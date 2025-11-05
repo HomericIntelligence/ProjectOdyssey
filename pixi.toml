@@ -1,0 +1,10 @@
+[workspace]
+channels = ["https://conda.modular.com/max-nightly", "conda-forge"]
+name = "ml-odyssey"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+mojo = ">=0.25.7.0.dev2025110405,<0.26"
