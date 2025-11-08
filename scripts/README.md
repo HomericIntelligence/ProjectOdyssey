@@ -315,12 +315,67 @@ ml-odyssey/
 
 ---
 
+## Script Details
+
+### create_issues.py
+- **Lines of Code**: 854
+- **Complexity**: High (comprehensive error handling, state management, retry logic)
+- **Key Features**:
+  - Automatic label creation with predefined colors
+  - Exponential backoff retry logic (up to 3 retries)
+  - Progress tracking with optional tqdm support
+  - Colored terminal output (can be disabled)
+  - State saved every 10 issues for resume capability
+  - Parses multiple github_issue.md format variations
+  - Updates markdown files with created issue URLs
+
+**Label Colors**:
+```python
+'planning': 'd4c5f9'       # Light purple
+'documentation': '0075ca'  # Blue
+'testing': 'fbca04'        # Yellow
+'tdd': 'fbca04'           # Yellow
+'implementation': '1d76db' # Dark blue
+'packaging': 'c2e0c6'      # Light green
+'integration': 'c2e0c6'    # Light green
+'cleanup': 'd93f0b'        # Red
+```
+
+### create_single_component_issues.py
+- **Lines of Code**: 198
+- **Complexity**: Medium
+- **Purpose**: Testing and verification tool for single components
+- **Features**:
+  - Same label creation as main script
+  - Simpler focused implementation for testing
+  - Direct markdown file updates
+  - Useful for validating changes before bulk creation
+
+### regenerate_github_issues.py
+- **Lines of Code**: 450+
+- **Complexity**: Medium
+- **Purpose**: Dynamic generation of github_issue.md files from plan.md sources
+- **Features**:
+  - Extracts all sections from plan.md (overview, inputs, outputs, steps, criteria, notes)
+  - Generates consistent 5-issue format for each component
+  - Supports dry-run, section-by-section, and resume modes
+  - Timestamped state files for tracking multiple runs
+  - Replaces 4 legacy update scripts with single consolidated tool
+
+**Body Generation**:
+- **Plan**: Objectives, inputs, outputs, success criteria, notes
+- **Test**: Testing objectives, what to test, test success criteria, implementation steps
+- **Implementation**: Goals, required inputs, outputs, implementation steps, success criteria
+- **Packaging**: Objectives, integration requirements, integration steps, success criteria
+- **Cleanup**: Objectives, cleanup tasks, success criteria, notes
+
+---
+
 ## Related Documentation
 
 - [Repository README](../README.md) - Main project documentation
 - [Planning Documentation](../notes/README.md) - GitHub issues plan overview
 - [Review Process](../notes/review/README.md) - PR review guidelines and 5-phase workflow
-- [Scripts Analysis](SCRIPTS_ANALYSIS.md) - Comprehensive analysis of all scripts
 - [Project Conventions](../.clinerules) - Claude Code conventions
 
 ---

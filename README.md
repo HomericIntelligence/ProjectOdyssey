@@ -38,5 +38,4 @@ See [scripts/README.md](scripts/README.md) for detailed documentation.
 
 - [notes/README.md](notes/README.md) - Plan for creating GitHub issues
 - [scripts/README.md](scripts/README.md) - Automation scripts documentation
-- [scripts/SCRIPTS_ANALYSIS.md](scripts/SCRIPTS_ANALYSIS.md) - Comprehensive scripts analysis
 - [notes/plan/](notes/plan/) - Complete hierarchical planning structure
