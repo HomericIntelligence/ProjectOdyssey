@@ -121,7 +121,7 @@ Optimizer.step (Mojo)
 ### Coordinates With
 - [Integration Design](./integration-design.md) - cross-component integration
 - [Security Design](./security-design.md) - security requirements
-- Other orchestrators - cross-module consistency
+- Section orchestrators as needed - cross-module consistency
 
 ## Workflow Phase
 Primarily **Plan** phase, with oversight in Implementation

@@ -126,7 +126,7 @@ core_ops_internal = { path = "../02-shared-library/core_ops" }
 ### Coordinates With
 - [Architecture Design](./architecture-design.md) - component specifications
 - [Security Design](./security-design.md) - API security
-- Other orchestrators - cross-module integration
+- Section orchestrators as needed - cross-module integration
 
 ## Workflow Phase
 **Plan** phase, with validation in **Test** phase

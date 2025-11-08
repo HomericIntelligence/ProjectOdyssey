@@ -55,33 +55,9 @@ Level 5 is the lowest level - no delegation to other agents.
 **[Primary Phase]**
 
 ## Skills to Use
-- [Skill 1] - [Simple usage]
-- [Skill 2] - [Simple usage]
-
-## Examples
-
-### Example 1: [Simple Task]
-**Task**: [Clear, simple description]
-
-**Implementation**:
-```[language]
-[Simple, straightforward solution]
-```
-
-### Example 2: [Template Application]
-**Task**: [Apply template to generate code]
-
-**Result**:
-```[language]
-[Template-generated code]
-```
-
-### Example 3: [Automation]
-**Task**: [Run tool or script]
-
-```bash
-[Simple command or script]
-```
+- [`generate_boilerplate`](../../.claude/skills/tier-1/generate-boilerplate/SKILL.md) - Code generation
+- [`format_code`](../../.claude/skills/tier-1/format-code/SKILL.md) - Code formatting
+- [Add other relevant skills for simple tasks]
 
 ## Constraints
 
