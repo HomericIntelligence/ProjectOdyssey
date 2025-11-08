@@ -61,30 +61,24 @@ Level 3 Component Specialist responsible for [specialist area] at component leve
 ## Delegation
 
 ### Delegates To
-- [Engineer Type] (Level 4)
-- [Engineer Type] (Level 4)
+- [Senior Implementation Engineer](../.claude/agents/senior-implementation-engineer.md) - complex implementation
+- [Implementation Engineer](../.claude/agents/implementation-engineer.md) - standard implementation
+- [Test Engineer](../.claude/agents/test-engineer.md) - test implementation
+- [Documentation Engineer](../.claude/agents/documentation-engineer.md) - documentation
+- [Performance Engineer](../.claude/agents/performance-engineer.md) - optimization
 
 ### Coordinates With
-- [Other Specialist] (Level 3)
-- [Design Agent] (Level 2)
+- [Implementation Specialist](../.claude/agents/implementation-specialist.md) - implementation coordination
+- [Test Specialist](../.claude/agents/test-specialist.md) - testing coordination
+- [Architecture Design](../.claude/agents/architecture-design.md) - architectural decisions
 
 ## Workflow Phase
 **[Primary Phase]**, **[Secondary Phases]**
 
 ## Skills to Use
-- [Skill 1] - [Usage]
-- [Skill 2] - [Usage]
-
-## Examples
-
-### Example 1: [Common Task]
-**Task**: [Description]
-
-**Approach**:
-[Step-by-step approach]
-
-**Output/Result**:
-[Expected outcome]
+- [`analyze_code_structure`](../../.claude/skills/tier-1/analyze-code-structure/SKILL.md) - Code analysis
+- [`generate_boilerplate`](../../.claude/skills/tier-1/generate-boilerplate/SKILL.md) - Code generation
+- [Add other relevant skills]
 
 ## Constraints
 

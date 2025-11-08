@@ -61,19 +61,23 @@ Level 0 Meta-Orchestrator responsible for strategic decisions across the entire 
 1. Strategic Analysis → 2. Architecture Definition → 3. Delegation → 4. Oversight → 5. Review
 
 ## Delegation
-**Delegates To**: All Level 1 Section Orchestrators
+
+### Delegates To
+- [Foundation Orchestrator](../.claude/agents/foundation-orchestrator.md) - repository structure
+- [Shared Library Orchestrator](../.claude/agents/shared-library-orchestrator.md) - core operations
+- [Tooling Orchestrator](../.claude/agents/tooling-orchestrator.md) - development tools
+- [Papers Orchestrator](../.claude/agents/papers-orchestrator.md) - research implementations
+- [CI/CD Orchestrator](../.claude/agents/cicd-orchestrator.md) - automation
+- [Agentic Workflows Orchestrator](../.claude/agents/agentic-workflows-orchestrator.md) - agent systems
 
 ## Workflow Phase
 Primarily **Plan** phase, oversight in all phases
 
 ## Skills to Use
-- `extract_algorithm` - Paper analysis
-- `identify_architecture` - Model architectures
-- `extract_hyperparameters` - Training parameters
-- `extract_dependencies` - Cross-section dependencies
-
-## Examples
-[Provide realistic examples of paper selection, architectural decisions, conflict resolution]
+- [`extract_algorithm`](../../.claude/skills/tier-2/extract-algorithm/SKILL.md) - Paper analysis
+- [`identify_architecture`](../../.claude/skills/tier-2/identify-architecture/SKILL.md) - Model architectures
+- [`extract_hyperparameters`](../../.claude/skills/tier-2/extract-hyperparameters/SKILL.md) - Training parameters
+- [`extract_dependencies`](../../.claude/skills/tier-2/extract-dependencies/SKILL.md) - Cross-section dependencies
 
 ## Constraints
 - **Do NOT**: Micromanage, skip documentation, override without rationale

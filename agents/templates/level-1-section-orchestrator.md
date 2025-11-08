@@ -7,7 +7,7 @@ Use this template to create Section Orchestrator agents that coordinate work wit
 ```markdown
 ---
 name: [section]-orchestrator
-description: Coordinate [section name] including [key responsibilities] for Section [number]
+description: Coordinate [section name] including [key responsibilities]
 tools: Read,Write,Edit,Bash,Grep,Glob
 model: sonnet
 ---
@@ -18,7 +18,6 @@ model: sonnet
 Level 1 Section Orchestrator responsible for coordinating [section description].
 
 ## Scope
-- Section [number]-[section-name]
 - [Key area 1]
 - [Key area 2]
 - [Key area 3]
@@ -64,35 +63,21 @@ Level 1 Section Orchestrator responsible for coordinating [section description].
 ## Delegation
 
 ### Delegates To
-- Architecture Design Agent (Level 2)
-- Integration Design Agent (Level 2)
-- Security Design Agent (Level 2)
+- [Architecture Design](../.claude/agents/architecture-design.md) - module architecture
+- [Integration Design](../.claude/agents/integration-design.md) - cross-module integration
+- [Security Design](../.claude/agents/security-design.md) - security requirements
 
 ### Coordinates With
+- [Chief Architect](../.claude/agents/chief-architect.md) - strategic decisions
 - [Other orchestrators as needed]
-- Chief Architect
 
 ## Workflow Phase
 [Primary workflow phases this agent participates in]
 
 ## Skills to Use
-- [Skill 1] - [Usage]
-- [Skill 2] - [Usage]
-- [Skill 3] - [Usage]
-
-## Examples
-
-### Example 1: [Common Task]
-**Task**: [Description]
-
-**Process**:
-[Step-by-step process]
-
-**Output**:
-[Expected output]
-
-### Example 2: [Conflict Resolution]
-[Example of handling conflicts]
+- [`analyze_code_structure`](../../.claude/skills/tier-1/analyze-code-structure/SKILL.md) - Code analysis
+- [`extract_dependencies`](../../.claude/skills/tier-2/extract-dependencies/SKILL.md) - Dependency mapping
+- [Add other relevant skills]
 
 ## Constraints
 
@@ -146,11 +131,6 @@ Escalate to Chief Architect when:
 4. **Detail Workflow**:
    - Break down section-specific workflow phases
    - Include coordination points with other sections
-
-## Examples
-- Foundation Orchestrator (directory structure, configuration)
-- Shared Library Orchestrator (core operations, training utilities)
-- Paper Implementation Orchestrator (research paper implementation)
 
 ## See Also
 - Level 2 Module Design Agent Template

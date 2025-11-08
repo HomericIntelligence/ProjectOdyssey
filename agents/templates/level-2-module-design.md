@@ -57,34 +57,23 @@ Level 2 Module Design Agent responsible for [design area description].
 ## Delegation
 
 ### Delegates To
-- [Specialist Type] (Level 3)
-- [Specialist Type] (Level 3)
+- [Implementation Specialist](../.claude/agents/implementation-specialist.md) - component implementation
+- [Test Specialist](../.claude/agents/test-specialist.md) - testing strategy
+- [Performance Specialist](../.claude/agents/performance-specialist.md) - optimization
+- [Security Specialist](../.claude/agents/security-specialist.md) - security implementation
 
 ### Coordinates With
-- Other Module Design Agents (Level 2)
-- Section Orchestrator (Level 1)
+- [Architecture Design](../.claude/agents/architecture-design.md) - architectural decisions
+- [Integration Design](../.claude/agents/integration-design.md) - integration concerns
+- [Security Design](../.claude/agents/security-design.md) - security requirements
 
 ## Workflow Phase
 Primarily **Plan** phase, [other phases as applicable]
 
 ## Skills to Use
-- [Skill 1] - [Usage]
-- [Skill 2] - [Usage]
-
-## Examples
-
-### Example 1: [Common Design Task]
-**Requirements**: [Description]
-
-**Design**:
-```markdown
-[Design specification]
-```
-
-**Rationale**: [Why this design]
-
-### Example 2: [Conflict Resolution]
-[Example of resolving design conflicts]
+- [`analyze_code_structure`](../../.claude/skills/tier-1/analyze-code-structure/SKILL.md) - Code analysis
+- [`extract_dependencies`](../../.claude/skills/tier-2/extract-dependencies/SKILL.md) - Dependency mapping
+- [Add other relevant skills]
 
 ## Constraints
 
