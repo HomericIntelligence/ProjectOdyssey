@@ -23,21 +23,17 @@ scripts/
 ├── create_issues.py                    # Main GitHub issue creation
 ├── create_single_component_issues.py   # Single component testing
 ├── regenerate_github_issues.py         # Dynamic issue file generation
-├── agents/                             # Agent system utilities
-│   ├── README.md                       # Agent scripts documentation
-│   ├── agent_health_check.sh           # System health checks
-│   ├── agent_stats.py                  # Statistics and metrics
-│   ├── check_frontmatter.py            # YAML validation
-│   ├── list_agents.py                  # Agent discovery
-│   ├── setup_agents.sh                 # Setup automation
-│   ├── test_agent_loading.py           # Loading tests
-│   ├── validate_agents.py              # Configuration validation
-│   └── tests/                          # Agent test suite
-└── archive/                            # Historical scripts (preserved for reference)
-    ├── README.md                       # Archive documentation
-    ├── fix_markdown.py                 # One-time markdown fixes (2024)
-    ├── fix_markdown_linting.py         # One-time markdown fixes (2024)
-    └── fix_remaining_markdown.py       # One-time markdown fixes (2024)
+├── fix_markdown.py                     # Unified markdown linting fixer
+└── agents/                             # Agent system utilities
+    ├── README.md                       # Agent scripts documentation
+    ├── agent_health_check.sh           # System health checks
+    ├── agent_stats.py                  # Statistics and metrics
+    ├── check_frontmatter.py            # YAML validation
+    ├── list_agents.py                  # Agent discovery
+    ├── setup_agents.sh                 # Setup automation
+    ├── test_agent_loading.py           # Loading tests
+    ├── validate_agents.py              # Configuration validation
+    └── tests/                          # Agent test suite
 ```
 
 ## Scripts
@@ -187,6 +183,68 @@ python3 scripts/create_single_component_issues.py notes/plan/01-foundation/githu
 # This creates 5 issues for the foundation component
 
 python3 scripts/create_single_component_issues.py notes/plan/01-foundation/github_issue.md
+```
+
+---
+
+#### `fix_markdown.py`
+
+**Purpose**: Unified markdown linting fixer that automatically fixes common markdownlint-cli2 errors.
+
+**Features**:
+
+- Fixes 8 common markdown linting rules (MD012, MD022, MD026, MD029, MD031, MD032, MD036, MD040)
+- Supports single files or entire directories
+- Dry-run mode to preview changes
+- Verbose output option
+- Excludes common directories (node_modules, .git, venv, etc.)
+
+**Usage**:
+
+```bash
+# Fix a single file
+python3 scripts/fix_markdown.py README.md
+
+# Fix all markdown in a directory
+python3 scripts/fix_markdown.py notes/
+
+# Fix all markdown in repository
+python3 scripts/fix_markdown.py .
+
+# Dry run (preview without changes)
+python3 scripts/fix_markdown.py . --dry-run
+
+# Verbose output
+python3 scripts/fix_markdown.py . --verbose
+```
+
+**Fixes Applied**:
+
+- **MD012**: Remove multiple consecutive blank lines
+- **MD022**: Add blank lines around headings
+- **MD026**: Remove trailing punctuation from headings
+- **MD029**: Fix ordered list numbering (use 1. for all items)
+- **MD031**: Add blank lines around code blocks
+- **MD032**: Add blank lines around lists
+- **MD036**: Convert bold text used as headings to actual headings
+- **MD040**: Add language tags to code blocks (defaults to `text`)
+
+**Command-line Options**:
+
+- `path`: Path to markdown file or directory (required)
+- `-v, --verbose`: Enable verbose output
+- `-n, --dry-run`: Show what would be fixed without making changes
+
+**Example Output**:
+
+```text
+Found 42 markdown file(s)
+Fixed notes/issues/3/README.md: 5 issues
+Fixed scripts/README.md: 3 issues
+
+Summary:
+  Files modified: 2
+  Total fixes: 8
 ```
 
 ---
@@ -479,42 +537,6 @@ ml-odyssey/
 - **Implementation**: Goals, required inputs, outputs, implementation steps, success criteria
 - **Packaging**: Objectives, integration requirements, integration steps, success criteria
 - **Cleanup**: Objectives, cleanup tasks, success criteria, notes
-
----
-
-## Archive
-
-The `archive/` directory contains historical scripts that are no longer actively used but preserved for reference.
-
-### Archived Scripts
-
-**Markdown Linting Fixes (2024)**:
-
-- `fix_markdown.py` - Systematic markdown linting fixes
-- `fix_markdown_linting.py` - Repository-wide markdown fixes
-- `fix_remaining_markdown.py` - Final cleanup pass
-
-These scripts successfully standardized all markdown files to pass `markdownlint-cli2` linting. The repository
-now uses pre-commit hooks (`markdownlint-cli2`) to maintain markdown quality, making these scripts obsolete.
-
-**Status**: Archived after successful completion of markdown standardization (November 2024).
-
-For detailed information about archived scripts, see [archive/README.md](archive/README.md).
-
-### Decision: Keep create_single_component_issues.py
-
-The `create_single_component_issues.py` script is intentionally kept separate from `create_issues.py` rather than
-being consolidated or archived. This decision follows "Option A: Keep Both Scripts" from the planning phase.
-
-**Rationale**:
-
-- **Clear separation of concerns**: Testing utility vs production tool
-- **Independent value**: Useful for validation before bulk operations
-- **Low maintenance cost**: Small focused script (198 LOC)
-- **Different use cases**: Quick validation vs comprehensive automation
-
-This separation improves the development workflow by providing a safe, focused tool for testing changes before
-running bulk operations.
 
 ---
 
