@@ -1,0 +1,215 @@
+# CODEOWNERS - Code Ownership and Review Requirements
+# Documentation: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# Format:
+#   pattern  @owner1 @owner2
+#
+# Rules:
+#   - Later matches override earlier ones
+#   - Patterns use .gitignore syntax
+#   - Reviewers must have write access
+#   - Order matters: specific patterns AFTER general ones
+
+# ============================================================================
+# Default Ownership
+# ============================================================================
+# Catch-all: All files default to primary maintainer
+# Override with more specific patterns below
+*  @mvillmow
+
+# ============================================================================
+# Critical Infrastructure
+# ============================================================================
+# Changes to these files require extra scrutiny due to project-wide impact
+
+# Repository Configuration
+# - Pixi environment affects all developers
+# - Pre-commit hooks enforce code quality
+# - Git configuration impacts workflows
+pixi.toml                           @mvillmow
+.pre-commit-config.yaml             @mvillmow
+.gitignore                          @mvillmow
+.gitattributes                      @mvillmow
+
+# GitHub Configuration
+# - Dependabot manages security updates
+# - CODEOWNERS changes affect review process (this file!)
+# - Funding affects project sustainability
+.github/dependabot.yml              @mvillmow
+.github/CODEOWNERS                  @mvillmow
+.github/FUNDING.yml                 @mvillmow
+
+# CI/CD Workflows
+# - Workflow changes affect all PRs and deployments
+# - Breaking workflows blocks team progress
+.github/workflows/                  @mvillmow
+
+# Claude Configuration
+# - Agent changes affect development workflow
+# - Skills affect code generation quality
+# - Global rules affect all Claude interactions
+.claude/                            @mvillmow
+.clinerules                         @mvillmow
+CLAUDE.md                           @mvillmow
+
+# ============================================================================
+# Documentation
+# ============================================================================
+# Core project documentation requires review for clarity and accuracy
+
+# Root Documentation
+# - README is first impression for new contributors
+# - License affects all usage
+README.md                           @mvillmow
+LICENSE                             @mvillmow
+
+# Comprehensive Documentation
+# - Architecture decisions have long-term impact
+# - Review docs guide code review process
+# - Workflow docs affect development efficiency
+notes/review/                       @mvillmow
+
+# Agent Documentation
+# - Agent templates guide new agent creation
+# - Hierarchy affects delegation patterns
+agents/                             @mvillmow
+
+# ============================================================================
+# Research Papers
+# ============================================================================
+# Paper implementations require domain expertise and reproducibility validation
+
+# All Papers Directory
+# - Each paper is a complete research reproduction
+# - Requires ML/DL expertise
+# - Must validate against original paper results
+papers/                             @mvillmow
+
+# Specific Papers (examples - add as papers are implemented)
+# papers/lenet5/                    @mvillmow @paper-expert-1
+# papers/alexnet/                   @mvillmow @ml-expert-1
+# papers/resnet/                    @mvillmow @ml-expert-2
+
+# ============================================================================
+# Core Shared Library
+# ============================================================================
+# Shared library changes affect all papers - require careful review
+
+# Core Operations
+# - Tensor operations used across all papers
+# - Performance-critical code
+# - Breaking changes impact multiple papers
+src/ml_odyssey/core/                @mvillmow
+
+# Training Utilities
+# - Shared training loops and optimizers
+# - Changes affect paper reproducibility
+src/ml_odyssey/training/            @mvillmow
+
+# Data Processing
+# - Dataset loaders and preprocessing
+# - Must maintain paper-specific compatibility
+src/ml_odyssey/data/                @mvillmow
+
+# ============================================================================
+# Development Tools
+# ============================================================================
+# Tools affect developer productivity and code quality
+
+# Automation Scripts
+# - Issue creation scripts are critical workflow
+# - Changes must be tested before merge
+scripts/                            @mvillmow
+
+# Test Infrastructure
+# - Test utilities affect all tests
+# - Breaking changes block development
+tests/                              @mvillmow
+
+# ============================================================================
+# Agent System (Operational)
+# ============================================================================
+# Operational agent configs affect automated development
+
+# Agent Configurations
+# - Changes affect code generation quality
+# - Must maintain agent hierarchy integrity
+.claude/agents/                     @mvillmow
+
+# Agent Skills
+# - Skills are reusable across agents
+# - Breaking changes affect multiple agents
+.claude/skills/                     @mvillmow
+
+# ============================================================================
+# Special Cases
+# ============================================================================
+
+# Security-Sensitive Files
+# - Any security-related changes need extra review
+# - Pattern: Look for security, auth, crypto keywords
+**/*security*                       @mvillmow
+**/*auth*                          @mvillmow
+**/*crypto*                        @mvillmow
+
+# Performance-Critical Code
+# - SIMD optimizations need expert review
+# - Parallel code needs race condition analysis
+**/*simd*                          @mvillmow
+**/*parallel*                      @mvillmow
+**/*benchmark*                     @mvillmow
+
+# Mojo Language Files
+# - All .mojo files require Mojo expertise
+# - Critical for performance and safety
+*.mojo                             @mvillmow
+*.🔥                               @mvillmow
+
+# Python-Mojo Interop
+# - FFI boundary is error-prone
+# - Requires understanding both languages
+**/*interop*                       @mvillmow
+**/*ffi*                          @mvillmow
+
+# ============================================================================
+# Future Team Assignments (Template)
+# ============================================================================
+# When adding team members, use these patterns:
+#
+# ML/DL Experts:
+#   papers/*/models/                @mvillmow @ml-expert
+#   src/ml_odyssey/training/        @mvillmow @ml-expert
+#
+# Performance Engineers:
+#   **/*simd*                       @mvillmow @perf-engineer
+#   **/*benchmark*                  @mvillmow @perf-engineer
+#
+# Security Engineers:
+#   **/*security*                   @mvillmow @security-engineer
+#   **/*auth*                       @mvillmow @security-engineer
+#
+# Documentation Writers:
+#   *.md                            @mvillmow @doc-writer
+#   docs/                           @mvillmow @doc-writer
+#
+# DevOps Engineers:
+#   .github/workflows/              @mvillmow @devops-engineer
+#   pixi.toml                       @mvillmow @devops-engineer
+#
+# Research Scientists:
+#   papers/*/theory/                @mvillmow @research-scientist
+#   papers/*/experiments/           @mvillmow @research-scientist
+
+# ============================================================================
+# Order and Precedence Notes
+# ============================================================================
+# 1. Most specific patterns at the END of file override general patterns
+# 2. Default owner (*) at top catches everything not matched below
+# 3. Security patterns override domain patterns (placed near end)
+# 4. File type patterns (*.mojo) catch files in any directory
+#
+# Testing CODEOWNERS:
+#   gh api /repos/mvillmow/ml-odyssey/codeowners/errors
+#
+# Validating a PR:
+#   gh pr view <number> --json reviewRequests

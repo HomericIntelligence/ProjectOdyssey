@@ -1,0 +1,158 @@
+# Dependabot configuration for ml-odyssey
+# Manages Python dependencies, GitHub Actions, and future Pixi support
+# Documentation: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+
+version: 2
+
+updates:
+  # ============================================================================
+  # Python Dependencies (pip ecosystem)
+  # ============================================================================
+  # Purpose: Keep Python tooling and development dependencies current
+  # Frequency: Weekly (Tuesdays) to batch updates
+  # Scope: pixi.toml dependencies and any future requirements.txt files
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "09:00"
+      timezone: "America/New_York"
+
+    # Version Update Strategy
+    # - Allow all: Patches, minor, and major updates
+    # - Rationale: Early in project lifecycle, want latest stable versions
+    # - Will restrict to semver-minor after 1.0 release
+    versioning-strategy: increase
+
+    # Pull Request Configuration
+    # - Limit active PRs to prevent overwhelming review queue
+    # - Group related updates when possible
+    open-pull-requests-limit: 5
+
+    # PR Metadata
+    # - Labels for automation and filtering
+    # - Assignees for review responsibility
+    labels:
+      - "dependencies"
+      - "python"
+      - "automated"
+    assignees:
+      - "mvillmow"
+
+    # Commit Message Format
+    # - Follow conventional commits for consistency
+    # - Enable automatic changelog generation
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(dev-deps)"
+      include: "scope"
+
+    # Grouping Rules
+    # - Batch minor/patch updates to reduce PR volume
+    # - Keep major updates separate for careful review
+    groups:
+      python-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+    # Ignore Rules
+    # - Pin Mojo version - manually updated after testing
+    # - Ignore pre-release versions unless explicitly opted in
+    ignore:
+      - dependency-name: "mojo"
+        reason: "Mojo updates require careful compatibility testing"
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+        reason: "Major version updates reviewed manually"
+
+  # ============================================================================
+  # GitHub Actions Dependencies
+  # ============================================================================
+  # Purpose: Keep CI/CD workflows secure and up-to-date
+  # Frequency: Weekly (Tuesdays) same as Python
+  # Scope: All workflow files in .github/workflows/
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "10:00"
+      timezone: "America/New_York"
+
+    # PR Configuration
+    open-pull-requests-limit: 5
+
+    # PR Metadata
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "ci-cd"
+      - "automated"
+    assignees:
+      - "mvillmow"
+
+    # Commit Message Format
+    commit-message:
+      prefix: "chore(ci)"
+      include: "scope"
+
+    # Grouping Rules
+    # - Batch all GitHub Actions updates together
+    # - Actions updates are typically low-risk
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  # ============================================================================
+  # Pixi Ecosystem (Future - Placeholder)
+  # ============================================================================
+  # Purpose: Native pixi dependency management when ecosystem support is available
+  # Status: Pending - Dependabot doesn't support pixi ecosystem yet
+  # Workaround: Currently using pip ecosystem for Python deps in pixi.toml
+  # TODO: Enable when Dependabot adds pixi support
+  #
+  # - package-ecosystem: "pixi"  # Not yet supported
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #     day: "tuesday"
+  #     time: "09:00"
+  #   labels:
+  #     - "dependencies"
+  #     - "pixi"
+  #     - "automated"
+
+# ============================================================================
+# Configuration Notes
+# ============================================================================
+# 1. Schedule Timing:
+#    - Python: 9:00 AM ET Tuesday (start of work week)
+#    - Actions: 10:00 AM ET Tuesday (after Python, sequential review)
+#
+# 2. PR Limits:
+#    - 5 PRs per ecosystem prevents overwhelming review queue
+#    - Adjust based on team capacity and velocity
+#
+# 3. Grouping Strategy:
+#    - Reduces PR volume by batching compatible updates
+#    - Major updates kept separate for careful review
+#    - Actions grouped together (low risk)
+#
+# 4. Ignore Strategy:
+#    - Mojo pinned: requires compatibility testing with research papers
+#    - Major versions: reviewed manually for breaking changes
+#
+# 5. Labels:
+#    - Integrate with GitHub Projects for automation
+#    - Filter PRs in review queue
+#    - Trigger CI/CD workflows conditionally
+#
+# 6. Future Enhancements:
+#    - Add pixi ecosystem when available
+#    - Add security-only updates (daily schedule)
+#    - Add rebase-strategy when GitHub Actions stabilize
