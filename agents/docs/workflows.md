@@ -64,6 +64,7 @@ Shared Library Orchestrator:
 ```
 
 **Artifacts**:
+
 - GitHub Issue #150 created
 - Initial requirements documented
 
@@ -90,6 +91,7 @@ Architecture Design Agent:
 ```
 
 **Artifacts**:
+
 - Component specification: `notes/issues/150/component-spec.md`
 - Interface definitions: `notes/issues/150/interfaces.md`
 - Dependency graph
@@ -137,6 +139,7 @@ Documentation Specialist:
 ```
 
 **Artifacts**:
+
 - Implementation plan: `notes/issues/150/implementation-plan.md`
 - Test plan: `notes/issues/150/test-plan.md`
 - Documentation outline: `notes/issues/150/docs-outline.md`
@@ -146,6 +149,7 @@ Documentation Specialist:
 #### Phase 2-4: Test/Implementation/Packaging (Parallel)
 
 **Git Worktree Setup**:
+
 ```bash
 # Create parallel worktrees
 git worktree add worktrees/issue-151-test-batchnorm -b 151-test-batchnorm
@@ -229,6 +233,7 @@ Test Engineer (Level 4):
 ```
 
 **Artifacts**:
+
 - Test files: `tests/test_batchnorm.mojo`
 - Test fixtures: `tests/fixtures/batchnorm_data.mojo`
 - All tests currently failing (no implementation yet)
@@ -417,6 +422,7 @@ Junior Implementation Engineer (Level 5):
 ```
 
 **Artifacts**:
+
 - Implementation: `src/core_ops/layers/batchnorm.mojo`
 - Most tests passing
 - Backward pass TODO item for cleanup
@@ -459,21 +465,24 @@ Documentation Engineer (Level 4):
   BatchNorm2D(num_features: Int, eps: Float32 = 1e-5, momentum: Float32 = 0.1)
   ```
 
-  ### Methods
+### Methods
 
-  #### forward (Inference Mode)
+#### forward (Inference Mode)
+
   ```mojo
   fn forward(self, input: Tensor[DType.float32]) -> Tensor[DType.float32]
   ```
 
-  #### forward_train (Training Mode)
+#### forward_train (Training Mode)
+
   ```mojo
   fn forward_train(inout self, input: Tensor[DType.float32]) -> Tensor[DType.float32]
   ```
 
-  ## Usage Examples
+## Usage Examples
 
-  ### Basic Usage
+### Basic Usage
+
   ```mojo
   from core_ops.layers import BatchNorm2D
   from tensor import Tensor
@@ -490,7 +499,8 @@ Documentation Engineer (Level 4):
   var test_output = bn.forward(test_input)
   ```
 
-  ### In a Model
+### In a Model
+
   ```mojo
   from core_ops.layers import Conv2D, BatchNorm2D, ReLU
 
@@ -511,14 +521,15 @@ Documentation Engineer (Level 4):
           return x
   ```
 
-  ## Performance
+## Performance
 
   SIMD-optimized implementation provides significant speedup:
-  - 8x faster than naive Python implementation
-  - Benchmarked at 1.2ms for 32x64x28x28 input on M1 Mac
-  - Scales linearly with batch size
 
-  ## Integration
+- 8x faster than naive Python implementation
+- Benchmarked at 1.2ms for 32x64x28x28 input on M1 Mac
+- Scales linearly with batch size
+
+## Integration
 
   To use in your paper implementation:
 
@@ -529,15 +540,17 @@ Documentation Engineer (Level 4):
   var bn = BatchNorm2D(num_features=128)
   ```
 
-  ## See Also
-  - [Conv2D Layer](./conv2d.md)
-  - [ReLU Activation](./relu.md)
-  - [Model Architecture Guide](../guides/model-architecture.md)
+## See Also
 
-  - Creates integration guide (docs/guides/using-batchnorm.md)
-  - Updates shared library README
-  - Commits documentation to packaging worktree
-  - Status update: "Documentation complete"
+- [Conv2D Layer](./conv2d.md)
+- [ReLU Activation](./relu.md)
+- [Model Architecture Guide](../guides/model-architecture.md)
+
+- Creates integration guide (docs/guides/using-batchnorm.md)
+- Updates shared library README
+- Commits documentation to packaging worktree
+- Status update: "Documentation complete"
+
 ```
 
 **Artifacts**:
@@ -614,6 +627,7 @@ Shared Library Orchestrator (Cleanup):
 ```
 
 **Artifacts**:
+
 - Complete, production-ready BatchNorm2D
 - Full test coverage including backward pass
 - Comprehensive documentation
@@ -622,16 +636,19 @@ Shared Library Orchestrator (Cleanup):
 ### Expected Outputs
 
 **Code**:
+
 - `src/core_ops/layers/batchnorm.mojo` - Implementation
 - `tests/test_batchnorm.mojo` - Tests
 - `tests/fixtures/batchnorm_data.mojo` - Test fixtures
 
 **Documentation**:
+
 - `docs/api/batchnorm.md` - API reference
 - `docs/guides/using-batchnorm.md` - Usage guide
 - `src/core_ops/README.md` - Updated with BatchNorm
 
 **GitHub**:
+
 - 5 Issues (#150-154) - Plan, Test, Impl, Package, Cleanup
 - 5 PRs - One per phase
 - All merged to main
@@ -747,13 +764,16 @@ Documentation Engineer:
 ### Expected Outputs
 
 **Code**:
+
 - Fixed `src/core_ops/layers/conv2d.mojo`
 - New test `tests/test_conv2d.mojo::test_rectangular_kernel()`
 
 **Documentation**:
+
 - Updated `docs/api/conv2d.md` with rectangular kernel examples
 
 **GitHub**:
+
 - 3 Issues (#200-202) - Plan, Test+Impl combined, Cleanup
 - 2 PRs - One for fix, one for cleanup
 - Merged to main
@@ -891,15 +911,18 @@ Architecture Design Agent:
 ### Expected Outputs
 
 **Code**:
+
 - New module: `src/core_ops/utils/simd_helpers.mojo`
 - Refactored: `conv2d.mojo`, `batchnorm.mojo`, `dense.mojo`
 - Removed: ~200 lines of duplicated code
 
 **Tests**:
+
 - Regression tests confirming no behavior changes
 - Unit tests for simd_helpers
 
 **Documentation**:
+
 - API docs for simd_helpers
 - Migration guide for future implementations
 
@@ -1050,6 +1073,7 @@ Component Specialists (Level 3):
 ```
 
 **Plan Phase Artifacts**:
+
 - Module specifications: `notes/issues/400-403/`
 - Interface definitions
 - Integration plan
@@ -1152,21 +1176,25 @@ All agents participate in cleanup:
 ### Expected Outputs
 
 **Code**:
+
 - Complete LeNet-5 implementation
 - MNIST data loading
 - Training loop
 - Evaluation scripts
 
 **Documentation**:
+
 - LeNet-5 architecture guide
 - Training tutorial
 - Reproduction report comparing with original paper
 
 **Results**:
+
 - Model achieves ~99% accuracy on MNIST (matching paper)
 - Performance benchmarks vs PyTorch
 
 **GitHub**:
+
 - 20+ issues (Plan, Test, Impl, Package, Cleanup for each module)
 - 20+ PRs
 - All merged to main
@@ -1424,21 +1452,27 @@ Documentation Engineer:
 ### Common Agent Combinations
 
 **Feature Development**:
+
 - Chief Architect (strategic) + Section Orchestrator (tactical) + Design Agents (architecture) + Specialists (execution)
 
 **Bug Fixes**:
+
 - Implementation Specialist + Test Engineer + Implementation Engineer
 
 **Refactoring**:
+
 - Architecture Design Agent + Implementation Specialist + Implementation Engineers
 
 **Documentation**:
+
 - Documentation Specialist + Documentation Engineer
 
 **Security**:
+
 - Security Design Agent + Security Specialist + Implementation Engineers
 
 **Performance**:
+
 - Performance Specialist + Performance Engineer + Test Engineer
 
 ## See Also
