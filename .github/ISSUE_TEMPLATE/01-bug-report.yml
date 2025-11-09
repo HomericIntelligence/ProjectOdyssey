@@ -39,6 +39,6 @@ body:
     id: environment
     attributes:
       label: System Information
-      description: Run `scripts/get_system_info.sh` and paste the output here (helps with debugging)
-      placeholder: Paste the output of scripts/get_system_info.sh here...
+      description: Run `python3 scripts/get_system_info.py` and paste the output here (helps with debugging)
+      placeholder: Paste the output of python3 scripts/get_system_info.py here...
       render: text
