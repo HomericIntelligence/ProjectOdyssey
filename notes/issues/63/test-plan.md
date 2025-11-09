@@ -29,6 +29,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 **Purpose**: Validate YAML frontmatter and configuration completeness
 
 **Tests**:
+
 - YAML frontmatter syntax is valid
 - Required fields present: name, description, tools, model
 - Tool specifications are valid Claude Code tools
@@ -37,12 +38,14 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Content structure includes expected sections
 
 **Expected Results**:
+
 - All agent configs pass validation
 - No syntax errors
 - Clear descriptions that would trigger auto-invocation
 - Consistent file naming (matches frontmatter name)
 
 **Success Criteria**:
+
 - 100% of agent configs pass validation
 - Zero critical errors
 - Minimal warnings (descriptive issues only)
@@ -52,6 +55,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 **Purpose**: Test agent discovery and loading
 
 **Tests**:
+
 - Agent files discovered in `.claude/agents/`
 - Configurations load without errors
 - Activation patterns detected from descriptions
@@ -60,6 +64,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Model distribution
 
 **Expected Results**:
+
 - All `.md` files in `.claude/agents/` discovered
 - Configurations parse successfully
 - Each description contains activation keywords
@@ -68,6 +73,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Model selection is appropriate (sonnet for most, opus for complex)
 
 **Success Criteria**:
+
 - All agent files discovered
 - Zero loading errors
 - All levels 0-5 have agent coverage
@@ -78,6 +84,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 **Purpose**: Validate delegation patterns across hierarchy
 
 **Tests**:
+
 - Level 0 → Level 1 delegation defined
 - Level 1 → Level 2 delegation defined
 - Level 2 → Level 3 delegation defined
@@ -88,6 +95,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Horizontal coordination patterns present
 
 **Expected Results**:
+
 - Clear delegation chains from top to bottom
 - Each level (except 5) delegates to level below
 - Each level (except 0) escalates to level above
@@ -95,6 +103,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Coordination patterns for same-level agents
 
 **Success Criteria**:
+
 - Complete delegation chains for all levels
 - Escalation paths defined for levels 1-5
 - Escalation triggers documented
@@ -105,6 +114,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 **Purpose**: Test workflow and worktree integration
 
 **Tests**:
+
 - All 5 phases covered by agents (Plan, Test, Implementation, Packaging, Cleanup)
 - Level-phase alignment (right levels in right phases)
 - Parallel execution support documented
@@ -112,6 +122,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Coordination scenarios defined
 
 **Expected Results**:
+
 - Plan phase: Levels 0-3 participate
 - Test/Impl/Package phases: Levels 3-5 participate (parallel)
 - Cleanup phase: All levels participate
@@ -119,6 +130,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Worktree coordination patterns documented
 
 **Success Criteria**:
+
 - All 5 phases have agent coverage
 - Level-phase alignment matches expected patterns
 - Parallel execution guidance present
@@ -129,6 +141,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 **Purpose**: Validate Mojo-specific guidance
 
 **Tests**:
+
 - fn vs def guidance in implementation agents
 - struct vs class guidance in implementation agents
 - SIMD optimization guidance where appropriate
@@ -137,6 +150,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Type safety guidance
 
 **Expected Results**:
+
 - Implementation agents (levels 3-5) have comprehensive Mojo guidance
 - fn vs def: When to use each
 - struct vs class: When to use each
@@ -145,6 +159,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Performance: @parameter, compile-time optimization
 
 **Success Criteria**:
+
 - 80%+ of implementation agents have fn vs def guidance
 - 80%+ of implementation agents have struct vs class guidance
 - 50%+ of implementation agents have SIMD guidance
@@ -157,6 +172,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 **Setup**: Create a new agent configuration file
 
 **Steps**:
+
 1. Run `validate_configs.py` on new file
 2. Check for YAML syntax errors
 3. Check for required fields
@@ -170,6 +186,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 **Setup**: Trace delegation from Level 0 to Level 5
 
 **Steps**:
+
 1. Run `test_delegation.py`
 2. Identify Chief Architect (Level 0)
 3. Trace delegation to Section Orchestrators (Level 1)
@@ -185,6 +202,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 **Setup**: Simulate full workflow execution
 
 **Steps**:
+
 1. Run `test_integration.py`
 2. Identify Plan phase agents
 3. Identify parallel phase agents (Test/Impl/Package)
@@ -192,6 +210,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 5. Check coordination patterns
 
 **Expected**:
+
 - Plan phase completes first
 - Parallel phases can run simultaneously
 - Cleanup phase runs last
@@ -202,6 +221,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 **Setup**: Check implementation agent for Mojo guidance
 
 **Steps**:
+
 1. Run `test_mojo_patterns.py`
 2. Identify implementation engineers
 3. Check for fn vs def guidance
@@ -216,6 +236,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 **Setup**: Simulate Test Engineer and Implementation Engineer coordination
 
 **Steps**:
+
 1. Check both agents have worktree guidance
 2. Check both agents mention TDD workflow
 3. Check coordination patterns documented
@@ -237,6 +258,7 @@ For initial testing (before issue #64 completes), create mock agents:
 6. **junior-implementation-engineer.md** (Level 5)
 
 Each mock should:
+
 - Have valid YAML frontmatter
 - Include delegation/escalation information
 - Mention workflow phases
@@ -254,7 +276,7 @@ Each mock should:
 
 ### Quality Metrics
 
-- **Configuration Quality**: Zero critical errors, <10 warnings
+- **Configuration Quality**: Zero critical errors, less than 10 warnings
 - **Coverage**: 100% of expected levels have agents
 - **Delegation Completeness**: 100% of agents have delegation/escalation defined
 - **Workflow Alignment**: 100% of agents participate in appropriate phases
