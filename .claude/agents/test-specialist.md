@@ -140,12 +140,14 @@ To avoid unnecessary overhead in the 6-level hierarchy, agents may skip intermed
 ## Constraints
 
 ### Do NOT
+
 - Implement tests yourself (delegate to engineers)
 - Skip coverage requirements
 - Ignore test failures
 - Make architectural decisions (escalate to design agent)
 
 ### DO
+
 - Create comprehensive test plans
 - Define clear test cases for all scenarios
 - Coordinate TDD with Implementation Specialist
@@ -155,6 +157,7 @@ To avoid unnecessary overhead in the 6-level hierarchy, agents may skip intermed
 ## Escalation Triggers
 
 Escalate to Architecture Design Agent when:
+
 - Component specification unclear or untestable
 - Test requirements conflict with implementation
 - Need clarification on expected behavior
@@ -163,6 +166,7 @@ Escalate to Architecture Design Agent when:
 ## Example Test Plan
 
 ```markdown
+
 ## Test Plan: Tensor Operations
 
 ### Unit Tests
@@ -186,6 +190,7 @@ Escalate to Architecture Design Agent when:
 2. benchmark_matmul - Matmul performance
 
 ### Coverage Target: 95%
+
 ```
 
 ## Success Criteria

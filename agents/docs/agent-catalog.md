@@ -236,8 +236,8 @@ training utilities (Section 02)
 
 **Configuration**: `.claude/agents/papers-orchestrator.md`
 
-**Description**: Coordinates research paper implementations including data preparation, model architecture,
-training, and evaluation (Section 04)
+**Description**: Coordinates research paper implementations including data preparation, model architecture, training,
+and evaluation (Section 04)
 
 **When to Use**:
 

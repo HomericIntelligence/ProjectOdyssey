@@ -157,12 +157,14 @@ To avoid unnecessary overhead in the 6-level hierarchy, agents may skip intermed
 ## Constraints
 
 ### Do NOT
+
 - Implement security fixes yourself (delegate to engineers)
 - Skip security testing
 - Make architectural security decisions (escalate to Security Design Agent)
 - Approve code with known vulnerabilities
 
 ### DO
+
 - Identify and document all security issues
 - Create comprehensive security test plans
 - Review all code for security vulnerabilities
@@ -172,6 +174,7 @@ To avoid unnecessary overhead in the 6-level hierarchy, agents may skip intermed
 ## Escalation Triggers
 
 Escalate to Security Design Agent when:
+
 - Critical vulnerabilities found requiring architectural changes
 - Security requirements conflict with functionality
 - Need fundamental security design changes
@@ -180,6 +183,7 @@ Escalate to Security Design Agent when:
 ## Example Security Plan
 
 ```markdown
+
 ## Security Plan: Data Loading Component
 
 ### Security Requirements
@@ -217,6 +221,7 @@ Escalate to Security Design Agent when:
 - Add bounds checking
 - Implement resource limits
 - Validate assumptions
+
 ```
 
 ## Success Criteria

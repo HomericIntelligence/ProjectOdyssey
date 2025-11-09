@@ -464,7 +464,7 @@ All methods follow Mojo conventions and include proper docstrings."
 
 **Flow**: Top → Down, each level adds more detail
 
-**Example: Implementing a New Layer Type**
+### Example: Implementing a New Layer Type
 
 ```text
 Chief Architect (Level 0):
@@ -1193,7 +1193,7 @@ CPUs, it can process 4-8 elements per cycle.
 
 Documentation complete."
 
-#### Step 5: Integration in Packaging Phase
+### Step 5: Integration in Packaging Phase
 
 **Implementation Specialist**:
 

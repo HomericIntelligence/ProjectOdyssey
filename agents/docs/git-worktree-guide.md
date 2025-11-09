@@ -14,14 +14,16 @@
 
 ## Overview
 
-Git worktrees allow multiple branches to be checked out simultaneously in separate directories. For the ml-odyssey agent hierarchy, worktrees enable:
+Git worktrees allow multiple branches to be checked out simultaneously in separate directories. For the ml-odyssey
+agent hierarchy, worktrees enable:
 
 - **Parallel execution**: Multiple agents work simultaneously on different phases
 - **Isolation**: Each phase has its own workspace, preventing conflicts
 - **Clean organization**: One worktree per GitHub issue/phase
 - **Easy context switching**: Agents can move between phases without git checkout
 
-**Core Concept**: Each GitHub issue gets its own worktree, allowing agents to work in parallel on Test, Implementation, and Packaging phases after Plan completes.
+**Core Concept**: Each GitHub issue gets its own worktree, allowing agents to work in parallel on Test,
+Implementation, and Packaging phases after Plan completes.
 
 ## Why Worktrees for Agents
 
@@ -134,7 +136,7 @@ Issue #66 (Clean)→ worktrees/issue-66-cleanup-agents/ → 66-cleanup-agents �
 
 ### Worktree Creation Sequence
 
-**Step 1: Plan Phase (Sequential)**
+#### Step 1: Plan Phase (Sequential)
 
 ```bash
 # Create Plan worktree first
@@ -155,7 +157,7 @@ git push -u origin 62-plan-agents
 # Plan phase complete ✓
 ```
 
-**Step 2: Parallel Phases (Test/Impl/Package)**
+#### Step 2: Parallel Phases (Test/Impl/Package)
 
 ```bash
 # After Plan merges, create parallel worktrees from main
@@ -174,7 +176,7 @@ git worktree add worktrees/issue-65-pkg-agents -b 65-pkg-agents
 # Now three teams can work in parallel
 ```
 
-**Step 3: Cleanup Phase (Sequential)**
+#### Step 3: Cleanup Phase (Sequential)
 
 ```bash
 # After Test/Impl/Package complete, create Cleanup worktree

@@ -26,7 +26,7 @@
 
 **Solutions**:
 
-**Solution A: Explicitly name the agent**
+#### Solution A: Explicitly name the agent
 
 ```text
 "Actually, use the [specific agent name] for this task"
@@ -38,7 +38,7 @@ Example:
 "Actually, use the senior implementation engineer - this requires advanced Mojo expertise"
 ```
 
-**Solution B: Be more specific in your request**
+#### Solution B: Be more specific in your request
 
 Instead of: "Fix the code"
 Use: "Profile and optimize the convolution performance" (invokes Performance Specialist)
@@ -46,7 +46,7 @@ Use: "Profile and optimize the convolution performance" (invokes Performance Spe
 Instead of: "Update the docs"
 Use: "Write comprehensive API documentation with examples" (invokes Documentation Writer)
 
-**Solution C: Start at higher level and let it delegate**
+#### Solution C: Start at higher level and let it delegate
 
 ```text
 "Use the [section] orchestrator to coordinate this work"
@@ -84,7 +84,7 @@ Example:
 
 **Solutions**:
 
-**Solution A: Escalate to higher level**
+#### Solution A: Escalate to higher level
 
 ```text
 "Escalate this to the [higher level agent]"
@@ -98,7 +98,7 @@ Implementation Engineer stuck → "Escalate to Implementation Specialist"
 Specialist stuck → "Escalate to Architecture Design Agent"
 ```
 
-**Solution B: Provide missing information**
+#### Solution B: Provide missing information
 
 If agent asks for specifications:
 
@@ -112,7 +112,7 @@ If agent needs decisions:
 "Use approach X because [rationale]"
 ```
 
-**Solution C: Check prerequisites**
+#### Solution C: Check prerequisites
 
 ```text
 "What prerequisites are missing? Let's address them first."
@@ -120,7 +120,7 @@ If agent needs decisions:
 
 Then delegate to appropriate agent to handle prerequisites.
 
-**Solution D: Resolve resource conflicts**
+#### Solution D: Resolve resource conflicts
 
 If multiple agents need same resource:
 
@@ -154,7 +154,7 @@ If multiple agents need same resource:
 
 **Solutions**:
 
-**Solution A: Start with an orchestrator**
+#### Solution A: Start with an orchestrator
 
 For repository-wide tasks:
 
@@ -176,7 +176,7 @@ Examples:
 "Use the CI/CD orchestrator to set up testing"
 ```
 
-**Solution B: Describe the task naturally and let auto-selection work**
+#### Solution B: Describe the task naturally and let auto-selection work
 
 ```text
 Just say what you want:
@@ -187,7 +187,7 @@ Just say what you want:
 → Auto-invokes Test Specialist
 ```
 
-**Solution C: Check the agent catalog**
+#### Solution C: Check the agent catalog
 
 ```bash
 # View catalog
@@ -197,7 +197,7 @@ cat agents/docs/agent-catalog.md
 cat agents/hierarchy.md
 ```
 
-**Solution D: Use decision tree**
+#### Solution D: Use decision tree
 
 ```text
 Is this about:
@@ -239,7 +239,7 @@ Is this about:
 
 **Solutions**:
 
-**Solution A: Use orchestrator for coordination**
+#### Solution A: Use orchestrator for coordination
 
 ```text
 "Use the [appropriate orchestrator/specialist] to coordinate between these agents"
@@ -251,7 +251,7 @@ Example:
 "Use the implementation specialist to coordinate between test and implementation engineers"
 ```
 
-**Solution B: Establish shared specifications**
+#### Solution B: Establish shared specifications
 
 ```text
 "Create detailed specifications that both [agent A] and [agent B] will follow"
@@ -263,7 +263,7 @@ Example:
 "Architecture design agent: Create interface specification for both test and implementation engineers"
 ```
 
-**Solution C: Use git worktrees for isolation**
+#### Solution C: Use git worktrees for isolation
 
 ```text
 "Assign separate worktrees:
@@ -272,7 +272,7 @@ Example:
 - Documentation Writer → worktrees/issue-65-docs-[component]/"
 ```
 
-**Solution D: Implement handoff protocol**
+#### Solution D: Implement handoff protocol
 
 ```text
 "[Agent A]: When you complete [task], create handoff document for [Agent B]
@@ -307,7 +307,7 @@ Include: what was done, artifacts created, next steps, important notes"
 
 **Solutions**:
 
-**Solution A: Use appropriate expertise level**
+#### Solution A: Use appropriate expertise level
 
 For advanced Mojo (SIMD, lifetimes, traits):
 
@@ -327,7 +327,7 @@ For simple Mojo:
 "Use the junior implementation engineer"
 ```
 
-**Solution B: Ask for Mojo-specific review**
+#### Solution B: Ask for Mojo-specific review
 
 ```text
 "Review this Mojo code for:
@@ -337,7 +337,7 @@ For simple Mojo:
 - Type system usage"
 ```
 
-**Solution C: Escalate to architecture level**
+#### Solution C: Escalate to architecture level
 
 For design issues:
 
@@ -345,7 +345,7 @@ For design issues:
 "Escalate to architecture design agent - we need to redesign this Mojo API"
 ```
 
-**Solution D: Check Mojo documentation**
+#### Solution D: Check Mojo documentation
 
 ```bash
 # Reference Mojo docs
@@ -383,7 +383,7 @@ cat papers/lenet5/src/*.mojo
 
 **Solutions**:
 
-**Solution A: TDD coordination**
+#### Solution A: TDD coordination
 
 ```text
 "Test Engineer and Implementation Engineer: Coordinate on this failure
@@ -392,7 +392,7 @@ cat papers/lenet5/src/*.mojo
 - Both: Discuss and resolve discrepancy"
 ```
 
-**Solution B: Debug systematically**
+#### Solution B: Debug systematically
 
 ```text
 "Test Engineer: Debug this test failure:
@@ -402,7 +402,7 @@ cat papers/lenet5/src/*.mojo
 4. Report findings to Implementation Engineer"
 ```
 
-**Solution C: Check for environment issues**
+#### Solution C: Check for environment issues
 
 ```text
 "Verify tests pass in:
@@ -413,7 +413,7 @@ cat papers/lenet5/src/*.mojo
 Identify environment-specific issues"
 ```
 
-**Solution D: Review specifications**
+#### Solution D: Review specifications
 
 ```text
 "Escalate to Component Specialist:
@@ -428,8 +428,6 @@ Test and implementation engineers have different interpretations"
 - Regular test runs, not just at end
 - Coordinate test and implementation engineers
 - Handle floating-point precision appropriately
-
----
 
 ### Issue 7: Documentation Incomplete or Unclear
 
@@ -449,14 +447,14 @@ Test and implementation engineers have different interpretations"
 
 **Solutions**:
 
-**Solution A: Assign documentation specialist**
+#### Solution A: Assign documentation specialist
 
 ```text
 "Documentation Specialist: Create comprehensive documentation plan for [component]
 Include: API docs, examples, tutorials, README updates"
 ```
 
-**Solution B: Parallel documentation with implementation**
+#### Solution B: Parallel documentation with implementation
 
 ```text
 "During implementation phase:
@@ -465,7 +463,7 @@ Include: API docs, examples, tutorials, README updates"
 - Both work in separate worktrees, merge in packaging phase"
 ```
 
-**Solution C: Documentation review**
+#### Solution C: Documentation review
 
 ```text
 "Documentation Specialist: Review all documentation for:
@@ -475,7 +473,7 @@ Include: API docs, examples, tutorials, README updates"
 - Up-to-date with code"
 ```
 
-**Solution D: Generate from code**
+#### Solution D: Generate from code
 
 ```text
 "Junior Documentation Engineer:
@@ -511,7 +509,7 @@ Include: API docs, examples, tutorials, README updates"
 
 **Solutions**:
 
-**Solution A: Performance planning**
+#### Solution A: Performance planning
 
 ```text
 "Performance Specialist: Create performance optimization plan:
@@ -521,7 +519,7 @@ Include: API docs, examples, tutorials, README updates"
 4. Plan SIMD vectorization"
 ```
 
-**Solution B: Profile first**
+#### Solution B: Profile first
 
 ```text
 "Performance Engineer: Profile current implementation:
@@ -531,7 +529,7 @@ Include: API docs, examples, tutorials, README updates"
 4. Report findings"
 ```
 
-**Solution C: Optimize with senior engineer**
+#### Solution C: Optimize with senior engineer
 
 ```text
 "Senior Implementation Engineer: Implement SIMD optimizations:
@@ -541,7 +539,7 @@ Include: API docs, examples, tutorials, README updates"
 - Leverage Mojo's zero-cost abstractions"
 ```
 
-**Solution D: Validate improvements**
+#### Solution D: Validate improvements
 
 ```text
 "Performance Engineer: Benchmark optimizations:
@@ -578,7 +576,7 @@ Include: API docs, examples, tutorials, README updates"
 
 **Solutions**:
 
-**Solution A: Resolve at packaging phase**
+#### Solution A: Resolve at packaging phase
 
 ```text
 "Implementation Specialist (in packaging worktree):
@@ -590,7 +588,7 @@ Include: API docs, examples, tutorials, README updates"
 6. Verify integration"
 ```
 
-**Solution B: Coordinate on interfaces**
+#### Solution B: Coordinate on interfaces
 
 ```text
 "Before parallel execution:
@@ -599,7 +597,7 @@ All engineers: Follow interface specifications exactly
 This prevents conflicting changes"
 ```
 
-**Solution C: Use cherry-pick for dependencies**
+#### Solution C: Use cherry-pick for dependencies
 
 ```text
 "If Implementation depends on Test fixtures:
@@ -607,7 +605,7 @@ cd worktrees/issue-64-impl/
 git cherry-pick <commit-from-test-branch>"
 ```
 
-**Solution D: Escalate significant conflicts**
+#### Solution D: Escalate significant conflicts
 
 ```text
 "If conflicts are fundamental (not just textual):
@@ -642,7 +640,7 @@ May need to redesign interfaces or split work differently"
 
 **Solutions**:
 
-**Solution A: Remind of scope**
+#### Solution A: Remind of scope
 
 ```text
 "[Agent name]: This decision is outside your scope.
@@ -660,7 +658,7 @@ This decision requires: Chief Architect
 Please escalate if you need technology decisions."
 ```
 
-**Solution B: Review agent hierarchy**
+#### Solution B: Review agent hierarchy
 
 ```text
 "Refer to agents/hierarchy.md for scope boundaries:
@@ -672,7 +670,7 @@ Level 4: Function/class
 Level 5: Lines/boilerplate"
 ```
 
-**Solution C: Reset and delegate properly**
+#### Solution C: Reset and delegate properly
 
 ```text
 "Let's restart this task with proper delegation:

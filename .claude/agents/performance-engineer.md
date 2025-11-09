@@ -140,12 +140,14 @@ fn add_fast[size: Int](a: Tensor, b: Tensor) -> Tensor:
 ## Constraints
 
 ### Do NOT
+
 - Change function signatures without approval
 - Optimize without profiling first
 - Skip correctness verification after optimization
 - Make architectural changes (escalate to design)
 
 ### DO
+
 - Benchmark before and after optimizations
 - Profile to identify actual bottlenecks
 - Verify optimized code produces correct results
