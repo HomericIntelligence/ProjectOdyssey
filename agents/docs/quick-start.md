@@ -2,11 +2,13 @@
 
 ## 5-Minute Introduction
 
-Welcome to the ML Odyssey agent system! This guide will get you started with using our 6-level hierarchical agent system for Mojo-based AI research implementations.
+Welcome to the ML Odyssey agent system! This guide will get you started with using our 6-level hierarchical agent
+system for Mojo-based AI research implementations.
 
 ### What Are Agents?
 
-Agents are AI assistants organized in a hierarchy, each with specific roles and responsibilities. Think of them as a team of specialists:
+Agents are AI assistants organized in a hierarchy, each with specific roles and responsibilities. Think of them as
+a team of specialists:
 
 - **High levels** (0-2): Strategic planners and architects
 - **Mid levels** (3): Component specialists who coordinate implementation
@@ -60,7 +62,8 @@ You can also explicitly name the agent you want:
 "Ask the documentation specialist to create a tutorial"
 ```
 
-**When to use explicit?** When you know exactly which specialist you need, or when automatic invocation selected the wrong agent.
+**When to use explicit?** When you know exactly which specialist you need, or when automatic invocation selected
+the wrong agent.
 
 ### Checking Available Agents
 
@@ -318,4 +321,5 @@ cat agents/docs/onboarding.md
 
 ---
 
-**Ready to start?** Try invoking an agent with your next task, or read [onboarding.md](onboarding.md) for the complete system walkthrough.
+**Ready to start?** Try invoking an agent with your next task, or read [onboarding.md](onboarding.md) for the
+complete system walkthrough.

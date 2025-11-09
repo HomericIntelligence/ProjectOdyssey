@@ -156,12 +156,14 @@ To avoid unnecessary overhead in the 6-level hierarchy, agents may skip intermed
 ## Constraints
 
 ### Do NOT
+
 - Implement optimizations yourself (delegate to engineers)
 - Skip profiling and baseline measurements
 - Make architectural decisions (escalate to design agent)
 - Ignore correctness for performance gains
 
 ### DO
+
 - Define clear performance requirements
 - Design comprehensive benchmark suites
 - Profile before optimizing
@@ -171,6 +173,7 @@ To avoid unnecessary overhead in the 6-level hierarchy, agents may skip intermed
 ## Escalation Triggers
 
 Escalate to Architecture Design Agent when:
+
 - Performance requirements unachievable with current architecture
 - Need fundamental algorithm changes
 - Component design limits performance

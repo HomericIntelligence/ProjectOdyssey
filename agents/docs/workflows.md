@@ -15,14 +15,16 @@
 
 ## Overview
 
-This document provides concrete examples of common development workflows using the ml-odyssey agent hierarchy. Each workflow shows:
+This document provides concrete examples of common development workflows using the ml-odyssey agent hierarchy.
+Each workflow shows:
 
 - Which agents are involved
 - What each agent does
 - How they coordinate
 - Expected outputs and artifacts
 
-**Note**: All workflows follow the 5-phase structure (Plan → Test/Impl/Package → Cleanup), but complexity varies based on the task.
+**Note**: All workflows follow the 5-phase structure (Plan → Test/Impl/Package → Cleanup), but complexity varies
+based on the task.
 
 ## Workflow 1: Implementing a New Mojo Feature
 
@@ -49,7 +51,7 @@ Implement a new `BatchNorm2D` layer for the shared library to be used across all
 
 #### Phase 1: Plan (Sequential)
 
-**Step 1: Strategic Planning (Level 0-1)**
+##### Step 1: Strategic Planning (Level 0-1)
 
 ```text
 Chief Architect:
@@ -68,7 +70,7 @@ Shared Library Orchestrator:
 - GitHub Issue #150 created
 - Initial requirements documented
 
-**Step 2: Architecture Design (Level 2)**
+##### Step 2: Architecture Design (Level 2)
 
 ```text
 Architecture Design Agent:
@@ -96,7 +98,7 @@ Architecture Design Agent:
 - Interface definitions: `notes/issues/150/interfaces.md`
 - Dependency graph
 
-**Step 3: Component Planning (Level 3)**
+##### Step 3: Component Planning (Level 3)
 
 ```text
 Implementation Specialist:
@@ -157,7 +159,7 @@ git worktree add worktrees/issue-152-impl-batchnorm -b 152-impl-batchnorm
 git worktree add worktrees/issue-153-pkg-batchnorm -b 153-pkg-batchnorm
 ```
 
-**Phase 2: Test (Parallel)**
+#### Phase 2: Test (Parallel)
 
 ```text
 Test Specialist (Level 3):
@@ -238,7 +240,7 @@ Test Engineer (Level 4):
 - Test fixtures: `tests/fixtures/batchnorm_data.mojo`
 - All tests currently failing (no implementation yet)
 
-**Phase 3: Implementation (Parallel)**
+#### Phase 3: Implementation (Parallel)
 
 ```text
 Implementation Specialist (Level 3):
@@ -427,7 +429,7 @@ Junior Implementation Engineer (Level 5):
 - Most tests passing
 - Backward pass TODO item for cleanup
 
-**Phase 4: Packaging (Parallel)**
+#### Phase 4: Packaging (Parallel)
 
 ```text
 Documentation Specialist (Level 3):
@@ -469,7 +471,7 @@ Documentation Engineer (Level 4):
 
 #### forward (Inference Mode)
 
-  ```mojo
+```mojo
   fn forward(self, input: Tensor[DType.float32]) -> Tensor[DType.float32]
   ```
 
@@ -483,7 +485,7 @@ Documentation Engineer (Level 4):
 
 ### Basic Usage
 
-  ```mojo
+```mojo
   from core_ops.layers import BatchNorm2D
   from tensor import Tensor
 
@@ -497,11 +499,11 @@ Documentation Engineer (Level 4):
   # Inference
   var test_input = Tensor[DType.float32](1, 64, 28, 28)
   var test_output = bn.forward(test_input)
-  ```
+```
 
 ### In a Model
 
-  ```mojo
+```mojo
   from core_ops.layers import Conv2D, BatchNorm2D, ReLU
 
   struct ConvBlock:
@@ -519,11 +521,11 @@ Documentation Engineer (Level 4):
           x = self.bn.forward_train(x)  # Training mode
           x = self.relu.forward(x)
           return x
-  ```
+```
 
 ## Performance
 
-  SIMD-optimized implementation provides significant speedup:
+SIMD-optimized implementation provides significant speedup:
 
 - 8x faster than naive Python implementation
 - Benchmarked at 1.2ms for 32x64x28x28 input on M1 Mac
@@ -531,14 +533,14 @@ Documentation Engineer (Level 4):
 
 ## Integration
 
-  To use in your paper implementation:
+To use in your paper implementation:
 
-  ```mojo
+```mojo
   from core_ops.layers import BatchNorm2D
 
   # Add to your model
   var bn = BatchNorm2D(num_features=128)
-  ```
+```
 
 ## See Also
 
@@ -551,7 +553,7 @@ Documentation Engineer (Level 4):
 - Commits documentation to packaging worktree
 - Status update: "Documentation complete"
 
-```
+```text
 
 **Artifacts**:
 - API documentation: `docs/api/batchnorm.md`
@@ -575,7 +577,7 @@ Week 3:
   - Ready for integration and cleanup
 ```
 
-#### Phase 5: Cleanup (Sequential)
+### Phase 5: Cleanup (Sequential)
 
 ```text
 Git Worktree Setup:
@@ -1083,7 +1085,7 @@ Component Specialists (Level 3):
 
 Each module (Data, Model, Training, Evaluation) has its own Test/Impl/Package issues running in parallel.
 
-**Example: Model Module**
+##### Example: Model Module
 
 ```text
 Test (Issue #411):
@@ -1475,7 +1477,7 @@ Documentation Engineer:
 
 - Performance Specialist + Performance Engineer + Test Engineer
 
-## See Also
+## Related Resources
 
 - [5-Phase Integration](./5-phase-integration.md) - Detailed workflow explanation
 - [Git Worktree Guide](./git-worktree-guide.md) - How to use worktrees

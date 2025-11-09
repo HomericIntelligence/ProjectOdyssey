@@ -15,7 +15,9 @@
 
 ## Overview
 
-The ml-odyssey project uses a comprehensive 5-phase development workflow that integrates seamlessly with the 6-level agent hierarchy. This document explains how agents participate in each phase, coordinate work, and execute in parallel when appropriate.
+The ml-odyssey project uses a comprehensive 5-phase development workflow that integrates seamlessly with the
+6-level agent hierarchy. This document explains how agents participate in each phase, coordinate work, and execute
+in parallel when appropriate.
 
 **Key Principles**:
 
@@ -67,37 +69,37 @@ The ml-odyssey project uses a comprehensive 5-phase development workflow that in
 
 ### By Agent Level
 
-**Level 0: Chief Architect**
+#### Level 0: Chief Architect
 
 - **Plan**: Strategic architecture decisions, paper selection, system-wide coordination
 - **Test/Impl/Package**: Oversight and approval of major changes
 - **Cleanup**: Final architectural review and validation
 
-**Level 1: Section Orchestrators**
+#### Level 1: Section Orchestrators
 
 - **Plan**: Section-level planning, module breakdown, resource allocation
 - **Test/Impl/Package**: Coordinate parallel work within section
 - **Cleanup**: Aggregate cleanup tasks, prioritize refactoring
 
-**Level 2: Module Design Agents**
+#### Level 2: Module Design Agents
 
 - **Plan**: Component design, interface definitions, integration planning
 - **Test/Impl/Package**: Review implementations for alignment with design
 - **Cleanup**: Validate architectural integrity, approve refactoring
 
-**Level 3: Component Specialists**
+#### Level 3: Component Specialists
 
 - **Plan**: Detailed specifications for functions/classes, define success criteria
 - **Test/Impl/Package**: Direct execution of work (ACTIVE PHASE)
 - **Cleanup**: Identify and fix code smells, refactor implementations
 
-**Level 4: Implementation Engineers**
+#### Level 4: Implementation Engineers
 
 - **Plan**: Review specifications, ask clarifying questions
 - **Test/Impl/Package**: Write code, tests, and documentation (ACTIVE PHASE)
 - **Cleanup**: Fix issues, improve code quality
 
-**Level 5: Junior Engineers**
+#### Level 5: Junior Engineers
 
 - **Plan**: Limited participation (review templates)
 - **Test/Impl/Package**: Simple tasks, boilerplate generation (ACTIVE PHASE)
@@ -464,11 +466,12 @@ The implementation uses SIMD vectorization for optimal performance:
 - [Dense Layer](./dense.md)
 - [Sequential Model](../model.md)
 
-```
+```text
 
 ### Coordination Between Phases
 
 **Test ↔ Implementation (TDD)**:
+
 ```text
 1. Test Engineer writes failing test
 2. Signals Implementation Engineer via status update
@@ -557,7 +560,7 @@ All: Final quality review
 ### Example: Cleanup Issues
 
 ```markdown
-## Cleanup Issues - Conv2D Implementation
+## Cleanup Issues: Conv2D Implementation
 
 ### From Test Phase
 - [ ] Add edge case test for zero-sized input
@@ -653,7 +656,7 @@ Legend: ███ = Heavy involvement, ██ = Moderate, ░░ = Light/Oversig
 
 ### Example 1: New Feature - MaxPool2D Layer
 
-**Phase 1: Plan**
+#### Phase 1: Plan
 
 ```text
 Papers Orchestrator:
@@ -680,7 +683,7 @@ Test Specialist:
     * Test gradient computation
 ```
 
-**Phase 2: Test** (Parallel with 3 & 4)
+#### Phase 2: Test (Parallel with 3 & 4)
 
 ```text
 Test Engineer:
@@ -690,7 +693,7 @@ Test Engineer:
   - Creates test fixtures with known outputs
 ```
 
-**Phase 3: Implementation** (Parallel with 2 & 4)
+#### Phase 3: Implementation (Parallel with 2 & 4)
 
 ```text
 Implementation Engineer:
@@ -700,7 +703,7 @@ Implementation Engineer:
   - Coordinates with Test: runs tests, fixes failures
 ```
 
-**Phase 4: Packaging** (Parallel with 2 & 3)
+#### Phase 4: Packaging (Parallel with 2 & 3)
 
 ```text
 Documentation Engineer:
@@ -710,7 +713,7 @@ Documentation Engineer:
   - Updates API reference
 ```
 
-**Phase 5: Cleanup**
+#### Phase 5: Cleanup
 
 ```text
 Issues discovered:
@@ -726,7 +729,7 @@ Implementation Engineer:
 
 ### Example 2: Bug Fix - Incorrect Gradient Computation
 
-**Phase 1: Plan**
+#### Phase 1: Plan
 
 ```text
 Component Specialist:
@@ -736,7 +739,7 @@ Component Specialist:
   - Plan is minimal: just fix description
 ```
 
-**Phase 2: Test** (Parallel with 3 & 4)
+#### Phase 2: Test (Parallel with 3 & 4)
 
 ```text
 Test Engineer:
@@ -745,7 +748,7 @@ Test Engineer:
   - Commits test to test worktree
 ```
 
-**Phase 3: Implementation** (Parallel with 2 & 4)
+#### Phase 3: Implementation (Parallel with 2 & 4)
 
 ```text
 Implementation Engineer:
@@ -755,7 +758,7 @@ Implementation Engineer:
   - Commits fix to impl worktree
 ```
 
-**Phase 4: Packaging** (Parallel with 2 & 4)
+#### Phase 4: Packaging (Parallel with 2 & 4)
 
 ```text
 Documentation Engineer:
@@ -763,7 +766,7 @@ Documentation Engineer:
   - No major doc changes needed
 ```
 
-**Phase 5: Cleanup**
+#### Phase 5: Cleanup
 
 ```text
 - Add regression test for related edge cases
@@ -926,7 +929,7 @@ mojo build src/
 
 **Solution**: Follow delegation rules, escalate when uncertain
 
-## See Also
+## Related Documentation
 
 - [Git Worktree Guide](./git-worktree-guide.md) - Detailed worktree usage
 - [Common Workflows](./workflows.md) - Workflow examples
