@@ -23,57 +23,15 @@ body:
     id: solution
     attributes:
       label: Proposed Solution
-      description: How would you like this feature to work?
-      placeholder: I would like to see... / The system should...
-    validations:
-      required: true
-
-  - type: textarea
-    id: alternatives
-    attributes:
-      label: Alternatives Considered
-      description: What alternative solutions or features have you considered?
-      placeholder: I considered... / Another approach would be...
-
-  - type: dropdown
-    id: component
-    attributes:
-      label: Component
-      description: Which component would this feature affect?
-      options:
-        - Foundation (repository structure, config)
-        - Shared Library (core operations, training)
-        - Tooling (CLI, scripts, automation)
-        - Papers (research implementations)
-        - CI/CD (testing, deployment)
-        - Agents (agentic workflows)
-        - Documentation
-        - Cross-cutting (multiple components)
-    validations:
-      required: true
-
-  - type: dropdown
-    id: priority
-    attributes:
-      label: Priority
-      description: How important is this feature to you?
-      options:
-        - Critical (blocking my work)
-        - High (would significantly improve workflow)
-        - Medium (nice to have)
-        - Low (minor enhancement)
-    validations:
-      required: true
-
-  - type: textarea
-    id: impact
-    attributes:
-      label: Expected Impact
-      description: Who would benefit from this feature? How would it improve the project?
+      description: How would you like this feature to work? What alternative solutions have you considered?
       placeholder: |
-        - Users who...
-        - Would enable...
-        - Would improve...
+        I would like to see... / The system should...
+
+        Alternatives considered:
+        - Alternative A...
+        - Alternative B...
+    validations:
+      required: true
 
   - type: textarea
     id: implementation
@@ -95,21 +53,3 @@ body:
         from ml_odyssey import new_feature
 
         result = new_feature.do_something()
-
-  - type: checkboxes
-    id: contribution
-    attributes:
-      label: Contribution
-      options:
-        - label: I would be willing to contribute this feature
-          required: false
-
-  - type: checkboxes
-    id: checklist
-    attributes:
-      label: Pre-submission Checklist
-      options:
-        - label: I have searched existing issues to avoid duplicates
-          required: true
-        - label: I have provided all required information above
-          required: true
