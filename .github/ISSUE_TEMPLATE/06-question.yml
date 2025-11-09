@@ -12,14 +12,16 @@ body:
 
         **Note**: For longer discussions, consider using [GitHub Discussions](https://github.com/mvillmow/ml-odyssey/discussions).
 
-        **System Information**: If reporting an issue or asking about system-specific behavior,
-        please run `python3 scripts/get_system_info.py` and paste the output in your question.
-
   - type: textarea
     id: question
     attributes:
       label: Question
-      description: What would you like to know? Include context, what you've tried, and any relevant details.
+      description: |
+        What would you like to know? Include:
+        - Your question
+        - Context about what you're trying to do
+        - What you've already tried or looked at
+        - System information (if relevant, run `python3 scripts/get_system_info.py`)
       placeholder: |
         **Question:**
         How do I... / Why does... / What is...

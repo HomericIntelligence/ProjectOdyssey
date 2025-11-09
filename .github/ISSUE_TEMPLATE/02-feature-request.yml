@@ -11,45 +11,31 @@ body:
         Thanks for suggesting a feature! Please provide detailed information about what you'd like to see.
 
   - type: textarea
-    id: problem
+    id: description
     attributes:
-      label: Problem Statement
-      description: What problem does this feature solve? What use case does it address?
-      placeholder: I'm frustrated when... / I need to... / It would be helpful if...
-    validations:
-      required: true
-
-  - type: textarea
-    id: solution
-    attributes:
-      label: Proposed Solution
-      description: How would you like this feature to work? What alternative solutions have you considered?
+      label: Feature Description
+      description: |
+        Describe the feature you'd like to see. Include:
+        - What problem this solves or use case it addresses
+        - How you'd like this feature to work
+        - Alternative solutions you've considered
+        - Examples of how this would be used (code snippets, CLI commands, etc.)
       placeholder: |
+        **Problem/Use Case:**
+        I'm frustrated when... / I need to... / It would be helpful if...
+
+        **Proposed Solution:**
         I would like to see... / The system should...
 
-        Alternatives considered:
+        **Alternatives Considered:**
         - Alternative A...
         - Alternative B...
+
+        **Example Usage:**
+        ```python
+        # Example code showing how this feature would be used
+        from ml_odyssey import new_feature
+        result = new_feature.do_something()
+        ```
     validations:
       required: true
-
-  - type: textarea
-    id: implementation
-    attributes:
-      label: Implementation Ideas
-      description: Do you have ideas about how this could be implemented? (optional)
-      placeholder: |
-        This could be implemented by...
-        Key components would include...
-
-  - type: textarea
-    id: examples
-    attributes:
-      label: Examples
-      description: Provide examples of how this feature would be used (code snippets, CLI commands, etc.)
-      render: python
-      placeholder: |
-        # Example usage
-        from ml_odyssey import new_feature
-
-        result = new_feature.do_something()
