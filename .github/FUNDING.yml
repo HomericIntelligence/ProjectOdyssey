@@ -1,0 +1,142 @@
+# GitHub Sponsors configuration for ml-odyssey
+# Documentation: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
+#
+# Purpose:
+#   - Enable "Sponsor" button on repository
+#   - Provide multiple funding options for supporters
+#   - Support project sustainability and growth
+#
+# Supported Platforms:
+#   github: [username] or [username1, username2]
+#   patreon: username
+#   open_collective: project-name
+#   ko_fi: username
+#   tidelift: platform/package
+#   community_bridge: project-name
+#   liberapay: username
+#   issuehunt: username
+#   otechie: username
+#   lfx_crowdfunding: project-name
+#   custom: [url1, url2]
+
+# ============================================================================
+# GitHub Sponsors (Recommended)
+# ============================================================================
+# Primary funding platform - integrated with GitHub
+# - Monthly recurring donations
+# - One-time contributions
+# - Sponsor tiers with benefits
+# - USD, EUR, and other currencies
+#
+# Setup: https://github.com/sponsors
+# Status: Replace with actual username after GitHub Sponsors enrollment
+github: [mvillmow]  # Replace with GitHub Sponsors username once enrolled
+
+# ============================================================================
+# Alternative Platforms
+# ============================================================================
+# Provide options for supporters who prefer other platforms
+
+# Open Collective
+# - Transparent budget and expenses
+# - Fiscal hosting available
+# - Good for project-level funding (not individual)
+# - Setup: https://opencollective.com/
+# open_collective: ml-odyssey  # Uncomment after Open Collective setup
+
+# Ko-fi
+# - Simple one-time and monthly donations
+# - No fees for creators
+# - Good for individual maintainers
+# - Setup: https://ko-fi.com/
+# ko_fi: mvillmow  # Uncomment after Ko-fi account creation
+
+# Patreon
+# - Monthly membership platform
+# - Tier-based benefits
+# - Good for creator-focused projects
+# - Setup: https://www.patreon.com/
+# patreon: mvillmow  # Uncomment after Patreon account creation
+
+# ============================================================================
+# Custom Funding URLs
+# ============================================================================
+# For funding options not covered by standard platforms
+# - Crypto wallets
+# - Institution-specific donation pages
+# - Project-specific crowdfunding campaigns
+#
+# Format: List of URLs (max 4)
+# custom: ["https://example.com/donate", "https://crypto-wallet-link"]
+
+# ============================================================================
+# Configuration Notes
+# ============================================================================
+# 1. Platform Priority:
+#    - GitHub Sponsors (primary) - best GitHub integration
+#    - Open Collective (secondary) - transparent budgeting
+#    - Ko-fi / Patreon (tertiary) - alternative options
+#
+# 2. Activation:
+#    - Uncomment platforms as accounts are created
+#    - Test "Sponsor" button after each addition
+#    - Update README.md with sponsorship information
+#
+# 3. Transparency:
+#    - Consider documenting funding goals
+#    - Share how funds are used (compute, time, etc.)
+#    - Acknowledge sponsors in README or SPONSORS.md
+#
+# 4. Tax Implications:
+#    - Consult tax professional about donation income
+#    - GitHub Sponsors provides tax forms (US)
+#    - Open Collective can provide fiscal hosting
+#
+# 5. Sponsor Benefits:
+#    - Early access to features (if applicable)
+#    - Recognition in README/docs
+#    - Priority support (if capacity allows)
+#    - Influence on roadmap (via sponsor-only discussions)
+#
+# 6. Legal Considerations:
+#    - Ensure compliance with GitHub Terms of Service
+#    - Don't promise what you can't deliver
+#    - Clearly state if donations are not tax-deductible
+#
+# 7. Sustainability:
+#    - Set realistic funding goals
+#    - Communicate regularly with sponsors
+#    - Update sponsorship tiers as project evolves
+
+# ============================================================================
+# Future Enhancements
+# ============================================================================
+# When project grows, consider:
+#
+# 1. GitHub Sponsors Tiers:
+#    - $5/mo: Supporter (name in README)
+#    - $25/mo: Contributor (priority issue responses)
+#    - $100/mo: Sponsor (influence on roadmap)
+#    - $500/mo: Sustainer (monthly video call)
+#
+# 2. Open Collective Budget Categories:
+#    - Compute: GPU/TPU credits for paper reproduction
+#    - Development: Maintainer time
+#    - Documentation: Technical writer support
+#    - Community: Events, workshops, tutorials
+#
+# 3. Custom Donation Page:
+#    - Dedicated website explaining funding needs
+#    - Progress toward goals
+#    - Sponsor recognition page
+#    - Impact reports (papers reproduced, compute hours saved)
+#
+# 4. Institutional Sponsorship:
+#    - University partnerships
+#    - Research grants
+#    - Corporate sponsorships (Google, NVIDIA, etc.)
+#
+# 5. Grant Applications:
+#    - NumFOCUS grants for scientific computing
+#    - PSF grants for Python ecosystem projects
+#    - Mozilla Open Source Support (MOSS)
