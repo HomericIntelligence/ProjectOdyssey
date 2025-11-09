@@ -64,12 +64,12 @@ Based on testing (#63) and packaging (#65) results, the following specific clean
 
 **Script Improvements** (found by pytest test suite):
 
-5. **Add --agents-dir Parameter to agent_stats.py** (Priority: Medium)
+1. **Add --agents-dir Parameter to agent_stats.py** (Priority: Medium)
    - Script currently doesn't accept --agents-dir parameter
    - Location: scripts/agents/agent_stats.py
    - Needed for consistency with other scripts
 
-6. **Improve Empty Directory Handling** (Priority: Low)
+2. **Improve Empty Directory Handling** (Priority: Low)
    - Better error handling when agents directory is empty
    - Multiple scripts affected
    - Add graceful error messages
@@ -78,7 +78,7 @@ Based on testing (#63) and packaging (#65) results, the following specific clean
 
 **Agent Configuration Enhancements** (46 warnings from validate_configs.py):
 
-7. **Add Examples Sections** (Priority: Medium)
+1. **Add Examples Sections** (Priority: Medium)
    - 16+ agents missing "Examples" sections
    - Examples improve agent understanding and onboarding
    - Affects: Most orchestrators (L0-L1), some design agents (L2)
@@ -90,49 +90,51 @@ Based on testing (#63) and packaging (#65) results, the following specific clean
 
 **Mojo-Specific Guidance** (found by test_mojo_patterns.py):
 
-8. **Enhance fn vs def Guidance** (Priority: High)
+1. **Enhance fn vs def Guidance** (Priority: High)
    - Only 1/23 agents have this guidance
    - Critical for implementation agents
    - Affects: All L4-L5 implementation agents
    - Add clear guidance on when to use `fn` vs `def`
 
-9. **Enhance struct vs class Guidance** (Priority: High)
+2. **Enhance struct vs class Guidance** (Priority: High)
    - Only 1/23 agents have this guidance
    - Critical for implementation agents
    - Affects: All L4-L5 implementation agents
    - Add clear guidance on when to use `struct` vs `class`
 
-10. **Improve SIMD/Vectorization Guidance** (Priority: Medium)
-    - Currently at 45% coverage in implementation agents
-    - Should be closer to 100% for implementation agents
-    - Add concrete SIMD examples and optimization patterns
+3. **Improve SIMD/Vectorization Guidance** (Priority: Medium)
+   - Currently at 45% coverage in implementation agents
+   - Should be closer to 100% for implementation agents
+   - Add concrete SIMD examples and optimization patterns
 
-11. **Enhance Memory Management Guidance** (Priority: High)
-    - Currently at 70% coverage in implementation agents
-    - Should be 100% for all implementation agents
-    - Add `owned`, `borrowed`, `inout` examples
+4. **Enhance Memory Management Guidance** (Priority: High)
+   - Currently at 70% coverage in implementation agents
+   - Should be 100% for all implementation agents
+   - Add `owned`, `borrowed`, `inout` examples
 
 **Delegation Documentation** (found by test_delegation.py):
 
-12. **Document Implicit Delegation Design** (Priority: Medium)
-    - Tests show most agents use implicit delegation (by design)
-    - Add documentation explaining this is intentional
-    - Location: Add section to agents/delegation-rules.md
+1. **Document Implicit Delegation Design** (Priority: Medium)
+   - Tests show most agents use implicit delegation (by design)
+   - Add documentation explaining this is intentional
+   - Location: Add section to agents/delegation-rules.md
 
-13. **Add Explicit Delegation Examples** (Priority: Low)
-    - While implicit delegation works, explicit examples help understanding
-    - Add to high-level agents (L0-L2) showing delegation patterns
-    - Include in agent configuration examples
+2. **Add Explicit Delegation Examples** (Priority: Low)
+   - While implicit delegation works, explicit examples help understanding
+   - Add to high-level agents (L0-L2) showing delegation patterns
+   - Include in agent configuration examples
 
 ### Priority Summary
 
 **High Priority** (Must Fix):
+
 - [ ] Fix unclosed code block (item 3)
 - [ ] Add fn vs def guidance (item 8)
 - [ ] Add struct vs class guidance (item 9)
 - [ ] Enhance memory management guidance (item 11)
 
 **Medium Priority** (Should Fix):
+
 - [ ] Convert absolute to relative paths (item 1)
 - [ ] Fix heading hierarchy (item 4)
 - [ ] Add --agents-dir parameter (item 5)
@@ -141,6 +143,7 @@ Based on testing (#63) and packaging (#65) results, the following specific clean
 - [ ] Document implicit delegation (item 12)
 
 **Low Priority** (Nice to Have):
+
 - [ ] Remove placeholder text (item 2)
 - [ ] Improve empty directory handling (item 6)
 - [ ] Add explicit delegation examples (item 13)
@@ -148,6 +151,7 @@ Based on testing (#63) and packaging (#65) results, the following specific clean
 ### Testing Status
 
 **Issue #63 Test Results** (All tests PASS):
+
 - ✅ validate_configs.py: 23/23 agents pass (46 warnings for enhancements)
 - ✅ test_loading.py: All 23 agents load successfully
 - ✅ test_delegation.py: Implicit delegation working as designed
@@ -155,6 +159,7 @@ Based on testing (#63) and packaging (#65) results, the following specific clean
 - ✅ test_mojo_patterns.py: Gaps identified in Mojo-specific guidance
 
 **Issue #65 Test Results** (69/76 tests pass):
+
 - ✅ 69 tests passing (91% pass rate)
 - ⚠️ 6 failures catching real documentation issues (items 1-4 above)
 - ⚠️ 1 error in test fixtures (not blocking)

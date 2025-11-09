@@ -2,7 +2,8 @@
 
 ## Purpose
 
-This directory contains mock agent configurations for testing the agent validation and testing infrastructure before real agents are implemented in issue #64.
+This directory contains mock agent configurations for testing the agent validation and testing infrastructure
+before real agents are implemented in issue #64.
 
 ## Mock Agents
 
@@ -46,6 +47,7 @@ python3 tests/agents/test_mojo_patterns.py tests/agents/mock_agents/
 When testing with these mock agents, you should see:
 
 ### validate_configs.py
+
 - All 6 agents pass validation
 - Zero critical errors
 - Minimal warnings (if any)
@@ -53,6 +55,7 @@ When testing with these mock agents, you should see:
 - Required fields present
 
 ### test_loading.py
+
 - All 6 agents discovered
 - All levels 0-5 represented
 - Activation keywords detected in descriptions
@@ -60,12 +63,14 @@ When testing with these mock agents, you should see:
 - Model distribution: mostly sonnet, opus for Chief Architect
 
 ### test_delegation.py
+
 - Complete delegation chain: 0→1→2→3→4→5
 - Escalation paths: 5→4→3→2→1→0
 - Escalation triggers defined for each agent
 - Horizontal coordination mentioned
 
 ### test_integration.py
+
 - Plan phase: Levels 0-3
 - Test/Impl/Package phases: Levels 3-5 (parallel)
 - Cleanup phase: All levels
@@ -73,6 +78,7 @@ When testing with these mock agents, you should see:
 - Worktree coordination for levels 4-5
 
 ### test_mojo_patterns.py
+
 - Levels 3-5 have Mojo guidance
 - fn vs def: Present in levels 3-5
 - struct vs class: Present in levels 3-5
@@ -83,12 +89,14 @@ When testing with these mock agents, you should see:
 ## Differences from Real Agents
 
 Mock agents are simplified:
+
 - Less detailed than real agents will be
 - Focused on demonstrating key patterns
 - May not cover all edge cases
 - Serve as validation baseline
 
 Real agents (from issue #64) will:
+
 - Have more comprehensive guidance
 - Include more examples
 - Cover more scenarios
@@ -105,6 +113,7 @@ Real agents (from issue #64) will:
 ## Maintenance
 
 These mock agents should:
+
 - Remain stable for baseline testing
 - Not be modified unless test requirements change
 - Serve as examples of proper agent structure
