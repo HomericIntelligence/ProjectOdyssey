@@ -11,10 +11,16 @@ body:
         Suggest improvements to project infrastructure, tooling, or developer experience.
 
   - type: textarea
-    id: problem
+    id: description
     attributes:
-      label: Problem Statement
-      description: What problem does this solve? What pain point does it address? What is your proposed solution?
+      label: Infrastructure Improvement
+      description: |
+        Describe the infrastructure or tooling improvement. Include:
+        - What problem this solves or pain point it addresses
+        - Proposed solution
+        - Implementation details (tools, technologies, key steps)
+        - Alternatives considered
+        - Risks, trade-offs, and considerations
       placeholder: |
         **Problem:**
         Currently, developers need to...
@@ -25,25 +31,18 @@ body:
         Add a new script that...
         Update the CI pipeline to...
         Implement automation for...
-    validations:
-      required: true
 
-  - type: textarea
-    id: implementation
-    attributes:
-      label: Implementation Details
-      description: Technical details, alternatives considered, and risks/trade-offs
-      placeholder: |
-        **Tools/technologies needed:**
+        **Implementation Details:**
+        Tools/technologies needed:
         - Tool A for...
         - Library B for...
 
-        **Key steps:**
+        Key steps:
         1. Configure...
         2. Implement...
         3. Test...
 
-        **Alternatives considered:**
+        **Alternatives Considered:**
         - Option A: ... (rejected because...)
         - Option B: ... (could work but...)
 
@@ -51,3 +50,5 @@ body:
         - May increase build time
         - Requires additional dependencies
         - Breaking change for existing workflows
+    validations:
+      required: true

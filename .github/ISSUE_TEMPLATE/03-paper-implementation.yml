@@ -12,10 +12,17 @@ body:
         following our 4-level hierarchical planning structure.
 
   - type: textarea
-    id: paper-description
+    id: description
     attributes:
       label: Paper Information
-      description: Provide complete information about the paper
+      description: |
+        Provide complete information about the paper. Include:
+        - Title, authors, year, venue, URL
+        - Paper abstract or brief description
+        - Category (CV, NLP, RL, etc.)
+        - Why this paper should be implemented
+        - Required datasets, dependencies, and resources
+        - Available reference implementations or pretrained models
       placeholder: |
         **Title**: Gradient-Based Learning Applied to Document Recognition
 
@@ -27,32 +34,10 @@ body:
 
         **URL**: https://ieeexplore.ieee.org/document/726791
 
-        **Abstract**: This paper presents...
-    validations:
-      required: true
+        **Category**: Computer Vision
 
-  - type: dropdown
-    id: category
-    attributes:
-      label: Category
-      description: What type of paper is this?
-      options:
-        - Computer Vision
-        - Natural Language Processing
-        - Reinforcement Learning
-        - Generative Models
-        - Optimization
-        - Architecture
-        - Other
-    validations:
-      required: true
+        **Abstract/Description**: This paper presents...
 
-  - type: textarea
-    id: motivation
-    attributes:
-      label: Motivation
-      description: Why should we implement this paper? What datasets, dependencies, or resources are needed?
-      placeholder: |
         **Why implement this paper:**
         This paper is important because...
         It would enable...
