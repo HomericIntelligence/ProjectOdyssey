@@ -12,58 +12,29 @@ body:
 
         **Note**: For longer discussions, consider using [GitHub Discussions](https://github.com/mvillmow/ml-odyssey/discussions).
 
-  - type: dropdown
-    id: category
-    attributes:
-      label: Question Category
-      description: What area is your question about?
-      options:
-        - Getting Started / Setup
-        - Agent System Usage
-        - Paper Implementation
-        - Code Understanding
-        - Architecture / Design
-        - Best Practices
-        - Troubleshooting
-        - Other
-    validations:
-      required: true
+        **System Information**: If reporting an issue or asking about system-specific behavior,
+        please run `python3 scripts/get_system_info.py` and paste the output in your question.
 
   - type: textarea
     id: question
     attributes:
       label: Question
-      description: What would you like to know?
-      placeholder: How do I... / Why does... / What is...
-    validations:
-      required: true
-
-  - type: textarea
-    id: context
-    attributes:
-      label: Context
-      description: Provide context about what you're trying to accomplish
+      description: What would you like to know? Include context, what you've tried, and any relevant details.
       placeholder: |
+        **Question:**
+        How do I... / Why does... / What is...
+
+        **Context:**
         I'm trying to...
         I've looked at...
         I expected... but...
 
-  - type: textarea
-    id: attempted
-    attributes:
-      label: What I've Tried
-      description: What have you already tried or researched?
-      placeholder: |
+        **What I've Tried:**
         - Read the documentation at...
         - Tried approach X...
         - Searched for...
 
-  - type: checkboxes
-    id: checklist
-    attributes:
-      label: Pre-submission Checklist
-      options:
-        - label: I have searched existing issues and discussions
-          required: true
-        - label: I have checked the documentation
-          required: true
+        **System Information (if relevant):**
+        Paste output of `python3 scripts/get_system_info.py` here
+    validations:
+      required: true
