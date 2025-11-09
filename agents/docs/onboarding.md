@@ -6,7 +6,7 @@
 - [System Overview](#system-overview)
 - [6-Level Hierarchy Explained](#6-level-hierarchy-explained)
 - [Delegation Patterns Walkthrough](#delegation-patterns-walkthrough)
-- [Mojo-Specific Agent Capabilities](#mojo-specific-agent-capabilities)
+- [Mojo-Specific Capabilities](#mojo-specific-agent-capabilities)
 - [Best Practices](#best-practices)
 - [Anti-Patterns to Avoid](#anti-patterns-to-avoid)
 - [Step-by-Step Tutorial](#step-by-step-tutorial)
@@ -14,7 +14,8 @@
 
 ## Introduction
 
-Welcome to the ML Odyssey multi-level agent system! This guide provides a comprehensive introduction to understanding and effectively using our hierarchical agent architecture.
+Welcome to the ML Odyssey multi-level agent system! This guide provides a comprehensive introduction to
+understanding and effectively using our hierarchical agent architecture.
 
 ### What You'll Learn
 
@@ -42,7 +43,8 @@ Welcome to the ML Odyssey multi-level agent system! This guide provides a compre
 
 ### The Big Picture
 
-The ML Odyssey agent system is a **hierarchical team of AI specialists** designed to implement AI research papers in Mojo. Think of it as a software engineering organization:
+The ML Odyssey agent system is a **hierarchical team of AI specialists** designed to implement AI research
+papers in Mojo. Think of it as a software engineering organization:
 
 ```text
 Level 0: CTO/VP Engineering        → Chief Architect
@@ -248,7 +250,6 @@ struct SGD(Optimizer):
 
 This design allows easy extension for Adam, RMSprop, etc. I'll delegate to the
 Implementation Specialist for detailed function specifications."
-```
 
 ### Level 3: Component Specialists
 
@@ -382,7 +383,6 @@ fn step(inout self, parameters: List[Tensor], gradients: List[Tensor]):
 
 This implementation leverages Mojo's SIMD capabilities for performance while
 maintaining clarity. I'll coordinate with the Test Engineer to verify correctness."
-```
 
 ### Level 5: Junior Engineers
 
@@ -455,7 +455,6 @@ fn set_momentum(inout self, m: Float64):
 ```
 
 All methods follow Mojo conventions and include proper docstrings."
-```
 
 ## Delegation Patterns Walkthrough
 
@@ -500,7 +499,7 @@ Junior Engineer (Level 5):
 
 **Flow**: Orchestrator → Appropriate Specialist
 
-**Example: Adding Authentication**
+#### Example: Adding Authentication
 
 ```text
 User Request: "Add API authentication to the model server"
@@ -532,7 +531,7 @@ Security Implementation Specialist:
 
 **Flow**: Specialist → Multiple Engineers (parallel)
 
-**Example: Implementing a Component**
+#### Example: Implementing a Component
 
 ```text
 Implementation Specialist (after planning):
@@ -561,32 +560,38 @@ All three work independently in separate git worktrees:
 
 **Flow**: Test Engineer ↔ Implementation Engineer
 
-**Example: Building a Function**
+#### Example: Building a Function
 
 ```text
-1. Test Engineer:
+Test Engineer:
    "I'll write failing tests first"
-   ```mojo
-   fn test_sgd_updates_parameters():
-       let optimizer = SGD(learning_rate=0.01)
-       # Test implementation here
-       assert_equal(...)  # Currently fails
-   ```
+```
 
-2. Implementation Engineer:
+```mojo
+fn test_sgd_updates_parameters():
+    let optimizer = SGD(learning_rate=0.01)
+    # Test implementation here
+    assert_equal(...)  # Currently fails
+```
+
+```text
+Implementation Engineer:
    "I see the test. Implementing to make it pass..."
-   ```mojo
-   fn step(inout self, ...):
-       # Implementation that satisfies the test
-   ```
+```
 
-3. Test Engineer:
+```mojo
+fn step(inout self, ...):
+    # Implementation that satisfies the test
+```
+
+```text
+Test Engineer:
    "Tests passing! Adding edge case tests..."
 
-4. Implementation Engineer:
+Implementation Engineer:
    "Edge cases failing. Fixing..."
 
-5. Both:
+Both:
    "All tests passing. Feature complete!"
 ```
 
@@ -1058,7 +1063,6 @@ fn relu[dtype: DType](
 ```
 
 Specs complete. Delegating to specialists for parallel execution."
-```
 
 #### Step 4: Parallel Execution
 
@@ -1095,7 +1099,6 @@ fn test_relu_simd_performance():
 ```
 
 Tests written. Committing to branch 63-test-relu."
-```
 
 **Senior Implementation Engineer** (in `worktrees/issue-64-impl-relu/`):
 
@@ -1129,7 +1132,6 @@ fn relu[dtype: DType](
 ```
 
 Implementation complete. This will vectorize across SIMD lanes for performance."
-```
 
 **Documentation Writer** (in `worktrees/issue-65-docs-relu/`):
 
@@ -1190,7 +1192,6 @@ CPUs, it can process 4-8 elements per cycle.
 "
 
 Documentation complete."
-```
 
 #### Step 5: Integration in Packaging Phase
 
@@ -1330,8 +1331,8 @@ mojo_lib.train_step.argtypes = [POINTER(c_float), c_int]
 def train_step(batch):
     return mojo_lib.train_step(batch.ctypes.data, batch.size)
 ```
+
 "
-```
 
 ### Performance Profiling Workflow
 

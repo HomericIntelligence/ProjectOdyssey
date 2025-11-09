@@ -231,6 +231,7 @@ Parallel Phases (issue-63, 64, 65):
 ```
 
 **Example**:
+
 ```bash
 # In issue-64-impl-agents worktree
 cd worktrees/issue-64-impl-agents
@@ -262,11 +263,13 @@ git cherry-pick abc123
 ```
 
 **When to Use**:
+
 - Need specific file from parallel worktree
 - Small, self-contained commits
 - No merge conflicts expected
 
 **When NOT to Use**:
+
 - Large, interdependent changes
 - Better to wait and merge in Packaging phase
 
@@ -295,6 +298,7 @@ git merge --abort
 ```
 
 **Benefits**:
+
 - Validate integration before final merge
 - Catch compatibility issues early
 - Can test without affecting other worktrees
@@ -636,6 +640,7 @@ git push -u origin 202-cleanup-refactor
 ### Branch Management
 
 1. **Branch from Main**: Always create worktrees from main (or latest stable)
+
    ```bash
    git checkout main
    git pull
@@ -643,6 +648,7 @@ git push -u origin 202-cleanup-refactor
    ```
 
 2. **Descriptive Branch Names**: Match issue number and purpose
+
    ```bash
    62-plan-agents
    63-test-agents
@@ -650,6 +656,7 @@ git push -u origin 202-cleanup-refactor
    ```
 
 3. **Push Immediately**: Set upstream on first push
+
    ```bash
    git push -u origin 64-impl-agents
    ```
@@ -667,11 +674,13 @@ git push -u origin 202-cleanup-refactor
 ### Cleanup
 
 1. **Remove After Merge**: Clean up worktrees after PR merges
+
    ```bash
    git worktree remove worktrees/issue-63-test-agents
    ```
 
 2. **Prune Regularly**: Remove stale worktree references
+
    ```bash
    git worktree prune
    ```
@@ -688,6 +697,7 @@ fatal: 'worktrees/issue-64-impl-agents' already exists
 ```
 
 **Solution**:
+
 ```bash
 # Remove existing worktree
 git worktree remove worktrees/issue-64-impl-agents
@@ -704,6 +714,7 @@ fatal: '64-impl-agents' is already checked out at '/home/user/ml-odyssey/worktre
 ```
 
 **Solution**:
+
 ```bash
 # Remove the worktree first
 git worktree remove worktrees/issue-64-impl-agents
@@ -721,6 +732,7 @@ git merge 63-test-agents
 ```
 
 **Solution**:
+
 ```bash
 # Resolve conflict manually
 vim .claude/agents/test-engineer.md
@@ -742,6 +754,7 @@ $ git worktree list
 ```
 
 **Solution**:
+
 ```bash
 # Prune invalid references
 git worktree prune
@@ -758,6 +771,7 @@ fatal: 'worktrees/issue-64-impl-agents' contains modified or untracked files, us
 ```
 
 **Solution**:
+
 ```bash
 # Option 1: Commit changes
 cd worktrees/issue-64-impl-agents
@@ -779,6 +793,7 @@ git branch
 ```
 
 **Solution**:
+
 ```bash
 # Switch to correct branch
 git checkout 64-impl-agents

@@ -58,7 +58,8 @@ This catalog lists all 23 agent types in the ML Odyssey hierarchical agent syste
 
 **Configuration**: `.claude/agents/chief-architect.md`
 
-**Description**: Makes system-wide strategic decisions, selects papers to implement, and coordinates across all repository sections
+**Description**: Makes system-wide strategic decisions, selects papers to implement, and coordinates across all
+repository sections
 
 **When to Use**:
 
@@ -148,7 +149,8 @@ This catalog lists all 23 agent types in the ML Odyssey hierarchical agent syste
 
 **Configuration**: `.claude/agents/shared-library-orchestrator.md`
 
-**Description**: Coordinates core reusable components including tensor operations, neural network layers, and training utilities (Section 02)
+**Description**: Coordinates core reusable components including tensor operations, neural network layers, and
+training utilities (Section 02)
 
 **When to Use**:
 
@@ -234,7 +236,8 @@ This catalog lists all 23 agent types in the ML Odyssey hierarchical agent syste
 
 **Configuration**: `.claude/agents/papers-orchestrator.md`
 
-**Description**: Coordinates research paper implementations including data preparation, model architecture, training, and evaluation (Section 04)
+**Description**: Coordinates research paper implementations including data preparation, model architecture,
+training, and evaluation (Section 04)
 
 **When to Use**:
 
@@ -279,7 +282,8 @@ This catalog lists all 23 agent types in the ML Odyssey hierarchical agent syste
 
 **Configuration**: `.claude/agents/cicd-orchestrator.md`
 
-**Description**: Manages continuous integration, testing infrastructure, deployment pipelines, and quality gates (Section 05)
+**Description**: Manages continuous integration, testing infrastructure, deployment pipelines, and quality gates
+(Section 05)
 
 **When to Use**:
 
@@ -324,7 +328,8 @@ This catalog lists all 23 agent types in the ML Odyssey hierarchical agent syste
 
 **Configuration**: `.claude/agents/agentic-workflows-orchestrator.md`
 
-**Description**: Coordinates Claude-powered automation including research assistants, code review agents, and documentation generators (Section 06)
+**Description**: Coordinates Claude-powered automation including research assistants, code review agents, and
+documentation generators (Section 06)
 
 **When to Use**:
 
@@ -511,7 +516,8 @@ This catalog lists all 23 agent types in the ML Odyssey hierarchical agent syste
 
 **Configuration**: `.claude/agents/implementation-specialist.md`
 
-**Description**: Coordinates component implementation, breaks components into functions/classes, and manages implementation work
+**Description**: Coordinates component implementation, breaks components into functions/classes, and manages
+implementation work
 
 **When to Use**:
 

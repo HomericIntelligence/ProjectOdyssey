@@ -18,6 +18,7 @@
 The ml-odyssey project uses a comprehensive 5-phase development workflow that integrates seamlessly with the 6-level agent hierarchy. This document explains how agents participate in each phase, coordinate work, and execute in parallel when appropriate.
 
 **Key Principles**:
+
 - **Plan First**: Design and specifications must complete before implementation begins
 - **Parallel Execution**: Test, Implementation, and Packaging run simultaneously after Plan completes
 - **Cleanup Last**: Refactoring and finalization happen after parallel phases finish
@@ -47,6 +48,7 @@ The ml-odyssey project uses a comprehensive 5-phase development workflow that in
 ```
 
 **Dependencies**:
+
 - **Plan → Test/Impl/Package**: Parallel phases require Plan specifications
 - **Test/Impl/Package → Cleanup**: Cleanup collects issues from all parallel phases
 - **Iterative**: Major issues in Cleanup may require revisiting earlier phases
@@ -66,31 +68,37 @@ The ml-odyssey project uses a comprehensive 5-phase development workflow that in
 ### By Agent Level
 
 **Level 0: Chief Architect**
+
 - **Plan**: Strategic architecture decisions, paper selection, system-wide coordination
 - **Test/Impl/Package**: Oversight and approval of major changes
 - **Cleanup**: Final architectural review and validation
 
 **Level 1: Section Orchestrators**
+
 - **Plan**: Section-level planning, module breakdown, resource allocation
 - **Test/Impl/Package**: Coordinate parallel work within section
 - **Cleanup**: Aggregate cleanup tasks, prioritize refactoring
 
 **Level 2: Module Design Agents**
+
 - **Plan**: Component design, interface definitions, integration planning
 - **Test/Impl/Package**: Review implementations for alignment with design
 - **Cleanup**: Validate architectural integrity, approve refactoring
 
 **Level 3: Component Specialists**
+
 - **Plan**: Detailed specifications for functions/classes, define success criteria
 - **Test/Impl/Package**: Direct execution of work (ACTIVE PHASE)
 - **Cleanup**: Identify and fix code smells, refactor implementations
 
 **Level 4: Implementation Engineers**
+
 - **Plan**: Review specifications, ask clarifying questions
 - **Test/Impl/Package**: Write code, tests, and documentation (ACTIVE PHASE)
 - **Cleanup**: Fix issues, improve code quality
 
 **Level 5: Junior Engineers**
+
 - **Plan**: Limited participation (review templates)
 - **Test/Impl/Package**: Simple tasks, boilerplate generation (ACTIVE PHASE)
 - **Cleanup**: Format code, update simple documentation
@@ -199,6 +207,7 @@ Component Specialist (Level 3) - Coordinates parallel work
 **Agents**: Test Specialist, Test Engineers (Levels 3-5)
 
 **Work**:
+
 - Implement unit tests from test plan
 - Create integration tests
 - Build test fixtures and mock data
@@ -206,12 +215,14 @@ Component Specialist (Level 3) - Coordinates parallel work
 - Verify coverage requirements
 
 **Deliverables**:
+
 - Test files (`.mojo`, `.py`)
 - Test fixtures
 - Test utilities
 - Coverage reports
 
 **Mojo Example**:
+
 ```mojo
 # tests/test_conv2d.mojo
 from testing import assert_equal, assert_raises
@@ -247,6 +258,7 @@ fn test_conv2d_simd_optimization():
 **Agents**: Implementation Specialist, Implementation Engineers (Levels 3-5)
 
 **Work**:
+
 - Implement functions and classes from specs
 - Write performance-critical Mojo code
 - Implement error handling
@@ -254,12 +266,14 @@ fn test_conv2d_simd_optimization():
 - Coordinate with Test phase for TDD
 
 **Deliverables**:
+
 - Implementation code (`.mojo`, `.py`)
 - Inline documentation
 - API implementations
 - Performance optimizations
 
 **Mojo Example**:
+
 ```mojo
 # src/model/layers/conv2d.mojo
 from tensor import Tensor
@@ -364,6 +378,7 @@ struct Conv2D:
 **Agents**: Documentation Specialist, Documentation Engineers, Integration Engineers (Levels 3-5)
 
 **Work**:
+
 - Write API documentation
 - Create usage examples
 - Write installation guides
@@ -371,6 +386,7 @@ struct Conv2D:
 - Create package configurations
 
 **Deliverables**:
+
 - README files
 - API documentation
 - Usage examples
@@ -378,6 +394,7 @@ struct Conv2D:
 - Package configurations
 
 **Example**:
+
 ```markdown
 # Conv2D Layer
 
@@ -394,6 +411,7 @@ Conv2D(in_channels: Int, out_channels: Int, kernel_size: Int)
 ```
 
 **Parameters**:
+
 - `in_channels`: Number of input channels
 - `out_channels`: Number of output feature maps
 - `kernel_size`: Size of the convolution kernel (square)
@@ -409,9 +427,11 @@ fn forward(self, input: Tensor[DType.float32]) -> Tensor[DType.float32]
 Apply 2D convolution to input tensor.
 
 **Parameters**:
+
 - `input`: Input tensor of shape `(batch, in_channels, height, width)`
 
 **Returns**:
+
 - Output tensor of shape `(batch, out_channels, out_height, out_width)`
 
 ## Usage Example
@@ -433,6 +453,7 @@ var output = conv.forward(input)  # Shape: (1, 6, 24, 24)
 ## Performance
 
 The implementation uses SIMD vectorization for optimal performance:
+
 - Benchmarked at 2.5ms for MNIST-sized inputs on M1 Mac
 - 10x faster than naive Python implementation
 - Scales efficiently with batch size
@@ -442,6 +463,7 @@ The implementation uses SIMD vectorization for optimal performance:
 - [MaxPool2D](./maxpool2d.md)
 - [Dense Layer](./dense.md)
 - [Sequential Model](../model.md)
+
 ```
 
 ### Coordination Between Phases
@@ -455,6 +477,7 @@ The implementation uses SIMD vectorization for optimal performance:
 ```
 
 **Implementation ↔ Packaging**:
+
 ```text
 1. Implementation Engineer completes function
 2. Documentation Engineer reads implementation
@@ -463,6 +486,7 @@ The implementation uses SIMD vectorization for optimal performance:
 ```
 
 **Git Worktree Isolation**:
+
 ```bash
 # Each phase has its own worktree
 worktrees/issue-63-test-agents/      # Test Engineers work here
@@ -471,6 +495,7 @@ worktrees/issue-65-pkg-agents/       # Documentation Engineers work here
 ```
 
 **Cross-Worktree Coordination**:
+
 - **Option 1**: Cherry-pick commits between worktrees
 - **Option 2**: Coordinate through specifications (preferred)
 - **Option 3**: Temporary merge for integration testing
@@ -502,6 +527,7 @@ All: Final quality review
 ### Common Cleanup Tasks
 
 **Level 3-4 (Specialists and Engineers)**:
+
 - Refactor duplicated code
 - Fix code smells (long functions, complex logic)
 - Improve error messages
@@ -510,17 +536,20 @@ All: Final quality review
 - Add missing edge case handling
 
 **Level 2 (Design Agents)**:
+
 - Validate architectural integrity
 - Review interfaces for consistency
 - Approve refactoring plans
 - Update design documents
 
 **Level 1 (Orchestrators)**:
+
 - Aggregate cleanup status
 - Ensure section-wide consistency
 - Coordinate cross-module refactoring
 
 **Level 0 (Chief Architect)**:
+
 - Final architectural review
 - Approve for production
 - Document lessons learned
@@ -625,6 +654,7 @@ Legend: ███ = Heavy involvement, ██ = Moderate, ░░ = Light/Oversig
 ### Example 1: New Feature - MaxPool2D Layer
 
 **Phase 1: Plan**
+
 ```text
 Papers Orchestrator:
   - Reviews LeNet-5 requirements
@@ -651,6 +681,7 @@ Test Specialist:
 ```
 
 **Phase 2: Test** (Parallel with 3 & 4)
+
 ```text
 Test Engineer:
   - Implements test_maxpool_output_shape()
@@ -660,6 +691,7 @@ Test Engineer:
 ```
 
 **Phase 3: Implementation** (Parallel with 2 & 4)
+
 ```text
 Implementation Engineer:
   - Implements MaxPool2D struct
@@ -669,6 +701,7 @@ Implementation Engineer:
 ```
 
 **Phase 4: Packaging** (Parallel with 2 & 3)
+
 ```text
 Documentation Engineer:
   - Writes MaxPool2D documentation
@@ -678,6 +711,7 @@ Documentation Engineer:
 ```
 
 **Phase 5: Cleanup**
+
 ```text
 Issues discovered:
   - [Test] Need stride != pool_size test case
@@ -693,6 +727,7 @@ Implementation Engineer:
 ### Example 2: Bug Fix - Incorrect Gradient Computation
 
 **Phase 1: Plan**
+
 ```text
 Component Specialist:
   - Analyzes bug report
@@ -702,6 +737,7 @@ Component Specialist:
 ```
 
 **Phase 2: Test** (Parallel with 3 & 4)
+
 ```text
 Test Engineer:
   - Writes failing test that reproduces bug
@@ -710,6 +746,7 @@ Test Engineer:
 ```
 
 **Phase 3: Implementation** (Parallel with 2 & 4)
+
 ```text
 Implementation Engineer:
   - Reads test case
@@ -719,6 +756,7 @@ Implementation Engineer:
 ```
 
 **Phase 4: Packaging** (Parallel with 2 & 4)
+
 ```text
 Documentation Engineer:
   - Updates CHANGELOG with bug fix
@@ -726,6 +764,7 @@ Documentation Engineer:
 ```
 
 **Phase 5: Cleanup**
+
 ```text
 - Add regression test for related edge cases
 - Review other gradient calculations for similar bugs
@@ -753,6 +792,7 @@ Iteration 2:
 ```
 
 **Benefits**:
+
 - Tests guide implementation
 - Continuous validation
 - High code coverage
@@ -779,6 +819,7 @@ Complete (100%):
 ```
 
 **Benefits**:
+
 - Documentation stays current
 - API design validated early
 - Examples guide implementation
