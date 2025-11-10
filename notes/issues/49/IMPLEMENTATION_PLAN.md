@@ -32,7 +32,7 @@ Issue #48 (Test Suite).
    - Mojo Features: Struct, ownership, borrowing, SIMD
    - Test: `test_tensors.mojo` (stub only, needs expansion)
 
-2. **Linear Layer** (`layers/linear.mojo`)
+1. **Linear Layer** (`layers/linear.mojo`)
    - Complexity: HIGH - Matrix multiplication with gradients
    - Lines: ~300
    - Dependencies: Tensor, matmul
@@ -40,7 +40,7 @@ Issue #48 (Test Suite).
    - Mojo Features: SIMD matmul, memory-efficient updates
    - Test: `test_layers.mojo` lines 26-98
 
-3. **Conv2D Layer** (`layers/conv.mojo`)
+1. **Conv2D Layer** (`layers/conv.mojo`)
    - Complexity: HIGH - Complex convolution with im2col optimization
    - Lines: ~400
    - Dependencies: Tensor
@@ -48,7 +48,7 @@ Issue #48 (Test Suite).
    - Mojo Features: SIMD convolution loops, tiling
    - Test: `test_layers.mojo` lines 105-187
 
-4. **SGD Optimizer** (`training/optimizers/sgd.mojo`)
+1. **SGD Optimizer** (`training/optimizers/sgd.mojo`)
    - Complexity: HIGH - Momentum accumulation, state management
    - Lines: ~250
    - Dependencies: Tensor
@@ -56,7 +56,7 @@ Issue #48 (Test Suite).
    - Mojo Features: Vectorized parameter updates, owned state
    - Test: `test_optimizers.mojo` lines 27-162
 
-5. **Adam Optimizer** (`training/optimizers/adam.mojo`)
+1. **Adam Optimizer** (`training/optimizers/adam.mojo`)
    - Complexity: HIGH - Complex moment estimation with bias correction
    - Lines: ~300
    - Dependencies: Tensor
@@ -64,7 +64,7 @@ Issue #48 (Test Suite).
    - Mojo Features: Vectorized updates, numerical stability
    - Test: `test_optimizers.mojo` lines 168-255
 
-6. **AdamW Optimizer** (`training/optimizers/adamw.mojo`)
+1. **AdamW Optimizer** (`training/optimizers/adamw.mojo`)
    - Complexity: HIGH - Decoupled weight decay
    - Lines: ~320
    - Dependencies: Adam
@@ -74,7 +74,7 @@ Issue #48 (Test Suite).
 
 #### Medium Complexity (Standard Engineer) - 8 Components
 
-7. **ReLU Activation** (`layers/activation.mojo` - part 1)
+1. **ReLU Activation** (`layers/activation.mojo` - part 1)
    - Complexity: MEDIUM - SIMD max operation
    - Lines: ~80
    - Dependencies: Tensor
@@ -82,7 +82,7 @@ Issue #48 (Test Suite).
    - Mojo Features: SIMD max(0, x)
    - Test: `test_activations.mojo` (needs creation based on test_layers.mojo lines 194-226)
 
-8. **Sigmoid/Tanh Activations** (`layers/activation.mojo` - part 2)
+1. **Sigmoid/Tanh Activations** (`layers/activation.mojo` - part 2)
    - Complexity: MEDIUM - Numerical stability for exp
    - Lines: ~100
    - Dependencies: Tensor
@@ -90,7 +90,7 @@ Issue #48 (Test Suite).
    - Mojo Features: Numerically stable exp, SIMD
    - Test: `test_layers.mojo` lines 229-276
 
-9. **MaxPool2D Layer** (`layers/pooling.mojo`)
+1. **MaxPool2D Layer** (`layers/pooling.mojo`)
    - Complexity: MEDIUM - Window-based max selection
    - Lines: ~200
    - Dependencies: Tensor
@@ -98,7 +98,7 @@ Issue #48 (Test Suite).
    - Mojo Features: SIMD max operations
    - Test: `test_layers.mojo` lines 283-321
 
-10. **RMSprop Optimizer** (`training/optimizers/rmsprop.mojo`)
+1. **RMSprop Optimizer** (`training/optimizers/rmsprop.mojo`)
     - Complexity: MEDIUM - Moving average of squared gradients
     - Lines: ~200
     - Dependencies: Tensor
@@ -106,7 +106,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Vectorized updates
     - Test: `test_optimizers.mojo` lines 290-334
 
-11. **Module Base Class** (`core/module.mojo`)
+1. **Module Base Class** (`core/module.mojo`)
     - Complexity: MEDIUM - Parameter management, forward/backward interface
     - Lines: ~150
     - Dependencies: Tensor
@@ -114,7 +114,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Trait for polymorphism
     - Test: `test_module.mojo`
 
-12. **Accuracy Metric** (`training/metrics/accuracy.mojo`)
+1. **Accuracy Metric** (`training/metrics/accuracy.mojo`)
     - Complexity: MEDIUM - Batch accumulation logic
     - Lines: ~100
     - Dependencies: Tensor
@@ -122,7 +122,7 @@ Issue #48 (Test Suite).
     - Mojo Features: In-place accumulation
     - Test: `test_metrics.mojo`
 
-13. **LossTracker Metric** (`training/metrics/loss_tracker.mojo`)
+1. **LossTracker Metric** (`training/metrics/loss_tracker.mojo`)
     - Complexity: MEDIUM - Running average calculation
     - Lines: ~80
     - Dependencies: None
@@ -130,7 +130,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Struct with state
     - Test: `test_metrics.mojo`
 
-14. **StepLR Scheduler** (`training/schedulers/step_decay.mojo`)
+1. **StepLR Scheduler** (`training/schedulers/step_decay.mojo`)
     - Complexity: MEDIUM - Step-based decay logic
     - Lines: ~100
     - Dependencies: Optimizer
@@ -140,7 +140,7 @@ Issue #48 (Test Suite).
 
 #### Low Complexity (Junior Engineer) - 4 Components
 
-15. **Xavier Initializer** (`core/utils/init.mojo` - part 1)
+1. **Xavier Initializer** (`core/utils/init.mojo` - part 1)
     - Complexity: LOW - Standard formula
     - Lines: ~60
     - Dependencies: Tensor, random
@@ -148,7 +148,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Random number generation
     - Test: `test_initializers.mojo`
 
-16. **He Initializer** (`core/utils/init.mojo` - part 2)
+1. **He Initializer** (`core/utils/init.mojo` - part 2)
     - Complexity: LOW - Standard formula
     - Lines: ~60
     - Dependencies: Tensor, random
@@ -156,7 +156,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Random number generation
     - Test: `test_initializers.mojo`
 
-17. **Uniform/Normal Initializers** (`core/utils/init.mojo` - part 3)
+1. **Uniform/Normal Initializers** (`core/utils/init.mojo` - part 3)
     - Complexity: LOW - Basic random fill
     - Lines: ~50
     - Dependencies: Tensor, random
@@ -164,7 +164,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Random number generation
     - Test: `test_initializers.mojo`
 
-18. **Softmax Activation** (`layers/activation.mojo` - part 3)
+1. **Softmax Activation** (`layers/activation.mojo` - part 3)
     - Complexity: LOW - Exp and normalization
     - Lines: ~100
     - Dependencies: Tensor
@@ -176,7 +176,7 @@ Issue #48 (Test Suite).
 
 #### High Complexity (Senior Engineer) - 2 Components
 
-19. **Basic Training Loop** (`loops/basic.mojo`)
+1. **Basic Training Loop** (`loops/basic.mojo`)
     - Complexity: HIGH - Orchestrates all components
     - Lines: ~300
     - Dependencies: Model, Optimizer, Metrics, Callbacks
@@ -184,7 +184,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Generic over model types
     - Test: `test_loops.mojo`
 
-20. **Validation Training Loop** (`loops/validation.mojo`)
+1. **Validation Training Loop** (`loops/validation.mojo`)
     - Complexity: HIGH - Training + validation logic
     - Lines: ~350
     - Dependencies: Basic loop, metrics
@@ -194,7 +194,7 @@ Issue #48 (Test Suite).
 
 #### Medium Complexity (Standard Engineer) - 9 Components
 
-21. **EarlyStopping Callback** (`callbacks/early_stopping.mojo`)
+1. **EarlyStopping Callback** (`callbacks/early_stopping.mojo`)
     - Complexity: MEDIUM - Monitoring and patience logic
     - Lines: ~150
     - Dependencies: Metrics
@@ -202,7 +202,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Struct with state
     - Test: `test_callbacks.mojo`
 
-22. **ModelCheckpoint Callback** (`callbacks/checkpoint.mojo`)
+1. **ModelCheckpoint Callback** (`callbacks/checkpoint.mojo`)
     - Complexity: MEDIUM - File I/O and monitoring
     - Lines: ~180
     - Dependencies: Model serialization
@@ -210,7 +210,7 @@ Issue #48 (Test Suite).
     - Mojo Features: File I/O
     - Test: `test_callbacks.mojo`
 
-23. **Logger Callback** (`callbacks/logger.mojo`)
+1. **Logger Callback** (`callbacks/logger.mojo`)
     - Complexity: MEDIUM - Formatting and output
     - Lines: ~120
     - Dependencies: Metrics
@@ -218,7 +218,7 @@ Issue #48 (Test Suite).
     - Mojo Features: String formatting
     - Test: `test_callbacks.mojo`
 
-24. **Cosine Annealing Scheduler** (`schedulers/cosine.mojo`)
+1. **Cosine Annealing Scheduler** (`schedulers/cosine.mojo`)
     - Complexity: MEDIUM - Cosine function calculation
     - Lines: ~120
     - Dependencies: Optimizer
@@ -226,7 +226,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Math functions
     - Test: `test_schedulers.mojo`
 
-25. **Exponential Scheduler** (`schedulers/exponential.mojo`)
+1. **Exponential Scheduler** (`schedulers/exponential.mojo`)
     - Complexity: MEDIUM - Exponential decay
     - Lines: ~100
     - Dependencies: Optimizer
@@ -234,7 +234,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Exponential function
     - Test: `test_schedulers.mojo`
 
-26. **Precision Metric** (`metrics/precision.mojo`)
+1. **Precision Metric** (`metrics/precision.mojo`)
     - Complexity: MEDIUM - True positive tracking
     - Lines: ~120
     - Dependencies: Tensor
@@ -242,7 +242,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Per-class accumulation
     - Test: `test_metrics.mojo`
 
-27. **Recall Metric** (`metrics/recall.mojo`)
+1. **Recall Metric** (`metrics/recall.mojo`)
     - Complexity: MEDIUM - False negative tracking
     - Lines: ~120
     - Dependencies: Tensor
@@ -250,7 +250,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Per-class accumulation
     - Test: `test_metrics.mojo`
 
-28. **F1 Score Metric** (`metrics/f1.mojo`)
+1. **F1 Score Metric** (`metrics/f1.mojo`)
     - Complexity: MEDIUM - Harmonic mean of precision/recall
     - Lines: ~100
     - Dependencies: Precision, Recall
@@ -258,7 +258,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Composition of metrics
     - Test: `test_metrics.mojo`
 
-29. **Confusion Matrix** (`metrics/confusion.mojo`)
+1. **Confusion Matrix** (`metrics/confusion.mojo`)
     - Complexity: MEDIUM - Matrix accumulation
     - Lines: ~150
     - Dependencies: Tensor
@@ -268,7 +268,7 @@ Issue #48 (Test Suite).
 
 #### Low Complexity (Junior Engineer) - 4 Components
 
-30. **Optimizer Base Trait** (`optimizers/base.mojo`)
+1. **Optimizer Base Trait** (`optimizers/base.mojo`)
     - Complexity: LOW - Interface definition
     - Lines: ~50
     - Dependencies: None
@@ -276,7 +276,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Trait definition
     - Test: Implicit in optimizer tests
 
-31. **Scheduler Base Trait** (`schedulers/base.mojo`)
+1. **Scheduler Base Trait** (`schedulers/base.mojo`)
     - Complexity: LOW - Interface definition
     - Lines: ~40
     - Dependencies: None
@@ -284,7 +284,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Trait definition
     - Test: Implicit in scheduler tests
 
-32. **Metric Base Trait** (`metrics/base.mojo`)
+1. **Metric Base Trait** (`metrics/base.mojo`)
     - Complexity: LOW - Interface definition
     - Lines: ~50
     - Dependencies: None
@@ -292,7 +292,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Trait definition
     - Test: Implicit in metric tests
 
-33. **Callback Base Trait** (`callbacks/base.mojo`)
+1. **Callback Base Trait** (`callbacks/base.mojo`)
     - Complexity: LOW - Interface definition
     - Lines: ~60
     - Dependencies: None
@@ -304,7 +304,7 @@ Issue #48 (Test Suite).
 
 #### Medium Complexity (Standard Engineer) - 5 Components
 
-34. **Dataset Base Class** (`datasets/base.mojo`)
+1. **Dataset Base Class** (`datasets/base.mojo`)
     - Complexity: MEDIUM - Abstract interface and utilities
     - Lines: ~120
     - Dependencies: Tensor
@@ -312,7 +312,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Trait or abstract struct
     - Test: `test_datasets.mojo`
 
-35. **DataLoader** (`loaders/data_loader.mojo`)
+1. **DataLoader** (`loaders/data_loader.mojo`)
     - Complexity: MEDIUM - Batching and shuffling logic
     - Lines: ~250
     - Dependencies: Dataset
@@ -320,7 +320,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Iterator protocol, random shuffle
     - Test: `test_loaders.mojo`
 
-36. **MNIST Dataset** (`datasets/mnist.mojo`)
+1. **MNIST Dataset** (`datasets/mnist.mojo`)
     - Complexity: MEDIUM - Binary file parsing
     - Lines: ~200
     - Dependencies: Dataset, file I/O
@@ -328,7 +328,7 @@ Issue #48 (Test Suite).
     - Mojo Features: File I/O, binary parsing
     - Test: `test_datasets.mojo`
 
-37. **CIFAR-10 Dataset** (`datasets/cifar10.mojo`)
+1. **CIFAR-10 Dataset** (`datasets/cifar10.mojo`)
     - Complexity: MEDIUM - Binary file parsing, RGB data
     - Lines: ~220
     - Dependencies: Dataset, file I/O
@@ -336,7 +336,7 @@ Issue #48 (Test Suite).
     - Mojo Features: File I/O, binary parsing
     - Test: `test_datasets.mojo`
 
-38. **Normalize Transform** (`transforms/normalize.mojo`)
+1. **Normalize Transform** (`transforms/normalize.mojo`)
     - Complexity: MEDIUM - Per-channel normalization
     - Lines: ~100
     - Dependencies: Tensor
@@ -346,7 +346,7 @@ Issue #48 (Test Suite).
 
 #### Low Complexity (Junior Engineer) - 4 Components
 
-39. **ImageFolder Dataset** (`datasets/image_folder.mojo`)
+1. **ImageFolder Dataset** (`datasets/image_folder.mojo`)
     - Complexity: LOW - Directory traversal
     - Lines: ~150
     - Dependencies: Dataset, file I/O
@@ -354,7 +354,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Path traversal
     - Test: `test_datasets.mojo`
 
-40. **RandomCrop Transform** (`transforms/random_crop.mojo`)
+1. **RandomCrop Transform** (`transforms/random_crop.mojo`)
     - Complexity: LOW - Random window selection
     - Lines: ~80
     - Dependencies: Tensor, random
@@ -362,7 +362,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Random position, slicing
     - Test: `test_transforms.mojo`
 
-41. **RandomFlip Transform** (`transforms/random_flip.mojo`)
+1. **RandomFlip Transform** (`transforms/random_flip.mojo`)
     - Complexity: LOW - Array reversal
     - Lines: ~60
     - Dependencies: Tensor, random
@@ -370,7 +370,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Array reversal
     - Test: `test_transforms.mojo`
 
-42. **Resize Transform** (`transforms/resize.mojo`)
+1. **Resize Transform** (`transforms/resize.mojo`)
     - Complexity: LOW - Bilinear interpolation
     - Lines: ~120
     - Dependencies: Tensor
@@ -382,7 +382,7 @@ Issue #48 (Test Suite).
 
 #### Medium Complexity (Standard Engineer) - 3 Components
 
-43. **Structured Logger** (`logging.mojo`)
+1. **Structured Logger** (`logging.mojo`)
     - Complexity: MEDIUM - Multi-level logging with formatting
     - Lines: ~200
     - Dependencies: File I/O
@@ -390,7 +390,7 @@ Issue #48 (Test Suite).
     - Mojo Features: String formatting, file I/O
     - Test: `test_logging.mojo`
 
-44. **YAML Config Parser** (`config.mojo`)
+1. **YAML Config Parser** (`config.mojo`)
     - Complexity: MEDIUM - YAML parsing (or simple dict)
     - Lines: ~180
     - Dependencies: File I/O, Python interop for YAML
@@ -398,7 +398,7 @@ Issue #48 (Test Suite).
     - Mojo Features: Python interop if needed
     - Test: `test_config.mojo`
 
-45. **Metric Plotter** (`visualization.mojo` - part 1)
+1. **Metric Plotter** (`visualization.mojo` - part 1)
     - Complexity: MEDIUM - Matplotlib interop
     - Lines: ~150
     - Dependencies: Python matplotlib interop
@@ -408,7 +408,7 @@ Issue #48 (Test Suite).
 
 #### Low Complexity (Junior Engineer) - 2 Components
 
-46. **CLI Argument Parser** (`config.mojo` - part 2)
+1. **CLI Argument Parser** (`config.mojo` - part 2)
     - Complexity: LOW - Argument parsing
     - Lines: ~100
     - Dependencies: Standard library
@@ -416,7 +416,7 @@ Issue #48 (Test Suite).
     - Mojo Features: String parsing
     - Test: `test_config.mojo`
 
-47. **Image Display** (`visualization.mojo` - part 2)
+1. **Image Display** (`visualization.mojo` - part 2)
     - Complexity: LOW - Show tensor as image
     - Lines: ~80
     - Dependencies: Visualization backend
@@ -653,7 +653,7 @@ Schedulers (parallel) → StepLR, Cosine, Exponential
 **Review Levels**:
 
 1. **Peer Review**: Engineer → Engineer (first pass)
-2. **Specialist Review**: Implementation Specialist (this role) reviews for:
+1. **Specialist Review**: Implementation Specialist (this role) reviews for:
    - API contract adherence (Issue #48 tests)
    - Mojo best practices (fn vs def, struct vs class, SIMD)
    - Memory management (owned, borrowed, inout)
@@ -672,9 +672,9 @@ Schedulers (parallel) → StepLR, Cosine, Exponential
 **TDD Process**:
 
 1. **Before Implementation**: Review test specification in Issue #48
-2. **During Implementation**: Run tests frequently
-3. **After Implementation**: All tests must pass
-4. **Edge Cases**: Add tests for edge cases discovered during implementation
+1. **During Implementation**: Run tests frequently
+1. **After Implementation**: All tests must pass
+1. **Edge Cases**: Add tests for edge cases discovered during implementation
 
 **Test Coordination with Issue #48**:
 
@@ -709,15 +709,15 @@ Schedulers (parallel) → StepLR, Cosine, Exponential
    - Escalate to: Implementation Specialist
    - Resolution: Design decision or dependency prioritization
 
-2. **API Contract Unclear**: Test spec ambiguous
+1. **API Contract Unclear**: Test spec ambiguous
    - Escalate to: Test Specialist (Issue #48)
    - Resolution: Clarify test specification
 
-3. **Mojo Language Issue**: Unsure of best practice
+1. **Mojo Language Issue**: Unsure of best practice
    - Escalate to: Mojo Language Review Specialist
    - Resolution: Language guidance
 
-4. **Performance Issue**: Can't meet performance target
+1. **Performance Issue**: Can't meet performance target
    - Escalate to: Performance Specialist
    - Resolution: Optimization strategy
 
@@ -735,19 +735,19 @@ Engineer → Implementation Specialist → Architecture Design Agent
    - Mitigation: Prioritize simple but functional Tensor first, optimize later
    - Contingency: Start with minimal Tensor API, expand as needed
 
-2. **Mojo Tooling Immaturity**: Mojo is new, tooling may have gaps
+1. **Mojo Tooling Immaturity**: Mojo is new, tooling may have gaps
    - Mitigation: Document workarounds, escalate blockers quickly
    - Contingency: Python interop for truly blocked features
 
-3. **Test Suite Incompleteness**: Issue #48 tests may need expansion
+1. **Test Suite Incompleteness**: Issue #48 tests may need expansion
    - Mitigation: Coordinate with Test Specialist for test additions
    - Contingency: Add tests in implementation phase, backport to #48
 
-4. **Performance Bottlenecks**: May not hit performance targets initially
+1. **Performance Bottlenecks**: May not hit performance targets initially
    - Mitigation: Correctness first, optimize in Phase 5
    - Contingency: Defer optimization to Issue #51 (Cleanup)
 
-5. **Dependency Cascade**: One component delay blocks others
+1. **Dependency Cascade**: One component delay blocks others
    - Mitigation: Parallel tracks minimize dependencies
    - Contingency: Stub interfaces to unblock downstream work
 
@@ -1069,12 +1069,12 @@ fn sum_vectorized(input: Tensor) -> Float32:
    - Issue for Engineer B (12 components)
    - Issue for Junior Engineer (14 components)
 
-2. **Set up coordination channel**:
+1. **Set up coordination channel**:
    - Daily standup template
    - Code review checklist
    - Blocker escalation process
 
-3. **Kickoff meeting**:
+1. **Kickoff meeting**:
    - Present this plan
    - Assign engineers to tracks
    - Review Issue #48 tests
@@ -1113,7 +1113,7 @@ fn sum_vectorized(input: Tensor) -> Float32:
 - **Shared Library README**: `/home/mvillmow/ml-odyssey/worktrees/issue-49-impl-shared/shared/README.md`
 - **Core README**: `/home/mvillmow/ml-odyssey/worktrees/issue-49-impl-shared/shared/core/README.md`
 - **Training README**: `/home/mvillmow/ml-odyssey/worktrees/issue-49-impl-shared/shared/training/README.md`
-- **Mojo Language Guide**: https://docs.modular.com/mojo/
+- **Mojo Language Guide**: [Mojo Documentation](https://docs.modular.com/mojo/)
 
 ## Appendix: Component Complexity Ratings
 
