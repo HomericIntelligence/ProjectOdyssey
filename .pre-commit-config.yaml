@@ -2,13 +2,13 @@
 # See https://pre-commit.com for more information
 
 repos:
-  # Mojo formatting
+  # Mojo formatting (optional - skips if mojo not found)
   - repo: local
     hooks:
       - id: mojo-format
         name: Mojo Format
-        description: Format Mojo source files using mojo format
-        entry: mojo format
+        description: Format Mojo source files using mojo format (skips if mojo not available)
+        entry: bash -c 'if command -v mojo &> /dev/null; then mojo format "$@"; else echo "⚠️  Mojo not found, skipping format"; exit 0; fi' --
         language: system
         files: \.(mojo|🔥)$
         pass_filenames: true
