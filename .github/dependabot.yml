@@ -61,13 +61,13 @@ updates:
 
     # Ignore Rules
     # - Pin Mojo version - manually updated after testing
-    # - Ignore pre-release versions unless explicitly opted in
+    #   Rationale: Mojo updates require careful compatibility testing
+    # - Ignore major version updates - reviewed manually
+    #   Rationale: Major version updates may have breaking changes
     ignore:
       - dependency-name: "mojo"
-        reason: "Mojo updates require careful compatibility testing"
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
-        reason: "Major version updates reviewed manually"
 
   # ============================================================================
   # GitHub Actions Dependencies
