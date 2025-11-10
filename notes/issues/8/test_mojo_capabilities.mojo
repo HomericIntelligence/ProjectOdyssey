@@ -64,7 +64,10 @@ fn test_subprocess_exit_code() raises:
             var result2 = run("false")
             print("  Command 'false' did not raise exception (unexpected)")
         except:
-            print("  ✗ run() does NOT provide exit code - failing commands raise exceptions")
+            print(
+                "  ✗ run() does NOT provide exit code - failing commands raise"
+                " exceptions"
+            )
             print("  This is a limitation for script conversion")
 
     except e:
@@ -153,8 +156,14 @@ fn print_summary():
     print("=" * 50)
 
     print("\nKey Findings:")
-    print("1. ✓ Subprocess execution: Available via subprocess.run(cmd: String) -> String")
-    print("2. ✓ Stdout capture: Returns String directly, trailing whitespace removed")
+    print(
+        "1. ✓ Subprocess execution: Available via subprocess.run(cmd: String)"
+        " -> String"
+    )
+    print(
+        "2. ✓ Stdout capture: Returns String directly, trailing whitespace"
+        " removed"
+    )
     print("3. ✗ Exit codes: NOT AVAILABLE - run() only returns stdout String")
     print("4. ✗ Stderr capture: NOT separate - must redirect with shell (2>&1)")
     print("5. ✗ Regex: Requires external package (mojo-regex) - not in stdlib")

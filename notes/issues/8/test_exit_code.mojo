@@ -2,6 +2,7 @@
 
 from subprocess import run
 
+
 fn main() raises:
     """Test if run() raises exception on non-zero exit code."""
     print("Test 1: true command (exit 0)")
