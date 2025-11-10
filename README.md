@@ -127,8 +127,8 @@ ML Odyssey uses a **Pragmatic Hybrid Approach** for language selection, document
 - `scripts/create_issues.py` - GitHub issue automation (requires subprocess capture)
 - `scripts/regenerate_github_issues.py` - Markdown parsing (requires regex)
 
-**Conversion Plan**: Python scripts will be converted to Mojo when subprocess output capture and regex support
-are available (target: Q2-Q3 2026).
+**Why Permanent**: Mojo's subprocess API lacks exit code access (silent failures) and regex support is not
+production-ready. Python is the right tool for automation - comprehensive testing validates this choice.
 
 See [ADR-001](notes/review/adr/ADR-001-language-selection-tooling.md) for complete strategy and rationale.
 

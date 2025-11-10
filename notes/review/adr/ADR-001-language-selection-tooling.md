@@ -17,8 +17,9 @@ tooling tasks.
 **Core Decision**: Use the right tool for the job. Mojo for ML/AI implementations and performance-critical code;
 Python for automation tasks that require subprocess output capture, regex parsing, or GitHub API interaction.
 
-**Strategic Rationale**: Project velocity and reliability are more important than philosophical consistency. We will
-revisit Mojo conversion when the language matures to support the required capabilities.
+**Strategic Rationale**: Project velocity and reliability are more important than philosophical consistency. Python is
+the right tool for automation - Mojo's subprocess API lacks exit code access (causing silent failures) and regex
+support is not production-ready.
 
 ## Context
 
@@ -46,28 +47,36 @@ The Chief Architect guidelines reinforced this:
 Issue #8 conducted a comprehensive feasibility assessment to convert the project's Python automation scripts
 (1,502 LOC) to Mojo. The assessment revealed critical blockers:
 
-**CRITICAL BLOCKER - Subprocess Output Capture**:
+**CRITICAL BLOCKER - No Exit Code Access (Silent Failures)**:
 
-Mojo v0.25.7's subprocess module cannot capture stdout/stderr, which is essential for the automation scripts'
-core functionality:
+Mojo's `subprocess.run()` can capture stdout but has NO access to exit codes, causing dangerous silent failures:
 
 ```python
-# Python (current - WORKS)
+# Python (current - SAFE)
 result = subprocess.run(['gh', 'issue', 'create', ...], capture_output=True)
-issue_url = result.stdout.strip()  # Get the issue URL
+if result.returncode != 0:
+    raise Exception(f"Command failed: {result.stderr}")
+issue_url = result.stdout.strip()
 
-# Mojo v0.25.7 (DOESN'T WORK)
-result = run("gh issue create ...")
-# result.stdout - NOT AVAILABLE
-# result.exit_code - NOT AVAILABLE
+# Mojo (UNSAFE - Silent Failures)
+from subprocess import run
+var output = run("false")  # Exit code 1 - NO ERROR RAISED!
+var output = run("exit 42")  # Exit code 42 - NO ERROR RAISED!
+var output = run("gh issue create ...")  # If this fails, no way to detect!
 ```
 
-Without the ability to capture GitHub CLI output, the entire issue creation workflow breaks. This single
-limitation makes conversion impossible.
+**Testing Evidence**: Created test scripts (`test_mojo_capabilities.mojo`, `test_exit_code.mojo`) that prove:
+- ✓ stdout capture works: `run()` returns String output
+- ✗ Exit code access: NOT AVAILABLE - failures are silent
+- ✗ Error detection: No exceptions on non-zero exit
+- ⚠️ stderr capture: Only via shell redirect (`2>&1`)
 
-**HIGH RISK - Regex Missing**:
+Without exit code access, scripts cannot detect command failures, making automation unreliable and unsafe.
 
-The scripts use 15+ regex patterns for markdown parsing, which would require complete rewriting with manual string parsing:
+**HIGH RISK - Regex Not Production-Ready**:
+
+The scripts use 15+ regex patterns for markdown parsing. While a third-party `mojo-regex` library exists
+(https://github.com/msaelices/mojo-regex), it is explicitly **not production-ready**:
 
 ```python
 # Python regex patterns used throughout scripts
@@ -79,7 +88,14 @@ title_match = re.search(r'\*\*Title\*\*:\s*`([^`]+)`', content)
 labels = re.findall(r'`([^`]+)`', labels_text)
 ```
 
-**The Conflict**: The philosophy demands Mojo for all scripts, but Mojo cannot perform the required tasks.
+**mojo-regex limitations**:
+- Early development stage (author warns: "not yet feature-complete and may contain bugs")
+- Missing: compile(), case-insensitive matching, lookaheads, backreferences
+- Not available in pixi (installation failed during testing)
+- Manual string parsing would be required for complex patterns
+
+**The Conflict**: The philosophy demands Mojo for all scripts, but Mojo lacks reliable subprocess error handling
+and production-ready regex support.
 
 ### Scripts Affected
 
@@ -107,16 +123,18 @@ Issue #8's comprehensive testing revealed:
 | Capability | Available | Maturity | Risk | Blocks Conversion |
 |-----------|-----------|----------|------|-------------------|
 | File I/O | Yes | Mature | Low | No |
-| Subprocess Exec | Yes | Alpha | Critical | No |
-| **Subprocess Capture** | **No** | **Missing** | **Critical** | **YES** |
-| **Exit Code Access** | **No** | **Missing** | **Critical** | **YES** |
+| Subprocess Exec | Yes | Beta | Medium | No |
+| **Subprocess Stdout** | **Partial** | **Beta** | **Medium** | **No** |
+| **Exit Code Access** | **NO** | **Missing** | **CRITICAL** | **YES** |
+| **Error Detection** | **NO** | **Missing** | **CRITICAL** | **YES** |
+| Stderr Capture | Workaround | Alpha | High | No* |
 | String Basics | Yes | Mature | Low | No |
 | String Methods | Partial | Beta | Medium | No |
-| **Regex** | **No** | **Missing** | **High** | No* |
-| JSON | Yes | Beta | Medium | No* |
-| Error Handling | Basic | Beta | Medium | No |
+| **Regex (stdlib)** | **NO** | **Missing** | **High** | **YES** |
+| **Regex (3rd party)** | **Alpha** | **Not Prod-Ready** | **High** | **YES** |
+| JSON | Yes | Beta | Medium | No |
 
-**\*** = Can work around but significantly increases complexity and risk
+**\*** = Workaround exists but increases complexity; **CRITICAL** = Complete blocker for production use
 
 **Estimated Conversion Effort**: 7-9 weeks with low confidence
 
@@ -430,103 +448,39 @@ These trade-offs are **preferable** to:
 - Wasted effort on impossible conversion
 - Ideological purity at expense of project success
 
-## Monitoring and Reassessment
+## Future Considerations
 
-### Quarterly Monitoring Strategy
+### If Mojo Capabilities Mature
 
-**Schedule**: February, May, August, November (starting Q1 2026)
+While Python is the right choice today, Mojo's subprocess and regex capabilities may improve in the future.
+**Reassessment should only occur if ALL of the following become available**:
 
-**Monitoring Actions**:
+**Critical Requirements** (must ALL be present):
 
-1. **Check Mojo Changelog**:
-   - Review official release notes for subprocess improvements
-   - Check for regex or pattern matching additions
-   - Note any stdlib additions relevant to scripting
+1. **Exit Code Access**:
+   - subprocess API returns exit codes
+   - Non-zero exits can be detected and handled
+   - No silent failures on command errors
 
-2. **Test Critical Capabilities**:
-   - If subprocess improvements noted, test output capture
-   - If regex added, test against script requirements
-   - Document test results in monitoring log
+2. **Reliable Error Handling**:
+   - Exceptions raised on subprocess failures
+   - stderr capture available independently
+   - Timeout and error handling mechanisms
 
-3. **Community Signals**:
-   - Monitor Mojo forums for scripting examples
-   - Check if community is using Mojo for automation
-   - Review any published Mojo tooling scripts
+3. **Production-Ready Regex**:
+   - Native stdlib regex module, OR
+   - Mature third-party library with compile(), findall(), sub()
+   - Documented, stable, and widely adopted
 
-4. **Decision Review**:
-   - If capabilities available → Plan conversion
-   - If still blocked → Continue monitoring
-   - Document decision in quarterly log
+**Decision Process If Requirements Met**:
 
-**Monitoring Log Location**: `/notes/review/adr/ADR-001-monitoring.md`
+1. **Validate** with updated test suite (`test_mojo_capabilities.mojo`)
+2. **Assess** conversion effort for highest-impact scripts
+3. **Compare** effort vs. benefit (likely still minimal benefit)
+4. **Document** findings in new ADR if conversion is warranted
 
-### Reassessment Triggers
-
-**Must-Have Capabilities** (blocking conversion):
-
-1. **Subprocess Output Capture**:
-   - Can capture stdout and stderr
-   - Can access exit codes
-   - Can set timeouts
-   - Can handle errors properly
-
-2. **Regex or Equivalent**:
-   - Native regex module in stdlib, OR
-   - Mature pattern matching syntax, OR
-   - Documented alternative parsing approach
-
-3. **Stable JSON Module**:
-   - Well-documented API
-   - Community adoption
-   - Battle-tested in production
-
-**Nice-to-Have Capabilities** (improve conversion):
-
-- Common string methods (strip, split, replace)
-- Enhanced error handling
-- Dataclass-like syntax
-- Better documentation with examples
-
-**Reassessment Timeline**:
-
-- **Optimistic**: Q2 2026 (6 months from decision)
-- **Realistic**: Q3 2026 (9 months from decision)
-- **Conservative**: Q1 2027 (15 months from decision)
-
-**Conversion Decision Criteria**:
-
-When all must-have capabilities are available:
-
-1. Create conversion plan (estimate effort)
-2. Prioritize scripts by usage frequency
-3. Convert high-priority scripts first
-4. Validate against Python versions
-5. Document lessons learned
-6. Update this ADR to "Superseded"
-
-### Conversion Priority
-
-When Mojo capabilities are available, convert in this order:
-
-**High Priority** (convert first):
-
-1. `create_issues.py` - Most frequently used
-2. `regenerate_github_issues.py` - Second most used
-3. `create_single_component_issues.py` - Testing utility
-
-**Evaluation Criteria**:
-
-- Usage frequency (daily vs. occasional)
-- Performance benefit from Mojo
-- Complexity of conversion
-- Risk of bugs during conversion
-
-**Estimated Conversion Effort** (when Mojo ready):
-
-- Phase 1: Capability validation (1 week)
-- Phase 2: High-priority conversion (2-3 weeks)
-- Phase 3: Testing and validation (1 week)
-- **Total**: 4-5 weeks (vs. 7-9 weeks today)
+**Current Stance**: Python automation is the permanent solution until Mojo fundamentally changes its subprocess
+and regex support. No active monitoring planned - reassessment only if Mojo announces major scripting improvements.
 
 ## Alternatives Considered
 
@@ -727,21 +681,27 @@ This implementation is successful when:
 
 **Key Findings**:
 
-- Subprocess output capture: NOT AVAILABLE (blocking)
-- Exit code access: NOT AVAILABLE (blocking)
-- Regex support: NOT AVAILABLE (high risk)
+- Subprocess stdout capture: AVAILABLE (returns String)
+- Exit code access: NOT AVAILABLE (silent failures - CRITICAL BLOCKER)
+- Error detection: NOT AVAILABLE (no exceptions on failure - CRITICAL BLOCKER)
+- Stderr capture: WORKAROUND ONLY (shell redirect)
+- Regex support (stdlib): NOT AVAILABLE
+- Regex support (3rd party): ALPHA/NOT PRODUCTION-READY (mojo-regex exists but immature)
 - Estimated effort: 7-9 weeks (low confidence)
 - ROI: Highly negative
-- Recommendation: NO-GO
+- Recommendation: NO-GO - Python is the right tool
 
-**Test Results**:
+**Test Results** (validated with test_mojo_capabilities.mojo):
 
 - File I/O: PASS (mature)
-- Subprocess execution: PARTIAL (no output capture)
+- Subprocess stdout: PASS (works, returns String)
+- Exit code access: FAIL (NOT AVAILABLE - silent failures)
+- Error detection: FAIL (NO exceptions on non-zero exit)
 - String operations: PARTIAL (basic only)
-- Pattern matching: MISSING (no regex)
+- Regex (stdlib): FAIL (NOT AVAILABLE)
+- Regex (3rd party): FAIL (mojo-regex not prod-ready, pixi install failed)
 
-**Decision Criteria Met**: 4 out of 4 NO-GO criteria
+**Decision Criteria Met**: 3 CRITICAL blockers (exit codes, error detection, prod-ready regex)
 
 ### Related Documentation
 
@@ -755,6 +715,13 @@ This implementation is successful when:
 - [Mojo Changelog](https://docs.modular.com/mojo/changelog/) - Release notes
 - [Mojo Stdlib](https://docs.modular.com/mojo/stdlib/) - Standard library
 - [Mojo Subprocess](https://docs.modular.com/mojo/stdlib/subprocess/) - Subprocess module
+- [mojo-regex](https://github.com/msaelices/mojo-regex) - Third-party regex (alpha, not production-ready)
+
+**Test Scripts** (evidence for this ADR):
+
+- `test_mojo_capabilities.mojo` - Comprehensive capability testing (203 LOC)
+- `test_exit_code.mojo` - Exit code access testing (34 LOC)
+- `test_mojo_capabilities_results.md` - Detailed test results documentation
 
 **Scripts Affected**:
 
@@ -921,8 +888,8 @@ Last Review: [YYYY-MM-DD]
 
 - Location: `/notes/review/adr/ADR-001-language-selection-tooling.md`
 - Status: Accepted
-- Review Frequency: Quarterly
-- Next Review: Q1 2026 (February 2026)
+- Review Frequency: As-needed (only if Mojo announces major subprocess/regex improvements)
+- Next Review: TBD (triggered by Mojo announcements, not scheduled)
 - Supersedes: Original "Mojo First" language preference in CLAUDE.md
 - Superseded By: None (current)
 
