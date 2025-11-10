@@ -2,7 +2,7 @@
 name: performance-engineer
 description: Write benchmark code, profile code execution, implement optimizations, and verify performance improvements
 tools: Read,Write,Edit,Bash,Grep,Glob
-model: sonnet
+model: haiku
 ---
 
 # Performance Engineer

@@ -2,7 +2,7 @@
 name: performance-review-specialist
 description: Reviews runtime performance, algorithmic complexity, memory usage, cache efficiency, and I/O optimization
 tools: Read,Grep,Glob
-model: sonnet
+model: haiku
 ---
 
 # Performance Review Specialist

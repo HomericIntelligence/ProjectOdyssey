@@ -2,7 +2,7 @@
 name: paper-review-specialist
 description: Reviews academic paper quality, writing clarity, citations, results presentation, and adherence to ML research standards
 tools: Read,Grep,Glob
-model: sonnet
+model: haiku
 ---
 
 # Paper Review Specialist

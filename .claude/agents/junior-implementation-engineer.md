@@ -2,7 +2,7 @@
 name: junior-implementation-engineer
 description: Write simple functions, generate boilerplate code, apply templates, format code, and run linters
 tools: Read,Write,Edit,Grep,Glob
-model: sonnet
+model: haiku
 ---
 
 # Junior Implementation Engineer

@@ -2,7 +2,7 @@
 name: foundation-orchestrator
 description: Coordinate foundation setup including directory structure, configuration files, and initial documentation
 tools: Read,Grep,Glob
-model: sonnet
+model: opus
 ---
 
 # Foundation Orchestrator
