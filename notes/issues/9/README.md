@@ -21,8 +21,8 @@ reusable tool that provides ongoing value.
   regenerate_github_issues.py, fix_markdown.py)
 - [x] Agent scripts in `scripts/agents/` documented
 - [x] All markdown files pass linting
-- [ ] Unified script tested and verified
-- [ ] Commit created with consolidation changes
+- [x] Unified script tested and verified (fixed 1100+ markdown linting errors in commit c704b38)
+- [x] Commit created with consolidation changes (commit 7ab79ce)
 
 ## References
 
