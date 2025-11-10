@@ -76,14 +76,14 @@ method for completing tasks.
 - SIMD optimization: Parallel tensor operations
 - Future-proof: Designed for AI/ML from the ground up
 
-**Conversion Strategy**:
+**Why Python for Automation**:
 
-- Quarterly reviews of Python automation for conversion opportunities
-- Convert when Mojo gains required capabilities (subprocess output, regex)
-- Target timeline: Q2-Q3 2026 (estimated based on Mojo maturity)
+- Mojo's subprocess API lacks exit code access (causes silent failures)
+- Regex support not production-ready (mojo-regex is alpha stage)
+- Python is the right tool for automation - not a temporary workaround
 
 **See**: [ADR-001](notes/review/adr/ADR-001-language-selection-tooling.md) for complete language selection strategy,
-monitoring plan, and justification requirements
+technical evidence (test results), and justification requirements
 
 See `/agents/README.md` for complete agent documentation and `/agents/hierarchy.md` for visual hierarchy.
 

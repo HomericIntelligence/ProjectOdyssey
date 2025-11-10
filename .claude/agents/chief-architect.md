@@ -89,7 +89,7 @@ technically necessary.
 
 - Chief Architect approves new Python automation
 - All Python usage must link to ADR-001 or have issue documenting justification
-- Quarterly reviews of Python code for conversion opportunities (see ADR-001 monitoring strategy)
+- Python for automation is a permanent solution (not temporary workaround)
 
 **Decision Process** (when creating new components):
 
@@ -103,13 +103,12 @@ technically necessary.
 
 All Python automation must include header comment with:
 
-- Specific Mojo limitations blocking conversion
-- Conversion blockers and required Mojo features
-- Estimated conversion timeline
+- Specific Mojo limitations (exit code access, regex maturity)
+- Why Python is the right tool for this script
 - Link to ADR-001
 
-See [ADR-001](../../../notes/review/adr/ADR-001-language-selection-tooling.md) for complete language selection strategy
-and monitoring plan. See [CLAUDE.md](../../CLAUDE.md#language-preference) for quick reference.
+See [ADR-001](../../../notes/review/adr/ADR-001-language-selection-tooling.md) for complete language selection strategy,
+technical evidence, and test results. See [CLAUDE.md](../../CLAUDE.md#language-preference) for quick reference.
 
 ### Architectural Patterns
 
