@@ -272,7 +272,7 @@ fn measure_throughput[
         Operations per second.
     """
     # TODO(#1538): Implement using Mojo's time module when available
-    let duration_ms = measure_time[func]()
+    var duration_ms = measure_time[func]()
     return Float64(n_iterations) / (duration_ms / 1000.0)
 
 
