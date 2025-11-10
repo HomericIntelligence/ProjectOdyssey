@@ -2,7 +2,7 @@
 name: dependency-review-specialist
 description: Reviews dependency management, version pinning, environment reproducibility, and license compatibility
 tools: Read,Grep,Glob
-model: sonnet
+model: haiku
 ---
 
 # Dependency Review Specialist
