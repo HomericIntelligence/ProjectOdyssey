@@ -75,7 +75,7 @@ name = "ml-odyssey-shared"
 version = "0.1.0"
 description = "Shared library for ML Odyssey paper implementations"
 authors = ["ML Odyssey Team"]
-license = "MIT"
+license = "BSD"
 readme = "shared/README.md"
 
 [dependencies]
