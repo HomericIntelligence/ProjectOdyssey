@@ -501,15 +501,15 @@ flask = ">=2.3,`3.0"
 
 | Your Project | Can Use | Cannot Use | Caution |
 |--------------|---------|------------|---------|
-| MIT | MIT, BSD, Apache 2.0 | GPL, AGPL | LGPL (dynamic linking OK) |
+| BSD | MIT, BSD, Apache 2.0 | GPL, AGPL | LGPL (dynamic linking OK) |
 | Apache 2.0 | MIT, BSD, Apache 2.0 | GPL-2.0, AGPL | GPL-3.0, LGPL |
 | GPL-3.0 | MIT, BSD, Apache 2.0, GPL | Proprietary | Must release as GPL |
 | Proprietary | MIT, BSD, Apache 2.0 | GPL, AGPL | LGPL (with care) |
 
 **Common Permissive Licenses** (Safe for most projects)
 
-- MIT
 - BSD (2-Clause, 3-Clause)
+- MIT
 - Apache 2.0
 - ISC
 
