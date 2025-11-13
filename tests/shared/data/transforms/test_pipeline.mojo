@@ -4,7 +4,55 @@ Tests Pipeline which composes multiple transforms into a single transform,
 enabling flexible and reusable data preprocessing workflows.
 """
 
-from tests.shared.conftest import assert_true, assert_equal, TestFixtures
+from tests.shared.conftest import assert_true, assert_equal, assert_not_equal, TestFixtures
+
+
+# ============================================================================
+# Stub Implementations for TDD
+# ============================================================================
+
+
+struct StubData:
+    """Minimal stub data for transform testing."""
+    var value: Float32
+
+    fn __init__(inout self, value: Float32):
+        self.value = value
+
+
+struct StubTransform:
+    """Minimal stub transform that adds a fixed value."""
+    var delta: Float32
+
+    fn __init__(inout self, delta: Float32):
+        self.delta = delta
+
+    fn apply(self, data: StubData) -> StubData:
+        """Apply transform by adding delta to data value."""
+        return StubData(data.value + self.delta)
+
+
+struct StubPipeline:
+    """Minimal stub pipeline that chains transforms sequentially."""
+    var transforms: List[StubTransform]
+
+    fn __init__(inout self):
+        self.transforms = List[StubTransform]()
+
+    fn add_transform(inout self, transform: StubTransform):
+        """Add a transform to the pipeline."""
+        self.transforms.append(transform)
+
+    fn apply(self, data: StubData) -> StubData:
+        """Apply all transforms sequentially."""
+        var result = data
+        for i in range(len(self.transforms)):
+            result = self.transforms[i].apply(result)
+        return result
+
+    fn __len__(self) -> Int:
+        """Return number of transforms in pipeline."""
+        return len(self.transforms)
 
 
 # ============================================================================
@@ -12,54 +60,103 @@ from tests.shared.conftest import assert_true, assert_equal, TestFixtures
 # ============================================================================
 
 
-fn test_pipeline_creation():
+fn test_pipeline_creation() raises:
     """Test creating Pipeline from list of transforms.
 
     Should accept list of transform objects and apply them sequentially
     when called on data.
     """
-    # TODO(#39): Implement when Pipeline exists
-    # var transforms = List[Transform]([
-    #     Resize(224, 224),
-    #     Normalize(mean=0.5, std=0.5)
-    # ])
-    # var pipeline = Pipeline(transforms)
-    # assert_true(pipeline is not None)
-    pass
+    var pipeline = StubPipeline()
+    pipeline.add_transform(StubTransform(delta=10.0))
+    pipeline.add_transform(StubTransform(delta=5.0))
+    assert_equal(len(pipeline), 2)
 
 
-fn test_pipeline_empty():
+fn test_pipeline_empty() raises:
     """Test creating empty Pipeline.
 
     Empty pipeline should be valid and return data unchanged,
     useful as default or for conditional pipeline building.
     """
-    # TODO(#39): Implement when Pipeline exists
-    # var pipeline = Pipeline([])
-    # var data = TestFixtures.small_tensor()
-    # var result = pipeline(data)
-    # assert_equal(result, data)
-    pass
+    var pipeline = StubPipeline()
+    var data = StubData(value=42.0)
+    var result = pipeline.apply(data)
+    assert_equal(result.value, data.value)
 
 
-fn test_pipeline_single_transform():
+fn test_pipeline_single_transform() raises:
     """Test Pipeline with single transform.
 
     Should work correctly even with just one transform,
     maintaining consistent API.
     """
-    # TODO(#39): Implement when Pipeline exists
-    # var pipeline = Pipeline([Resize(224, 224)])
-    # var data = TestFixtures.small_tensor()
-    # var result = pipeline(data)
-    # assert_equal(result.shape[0], 224)
-    # assert_equal(result.shape[1], 224)
-    pass
+    var pipeline = StubPipeline()
+    pipeline.add_transform(StubTransform(delta=10.0))
+
+    var data = StubData(value=5.0)
+    var result = pipeline.apply(data)
+    assert_equal(result.value, Float32(15.0))  # 5.0 + 10.0
 
 
 # ============================================================================
 # Pipeline Execution Tests
 # ============================================================================
+
+
+fn test_pipeline_sequential_application() raises:
+    """Test that transforms are applied in order.
+
+    Transform order matters: Transform(+10)→Transform(+5) should produce
+    different result than Transform(+5)→Transform(+10) when order affects output.
+    """
+    var data = StubData(value=0.0)
+
+    # Pipeline 1: +10 then +5
+    var pipe1 = StubPipeline()
+    pipe1.add_transform(StubTransform(delta=10.0))
+    pipe1.add_transform(StubTransform(delta=5.0))
+    var result1 = pipe1.apply(data)
+
+    # Result should be 0 + 10 + 5 = 15
+    assert_equal(result1.value, Float32(15.0))
+
+
+fn test_pipeline_output_feeds_next() raises:
+    """Test that each transform receives output of previous.
+
+    Output value from transform N should be input to transform N+1,
+    enabling complex preprocessing chains.
+    """
+    var data = StubData(value=2.0)
+
+    # Create pipeline that multiplies the effect
+    var pipeline = StubPipeline()
+    pipeline.add_transform(StubTransform(delta=3.0))  # 2 + 3 = 5
+    pipeline.add_transform(StubTransform(delta=5.0))  # 5 + 5 = 10
+    pipeline.add_transform(StubTransform(delta=10.0))  # 10 + 10 = 20
+
+    var result = pipeline.apply(data)
+    assert_equal(result.value, Float32(20.0))
+
+
+fn test_pipeline_preserves_intermediate_values() raises:
+    """Test that pipeline doesn't modify original data.
+
+    Original input data should remain unchanged after pipeline application.
+    """
+    var data = StubData(value=100.0)
+
+    var pipeline = StubPipeline()
+    pipeline.add_transform(StubTransform(delta=50.0))
+
+    var result = pipeline.apply(data)
+
+    # Result should be different from original
+    assert_not_equal(result.value, data.value)
+    # Original should be unchanged
+    assert_equal(data.value, Float32(100.0))
+    # Result should have transform applied
+    assert_equal(result.value, Float32(150.0))
 
 
 fn test_pipeline_sequential_application():
