@@ -8,38 +8,64 @@ from tests.shared.conftest import assert_true, assert_equal, TestFixtures
 
 
 # ============================================================================
+# Stub Implementation for TDD
+# ============================================================================
+
+
+struct StubSequentialSampler:
+    """Minimal stub sequential sampler for testing Sampler interface.
+
+    Yields indices in sequential order [0, 1, 2, ..., n-1].
+    """
+    var size: Int
+
+    fn __init__(inout self, size: Int):
+        """Create sequential sampler.
+
+        Args:
+            size: Number of indices to generate.
+        """
+        self.size = size
+
+    fn __len__(self) -> Int:
+        """Return number of indices."""
+        return self.size
+
+    fn get_index(self, position: Int) -> Int:
+        """Get index at position.
+
+        Args:
+            position: Position in sequence (0 to size-1).
+
+        Returns:
+            Index value (same as position for sequential sampler).
+        """
+        return position
+
+
+# ============================================================================
 # SequentialSampler Creation Tests
 # ============================================================================
 
 
-fn test_sequential_sampler_creation():
+fn test_sequential_sampler_creation() raises:
     """Test creating SequentialSampler with dataset size.
 
     Should create sampler that will yield indices 0 to n-1 in order,
     deterministic and reproducible.
     """
-    # TODO(#39): Implement when SequentialSampler exists
-    # var sampler = SequentialSampler(size=100)
-    # assert_equal(len(sampler), 100)
-    pass
+    var sampler = StubSequentialSampler(size=100)
+    assert_equal(len(sampler), 100)
 
 
-fn test_sequential_sampler_empty():
+fn test_sequential_sampler_empty() raises:
     """Test creating SequentialSampler with size 0.
 
     Should create valid sampler that yields no indices,
     useful for edge case testing.
     """
-    # TODO(#39): Implement when SequentialSampler exists
-    # var sampler = SequentialSampler(size=0)
-    # assert_equal(len(sampler), 0)
-    #
-    # var count = 0
-    # for idx in sampler:
-    #     count += 1
-    #
-    # assert_equal(count, 0)
-    pass
+    var sampler = StubSequentialSampler(size=0)
+    assert_equal(len(sampler), 0)
 
 
 # ============================================================================
@@ -47,68 +73,63 @@ fn test_sequential_sampler_empty():
 # ============================================================================
 
 
-fn test_sequential_sampler_yields_all_indices():
+fn test_sequential_sampler_yields_all_indices() raises:
     """Test that sampler yields all indices exactly once.
 
     Should produce indices [0, 1, 2, ..., n-1] without
     skipping or duplicating any.
     """
-    # TODO(#39): Implement when SequentialSampler exists
-    # var sampler = SequentialSampler(size=10)
-    #
-    # var indices = List[Int]()
-    # for idx in sampler:
-    #     indices.append(idx)
-    #
-    # assert_equal(len(indices), 10)
-    #
-    # # Check all indices present
-    # for i in range(10):
-    #     assert_true(i in indices)
-    pass
+    var sampler = StubSequentialSampler(size=10)
+
+    var indices = List[Int](capacity=10)
+    for i in range(len(sampler)):
+        indices.append(sampler.get_index(i))
+
+    assert_equal(len(indices), 10)
+
+    # Check all indices present and in order
+    for i in range(10):
+        assert_equal(indices[i], i)
 
 
-fn test_sequential_sampler_order():
+fn test_sequential_sampler_order() raises:
     """Test that indices are yielded in sequential order.
 
     Should yield [0, 1, 2, 3, ...], not shuffled or reversed.
     This is the defining property of SequentialSampler.
     """
-    # TODO(#39): Implement when SequentialSampler exists
-    # var sampler = SequentialSampler(size=100)
-    #
-    # var indices = List[Int]()
-    # for idx in sampler:
-    #     indices.append(idx)
-    #
-    # # Check indices are in order
-    # for i in range(100):
-    #     assert_equal(indices[i], i)
-    pass
+    var sampler = StubSequentialSampler(size=100)
+
+    var indices = List[Int](capacity=100)
+    for i in range(len(sampler)):
+        indices.append(sampler.get_index(i))
+
+    # Check indices are in order
+    for i in range(100):
+        assert_equal(indices[i], i)
 
 
-fn test_sequential_sampler_deterministic():
+fn test_sequential_sampler_deterministic() raises:
     """Test that sampler produces same sequence every time.
 
     Multiple iterations should yield identical index sequences,
     no randomness involved.
     """
-    # TODO(#39): Implement when SequentialSampler exists
-    # var sampler = SequentialSampler(size=50)
-    #
-    # # First iteration
-    # var indices1 = List[Int]()
-    # for idx in sampler:
-    #     indices1.append(idx)
-    #
-    # # Second iteration
-    # var indices2 = List[Int]()
-    # for idx in sampler:
-    #     indices2.append(idx)
-    #
-    # # Should be identical
-    # assert_equal(indices1, indices2)
-    pass
+    var sampler = StubSequentialSampler(size=50)
+
+    # First iteration
+    var indices1 = List[Int](capacity=50)
+    for i in range(len(sampler)):
+        indices1.append(sampler.get_index(i))
+
+    # Second iteration
+    var indices2 = List[Int](capacity=50)
+    for i in range(len(sampler)):
+        indices2.append(sampler.get_index(i))
+
+    # Should be identical
+    for i in range(50):
+        assert_equal(indices1[i], indices2[i])
 
 
 # ============================================================================

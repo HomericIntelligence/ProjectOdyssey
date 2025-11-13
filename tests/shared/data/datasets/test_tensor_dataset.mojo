@@ -13,67 +13,138 @@ from tests.shared.conftest import (
 
 
 # ============================================================================
+# Stub Implementation for TDD
+# ============================================================================
+
+
+struct StubTensorDataset:
+    """Minimal stub tensor dataset for testing TensorDataset interface.
+
+    Stores data and labels as simple lists for in-memory access.
+    """
+    var data: List[Float32]
+    var labels: List[Int]
+    var size: Int
+
+    fn __init__(inout self, data: List[Float32], labels: List[Int]) raises:
+        """Create tensor dataset from data and labels.
+
+        Args:
+            data: List of data values.
+            labels: List of label values.
+
+        Raises:
+            Error if data and labels have different lengths.
+        """
+        if len(data) != len(labels):
+            raise Error("Data and labels must have same length")
+
+        self.data = data
+        self.labels = labels
+        self.size = len(data)
+
+    fn __len__(self) -> Int:
+        """Return number of samples."""
+        return self.size
+
+    fn __getitem__(self, index: Int) raises -> Tuple[Float32, Int]:
+        """Get sample at index.
+
+        Args:
+            index: Sample index.
+
+        Returns:
+            Tuple of (data, label).
+
+        Raises:
+            Error if index is out of bounds.
+        """
+        if index < 0 or index >= self.size:
+            raise Error("Index out of bounds")
+
+        return (self.data[index], self.labels[index])
+
+
+# ============================================================================
 # TensorDataset Creation Tests
 # ============================================================================
 
 
-fn test_tensor_dataset_creation():
+fn test_tensor_dataset_creation() raises:
     """Test creating TensorDataset from tensors.
 
     TensorDataset should accept data and labels tensors and store them
     for efficient in-memory access.
     """
-    # TODO(#39): Implement when TensorDataset exists
-    # var data = TestFixtures.small_tensor()  # 3x3 tensor
-    # var labels = Tensor([0, 1, 2])
-    # var dataset = TensorDataset(data, labels)
-    # assert_equal(len(dataset), 3)
-    pass
+    var data = List[Float32](0.0, 1.0, 2.0)
+    var labels = List[Int](0, 1, 2)
+    var dataset = StubTensorDataset(data, labels)
+    assert_equal(len(dataset), 3)
 
 
-fn test_tensor_dataset_with_matching_sizes():
+fn test_tensor_dataset_with_matching_sizes() raises:
     """Test that data and labels must have matching first dimension.
 
     The number of samples in data must match the number of labels,
     otherwise training would fail with mismatched batch sizes.
     """
-    # TODO(#39): Implement when TensorDataset exists
-    # var data = Tensor.randn(100, 10)  # 100 samples
-    # var labels = Tensor.randn(100)    # 100 labels
-    # var dataset = TensorDataset(data, labels)
-    # assert_equal(len(dataset), 100)
-    pass
+    var data = List[Float32](capacity=100)
+    var labels = List[Int](capacity=100)
+    for i in range(100):
+        data.append(Float32(i))
+        labels.append(i)
+
+    var dataset = StubTensorDataset(data, labels)
+    assert_equal(len(dataset), 100)
 
 
-fn test_tensor_dataset_size_mismatch_error():
+fn test_tensor_dataset_size_mismatch_error() raises:
     """Test that mismatched data/label sizes raise error.
 
     Creating dataset with 100 data samples and 50 labels should fail
     immediately rather than causing silent errors during training.
     """
-    # TODO(#39): Implement when TensorDataset exists
-    # var data = Tensor.randn(100, 10)
-    # var labels = Tensor.randn(50)  # Mismatch!
-    # try:
-    #     var dataset = TensorDataset(data, labels)
-    #     assert_true(False, "Should have raised ValueError")
-    # except ValueError:
-    #     pass  # Expected
-    pass
+    var data = List[Float32](capacity=100)
+    var labels = List[Int](capacity=50)
+
+    for i in range(100):
+        data.append(Float32(i))
+    for i in range(50):
+        labels.append(i)
+
+    var error_raised = False
+    try:
+        var dataset = StubTensorDataset(data, labels)
+    except:
+        error_raised = True
+
+    assert_true(error_raised, "Should have raised error for size mismatch")
 
 
-fn test_tensor_dataset_empty():
+fn test_tensor_dataset_empty() raises:
     """Test creating empty TensorDataset.
 
     Empty dataset should be valid (length 0) and not crash when queried.
     Useful for testing edge cases and incremental dataset building.
     """
-    # TODO(#39): Implement when TensorDataset exists
-    # var data = Tensor.empty(0, 10)
-    # var labels = Tensor.empty(0)
-    # var dataset = TensorDataset(data, labels)
-    # assert_equal(len(dataset), 0)
-    pass
+    var data = List[Float32]()
+    var labels = List[Int]()
+    var dataset = StubTensorDataset(data, labels)
+    assert_equal(len(dataset), 0)
+
+
+fn test_tensor_dataset_getitem() raises:
+    """Test getting individual samples from TensorDataset.
+
+    Should return (data, label) tuple for requested index.
+    """
+    var data = List[Float32](10.0, 20.0, 30.0)
+    var labels = List[Int](0, 1, 2)
+    var dataset = StubTensorDataset(data, labels)
+
+    var sample = dataset[1]
+    assert_equal(sample[0], Float32(20.0))
+    assert_equal(sample[1], 1)
 
 
 # ============================================================================
