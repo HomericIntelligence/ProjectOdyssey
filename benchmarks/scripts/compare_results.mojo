@@ -295,6 +295,33 @@ fn load_benchmark_results(filepath: String) raises -> List[BenchmarkData]:
     return results
 
 
+fn atoi(s: String) -> Int:
+    """Convert string to integer.
+
+    Args:
+        s: String to convert.
+
+    Returns:
+        Integer value.
+    """
+    var result: Int = 0
+    var sign: Int = 1
+    var i = 0
+
+    # Handle negative numbers
+    if len(s) > 0 and s[0] == "-":
+        sign = -1
+        i = 1
+
+    # Parse digits
+    while i < len(s):
+        if s[i] >= "0" and s[i] <= "9":
+            result = result * 10 + (ord(s[i]) - ord("0"))
+        i += 1
+
+    return result * sign
+
+
 # ============================================================================
 # Comparison Logic
 # ============================================================================
