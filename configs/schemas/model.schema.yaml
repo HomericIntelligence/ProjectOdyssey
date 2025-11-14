@@ -1,0 +1,132 @@
+# JSON Schema for Model Configuration Validation
+# Last updated: 2024-11-14
+
+$schema: "http://json-schema.org/draft-07/schema#"
+title: "Model Configuration Schema"
+type: object
+required: ["name", "input_shape", "num_classes", "layers"]
+
+properties:
+  name:
+    type: string
+    description: "Model name"
+
+  paper:
+    type: string
+    description: "Paper reference"
+
+  input_shape:
+    type: array
+    items:
+      type: integer
+      minimum: 1
+    description: "Input tensor shape"
+
+  num_classes:
+    type: integer
+    minimum: 1
+    description: "Number of output classes"
+
+  layers:
+    type: array
+    items:
+      type: object
+      required: ["name", "type"]
+      properties:
+        name:
+          type: string
+          description: "Layer name"
+
+        type:
+          type: string
+          enum: ["conv2d", "conv1d", "linear", "avgpool2d", "maxpool2d", "flatten", "dropout", "batchnorm"]
+          description: "Layer type"
+
+        in_channels:
+          type: integer
+          minimum: 1
+          description: "Input channels (for conv layers)"
+
+        out_channels:
+          type: integer
+          minimum: 1
+          description: "Output channels (for conv layers)"
+
+        kernel_size:
+          oneOf:
+            - type: integer
+              minimum: 1
+            - type: array
+              items:
+                type: integer
+                minimum: 1
+          description: "Kernel size"
+
+        stride:
+          type: integer
+          minimum: 1
+          description: "Stride"
+
+        padding:
+          oneOf:
+            - type: integer
+              minimum: 0
+            - type: string
+              enum: ["same", "valid"]
+          description: "Padding"
+
+        in_features:
+          type: integer
+          minimum: 1
+          description: "Input features (for linear layers)"
+
+        out_features:
+          type: integer
+          minimum: 1
+          description: "Output features (for linear layers)"
+
+        activation:
+          oneOf:
+            - type: string
+              enum: ["relu", "tanh", "sigmoid", "gelu", "swish", "elu", "selu"]
+            - type: "null"
+          description: "Activation function (null for no activation)"
+
+  initialization:
+    type: object
+    properties:
+      weight_init:
+        type: string
+        enum: ["xavier_uniform", "xavier_normal", "kaiming_uniform", "kaiming_normal", "normal", "uniform"]
+      bias_init:
+        type: string
+        enum: ["zeros", "ones", "normal", "uniform"]
+      gain:
+        type: number
+        minimum: 0
+
+  regularization:
+    type: object
+    properties:
+      dropout:
+        type: number
+        minimum: 0
+        maximum: 1
+      batch_norm:
+        type: boolean
+      layer_norm:
+        type: boolean
+      weight_decay:
+        type: number
+        minimum: 0
+
+  loss:
+    type: object
+    properties:
+      name:
+        type: string
+        enum: ["cross_entropy", "mse", "l1", "focal_loss", "triplet"]
+      label_smoothing:
+        type: number
+        minimum: 0
+        maximum: 1

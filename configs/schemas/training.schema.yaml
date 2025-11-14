@@ -1,0 +1,97 @@
+# JSON Schema for Training Configuration Validation
+# Last updated: 2024-11-14
+
+$schema: "http://json-schema.org/draft-07/schema#"
+title: "Training Configuration Schema"
+type: object
+required: ["optimizer", "training"]
+
+properties:
+  optimizer:
+    type: object
+    required: ["name", "learning_rate"]
+    properties:
+      name:
+        type: string
+        enum: ["sgd", "adam", "adamw", "rmsprop", "adagrad"]
+      learning_rate:
+        type: number
+        minimum: 0
+        maximum: 1
+      momentum:
+        type: number
+        minimum: 0
+        maximum: 1
+      weight_decay:
+        type: number
+        minimum: 0
+        maximum: 1
+      betas:
+        type: array
+        items:
+          type: number
+          minimum: 0
+          maximum: 1
+        minItems: 2
+        maxItems: 2
+      eps:
+        type: number
+        minimum: 0
+
+  scheduler:
+    type: object
+    properties:
+      name:
+        type: string
+        enum: ["step", "cosine", "exponential", "polynomial", "none"]
+      step_size:
+        type: integer
+        minimum: 1
+      gamma:
+        type: number
+        minimum: 0
+        maximum: 1
+
+  training:
+    type: object
+    required: ["epochs", "batch_size"]
+    properties:
+      epochs:
+        type: integer
+        minimum: 1
+        maximum: 10000
+      batch_size:
+        type: integer
+        minimum: 1
+        multipleOf: 1
+      validation_split:
+        type: number
+        minimum: 0
+        maximum: 1
+      seed:
+        type: integer
+
+  gradient:
+    type: object
+    properties:
+      clip_norm:
+        type: number
+        minimum: 0
+      accumulation_steps:
+        type: integer
+        minimum: 1
+
+  logging:
+    type: object
+    properties:
+      level:
+        type: string
+        enum: ["DEBUG", "INFO", "WARNING", "ERROR"]
+      interval:
+        type: integer
+        minimum: 1
+      save_checkpoints:
+        type: boolean
+      checkpoint_frequency:
+        type: integer
+        minimum: 1

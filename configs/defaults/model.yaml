@@ -1,0 +1,23 @@
+# Default Model Configuration
+# Common model settings and initialization
+# Last updated: 2024-11-14
+
+# Weight initialization
+initialization:
+  weight_init: "xavier_uniform"  # xavier_uniform, xavier_normal, kaiming_uniform, kaiming_normal, normal, uniform
+  bias_init: "zeros"              # zeros, ones, normal, uniform
+  gain: 1.0                       # Gain factor for Xavier/Kaiming
+
+# Regularization techniques
+regularization:
+  dropout: 0.0                    # Dropout probability (0 = disabled)
+  batch_norm: false               # Use batch normalization
+  layer_norm: false               # Use layer normalization
+  weight_decay: 0.0001            # L2 regularization strength
+
+# Common architecture settings
+architecture:
+  activation: "relu"              # Default activation: relu, tanh, sigmoid, gelu, swish
+  pooling: "max"                  # Pooling type: max, avg
+  padding: "same"                 # Padding strategy: same, valid
+  bias: true                      # Use bias terms
