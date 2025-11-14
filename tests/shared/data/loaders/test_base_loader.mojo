@@ -17,9 +17,7 @@ struct StubDataset:
 
     var size: Int
 
-    fn __init__(
-        inoutself, size: Int
-    ):
+    fn __init__(out self, size: Int):
         self.size = size
 
     fn __len__(self) -> Int:
@@ -37,15 +35,11 @@ struct StubBatch:
     var data: List[Float32]
     var labels: List[Int]
 
-    fn __init__(
-        inoutself, capacity: Int
-    ):
+    fn __init__(out self, capacity: Int):
         self.data = List[Float32](capacity=capacity)
         self.labels = List[Int](capacity=capacity)
 
-    fn add_sample(
-        inoutself, data: Float32, label: Int
-    ):
+    fn add_sample(inout self, data: Float32, label: Int):
         self.data.append(data)
         self.labels.append(label)
 
@@ -65,7 +59,7 @@ struct StubDataLoader:
     var num_batches: Int
 
     fn __init__(
-        inoutself,
+        out self,
         dataset: StubDataset,
         batch_size: Int,
         drop_last: Bool = False,

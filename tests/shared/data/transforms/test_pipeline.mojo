@@ -22,9 +22,7 @@ struct StubData:
 
     var value: Float32
 
-    fn __init__(
-        inoutself, value: Float32
-    ):
+    fn __init__(out self, value: Float32):
         self.value = value
 
 
@@ -33,9 +31,7 @@ struct StubTransform:
 
     var delta: Float32
 
-    fn __init__(
-        inoutself, delta: Float32
-    ):
+    fn __init__(out self, delta: Float32):
         self.delta = delta
 
     fn apply(self, data: StubData) -> StubData:
@@ -48,14 +44,10 @@ struct StubPipeline:
 
     var transforms: List[StubTransform]
 
-    fn __init__(
-        inoutself
-    ):
+    fn __init__(out self):
         self.transforms = List[StubTransform]()
 
-    fn add_transform(
-        inoutself, transform: StubTransform
-    ):
+    fn add_transform(inout self, transform: StubTransform):
         """Add a transform to the pipeline."""
         self.transforms.append(transform)
 
