@@ -165,6 +165,38 @@ fn atof(s: String) -> Float64:
     return result * sign
 
 
+fn parse_int_value(line: String, field_name: String) raises -> Int:
+    """Extract int value from JSON line.
+
+    Args:
+        line: JSON line containing field
+        field_name: Name of field to extract
+
+    Returns:
+        Extracted int value.
+    """
+    var search_str = field_name + '": '
+    var start = line.find(search_str)
+    if start == -1:
+        raise Error("Could not find " + field_name + " in line")
+
+    start = start + len(search_str)
+
+    # Find end of number (comma, newline, or closing brace)
+    var end = start
+    while end < len(line) and line[end] != "," and line[end] != "}" and line[end] != "\n":
+        end += 1
+
+    var value_str = line[start:end].strip()
+
+    # Convert string to int
+    var result = 0
+    for i in range(len(value_str)):
+        result = result * 10 + (ord(value_str[i]) - ord("0"))
+
+    return result
+
+
 fn load_benchmark_results(filepath: String) raises -> List[BenchmarkData]:
     """Load benchmark results from JSON file.
 
@@ -179,20 +211,63 @@ fn load_benchmark_results(filepath: String) raises -> List[BenchmarkData]:
     """
     var results = List[BenchmarkData](capacity=10)
 
-    # For now, create placeholder data
-    # In production, would parse JSON from file
-    results.append(
-        BenchmarkData("tensor_add_small", 10.0, 1000000.0, 0.08, 100)
-    )
-    results.append(
-        BenchmarkData("tensor_add_large", 100.0, 10000000.0, 8.0, 100)
-    )
-    results.append(
-        BenchmarkData("matmul_small", 15.0, 666666.0, 0.08, 100)
-    )
-    results.append(
-        BenchmarkData("matmul_large", 500.0, 2000000.0, 8.0, 10)
-    )
+    try:
+        # Use Python to read file since Mojo v0.25.7 lacks native file reading
+        var builtins = Python.import_module("builtins")
+        var os_path = Python.import_module("os.path")
+
+        # Check file exists
+        if not os_path.exists(filepath):
+            raise Error("Benchmark file not found: " + filepath)
+
+        # Read file content
+        var file = builtins.open(filepath, "r")
+        var content = String(file.read())
+        file.close()
+
+        # Parse JSON content for benchmarks array
+        var benchmarks_start = content.find('"benchmarks": [')
+        if benchmarks_start == -1:
+            raise Error("Could not find benchmarks array in JSON")
+
+        # Find benchmark entries within the array
+        var current_pos = benchmarks_start
+        while True:
+            var entry_start = content.find('{', current_pos)
+            if entry_start == -1:
+                break
+
+            # Check if we've gone past the benchmarks array
+            var array_end = content.find(']', benchmarks_start)
+            if entry_start > array_end:
+                break
+
+            var entry_end = content.find('}', entry_start)
+            if entry_end == -1:
+                break
+
+            var entry = content[entry_start : entry_end + 1]
+
+            # Parse benchmark entry using existing parsing functions
+            try:
+                var name = parse_benchmark_name(entry)
+                var duration_ms = parse_float_value(entry, '"duration_ms')
+                var throughput = parse_float_value(entry, '"throughput')
+                var memory_mb = parse_float_value(entry, '"memory_mb')
+                var iterations = parse_int_value(entry, '"iterations')
+
+                results.append(
+                    BenchmarkData(name, duration_ms, throughput, memory_mb, iterations)
+                )
+            except:
+                # Skip entries that can't be parsed
+                pass
+
+            # Move to next entry
+            current_pos = entry_end + 1
+
+    except e:
+        raise Error("Failed to load benchmark results: " + str(e))
 
     return results
 
