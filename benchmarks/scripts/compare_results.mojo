@@ -219,6 +219,7 @@ fn parse_int_value(line: String, field_name: String) raises -> Int:
     return result
 
 
+
 fn load_benchmark_results(filepath: String) raises -> List[BenchmarkData]:
     """Load benchmark results from JSON file.
 
