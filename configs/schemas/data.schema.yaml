@@ -1,0 +1,158 @@
+# JSON Schema for Data Configuration Validation
+# Last updated: 2024-11-14
+
+$schema: "http://json-schema.org/draft-07/schema#"
+title: "Data Configuration Schema"
+type: object
+
+properties:
+  dataset:
+    type: object
+    properties:
+      name:
+        type: string
+        description: "Dataset name"
+      path:
+        type: string
+        description: "Path to dataset (supports environment variables)"
+      download:
+        type: boolean
+        description: "Whether to auto-download the dataset"
+
+  preprocessing:
+    type: object
+    properties:
+      normalize:
+        type: boolean
+        description: "Apply normalization"
+      mean:
+        oneOf:
+          - type: array
+            items:
+              type: number
+          - type: "null"
+        description: "Normalization mean"
+      std:
+        oneOf:
+          - type: array
+            items:
+              type: number
+          - type: "null"
+        description: "Normalization standard deviation"
+      resize:
+        oneOf:
+          - type: array
+            items:
+              type: integer
+              minimum: 1
+          - type: "null"
+        description: "Resize target [height, width]"
+      center_crop:
+        oneOf:
+          - type: array
+            items:
+              type: integer
+              minimum: 1
+          - type: "null"
+        description: "Center crop size"
+
+  augmentation:
+    type: object
+    properties:
+      enabled:
+        type: boolean
+        description: "Enable augmentation"
+      random_horizontal_flip:
+        oneOf:
+          - type: boolean
+          - type: number
+            minimum: 0
+            maximum: 1
+      random_vertical_flip:
+        oneOf:
+          - type: boolean
+          - type: number
+            minimum: 0
+            maximum: 1
+      random_rotation:
+        type: number
+        minimum: 0
+        description: "Max rotation in degrees"
+      random_crop:
+        oneOf:
+          - type: array
+            items:
+              type: integer
+              minimum: 1
+          - type: "null"
+      color_jitter:
+        type: object
+        properties:
+          enabled:
+            type: boolean
+          brightness:
+            type: number
+            minimum: 0
+          contrast:
+            type: number
+            minimum: 0
+          saturation:
+            type: number
+            minimum: 0
+          hue:
+            type: number
+            minimum: 0
+
+  loader:
+    type: object
+    properties:
+      batch_size:
+        type: integer
+        minimum: 1
+      num_workers:
+        type: integer
+        minimum: 0
+      pin_memory:
+        type: boolean
+      shuffle_train:
+        type: boolean
+      shuffle_val:
+        type: boolean
+      shuffle_test:
+        type: boolean
+      drop_last:
+        type: boolean
+
+  split:
+    type: object
+    properties:
+      train:
+        oneOf:
+          - type: number
+            minimum: 0
+            maximum: 1
+            description: "Training fraction (0-1)"
+          - type: integer
+            minimum: 1
+            description: "Training size (absolute)"
+      val:
+        oneOf:
+          - type: number
+            minimum: 0
+            maximum: 1
+            description: "Validation fraction (0-1)"
+          - type: integer
+            minimum: 1
+            description: "Validation size (absolute)"
+      test:
+        oneOf:
+          - type: number
+            minimum: 0
+            maximum: 1
+            description: "Test fraction (0-1)"
+          - type: integer
+            minimum: 1
+            description: "Test size (absolute)"
+      stratified:
+        type: boolean
+        description: "Use stratified split"
