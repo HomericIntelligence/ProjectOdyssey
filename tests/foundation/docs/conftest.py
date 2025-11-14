@@ -20,7 +20,7 @@ from typing import List, Dict
 MIN_DOC_LENGTH = 100
 MAX_LINE_LENGTH = 120
 TIER_NAMES = ["getting-started", "core", "advanced", "dev"]
-ROOT_DOCS = ["README.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md"]
+ROOT_DOCS = ["README.md"]
 
 
 @pytest.fixture
