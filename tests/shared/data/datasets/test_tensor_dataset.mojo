@@ -40,8 +40,8 @@ struct StubTensorDataset:
         if len(data) != len(labels):
             raise Error("Data and labels must have same length")
 
-        self.data = data
-        self.labels = labels
+        self.data = data.copy()
+        self.labels = labels.copy()
         self.size = len(data)
 
     fn __len__(self) -> Int:
@@ -79,8 +79,8 @@ fn test_tensor_dataset_creation() raises:
     """
     var data = List[Float32](0.0, 1.0, 2.0)
     var labels = List[Int](0, 1, 2)
-    var dataset = StubTensorDataset(data, labels)
-    assert_equal(len(dataset), 3)
+    var dataset = StubTensorDataset(data^, labels^)
+    assert_equal(dataset.__len__(), 3)
 
 
 fn test_tensor_dataset_with_matching_sizes() raises:
@@ -95,8 +95,8 @@ fn test_tensor_dataset_with_matching_sizes() raises:
         data.append(Float32(i))
         labels.append(i)
 
-    var dataset = StubTensorDataset(data, labels)
-    assert_equal(len(dataset), 100)
+    var dataset = StubTensorDataset(data^, labels^)
+    assert_equal(dataset.__len__(), 100)
 
 
 fn test_tensor_dataset_size_mismatch_error() raises:
@@ -115,7 +115,7 @@ fn test_tensor_dataset_size_mismatch_error() raises:
 
     var error_raised = False
     try:
-        var dataset = StubTensorDataset(data, labels)
+        var dataset = StubTensorDataset(data^, labels^)
     except:
         error_raised = True
 
@@ -130,8 +130,8 @@ fn test_tensor_dataset_empty() raises:
     """
     var data = List[Float32]()
     var labels = List[Int]()
-    var dataset = StubTensorDataset(data, labels)
-    assert_equal(len(dataset), 0)
+    var dataset = StubTensorDataset(data^, labels^)
+    assert_equal(dataset.__len__(), 0)
 
 
 fn test_tensor_dataset_getitem() raises:
@@ -141,34 +141,11 @@ fn test_tensor_dataset_getitem() raises:
     """
     var data = List[Float32](10.0, 20.0, 30.0)
     var labels = List[Int](0, 1, 2)
-    var dataset = StubTensorDataset(data, labels)
+    var dataset = StubTensorDataset(data^, labels^)
 
     var sample = dataset[1]
     assert_equal(sample[0], Float32(20.0))
     assert_equal(sample[1], 1)
-
-
-# ============================================================================
-# TensorDataset Access Tests
-# ============================================================================
-
-
-fn test_tensor_dataset_getitem():
-    """Test accessing individual samples by index.
-
-    Should return (data, label) tuple for the requested index,
-    with data being a single sample (not a batch).
-    """
-    # TODO(#39): Implement when TensorDataset exists
-    # var data = Tensor([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])
-    # var labels = Tensor([0, 1, 2])
-    # var dataset = TensorDataset(data, labels)
-    #
-    # var sample_data, sample_label = dataset[1]
-    # assert_almost_equal(sample_data[0], 3.0)
-    # assert_almost_equal(sample_data[1], 4.0)
-    # assert_equal(sample_label, 1)
-    pass
 
 
 fn test_tensor_dataset_negative_indexing():

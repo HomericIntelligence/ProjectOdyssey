@@ -71,7 +71,7 @@ fn test_dataset_has_len_method() raises:
     This is critical for batch calculation and progress tracking.
     """
     var dataset = StubDataset(size=100)
-    assert_equal(len(dataset), 100)
+    assert_equal(dataset.__len__(), 100)
 
 
 fn test_dataset_has_getitem_method() raises:
@@ -109,7 +109,7 @@ fn test_dataset_getitem_index_validation() raises:
     var dataset = StubDataset(size=100)
     var error_raised = False
     try:
-        var sample = dataset[100]  # Out of bounds
+        var _ = dataset[100]  # Out of bounds
     except:
         error_raised = True
     assert_true(
@@ -137,8 +137,8 @@ fn test_dataset_length_immutable() raises:
     ensuring deterministic behavior for data loaders.
     """
     var dataset = StubDataset(size=100)
-    var len1 = len(dataset)
-    var len2 = len(dataset)
+    var len1 = dataset.__len__()
+    var len2 = dataset.__len__()
     assert_equal(len1, len2)
 
 
