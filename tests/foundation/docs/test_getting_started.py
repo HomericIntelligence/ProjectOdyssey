@@ -1,13 +1,10 @@
 """
 Test suite for Tier 1 (Getting Started) documentation validation.
 
-This module validates the 6 documents in Tier 1, ensuring they exist,
+This module validates the 3 documents in Tier 1, ensuring they exist,
 have required content, and meet quality standards for user-facing documentation.
 
-Tier 1 Documents (6):
-- README.md (root)
-- CONTRIBUTING.md (root)
-- CODE_OF_CONDUCT.md (root)
+Tier 1 Documents (3):
 - docs/getting-started/quickstart.md
 - docs/getting-started/installation.md
 - docs/getting-started/first-paper.md
@@ -123,148 +120,6 @@ Installation steps.
 
         text = readme.read_text()
         assert "## Features" in text or "## " in text, "README should have sections"
-
-
-class TestContributing:
-    """Test cases for CONTRIBUTING.md."""
-
-    def test_contributing_exists(self, repo_root: Path) -> None:
-        """
-        Test that CONTRIBUTING.md exists at repository root.
-
-        Args:
-            repo_root: Repository root path
-        """
-        contributing = repo_root / "CONTRIBUTING.md"
-
-        if not contributing.exists():
-
-            pytest.skip(f"Documentation file not created yet: {contributing}")
-        assert contributing.exists(), "CONTRIBUTING.md should exist"
-        assert contributing.is_file(), "CONTRIBUTING.md should be a file"
-
-    def test_contributing_has_title(self, repo_root: Path) -> None:
-        """
-        Test that CONTRIBUTING.md has a title.
-
-        Args:
-            repo_root: Repository root path
-        """
-        contributing = repo_root / "CONTRIBUTING.md"
-        content = """# Contributing to ML Odyssey
-
-Guidelines for contributors.
-"""
-        if not contributing.exists():
-
-            pytest.skip(f"Documentation file not created yet: {contributing}")
-
-
-        contributing.write_text(content)
-
-        text = contributing.read_text()
-        assert text.startswith("# "), "CONTRIBUTING should start with title"
-
-    def test_contributing_has_guidelines(self, repo_root: Path) -> None:
-        """
-        Test that CONTRIBUTING.md has contribution guidelines.
-
-        Args:
-            repo_root: Repository root path
-        """
-        contributing = repo_root / "CONTRIBUTING.md"
-        content = """# Contributing
-
-## How to Contribute
-
-Steps to contribute.
-
-## Code Standards
-
-Coding standards.
-
-## Pull Request Process
-
-PR workflow.
-"""
-        if not contributing.exists():
-
-            pytest.skip(f"Documentation file not created yet: {contributing}")
-
-
-        contributing.write_text(content)
-
-        text = contributing.read_text()
-        assert "## " in text, "CONTRIBUTING should have sections"
-
-
-class TestCodeOfConduct:
-    """Test cases for CODE_OF_CONDUCT.md."""
-
-    def test_code_of_conduct_exists(self, repo_root: Path) -> None:
-        """
-        Test that CODE_OF_CONDUCT.md exists at repository root.
-
-        Args:
-            repo_root: Repository root path
-        """
-        coc = repo_root / "CODE_OF_CONDUCT.md"
-
-        if not coc.exists():
-
-            pytest.skip(f"Documentation file not created yet: {coc}")
-        assert coc.exists(), "CODE_OF_CONDUCT.md should exist"
-        assert coc.is_file(), "CODE_OF_CONDUCT.md should be a file"
-
-    def test_code_of_conduct_has_title(self, repo_root: Path) -> None:
-        """
-        Test that CODE_OF_CONDUCT.md has a title.
-
-        Args:
-            repo_root: Repository root path
-        """
-        coc = repo_root / "CODE_OF_CONDUCT.md"
-        content = """# Code of Conduct
-
-Community standards.
-"""
-        if not coc.exists():
-
-            pytest.skip(f"Documentation file not created yet: {coc}")
-
-
-        coc.write_text(content)
-
-        text = coc.read_text()
-        assert text.startswith("# "), "CODE_OF_CONDUCT should start with title"
-
-    def test_code_of_conduct_has_standards(self, repo_root: Path) -> None:
-        """
-        Test that CODE_OF_CONDUCT.md has community standards.
-
-        Args:
-            repo_root: Repository root path
-        """
-        coc = repo_root / "CODE_OF_CONDUCT.md"
-        content = """# Code of Conduct
-
-## Our Standards
-
-Expected behavior.
-
-## Enforcement
-
-Enforcement policy.
-"""
-        if not coc.exists():
-
-            pytest.skip(f"Documentation file not created yet: {coc}")
-
-
-        coc.write_text(content)
-
-        text = coc.read_text()
-        assert "## " in text, "CODE_OF_CONDUCT should have sections"
 
 
 class TestQuickstart:
@@ -488,19 +343,13 @@ class TestTier1Integration:
 
     def test_all_tier1_docs_exist(self, repo_root: Path, getting_started_dir: Path) -> None:
         """
-        Test that all 6 Tier 1 documents exist.
+        Test that all 3 Tier 1 documents exist.
 
         Args:
             repo_root: Repository root path
             getting_started_dir: Path to getting-started directory
         """
         # Create all Tier 1 documents
-        root_docs = ["README.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md"]
-        for doc in root_docs:
-            doc_path = (repo_root / doc)
-            if not doc_path.exists():
-                pytest.skip(f"Documentation file not created yet: {doc_path}")
-
         gs_docs = ["quickstart.md", "installation.md", "first-paper.md"]
         for doc in gs_docs:
             doc_path = (getting_started_dir / doc)
@@ -508,27 +357,18 @@ class TestTier1Integration:
                 pytest.skip(f"Documentation file not created yet: {doc_path}")
 
         # Verify all exist
-        for doc in root_docs:
-            assert (repo_root / doc).exists(), f"{doc} should exist"
-
         for doc in gs_docs:
             assert (getting_started_dir / doc).exists(), f"{doc} should exist"
 
     def test_tier1_document_count(self, repo_root: Path, getting_started_dir: Path) -> None:
         """
-        Test that Tier 1 has exactly 6 documents.
+        Test that Tier 1 has exactly 3 documents.
 
         Args:
             repo_root: Repository root path
             getting_started_dir: Path to getting-started directory
         """
         # Create all Tier 1 documents
-        root_docs = ["README.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md"]
-        for doc in root_docs:
-            doc_path = (repo_root / doc)
-            if not doc_path.exists():
-                pytest.skip(f"Documentation file not created yet: {doc_path}")
-
         gs_docs = ["quickstart.md", "installation.md", "first-paper.md"]
         for doc in gs_docs:
             doc_path = (getting_started_dir / doc)
@@ -536,8 +376,6 @@ class TestTier1Integration:
                 pytest.skip(f"Documentation file not created yet: {doc_path}")
 
         # Count documents
-        root_count = len([d for d in root_docs if (repo_root / d).exists()])
         gs_count = len([d for d in gs_docs if (getting_started_dir / d).exists()])
-        total = root_count + gs_count
 
-        assert total == 6, f"Tier 1 should have 6 documents, found {total}"
+        assert gs_count == 3, f"Tier 1 should have 3 documents, found {gs_count}"

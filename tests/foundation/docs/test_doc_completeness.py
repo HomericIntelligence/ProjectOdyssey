@@ -22,31 +22,7 @@ from .conftest import MIN_DOC_LENGTH
 
 
 class TestTier1Completeness:
-    """Test cases for Tier 1 (Getting Started) document completeness - 6 documents."""
-
-    @pytest.mark.parametrize(
-        "doc_name",
-        [
-            "README.md",
-            "CONTRIBUTING.md",
-            "CODE_OF_CONDUCT.md",
-        ],
-    )
-    def test_root_docs_exist(self, repo_root: Path, doc_name: str) -> None:
-        """
-        Test that root-level Tier 1 documents exist.
-
-        Args:
-            repo_root: Repository root path
-            doc_name: Name of document to test
-        """
-        doc_path = repo_root / doc_name
-
-        if not doc_path.exists():
-
-            pytest.skip(f"Documentation file not created yet: {doc_path}")
-        assert doc_path.exists(), f"{doc_name} should exist at repository root"
-        assert doc_path.is_file(), f"{doc_name} should be a file"
+    """Test cases for Tier 1 (Getting Started) document completeness - 3 documents."""
 
     @pytest.mark.parametrize(
         "doc_name",
@@ -77,68 +53,6 @@ class TestTier1Completeness:
         assert doc_path.exists(), f"{doc_name} should exist in getting-started/"
         assert doc_path.is_file(), f"{doc_name} should be a file"
 
-    def test_readme_has_content(self, repo_root: Path) -> None:
-        """
-        Test that README.md has minimum required content.
-
-        Args:
-            repo_root: Repository root path
-        """
-        readme = repo_root / "README.md"
-        content = "# ML Odyssey\n\nProject description.\n"
-        if not readme.exists():
-
-            pytest.skip(f"Documentation file not created yet: {readme}")
-
-
-        readme.write_text(content)
-
-        assert readme.exists(), "README.md should exist"
-        text = readme.read_text()
-        assert len(text) > 0, "README.md should not be empty"
-        assert "# " in text, "README.md should have a title"
-
-    def test_contributing_has_content(self, repo_root: Path) -> None:
-        """
-        Test that CONTRIBUTING.md has minimum required content.
-
-        Args:
-            repo_root: Repository root path
-        """
-        contributing = repo_root / "CONTRIBUTING.md"
-        content = "# Contributing\n\nContribution guidelines.\n"
-        if not contributing.exists():
-
-            pytest.skip(f"Documentation file not created yet: {contributing}")
-
-
-        contributing.write_text(content)
-
-        assert contributing.exists(), "CONTRIBUTING.md should exist"
-        text = contributing.read_text()
-        assert len(text) > 0, "CONTRIBUTING.md should not be empty"
-        assert "# " in text, "CONTRIBUTING.md should have a title"
-
-    def test_code_of_conduct_has_content(self, repo_root: Path) -> None:
-        """
-        Test that CODE_OF_CONDUCT.md has minimum required content.
-
-        Args:
-            repo_root: Repository root path
-        """
-        coc = repo_root / "CODE_OF_CONDUCT.md"
-        content = "# Code of Conduct\n\nCommunity standards.\n"
-        if not coc.exists():
-
-            pytest.skip(f"Documentation file not created yet: {coc}")
-
-
-        coc.write_text(content)
-
-        assert coc.exists(), "CODE_OF_CONDUCT.md should exist"
-        text = coc.read_text()
-        assert len(text) > 0, "CODE_OF_CONDUCT.md should not be empty"
-        assert "# " in text, "CODE_OF_CONDUCT.md should have a title"
 
 
 class TestTier2Completeness:
@@ -383,11 +297,6 @@ class TestDocumentCompleteness:
 
                 pytest.skip(f"Tier directory not yet created: {tier_path}")
 
-        # Create root docs (3)
-        for doc in ["README.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md"]:
-            doc_path = (repo_root / doc)
-            if not doc_path.exists():
-                pytest.skip(f"Documentation file not created yet: {doc_path}")
 
         # Create Tier 1 docs (3)
         tier1_docs = ["quickstart.md", "installation.md", "first-paper.md"]

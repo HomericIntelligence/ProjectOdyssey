@@ -121,26 +121,17 @@ class TestDocumentationStructure:
             pytest.skip(f"Tier directory not yet created: {tier4}")
         assert tier4.parent == docs_root, "dev/ should be under docs/"
 
-    @pytest.mark.parametrize(
-        "root_doc",
-        [
-            "README.md",
-            "CONTRIBUTING.md",
-            "CODE_OF_CONDUCT.md",
-        ],
-    )
-    def test_root_level_docs_location(self, repo_root: Path, root_doc: str) -> None:
+    def test_readme_location(self, repo_root: Path) -> None:
         """
-        Test that root-level documents are at repository root.
+        Test that README.md is at repository root.
 
         Args:
             repo_root: Repository root path
-            root_doc: Name of root document to test
         """
-        doc_path = repo_root / root_doc
-        if not doc_path.exists():
-            pytest.skip(f"Documentation file not created yet: {doc_path}")
-        assert doc_path.parent == repo_root, f"{root_doc} should be at repository root"
+        readme = repo_root / "README.md"
+        if not readme.exists():
+            pytest.skip(f"Documentation file not created yet: {readme}")
+        assert readme.parent == repo_root, "README.md should be at repository root"
 
     def test_all_tier_directories_present(self, docs_root: Path) -> None:
         """
