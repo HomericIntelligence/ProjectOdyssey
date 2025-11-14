@@ -602,11 +602,14 @@ fn create_directory(dirpath: String) -> Bool:
     Returns:
         True if created or already exists, False if error
     """
-    # NOTE: Mojo v0.25.7 doesn't have os.makedirs()
-    # In production, would use os.makedirs(dirpath, exist_ok=True)
-    # For now, placeholder that simulates successful creation
-    # TODO: Implement using Python interop when available
-    return True
+    # Use Python os.makedirs() to create directory with parents
+    try:
+        var python = Python.import_module("os")
+        python.makedirs(dirpath, exist_ok=True)
+        return True
+    except:
+        # Return False if directory creation fails
+        return False
 
 
 fn get_file_size(filepath: String) -> Int:
