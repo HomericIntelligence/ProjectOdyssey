@@ -175,6 +175,7 @@ fn measure_benchmark[func: fn () raises -> None](
     iterations: Int,
     memory_mb: Float64 = 0.0,
     operations_per_iteration: Float64 = 10000.0,
+    warmup_iterations: Int = 2,
 ) raises -> BenchmarkMetrics:
     """Measure a benchmark's performance.
 
@@ -188,10 +189,19 @@ fn measure_benchmark[func: fn () raises -> None](
         memory_mb: Memory used in MB.
         operations_per_iteration: Number of operations performed per iteration.
             Used for throughput calculation. Defaults to 10000.0.
+        warmup_iterations: Number of warmup iterations to run before measurements
+            to eliminate JIT compilation and cold-start overhead. Defaults to 2.
 
     Returns:
         BenchmarkMetrics with timing and throughput data.
     """
+    # Run warmup iterations to eliminate JIT compilation overhead
+    for _ in range(warmup_iterations):
+        try:
+            func()
+        except:
+            pass  # Ignore errors during warmup
+
     var total_duration_us: Int64 = 0
     var min_duration_us: Int64 = MAX_INT64
     var max_duration_us: Int64 = 0
