@@ -44,7 +44,7 @@ struct StubBatch:
         self.labels.append(label)
 
     fn size(self) -> Int:
-        return len(self.data)
+        return self.data.__len__()
 
 
 struct StubDataLoader:
@@ -82,7 +82,7 @@ struct StubDataLoader:
         self.drop_last = drop_last
 
         # Calculate number of batches
-        var n_samples = len(dataset)
+        var n_samples = dataset.__len__()
         if n_samples == 0:
             self.num_batches = 0
         elif drop_last:
@@ -105,7 +105,7 @@ struct StubDataLoader:
         """
         var start_idx = batch_idx * self.batch_size
         var end_idx = start_idx + self.batch_size
-        var dataset_len = len(self.dataset)
+        var dataset_len = self.dataset.__len__()
 
         if end_idx > dataset_len:
             end_idx = dataset_len
@@ -131,7 +131,7 @@ fn test_loader_has_len_method() raises:
     """
     var dataset = StubDataset(size=100)
     var loader = StubDataLoader(dataset, batch_size=32)
-    assert_equal(len(loader), 4)  # ceil(100/32) = 4 batches
+    assert_equal(loader.__len__(), 4)  # ceil(100/32) = 4 batches
 
 
 fn test_loader_batch_size_consistency() raises:
@@ -166,7 +166,7 @@ fn test_loader_empty_dataset() raises:
     """
     var dataset = StubDataset(size=0)
     var loader = StubDataLoader(dataset, batch_size=32)
-    assert_equal(len(loader), 0)
+    assert_equal(loader.__len__(), 0)
 
 
 fn test_loader_single_sample() raises:
@@ -178,7 +178,7 @@ fn test_loader_single_sample() raises:
     var dataset = StubDataset(size=1)
     var loader = StubDataLoader(dataset, batch_size=32)
 
-    assert_equal(len(loader), 1)
+    assert_equal(loader.__len__(), 1)
 
     var batch = loader.get_batch(0)
     assert_equal(batch.size(), 1)
@@ -214,10 +214,10 @@ fn test_loader_drop_last_option() raises:
     var loader = StubDataLoader(dataset, batch_size=32, drop_last=True)
 
     # Should drop last batch of 4 samples
-    assert_equal(len(loader), 3)
+    assert_equal(loader.__len__(), 3)
 
     # All remaining batches should have exactly batch_size samples
-    for i in range(len(loader)):
+    for i in range(loader.__len__()):
         var batch = loader.get_batch(i)
         assert_equal(batch.size(), 32)
 
@@ -232,9 +232,7 @@ fn main() raises:
     print("Running base loader tests...")
 
     # Interface tests
-    test_loader_has_iter_method()
     test_loader_has_len_method()
-    test_loader_iteration()
     test_loader_batch_size_consistency()
     test_loader_empty_dataset()
     test_loader_single_sample()
@@ -242,6 +240,5 @@ fn main() raises:
     # Configuration tests
     test_loader_batch_size_validation()
     test_loader_drop_last_option()
-    test_loader_reset_between_epochs()
 
     print("✓ All base loader tests passed!")

@@ -55,7 +55,7 @@ fn assert_equal[T: Comparable](a: T, b: T, message: String = "") raises:
         Error if a != b.
     """
     if a != b:
-        var error_msg = message if message else String(a) + " != " + String(b)
+        var error_msg = message if message else "Values are not equal"
         raise Error(error_msg)
 
 
@@ -71,7 +71,9 @@ fn assert_not_equal[T: Comparable](a: T, b: T, message: String = "") raises:
         Error if a == b.
     """
     if a == b:
-        var error_msg = message if message else String(a) + " == " + String(b)
+        var error_msg = (
+            message if message else "Values are equal but should not be"
+        )
         raise Error(error_msg)
 
 
@@ -200,7 +202,7 @@ struct BenchmarkResult:
     var memory_mb: Float64
 
     fn __init__(
-        inoutself,
+        out self,
         name: String,
         duration_ms: Float64,
         throughput: Float64,
