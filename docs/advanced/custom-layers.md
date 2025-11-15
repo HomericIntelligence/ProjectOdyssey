@@ -64,45 +64,25 @@ var output = layer.forward(input)  # Scaled by learnable parameter
 
 ### Example: Custom Activation
 
-Parametric ReLU with learnable slope:
+Parametric ReLU with learnable slope.
+
+See [`examples/custom-layers/prelu_activation.mojo`](
+../../examples/custom-layers/prelu_activation.mojo) for a complete working example.
+
+Key implementation:
 
 ```mojo
 struct PReLU(Module):
-    """Parametric ReLU activation.
-
-    Formula: PReLU(x) = max(0, x) + α * min(0, x)
-    """
+    """Parametric ReLU: PReLU(x) = max(0, x) + α * min(0, x)"""
     var alpha: Tensor  # Learnable slope for negative values
 
-    fn __init__(inout self, num_features: Int = 1, init_value: Float64 = 0.25):
-        """Initialize PReLU.
-
-        Args:
-            num_features: Number of parameters (1 for shared, or per-channel).
-            init_value: Initial value for alpha.
-        """
-        self.alpha = Tensor.ones(num_features) * init_value
-
     fn forward(inout self, borrowed input: Tensor) -> Tensor:
-        """Forward pass.
-
-        Returns:
-            PReLU(input) = max(0, input) + α * min(0, input)
-        """
         var positive = max(input, 0.0)
         var negative = min(input, 0.0)
-
-        # Broadcast alpha if needed
-        if self.alpha.size() == 1:
-            return positive + self.alpha[0] * negative
-        else:
-            # Per-channel alpha
-            return positive + self.alpha.reshape(1, -1, 1, 1) * negative
-
-    fn parameters(inout self) -> List[Tensor]:
-        """Return alpha for optimization."""
-        return [self.alpha]
+        return positive + self.alpha[0] * negative
 ```
+
+Full example: [`examples/custom-layers/prelu_activation.mojo`](../../examples/custom-layers/prelu_activation.mojo)
 
 ## Advanced Custom Layer
 
@@ -241,131 +221,63 @@ struct CustomLinear(Module):
 
 ### Example: Focal Loss
 
-Custom loss for imbalanced datasets:
+Custom loss for imbalanced datasets.
+
+See [`examples/custom-layers/focal_loss.mojo`](
+../../examples/custom-layers/focal_loss.mojo) for a complete working example.
+
+Key implementation:
 
 ```mojo
 struct FocalLoss:
-    """Focal loss for addressing class imbalance.
+    """Focal loss: FL(p_t) = -α_t * (1 - p_t)^γ * log(p_t)
 
-    FL(p_t) = -α_t * (1 - p_t)^γ * log(p_t)
-
-    Reference:
-        Lin et al., "Focal Loss for Dense Object Detection", ICCV 2017
+    Reference: Lin et al., "Focal Loss for Dense Object Detection", ICCV 2017
     """
     var alpha: Float64  # Weighting factor
     var gamma: Float64  # Focusing parameter
 
-    fn __init__(inout self, alpha: Float64 = 0.25, gamma: Float64 = 2.0):
-        self.alpha = alpha
-        self.gamma = gamma
-
     fn __call__(self, borrowed predictions: Tensor, borrowed targets: Tensor) -> Tensor:
-        """Compute focal loss.
-
-        Args:
-            predictions: Model predictions (after softmax), shape [batch, num_classes].
-            targets: Ground truth labels, shape [batch].
-
-        Returns:
-            Scalar loss value.
-        """
-        var batch_size = predictions.shape[0]
-        var num_classes = predictions.shape[1]
-
         # Get predicted probabilities for true class
-        var p_t = Tensor.zeros(batch_size)
-        for i in range(batch_size):
-            var true_class = int(targets[i])
-            p_t[i] = predictions[i, true_class]
-
-        # Focal loss: -α * (1 - p_t)^γ * log(p_t)
-        var alpha_t = self.alpha
+        var p_t = get_class_probabilities(predictions, targets)
+        # Focal loss formula
         var focal_weight = (1.0 - p_t) ** self.gamma
-        var ce_loss = -log(p_t + 1e-7)  # Add epsilon for stability
-
-        var loss = alpha_t * focal_weight * ce_loss
-        return loss.mean()
+        return (self.alpha * focal_weight * -log(p_t + 1e-7)).mean()
 ```
+
+Full example: [`examples/custom-layers/focal_loss.mojo`](../../examples/custom-layers/focal_loss.mojo)
 
 ## Attention Mechanism
 
 ### Example: Multi-Head Attention
 
+Multi-head self-attention mechanism used in Transformers.
+
+See [`examples/custom-layers/attention_layer.mojo`](
+../../examples/custom-layers/attention_layer.mojo) for a complete working example.
+
+Key implementation:
+
 ```mojo
 struct MultiHeadAttention(Module):
-    """Multi-head self-attention mechanism.
-
-    Used in Transformers and other attention-based models.
-    """
+    """Multi-head self-attention mechanism."""
     var num_heads: Int
     var head_dim: Int
-    var embed_dim: Int
-
     var q_proj: Linear  # Query projection
     var k_proj: Linear  # Key projection
     var v_proj: Linear  # Value projection
     var out_proj: Linear  # Output projection
 
-    fn __init__(inout self, embed_dim: Int, num_heads: Int):
-        """Initialize multi-head attention.
-
-        Args:
-            embed_dim: Embedding dimension.
-            num_heads: Number of attention heads.
-        """
-        self.embed_dim = embed_dim
-        self.num_heads = num_heads
-        self.head_dim = embed_dim // num_heads
-
-        # Projection layers
-        self.q_proj = Linear(embed_dim, embed_dim)
-        self.k_proj = Linear(embed_dim, embed_dim)
-        self.v_proj = Linear(embed_dim, embed_dim)
-        self.out_proj = Linear(embed_dim, embed_dim)
-
     fn forward(inout self, borrowed x: Tensor) -> Tensor:
-        """Compute multi-head attention.
-
-        Args:
-            x: Input tensor, shape [batch, seq_len, embed_dim].
-
-        Returns:
-            Output tensor, shape [batch, seq_len, embed_dim].
-        """
-        var batch_size = x.shape[0]
-        var seq_len = x.shape[1]
-
         # Project to Q, K, V
         var q = self.q_proj.forward(x)
         var k = self.k_proj.forward(x)
         var v = self.v_proj.forward(x)
-
-        # Reshape for multi-head attention
-        # [batch, seq_len, embed_dim] -> [batch, num_heads, seq_len, head_dim]
-        q = q.reshape(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
-        k = k.reshape(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
-        v = v.reshape(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
-
-        # Scaled dot-product attention
-        var scores = q @ k.transpose(-2, -1) / sqrt(Float64(self.head_dim))
-        var attn_weights = softmax(scores, dim=-1)
-        var attn_output = attn_weights @ v
-
-        # Reshape back
-        # [batch, num_heads, seq_len, head_dim] -> [batch, seq_len, embed_dim]
-        attn_output = attn_output.transpose(1, 2).reshape(batch_size, seq_len, self.embed_dim)
-
-        # Output projection
-        return self.out_proj.forward(attn_output)
-
-    fn parameters(inout self) -> List[Tensor]:
-        var params = List[Tensor]()
-        params.extend(self.q_proj.parameters())
-        params.extend(self.k_proj.parameters())
-        params.extend(self.v_proj.parameters())
-        params.extend(self.out_proj.parameters())
-        return params
+        # Reshape, compute attention, project output
+        # ... (see full example)
 ```
+
+Full example: [`examples/custom-layers/attention_layer.mojo`](../../examples/custom-layers/attention_layer.mojo)
 
 ## Testing Custom Layers
 
