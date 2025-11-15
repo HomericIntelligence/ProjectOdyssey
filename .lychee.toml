@@ -1,0 +1,17 @@
+# Lychee configuration for link checking
+# Excludes patterns that are expected to fail or shouldn't be checked
+
+# Exclude certain patterns from link checking
+exclude = [
+    "notes/plan/",
+    "file:///",
+    # Files that exist locally but not on main yet (added in this PR)
+    "https://github.com/mvillmow/ml-odyssey/blob/main/CONTRIBUTING.md",
+    "https://github.com/mvillmow/ml-odyssey/blob/main/CODE_OF_CONDUCT.md",
+]
+
+# Fail on broken links
+fail = true
+
+# Verbose output
+verbose = true
