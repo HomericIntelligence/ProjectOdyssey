@@ -2,9 +2,6 @@
 
 Managing environment, project, and model configuration in ML Odyssey.
 
-> **📚 Detailed Reference**: For complete configuration options, validation, and advanced patterns, see
-> [Configuration Reference Appendix](../appendices/configuration-reference.md).
-
 ## Overview
 
 ML Odyssey uses a layered configuration system that separates environment setup, project settings, and
@@ -678,7 +675,6 @@ var lr = config.get("training.learning_rate")  # Returns variant type
 
 ## See Also
 
-- **[Configuration Reference Appendix](../appendices/configuration-reference.md)** - Complete configuration details
 - **[Workflow](workflow.md)** - Using configuration in development workflow
 - **[Paper Implementation](paper-implementation.md)** - Model-specific configuration
 - **[Testing Strategy](testing-strategy.md)** - Testing with different configs
