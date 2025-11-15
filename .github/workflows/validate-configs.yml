@@ -23,15 +23,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      
+
       - name: Install yamllint
         run: pip install yamllint
-      
+
       - name: Validate YAML files
         run: |
           echo "Validating YAML syntax in configs/"
@@ -39,7 +39,7 @@ jobs:
             echo "Validating: $file"
             yamllint -d "{extends: default, rules: {line-length: {max: 120}}}" "$file"
           done
-      
+
       - name: Check for required default configs
         run: |
           echo "Checking for required default configurations..."
@@ -48,7 +48,7 @@ jobs:
             "configs/defaults/model.yaml"
             "configs/defaults/data.yaml"
           )
-          
+
           for config in "${required_defaults[@]}"; do
             if [ ! -f "$config" ]; then
               echo "ERROR: Required default config missing: $config"
@@ -64,12 +64,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
       - name: Validate config structure
         run: |
           echo "Validating configuration structure..."
@@ -77,35 +80,35 @@ jobs:
           import yaml
           import sys
           from pathlib import Path
-          
+
           def validate_training_config(config_path):
               """Validate training configuration has required fields."""
               with open(config_path) as f:
                   config = yaml.safe_load(f)
-              
+
               # Check for optimizer section
               if 'optimizer' not in config:
                   print(f"WARNING: {config_path} missing 'optimizer' section")
                   return False
-              
+
               # Check for training section
               if 'training' not in config:
                   print(f"WARNING: {config_path} missing 'training' section")
                   return False
-              
+
               print(f"✓ {config_path} has valid structure")
               return True
-          
+
           # Validate default training config
           default_training = Path("configs/defaults/training.yaml")
           if default_training.exists():
               validate_training_config(default_training)
-          
+
           # Validate paper training configs
           paper_configs = Path("configs/papers").rglob("training.yaml")
           for config in paper_configs:
               validate_training_config(config)
-          
+
           print("\nConfiguration structure validation complete!")
           PYTHON_SCRIPT
 
@@ -116,18 +119,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
       - name: Install Modular CLI
         run: |
           curl -s https://get.modular.com | sh -
           modular auth ${{ secrets.MODULAR_AUTH_TOKEN || 'dummy-token' }}
         continue-on-error: true
-      
+
       - name: Install Mojo
         run: |
           modular install mojo
         continue-on-error: true
-      
+
       - name: Test config loading (placeholder)
         run: |
           echo "Testing configuration loading..."
@@ -145,12 +148,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
       - name: Validate experiment configs reference valid papers
         run: |
           echo "Validating experiment configurations..."
@@ -158,25 +164,25 @@ jobs:
           import yaml
           import sys
           from pathlib import Path
-          
+
           experiments_dir = Path("configs/experiments")
           if not experiments_dir.exists():
               print("No experiments directory yet - skipping validation")
               sys.exit(0)
-          
+
           for exp_file in experiments_dir.rglob("*.yaml"):
               with open(exp_file) as f:
                   config = yaml.safe_load(f)
-              
+
               # Check if experiment references a valid paper
               paper_name = exp_file.parent.name
               paper_dir = Path(f"configs/papers/{paper_name}")
-              
+
               if not paper_dir.exists():
                   print(f"WARNING: Experiment {exp_file} references non-existent paper: {paper_name}")
               else:
                   print(f"✓ {exp_file.name} references valid paper: {paper_name}")
-          
+
           print("\nExperiment validation complete!")
           PYTHON_SCRIPT
 
@@ -195,12 +201,12 @@ jobs:
           echo "✓ Schema validation: ${{ needs.validate-schemas.result }}"
           echo "✓ Experiment validation: ${{ needs.validate-experiments.result }}"
           echo "=" * 60
-          
+
           if [ "${{ needs.validate-yaml.result }}" != "success" ] || \
              [ "${{ needs.validate-schemas.result }}" != "success" ] || \
              [ "${{ needs.validate-experiments.result }}" != "success" ]; then
             echo "ERROR: Some validation checks failed!"
             exit 1
           fi
-          
+
           echo "All validation checks passed!"
