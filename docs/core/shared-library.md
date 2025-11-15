@@ -2,9 +2,6 @@
 
 Understanding and using ML Odyssey's reusable components across all paper implementations.
 
-> **📚 Detailed Reference**: For complete API documentation, advanced patterns, and examples, see
-> [Shared Library API Appendix](../appendices/shared-library-api.md).
-
 ## Overview
 
 The shared library (`shared/`) contains battle-tested, reusable components for building neural networks, training
@@ -633,7 +630,6 @@ See [Performance Guide](../advanced/performance.md) for optimization techniques.
 
 ## See Also
 
-- **[Shared Library API Appendix](../appendices/shared-library-api.md)** - Complete API reference
 - **[Paper Implementation Guide](paper-implementation.md)** - Use shared library to implement papers
 - **[Custom Layers](../advanced/custom-layers.md)** - Create custom components
 - **[Mojo Patterns](mojo-patterns.md)** - Learn Mojo-specific patterns
