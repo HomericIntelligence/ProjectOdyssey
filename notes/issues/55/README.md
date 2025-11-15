@@ -286,11 +286,11 @@ All expected files exist:
 
 ## References
 
-- **Planning**: [Issue #52](https://github.com/modularml/ml-odyssey/issues/52) - [Plan] Benchmarks
-- **Testing**: [Issue #53](https://github.com/modularml/ml-odyssey/issues/53) - [Test] Benchmarks
-- **Implementation**: [Issue #54](https://github.com/modularml/ml-odyssey/issues/54) - [Impl] Benchmarks
-- **Packaging**: This issue ([Issue #55](https://github.com/modularml/ml-odyssey/issues/55))
-- **Cleanup**: [Issue #56](https://github.com/modularml/ml-odyssey/issues/56) - [Cleanup] Benchmarks
+- **Planning**: [Issue #52](https://github.com/mvillmow/ml-odyssey/issues/52) - [Plan] Benchmarks
+- **Testing**: [Issue #53](https://github.com/mvillmow/ml-odyssey/issues/53) - [Test] Benchmarks
+- **Implementation**: [Issue #54](https://github.com/mvillmow/ml-odyssey/issues/54) - [Impl] Benchmarks
+- **Packaging**: This issue ([Issue #55](https://github.com/mvillmow/ml-odyssey/issues/55))
+- **Cleanup**: [Issue #56](https://github.com/mvillmow/ml-odyssey/issues/56) - [Cleanup] Benchmarks
 
 ## Packaging Artifacts
 
