@@ -781,5 +781,5 @@ gh api repos/OWNER/REPO/pulls/PR/comments/ID/replies -f body="✅ Fixed"
 - **[Testing Strategy](testing-strategy.md)** - Comprehensive testing approach
 - **[Project Structure](project-structure.md)** - Repository organization
 - **[Configuration](configuration.md)** - Environment configuration
-- [Git Worktree Strategy](/notes/review/worktree-strategy.md) - Advanced worktree usage
-- [Orchestration Patterns](/notes/review/orchestration-patterns.md) - Agent coordination
+- [Git Worktree Strategy](../../notes/review/worktree-strategy.md) - Advanced worktree usage
+- [Orchestration Patterns](../../notes/review/orchestration-patterns.md) - Agent coordination

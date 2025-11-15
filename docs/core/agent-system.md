@@ -556,4 +556,4 @@ Agents are configured in `.claude/agents/`:
 - [Agent README](/agents/README.md) - Quick start
 - [Agent Hierarchy](/agents/hierarchy.md) - Visual diagram
 - [Delegation Rules](/agents/delegation-rules.md) - Coordination patterns
-- [Orchestration Patterns](/notes/review/orchestration-patterns.md) - Advanced patterns
+- [Orchestration Patterns](../../notes/review/orchestration-patterns.md) - Advanced patterns
