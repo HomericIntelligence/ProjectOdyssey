@@ -11,4 +11,8 @@ build/
 worktrees/
 dist/
 
+# MkDocs build artifacts
+site/
+.cache/
+
 *.swp
