@@ -31,7 +31,7 @@ fn train_model() raises:
     var batch_size = 32
     var epochs = 10
     var optimizer = "sgd"
-    
+
     # Training logic...
 ```
 
@@ -71,13 +71,13 @@ from shared.utils.config_loader import load_experiment_config
 fn train_model() raises:
     # Load configuration
     var config = load_experiment_config("lenet5", "baseline")
-    
+
     # Extract parameters
     var learning_rate = config.get_float("optimizer.learning_rate")
     var batch_size = config.get_int("training.batch_size")
     var epochs = config.get_int("training.epochs")
     var optimizer = config.get_string("optimizer.name")
-    
+
     # Training logic...
 ```
 
@@ -102,14 +102,14 @@ from shared.utils.config_loader import load_experiment_config
 
 fn create_model(config: Config) raises -> Model:
     var model = Model()
-    
+
     # Load layer configurations from config
     var layers = config.get_list("model.layers")
     for i in range(len(layers)):
         # Parse layer config and add to model
         # (Actual implementation depends on your model structure)
         pass
-    
+
     return model
 
 fn main() raises:
@@ -126,10 +126,10 @@ from shared.utils.config_loader import validate_experiment_config
 
 fn main() raises:
     var config = load_experiment_config("lenet5", "baseline")
-    
+
     # Validate config before use
     validate_experiment_config(config)
-    
+
     # Proceed with training
     train_model(config)
 ```
@@ -203,10 +203,10 @@ fn main() raises:
     var lr = 0.001
     var batch_size = 32
     var epochs = 10
-    
+
     # Create model
     var model = create_model()
-    
+
     # Train
     for epoch in range(epochs):
         # Training loop
@@ -224,13 +224,13 @@ from shared.utils.config_loader import (
 fn main() raises:
     # Load configuration
     var config = load_experiment_config("lenet5", "baseline")
-    
+
     # Validate
     validate_experiment_config(config)
-    
+
     # Create model from config
     var model = create_model(config)
-    
+
     # Train with config parameters
     var epochs = config.get_int("training.epochs")
     for epoch in range(epochs):
@@ -367,7 +367,7 @@ Add validation at the start of your script:
 fn main() raises:
     var config = load_experiment_config("lenet5", "baseline")
     validate_experiment_config(config)  # Fail fast if invalid
-    
+
     # Rest of the code...
 ```
 
