@@ -77,25 +77,21 @@ struct Linear:
 
 ### Ownership and Borrowing
 
-Mojo's ownership system prevents memory errors:
+Mojo's ownership system prevents memory errors.
+
+See [`examples/mojo-patterns/ownership_example.mojo`](
+../../examples/mojo-patterns/ownership_example.mojo) for a complete working example.
+
+Key patterns:
 
 ```mojo
 # Borrowed: read-only access (no ownership transfer)
 fn compute_loss(borrowed predictions: Tensor, borrowed targets: Tensor) -> Float64:
-    """Compute loss without taking ownership."""
     var diff = predictions - targets
     return (diff * diff).mean()
 
-# Owned: take ownership (move semantics)
-fn consume_tensor(owned tensor: Tensor) -> Float64:
-    """Take ownership and consume tensor."""
-    var result = tensor.sum()
-    # tensor is destroyed here
-    return result
-
 # Inout: mutable reference (modify in place)
 fn update_weights(inout weights: Tensor, borrowed gradients: Tensor, lr: Float64):
-    """Update weights in place."""
     weights -= lr * gradients  # Modifies original
 ```
 
@@ -105,6 +101,8 @@ fn update_weights(inout weights: Tensor, borrowed gradients: Tensor, lr: Float64
 - Use `inout` for in-place updates
 - Use `owned` only when consuming resources
 - Avoid unnecessary copies
+
+Full example: [`examples/mojo-patterns/ownership_example.mojo`](../../examples/mojo-patterns/ownership_example.mojo)
 
 ### In-Place Operations
 
@@ -134,12 +132,13 @@ fn update_good(inout weights: Tensor, borrowed grad: Tensor, lr: Float64):
 
 ### Vectorized Operations
 
-Leverage SIMD for parallel computation:
+Leverage SIMD for parallel computation.
+
+See [`examples/mojo-patterns/simd_example.mojo`](../../examples/mojo-patterns/simd_example.mojo) for a complete working example.
+
+Key pattern:
 
 ```mojo
-from algorithm import vectorize
-from sys.info import simdwidthof
-
 fn relu_simd(inout tensor: Tensor):
     """ReLU activation using SIMD."""
     alias simd_width = simdwidthof[DType.float32]()
@@ -150,25 +149,9 @@ fn relu_simd(inout tensor: Tensor):
         tensor.data.simd_store[width](idx, max(val, 0.0))
 
     vectorize[simd_width, vectorized_relu](tensor.size())
-
-fn matmul_simd(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
-    """Matrix multiplication using SIMD."""
-    var result = Tensor.zeros(a.shape[0], b.shape[1])
-
-    alias simd_width = simdwidthof[DType.float32]()
-
-    for i in range(a.shape[0]):
-        for j in range(b.shape[1]):
-            @parameter
-            fn dot_product[width: Int](k: Int):
-                var a_vec = a.data.simd_load[width](i * a.shape[1] + k)
-                var b_vec = b.data.simd_load[width](k * b.shape[1] + j)
-                result[i, j] += (a_vec * b_vec).reduce_add()
-
-            vectorize[simd_width, dot_product](a.shape[1])
-
-    return result
 ```
+
+Full example: [`examples/mojo-patterns/simd_example.mojo`](../../examples/mojo-patterns/simd_example.mojo)
 
 ### Parallel Loops
 
@@ -196,59 +179,26 @@ fn batch_forward(borrowed inputs: Tensor, borrowed weights: Tensor) -> Tensor:
 
 ### Defining Traits
 
-Create reusable interfaces with traits:
+Create reusable interfaces with traits.
+
+See [`examples/mojo-patterns/trait_example.mojo`](
+../../examples/mojo-patterns/trait_example.mojo) for a complete working example.
+
+Key pattern:
 
 ```mojo
 trait Module:
     """Base trait for neural network modules."""
+    fn forward(inout self, borrowed input: Tensor) -> Tensor: ...
+    fn parameters(inout self) -> List[Tensor]: ...
 
-    fn forward(inout self, borrowed input: Tensor) -> Tensor:
-        """Forward pass."""
-        ...
-
-    fn parameters(inout self) -> List[Tensor]:
-        """Get trainable parameters."""
-        ...
-
-trait Optimizer:
-    """Base trait for optimizers."""
-
-    fn step(self, inout parameters: List[Tensor]):
-        """Update parameters."""
-        ...
-
-    fn zero_grad(self, inout parameters: List[Tensor]):
-        """Zero gradients."""
-        for i in range(len(parameters)):
-            parameters[i].grad = Tensor.zeros_like(parameters[i])
-```
-
-### Implementing Traits
-
-```mojo
 struct Linear(Module):
     """Linear layer implementing Module trait."""
-    var weight: Tensor
-    var bias: Tensor
-
     fn forward(inout self, borrowed input: Tensor) -> Tensor:
         return input @ self.weight.T + self.bias
-
-    fn parameters(inout self) -> List[Tensor]:
-        return [self.weight, self.bias]
-
-struct Adam(Optimizer):
-    """Adam optimizer implementing Optimizer trait."""
-    var lr: Float64
-    var beta1: Float64
-    var beta2: Float64
-
-    fn step(self, inout parameters: List[Tensor]):
-        # Adam update logic
-        for i in range(len(parameters)):
-            # Update with momentum and adaptive learning rate
-            parameters[i] -= self.lr * parameters[i].grad
 ```
+
+Full example: [`examples/mojo-patterns/trait_example.mojo`](../../examples/mojo-patterns/trait_example.mojo)
 
 ### Generic Functions
 

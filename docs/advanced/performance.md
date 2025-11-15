@@ -55,11 +55,14 @@ fn simd_example():
 
 ### Vectorizing Loops
 
-Convert scalar loops to SIMD:
+Convert scalar loops to SIMD for massive performance gains.
+
+See [`examples/performance/simd_optimization.mojo`](
+../../examples/performance/simd_optimization.mojo) for complete working examples.
+
+Key pattern:
 
 ```mojo
-from algorithm import vectorize
-
 fn relu_simd(inout tensor: Tensor):
     """ReLU activation with SIMD."""
     alias simd_width = simdwidthof[DType.float32]()
@@ -70,21 +73,9 @@ fn relu_simd(inout tensor: Tensor):
         tensor.data.simd_store[width](idx, max(val, 0.0))
 
     vectorize[simd_width, vectorized_relu](tensor.size())
-
-fn batch_norm_simd(inout input: Tensor, borrowed mean: Tensor, borrowed var: Tensor):
-    """Batch normalization with SIMD."""
-    alias width = simdwidthof[DType.float32]()
-
-    @parameter
-    fn vectorized[w: Int](idx: Int):
-        var x = input.load[w](idx)
-        var m = mean.load[w](idx)
-        var v = var.load[w](idx)
-        var normalized = (x - m) / sqrt(v + 1e-5)
-        input.store[w](idx, normalized)
-
-    vectorize[width, vectorized](input.size())
 ```
+
+Full example: [`examples/performance/simd_optimization.mojo`](../../examples/performance/simd_optimization.mojo)
 
 ### Matrix Multiplication
 
@@ -188,28 +179,29 @@ struct ParallelLinear:
 
 ### In-Place Operations
 
-Avoid unnecessary allocations:
+Avoid unnecessary allocations for better memory efficiency.
+
+See [`examples/performance/memory_optimization.mojo`](
+../../examples/performance/memory_optimization.mojo) for complete working examples.
+
+Key pattern:
 
 ```mojo
-# Bad: Creates temporary tensors
+# Bad: Creates temporary tensors (2 allocations)
 fn bad_update(weights: Tensor, grad: Tensor, lr: Float64) -> Tensor:
-    var scaled_grad = grad * lr  # Allocation 1
-    return weights - scaled_grad  # Allocation 2
+    var scaled_grad = grad * lr
+    return weights - scaled_grad
 
-# Good: In-place update
+# Good: In-place update (no allocation)
 fn good_update(inout weights: Tensor, borrowed grad: Tensor, lr: Float64):
-    weights -= lr * grad  # No allocation
+    weights -= lr * grad
 
-# Best: Fused in-place operation
+# Best: Fused SIMD in-place operation (no allocation, vectorized)
 fn best_update(inout weights: Tensor, borrowed grad: Tensor, lr: Float64):
-    @parameter
-    fn fused_update[width: Int](idx: Int):
-        var w = weights.load[width](idx)
-        var g = grad.load[width](idx)
-        weights.store[width](idx, w - lr * g)
-
-    vectorize[simdwidthof[DType.float32](), fused_update](weights.size())
+    # ... (see full example for SIMD implementation)
 ```
+
+Full example: [`examples/performance/memory_optimization.mojo`](../../examples/performance/memory_optimization.mojo)
 
 ### Memory Layout
 

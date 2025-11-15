@@ -50,38 +50,33 @@ pixi run mojo format shared/
 
 ## Your First Model
 
-Let's create a simple neural network using the shared library:
+Let's create a simple neural network using the shared library.
+
+See [`examples/getting-started/quickstart_example.mojo`](
+../../examples/getting-started/quickstart_example.mojo) for a complete working example.
+
+Key concepts demonstrated:
 
 ```mojo
-from shared.core import Layer, Sequential
-from shared.training import Trainer, SGD
-from shared.data import TensorDataset, BatchLoader
+# Create a simple network
+var model = Sequential([
+    Layer("linear", input_size=784, output_size=128),
+    Layer("relu"),
+    Layer("linear", input_size=128, output_size=10),
+])
 
-fn main() raises:
-    # Create a simple network
-    var model = Sequential([
-        Layer("linear", input_size=784, output_size=128),
-        Layer("relu"),
-        Layer("linear", input_size=128, output_size=10),
-    ])
-
-    # Prepare data
-    var train_data = TensorDataset(X_train, y_train)
-    var train_loader = BatchLoader(train_data, batch_size=32, shuffle=True)
-
-    # Train the model
-    var optimizer = SGD(learning_rate=0.01)
-    var trainer = Trainer(model, optimizer)
-
-    trainer.train(train_loader, epochs=10)
-
-    print("Training complete!")
+# Train the model
+var optimizer = SGD(learning_rate=0.01)
+var trainer = Trainer(model, optimizer)
+trainer.train(train_loader, epochs=10)
 ```
 
-Save this as `examples/quickstart.mojo` and run:
+Full example: [`examples/getting-started/quickstart_example.mojo`](../../examples/getting-started/quickstart_example.mojo)
+
+Run the example:
 
 ```bash
-pixi run mojo run examples/quickstart.mojo
+pixi run mojo run examples/getting-started/quickstart_example.mojo
 ```
 
 ## Next Steps

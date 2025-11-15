@@ -65,118 +65,51 @@ fn prepare_mnist() raises -> (TensorDataset, TensorDataset):
 
 ## Step 3: Define the Model
 
-Create `model.mojo` with your neural network architecture:
+Create `model.mojo` with your neural network architecture.
+
+See [`examples/getting-started/first_model_model.mojo`](
+../../examples/getting-started/first_model_model.mojo) for the complete model definition.
+
+Key architecture:
 
 ```mojo
-from shared.core import Layer, Sequential, ReLU, Softmax
-from shared.core.types import Tensor
-
-struct DigitClassifier:
-    """Simple 3-layer neural network for digit classification."""
-
-    var model: Sequential
-
-    fn __init__(inout self):
-        """Create a 3-layer network: 784 -> 128 -> 64 -> 10."""
-
-        # Input: 784 pixels (28x28 flattened)
-        # Hidden layer 1: 128 neurons with ReLU activation
-        # Hidden layer 2: 64 neurons with ReLU activation
-        # Output: 10 classes (digits 0-9) with Softmax
-
-        self.model = Sequential([
-            Layer("linear", input_size=784, output_size=128),
-            ReLU(),
-            Layer("linear", input_size=128, output_size=64),
-            ReLU(),
-            Layer("linear", input_size=64, output_size=10),
-            Softmax(),
-        ])
-
-    fn forward(inout self, borrowed input: Tensor) -> Tensor:
-        """Forward pass through the network."""
-        return self.model.forward(input)
-
-    fn parameters(inout self) -> List[Tensor]:
-        """Get all trainable parameters."""
-        return self.model.parameters()
+# 3-layer network: 784 -> 128 -> 64 -> 10
+self.model = Sequential([
+    Layer("linear", input_size=784, output_size=128),
+    ReLU(),
+    Layer("linear", input_size=128, output_size=64),
+    ReLU(),
+    Layer("linear", input_size=64, output_size=10),
+    Softmax(),
+])
 ```
+
+Full example: [`examples/getting-started/first_model_model.mojo`](../../examples/getting-started/first_model_model.mojo)
 
 ## Step 4: Training Script
 
-Create `train.mojo` to train your model:
+Create `train.mojo` to train your model.
+
+See [`examples/getting-started/first_model_train.mojo`](
+../../examples/getting-started/first_model_train.mojo) for the complete training script.
+
+Key training steps:
 
 ```mojo
-from shared.training import Trainer, SGD, CrossEntropyLoss
-from shared.training.callbacks import EarlyStopping, ModelCheckpoint
-from shared.data import BatchLoader
-from prepare_data import prepare_mnist
-from model import DigitClassifier
+# Configure training
+var optimizer = SGD(learning_rate=0.01, momentum=0.9)
+var loss_fn = CrossEntropyLoss()
+var trainer = Trainer(model=model, optimizer=optimizer, loss_fn=loss_fn)
 
-fn main() raises:
-    """Train the digit classifier."""
+# Add callbacks
+trainer.add_callback(EarlyStopping(patience=3, min_delta=0.001))
+trainer.add_callback(ModelCheckpoint(filepath="best_model.mojo", save_best_only=True))
 
-    print("=" * 50)
-    print("Training Digit Classifier")
-    print("=" * 50)
-
-    # Step 1: Load data
-    var train_data, test_data = prepare_mnist()
-
-    # Step 2: Create data loaders
-    var train_loader = BatchLoader(
-        train_data,
-        batch_size=32,
-        shuffle=True,
-        drop_last=True
-    )
-
-    var test_loader = BatchLoader(
-        test_data,
-        batch_size=32,
-        shuffle=False
-    )
-
-    # Step 3: Create model
-    var model = DigitClassifier()
-    print("\nModel architecture:")
-    print(model.model.summary())
-
-    # Step 4: Configure optimizer
-    var optimizer = SGD(
-        learning_rate=0.01,
-        momentum=0.9
-    )
-
-    # Step 5: Configure loss function
-    var loss_fn = CrossEntropyLoss()
-
-    # Step 6: Create trainer
-    var trainer = Trainer(
-        model=model,
-        optimizer=optimizer,
-        loss_fn=loss_fn
-    )
-
-    # Step 7: Add callbacks
-    trainer.add_callback(
-        EarlyStopping(patience=3, min_delta=0.001)
-    )
-    trainer.add_callback(
-        ModelCheckpoint(filepath="best_model.mojo", save_best_only=True)
-    )
-
-    # Step 8: Train the model
-    print("\nStarting training...")
-    trainer.train(
-        train_loader=train_loader,
-        val_loader=test_loader,
-        epochs=10,
-        verbose=True
-    )
-
-    print("\nTraining complete!")
+# Train
+trainer.train(train_loader, val_loader, epochs=10, verbose=True)
 ```
+
+Full example: [`examples/getting-started/first_model_train.mojo`](../../examples/getting-started/first_model_train.mojo)
 
 ## Step 5: Run Training
 
