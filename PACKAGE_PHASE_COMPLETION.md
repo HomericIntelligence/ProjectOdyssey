@@ -222,11 +222,11 @@ git add PACKAGE_PHASE_COMPLETION.md
 git commit -m "feat(training): create distributable package with build automation and verification"
 ```
 
-2. **Push branch**: `git push origin 35-pkg-training`
+1. **Push branch**: `git push origin 35-pkg-training`
 
-3. **Create PR**: Link to Issue #35
+1. **Create PR**: Link to Issue #35
 
-4. **Build package** (optional, for local testing):
+1. **Build package** (optional, for local testing):
 
 ```bash
 ./scripts/build_training_package.sh
@@ -238,7 +238,7 @@ git commit -m "feat(training): create distributable package with build automatio
 - Package phase guide: `/agents/guides/package-phase-guide.md`
 - Training module source: `/shared/training/`
 - 5-phase workflow: `/notes/review/README.md`
-- Mojo packaging docs: https://docs.modular.com/mojo/manual/packages/
+- Mojo packaging docs: <https://docs.modular.com/mojo/manual/packages/>
 
 ## Lessons Learned
 
