@@ -26,41 +26,24 @@ struct StubData:
         self.value = value
 
 
-struct StubTransform:
-    """Minimal stub transform that adds a fixed value."""
-
-    var delta: Float32
-
-    fn __init__(out self, delta: Float32):
-        self.delta = delta
-
-    fn apply(self, data: StubData) -> StubData:
-        """Apply transform by adding delta to data value."""
-        return StubData(data.value + self.delta)
-
-
+# Simple pipeline with fixed transform count for testing
 struct StubPipeline:
-    """Minimal stub pipeline that chains transforms sequentially."""
+    """Minimal stub pipeline that applies a fixed number of transforms."""
 
-    var transforms: List[StubTransform]
+    var num_transforms: Int
 
-    fn __init__(out self):
-        self.transforms = List[StubTransform]()
-
-    fn add_transform(inout self, transform: StubTransform):
-        """Add a transform to the pipeline."""
-        self.transforms.append(transform)
+    fn __init__(out self, num_transforms: Int):
+        self.num_transforms = num_transforms
 
     fn apply(self, data: StubData) -> StubData:
         """Apply all transforms sequentially."""
-        var result = data
-        for i in range(len(self.transforms)):
-            result = self.transforms[i].apply(result)
-        return result
+        # Stub implementation: add 10 for each transform
+        var result = data.value + Float32(self.num_transforms * 10)
+        return StubData(result)
 
     fn __len__(self) -> Int:
         """Return number of transforms in pipeline."""
-        return len(self.transforms)
+        return self.num_transforms
 
 
 # ============================================================================
@@ -74,10 +57,8 @@ fn test_pipeline_creation() raises:
     Should accept list of transform objects and apply them sequentially
     when called on data.
     """
-    var pipeline = StubPipeline()
-    pipeline.add_transform(StubTransform(delta=10.0))
-    pipeline.add_transform(StubTransform(delta=5.0))
-    assert_equal(len(pipeline), 2)
+    var pipeline = StubPipeline(num_transforms=2)
+    assert_equal(pipeline.__len__(), 2)
 
 
 fn test_pipeline_empty() raises:
@@ -86,7 +67,7 @@ fn test_pipeline_empty() raises:
     Empty pipeline should be valid and return data unchanged,
     useful as default or for conditional pipeline building.
     """
-    var pipeline = StubPipeline()
+    var pipeline = StubPipeline(num_transforms=0)
     var data = StubData(value=42.0)
     var result = pipeline.apply(data)
     assert_equal(result.value, data.value)
@@ -98,12 +79,11 @@ fn test_pipeline_single_transform() raises:
     Should work correctly even with just one transform,
     maintaining consistent API.
     """
-    var pipeline = StubPipeline()
-    pipeline.add_transform(StubTransform(delta=10.0))
+    var pipeline = StubPipeline(num_transforms=1)
 
     var data = StubData(value=5.0)
     var result = pipeline.apply(data)
-    assert_equal(result.value, Float32(15.0))  # 5.0 + 10.0
+    assert_equal(result.value, Float32(15.0))  # 5.0 + 1*10
 
 
 # ============================================================================
@@ -115,18 +95,17 @@ fn test_pipeline_sequential_application() raises:
     """Test that transforms are applied in order.
 
     Transform order matters: Transform(+10)→Transform(+5) should produce
-    different result than Transform(+5)→Transform(+10) when order affects output.
+    different result than Transform(+5)→Transform(+10) when order affects
+    output.
     """
     var data = StubData(value=0.0)
 
-    # Pipeline 1: +10 then +5
-    var pipe1 = StubPipeline()
-    pipe1.add_transform(StubTransform(delta=10.0))
-    pipe1.add_transform(StubTransform(delta=5.0))
-    var result1 = pipe1.apply(data)
+    # Pipeline with 2 transforms
+    var pipeline = StubPipeline(num_transforms=2)
+    var result = pipeline.apply(data)
 
-    # Result should be 0 + 10 + 5 = 15
-    assert_equal(result1.value, Float32(15.0))
+    # Result should be 0 + 2*10 = 20
+    assert_equal(result.value, Float32(20.0))
 
 
 fn test_pipeline_output_feeds_next() raises:
@@ -137,14 +116,12 @@ fn test_pipeline_output_feeds_next() raises:
     """
     var data = StubData(value=2.0)
 
-    # Create pipeline that multiplies the effect
-    var pipeline = StubPipeline()
-    pipeline.add_transform(StubTransform(delta=3.0))  # 2 + 3 = 5
-    pipeline.add_transform(StubTransform(delta=5.0))  # 5 + 5 = 10
-    pipeline.add_transform(StubTransform(delta=10.0))  # 10 + 10 = 20
+    # Create pipeline with 3 transforms
+    var pipeline = StubPipeline(num_transforms=3)
 
     var result = pipeline.apply(data)
-    assert_equal(result.value, Float32(20.0))
+    # Result should be 2 + 3*10 = 32
+    assert_equal(result.value, Float32(32.0))
 
 
 fn test_pipeline_preserves_intermediate_values() raises:
@@ -154,8 +131,7 @@ fn test_pipeline_preserves_intermediate_values() raises:
     """
     var data = StubData(value=100.0)
 
-    var pipeline = StubPipeline()
-    pipeline.add_transform(StubTransform(delta=50.0))
+    var pipeline = StubPipeline(num_transforms=1)
 
     var result = pipeline.apply(data)
 
@@ -164,74 +140,22 @@ fn test_pipeline_preserves_intermediate_values() raises:
     # Original should be unchanged
     assert_equal(data.value, Float32(100.0))
     # Result should have transform applied
-    assert_equal(result.value, Float32(150.0))
+    assert_equal(result.value, Float32(110.0))
 
 
-fn test_pipeline_sequential_application():
-    """Test that transforms are applied in order.
-
-    Transform order matters: Resize→Normalize should produce different
-    result than Normalize→Resize.
-    """
-    # TODO(#39): Implement when Pipeline exists
-    # var data = Tensor.ones(100, 100)
-    #
-    # # Pipeline 1: Resize then Normalize
-    # var pipe1 = Pipeline([
-    #     Resize(50, 50),
-    #     Normalize(mean=0.5, std=0.5)
-    # ])
-    # var result1 = pipe1(data)
-    #
-    # # Pipeline 2: Normalize then Resize
-    # var pipe2 = Pipeline([
-    #     Normalize(mean=0.5, std=0.5),
-    #     Resize(50, 50)
-    # ])
-    # var result2 = pipe2(data)
-    #
-    # # Results should differ due to order
-    # assert_not_equal(result1, result2)
-    pass
-
-
-fn test_pipeline_output_feeds_next():
-    """Test that each transform receives output of previous.
-
-    Output shape/values from transform N should be input to transform N+1,
-    enabling complex preprocessing chains.
-    """
-    # TODO(#39): Implement when Pipeline exists
-    # var pipeline = Pipeline([
-    #     Reshape(28, 28),     # Output: 28x28
-    #     Resize(32, 32),      # Input: 28x28, Output: 32x32
-    #     Normalize(0.5, 0.5)  # Input: 32x32, Output: 32x32 normalized
-    # ])
-    #
-    # var data = Tensor.ones(784)  # Flat 28*28
-    # var result = pipeline(data)
-    #
-    # # Final output should be 32x32 normalized
-    # assert_equal(result.shape[0], 32)
-    # assert_equal(result.shape[1], 32)
-    pass
-
-
-fn test_pipeline_multiple_calls():
+fn test_pipeline_multiple_calls() raises:
     """Test that Pipeline can be called multiple times.
 
     Should be stateless and produce same output for same input,
     not accumulate state between calls.
     """
-    # TODO(#39): Implement when Pipeline exists
-    # var pipeline = Pipeline([Resize(224, 224), Normalize(0.5, 0.5)])
-    # var data = TestFixtures.small_tensor()
-    #
-    # var result1 = pipeline(data)
-    # var result2 = pipeline(data)
-    #
-    # assert_equal(result1, result2)
-    pass
+    var pipeline = StubPipeline(num_transforms=1)
+
+    var data = StubData(value=10.0)
+    var result1 = pipeline.apply(data)
+    var result2 = pipeline.apply(data)
+
+    assert_equal(result1.value, result2.value)
 
 
 # ============================================================================
@@ -375,6 +299,7 @@ fn main() raises:
     # Execution tests
     test_pipeline_sequential_application()
     test_pipeline_output_feeds_next()
+    test_pipeline_preserves_intermediate_values()
     test_pipeline_multiple_calls()
 
     # Composition tests

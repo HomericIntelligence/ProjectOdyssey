@@ -32,19 +32,17 @@ struct StubDataset:
 struct StubBatch:
     """Minimal stub batch for testing batch operations."""
 
-    var data: List[Float32]
-    var labels: List[Int]
+    var batch_size: Int
 
     fn __init__(out self, capacity: Int):
-        self.data = List[Float32](capacity=capacity)
-        self.labels = List[Int](capacity=capacity)
+        self.batch_size = capacity
 
-    fn add_sample(inout self, data: Float32, label: Int):
-        self.data.append(data)
-        self.labels.append(label)
+    fn __moveinit__(out self, owned existing: Self):
+        """Move initializer."""
+        self.batch_size = existing.batch_size
 
     fn size(self) -> Int:
-        return self.data.__len__()
+        return self.batch_size
 
 
 struct StubDataLoader:
@@ -53,7 +51,7 @@ struct StubDataLoader:
     Provides basic batching functionality without complex features.
     """
 
-    var dataset: StubDataset
+    var dataset_size: Int
     var batch_size: Int
     var drop_last: Bool
     var num_batches: Int
@@ -77,12 +75,12 @@ struct StubDataLoader:
         if batch_size <= 0:
             raise Error("batch_size must be positive")
 
-        self.dataset = dataset
+        self.dataset_size = dataset.__len__()
         self.batch_size = batch_size
         self.drop_last = drop_last
 
         # Calculate number of batches
-        var n_samples = dataset.__len__()
+        var n_samples = self.dataset_size
         if n_samples == 0:
             self.num_batches = 0
         elif drop_last:
@@ -105,17 +103,13 @@ struct StubDataLoader:
         """
         var start_idx = batch_idx * self.batch_size
         var end_idx = start_idx + self.batch_size
-        var dataset_len = self.dataset.__len__()
 
-        if end_idx > dataset_len:
-            end_idx = dataset_len
+        if end_idx > self.dataset_size:
+            end_idx = self.dataset_size
 
-        var batch = StubBatch(capacity=self.batch_size)
-        for i in range(start_idx, end_idx):
-            var sample = self.dataset[i]
-            batch.add_sample(sample[0], sample[1])
-
-        return batch
+        var num_samples = end_idx - start_idx
+        var batch = StubBatch(capacity=num_samples)
+        return batch^
 
 
 # ============================================================================

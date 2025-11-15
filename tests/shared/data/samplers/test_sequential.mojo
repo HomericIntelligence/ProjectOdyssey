@@ -56,7 +56,7 @@ fn test_sequential_sampler_creation() raises:
     deterministic and reproducible.
     """
     var sampler = StubSequentialSampler(size=100)
-    assert_equal(len(sampler), 100)
+    assert_equal(sampler.__len__(), 100)
 
 
 fn test_sequential_sampler_empty() raises:
@@ -66,7 +66,7 @@ fn test_sequential_sampler_empty() raises:
     useful for edge case testing.
     """
     var sampler = StubSequentialSampler(size=0)
-    assert_equal(len(sampler), 0)
+    assert_equal(sampler.__len__(), 0)
 
 
 # ============================================================================
@@ -83,7 +83,7 @@ fn test_sequential_sampler_yields_all_indices() raises:
     var sampler = StubSequentialSampler(size=10)
 
     var indices = List[Int](capacity=10)
-    for i in range(len(sampler)):
+    for i in range(sampler.__len__()):
         indices.append(sampler.get_index(i))
 
     assert_equal(len(indices), 10)
@@ -102,7 +102,7 @@ fn test_sequential_sampler_order() raises:
     var sampler = StubSequentialSampler(size=100)
 
     var indices = List[Int](capacity=100)
-    for i in range(len(sampler)):
+    for i in range(sampler.__len__()):
         indices.append(sampler.get_index(i))
 
     # Check indices are in order
@@ -120,12 +120,12 @@ fn test_sequential_sampler_deterministic() raises:
 
     # First iteration
     var indices1 = List[Int](capacity=50)
-    for i in range(len(sampler)):
+    for i in range(sampler.__len__()):
         indices1.append(sampler.get_index(i))
 
     # Second iteration
     var indices2 = List[Int](capacity=50)
-    for i in range(len(sampler)):
+    for i in range(sampler.__len__()):
         indices2.append(sampler.get_index(i))
 
     # Should be identical
