@@ -292,6 +292,31 @@ fn test_weighted_sampler_deterministic_with_seed():
 
 
 # ============================================================================
+# WeightedSampler Multiple Iterations Tests
+# ============================================================================
+
+
+fn test_weighted_sampler_multiple_iterations() raises:
+    """Verify WeightedSampler can be iterated multiple times.
+
+    When called multiple times, should produce valid samples each time,
+    not get stuck or fail on second iteration.
+    """
+    # TODO(#39): Implement when WeightedSampler exists
+    # var weights = List[Float64]([0.1, 0.2, 0.3, 0.4])
+    # var sampler = WeightedSampler(weights, replacement=False)
+    #
+    # # First iteration
+    # var indices1 = sampler.__iter__()
+    # assert_equal(indices1.__len__(), 4, "Should sample all 4 items")
+    #
+    # # Second iteration should work the same
+    # var indices2 = sampler.__iter__()
+    # assert_equal(indices2.__len__(), 4, "Should sample all 4 items again")
+    pass
+
+
+# ============================================================================
 # WeightedSampler Error Handling Tests
 # ============================================================================
 
@@ -373,6 +398,9 @@ fn main() raises:
 
     # Determinism tests
     test_weighted_sampler_deterministic_with_seed()
+
+    # Multiple iterations tests
+    test_weighted_sampler_multiple_iterations()
 
     # Error handling tests
     test_weighted_sampler_negative_weight_error()
