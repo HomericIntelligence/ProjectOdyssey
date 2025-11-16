@@ -24,6 +24,4 @@ Add any other context, screenshots, or examples about the feature request here.
 
 ## Acceptance Criteria
 
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
+List the criteria that must be met for this feature to be considered complete.
