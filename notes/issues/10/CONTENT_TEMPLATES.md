@@ -583,14 +583,6 @@ Before submitting your paper implementation for review:
 - Memory usage measured
 - Optimization notes included
 
-### Final Review
-
-- Code reviewed by team member
-- All feedback addressed
-- PR description complete
-- Related issues linked
-- Ready for merge!
-
 ---
 
 ## Example: LeNet-5 Paper Entry
