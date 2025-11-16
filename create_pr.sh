@@ -813,3 +813,70 @@ The supporting directories system is now:
 The supporting directories system is production-ready and ready for immediate use.
 EOF
 )"
+
+# PR for Issue #82 - Directory Structure Planning
+gh pr create --issue 82 --title "feat(planning): [Plan] Directory structure design and documentation" --body "$(cat <<'EOF'
+## Summary
+
+Comprehensive planning and architectural design for papers/ and shared/ directory structure.
+
+Closes #82 - [Plan] Directory Structure - Design and Documentation
+
+## What Changed
+
+### Planning Documentation Created ✅
+
+**Comprehensive Planning** (`notes/issues/82/README.md` - 581 lines):
+- Complete directory structure specifications
+- API contracts and interface definitions
+- Integration patterns and dependency flows
+- Quality standards and testing requirements
+
+### Papers Directory Design
+
+- Standardized template structure
+- Consistent organization: src/, scripts/, tests/, data/, configs/, notebooks/, examples/
+- Clear naming conventions
+- Template at `/papers/_template/` for replication
+
+### Shared Library Architecture
+
+- **Core Components** (core/): Neural network layers, operations, types, utilities
+- **Training Infrastructure** (training/): Optimizers, schedulers, metrics, callbacks
+- **Data Processing** (data/): Datasets, loaders, transforms, samplers
+- **General Utilities** (utils/): Logging, visualization, I/O, profiling
+
+### API Contracts Defined
+
+- Module and Layer interfaces for neural networks
+- Optimizer and Scheduler interfaces for training
+- Dataset and Transform interfaces for data processing
+- Clear tensor shape conventions
+
+### Integration Patterns
+
+- Dependency flow from papers to shared components
+- Extension points for customizations
+- Migration guidelines for refactoring
+- Performance optimization strategies
+
+## Key Design Decisions
+
+1. **Separation of Concerns**: Clear boundary between shared and paper-specific code
+2. **Mojo-First Approach**: ML/AI in Mojo for performance
+3. **Template-Based Consistency**: All papers follow same structure
+4. **Interface-Driven Design**: Well-defined traits for extensibility
+5. **Performance Focus**: SIMD optimization, memory safety
+
+## Success Criteria Met
+
+- ✅ Complete planning for papers/ and shared/
+- ✅ Template structure designed
+- ✅ API contracts documented
+- ✅ Integration strategy defined
+- ✅ Clear code separation
+- ✅ Documentation complete
+
+Architectural foundation established for ML research paper implementations.
+EOF
+)"
