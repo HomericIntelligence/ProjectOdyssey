@@ -306,7 +306,7 @@ configs/
 
 ### Naming Conventions
 
-- **Directories**: lowercase with underscores (e.g., `shared_library/`)
+- **Directories**: lowercase, underscores for multi-word names (e.g., `papers/`, `shared/`, `getting-started/`)
 - **Mojo files**: lowercase with underscores (e.g., `conv2d.mojo`)
 - **Python files**: lowercase with underscores (e.g., `create_issues.py`)
 - **Documentation**: Title case for READMEs, lowercase for guides
@@ -375,9 +375,9 @@ For existing code:
 
 ## References
 
-- [Agent Architecture Review](/home/user/ml-odyssey/notes/review/agent-architecture-review.md)
-- [Worktree Strategy](/home/user/ml-odyssey/notes/review/worktree-strategy.md)
-- [CLAUDE.md](/home/user/ml-odyssey/CLAUDE.md) - Project conventions and guidelines
+- [Agent Architecture Review](../../review/agent-architecture-review.md)
+- [Worktree Strategy](../../review/worktree-strategy.md)
+- [CLAUDE.md](../../../CLAUDE.md) - Project conventions and guidelines
 
 ## Next Steps
 
