@@ -33,6 +33,59 @@ Comprehensive test suite for `papers/` directory creation and management.
 
 **Test Principles**: Follows FIRST principles (Fast, Isolated, Repeatable, Self-validating, Timely)
 
+### test_supporting_directories.py
+
+Comprehensive test suite for supporting directories validation (benchmarks/, docs/, agents/, tools/, configs/).
+
+**Test Coverage**:
+
+- **Existence Tests** (5 tests):
+  - `test_benchmarks_directory_exists` - Verify benchmarks/ exists
+  - `test_docs_directory_exists` - Verify docs/ exists
+  - `test_agents_directory_exists` - Verify agents/ exists
+  - `test_tools_directory_exists` - Verify tools/ exists
+  - `test_configs_directory_exists` - Verify configs/ exists
+
+- **Location Tests** (3 tests):
+  - `test_supporting_directories_at_root` - All directories at repository root
+  - `test_directory_names_correct` - Directory names match specification
+  - `test_directory_permissions` - Correct read/write/execute permissions
+
+- **README Validation** (3 tests):
+  - `test_each_directory_has_readme` - Every directory has README.md
+  - `test_readme_not_empty` - READMEs have substantial content
+  - `test_readme_has_title` - READMEs have markdown headers
+
+- **Structure Tests** (5 tests):
+  - `test_benchmarks_subdirectory_structure` - Validate benchmarks/ structure
+  - `test_docs_subdirectory_structure` - Validate docs/ 4-tier structure
+  - `test_agents_subdirectory_structure` - Validate agents/ structure
+  - `test_tools_subdirectory_structure` - Validate tools/ structure
+  - `test_configs_subdirectory_structure` - Validate configs/ structure
+
+- **Integration Tests** (3 tests):
+  - `test_all_supporting_directories_present` - All 5 directories exist
+  - `test_directories_ready_for_content` - Can create subdirectories and files
+  - `test_supporting_directories_relationship` - Flat structure at root
+
+- **Real-World Scenarios** (1 test):
+  - `test_complete_supporting_directories_workflow` - Complete workflow validation
+
+**Total Tests**: 20
+
+**Test Principles**: Follows FIRST principles, uses real filesystem (no mocks), validates critical paths
+
+### conftest.py
+
+Shared pytest fixtures for foundation tests:
+- `repo_root` - Real repository root directory
+- `benchmarks_dir` - Path to benchmarks/ directory
+- `docs_dir` - Path to docs/ directory
+- `agents_dir` - Path to agents/ directory
+- `tools_dir` - Path to tools/ directory
+- `configs_dir` - Path to configs/ directory
+- `supporting_dirs` - Dictionary of all supporting directory paths
+
 ## Running Tests
 
 ### Run all foundation tests
