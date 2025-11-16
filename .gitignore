@@ -10,6 +10,7 @@ logs/
 build/
 worktrees/
 dist/
+site/
 
 # MkDocs build artifacts
 site/
