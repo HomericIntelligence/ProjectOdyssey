@@ -1,13 +1,3 @@
-# Distributed Training
+# Distributed Training.Md
 
-## Setup
-
-Distributed setup.
-
-## Communication
-
-Inter-process communication.
-
-## Scaling
-
-How to scale.
+Content here.

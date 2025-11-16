@@ -1,13 +1,3 @@
-# Debugging Guide
+# Debugging.Md
 
-## Common Issues
-
-Common problems.
-
-## Debugging Tools
-
-Available tools.
-
-## Strategies
-
-Debugging strategies.
+Content here.
