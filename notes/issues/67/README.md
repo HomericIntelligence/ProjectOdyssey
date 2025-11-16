@@ -297,10 +297,10 @@ Each tool should be registered in `tools/README.md`:
 
 ## References
 
-- [03-Tooling Section Plan](/home/user/ml-odyssey/notes/plan/03-tooling/plan.md)
-- [Scripts README](/home/user/ml-odyssey/scripts/README.md)
-- [Agent Hierarchy](/home/user/ml-odyssey/agents/hierarchy.md)
-- [ADR-001 Language Selection](/home/user/ml-odyssey/notes/review/adr/ADR-001-language-selection-tooling.md)
+- [03-Tooling Section Plan](../../plan/03-tooling/plan.md)
+- [Scripts README](../../../scripts/README.md)
+- [Agent Hierarchy](../../../agents/hierarchy.md)
+- [ADR-001 Language Selection](../../review/adr/ADR-001-language-selection-tooling.md)
 
 ## Implementation Notes
 
