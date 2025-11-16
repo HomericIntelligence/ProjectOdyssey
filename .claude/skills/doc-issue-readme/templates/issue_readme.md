@@ -6,20 +6,20 @@ Brief description of what this issue accomplishes (1-2 sentences).
 
 ## Deliverables
 
-- [ ] `path/to/file1.mojo` - Description
-- [ ] `path/to/file2.mojo` - Description
-- [ ] `tests/test_file.mojo` - Test suite
-- [ ] Documentation updates
+- `path/to/file1.mojo` - Description
+- `path/to/file2.mojo` - Description
+- `tests/test_file.mojo` - Test suite
+- Documentation updates
 
 ## Success Criteria
 
-- [ ] All functionality implemented and working
-- [ ] Tests passing with adequate coverage (>80%)
-- [ ] Code follows project standards
-- [ ] Documentation complete
-- [ ] PR reviewed and approved
-- [ ] CI checks passing
-- [ ] Issue closed
+- All functionality implemented and working
+- Tests passing with adequate coverage (>80%)
+- Code follows project standards
+- Documentation complete
+- PR reviewed and approved
+- CI checks passing
+- Issue closed
 
 ## References
 

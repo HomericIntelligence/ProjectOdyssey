@@ -22,10 +22,10 @@ Why should this paper be implemented? What makes it foundational or important?
 
 What aspects of the paper should be implemented?
 
-- [ ] Core algorithm
-- [ ] Training procedure
-- [ ] Evaluation metrics
-- [ ] Experiments from paper
+- Core algorithm
+- Training procedure
+- Evaluation metrics
+- Experiments from paper
 
 ## Implementation Notes
 
@@ -37,7 +37,7 @@ Any specific considerations for implementing this paper in Mojo:
 
 ## Success Criteria
 
-- [ ] Matches paper's reported results
-- [ ] Comprehensive test coverage
-- [ ] Performance benchmarks
-- [ ] Documentation complete
+- Matches paper's reported results
+- Comprehensive test coverage
+- Performance benchmarks
+- Documentation complete
