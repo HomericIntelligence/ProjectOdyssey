@@ -1,11 +1,11 @@
 """
 Test suite for documentation structure validation.
 
-This module validates the 4-tier documentation hierarchy exists and is properly
+This module validates the 5-tier documentation hierarchy exists and is properly
 organized according to the project specifications.
 
 Test Categories:
-- Tier structure: Validate all 4 tiers present
+- Tier structure: Validate all 5 tiers present
 - Directory organization: Validate subdirectory structure
 - Root-level docs: Validate docs at repository root
 - Path validation: Ensure correct locations
@@ -135,12 +135,12 @@ class TestDocumentationStructure:
 
     def test_all_tier_directories_present(self, docs_root: Path) -> None:
         """
-        Test that all 4 tier directories are present.
+        Test that all 5 tier directories are present.
 
         Args:
             docs_root: Path to docs directory
         """
-        expected_tiers = ["getting-started", "core", "advanced", "dev"]
+        expected_tiers = ["getting-started", "core", "advanced", "dev", "integration"]
         if not docs_root.exists():
 
             pytest.skip(f"Documentation not yet created: {docs_root}")
@@ -162,7 +162,7 @@ class TestDocumentationStructure:
         Args:
             docs_root: Path to docs directory
         """
-        expected_tiers = {"getting-started", "core", "advanced", "dev"}
+        expected_tiers = {"getting-started", "core", "advanced", "dev", "integration"}
         if not docs_root.exists():
 
             pytest.skip(f"Documentation not yet created: {docs_root}")
@@ -181,14 +181,14 @@ class TestDocumentationStructure:
 class TestDocumentationHierarchy:
     """Test cases for documentation hierarchy validation."""
 
-    def test_4_tier_structure_complete(self, docs_root: Path) -> None:
+    def test_5_tier_structure_complete(self, docs_root: Path) -> None:
         """
-        Test that all 4 tiers are present and accessible.
+        Test that all 5 tiers are present and accessible.
 
         Args:
             docs_root: Path to docs directory
         """
-        tiers = ["getting-started", "core", "advanced", "dev"]
+        tiers = ["getting-started", "core", "advanced", "dev", "integration"]
         if not docs_root.exists():
 
             pytest.skip(f"Documentation not yet created: {docs_root}")
@@ -205,12 +205,12 @@ class TestDocumentationHierarchy:
 
     def test_tier_count(self, docs_root: Path) -> None:
         """
-        Test that exactly 4 tiers exist (no more, no less).
+        Test that exactly 5 tiers exist (no more, no less).
 
         Args:
             docs_root: Path to docs directory
         """
-        tiers = ["getting-started", "core", "advanced", "dev"]
+        tiers = ["getting-started", "core", "advanced", "dev", "integration"]
         if not docs_root.exists():
 
             pytest.skip(f"Documentation not yet created: {docs_root}")
@@ -221,7 +221,7 @@ class TestDocumentationHierarchy:
                 pytest.skip(f"Tier directory not yet created: {tier_path}")
 
         tier_dirs = [d for d in docs_root.iterdir() if d.is_dir()]
-        assert len(tier_dirs) == 4, "Should have exactly 4 tier directories"
+        assert len(tier_dirs) == 5, "Should have exactly 5 tier directories"
 
     def test_hierarchy_paths_valid(self, repo_root: Path) -> None:
         """
@@ -231,7 +231,7 @@ class TestDocumentationHierarchy:
             repo_root: Repository root path
         """
         docs_root = repo_root / "docs"
-        tiers = ["getting-started", "core", "advanced", "dev"]
+        tiers = ["getting-started", "core", "advanced", "dev", "integration"]
 
         # Test root level
         assert repo_root.exists(), "Repository root should exist"

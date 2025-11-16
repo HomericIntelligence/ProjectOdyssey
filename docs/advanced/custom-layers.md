@@ -1,16 +1,3 @@
-# Custom Layer Development
+# Custom Layers.Md
 
-## Layer Interface
-
-Interface definition.
-
-## Implementation
-
-```mojo
-struct CustomLayer:
-    pass
-```
-
-## Testing
-
-How to test layers.
+Content here.

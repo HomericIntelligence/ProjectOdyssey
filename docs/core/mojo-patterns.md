@@ -1,3 +1,3 @@
-# Mojo Patterns
+# Mojo Patterns.Md
 
 Content here.
