@@ -34,7 +34,7 @@ Create the foundational `magic.toml` configuration file with project metadata fo
 
 **Purpose**: `magic.toml` is the package manager configuration file for Mojo/MAX projects, similar to `package.json` for Node.js or `pyproject.toml` for Python. It defines project metadata, dependencies, channels, and environment configuration.
 
-**Location**: Repository root (`/home/user/ml-odyssey/magic.toml`)
+**Location**: Repository root (`magic.toml`)
 
 **Format**: TOML (Tom's Obvious, Minimal Language) - human-readable configuration format
 
@@ -143,7 +143,7 @@ Optional section for additional project links. Common entries:
 
 #### Step 1: Create File
 ```bash
-touch /home/user/ml-odyssey/magic.toml
+touch magic.toml
 ```
 
 #### Step 2: Add Header Comments
@@ -285,4 +285,4 @@ The planning phase is complete when:
 ---
 
 **Last Updated**: 2025-11-15
-**Status**: Planning Complete ✅
+**Status**: Planning Complete
