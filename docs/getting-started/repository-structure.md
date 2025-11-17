@@ -296,7 +296,7 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
        --year 2015
    ```
 
-2. **Configure**:
+1. **Configure**:
 
    ```bash
    # Copy and edit configs
@@ -304,20 +304,20 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
    cp configs/templates/experiment.yaml configs/experiments/resnet/baseline.yaml
    ```
 
-3. **Implement**:
+1. **Implement**:
 
    ```bash
    cd papers/resnet/
    # Edit model.mojo, train.mojo
    ```
 
-4. **Test**:
+1. **Test**:
 
    ```bash
    mojo test tests/papers/resnet/
    ```
 
-5. **Document**:
+1. **Document**:
 
    ```bash
    # Update papers/resnet/README.md

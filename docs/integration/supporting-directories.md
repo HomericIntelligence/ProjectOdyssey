@@ -39,13 +39,13 @@ cp configs/templates/paper.yaml configs/papers/resnet/model.yaml
 cp configs/templates/experiment.yaml configs/experiments/resnet/baseline.yaml
 
 # Step 3: Implement the paper (in papers/resnet/)
-# ... implement model.mojo, train.mojo 
+# ... implement model.mojo, train.mojo
 
 # Step 4: Add benchmarks/ for performance tracking
-# ... create benchmarks/scripts/resnet_benchmark.mojo 
+# ... create benchmarks/scripts/resnet_benchmark.mojo
 
 # Step 5: Document in docs/
-# ... update docs/api/papers/resnet.md 
+# ... update docs/api/papers/resnet.md
 
 ```text
 
@@ -71,13 +71,13 @@ mojo benchmarks/scripts/run_benchmarks.mojo --paper lenet5
 mojo tools/benchmarking/runner.mojo --target lenet5 --profile
 
 # Step 3: Implement optimization in papers/lenet5/
-# ... optimize code based on profiling results 
+# ... optimize code based on profiling results
 
 # Step 4: Re-run benchmarks/ to verify improvement
 mojo benchmarks/scripts/run_benchmarks.mojo --paper lenet5 --compare
 
 # Step 5: Document in docs/advanced/
-# ... document optimization technique 
+# ... document optimization technique
 
 ```text
 
@@ -415,7 +415,7 @@ python tools/paper-scaffold/scaffold.py --paper new_paper
 
 # Then implement
 cd papers/new_paper/
-# ... implementation 
+# ... implementation
 
 ```text
 
@@ -502,7 +502,7 @@ git commit -m "optimized code (15% faster)" && git push
 # Bad - manually create every file
 mkdir papers/new_paper
 touch papers/new_paper/model.mojo
-# ... create 10 more files manually 
+# ... create 10 more files manually
 
 ```text
 
@@ -684,7 +684,7 @@ cp configs/templates/experiment.yaml configs/experiments/$PAPER/$EXPERIMENT.yaml
 echo "Step 3: Implement the paper in papers/$PAPER/"
 echo "  - Edit papers/$PAPER/model.mojo"
 echo "  - Edit papers/$PAPER/train.mojo"
-# ... manual implementation 
+# ... manual implementation
 
 # 4. Benchmarks: Establish baseline
 echo "Step 4: Running initial benchmarks..."
@@ -696,7 +696,7 @@ mojo tools/benchmarking/runner.mojo --target $PAPER --profile
 
 # 6. Papers: Optimize based on profiling
 echo "Step 6: Implement optimizations..."
-# ... manual optimization 
+# ... manual optimization
 
 # 7. Benchmarks: Verify improvement
 echo "Step 7: Verifying performance improvement..."
