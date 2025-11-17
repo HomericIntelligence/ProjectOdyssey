@@ -5,9 +5,6 @@
 exclude = [
     "notes/",  # Historical documentation with many old/redirected URLs
     "file:///",
-    # Files that exist locally but not on main yet (added in this PR)
-    "https://github.com/mvillmow/ml-odyssey/blob/main/CONTRIBUTING.md",
-    "https://github.com/mvillmow/ml-odyssey/blob/main/CODE_OF_CONDUCT.md",
 ]
 
 # Fail on broken links
