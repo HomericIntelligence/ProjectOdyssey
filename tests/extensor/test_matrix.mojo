@@ -8,6 +8,7 @@ from sys import DType
 
 # Import ExTensor and operations
 from extensor import ExTensor, zeros, ones, full, arange, eye
+from extensor import matmul, transpose, dot, outer
 
 # Import test helpers
 from ..helpers.assertions import (
@@ -26,15 +27,19 @@ from ..helpers.assertions import (
 
 fn test_matmul_2d_square() raises:
     """Test 2D matrix multiplication with square matrices."""
+    var shape_3x3 = DynamicVector[Int](2)
+    shape_3x3[0] = 3
+    shape_3x3[1] = 3
+
     let a = eye(3, 3, DType.float32)  # 3x3 identity
-    let b = full(DynamicVector[Int](2), 2.0, DType.float32)  # Will need to set shape
-    # Create 3x3 matrix filled with 2s
-    # let c = matmul(a, b)  # TODO: Implement matmul()
+    let b = full(shape_3x3, 2.0, DType.float32)  # 3x3 matrix of 2s
+    let c = matmul(a, b)
 
     # Identity @ B = B, so result should be all 2s
-    # assert_numel(c, 9, "Result should be 3x3 (9 elements)")
+    assert_dim(c, 2, "Result should be 2D")
+    assert_numel(c, 9, "Result should be 3x3 (9 elements)")
+    # TODO: Once matmul is implemented, uncomment:
     # assert_all_values(c, 2.0, 1e-6, "Identity @ B should equal B")
-    pass  # Placeholder
 
 
 fn test_matmul_2d_rectangular() raises:
@@ -48,13 +53,13 @@ fn test_matmul_2d_rectangular() raises:
 
     let a = ones(shape_a, DType.float32)  # 3x4
     let b = full(shape_b, 2.0, DType.float32)  # 4x2
-    # let c = matmul(a, b)  # TODO: Implement matmul()
+    let c = matmul(a, b)
 
     # Result should be 3x2, each element = 1*2 + 1*2 + 1*2 + 1*2 = 8
-    # assert_dim(c, 2, "Result should be 2D")
-    # assert_numel(c, 6, "Result should be 3x2 (6 elements)")
+    assert_dim(c, 2, "Result should be 2D")
+    assert_numel(c, 6, "Result should be 3x2 (6 elements)")
+    # TODO: Once matmul is implemented, uncomment:
     # assert_all_values(c, 8.0, 1e-6, "Each element should be 8")
-    pass  # Placeholder
 
 
 fn test_matmul_2d_known_values() raises:
@@ -93,14 +98,14 @@ fn test_matmul_batched_3d() raises:
 
     let a = ones(shape_a, DType.float32)  # 2x3x4
     let b = full(shape_b, 0.5, DType.float32)  # 2x4x2
-    # let c = matmul(a, b)  # TODO: Implement batched matmul
+    let c = matmul(a, b)
 
     # Result should be 2x3x2 (batch_size x a_rows x b_cols)
     # Each element = 1*0.5 + 1*0.5 + 1*0.5 + 1*0.5 = 2
-    # assert_dim(c, 3, "Result should be 3D")
-    # assert_numel(c, 12, "Result should be 2x3x2 (12 elements)")
+    assert_dim(c, 3, "Result should be 3D")
+    assert_numel(c, 12, "Result should be 2x3x2 (12 elements)")
+    # TODO: Once matmul is implemented, uncomment:
     # assert_all_values(c, 2.0, 1e-6, "Each element should be 2")
-    pass  # Placeholder
 
 
 fn test_matmul_batched_4d() raises:
@@ -118,11 +123,14 @@ fn test_matmul_batched_4d() raises:
 
     let a = ones(shape_a, DType.float32)  # 2x3x4x5
     let b = ones(shape_b, DType.float32)  # 2x3x5x2
-    # let c = matmul(a, b)  # TODO: Implement batched matmul
+    let c = matmul(a, b)
 
     # Result should be 2x3x4x2
-    # assert_numel(c, 48, "Result should be 2x3x4x2 (48 elements)")
-    pass  # Placeholder
+    assert_dim(c, 4, "Result should be 4D")
+    assert_numel(c, 48, "Result should be 2x3x4x2 (48 elements)")
+    # TODO: Once matmul is implemented, uncomment:
+    # Each element = 1*1 + ... (5 times) = 5
+    # assert_all_values(c, 5.0, 1e-6, "Each element should be 5")
 
 
 # ============================================================================
@@ -141,13 +149,65 @@ fn test_matmul_incompatible_shapes() raises:
     let a = ones(shape_a, DType.float32)
     let b = ones(shape_b, DType.float32)
 
-    # TODO: Verify error handling
-    # try:
-    #     let c = matmul(a, b)
-    #     raise Error("Should have raised error for incompatible shapes")
-    # except:
-    #     pass  # Expected
-    pass  # Placeholder
+    # Verify error handling
+    var error_raised = False
+    try:
+        let c = matmul(a, b)
+    except:
+        error_raised = True
+
+    if not error_raised:
+        raise Error("Should have raised error for incompatible matmul shapes (3,4) @ (5,2)")
+
+
+fn test_matmul_dtype_mismatch() raises:
+    """Test that dtype mismatch raises error."""
+    var shape = DynamicVector[Int](2)
+    shape[0] = 2
+    shape[1] = 2
+    let a = ones(shape, DType.float32)
+    let b = ones(shape, DType.float64)  # Different dtype
+
+    var error_raised = False
+    try:
+        let c = matmul(a, b)
+    except:
+        error_raised = True
+
+    if not error_raised:
+        raise Error("Should have raised error for dtype mismatch in matmul")
+
+
+fn test_matmul_1d_error() raises:
+    """Test that 1D inputs raise error."""
+    var shape = DynamicVector[Int](1)
+    shape[0] = 5
+    let a = ones(shape, DType.float32)
+    let b = ones(shape, DType.float32)
+
+    var error_raised = False
+    try:
+        let c = matmul(a, b)  # matmul requires 2D+
+    except:
+        error_raised = True
+
+    if not error_raised:
+        raise Error("Should have raised error for 1D inputs to matmul")
+
+
+fn test_matmul_with_zeros() raises:
+    """Test matmul with zero matrices."""
+    var shape = DynamicVector[Int](2)
+    shape[0] = 3
+    shape[1] = 3
+    let a = zeros(shape, DType.float32)
+    let b = ones(shape, DType.float32)
+    let c = matmul(a, b)
+
+    assert_dim(c, 2, "Result should be 2D")
+    assert_numel(c, 9, "Result should be 3x3")
+    # TODO: Once matmul is implemented, uncomment:
+    # assert_all_values(c, 0.0, 1e-6, "Zero matrix @ anything = zero matrix")
 
 
 # ============================================================================
@@ -160,13 +220,14 @@ fn test_transpose_2d() raises:
     shape[0] = 3
     shape[1] = 4
     let a = ones(shape, DType.float32)  # 3x4
-    # let b = transpose(a)  # TODO: Implement transpose()
+    let b = transpose(a)
 
     # Result should be 4x3
-    # assert_dim(b, 2, "Transpose should be 2D")
-    # assert_numel(b, 12, "Transpose should have same number of elements")
-    # TODO: Check actual shape is (4, 3)
-    pass  # Placeholder
+    assert_dim(b, 2, "Transpose should be 2D")
+    assert_numel(b, 12, "Transpose should have same number of elements")
+    # TODO: Once transpose is implemented, verify shape is (4, 3):
+    # assert_equal_int(b.shape()[0], 4, "First dim should be 4")
+    # assert_equal_int(b.shape()[1], 3, "Second dim should be 3")
 
 
 fn test_transpose_3d_default() raises:
@@ -176,12 +237,15 @@ fn test_transpose_3d_default() raises:
     shape[1] = 3
     shape[2] = 4
     let a = ones(shape, DType.float32)  # 2x3x4
-    # let b = transpose(a)  # TODO: Implement transpose()
+    let b = transpose(a)
 
     # Default: reverse all axes -> 4x3x2
-    # assert_dim(b, 3, "Transpose should be 3D")
-    # assert_numel(b, 24, "Transpose should have same number of elements")
-    pass  # Placeholder
+    assert_dim(b, 3, "Transpose should be 3D")
+    assert_numel(b, 24, "Transpose should have same number of elements")
+    # TODO: Once transpose is implemented, verify shape is (4, 3, 2):
+    # assert_equal_int(b.shape()[0], 4, "First dim should be 4")
+    # assert_equal_int(b.shape()[1], 3, "Second dim should be 3")
+    # assert_equal_int(b.shape()[2], 2, "Third dim should be 2")
 
 
 fn test_transpose_3d_permute() raises:
@@ -212,6 +276,46 @@ fn test_transpose_values_correctness() raises:
     pass  # Placeholder
 
 
+fn test_transpose_identity() raises:
+    """Test transpose of identity matrix."""
+    let a = eye(4, 4, DType.float32)
+    let b = transpose(a)
+
+    # Transpose of identity should be identity
+    assert_dim(b, 2, "Transpose of 2D should be 2D")
+    assert_numel(b, 16, "Transpose should preserve elements")
+    # TODO: Once transpose is implemented, verify values:
+    # assert_all_values(b, ..., "Identity transpose = identity")
+
+
+fn test_transpose_twice() raises:
+    """Test that transpose(transpose(x)) == x."""
+    var shape = DynamicVector[Int](2)
+    shape[0] = 3
+    shape[1] = 5
+    let a = ones(shape, DType.float32)
+    let b = transpose(a)
+    let c = transpose(b)
+
+    # Should return to original shape
+    assert_dim(c, 2, "Double transpose should be 2D")
+    assert_numel(c, 15, "Double transpose should preserve elements")
+    # TODO: Once transpose is implemented, verify shape:
+    # assert_equal_int(c.shape()[0], 3, "Should be back to 3")
+    # assert_equal_int(c.shape()[1], 5, "Should be back to 5")
+
+
+fn test_transpose_preserves_dtype() raises:
+    """Test that transpose preserves dtype."""
+    var shape = DynamicVector[Int](2)
+    shape[0] = 2
+    shape[1] = 3
+    let a = ones(shape, DType.float64)
+    let b = transpose(a)
+
+    assert_dtype(b, DType.float64, "Transpose should preserve float64")
+
+
 # ============================================================================
 # Test dot()
 # ============================================================================
@@ -220,12 +324,13 @@ fn test_dot_1d() raises:
     """Test dot product of two 1D vectors."""
     let a = arange(1.0, 6.0, 1.0, DType.float32)  # [1, 2, 3, 4, 5]
     let b = arange(1.0, 6.0, 1.0, DType.float32)  # [1, 2, 3, 4, 5]
-    # let c = dot(a, b)  # TODO: Implement dot()
+    let c = dot(a, b)
 
     # Expected: 1*1 + 2*2 + 3*3 + 4*4 + 5*5 = 55
-    # assert_numel(c, 1, "Dot product should be scalar")
+    assert_dim(c, 0, "Dot product should be scalar (0D)")
+    assert_numel(c, 1, "Dot product should have 1 element")
+    # TODO: Once dot is implemented, uncomment:
     # assert_value_at(c, 0, 55.0, 1e-4, "Dot product result")
-    pass  # Placeholder
 
 
 fn test_dot_2d() raises:
@@ -238,12 +343,61 @@ fn test_dot_2d() raises:
     shape_b[0] = 3
     shape_b[1] = 2
     let b = ones(shape_b, DType.float32)  # 3x2
-    # let c = dot(a, b)  # TODO: Implement dot()
+    let c = dot(a, b)
 
     # Should behave like matmul for 2D
-    # assert_numel(c, 4, "Result should be 2x2 (4 elements)")
+    assert_dim(c, 2, "Result should be 2D")
+    assert_numel(c, 4, "Result should be 2x2 (4 elements)")
+    # TODO: Once dot is implemented, uncomment:
     # assert_all_values(c, 3.0, 1e-6, "Each element should be 3")
-    pass  # Placeholder
+
+
+fn test_dot_incompatible_shapes() raises:
+    """Test that incompatible 1D shapes raise error."""
+    var shape_a = DynamicVector[Int](1)
+    shape_a[0] = 5
+    var shape_b = DynamicVector[Int](1)
+    shape_b[0] = 3  # Different size
+
+    let a = ones(shape_a, DType.float32)
+    let b = ones(shape_b, DType.float32)
+
+    var error_raised = False
+    try:
+        let c = dot(a, b)
+    except:
+        error_raised = True
+
+    if not error_raised:
+        raise Error("Should have raised error for incompatible dot shapes (5,) and (3,)")
+
+
+fn test_dot_dtype_mismatch() raises:
+    """Test that dtype mismatch raises error."""
+    var shape = DynamicVector[Int](1)
+    shape[0] = 5
+    let a = ones(shape, DType.float32)
+    let b = ones(shape, DType.float64)
+
+    var error_raised = False
+    try:
+        let c = dot(a, b)
+    except:
+        error_raised = True
+
+    if not error_raised:
+        raise Error("Should have raised error for dtype mismatch in dot")
+
+
+fn test_dot_preserves_dtype() raises:
+    """Test that dot preserves dtype."""
+    var shape = DynamicVector[Int](1)
+    shape[0] = 5
+    let a = ones(shape, DType.float64)
+    let b = ones(shape, DType.float64)
+    let c = dot(a, b)
+
+    assert_dtype(c, DType.float64, "dot should preserve float64")
 
 
 # ============================================================================
@@ -254,17 +408,90 @@ fn test_outer_vectors() raises:
     """Test outer product of two vectors."""
     let a = arange(1.0, 4.0, 1.0, DType.float32)  # [1, 2, 3]
     let b = arange(1.0, 3.0, 1.0, DType.float32)  # [1, 2]
-    # let c = outer(a, b)  # TODO: Implement outer()
+    let c = outer(a, b)
 
     # Expected 3x2 matrix:
     # [[1, 2],
     #  [2, 4],
     #  [3, 6]]
-    # assert_dim(c, 2, "Outer product should be 2D")
-    # assert_numel(c, 6, "Outer product should be 3x2")
-    # assert_value_at(c, 0, 1.0, 1e-6, "c[0,0] = 1*1")
-    # assert_value_at(c, 3, 4.0, 1e-6, "c[1,1] = 2*2")
-    pass  # Placeholder
+    assert_dim(c, 2, "Outer product should be 2D")
+    assert_numel(c, 6, "Outer product should be 3x2 (6 elements)")
+    # TODO: Once outer is implemented, uncomment:
+    # assert_value_at(c, 0, 1.0, 1e-6, "c[0,0] = 1*1 = 1")
+    # assert_value_at(c, 1, 2.0, 1e-6, "c[0,1] = 1*2 = 2")
+    # assert_value_at(c, 2, 2.0, 1e-6, "c[1,0] = 2*1 = 2")
+    # assert_value_at(c, 3, 4.0, 1e-6, "c[1,1] = 2*2 = 4")
+    # assert_value_at(c, 4, 3.0, 1e-6, "c[2,0] = 3*1 = 3")
+    # assert_value_at(c, 5, 6.0, 1e-6, "c[2,1] = 3*2 = 6")
+
+
+fn test_outer_not_1d_error() raises:
+    """Test that non-1D inputs raise error."""
+    var shape_2d = DynamicVector[Int](2)
+    shape_2d[0] = 2
+    shape_2d[1] = 3
+    var shape_1d = DynamicVector[Int](1)
+    shape_1d[0] = 3
+
+    let a = ones(shape_2d, DType.float32)  # 2D tensor
+    let b = ones(shape_1d, DType.float32)  # 1D vector
+
+    var error_raised = False
+    try:
+        let c = outer(a, b)  # Should error: outer requires 1D
+    except:
+        error_raised = True
+
+    if not error_raised:
+        raise Error("Should have raised error for non-1D input to outer")
+
+
+fn test_outer_dtype_mismatch() raises:
+    """Test that dtype mismatch raises error."""
+    var shape = DynamicVector[Int](1)
+    shape[0] = 3
+    let a = ones(shape, DType.float32)
+    let b = ones(shape, DType.float64)
+
+    var error_raised = False
+    try:
+        let c = outer(a, b)
+    except:
+        error_raised = True
+
+    if not error_raised:
+        raise Error("Should have raised error for dtype mismatch in outer")
+
+
+fn test_outer_with_zeros() raises:
+    """Test outer product with zero vector."""
+    var shape_a = DynamicVector[Int](1)
+    shape_a[0] = 3
+    var shape_b = DynamicVector[Int](1)
+    shape_b[0] = 4
+
+    let a = zeros(shape_a, DType.float32)
+    let b = ones(shape_b, DType.float32)
+    let c = outer(a, b)
+
+    assert_dim(c, 2, "Outer product should be 2D")
+    assert_numel(c, 12, "Outer product should be 3x4 (12 elements)")
+    # TODO: Once outer is implemented, uncomment:
+    # assert_all_values(c, 0.0, 1e-6, "Outer with zero vector should be all zeros")
+
+
+fn test_outer_preserves_dtype() raises:
+    """Test that outer preserves dtype."""
+    var shape_a = DynamicVector[Int](1)
+    shape_a[0] = 2
+    var shape_b = DynamicVector[Int](1)
+    shape_b[0] = 3
+
+    let a = ones(shape_a, DType.float64)
+    let b = ones(shape_b, DType.float64)
+    let c = outer(a, b)
+
+    assert_dtype(c, DType.float64, "outer should preserve float64")
 
 
 # ============================================================================
@@ -349,10 +576,9 @@ fn test_matmul_preserves_dtype() raises:
     shape[1] = 3
     let a = ones(shape, DType.float64)
     let b = ones(shape, DType.float64)
-    # let c = matmul(a, b)
+    let c = matmul(a, b)
 
-    # assert_dtype(c, DType.float64, "matmul should preserve float64")
-    pass  # Placeholder
+    assert_dtype(c, DType.float64, "matmul should preserve float64")
 
 
 # ============================================================================
@@ -366,11 +592,13 @@ fn test_dunder_matmul() raises:
     shape[1] = 2
     let a = ones(shape, DType.float32)
     let b = full(shape, 2.0, DType.float32)
-    # let c = a @ b  # TODO: Implement __matmul__
+    let c = a @ b
 
     # Each element should be 1*2 + 1*2 = 4
+    assert_dim(c, 2, "Result should be 2D")
+    assert_numel(c, 4, "Result should be 2x2 (4 elements)")
+    # TODO: Once matmul is implemented, uncomment:
     # assert_all_values(c, 4.0, 1e-6, "a @ b should work via __matmul__")
-    pass  # Placeholder
 
 
 # ============================================================================
@@ -395,6 +623,9 @@ fn main() raises:
     # matmul() error cases
     print("  Testing matmul() error handling...")
     test_matmul_incompatible_shapes()
+    test_matmul_dtype_mismatch()
+    test_matmul_1d_error()
+    test_matmul_with_zeros()
 
     # transpose() tests
     print("  Testing transpose()...")
@@ -402,22 +633,32 @@ fn main() raises:
     test_transpose_3d_default()
     test_transpose_3d_permute()
     test_transpose_values_correctness()
+    test_transpose_identity()
+    test_transpose_twice()
+    test_transpose_preserves_dtype()
 
     # dot() tests
     print("  Testing dot()...")
     test_dot_1d()
     test_dot_2d()
+    test_dot_incompatible_shapes()
+    test_dot_dtype_mismatch()
+    test_dot_preserves_dtype()
 
     # outer() tests
     print("  Testing outer()...")
     test_outer_vectors()
+    test_outer_not_1d_error()
+    test_outer_dtype_mismatch()
+    test_outer_with_zeros()
+    test_outer_preserves_dtype()
 
-    # inner() tests
+    # inner() tests (placeholders for Priority 6)
     print("  Testing inner()...")
     test_inner_1d()
     test_inner_2d()
 
-    # tensordot() tests
+    # tensordot() tests (placeholders for Priority 6)
     print("  Testing tensordot()...")
     test_tensordot_basic()
     test_tensordot_multiple_axes()
