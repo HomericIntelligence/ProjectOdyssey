@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Main development environment
+  ml-odyssey-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    image: ml-odyssey:dev
+    container_name: ml-odyssey-dev
+    volumes:
+      # Mount source code for live development
+      - .:/workspace
+      # Persist Pixi cache across container rebuilds
+      - pixi-cache:/root/.pixi
+      # Persist pre-commit cache
+      - pre-commit-cache:/root/.cache/pre-commit
+      # Persist git config
+      - ~/.gitconfig:/root/.gitconfig:ro
+    environment:
+      # Set development environment
+      - ENVIRONMENT=development
+      # Enable color output
+      - TERM=xterm-256color
+    working_dir: /workspace
+    # Keep container running
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+  # CI/Testing environment (optimized for automated testing)
+  ml-odyssey-ci:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: ci
+    image: ml-odyssey:ci
+    container_name: ml-odyssey-ci
+    volumes:
+      - .:/workspace
+    environment:
+      - ENVIRONMENT=ci
+      - CI=true
+    working_dir: /workspace
+
+  # Production environment (if needed)
+  ml-odyssey-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: ml-odyssey:prod
+    container_name: ml-odyssey-prod
+    volumes:
+      - .:/workspace:ro  # Read-only in production
+    environment:
+      - ENVIRONMENT=production
+    working_dir: /workspace
+
+volumes:
+  # Named volumes for persistence
+  pixi-cache:
+    driver: local
+  pre-commit-cache:
+    driver: local
