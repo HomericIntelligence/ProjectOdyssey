@@ -3,7 +3,8 @@
 **Version**: 0.1.0
 **License**: BSD-3-Clause
 
-ExTensor is a high-performance tensor library for Mojo with NumPy-style broadcasting, designed for machine learning and scientific computing applications.
+ExTensor is a high-performance tensor library for Mojo with NumPy-style broadcasting, designed for machine
+learning and scientific computing applications.
 
 ## Features
 
@@ -18,19 +19,23 @@ ExTensor is a high-performance tensor library for Mojo with NumPy-style broadcas
 ### Implemented Operations (57 total)
 
 #### Arithmetic Operations (7) - All with Broadcasting ✨
+
 - `add`, `subtract`, `multiply`, `divide`
 - `floor_divide`, `modulo`, `power`
 
 #### Creation Operations (7)
+
 - `zeros`, `ones`, `full`, `empty`
 - `arange`, `eye`, `linspace`
 
 #### Comparison Operations (6)
+
 - `equal`, `not_equal`
 - `less`, `less_equal`
 - `greater`, `greater_equal`
 
 #### Element-wise Math (19)
+
 - **Basic**: `abs`, `sign`, `exp`, `log`, `sqrt`
 - **Trigonometric**: `sin`, `cos`, `tanh`
 - **Rounding**: `ceil`, `floor`, `round`, `trunc`
@@ -39,12 +44,15 @@ ExTensor is a high-performance tensor library for Mojo with NumPy-style broadcas
 - **Utilities**: `clip`
 
 #### Matrix Operations (4)
+
 - `matmul`, `transpose`, `dot`, `outer`
 
 #### Reduction Operations (4)
+
 - `sum`, `mean`, `max_reduce`, `min_reduce`
 
 #### Shape Manipulation (8)
+
 - `reshape`, `squeeze`, `unsqueeze`, `expand_dims`
 - `flatten`, `ravel`, `concatenate`, `stack`
 
@@ -208,29 +216,36 @@ Shape (3, 4)    + Shape (5,)      → ERROR      # Incompatible shapes
 ### Creation Operations
 
 #### `zeros(shape, dtype) -> ExTensor`
+
 Create a tensor filled with zeros.
 
 **Parameters**:
+
 - `shape: DynamicVector[Int]` - Shape of the output tensor
 - `dtype: DType` - Data type of tensor elements
 
 **Returns**: New ExTensor filled with zeros
 
 #### `ones(shape, dtype) -> ExTensor`
+
 Create a tensor filled with ones.
 
 #### `full(shape, value, dtype) -> ExTensor`
+
 Create a tensor filled with a specific value.
 
 **Parameters**:
+
 - `shape: DynamicVector[Int]` - Shape of the output tensor
 - `value: Float64` - Fill value
 - `dtype: DType` - Data type
 
 #### `arange(start, stop, step, dtype) -> ExTensor`
+
 Create a 1D tensor with evenly spaced values.
 
 **Parameters**:
+
 - `start: Float64` - Start value (inclusive)
 - `stop: Float64` - Stop value (exclusive)
 - `step: Float64` - Step size
@@ -241,9 +256,11 @@ Create a 1D tensor with evenly spaced values.
 All arithmetic operations support NumPy-style broadcasting.
 
 #### `add(a, b) -> ExTensor`
+
 Element-wise addition with broadcasting.
 
 **Parameters**:
+
 - `a: ExTensor` - First tensor
 - `b: ExTensor` - Second tensor
 
@@ -252,50 +269,63 @@ Element-wise addition with broadcasting.
 **Raises**: Error if shapes are not broadcast-compatible or dtypes don't match
 
 #### `subtract(a, b) -> ExTensor`
+
 Element-wise subtraction with broadcasting.
 
 #### `multiply(a, b) -> ExTensor`
+
 Element-wise multiplication with broadcasting.
 
 #### `divide(a, b) -> ExTensor`
+
 Element-wise division with broadcasting.
 
 **Note**: Division by zero follows IEEE 754 semantics:
+
 - `x / 0.0` where `x > 0` → `+inf`
 - `x / 0.0` where `x < 0` → `-inf`
 - `0.0 / 0.0` → `NaN`
 
 #### `floor_divide(a, b) -> ExTensor`
+
 Element-wise floor division with broadcasting.
 
 #### `modulo(a, b) -> ExTensor`
+
 Element-wise modulo operation with broadcasting.
 
 #### `power(a, b) -> ExTensor`
+
 Element-wise exponentiation with broadcasting.
 
 ### Shape Manipulation
 
 #### `reshape(tensor, new_shape) -> ExTensor`
+
 Reshape tensor to new shape.
 
 **Parameters**:
+
 - `tensor: ExTensor` - Input tensor
 - `new_shape: DynamicVector[Int]` - New shape (total elements must match)
 
 **Returns**: Reshaped tensor
 
 #### `flatten(tensor) -> ExTensor`
+
 Flatten tensor to 1D.
 
 #### `concatenate(tensors, axis) -> ExTensor`
+
 Concatenate tensors along existing axis.
 
 **Parameters**:
+
 - `tensors: DynamicVector[ExTensor]` - List of tensors to concatenate
 - `axis: Int` - Axis along which to concatenate
 
 #### `stack(tensors, axis) -> ExTensor`
+
 Stack tensors along a new axis.
 
 ## Performance
@@ -317,6 +347,7 @@ ExTensor uses **stride-based broadcasting** which avoids unnecessary data copyin
 ### Current Version: 0.1.0
 
 **Completed** (Issues #219-220):
+
 - ✅ Core arithmetic operations with broadcasting
 - ✅ Broadcasting infrastructure
 - ✅ Comprehensive test suite (355 tests)
@@ -324,10 +355,12 @@ ExTensor uses **stride-based broadcasting** which avoids unnecessary data copyin
 - ✅ Element-wise math operations
 
 **In Progress**:
+
 - ⏳ Packaging and distribution (#221)
 - ⏳ Code cleanup and optimization (#222)
 
 **Future Work**:
+
 - ⬜ Additional Array API Standard operations
 - ⬜ SIMD optimization
 - ⬜ GPU acceleration
