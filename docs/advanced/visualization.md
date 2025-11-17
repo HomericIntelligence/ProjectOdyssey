@@ -300,4 +300,3 @@ def visualize_training_session(model, train_history, val_history,
 - **Labels**: Always include axis labels, titles, and legends
 - **File Organization**: Store visualizations in timestamped directories
 - **Memory**: Close figures with `plt.close()` to prevent memory leaks
-
