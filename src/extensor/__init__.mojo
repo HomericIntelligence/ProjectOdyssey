@@ -12,23 +12,24 @@ Examples:
     from extensor import ExTensor, zeros, ones
 
     # Create tensors
-    let a = zeros((3, 4), DType.float32)
-    let b = ones((3, 4), DType.float32)
+    var shape = DynamicVector[Int](3, 4)
+    var a = zeros(shape, DType.float32)
+    var b = ones(shape, DType.float32)
 
-    # Arithmetic with broadcasting
-    let c = a + b
+    # Arithmetic with broadcasting (TODO: implement)
+    # var c = a + b
 
-    # Matrix multiplication
-    let x = zeros((3, 4), DType.float32)
-    let y = zeros((4, 5), DType.float32)
-    let z = x @ y  # Matrix multiplication
+    # Matrix multiplication (TODO: implement)
+    # var x = zeros(DynamicVector[Int](3, 4), DType.float32)
+    # var y = zeros(DynamicVector[Int](4, 5), DType.float32)
+    # var z = x @ y
 """
 
 # Core tensor type
 from .extensor import ExTensor
 
 # Creation operations
-from .extensor import zeros, ones, full, empty
+from .extensor import zeros, ones, full, empty, arange, eye, linspace
 
 # TODO: Export other operation categories as they are implemented
 # from .arithmetic import add, subtract, multiply, divide
