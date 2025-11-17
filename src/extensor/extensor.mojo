@@ -4,8 +4,9 @@ A comprehensive, dynamic tensor class with arbitrary shapes, data types, and dim
 Implements 150+ operations from the Array API Standard 2024 with NumPy-style broadcasting.
 """
 
-from memory import UnsafePointer
+from memory import UnsafePointer, memset_zero
 from sys import simdwidthof
+from math import ceildiv
 
 
 struct ExTensor:
@@ -16,29 +17,25 @@ struct ExTensor:
     and NumPy-style broadcasting for all operations.
 
     Attributes:
-        _data: UnsafePointer to the underlying data buffer
+        _data: UnsafePointer to raw byte storage (type-erased)
         _shape: DynamicVector storing the shape dimensions
-        _strides: DynamicVector storing the stride for each dimension
+        _strides: DynamicVector storing the stride for each dimension (in elements)
         _dtype: The data type of tensor elements
         _numel: Total number of elements in the tensor
         _is_view: Whether this tensor is a view (shares data with another tensor)
 
     Examples:
         # Create tensors
-        let a = ExTensor.zeros((3, 4), DType.float32)
-        let b = ExTensor.ones((3, 4), DType.float32)
+        var a = zeros(DynamicVector[Int](3, 4), DType.float32)
+        var b = ones(DynamicVector[Int](3, 4), DType.float32)
 
-        # Arithmetic with broadcasting
-        let c = a + b  # Element-wise addition
-        let d = c * 2.0  # Broadcast scalar
-
-        # Matrix operations
-        let x = ExTensor.zeros((3, 4), DType.float32)
-        let y = ExTensor.zeros((4, 5), DType.float32)
-        let z = x @ y  # Matrix multiplication -> (3, 5)
+        # Access properties
+        print(a.shape())  # [3, 4]
+        print(a.dtype())  # float32
+        print(a.numel())  # 12
     """
 
-    var _data: UnsafePointer[Scalar[DType.float32]]  # Will be parametrized by dtype
+    var _data: UnsafePointer[UInt8]  # Raw byte storage
     var _shape: DynamicVector[Int]
     var _strides: DynamicVector[Int]
     var _dtype: DType
@@ -65,20 +62,42 @@ struct ExTensor:
         for i in range(len(shape)):
             self._numel *= shape[i]
 
-        # Calculate row-major strides
+        # Calculate row-major strides (in elements, not bytes)
         self._strides = DynamicVector[Int]()
         var stride = 1
         for i in range(len(shape) - 1, -1, -1):
-            self._strides.insert(i, stride)
+            self._strides.push_back(0)  # Preallocate
+        for i in range(len(shape) - 1, -1, -1):
+            self._strides[i] = stride
             stride *= shape[i]
 
-        # Allocate memory (placeholder - will need to handle different dtypes)
-        self._data = UnsafePointer[Scalar[DType.float32]].alloc(self._numel)
+        # Allocate raw byte storage
+        let dtype_size = self._get_dtype_size()
+        self._data = UnsafePointer[UInt8].alloc(self._numel * dtype_size)
 
     fn __del__(owned self):
         """Destructor to free allocated memory."""
         if not self._is_view:
             self._data.free()
+
+    fn _get_dtype_size(self) -> Int:
+        """Get size in bytes for the tensor's dtype."""
+        if self._dtype == DType.float16:
+            return 2
+        elif self._dtype == DType.float32:
+            return 4
+        elif self._dtype == DType.float64:
+            return 8
+        elif self._dtype == DType.int8 or self._dtype == DType.uint8 or self._dtype == DType.bool:
+            return 1
+        elif self._dtype == DType.int16 or self._dtype == DType.uint16:
+            return 2
+        elif self._dtype == DType.int32 or self._dtype == DType.uint32:
+            return 4
+        elif self._dtype == DType.int64 or self._dtype == DType.uint64:
+            return 8
+        else:
+            return 4  # Default fallback
 
     fn shape(self) -> DynamicVector[Int]:
         """Return the shape of the tensor.
@@ -141,6 +160,70 @@ struct ExTensor:
             expected_stride *= self._shape[i]
         return True
 
+    fn _set_float64(self, index: Int, value: Float64):
+        """Internal: Set value at index (assumes float-compatible dtype)."""
+        let dtype_size = self._get_dtype_size()
+        let offset = index * dtype_size
+
+        if self._dtype == DType.float16:
+            let ptr = (self._data + offset).bitcast[Float16]()
+            ptr[] = value.cast[DType.float16]()
+        elif self._dtype == DType.float32:
+            let ptr = (self._data + offset).bitcast[Float32]()
+            ptr[] = value.cast[DType.float32]()
+        elif self._dtype == DType.float64:
+            let ptr = (self._data + offset).bitcast[Float64]()
+            ptr[] = value
+
+    fn _set_int64(self, index: Int, value: Int64):
+        """Internal: Set value at index (assumes integer-compatible dtype)."""
+        let dtype_size = self._get_dtype_size()
+        let offset = index * dtype_size
+
+        if self._dtype == DType.int8:
+            let ptr = (self._data + offset).bitcast[Int8]()
+            ptr[] = value.cast[DType.int8]()
+        elif self._dtype == DType.int16:
+            let ptr = (self._data + offset).bitcast[Int16]()
+            ptr[] = value.cast[DType.int16]()
+        elif self._dtype == DType.int32:
+            let ptr = (self._data + offset).bitcast[Int32]()
+            ptr[] = value.cast[DType.int32]()
+        elif self._dtype == DType.int64:
+            let ptr = (self._data + offset).bitcast[Int64]()
+            ptr[] = value
+        elif self._dtype == DType.uint8:
+            let ptr = (self._data + offset).bitcast[UInt8]()
+            ptr[] = value.cast[DType.uint8]()
+        elif self._dtype == DType.uint16:
+            let ptr = (self._data + offset).bitcast[UInt16]()
+            ptr[] = value.cast[DType.uint16]()
+        elif self._dtype == DType.uint32:
+            let ptr = (self._data + offset).bitcast[UInt32]()
+            ptr[] = value.cast[DType.uint32]()
+        elif self._dtype == DType.uint64:
+            let ptr = (self._data + offset).bitcast[UInt64]()
+            ptr[] = value.cast[DType.uint64]()
+        elif self._dtype == DType.bool:
+            let ptr = (self._data + offset).bitcast[Bool]()
+            ptr[] = value != 0
+
+    fn _fill_zero(inout self):
+        """Internal: Fill tensor with zeros (works for all dtypes)."""
+        let dtype_size = self._get_dtype_size()
+        let total_bytes = self._numel * dtype_size
+        memset_zero(self._data, total_bytes)
+
+    fn _fill_value_float(inout self, value: Float64):
+        """Internal: Fill tensor with float value."""
+        for i in range(self._numel):
+            self._set_float64(i, value)
+
+    fn _fill_value_int(inout self, value: Int64):
+        """Internal: Fill tensor with integer value."""
+        for i in range(self._numel):
+            self._set_int64(i, value)
+
 
 # ============================================================================
 # Creation Operations
@@ -157,19 +240,14 @@ fn zeros(shape: DynamicVector[Int], dtype: DType) -> ExTensor:
         A new ExTensor filled with zeros
 
     Examples:
-        let t = zeros((3, 4), DType.float32)
+        var t = zeros(DynamicVector[Int](3, 4), DType.float32)
         # Creates a 3x4 tensor of float32 zeros
 
     Performance:
         O(n) time where n is the number of elements
     """
     var tensor = ExTensor(shape, dtype)
-
-    # Initialize all elements to zero
-    # TODO: Handle different dtypes properly
-    for i in range(tensor._numel):
-        tensor._data[i] = 0.0
-
+    tensor._fill_zero()  # Efficiently zero out all bytes
     return tensor^
 
 
@@ -184,15 +262,20 @@ fn ones(shape: DynamicVector[Int], dtype: DType) -> ExTensor:
         A new ExTensor filled with ones
 
     Examples:
-        let t = ones((3, 4), DType.float32)
+        var t = ones(DynamicVector[Int](3, 4), DType.float32)
         # Creates a 3x4 tensor of float32 ones
     """
     var tensor = ExTensor(shape, dtype)
 
-    # Initialize all elements to one
-    # TODO: Handle different dtypes properly
-    for i in range(tensor._numel):
-        tensor._data[i] = 1.0
+    # Fill with ones based on dtype category
+    if (
+        dtype == DType.float16
+        or dtype == DType.float32
+        or dtype == DType.float64
+    ):
+        tensor._fill_value_float(1.0)
+    else:
+        tensor._fill_value_int(1)
 
     return tensor^
 
@@ -209,15 +292,20 @@ fn full(shape: DynamicVector[Int], fill_value: Float64, dtype: DType) -> ExTenso
         A new ExTensor filled with fill_value
 
     Examples:
-        let t = full((3, 4), 42.0, DType.float32)
+        var t = full(DynamicVector[Int](3, 4), 42.0, DType.float32)
         # Creates a 3x4 tensor filled with 42.0
     """
     var tensor = ExTensor(shape, dtype)
 
-    # Initialize all elements to fill_value
-    # TODO: Handle different dtypes properly
-    for i in range(tensor._numel):
-        tensor._data[i] = fill_value
+    # Fill with value based on dtype category
+    if (
+        dtype == DType.float16
+        or dtype == DType.float32
+        or dtype == DType.float64
+    ):
+        tensor._fill_value_float(fill_value)
+    else:
+        tensor._fill_value_int(int(fill_value))
 
     return tensor^
 
@@ -237,9 +325,147 @@ fn empty(shape: DynamicVector[Int], dtype: DType) -> ExTensor:
         Use this for performance when you will immediately write to all elements.
 
     Examples:
-        let t = empty((3, 4), DType.float32)
+        var t = empty(DynamicVector[Int](3, 4), DType.float32)
         # Creates a 3x4 tensor with undefined values
     """
     # Just allocate without initialization
     var tensor = ExTensor(shape, dtype)
+    return tensor^
+
+
+fn arange(start: Float64, stop: Float64, step: Float64, dtype: DType) -> ExTensor:
+    """Create 1D tensor with evenly spaced values.
+
+    Args:
+        start: Start value (inclusive)
+        stop: End value (exclusive)
+        step: Spacing between values
+        dtype: The data type of tensor elements
+
+    Returns:
+        A new 1D ExTensor with values in range [start, stop) with given step
+
+    Examples:
+        var t = arange(0.0, 10.0, 1.0, DType.float32)
+        # Creates [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+        var t2 = arange(0.0, 10.0, 2.0, DType.int32)
+        # Creates [0, 2, 4, 6, 8]
+    """
+    # Calculate number of elements
+    let num_elements = int((stop - start) / step)
+    var shape = DynamicVector[Int](1)
+    shape[0] = num_elements
+
+    var tensor = ExTensor(shape, dtype)
+
+    # Fill with sequence
+    var value = start
+    for i in range(num_elements):
+        if (
+            dtype == DType.float16
+            or dtype == DType.float32
+            or dtype == DType.float64
+        ):
+            tensor._set_float64(i, value)
+        else:
+            tensor._set_int64(i, int(value))
+        value += step
+
+    return tensor^
+
+
+fn eye(n: Int, m: Int, k: Int, dtype: DType) -> ExTensor:
+    """Create 2D tensor with ones on diagonal.
+
+    Args:
+        n: Number of rows
+        m: Number of columns
+        k: Diagonal offset (0 for main diagonal, >0 for upper, <0 for lower)
+        dtype: The data type of tensor elements
+
+    Returns:
+        A new 2D ExTensor with ones on the k-th diagonal
+
+    Examples:
+        var t = eye(3, 3, 0, DType.float32)
+        # Creates 3x3 identity matrix
+
+        var t2 = eye(3, 4, 1, DType.float32)
+        # Creates 3x4 matrix with ones on diagonal above main
+    """
+    var shape = DynamicVector[Int](2)
+    shape[0] = n
+    shape[1] = m
+
+    var tensor = ExTensor(shape, dtype)
+    tensor._fill_zero()
+
+    # Set diagonal to one
+    for i in range(n):
+        let j = i + k
+        if j >= 0 and j < m:
+            let index = i * m + j
+            if (
+                dtype == DType.float16
+                or dtype == DType.float32
+                or dtype == DType.float64
+            ):
+                tensor._set_float64(index, 1.0)
+            else:
+                tensor._set_int64(index, 1)
+
+    return tensor^
+
+
+fn linspace(start: Float64, stop: Float64, num: Int, dtype: DType) -> ExTensor:
+    """Create 1D tensor with evenly spaced values (inclusive).
+
+    Args:
+        start: Start value (inclusive)
+        stop: End value (inclusive)
+        num: Number of values
+        dtype: The data type of tensor elements
+
+    Returns:
+        A new 1D ExTensor with num evenly spaced values
+
+    Examples:
+        var t = linspace(0.0, 10.0, 11, DType.float32)
+        # Creates [0.0, 1.0, 2.0, ..., 10.0]
+
+        var t2 = linspace(0.0, 1.0, 5, DType.float64)
+        # Creates [0.0, 0.25, 0.5, 0.75, 1.0]
+    """
+    var shape = DynamicVector[Int](1)
+    shape[0] = num
+
+    var tensor = ExTensor(shape, dtype)
+
+    if num == 1:
+        # Special case: single value
+        if (
+            dtype == DType.float16
+            or dtype == DType.float32
+            or dtype == DType.float64
+        ):
+            tensor._set_float64(0, start)
+        else:
+            tensor._set_int64(0, int(start))
+    else:
+        # Calculate step size
+        let step = (stop - start) / (num - 1)
+
+        # Fill with sequence
+        for i in range(num):
+            let value = start + step * i
+            if (
+                dtype == DType.float16
+                or dtype == DType.float32
+                or dtype == DType.float64
+            ):
+                tensor._set_float64(i, value)
+            else:
+                tensor._set_int64(i, int(value))
+
     return tensor^
