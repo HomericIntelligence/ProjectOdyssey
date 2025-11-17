@@ -47,7 +47,7 @@ Each dataset should be organized in its own subdirectory with:
 All datasets should provide:
 
 - Training data
-- Validation data  
+- Validation data
 - Test data
 - Metadata (shape, classes, etc.)
 

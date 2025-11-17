@@ -137,7 +137,7 @@ struct Layer:
     var weights: Tensor[DType.float32]
     var bias: Tensor[DType.float32]
     var activation: String
-    
+
     fn forward(self, input: Tensor) -> Tensor:
         ...
 ```
@@ -152,7 +152,7 @@ struct Layer:
 ```mojo
 class Model:
     var layers: List[Layer]
-    
+
     def add_layer(self, layer: Layer):
         self.layers.append(layer)
 ```
@@ -193,7 +193,7 @@ fn vectorized_add[simd_width: Int](a: Tensor, b: Tensor) -> Tensor:
     @parameter
     fn add_simd[width: Int](idx: Int):
         result.store[width](idx, a.load[width](idx) + b.load[width](idx))
-    
+
     vectorize[add_simd, simd_width](a.num_elements())
     return result
 ```

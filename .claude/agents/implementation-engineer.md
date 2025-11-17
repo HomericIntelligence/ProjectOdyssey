@@ -163,7 +163,7 @@ struct Layer:
     var weights: Tensor[DType.float32]
     var bias: Tensor[DType.float32]
     var activation: String
-    
+
     fn forward(self, input: Tensor) -> Tensor:
         ...
 ```
@@ -178,7 +178,7 @@ struct Layer:
 ```mojo
 class Model:
     var layers: List[Layer]
-    
+
     def add_layer(self, layer: Layer):
         self.layers.append(layer)
 ```
@@ -219,7 +219,7 @@ fn vectorized_add[simd_width: Int](a: Tensor, b: Tensor) -> Tensor:
     @parameter
     fn add_simd[width: Int](idx: Int):
         result.store[width](idx, a.load[width](idx) + b.load[width](idx))
-    
+
     vectorize[add_simd, simd_width](a.num_elements())
     return result
 ```
@@ -407,12 +407,12 @@ struct FCLayer:
     var weights: Tensor[DType.float32]
     var bias: Tensor[DType.float32]
     var use_relu: Bool
-    
+
     fn __init__(inout self, input_dim: Int, output_dim: Int, use_relu: Bool = True):
         self.weights = Tensor[DType.float32].randn(input_dim, output_dim) * 0.01
         self.bias = Tensor[DType.float32].zeros(output_dim)
         self.use_relu = use_relu
-    
+
     fn forward(self, input: Tensor[DType.float32]) -> Tensor[DType.float32]:
         var output = input @ self.weights + self.bias
         if self.use_relu:
@@ -430,24 +430,24 @@ struct FCLayer:
 
 ```mojo
 fn create_batches[dtype: DType](
-    data: Tensor[dtype], 
+    data: Tensor[dtype],
     labels: Tensor[dtype],
     batch_size: Int,
     shuffle: Bool = True
 ) -> List[Tuple[Tensor[dtype], Tensor[dtype]]]:
     var num_samples = data.shape[0]
     var indices = range(num_samples)
-    
+
     if shuffle:
         random.shuffle(indices)
-    
+
     var batches = List[Tuple[Tensor[dtype], Tensor[dtype]]]()
     for i in range(0, num_samples, batch_size):
         var batch_indices = indices[i:min(i + batch_size, num_samples)]
         var batch_data = data[batch_indices]
         var batch_labels = labels[batch_indices]
         batches.append((batch_data, batch_labels))
-    
+
     return batches
 ```
 
@@ -468,25 +468,25 @@ fn train_step(
 ) raises -> Float32:
     # Validate inputs
     if batch.shape[0] != targets.shape[0]:
-        raise Error("Batch size mismatch: batch=" + str(batch.shape[0]) + 
+        raise Error("Batch size mismatch: batch=" + str(batch.shape[0]) +
                    ", targets=" + str(targets.shape[0]))
-    
+
     # Forward pass with NaN checking
     var predictions = model.forward(batch)
     if predictions.has_nan():
         raise Error("NaN detected in forward pass predictions")
-    
+
     # Compute loss
     var loss = compute_mse_loss(predictions, targets)
     if loss.is_inf() or loss.is_nan():
         raise Error("Invalid loss value: " + str(loss))
-    
+
     # Backward pass
     var gradients = model.backward(loss)
-    
+
     # Update weights with gradient clipping
     model.update_weights(gradients, learning_rate, max_grad_norm=1.0)
-    
+
     return loss
 ```
 

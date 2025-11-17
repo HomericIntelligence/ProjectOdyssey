@@ -201,11 +201,11 @@ python scripts/lint_configs.py -v configs/
    ```bash
    # Create directory
    mkdir -p configs/papers/resnet
-   
+
    # Copy templates
    cp configs/templates/paper.yaml configs/papers/resnet/model.yaml
    cp configs/defaults/training.yaml configs/papers/resnet/training.yaml
-   
+
    # Edit with paper-specific values
    vim configs/papers/resnet/model.yaml
    ```
@@ -215,7 +215,7 @@ python scripts/lint_configs.py -v configs/
    ```bash
    # Copy template
    cp configs/templates/experiment.yaml configs/experiments/resnet/improved.yaml
-   
+
    # Edit to override specific values
    vim configs/experiments/resnet/improved.yaml
    ```
