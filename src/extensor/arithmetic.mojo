@@ -24,36 +24,50 @@ fn add(a: ExTensor, b: ExTensor) raises -> ExTensor:
         var a = zeros(DynamicVector[Int](3, 4), DType.float32)
         var b = ones(DynamicVector[Int](3, 4), DType.float32)
         var c = add(a, b)  # Shape (3, 4), all ones
+
+        # Broadcasting example
+        var x = ones([3, 1, 5], DType.float32)
+        var y = ones([3, 4, 5], DType.float32)
+        var z = add(x, y)  # Shape (3, 4, 5)
     """
-    # Check dtype compatibility
     if a.dtype() != b.dtype():
         raise Error("Cannot add tensors with different dtypes")
 
     # Compute broadcast shape
     let result_shape = broadcast_shapes(a.shape(), b.shape())
-
-    # Create result tensor
     var result = ExTensor(result_shape, a.dtype())
 
-    # Simple case: same shape (no broadcasting needed)
-    if len(a.shape()) == len(b.shape()):
-        var same_shape = True
-        for i in range(len(a.shape())):
-            if a.shape()[i] != b.shape()[i]:
-                same_shape = False
-                break
+    # Compute broadcast strides
+    let strides_a = compute_broadcast_strides(a.shape(), result_shape)
+    let strides_b = compute_broadcast_strides(b.shape(), result_shape)
 
-        if same_shape:
-            # Direct element-wise addition (no broadcasting)
-            for i in range(a.numel()):
-                let a_val = a._get_float64(i)
-                let b_val = b._get_float64(i)
-                result._set_float64(i, a_val + b_val)
-            return result^
+    # Calculate total elements in result
+    var total_elems = 1
+    for i in range(len(result_shape)):
+        total_elems *= result_shape[i]
 
-    # TODO: Implement full broadcasting for different shapes
-    # For now, return zeros for broadcast cases
-    result._fill_zero()
+    # Iterate over all result elements
+    for result_idx in range(total_elems):
+        var idx_a = 0
+        var idx_b = 0
+        var temp_idx = result_idx
+
+        # Compute source indices for a and b using broadcast strides
+        for dim in range(len(result_shape) - 1, -1, -1):
+            var stride_prod = 1
+            for d in range(dim + 1, len(result_shape)):
+                stride_prod *= result_shape[d]
+
+            let coord = temp_idx // stride_prod
+            temp_idx = temp_idx % stride_prod
+
+            idx_a += coord * strides_a[dim]
+            idx_b += coord * strides_b[dim]
+
+        # Perform addition
+        let a_val = a._get_float64(idx_a)
+        let b_val = b._get_float64(idx_b)
+        result._set_float64(result_idx, a_val + b_val)
 
     return result^
 
