@@ -12,6 +12,8 @@ The documentation is organized into subdirectories by type and audience:
 ### Directory Organization
 
 ```text
+```text
+
 docs/
 ├── README.md               # This file
 ├── index.md                # Main documentation landing page
@@ -40,7 +42,8 @@ docs/
     ├── api-reference.md    # Complete API docs
     ├── release-process.md  # Release workflow
     └── ci-cd.md            # CI/CD pipeline
-```
+
+```text
 
 ## Guidelines
 
@@ -89,6 +92,8 @@ docs/
 Documentation can be viewed directly in the repository or built for web deployment:
 
 ```bash
+```bash
+
 # Preview documentation locally (requires mkdocs)
 mkdocs serve
 
@@ -97,7 +102,8 @@ mkdocs build
 
 # Deploy to GitHub Pages
 mkdocs gh-deploy
-```
+
+```text
 
 ## Integration with MkDocs
 

@@ -25,6 +25,8 @@ in combination.
 **Complete workflow using all supporting directories**
 
 ```bash
+```bash
+
 # Step 1: Use tools/ to scaffold paper structure
 python tools/paper-scaffold/scaffold.py \
     --paper resnet \
@@ -37,14 +39,15 @@ cp configs/templates/paper.yaml configs/papers/resnet/model.yaml
 cp configs/templates/experiment.yaml configs/experiments/resnet/baseline.yaml
 
 # Step 3: Implement the paper (in papers/resnet/)
-# ... implement model.mojo, train.mojo ...
+# ... implement model.mojo, train.mojo 
 
 # Step 4: Add benchmarks/ for performance tracking
-# ... create benchmarks/scripts/resnet_benchmark.mojo ...
+# ... create benchmarks/scripts/resnet_benchmark.mojo 
 
 # Step 5: Document in docs/
-# ... update docs/api/papers/resnet.md ...
-```
+# ... update docs/api/papers/resnet.md 
+
+```text
 
 **Directory Interactions**:
 
@@ -59,6 +62,8 @@ cp configs/templates/experiment.yaml configs/experiments/resnet/baseline.yaml
 **Using benchmarks/ and tools/ together**
 
 ```bash
+```bash
+
 # Step 1: Run benchmarks/ to identify bottleneck
 mojo benchmarks/scripts/run_benchmarks.mojo --paper lenet5
 
@@ -66,14 +71,15 @@ mojo benchmarks/scripts/run_benchmarks.mojo --paper lenet5
 mojo tools/benchmarking/runner.mojo --target lenet5 --profile
 
 # Step 3: Implement optimization in papers/lenet5/
-# ... optimize code based on profiling results ...
+# ... optimize code based on profiling results 
 
 # Step 4: Re-run benchmarks/ to verify improvement
 mojo benchmarks/scripts/run_benchmarks.mojo --paper lenet5 --compare
 
 # Step 5: Document in docs/advanced/
-# ... document optimization technique ...
-```
+# ... document optimization technique 
+
+```text
 
 **Directory Interactions**:
 
@@ -88,6 +94,8 @@ mojo benchmarks/scripts/run_benchmarks.mojo --paper lenet5 --compare
 **Using configs/ across all directories**
 
 ```bash
+```bash
+
 # Step 1: Create experiment config
 cp configs/templates/experiment.yaml configs/experiments/lenet5/augmented.yaml
 
@@ -106,7 +114,8 @@ mojo benchmarks/scripts/run_benchmarks.mojo --experiment lenet5/augmented
 
 # Step 5: Document results
 # docs/research/experiments/lenet5_augmentation.md
-```
+
+```text
 
 **Directory Interactions**:
 
@@ -120,6 +129,8 @@ mojo benchmarks/scripts/run_benchmarks.mojo --experiment lenet5/augmented
 **Using agents/ to automate documentation**
 
 ```bash
+```bash
+
 # Step 1: Agent reviews code structure
 # agents/ → analyzes papers/lenet5/
 
@@ -134,7 +145,8 @@ python scripts/validate_links.py docs/
 
 # Step 5: Integrate with docs/
 # Update docs/index.md with new links
-```
+
+```text
 
 **Directory Interactions**:
 
@@ -148,6 +160,8 @@ python scripts/validate_links.py docs/
 **All directories working with CI/CD**
 
 ```yaml
+```yaml
+
 # .github/workflows/paper-validation.yml
 name: Paper Validation
 
@@ -158,29 +172,48 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Use tools/ for setup
+
       - name: Setup environment
+      - name: Setup environment
+
         run: python scripts/setup.py
 
       # Use configs/ for test configuration
+
       - name: Load test config
+      - name: Load test config
+
         run: cp configs/defaults/testing.yaml .test_config.yaml
 
       # Run tests
+
       - name: Run tests
+      - name: Run tests
+
         run: mojo test tests/papers/lenet5/
 
       # Use benchmarks/ for performance check
+
       - name: Run benchmarks
+      - name: Run benchmarks
+
         run: mojo benchmarks/scripts/run_benchmarks.mojo
 
       # Use agents/ for code review
+
       - name: AI code review
+      - name: AI code review
+
         run: python scripts/agents/review_pr.py
 
       # Validate docs/
+
       - name: Check documentation
+      - name: Check documentation
+
         run: python scripts/validate_links.py docs/
-```
+
+```text
 
 **Directory Interactions**:
 
@@ -196,6 +229,8 @@ jobs:
 ### Dependency Map
 
 ```text
+```text
+
 papers/
   ├─> shared/ (uses layers, optimizers)
   ├─> configs/ (loads configurations)
@@ -222,7 +257,8 @@ docs/
 
 agents/
   (coordinates all directories)
-```
+
+```text
 
 ### Foundation Layer
 
@@ -342,6 +378,8 @@ agents/
 Don't hardcode:
 
 ```mojo
+```mojo
+
 # Bad
 var learning_rate = 0.001
 var batch_size = 32
@@ -350,45 +388,57 @@ var batch_size = 32
 var config = load_experiment_config("lenet5", "baseline")
 var learning_rate = config.get_float("optimizer.learning_rate")
 var batch_size = config.get_int("training.batch_size")
-```
+
+```text
 
 **2. Benchmark After Changes**
 
 Always run benchmarks after code changes:
 
 ```bash
+```bash
+
 # After implementing optimization
 mojo benchmarks/scripts/run_benchmarks.mojo --compare
-```
+
+```text
 
 **3. Generate Before Implementing**
 
 Use tools to avoid boilerplate:
 
 ```bash
+```bash
+
 # Generate structure first
 python tools/paper-scaffold/scaffold.py --paper new_paper
 
 # Then implement
 cd papers/new_paper/
-# ... implementation ...
-```
+# ... implementation 
+
+```text
 
 **4. Document as You Go**
 
 Update documentation with code:
 
 ```bash
+```bash
+
 # After implementing feature
 vim papers/new_paper/README.md  # Update paper docs
 vim docs/api/papers/new_paper.md  # Update API docs
-```
+
+```text
 
 **5. Validate Continuously**
 
 Run validation throughout development:
 
 ```bash
+```bash
+
 # Validate structure
 python scripts/validate_structure.py
 
@@ -397,70 +447,95 @@ python scripts/validate_links.py
 
 # Run tests
 mojo test tests/
-```
+
+```text
 
 ### Anti-Patterns to Avoid
 
 **Don't: Bypass Configs**
 
 ```mojo
+```mojo
+
 # Bad - hardcoded parameters
 var lr = 0.001
-```
+
+```text
 
 **Do: Use Config System**
 
 ```mojo
+```mojo
+
 # Good - configurable parameters
 var config = load_paper_config("lenet5", "training")
 var lr = config.get_float("optimizer.learning_rate")
-```
+
+```text
 
 **Don't: Skip Benchmarking**
 
 ```bash
+```bash
+
 # Bad - deploy without measuring
 git commit -m "optimized code" && git push
-```
+
+```text
 
 **Do: Benchmark Before Committing**
 
 ```bash
+```bash
+
 # Good - verify performance
 mojo benchmarks/scripts/run_benchmarks.mojo
 git commit -m "optimized code (15% faster)" && git push
-```
+
+```text
 
 **Don't: Duplicate Boilerplate**
 
 ```bash
+```bash
+
 # Bad - manually create every file
 mkdir papers/new_paper
 touch papers/new_paper/model.mojo
-# ... create 10 more files manually ...
-```
+# ... create 10 more files manually 
+
+```text
 
 **Do: Use Scaffolding Tools**
 
 ```bash
+```bash
+
 # Good - generate structure
 python tools/paper-scaffold/scaffold.py --paper new_paper
-```
+
+```text
 
 **Don't: Document in Isolation**
 
 ```text
+```text
+
 # Bad - docs not linked or indexed
 papers/my_paper/some_notes.txt
-```
+
+```text
 
 **Do: Integrate with Doc System**
 
 ```text
+```text
+
 # Good - proper location and linking
 docs/research/my_paper_analysis.md
 docs/index.md (with link to analysis)
-```
+
+```text
 
 ## Troubleshooting
 
@@ -478,6 +553,8 @@ docs/index.md (with link to analysis)
 **Solution**:
 
 ```bash
+```bash
+
 # Validate config syntax
 python scripts/lint_configs.py configs/experiments/my_experiment.yaml
 
@@ -486,7 +563,8 @@ echo $ML_ODYSSEY_DATA
 
 # Test loading
 mojo -c "from shared.utils.config_loader import load_experiment_config; var c = load_experiment_config('paper', 'exp')"
-```
+
+```text
 
 ### Issue: Benchmark Regression
 
@@ -502,6 +580,8 @@ mojo -c "from shared.utils.config_loader import load_experiment_config; var c = 
 **Solution**:
 
 ```bash
+```bash
+
 # Compare with baseline
 mojo benchmarks/scripts/compare_results.mojo \
   --baseline benchmarks/baselines/baseline_results.json \
@@ -512,7 +592,8 @@ mojo tools/benchmarking/runner.mojo --profile --target problem_area
 
 # Review recent changes
 git diff HEAD~1 papers/affected_paper/
-```
+
+```python
 
 ### Issue: Tool Not Found
 
@@ -528,6 +609,8 @@ git diff HEAD~1 papers/affected_paper/
 **Solution**:
 
 ```bash
+```bash
+
 # Check tool exists
 ls -la tools/paper-scaffold/scaffold.py
 
@@ -539,7 +622,8 @@ export PYTHONPATH="${PYTHONPATH}:/home/user/ml-odyssey/tools"
 
 # Run with explicit path
 python /home/user/ml-odyssey/tools/paper-scaffold/scaffold.py
-```
+
+```text
 
 ### Issue: Documentation Links Broken
 
@@ -555,6 +639,8 @@ python /home/user/ml-odyssey/tools/paper-scaffold/scaffold.py
 **Solution**:
 
 ```bash
+```bash
+
 # Validate all links
 python scripts/validate_links.py docs/
 
@@ -564,7 +650,8 @@ python scripts/validate_links.py docs/path/to/file.md
 # Fix and re-validate
 vim docs/path/to/file.md  # Fix links
 python scripts/validate_links.py docs/path/to/file.md
-```
+
+```text
 
 ## Advanced Integration
 
@@ -573,6 +660,8 @@ python scripts/validate_links.py docs/path/to/file.md
 **Complex Workflow Example: Paper + Optimization + Documentation**
 
 ```bash
+```bash
+
 #!/bin/bash
 # Complete workflow using all 5 supporting directories
 
@@ -595,7 +684,7 @@ cp configs/templates/experiment.yaml configs/experiments/$PAPER/$EXPERIMENT.yaml
 echo "Step 3: Implement the paper in papers/$PAPER/"
 echo "  - Edit papers/$PAPER/model.mojo"
 echo "  - Edit papers/$PAPER/train.mojo"
-# ... manual implementation ...
+# ... manual implementation 
 
 # 4. Benchmarks: Establish baseline
 echo "Step 4: Running initial benchmarks..."
@@ -607,7 +696,7 @@ mojo tools/benchmarking/runner.mojo --target $PAPER --profile
 
 # 6. Papers: Optimize based on profiling
 echo "Step 6: Implement optimizations..."
-# ... manual optimization ...
+# ... manual optimization 
 
 # 7. Benchmarks: Verify improvement
 echo "Step 7: Verifying performance improvement..."
@@ -627,19 +716,25 @@ python scripts/validate_links.py
 mojo test tests/papers/$PAPER/
 
 echo "Workflow complete!"
-```
+
+```text
 
 ### Automated Integration with Agents
 
 **Using agents/ to orchestrate workflows**
 
 ```yaml
+```yaml
+
 # agents/workflows/new-paper.yaml
 name: New Paper Implementation
 description: Complete workflow for implementing a new research paper
 
 steps:
+
   - name: scaffold
+  - name: scaffold
+
     agent: implementation-specialist
     action: scaffold_paper
     inputs:
@@ -647,6 +742,8 @@ steps:
       template: papers/_template/
 
   - name: configure
+  - name: configure
+
     agent: configuration-specialist
     action: create_configs
     inputs:
@@ -654,6 +751,8 @@ steps:
       config_template: configs/templates/
 
   - name: implement
+  - name: implement
+
     agent: senior-implementation-engineer
     action: implement_model
     inputs:
@@ -661,6 +760,8 @@ steps:
       spec: "{{ specification }}"
 
   - name: test
+  - name: test
+
     agent: test-engineer
     action: create_tests
     inputs:
@@ -668,6 +769,8 @@ steps:
       coverage_target: 80
 
   - name: benchmark
+  - name: benchmark
+
     agent: performance-engineer
     action: create_benchmarks
     inputs:
@@ -675,12 +778,15 @@ steps:
       benchmark_path: "benchmarks/scripts/"
 
   - name: document
+  - name: document
+
     agent: documentation-engineer
     action: create_docs
     inputs:
       paper_name: "{{ paper }}"
       docs_path: "docs/api/papers/"
-```
+
+```text
 
 ## Summary
 

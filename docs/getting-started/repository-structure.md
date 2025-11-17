@@ -20,6 +20,8 @@ This guide helps you quickly navigate the ML Odyssey repository and understand w
 **Workflow**:
 
 ```bash
+```bash
+
 # 1. Generate structure
 python tools/paper-scaffold/scaffold.py \
     --paper {name} \
@@ -39,7 +41,8 @@ mojo test tests/papers/{name}/
 
 # 5. Benchmark
 mojo benchmarks/scripts/run_benchmarks.mojo --paper {name}
-```
+
+```text
 
 **See**: `tools/paper-scaffold/README.md` for detailed instructions
 
@@ -67,6 +70,8 @@ mojo benchmarks/scripts/run_benchmarks.mojo --paper {name}
 **Test Locations**:
 
 ```bash
+```bash
+
 # All tests
 mojo test tests/
 
@@ -77,7 +82,8 @@ mojo test tests/foundation/      # Foundation tests
 
 # With coverage
 python tools/testing/coverage.py
-```
+
+```text
 
 **See**: `tests/README.md` for testing guidelines
 
@@ -86,6 +92,8 @@ python tools/testing/coverage.py
 **Benchmarking**:
 
 ```bash
+```bash
+
 # Run all benchmarks
 mojo benchmarks/scripts/run_benchmarks.mojo
 
@@ -96,7 +104,8 @@ mojo benchmarks/scripts/lenet5_benchmark.mojo
 mojo benchmarks/scripts/compare_results.mojo \
     --baseline benchmarks/baselines/baseline_results.json \
     --current benchmarks/results/latest_results.json
-```
+
+```text
 
 **See**: `benchmarks/README.md` for details
 
@@ -105,6 +114,8 @@ mojo benchmarks/scripts/compare_results.mojo \
 ### Top-Level Directories
 
 ```text
+```text
+
 ml-odyssey/
 ├── papers/          # ML paper implementations
 ├── shared/          # Reusable ML components
@@ -119,7 +130,8 @@ ml-odyssey/
 ├── notes/           # Planning and architectural docs
 ├── .claude/         # Claude Code configurations
 └── .github/         # CI/CD workflows
-```
+
+```text
 
 ### Core Directories Explained
 
@@ -135,6 +147,8 @@ ml-odyssey/
 **Example**:
 
 ```text
+```text
+
 papers/
 ├── _template/
 ├── lenet5/
@@ -142,7 +156,8 @@ papers/
 │   ├── train.mojo
 │   ├── tests/
 │   └── README.md
-```
+
+```text
 
 **When to Use**: Implementing or studying paper implementations
 
@@ -174,12 +189,15 @@ papers/
 **Common Tasks**:
 
 ```bash
+```bash
+
 # Run benchmarks
 mojo benchmarks/scripts/run_benchmarks.mojo
 
 # Compare results
 mojo benchmarks/scripts/compare_results.mojo
-```
+
+```text
 
 ##### 2. docs/ - User Documentation
 
@@ -228,12 +246,15 @@ mojo benchmarks/scripts/compare_results.mojo
 **Common Tasks**:
 
 ```bash
+```bash
+
 # Scaffold paper
 python tools/paper-scaffold/scaffold.py --paper {name}
 
 # Generate boilerplate
 python tools/codegen/mojo_boilerplate.py --layer Conv2D
-```
+
+```text
 
 ##### 5. configs/ - Configuration Management
 
@@ -249,12 +270,15 @@ python tools/codegen/mojo_boilerplate.py --layer Conv2D
 **Common Tasks**:
 
 ```bash
+```bash
+
 # Create experiment
 cp configs/templates/experiment.yaml configs/experiments/{paper}/{name}.yaml
 
 # Validate config
 python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
-```
+
+```text
 
 ## Common Workflows
 
@@ -400,13 +424,15 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
    vim docs/advanced/optimization_techniques.md
    ```
 
-## Decision Tree: Where Does This Go?
+## Decision Tree: Where Does This Go
 
 ### Content Type Decision Tree
 
 **Q: What type of content are you adding?**
 
 ```text
+```text
+
 ML Paper Implementation?
 ├─ Yes → papers/{paper_name}/
 └─ No → Continue
@@ -454,7 +480,8 @@ Issue-Specific Notes?
 Architectural Decision?
 ├─ Yes → notes/review/
 └─ No → Ask in team channel!
-```
+
+```text
 
 ## Best Practices
 
@@ -517,24 +544,30 @@ Architectural Decision?
 **Example**:
 
 ```bash
+```bash
+
 # For baseline reproduction
 mojo papers/lenet5/train.mojo --config experiments/lenet5/baseline
 
 # For custom experiment
 mojo papers/lenet5/train.mojo --config experiments/lenet5/my_experiment
-```
+
+```text
 
 ### "My Links Are Broken"
 
 **Solution**: Run link validation
 
 ```bash
+```bash
+
 # Check all docs
 python scripts/validate_links.py docs/
 
 # Check specific file
 python scripts/validate_links.py docs/path/to/file.md
-```
+
+```text
 
 **Common Issues**:
 
@@ -547,18 +580,23 @@ python scripts/validate_links.py docs/path/to/file.md
 **Solution**: Run structure validator
 
 ```bash
+```bash
+
 # Check entire repository
 python scripts/validate_structure.py
 
 # Check what's missing
 python scripts/validate_structure.py --verbose
-```
+
+```text
 
 ## Quick Reference
 
 ### Essential Commands
 
 ```bash
+```bash
+
 # Setup environment
 python scripts/setup.py
 
@@ -577,7 +615,8 @@ mojo benchmarks/scripts/run_benchmarks.mojo
 
 # Format code
 pre-commit run --all-files
-```
+
+```text
 
 ### Essential Files
 
