@@ -3,7 +3,7 @@
 Implements linear algebra operations like matrix multiplication and transpose.
 """
 
-from .extensor import ExTensor
+from extensor.extensor import ExTensor
 
 
 fn matmul(a: ExTensor, b: ExTensor) raises -> ExTensor:
@@ -108,29 +108,29 @@ fn matmul(a: ExTensor, b: ExTensor) raises -> ExTensor:
     return result^
 
 
-fn transpose(tensor: ExTensor, axes: DynamicVector[Int] | None = None) raises -> ExTensor:
+fn transpose(tensor: ExTensor) raises -> ExTensor:
     """Transpose tensor dimensions.
 
     Args:
         tensor: Input tensor
-        axes: Permutation of dimensions (default: reverse all axes)
 
     Returns:
-        A new tensor (view) with transposed dimensions
+        A new tensor (view) with transposed dimensions (reverses all axes)
 
     Examples:
         var t = zeros(DynamicVector[Int](3, 4, 5), DType.float32)
         var t_T = transpose(t)  # Shape (5, 4, 3) - reverse all axes
 
-        var axes = DynamicVector[Int](2, 0, 1)
-        var t_perm = transpose(t, axes)  # Shape (5, 3, 4) - custom permutation
+    Note:
+        LIMITATION: Currently only supports reversing all axes.
+        TODO: Add support for custom axis permutation via axes parameter.
     """
     # Implement transpose
     # For now, copy data in transposed order (TODO: zero-copy view with strides)
 
     var result_shape = DynamicVector[Int]()
 
-    # If no axes provided, reverse all dimensions
+    # Reverse all dimensions
     for i in range(tensor.dim() - 1, -1, -1):
         result_shape.push_back(tensor.shape()[i])
 
