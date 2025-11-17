@@ -27,13 +27,13 @@ training:
   device: "cuda"
   num_gpus: 4
   distributed_backend: "nccl"
-  
+
   # Per-GPU batch size
   batch_size: 32  # Total batch = 32 * 4 = 128
-  
+
   # Gradient synchronization
   gradient_sync_interval: 1
-  
+
   # Mixed precision for efficiency
   mixed_precision:
     enabled: true
@@ -58,19 +58,19 @@ Configure training across multiple machines.
 distributed:
   enabled: true
   backend: "nccl"  # nccl for GPU, gloo for CPU
-  
+
   # Master node
   master_addr: "${MASTER_ADDR:-localhost}"
   master_port: "${MASTER_PORT:-29500}"
-  
+
   # World size and rank set by launcher
   world_size: "${WORLD_SIZE:-1}"
   rank: "${RANK:-0}"
-  
+
   # Communication settings
   init_method: "env://"
   timeout_seconds: 1800
-  
+
   # Gradient compression
   compression:
     enabled: true
@@ -81,7 +81,7 @@ training:
   # Effective batch size = batch_size * world_size
   batch_size: 64
   gradient_accumulation_steps: 1
-  
+
   # Checkpoint only from rank 0
   save_checkpoints: "${RANK:-0} == 0"
 ```
@@ -97,23 +97,23 @@ sweep:
   metric:
     name: "validation_loss"
     goal: "minimize"
-  
+
   # Parameter ranges
   parameters:
     learning_rate:
       values: [0.001, 0.01, 0.1]
-    
+
     batch_size:
       values: [16, 32, 64]
-    
+
     dropout:
       min: 0.1
       max: 0.5
       distribution: "uniform"
-    
+
     optimizer:
       values: ["sgd", "adam", "rmsprop"]
-    
+
     weight_decay:
       values: [0.0, 0.0001, 0.001]
 
@@ -141,18 +141,18 @@ variants:
       architecture: "baseline"
       layers: [784, 128, 64, 10]
       activation: "relu"
-    
+
     optimizer:
       name: "sgd"
       learning_rate: 0.01
-  
+
   treatment:
     model:
       architecture: "improved"
       layers: [784, 256, 128, 64, 10]
       activation: "gelu"
       dropout: 0.3
-    
+
     optimizer:
       name: "adam"
       learning_rate: 0.001
@@ -180,7 +180,7 @@ Define a custom model architecture.
 # configs/experiments/custom_arch.yaml
 model:
   architecture: "custom"
-  
+
   # Layer definitions
   layers:
     - type: "conv2d"
@@ -188,28 +188,28 @@ model:
       kernel_size: 3
       activation: "relu"
       padding: "same"
-    
+
     - type: "maxpool2d"
       pool_size: 2
       strides: 2
-    
+
     - type: "conv2d"
       filters: 64
       kernel_size: 3
       activation: "relu"
       padding: "same"
-    
+
     - type: "global_avgpool2d"
-    
+
     - type: "dense"
       units: 128
       activation: "relu"
       dropout: 0.5
-    
+
     - type: "dense"
       units: 10
       activation: "softmax"
-  
+
   # Weight initialization
   init:
     method: "he_normal"  # For ReLU
@@ -226,7 +226,7 @@ pretrained:
   model_path: "${PRETRAINED_MODEL_PATH}"
   freeze_layers: true
   freeze_until: "layer_10"  # Freeze up to this layer
-  
+
   # Fine-tuning schedule
   fine_tuning:
     enabled: true
@@ -264,17 +264,17 @@ mixed_precision:
   enabled: true
   backend: "apex"  # or "native" for PyTorch AMP
   opt_level: "O1"
-  
+
   # O0: FP32 (baseline)
   # O1: Mixed Precision (recommended)
   # O2: "Almost FP16" Mixed Precision
   # O3: FP16
-  
+
   # Loss scaling
   loss_scale: "dynamic"  # or fixed value like 128
   initial_loss_scale: 65536
   loss_scale_window: 2000
-  
+
   # Keep specific layers in FP32
   fp32_layers:
     - "batch_norm"
@@ -283,7 +283,7 @@ mixed_precision:
 # Adjust batch size (can use larger with FP16)
 training:
   batch_size: 256  # 2x normal batch size
-  
+
   # Gradient clipping recommended
   gradient_clip_norm: 1.0
 ```
@@ -297,21 +297,21 @@ Simulate large batches on limited memory.
 training:
   # Micro batch (fits in memory)
   batch_size: 8
-  
+
   # Accumulation steps
   gradient_accumulation_steps: 16
   # Effective batch size = 8 * 16 = 128
-  
+
   # Only step optimizer after accumulation
   optimizer_step_interval: 16
-  
+
   # Adjust learning rate for effective batch size
   learning_rate: 0.004  # 4x base LR
 
 memory_optimization:
   gradient_checkpointing: true
   clear_gradients: true
-  
+
   # Optionally offload to CPU
   offload:
     optimizer_state: false
@@ -328,14 +328,14 @@ early_stopping:
   enabled: true
   monitor: "validation_loss"
   mode: "min"  # min for loss, max for accuracy
-  
+
   # Patience settings
   patience: 10  # Epochs to wait
   min_delta: 0.0001  # Minimum change
-  
+
   # Restore best weights
   restore_best_weights: true
-  
+
   # Learning rate reduction on plateau
   reduce_lr_on_plateau:
     enabled: true
@@ -358,26 +358,26 @@ Configure detailed logging and monitoring.
 # configs/experiments/custom_logging.yaml
 logging:
   level: "INFO"
-  
+
   # Console logging
   console:
     enabled: true
     interval: 10  # Log every N batches
-    
+
   # File logging
   file:
     enabled: true
     path: "${LOG_DIR}/training.log"
     max_size_mb: 100
     backup_count: 5
-  
+
   # TensorBoard
   tensorboard:
     enabled: true
     log_dir: "${LOG_DIR}/tensorboard"
     histogram_freq: 10  # Weight histograms
     profile_batch: [100, 110]  # Profile batches
-    
+
   # Weights & Biases
   wandb:
     enabled: true
@@ -385,7 +385,7 @@ logging:
     entity: "${WANDB_ENTITY}"
     tags: ["experiment", "baseline"]
     config_exclude: ["wandb", "logging"]
-  
+
   # Custom metrics
   custom_metrics:
     - name: "gradient_norm"
@@ -401,7 +401,7 @@ metrics:
     - "loss"
     - "accuracy"
     - "learning_rate"
-  
+
   validation:
     - "loss"
     - "accuracy"
@@ -423,33 +423,33 @@ data_augmentation:
       enabled: true
       size: [28, 28]
       padding: 4
-    
+
     random_horizontal_flip:
       enabled: true
       probability: 0.5
-    
+
     random_rotation:
       enabled: true
       degrees: 15
-    
+
     color_jitter:
       enabled: true
       brightness: 0.2
       contrast: 0.2
       saturation: 0.2
       hue: 0.1
-    
+
     random_erasing:
       enabled: true
       probability: 0.5
       scale: [0.02, 0.33]
       ratio: [0.3, 3.3]
-  
+
   # MixUp augmentation
   mixup:
     enabled: true
     alpha: 0.2
-  
+
   # CutMix augmentation
   cutmix:
     enabled: true
@@ -475,32 +475,32 @@ lr_scheduler:
     enabled: false
     step_size: 30
     gamma: 0.1
-  
+
   # Exponential decay
   exponential:
     enabled: false
     gamma: 0.95
-  
+
   # Cosine annealing
   cosine:
     enabled: true
     T_max: 100  # Maximum epochs
     eta_min: 0.00001
-  
+
   # Cosine annealing with warm restarts
   cosine_warm_restarts:
     enabled: false
     T_0: 10  # Initial restart interval
     T_mult: 2  # Interval multiplier
     eta_min: 0.00001
-  
+
   # Linear warmup
   warmup:
     enabled: true
     warmup_epochs: 5
     warmup_method: "linear"  # linear or exponential
     warmup_factor: 0.1
-  
+
   # One cycle policy
   one_cycle:
     enabled: false
@@ -508,7 +508,7 @@ lr_scheduler:
     epochs: 100
     pct_start: 0.3
     anneal_strategy: "cos"
-    
+
   # Custom schedule
   custom:
     enabled: false
@@ -529,7 +529,7 @@ training:
   num_gpus: 2
   batch_size: 16
   gradient_accumulation_steps: 4
-  
+
 mixed_precision:
   enabled: true
   opt_level: "O1"

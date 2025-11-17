@@ -84,7 +84,7 @@ from tools.test_utils import generate_batch, generate_image
 fn test_model():
     // Generate random batch
     let batch = generate_batch(shape=(32, 3, 28, 28))
-    
+
     // Generate specific pattern
     let zeros = generate_image(shape=(1, 28, 28), fill=0.0)
     let ones = generate_image(shape=(1, 28, 28), fill=1.0)
