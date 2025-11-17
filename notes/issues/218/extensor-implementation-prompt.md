@@ -20,31 +20,20 @@ Re-interpret GitHub issues #218-222 (originally scoped for basic arithmetic oper
 
 ## Technical Requirements
 
-### 1. Dual Type System (Static + Dynamic)
+### 1. Dynamic Tensor System
 
-Implement both static and dynamic tensor variants using Mojo's parametric type system:
+Implement ExTensor as a runtime-flexible tensor class:
 
-**Dynamic Tensor (ExTensor):**
-- Shape determined at runtime (default variant)
+**ExTensor (Dynamic Tensor):**
+- Shape determined at runtime
 - Flexible for research and experimentation
-- Runtime shape validation
+- Runtime shape validation with clear error messages
 - Support for dynamic reshaping and shape inference
 - Compatible with Python-style workflow
-- **Primary tensor type** for most use cases
-
-**Static Tensor (ExStaticTensor):**
-- Shape known at compile-time via parametric types (e.g., `ExStaticTensor[DType.float32, 3, 224, 224]`)
-- Optimized code paths with compile-time bounds checking
-- Zero runtime overhead for shape validation
-- SIMD vectorization opportunities
-- Memory layout determined at compile-time
-- **Performance-optimized variant** for when shapes are known ahead of time
-
-**Relationship between variants:**
-- Both should share a common trait interface (e.g., `TensorOps` trait)
-- ExTensor is the default for ease of use
-- ExStaticTensor provides opt-in optimization when shapes are known
-- Seamless conversion between static and dynamic when needed
+- Supports arbitrary dimensions (0D scalars to N-D tensors)
+- Generic over data type via Mojo's DType system
+- Efficient SIMD-optimized operations
+- Memory-safe via Mojo's ownership system
 
 ### 2. Tensor Calculus Foundation
 
@@ -297,8 +286,9 @@ Implement NumPy-style broadcasting rules:
 ### 8. Error Handling and Safety
 
 **Mojo's safety-first approach:**
-- Compile-time shape validation for static tensors
-- Runtime shape validation for dynamic tensors
+- Runtime shape validation with clear error messages
+- Type safety via DType parametric types
+- Memory safety via ownership system (owned, borrowed, inout)
 - Clear error messages for dimension mismatches
 - IEEE 754 semantics for floating-point edge cases:
   - `x / 0.0` where `x > 0` → `+inf`
@@ -316,21 +306,21 @@ Implement NumPy-style broadcasting rules:
 Follow the 5-phase development workflow:
 
 ### Phase 1: Plan (Issue #218)
-**Objective:** Design ExTensors architecture and API specification
+**Objective:** Design ExTensor architecture and API specification
 
 **Deliverables:**
 1. Complete API specification document
-2. Static vs Dynamic design decisions with rationale
-3. Memory layout specification
-4. Broadcasting algorithm specification
-5. Data type support matrix
-6. Performance optimization strategy
-7. Error handling specification
+2. Memory layout specification
+3. Broadcasting algorithm specification
+4. Data type support matrix
+5. Performance optimization strategy
+6. Error handling specification
+7. Shape representation and ownership model
 
 **Success criteria:**
 - Unambiguous API contracts for all operations
-- Clear distinction between static and dynamic paths
 - Comprehensive edge case documentation
+- Performance optimization strategy defined
 - Design ready for Test and Implementation phases
 
 ### Phase 2: Test (Issue #219) - Parallel after Plan
@@ -344,21 +334,21 @@ Follow the 5-phase development workflow:
 5. **Shape manipulation tests:** Reshape, squeeze, expand, concatenate
 6. **Indexing tests:** Slicing, advanced indexing, assignment
 7. **Broadcasting tests:** All broadcasting rule combinations
-8. **Static vs Dynamic tests:** Verify optimization paths
-9. **Edge case tests:** Empty tensors, scalars, overflow, NaN, inf
-10. **Type tests:** All supported dtypes
+8. **Edge case tests:** Empty tensors, scalars, overflow, NaN, inf
+9. **Type tests:** All supported dtypes
+10. **Performance tests:** SIMD operation benchmarks
 
 **Success criteria:**
 - 100% coverage of API surface
-- Tests pass for both static and dynamic variants
-- Performance benchmarks for static optimization benefit
+- All tests pass with clear error messages
+- Performance benchmarks demonstrate SIMD optimization
 
 ### Phase 3: Implementation (Issue #220) - Parallel after Plan
-**Objective:** Implement ExTensors following TDD
+**Objective:** Implement ExTensor following TDD
 
 **Implementation order:**
-1. Core tensor struct definitions (static and dynamic)
-2. Memory allocation and layout
+1. Core ExTensor struct definition
+2. Memory allocation and layout (row-major, strided)
 3. Creation operations
 4. Basic arithmetic (no broadcasting)
 5. Broadcasting infrastructure
@@ -372,9 +362,9 @@ Follow the 5-phase development workflow:
 
 **Success criteria:**
 - All tests pass
-- Static tensors show measurable performance improvement
-- Memory safety verified
 - SIMD optimizations applied where possible
+- Memory safety verified
+- Performance meets benchmark targets
 
 ### Phase 4: Package (Issue #221) - Parallel after Plan
 **Objective:** Package ExTensors for distribution and reuse
@@ -464,7 +454,7 @@ Please provide your deliverables in this structure:
 ```xml
 <implementation>
   <core_types>
-    <!-- ExTensor (dynamic) and ExStaticTensor (static) structs -->
+    <!-- ExTensor struct with DType parametrization -->
   </core_types>
 
   <operations>
@@ -517,19 +507,19 @@ Please provide your deliverables in this structure:
 
 ### MUST Requirements
 1. ✅ Use Mojo language exclusively (no Python for core tensor implementation)
-2. ✅ Support both static and dynamic tensor variants
-3. ✅ Implement all operations from "Minimal Complete Tensor API" section
-4. ✅ Follow NumPy-style broadcasting rules exactly
-5. ✅ Use IEEE 754 semantics for floating-point edge cases
-6. ✅ Provide comprehensive test coverage (>95%)
-7. ✅ Follow ML Odyssey coding standards (KISS, YAGNI, TDD, DRY, SOLID)
+2. ✅ Implement all operations from "Complete Tensor API" section
+3. ✅ Follow NumPy-style broadcasting rules exactly
+4. ✅ Use IEEE 754 semantics for floating-point edge cases
+5. ✅ Provide comprehensive test coverage (>95%)
+6. ✅ Follow ML Odyssey coding standards (KISS, YAGNI, TDD, DRY, SOLID)
+7. ✅ Memory safety via Mojo's ownership system
 
 ### SHOULD Requirements
 1. ✅ Use SIMD optimization for element-wise operations
-2. ✅ Optimize static tensor paths at compile-time
-3. ✅ Provide clear, actionable error messages
-4. ✅ Include docstrings for all public APIs
-5. ✅ Benchmark static vs dynamic performance differences
+2. ✅ Provide clear, actionable error messages
+3. ✅ Include docstrings for all public APIs
+4. ✅ Benchmark SIMD operation performance
+5. ✅ Use strided memory for zero-copy views where possible
 
 ### COULD Requirements (Future Extensions)
 1. ⏸️ Lazy evaluation and operation fusion
@@ -542,25 +532,25 @@ Please provide your deliverables in this structure:
 ### MUST NOT
 1. ❌ Sacrifice type safety for convenience
 2. ❌ Implement implicit type coercion
-3. ❌ Use dynamic dispatch for static tensor operations
-4. ❌ Copy NumPy/PyTorch code (implement from scratch in Mojo)
-5. ❌ Add features beyond the minimal API (follow YAGNI)
+3. ❌ Copy NumPy/PyTorch code (implement from scratch in Mojo)
+4. ❌ Add features beyond the complete API (follow YAGNI)
+5. ❌ Sacrifice memory safety for performance
 
 ## Success Criteria
 
 ### Functional Requirements
-- [ ] All operations from "Minimal Complete Tensor API" implemented
-- [ ] Both static and dynamic variants work correctly
+- [ ] All operations from "Complete Tensor API" implemented
 - [ ] Broadcasting works for all operation types
 - [ ] All data types supported correctly
 - [ ] Arbitrary dimensions supported (0D to 16D)
 - [ ] All tests pass (>95% coverage)
+- [ ] Memory safety verified (no leaks, no use-after-free)
 
 ### Performance Requirements
-- [ ] Static tensors show ≥2x speedup vs dynamic for fixed-shape workloads
 - [ ] SIMD operations achieve expected vectorization speedup
 - [ ] Memory layout enables cache-efficient access
 - [ ] No unnecessary allocations in hot paths
+- [ ] Zero-copy views for transpose, reshape, slice operations
 
 ### Quality Requirements
 - [ ] Code passes `mojo format` and pre-commit hooks
@@ -604,21 +594,46 @@ Please provide your deliverables in this structure:
 
 ## Questions to Address in Your Design
 
-1. **Static vs Dynamic API:** Should users explicitly choose `ExStaticTensor` vs `ExTensor`, or should there be a unified API that automatically selects the variant based on compile-time information?
+1. **Shape Representation:** How should shapes be represented at runtime?
+   - Dynamic array/list? Fixed-size buffer with capacity? SIMD-optimized storage?
+   - What's the maximum number of dimensions to support?
 
-2. **Shape Representation:** How should shapes be represented for static tensors (parametric types? variadic parameters?) vs dynamic tensors (runtime array/list?)?
+2. **Broadcasting Implementation:** Should broadcasting be:
+   - Separate function/trait that operations call?
+   - Integrated into each operation?
+   - Helper utilities that compute output shapes?
 
-3. **Broadcasting Implementation:** Should broadcasting be implemented as a separate function/trait, or integrated into each operation?
+3. **Memory Ownership:** What ownership model should tensor operations use?
+   - Return new owned tensor (safe but allocates)?
+   - Support in-place mutations via `inout` parameters?
+   - Provide both owned and in-place variants?
+   - How to handle borrowed tensors for read-only operations?
 
-4. **Memory Ownership:** What ownership model (owned, borrowed, inout) should tensor operations use? How does this affect API ergonomics?
+4. **Zero-Copy Operations:** Which operations can be zero-copy?
+   - Zero-copy: transpose, reshape, slice (create views with different strides)
+   - Requires allocation: arithmetic, matmul, reductions
+   - How to indicate view vs copy in API? Explicit method names or flags?
 
-5. **Zero-Copy Operations:** Which operations can be zero-copy (transpose, reshape, slice) vs require allocation (arithmetic, matmul, reductions)?
+5. **Trait Design:** What traits should ExTensor implement?
+   - Single `Tensor` trait with all operations?
+   - Separate `TensorOps`, `TensorShape`, `TensorDType` traits?
+   - Standard Mojo traits (Stringable, Representable, etc.)?
 
-6. **Trait Design:** What traits should static and dynamic tensors implement? Should there be a common `Tensor` trait?
+6. **Error Handling:** How to provide clear error messages?
+   - Custom error types or strings?
+   - Validation at operation entry points?
+   - Debug vs release mode validation?
 
-7. **Error Strategy:** Compile-time errors for static tensors vs runtime errors for dynamic tensors - how to make this ergonomic?
+7. **SIMD Vectorization:** Where and how to apply SIMD?
+   - Element-wise ops (add, mul, div, etc.)
+   - Reduction ops (sum, mean, max, min)
+   - What SIMD width? Fixed or parametric?
+   - How to handle non-aligned memory?
 
-8. **Testing Strategy:** How to avoid duplicating tests for static and dynamic variants? Parametric testing approach?
+8. **Stride Calculation:** How to handle strided memory?
+   - Row-major (C-order) vs column-major (Fortran-order)?
+   - Stride storage: separate array or computed on-demand?
+   - Contiguous checking: flag or computed property?
 
 ---
 

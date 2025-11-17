@@ -6,7 +6,7 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 
 ## Deliverables
 
-- **ExStaticTensor specification** - Compile-time optimized tensor with static shapes
+- **ExTensor specification** - Compile-time optimized tensor with static shapes
 - **ExTensor specification** - Runtime flexible tensor with dynamic shapes
 - **Complete API specification** - 40+ operations including:
   - Creation operations (zeros, ones, full, arange, from_array)
@@ -25,7 +25,7 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 
 ## Success Criteria
 
-- [ ] Static vs Dynamic tensor architecture clearly specified
+- [ ] ExTensor architecture clearly specified
 - [ ] All 40+ operations from Array API Standard 2024 specified
 - [ ] Broadcasting algorithm documented with examples
 - [ ] Memory layout and ownership model defined
@@ -42,15 +42,15 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 
 ### 1. Dual Type System (Static + Dynamic)
 
-**Decision**: Implement both ExStaticTensor and ExTensor variants sharing a common trait interface.
+**Decision**: Implement both ExTensor (dynamic tensor) sharing a common trait interface.
 
 **Rationale**:
 
-- Static tensors enable compile-time shape validation and SIMD optimization
-- Dynamic tensors provide runtime flexibility for research and experimentation
-- Common trait ensures API compatibility between variants
+- ExTensor uses runtime shape validation with SIMD optimization
+- ExTensor provides runtime flexibility for research and experimentation
+- Trait-based design for extensibility
 - Mojo's parametric types allow compile-time shape specification without runtime overhead
-- Users can opt into performance when shapes are known, default to flexibility otherwise
+- Runtime flexibility with SIMD-optimized performance
 
 **Trade-offs**:
 
@@ -301,7 +301,7 @@ These questions must be answered during the planning phase:
 4. **Broadcasting Implementation**: Should broadcasting be:
    - Separate function/trait that operations call?
    - Integrated into each operation?
-   - Compile-time for static tensors, runtime for dynamic?
+   - Compile-time for ExTensor operations?
 
 5. **Memory Ownership in Operations**: What ownership model for tensor operations?
    - Return new owned tensor (safe but allocates)?

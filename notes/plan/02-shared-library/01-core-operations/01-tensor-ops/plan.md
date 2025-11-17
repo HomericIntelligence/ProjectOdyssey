@@ -42,7 +42,7 @@ Note: The original child plans (01-basic-arithmetic, 02-matrix-ops, 03-reduction
 ## Steps
 
 1. **Plan Phase (Issue #218):**
-   - Design static vs dynamic tensor architecture
+   - Design ExTensor architecture
    - Specify complete API surface (40+ operations)
    - Document broadcasting algorithm
    - Define memory layout and ownership model
@@ -80,13 +80,13 @@ Note: The original child plans (01-basic-arithmetic, 02-matrix-ops, 03-reduction
 
 ## Success Criteria
 
-- [ ] Static and dynamic tensor variants both implemented
+- [ ] ExTensor implemented with full API support
 - [ ] All 40+ operations from Array API Standard 2024 working
 - [ ] Broadcasting works correctly for all compatible operations
 - [ ] All data types (Float16/32/64, Int8/16/32/64, UInt8/16/32/64, Bool) supported
 - [ ] Arbitrary dimensions (0D to 16D) supported
 - [ ] Test coverage >95%
-- [ ] Static tensors show ≥2x performance improvement vs dynamic
+- [ ] SIMD optimizations provide performance benefits
 - [ ] SIMD optimizations applied and verified
 - [ ] Comprehensive documentation (API ref, tutorials, examples)
 - [ ] Package builds successfully
@@ -96,7 +96,7 @@ Note: The original child plans (01-basic-arithmetic, 02-matrix-ops, 03-reduction
 
 **Key Design Principles:**
 
-- **Dual type system:** ExStaticTensor (compile-time optimized) and ExTensor (runtime flexible) sharing common trait interface
+- **Dual type system:** ExTensor (runtime-flexible dynamic tensor) sharing common trait interface
 - **Tensor calculus foundation:** Operations preserve mathematical semantics (rank preservation, proper broadcasting, contraction)
 - **Array API Standard 2024 compliance:** Follow latest standard for ecosystem compatibility
 - **YAGNI approach:** Implement minimal complete API, defer advanced features (autograd, GPU, einsum)
