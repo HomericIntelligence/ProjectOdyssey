@@ -461,4 +461,5 @@ fn profile_memory():
 - Profiling for performance
 - Monitoring for memory leaks
 
-**Remember**: Most ML bugs are in implementation details (shapes, gradients) rather than model architecture. Systematic debugging catches these early.
+**Remember**: Most ML bugs are in implementation details (shapes, gradients) rather than model
+architecture. Systematic debugging catches these early.
