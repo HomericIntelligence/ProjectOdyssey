@@ -35,13 +35,24 @@ fn add(a: ExTensor, b: ExTensor) raises -> ExTensor:
     # Create result tensor
     var result = ExTensor(result_shape, a.dtype())
 
-    # Compute broadcast strides
-    let strides_a = compute_broadcast_strides(a.shape(), result_shape)
-    let strides_b = compute_broadcast_strides(b.shape(), result_shape)
+    # Simple case: same shape (no broadcasting needed)
+    if len(a.shape()) == len(b.shape()):
+        var same_shape = True
+        for i in range(len(a.shape())):
+            if a.shape()[i] != b.shape()[i]:
+                same_shape = False
+                break
 
-    # Perform element-wise addition
-    # TODO: Implement efficient broadcasting iteration and add operation
-    # For now, this is a placeholder
+        if same_shape:
+            # Direct element-wise addition (no broadcasting)
+            for i in range(a.numel()):
+                let a_val = a._get_float64(i)
+                let b_val = b._get_float64(i)
+                result._set_float64(i, a_val + b_val)
+            return result^
+
+    # TODO: Implement full broadcasting for different shapes
+    # For now, return zeros for broadcast cases
     result._fill_zero()
 
     return result^
@@ -71,9 +82,22 @@ fn subtract(a: ExTensor, b: ExTensor) raises -> ExTensor:
     let result_shape = broadcast_shapes(a.shape(), b.shape())
     var result = ExTensor(result_shape, a.dtype())
 
-    # TODO: Implement subtraction
-    result._fill_zero()
+    # Simple case: same shape (no broadcasting)
+    if len(a.shape()) == len(b.shape()):
+        var same_shape = True
+        for i in range(len(a.shape())):
+            if a.shape()[i] != b.shape()[i]:
+                same_shape = False
+                break
 
+        if same_shape:
+            for i in range(a.numel()):
+                let a_val = a._get_float64(i)
+                let b_val = b._get_float64(i)
+                result._set_float64(i, a_val - b_val)
+            return result^
+
+    result._fill_zero()
     return result^
 
 
@@ -101,9 +125,22 @@ fn multiply(a: ExTensor, b: ExTensor) raises -> ExTensor:
     let result_shape = broadcast_shapes(a.shape(), b.shape())
     var result = ExTensor(result_shape, a.dtype())
 
-    # TODO: Implement multiplication
-    result._fill_zero()
+    # Simple case: same shape (no broadcasting)
+    if len(a.shape()) == len(b.shape()):
+        var same_shape = True
+        for i in range(len(a.shape())):
+            if a.shape()[i] != b.shape()[i]:
+                same_shape = False
+                break
 
+        if same_shape:
+            for i in range(a.numel()):
+                let a_val = a._get_float64(i)
+                let b_val = b._get_float64(i)
+                result._set_float64(i, a_val * b_val)
+            return result^
+
+    result._fill_zero()
     return result^
 
 

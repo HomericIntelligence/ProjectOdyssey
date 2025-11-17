@@ -224,6 +224,55 @@ struct ExTensor:
         for i in range(self._numel):
             self._set_int64(i, value)
 
+    # ========================================================================
+    # Dunder Methods (Operator Overloading)
+    # ========================================================================
+
+    fn __add__(self, other: ExTensor) raises -> ExTensor:
+        """Element-wise addition: a + b"""
+        from .arithmetic import add
+        return add(self, other)
+
+    fn __sub__(self, other: ExTensor) raises -> ExTensor:
+        """Element-wise subtraction: a - b"""
+        from .arithmetic import subtract
+        return subtract(self, other)
+
+    fn __mul__(self, other: ExTensor) raises -> ExTensor:
+        """Element-wise multiplication: a * b"""
+        from .arithmetic import multiply
+        return multiply(self, other)
+
+    fn __truediv__(self, other: ExTensor) raises -> ExTensor:
+        """Element-wise division: a / b"""
+        from .arithmetic import divide
+        return divide(self, other)
+
+    fn __floordiv__(self, other: ExTensor) raises -> ExTensor:
+        """Element-wise floor division: a // b"""
+        from .arithmetic import floor_divide
+        return floor_divide(self, other)
+
+    fn __mod__(self, other: ExTensor) raises -> ExTensor:
+        """Element-wise modulo: a % b"""
+        from .arithmetic import modulo
+        return modulo(self, other)
+
+    fn __pow__(self, other: ExTensor) raises -> ExTensor:
+        """Element-wise power: a ** b"""
+        from .arithmetic import power
+        return power(self, other)
+
+    fn __matmul__(self, other: ExTensor) raises -> ExTensor:
+        """Matrix multiplication: a @ b"""
+        from .matrix import matmul
+        return matmul(self, other)
+
+    # TODO: Add reflected operators (__radd__, __rsub__, etc.) for operations like: 2 + tensor
+    # TODO: Add in-place operators (__iadd__, __isub__, etc.) for operations like: tensor += 2
+    # TODO: Add comparison operators (__eq__, __lt__, etc.)
+    # TODO: Add unary operators (__neg__, __pos__, __abs__, __invert__)
+
 
 # ============================================================================
 # Creation Operations
