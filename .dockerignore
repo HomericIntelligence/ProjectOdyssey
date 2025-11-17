@@ -1,0 +1,86 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+.github
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Python cache and build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# Pixi cache (will be recreated in container)
+.pixi/
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+
+# Logs and temp files
+logs/
+*.log
+tmp/
+temp/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation build
+docs/_build/
+docs/.doctrees/
+site/
+
+# Notes and planning (not needed in container)
+notes/
+agents/
+
+# Benchmarks and datasets (large files)
+benchmarks/
+datasets/
+
+# Pre-commit cache
+.pre-commit-config.yaml.swp
+
+# OS files
+.DS_Store
+Thumbs.db
