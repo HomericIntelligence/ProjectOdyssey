@@ -12,10 +12,13 @@ This guide explains how papers/ and shared/ directories work together.
 Papers import from shared:
 
 ```mojo
+```mojo
+
 from shared.core import Layer, Module
 from shared.training import Optimizer
 from shared.data import Dataset
-```
+
+```text
 
 ## Quick Start
 

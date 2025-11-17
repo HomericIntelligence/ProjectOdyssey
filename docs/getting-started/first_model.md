@@ -24,16 +24,21 @@ Before starting, ensure you have:
 Create a new directory for your first model:
 
 ```bash
+```bash
+
 cd ml-odyssey
 mkdir -p examples/first_model
 cd examples/first_model
-```
+
+```text
 
 ## Step 2: Prepare the Data
 
 Create `prepare_data.mojo` to load and preprocess the MNIST dataset:
 
 ```mojo
+```mojo
+
 from shared.data import TensorDataset, BatchLoader
 from shared.utils import download_mnist, normalize_images
 
@@ -61,7 +66,8 @@ fn prepare_mnist() raises -> (TensorDataset, TensorDataset):
     print("Data loaded: ", test_data.size(), " test examples")
 
     return train_data, test_data
-```
+
+```text
 
 ## Step 3: Define the Model
 
@@ -72,6 +78,8 @@ See `examples/getting-started/first_model_model.mojo`
 Key architecture:
 
 ```mojo
+```mojo
+
 # 3-layer network: 784 -> 128 -> 64 -> 10
 self.model = Sequential([
     Layer("linear", input_size=784, output_size=128),
@@ -81,7 +89,8 @@ self.model = Sequential([
     Layer("linear", input_size=64, output_size=10),
     Softmax(),
 ])
-```
+
+```text
 
 Full example: `examples/getting-started/first_model_model.mojo`
 
@@ -94,6 +103,8 @@ See `examples/getting-started/first_model_train.mojo`
 Key training steps:
 
 ```mojo
+```mojo
+
 # Configure training
 var optimizer = SGD(learning_rate=0.01, momentum=0.9)
 var loss_fn = CrossEntropyLoss()
@@ -105,7 +116,8 @@ trainer.add_callback(ModelCheckpoint(filepath="best_model.mojo", save_best_only=
 
 # Train
 trainer.train(train_loader, val_loader, epochs=10, verbose=True)
-```
+
+```text
 
 Full example: `examples/getting-started/first_model_train.mojo`
 
@@ -114,12 +126,17 @@ Full example: `examples/getting-started/first_model_train.mojo`
 Execute your training script:
 
 ```bash
+```bash
+
 pixi run mojo run train.mojo
-```
+
+```text
 
 You should see output like:
 
 ```text
+```text
+
 ==================================================
 Training Digit Classifier
 ==================================================
@@ -149,13 +166,16 @@ Validation: loss=0.189, accuracy=0.951
 Model checkpoint saved: best_model.mojo
 
 Training complete!
-```
+
+```text
 
 ## Step 6: Evaluate the Model
 
 Create `evaluate.mojo` to test your trained model:
 
 ```mojo
+```mojo
+
 from shared.training import evaluate_model
 from shared.utils import load_model, plot_confusion_matrix
 from prepare_data import prepare_mnist
@@ -189,17 +209,23 @@ fn main() raises:
     )
 
     print("\nConfusion matrix saved to confusion_matrix.png")
-```
+
+```text
 
 Run evaluation:
 
 ```bash
+```bash
+
 pixi run mojo run evaluate.mojo
-```
+
+```text
 
 Expected output:
 
 ```text
+```text
+
 Evaluating model...
 
 Test Results:
@@ -209,13 +235,16 @@ Test Results:
   F1 Score:  95.10
 
 Confusion matrix saved to confusion_matrix.png
-```
+
+```text
 
 ## Step 7: Make Predictions
 
 Create `predict.mojo` to classify individual images:
 
 ```mojo
+```mojo
+
 from shared.utils import load_model, load_image, plot_image
 from model import DigitClassifier
 
@@ -243,7 +272,8 @@ fn predict_digit(image_path: String) raises:
 
 fn main() raises:
     predict_digit("my_digit.png")
-```
+
+```text
 
 ## Understanding the Code
 
@@ -256,6 +286,8 @@ fn main() raises:
 ### Model Architecture
 
 ```text
+```text
+
 Input (784)
     ↓
 Linear Layer (784 → 128)
@@ -269,7 +301,8 @@ ReLU Activation
 Linear Layer (64 → 10)
     ↓
 Softmax (Output Probabilities)
-```
+
+```text
 
 ### Training Process
 
@@ -292,6 +325,8 @@ Softmax (Output Probabilities)
 **Solutions**:
 
 ```mojo
+```mojo
+
 # Try adjusting learning rate
 var optimizer = SGD(learning_rate=0.001)  # Lower LR
 
@@ -301,29 +336,38 @@ trainer.train(train_loader, val_loader, epochs=20)
 # Verify data normalization
 print("Data range: ", train_images.min(), " to ", train_images.max())
 # Should be [0.0, 1.0]
-```
+
+```text
 
 ### Training Too Slow
 
 **Solutions**:
 
 ```mojo
+```mojo
+
 # Increase batch size
 var train_loader = BatchLoader(train_data, batch_size=128)
 
 # Use release build for better performance
-```
+
+```text
 
 ```bash
+```bash
+
 pixi run mojo build --release train.mojo
 ./train
-```
+
+```text
 
 ### Out of Memory
 
 **Solutions**:
 
 ```mojo
+```mojo
+
 # Reduce batch size
 var train_loader = BatchLoader(train_data, batch_size=16)
 
@@ -333,11 +377,14 @@ self.model = Sequential([
     ReLU(),
     Layer("linear", input_size=64, output_size=10),
 ])
-```
+
+```python
 
 ### Import Errors
 
 ```bash
+```bash
+
 # Ensure you're in the right directory
 cd ml-odyssey/examples/first_model
 
@@ -347,13 +394,16 @@ ls ../../shared/
 # Run from repository root
 cd ../..
 pixi run mojo run examples/first_model/train.mojo
-```
+
+```text
 
 ## Improving Your Model
 
 ### 1. Deeper Network
 
 ```mojo
+```mojo
+
 self.model = Sequential([
     Layer("linear", input_size=784, output_size=256),
     ReLU(),
@@ -364,28 +414,37 @@ self.model = Sequential([
     Layer("linear", input_size=64, output_size=10),
     Softmax(),
 ])
-```
+
+```text
 
 ### 2. Different Optimizer
 
 ```mojo
+```mojo
+
 from shared.training import Adam
 
 var optimizer = Adam(learning_rate=0.001, beta1=0.9, beta2=0.999)
-```
+
+```text
 
 ### 3. Learning Rate Scheduling
 
 ```mojo
+```mojo
+
 from shared.training.schedulers import StepLR
 
 var scheduler = StepLR(initial_lr=0.01, step_size=5, gamma=0.5)
 trainer.add_scheduler(scheduler)
-```
+
+```text
 
 ### 4. Data Augmentation
 
 ```mojo
+```mojo
+
 from shared.data.transforms import RandomRotation, RandomShift
 
 var train_loader = BatchLoader(
@@ -396,7 +455,8 @@ var train_loader = BatchLoader(
         RandomShift(max_shift=2),
     ]
 )
-```
+
+```text
 
 ## Next Steps
 
