@@ -38,8 +38,7 @@ fn test_matmul_2d_square() raises:
     # Identity @ B = B, so result should be all 2s
     assert_dim(c, 2, "Result should be 2D")
     assert_numel(c, 9, "Result should be 3x3 (9 elements)")
-    # TODO: Once matmul is implemented, uncomment:
-    # assert_all_values(c, 2.0, 1e-6, "Identity @ B should equal B")
+    assert_all_values(c, 2.0, 1e-6, "Identity @ B should equal B")
 
 
 fn test_matmul_2d_rectangular() raises:
@@ -58,8 +57,7 @@ fn test_matmul_2d_rectangular() raises:
     # Result should be 3x2, each element = 1*2 + 1*2 + 1*2 + 1*2 = 8
     assert_dim(c, 2, "Result should be 2D")
     assert_numel(c, 6, "Result should be 3x2 (6 elements)")
-    # TODO: Once matmul is implemented, uncomment:
-    # assert_all_values(c, 8.0, 1e-6, "Each element should be 8")
+    assert_all_values(c, 8.0, 1e-6, "Each element should be 8")
 
 
 fn test_matmul_2d_known_values() raises:
@@ -104,8 +102,7 @@ fn test_matmul_batched_3d() raises:
     # Each element = 1*0.5 + 1*0.5 + 1*0.5 + 1*0.5 = 2
     assert_dim(c, 3, "Result should be 3D")
     assert_numel(c, 12, "Result should be 2x3x2 (12 elements)")
-    # TODO: Once matmul is implemented, uncomment:
-    # assert_all_values(c, 2.0, 1e-6, "Each element should be 2")
+    assert_all_values(c, 2.0, 1e-6, "Each element should be 2")
 
 
 fn test_matmul_batched_4d() raises:
@@ -206,8 +203,7 @@ fn test_matmul_with_zeros() raises:
 
     assert_dim(c, 2, "Result should be 2D")
     assert_numel(c, 9, "Result should be 3x3")
-    # TODO: Once matmul is implemented, uncomment:
-    # assert_all_values(c, 0.0, 1e-6, "Zero matrix @ anything = zero matrix")
+    assert_all_values(c, 0.0, 1e-6, "Zero matrix @ anything = zero matrix")
 
 
 # ============================================================================
@@ -329,8 +325,7 @@ fn test_dot_1d() raises:
     # Expected: 1*1 + 2*2 + 3*3 + 4*4 + 5*5 = 55
     assert_dim(c, 0, "Dot product should be scalar (0D)")
     assert_numel(c, 1, "Dot product should have 1 element")
-    # TODO: Once dot is implemented, uncomment:
-    # assert_value_at(c, 0, 55.0, 1e-4, "Dot product result")
+    assert_value_at(c, 0, 55.0, 1e-4, "Dot product result")
 
 
 fn test_dot_2d() raises:
@@ -348,8 +343,7 @@ fn test_dot_2d() raises:
     # Should behave like matmul for 2D
     assert_dim(c, 2, "Result should be 2D")
     assert_numel(c, 4, "Result should be 2x2 (4 elements)")
-    # TODO: Once dot is implemented, uncomment:
-    # assert_all_values(c, 3.0, 1e-6, "Each element should be 3")
+    assert_all_values(c, 3.0, 1e-6, "Each element should be 3")
 
 
 fn test_dot_incompatible_shapes() raises:
@@ -416,13 +410,12 @@ fn test_outer_vectors() raises:
     #  [3, 6]]
     assert_dim(c, 2, "Outer product should be 2D")
     assert_numel(c, 6, "Outer product should be 3x2 (6 elements)")
-    # TODO: Once outer is implemented, uncomment:
-    # assert_value_at(c, 0, 1.0, 1e-6, "c[0,0] = 1*1 = 1")
-    # assert_value_at(c, 1, 2.0, 1e-6, "c[0,1] = 1*2 = 2")
-    # assert_value_at(c, 2, 2.0, 1e-6, "c[1,0] = 2*1 = 2")
-    # assert_value_at(c, 3, 4.0, 1e-6, "c[1,1] = 2*2 = 4")
-    # assert_value_at(c, 4, 3.0, 1e-6, "c[2,0] = 3*1 = 3")
-    # assert_value_at(c, 5, 6.0, 1e-6, "c[2,1] = 3*2 = 6")
+    assert_value_at(c, 0, 1.0, 1e-6, "c[0,0] = 1*1 = 1")
+    assert_value_at(c, 1, 2.0, 1e-6, "c[0,1] = 1*2 = 2")
+    assert_value_at(c, 2, 2.0, 1e-6, "c[1,0] = 2*1 = 2")
+    assert_value_at(c, 3, 4.0, 1e-6, "c[1,1] = 2*2 = 4")
+    assert_value_at(c, 4, 3.0, 1e-6, "c[2,0] = 3*1 = 3")
+    assert_value_at(c, 5, 6.0, 1e-6, "c[2,1] = 3*2 = 6")
 
 
 fn test_outer_not_1d_error() raises:
@@ -476,8 +469,7 @@ fn test_outer_with_zeros() raises:
 
     assert_dim(c, 2, "Outer product should be 2D")
     assert_numel(c, 12, "Outer product should be 3x4 (12 elements)")
-    # TODO: Once outer is implemented, uncomment:
-    # assert_all_values(c, 0.0, 1e-6, "Outer with zero vector should be all zeros")
+    assert_all_values(c, 0.0, 1e-6, "Outer with zero vector should be all zeros")
 
 
 fn test_outer_preserves_dtype() raises:
@@ -597,8 +589,7 @@ fn test_dunder_matmul() raises:
     # Each element should be 1*2 + 1*2 = 4
     assert_dim(c, 2, "Result should be 2D")
     assert_numel(c, 4, "Result should be 2x2 (4 elements)")
-    # TODO: Once matmul is implemented, uncomment:
-    # assert_all_values(c, 4.0, 1e-6, "a @ b should work via __matmul__")
+    assert_all_values(c, 4.0, 1e-6, "a @ b should work via __matmul__")
 
 
 # ============================================================================
