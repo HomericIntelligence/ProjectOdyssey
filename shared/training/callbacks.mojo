@@ -30,25 +30,39 @@ struct EarlyStopping(Callback):
     Early stopping monitors a validation metric and stops training when
     the metric fails to improve for a specified number of epochs (patience).
 
+    Supports both minimization (e.g., loss) and maximization (e.g., accuracy) modes.
+
     Attributes:
-        monitor: Name of metric to monitor (e.g., "val_loss")
+        monitor: Name of metric to monitor (e.g., "val_loss", "val_accuracy")
         patience: Number of epochs with no improvement before stopping
         min_delta: Minimum change to qualify as improvement
+        mode: "min" for minimization (loss), "max" for maximization (accuracy)
         best_value: Best value seen so far
         wait_count: Epochs since last improvement
         stopped: Whether training has been stopped
 
     Example:
+        # For loss (minimize)
         var early_stop = EarlyStopping(
             monitor="val_loss",
             patience=5,
-            min_delta=0.001
+            min_delta=0.001,
+            mode="min"
+        )
+
+        # For accuracy (maximize)
+        var early_stop = EarlyStopping(
+            monitor="val_accuracy",
+            patience=5,
+            min_delta=0.001,
+            mode="max"
         )
     """
 
     var monitor: String
     var patience: Int
     var min_delta: Float64
+    var mode: String
     var best_value: Float64
     var wait_count: Int
     var stopped: Bool
@@ -58,24 +72,38 @@ struct EarlyStopping(Callback):
         monitor: String = "val_loss",
         patience: Int = 5,
         min_delta: Float64 = 0.0,
+        mode: String = "min",
     ):
         """Initialize early stopping callback.
 
         Args:
-            monitor: Metric to monitor (e.g., "val_loss").
+            monitor: Metric to monitor (e.g., "val_loss", "val_accuracy").
             patience: Epochs to wait before stopping.
             min_delta: Minimum improvement threshold.
+            mode: "min" for metrics to minimize (loss), "max" for metrics to maximize (accuracy).
         """
         self.monitor = monitor
         self.patience = patience
         self.min_delta = min_delta
-        self.best_value = Float64(1e9)
+        self.mode = mode
+
+        # Initialize best_value based on mode
+        if mode == "max":
+            self.best_value = Float64(-1e9)
+        else:  # mode == "min" (default)
+            self.best_value = Float64(1e9)
+
         self.wait_count = 0
         self.stopped = False
 
     fn on_train_begin(inout self, inout state: TrainingState) -> CallbackSignal:
         """Reset state at training start."""
-        self.best_value = Float64(1e9)
+        # Reset best_value based on mode
+        if self.mode == "max":
+            self.best_value = Float64(-1e9)
+        else:  # mode == "min" (default)
+            self.best_value = Float64(1e9)
+
         self.wait_count = 0
         self.stopped = False
         return CONTINUE
@@ -103,8 +131,14 @@ struct EarlyStopping(Callback):
 
         var current_value = state.metrics[self.monitor]
 
-        # Check for improvement (assuming lower is better)
-        var improved = (self.best_value - current_value) > self.min_delta
+        # Check for improvement based on mode
+        var improved: Bool
+        if self.mode == "max":
+            # For maximization (e.g., accuracy): current > best
+            improved = (current_value - self.best_value) > self.min_delta
+        else:  # mode == "min" (default)
+            # For minimization (e.g., loss): best > current
+            improved = (self.best_value - current_value) > self.min_delta
 
         if improved:
             self.best_value = current_value
@@ -145,8 +179,8 @@ struct EarlyStopping(Callback):
 struct ModelCheckpoint(Callback):
     """Save model checkpoints during training.
 
-    Saves the model state at specified intervals (e.g., every epoch).
-    Can be configured to save only when metrics improve.
+    Saves the model state at specified intervals or when metrics improve.
+    Can be configured to save every epoch or only when monitored metric improves.
 
     Error Handling:
         If checkpoint saving fails, a warning is printed but training continues.
@@ -154,25 +188,69 @@ struct ModelCheckpoint(Callback):
         permission denied). The error message clearly identifies the cause.
 
     Attributes:
-        save_path: Path template for saving checkpoints
+        filepath: Path template for saving checkpoints (supports {epoch} placeholder)
+        monitor: Metric to monitor for best model tracking
+        save_best_only: If True, only save when monitored metric improves
+        save_frequency: Save every N epochs (ignored if save_best_only=True)
+        mode: "min" or "max" for monitored metric
+        best_value: Best value of monitored metric
         save_count: Number of checkpoints saved
         error_count: Number of failed checkpoint save attempts
 
     Example:
-        var checkpoint = ModelCheckpoint(save_path="checkpoint_epoch_{epoch}.pt")
+        # Save every epoch
+        var checkpoint = ModelCheckpoint(
+            filepath="checkpoints/model_epoch_{epoch}.pt",
+            save_frequency=1
+        )
+
+        # Save only best model
+        var checkpoint = ModelCheckpoint(
+            filepath="checkpoints/best_model.pt",
+            monitor="val_loss",
+            save_best_only=True,
+            mode="min"
+        )
     """
 
-    var save_path: String
+    var filepath: String
+    var monitor: String
+    var save_best_only: Bool
+    var save_frequency: Int
+    var mode: String
+    var best_value: Float64
     var save_count: Int
     var error_count: Int
 
-    fn __init__(out self, save_path: String = "checkpoint.pt"):
+    fn __init__(
+        out self,
+        filepath: String = "checkpoint.pt",
+        monitor: String = "val_loss",
+        save_best_only: Bool = False,
+        save_frequency: Int = 1,
+        mode: String = "min",
+    ):
         """Initialize checkpoint callback.
 
         Args:
-            save_path: Path template for saving checkpoints.
+            filepath: Path template for saving checkpoints (supports {epoch} placeholder).
+            monitor: Metric to monitor for best model.
+            save_best_only: If True, only save when monitored metric improves.
+            save_frequency: Save every N epochs (ignored if save_best_only=True).
+            mode: "min" for metrics to minimize (loss), "max" for metrics to maximize (accuracy).
         """
-        self.save_path = save_path
+        self.filepath = filepath
+        self.monitor = monitor
+        self.save_best_only = save_best_only
+        self.save_frequency = save_frequency
+        self.mode = mode
+
+        # Initialize best_value based on mode
+        if mode == "max":
+            self.best_value = Float64(-1e9)
+        else:  # mode == "min" (default)
+            self.best_value = Float64(1e9)
+
         self.save_count = 0
         self.error_count = 0
 
@@ -191,30 +269,56 @@ struct ModelCheckpoint(Callback):
     fn on_epoch_end(inout self, inout state: TrainingState) -> CallbackSignal:
         """Save checkpoint at end of epoch with error handling.
 
-        Attempts to save checkpoint at the end of each epoch. If saving fails,
-        logs a warning but continues training to prevent I/O errors from
-        interrupting the training process.
+        Attempts to save checkpoint based on configuration:
+        - If save_best_only=True: Save only when monitored metric improves
+        - Otherwise: Save every save_frequency epochs
+
+        If saving fails, logs a warning but continues training to prevent I/O
+        errors from interrupting the training process.
 
         Args:
-            state: Training state with current epoch number.
+            state: Training state with current epoch number and metrics.
 
         Returns:
             CONTINUE always (even if checkpoint save fails).
         """
-        self.save_count += 1
+        var should_save = False
 
-        # Build checkpoint path from template and epoch number
-        # TODO(#34): Implement actual checkpoint saving when model interface available
-        var checkpoint_path = self.save_path
+        if self.save_best_only:
+            # Save only if monitored metric improves
+            if self.monitor in state.metrics:
+                var current_value = state.metrics[self.monitor]
 
-        # When model interface is available, implement actual checkpoint saving:
-        # try:
-        #     model.save(checkpoint_path)
-        # except:
-        #     self.error_count += 1
-        #     print("Warning: Failed to save checkpoint to", checkpoint_path)
-        #     print("Checkpoint save error - epoch", state.epoch)
-        #     # Continue training despite checkpoint save failure
+                # Check for improvement based on mode
+                var improved: Bool
+                if self.mode == "max":
+                    improved = current_value > self.best_value
+                else:  # mode == "min" (default)
+                    improved = current_value < self.best_value
+
+                if improved:
+                    self.best_value = current_value
+                    should_save = True
+        else:
+            # Save at specified frequency
+            if state.epoch % self.save_frequency == 0:
+                should_save = True
+
+        if should_save:
+            self.save_count += 1
+
+            # Build checkpoint path from template and epoch number
+            # TODO(#34): Implement actual checkpoint saving when model interface available
+            var checkpoint_path = self.filepath
+
+            # When model interface is available, implement actual checkpoint saving:
+            # try:
+            #     model.save(checkpoint_path)
+            # except:
+            #     self.error_count += 1
+            #     print("Warning: Failed to save checkpoint to", checkpoint_path)
+            #     print("Checkpoint save error - epoch", state.epoch)
+            #     # Continue training despite checkpoint save failure
 
         # Always return CONTINUE to prevent I/O errors from stopping training
         return CONTINUE
