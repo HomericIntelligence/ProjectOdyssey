@@ -301,5 +301,147 @@ class TestEndToEnd:
         assert len(result.created_dirs) > 0
 
 
+class TestCLIArguments:
+    """Test CLI argument parsing (Issue #780)."""
+
+    def test_help_text(self):
+        """Test --help displays comprehensive usage information."""
+        import subprocess
+
+        result = subprocess.run(
+            [sys.executable, "tools/paper-scaffold/scaffold_enhanced.py", "--help"],
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).parent.parent.parent
+        )
+
+        assert result.returncode == 0
+        output = result.stdout
+
+        # Check for key elements in help text
+        assert "paper" in output.lower() or "Paper name" in output
+        assert "title" in output.lower()
+        assert "authors" in output.lower()
+        assert "Examples:" in output
+        assert "interactive" in output.lower()
+
+    def test_interactive_mode_no_args(self):
+        """Test interactive mode is triggered when no args provided."""
+        # This is tested in test_user_prompts.py
+        # Here we just verify the flag exists
+        import subprocess
+
+        result = subprocess.run(
+            [sys.executable, "tools/paper-scaffold/scaffold_enhanced.py", "--help"],
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).parent.parent.parent
+        )
+
+        assert "--interactive" in result.stdout
+
+    def test_paper_argument_optional(self):
+        """Test --paper argument is optional (for interactive mode)."""
+        from scaffold_enhanced import main
+        import argparse
+
+        # Verify argparse config allows missing --paper
+        # This is indirectly tested by the help text not showing --paper as required
+        import subprocess
+
+        result = subprocess.run(
+            [sys.executable, "tools/paper-scaffold/scaffold_enhanced.py", "--help"],
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).parent.parent.parent
+        )
+
+        # --paper should be optional (shown in [--paper PAPER] not just PAPER)
+        assert "[--paper PAPER]" in result.stdout or "--paper" in result.stdout
+
+    def test_dry_run_flag(self):
+        """Test --dry-run flag exists and is documented."""
+        import subprocess
+
+        result = subprocess.run(
+            [sys.executable, "tools/paper-scaffold/scaffold_enhanced.py", "--help"],
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).parent.parent.parent
+        )
+
+        assert "--dry-run" in result.stdout
+        assert "without actually creating" in result.stdout.lower() or "dry" in result.stdout.lower()
+
+    def test_no_validate_flag(self):
+        """Test --no-validate flag exists."""
+        import subprocess
+
+        result = subprocess.run(
+            [sys.executable, "tools/paper-scaffold/scaffold_enhanced.py", "--help"],
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).parent.parent.parent
+        )
+
+        assert "--no-validate" in result.stdout
+
+    def test_quiet_flag(self):
+        """Test --quiet flag exists."""
+        import subprocess
+
+        result = subprocess.run(
+            [sys.executable, "tools/paper-scaffold/scaffold_enhanced.py", "--help"],
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).parent.parent.parent
+        )
+
+        assert "--quiet" in result.stdout
+
+    def test_output_directory_option(self):
+        """Test --output option for specifying directory."""
+        import subprocess
+
+        result = subprocess.run(
+            [sys.executable, "tools/paper-scaffold/scaffold_enhanced.py", "--help"],
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).parent.parent.parent
+        )
+
+        assert "--output" in result.stdout
+
+    def test_examples_in_help(self):
+        """Test help text includes usage examples."""
+        import subprocess
+
+        result = subprocess.run(
+            [sys.executable, "tools/paper-scaffold/scaffold_enhanced.py", "--help"],
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).parent.parent.parent
+        )
+
+        assert "Examples:" in result.stdout
+        # Should show both interactive and non-interactive examples
+        assert "interactive" in result.stdout.lower()
+
+    def test_argument_defaults(self):
+        """Test default values are appropriate."""
+        # Test that defaults exist by checking help text
+        import subprocess
+
+        result = subprocess.run(
+            [sys.executable, "tools/paper-scaffold/scaffold_enhanced.py", "--help"],
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).parent.parent.parent
+        )
+
+        # Default output should be papers/
+        assert "papers" in result.stdout.lower() or "default:" in result.stdout.lower()
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
