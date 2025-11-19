@@ -363,12 +363,21 @@ def main() -> int:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Basic usage
+  # Interactive mode (prompts for all metadata)
+  python scaffold_enhanced.py
+
+  # Interactive mode with some pre-filled values
+  python scaffold_enhanced.py --paper "LeNet-5"
+
+  # Non-interactive mode (all arguments provided)
   python scaffold_enhanced.py \\
     --paper "LeNet-5" \\
     --title "LeNet-5: Gradient-Based Learning" \\
     --authors "LeCun et al." \\
     --year 1998
+
+  # Force interactive mode even with arguments
+  python scaffold_enhanced.py --interactive --paper "BERT"
 
   # Dry run to see what would be created
   python scaffold_enhanced.py --paper "BERT" --dry-run
@@ -380,8 +389,14 @@ Examples:
 
     parser.add_argument(
         "--paper",
-        required=True,
+        required=False,
+        default=None,
         help="Paper name (will be normalized to lowercase-with-hyphens)"
+    )
+    parser.add_argument(
+        "--interactive",
+        action="store_true",
+        help="Force interactive mode (prompt for all metadata)"
     )
     parser.add_argument(
         "--title",
@@ -439,24 +454,55 @@ Examples:
     args = parser.parse_args()
 
     try:
+        # Check if interactive mode is needed
+        needs_interactive = (
+            args.interactive or
+            not args.paper or
+            args.title.startswith("TODO") or
+            args.authors.startswith("TODO")
+        )
+
+        # Use interactive prompts if needed
+        if needs_interactive:
+            from prompts import InteractivePrompter
+
+            prompter = InteractivePrompter(quiet=args.quiet)
+
+            # Prepare existing args for prompter
+            existing_args = {
+                'paper': args.paper,
+                'title': args.title,
+                'authors': args.authors,
+                'year': args.year,
+                'url': args.url,
+                'description': args.description,
+            }
+
+            # Collect metadata interactively
+            metadata = prompter.collect_metadata(existing=existing_args)
+
+            # Extract paper name from metadata
+            paper_name = metadata['PAPER_NAME']
+        else:
+            # Use CLI arguments directly
+            paper_name = args.paper
+            metadata = {
+                "PAPER_TITLE": args.title,
+                "AUTHORS": args.authors,
+                "YEAR": args.year,
+                "PAPER_URL": args.url,
+                "DESCRIPTION": args.description,
+            }
+
         # Create generator
         generator = DirectoryGenerator(
             base_path=args.output,
             verbose=not args.quiet
         )
 
-        # Prepare metadata
-        metadata = {
-            "PAPER_TITLE": args.title,
-            "AUTHORS": args.authors,
-            "YEAR": args.year,
-            "PAPER_URL": args.url,
-            "DESCRIPTION": args.description,
-        }
-
         # Generate structure
         result = generator.generate(
-            paper_name=args.paper,
+            paper_name=paper_name,
             paper_metadata=metadata,
             templates_dir=args.templates,
             validate=not args.no_validate,
