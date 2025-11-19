@@ -44,6 +44,15 @@ mojo test -v tests/
 
 # Run integration tests only
 ./scripts/run_tests.sh --integration
+
+# Run tests for specific paper
+./scripts/run_tests.sh --paper lenet-5
+
+# Run tests for paper (partial match)
+./scripts/run_tests.sh --paper lenet
+
+# Run tests for paper with type filter
+./scripts/run_tests.sh --paper bert --unit
 ```
 
 ### Test Output
@@ -107,6 +116,65 @@ fn test_my_feature() raises:
 fn my_helper_function():
     pass
 ```
+
+## Paper-Specific Testing
+
+Run tests for a specific paper implementation:
+
+### Usage
+
+```bash
+# Run all tests for a paper (exact name)
+./scripts/run_tests.sh --paper lenet-5
+
+# Run tests for paper (partial match)
+./scripts/run_tests.sh --paper lenet  # Finds lenet-5
+
+# Combine with test type filters
+./scripts/run_tests.sh --paper bert --unit
+./scripts/run_tests.sh --paper gpt-2 --integration
+```
+
+### Features
+
+- **Exact matching**: `--paper lenet-5` finds `papers/lenet-5/`
+- **Partial matching**: `--paper lenet` finds `papers/lenet-5/`
+- **Case-insensitive**: `--paper BERT` finds `papers/bert/`
+- **Error handling**: Shows available papers if not found
+- **Multiple matches**: Asks user to be more specific
+
+### Examples
+
+```bash
+# Test a specific paper's implementation
+$ ./scripts/run_tests.sh --paper lenet-5
+Running tests for paper: lenet-5
+Test directory: papers/lenet-5/tests
+
+# Paper not found - helpful error
+$ ./scripts/run_tests.sh --paper nonexistent
+Error: Paper 'nonexistent' not found
+
+Available papers:
+  lenet-5
+  bert
+  gpt-2
+
+# Multiple matches - be more specific
+$ ./scripts/run_tests.sh --paper le
+Error: Multiple papers match 'le':
+  papers/lenet-5
+  papers/lenet-7
+
+Please be more specific.
+```
+
+### Use Cases
+
+- Test a paper after making changes
+- Verify paper implementation before PR
+- Run paper tests in CI/CD for specific changes
+- Develop and test papers independently
 
 ## Error Handling
 
