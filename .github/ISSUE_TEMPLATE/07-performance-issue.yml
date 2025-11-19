@@ -1,0 +1,225 @@
+name: ⚡ Performance Issue
+description: Report performance degradation or optimization opportunity
+title: "[Performance] "
+labels: ["performance", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Report performance issues or suggest optimizations! Please provide benchmark data
+        to help us understand and improve performance.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Performance Issue Description
+      description: |
+        Describe the performance problem or optimization opportunity. Include:
+        - What operation is slow or could be optimized
+        - When the performance issue occurs (always, under certain conditions, etc.)
+        - Impact on your workflow or use case
+        - Any patterns you've noticed
+      placeholder: |
+        The training loop for LeNet-5 on MNIST takes significantly longer than expected.
+
+        **What's slow**: Forward pass during training
+        **When it occurs**: On datasets with >10,000 samples
+        **Impact**: Training takes 30 minutes instead of expected 5 minutes
+        **Pattern**: Performance degrades linearly with dataset size
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-metrics
+    attributes:
+      label: Current Performance Metrics
+      description: |
+        Provide concrete measurements showing current performance. Include:
+        - Execution time, throughput, latency
+        - Memory usage, CPU/GPU utilization
+        - Benchmark results or profiling data
+        - Sample size or input characteristics
+      placeholder: |
+        **Execution time**: 10.5 seconds per epoch
+        **Throughput**: 95 samples/second
+        **Memory usage**: 2.3GB GPU memory
+        **CPU utilization**: 85% average
+        **GPU utilization**: 45% average
+        **Dataset size**: 60,000 training samples
+        **Batch size**: 64
+
+        Benchmark command:
+        ```bash
+        mojo run benchmarks/lenet5_training.mojo --dataset mnist --epochs 1
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-metrics
+    attributes:
+      label: Expected Performance Metrics
+      description: |
+        What performance would you expect? Include:
+        - Target execution time or throughput
+        - Expected resource usage
+        - Baseline comparison (reference implementation, similar models, etc.)
+        - Performance requirements for your use case
+      placeholder: |
+        **Expected execution time**: <2 seconds per epoch
+        **Expected throughput**: >500 samples/second
+        **Expected memory usage**: <500MB GPU memory
+
+        **Baseline**: PyTorch implementation runs at 600 samples/second
+        **Reference**: Paper reports 3 minutes for full training (60 epochs)
+        **Requirement**: Need <10 minute total training time for CI/CD
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Hardware & Environment Details
+      description: |
+        Provide detailed system information. Run `python3 scripts/get_system_info.py` and paste output,
+        or manually provide:
+        - CPU model, core count, clock speed
+        - RAM size and type
+        - GPU model, VRAM, CUDA version
+        - OS and version
+        - Mojo version
+        - Python version (if relevant)
+      placeholder: |
+        **CPU**: AMD Ryzen 9 5950X (16 cores, 3.4GHz base, 4.9GHz boost)
+        **RAM**: 64GB DDR4-3600
+        **GPU**: NVIDIA RTX 3090 (24GB VRAM, CUDA 12.1)
+        **OS**: Ubuntu 22.04.3 LTS
+        **Mojo**: 24.5.0
+        **Python**: 3.11.6
+
+        System info:
+        ```
+        [Paste output of python3 scripts/get_system_info.py]
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: profiling
+    attributes:
+      label: Profiling Data (Optional)
+      description: |
+        Include profiling results if available:
+        - Hotspots (functions taking most time)
+        - Memory allocation patterns
+        - Cache hit rates
+        - Thread utilization
+        - Screenshots of profiling tools
+      placeholder: |
+        Profiling shows:
+        - 60% time spent in `matmul` operation
+        - 25% time in memory allocation
+        - 15% in other operations
+
+        Top functions by time:
+        1. Tensor.matmul() - 6.3s (60%)
+        2. Tensor.__init__() - 2.6s (25%)
+        3. relu() - 0.8s (8%)
+
+        Profiler output:
+        ```
+        [Paste profiling data]
+        ```
+      render: text
+
+  - type: textarea
+    id: baseline-comparison
+    attributes:
+      label: Baseline Comparison (Optional)
+      description: |
+        Compare to baseline or similar implementations:
+        - Reference implementation performance
+        - Performance on different hardware
+        - Historical performance (if this is a regression)
+        - Similar models or algorithms
+      placeholder: |
+        **PyTorch LeNet-5**: 600 samples/second (6x faster)
+        **TensorFlow LeNet-5**: 550 samples/second (5.8x faster)
+        **Previous Mojo version (24.4)**: 200 samples/second (2x faster)
+        **Same code on V100 GPU**: 300 samples/second
+
+        This appears to be a regression from version 24.4 to 24.5
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction Steps (Optional)
+      description: Steps to reproduce the performance issue
+      placeholder: |
+        1. Clone the repository
+        2. Download MNIST dataset: `python3 scripts/download_mnist.py`
+        3. Run benchmark: `mojo run benchmarks/lenet5_training.mojo`
+        4. Observe execution time in output
+
+  - type: textarea
+    id: attempted-solutions
+    attributes:
+      label: Attempted Solutions (Optional)
+      description: |
+        What have you tried to improve performance?
+        - Code changes attempted
+        - Configuration adjustments
+        - Different approaches tested
+      placeholder: |
+        Tried:
+        - Increasing batch size from 64 to 256: Minimal improvement (10%)
+        - Disabling gradient computation: Not applicable (need training)
+        - Using @parameter for compile-time optimization: No change
+        - Switching to in-place operations: Minor improvement (5%)
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution (Optional)
+      description: |
+        If you have ideas for optimization:
+        - Algorithm improvements
+        - Implementation changes
+        - Compiler optimizations
+        - Architecture changes
+      placeholder: |
+        Possible optimizations:
+        1. Use SIMD vectorization for matmul operations
+        2. Implement kernel fusion for conv+relu
+        3. Pre-allocate memory buffers to reduce allocations
+        4. Use tiling for better cache utilization
+        5. Parallelize batch processing across CPU cores
+
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Performance Impact
+      description: Select all that apply
+      options:
+        - label: Blocks development or testing
+        - label: Impacts production use cases
+        - label: Affects CI/CD pipeline duration
+        - label: Increases resource costs significantly
+        - label: Prevents scaling to larger datasets
+        - label: Regression from previous version
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Performance Scope
+      description: What's affected?
+      options:
+        - label: Specific algorithm or model
+        - label: Entire training pipeline
+        - label: Inference/prediction
+        - label: Data loading/preprocessing
+        - label: Memory usage
+        - label: Disk I/O
+        - label: Network operations
