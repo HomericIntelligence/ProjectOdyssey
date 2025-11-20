@@ -16,18 +16,18 @@
    - 11 dtype support (float16/32/64, int8/16/32/64, uint8/16/32/64)
    - Zero-overhead compile-time specialization
 
-2. **Module Integration**
+1. **Module Integration**
    - Updated `shared/core/__init__.mojo` with imports/exports
    - Updated module documentation
    - All dispatch helpers available in public API
 
-3. **Proof-of-Concept Demonstration**
+1. **Proof-of-Concept Demonstration**
    - File: `shared/core/activation_refactored_demo.mojo` (290 lines)
    - Refactored 3 activation functions (relu, tanh, sigmoid)
    - Demonstrated 80% average code reduction (79.7% actual)
    - Before/after comparison for validation
 
-4. **Comprehensive Documentation**
+1. **Comprehensive Documentation**
    - File: `notes/issues/dtype-refactoring-implementation.md`
    - Complete implementation plan with metrics
    - Code reduction examples
@@ -61,7 +61,8 @@
 
 ### 1. Generic Dispatch Pattern
 
-**Before (66 lines per function):**
+### Before (66 lines per function):
+
 ```mojo
 fn relu(tensor: ExTensor) raises -> ExTensor:
     var result = ExTensor(tensor._shape, tensor._dtype)
@@ -70,16 +71,17 @@ fn relu(tensor: ExTensor) raises -> ExTensor:
             result._data.bitcast[Float32]()[i] = max(0.0, tensor._data.bitcast[Float32]()[i])
     # ... 10 more dtype branches ...
     return result
-```
+```text
 
-**After (8 lines per function):**
+### After (8 lines per function):
+
 ```mojo
 fn relu_op[T: DType](x: Scalar[T]) -> Scalar[T]:
     return max(Scalar[T](0), x)
 
 fn relu(tensor: ExTensor) raises -> ExTensor:
     return dispatch_unary[relu_op](tensor)
-```
+```text
 
 ### 2. Zero-Overhead Abstraction
 
@@ -95,7 +97,7 @@ fn dispatch[dtype: DType]():
 # Runtime dispatch to compile-time specialized version
 if tensor._dtype == DType.float32:
     dispatch[DType.float32]()  # Compiled as if hand-written
-```
+```text
 
 **Performance:** Identical to manual branching (zero overhead)
 
@@ -114,17 +116,17 @@ if tensor._dtype == DType.float32:
    - All-dtype and float-only variants
    - Comprehensive dtype coverage
 
-2. `shared/core/activation_refactored_demo.mojo` (290 lines)
+1. `shared/core/activation_refactored_demo.mojo` (290 lines)
    - Before/after comparison for 3 functions
    - Proof-of-concept validation
    - Reference implementation patterns
 
-3. `notes/issues/dtype-refactoring-implementation.md` (310 lines)
+1. `notes/issues/dtype-refactoring-implementation.md` (310 lines)
    - Complete implementation documentation
    - Metrics and success criteria
    - Phase-by-phase implementation plan
 
-4. `notes/issues/session-summary-dtype-refactoring.md` (this file)
+1. `notes/issues/session-summary-dtype-refactoring.md` (this file)
    - Session accomplishments summary
    - Next steps and roadmap
 
@@ -176,12 +178,12 @@ if tensor._dtype == DType.float32:
    - Apply pattern to `elementwise.mojo` (26 functions)
    - Apply pattern to `arithmetic.mojo` (12 functions)
 
-2. **Validation**
+1. **Validation**
    - Run existing test suite (no regressions)
    - Measure actual code reduction
    - Benchmark performance (verify zero overhead)
 
-3. **Cleanup**
+1. **Cleanup**
    - Remove demo file (merge into production)
    - Update documentation
    - Commit with comprehensive message
@@ -193,7 +195,7 @@ if tensor._dtype == DType.float32:
    - Investigate SIMD vectorization in dispatchers
    - Profile hot paths for further optimization
 
-2. **Documentation**
+1. **Documentation**
    - Create architecture guide for dtype dispatch pattern
    - Document best practices for new operations
    - Add examples to developer guide
@@ -226,12 +228,14 @@ if tensor._dtype == DType.float32:
 
 ### Code Quality Score Update
 
-**Before Refactoring:**
+### Before Refactoring:
+
 - Architecture & Design: 90/100
 - Code Quality: 78/100
 - **Overall: 78/100**
 
-**After Refactoring (Projected):**
+### After Refactoring (Projected):
+
 - Architecture & Design: 92/100 (+2, improved generic patterns)
 - Code Quality: 85/100 (+7, reduced duplication, better maintainability)
 - **Overall: 83/100** (+5 points)
@@ -239,9 +243,9 @@ if tensor._dtype == DType.float32:
 ### Specific Improvements
 
 1. **Reduced Duplication:** 1,386 lines of duplicated dtype branching removed
-2. **Improved Maintainability:** Single source of truth for operation logic
-3. **Better Type Safety:** Compile-time specialization ensures correctness
-4. **Enhanced Extensibility:** Easy to add new dtypes and operations
+1. **Improved Maintainability:** Single source of truth for operation logic
+1. **Better Type Safety:** Compile-time specialization ensures correctness
+1. **Enhanced Extensibility:** Easy to add new dtypes and operations
 
 ---
 

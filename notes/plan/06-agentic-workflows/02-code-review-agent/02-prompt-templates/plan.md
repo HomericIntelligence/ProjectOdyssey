@@ -32,8 +32,8 @@ Create structured prompt templates for the code review agent's different review 
 ## Steps
 
 1. Create correctness reviewer template with bug detection focus
-2. Create performance reviewer template with efficiency focus
-3. Create style reviewer template with readability focus
+1. Create performance reviewer template with efficiency focus
+1. Create style reviewer template with readability focus
 
 ## Success Criteria
 

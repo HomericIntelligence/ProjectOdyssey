@@ -40,13 +40,13 @@ The tensor operations are organized into three logical categories:
    - Handle shape compatibility through NumPy-style broadcasting rules
    - Division requires special handling for zero denominators
 
-2. **Matrix Operations** (matmul, transpose)
+1. **Matrix Operations** (matmul, transpose)
    - Essential for linear algebra computations in neural networks
    - Matrix multiplication for layer computations
    - Transpose for reshaping and gradient calculations
    - Support for batched operations (3D+ tensors)
 
-3. **Reduction Operations** (sum, mean, max, min)
+1. **Reduction Operations** (sum, mean, max, min)
    - Aggregate tensor values along specified dimensions
    - Critical for pooling, normalization, and loss computation
    - Support axis specification and keepdims flag
@@ -104,7 +104,7 @@ could corrupt training runs.
 - Follow functional style where possible (operations return new tensors)
 - Support method chaining for common operations
 
-**Key API Patterns**:
+### Key API Patterns
 
 ```mojo
 # Arithmetic with broadcasting
@@ -122,7 +122,7 @@ fn sum(tensor: Tensor, axis: Optional[Int] = None, keepdims: Bool = False) -> Te
 fn mean(tensor: Tensor, axis: Optional[Int] = None, keepdims: Bool = False) -> Tensor
 fn max(tensor: Tensor, axis: Optional[Int] = None, keepdims: Bool = False) -> Tensor
 fn min(tensor: Tensor, axis: Optional[Int] = None, keepdims: Bool = False) -> Tensor
-```
+```text
 
 **Rationale**: This API design:
 
@@ -140,7 +140,7 @@ fn min(tensor: Tensor, axis: Optional[Int] = None, keepdims: Bool = False) -> Te
 - Include edge case tests (zeros, empty, large values)
 - Test numerical stability with known inputs/outputs
 
-**Test Categories**:
+### Test Categories
 
 - **Correctness**: Operations produce mathematically correct results
 - **Broadcasting**: Shape compatibility and result shapes are correct
@@ -215,9 +215,9 @@ This section will be populated during the Test, Implementation, and Packaging ph
 
 **Planning Phase Status**: Complete
 
-**Next Steps**:
+### Next Steps
 
 1. Issue #234 (Test): Create comprehensive test suite based on this design
-2. Issue #235 (Implementation): Implement operations following this specification
-3. Issue #236 (Packaging): Integrate operations into shared library
-4. Issue #237 (Cleanup): Refactor and finalize based on lessons learned
+1. Issue #235 (Implementation): Implement operations following this specification
+1. Issue #236 (Packaging): Integrate operations into shared library
+1. Issue #237 (Cleanup): Refactor and finalize based on lessons learned

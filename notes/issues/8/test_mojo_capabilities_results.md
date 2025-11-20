@@ -22,7 +22,7 @@ Testing confirms that **Mojo is NOT ready for converting existing Python scripts
 ```mojo
 var result = run("echo 'Hello from subprocess'")
 // Output: "Hello from subprocess"
-```
+```text
 
 **API**: `run(cmd: String) -> String`
 
@@ -39,7 +39,7 @@ var result = run("echo 'Hello from subprocess'")
 ```text
 Output: gh version 2.83.0 (2025-11-04)
 https://github.com/cli/cli/releases/tag/v2.83.0
-```
+```text
 
 **Conclusion**: Can execute external commands and capture their output.
 
@@ -68,7 +68,7 @@ result = subprocess.run(["gh", "auth", "status"], capture_output=True)
 if result.returncode != 0:
     print("Not authenticated")
     sys.exit(1)
-```
+```text
 
 ### 4. Stderr Capture: ⚠️ PARTIAL
 
@@ -80,7 +80,7 @@ if result.returncode != 0:
 // Must use shell redirection
 var result = run("ls /nonexistent 2>&1")
 // Captures: "ls: cannot access '/nonexistent': No such file or directory"
-```
+```text
 
 **Limitation**: No separate stderr stream - must redirect using shell syntax
 
@@ -122,15 +122,15 @@ var result = run("ls /nonexistent 2>&1")
 
 ```mojo
 fn run(cmd: String) -> String
-```
+```text
 
-**What it provides**:
+### What it provides
 
 - Single String command argument
 - Returns stdout as String
 - Trailing whitespace removed
 
-**What it DOESN'T provide**:
+### What it DOESN'T provide
 
 - Exit code access (exit codes are silently ignored)
 - Exception on command failure (non-zero exits pass silently)
@@ -138,7 +138,7 @@ fn run(cmd: String) -> String
 - ProcessResult object
 - Command as list of arguments
 
-**Comparison to Python**:
+### Comparison to Python
 
 ```python
 # Python subprocess - Rich API
@@ -153,7 +153,7 @@ result = subprocess.run(
 var output = run("gh auth status")
 # Only have: output (String)
 # Missing: exit code, stderr
-```
+```text
 
 ## Script Conversion Assessment
 
@@ -168,21 +168,21 @@ Total Python scripts: 14 files in `/home/mvillmow/ml-odyssey/scripts/`
    - Exit code checking
    - File parsing with complex patterns
 
-2. `regenerate_github_issues.py` (450+ LOC)
+1. `regenerate_github_issues.py` (450+ LOC)
    - Regex pattern matching
    - Complex string parsing
    - File manipulation
 
-3. `get_system_info.py` (229 LOC)
+1. `get_system_info.py` (229 LOC)
    - Exit code checking (line 39: `result.returncode == 0`)
    - File parsing
    - Conditional logic based on command success
 
-4. Other scripts: All use regex, exit codes, or complex parsing
+1. Other scripts: All use regex, exit codes, or complex parsing
 
 ### Example: get_system_info.py Analysis
 
-**Lines that block conversion**:
+### Lines that block conversion
 
 ```python
 # Line 39: Checks exit code - NOT possible in Mojo
@@ -196,9 +196,9 @@ return output if success and output else None
 success, _ = run_command(["git", "rev-parse", "--git-dir"])
 if success:
     print("  Git Repository: Yes")
-```
+```text
 
-**Conversion blockers**:
+### Conversion blockers
 
 - Exit code checking (lines 39, 199, 204, 209)
 - Tuple returns with success status
@@ -220,7 +220,7 @@ if success:
 
 ### 1. Keep Python Scripts in Python (RECOMMENDED)
 
-**Rationale**:
+### Rationale
 
 - Existing scripts work perfectly
 - No functional benefit from conversion
@@ -228,7 +228,7 @@ if success:
 - High risk of introducing bugs
 - Loss of features (exit codes, regex)
 
-**Scripts to keep in Python**:
+### Scripts to keep in Python
 
 - ALL current scripts in `/home/mvillmow/ml-odyssey/scripts/`
 - Focus on maintaining existing functionality
@@ -255,11 +255,11 @@ fn get_git_branch() raises -> String:
 fn main() raises:
     var branch = get_git_branch()
     print("Current branch:", branch)
-```
+```text
 
 ### 3. Wait for Mojo Stdlib Improvements
 
-**Missing features needed**:
+### Missing features needed
 
 - Exit code access: `result.exit_code`
 - Separate stderr: `result.stderr`
@@ -270,14 +270,14 @@ fn main() raises:
 
 ### 4. Focus Mojo Development on ML Code
 
-**Better use of Mojo**:
+### Better use of Mojo
 
 - Implement LeNet-5 in Mojo (Issue #4)
 - Build tensor operations in Mojo
 - Performance-critical ML algorithms
 - Core ML library components
 
-**Not a good use of Mojo**:
+### Not a good use of Mojo
 
 - Converting working Python scripts
 - Automation tools
@@ -293,9 +293,9 @@ fn main() raises:
 Critical missing features:
 
 1. **Exit code access** - Exit codes are silently ignored, no way to check success/failure
-2. **No exceptions on failure** - Commands can fail silently with no indication
-3. **Separate stderr stream** - Only stdout captured, stderr lost unless redirected
-4. **Regex support** - Not in stdlib, external package not available
+1. **No exceptions on failure** - Commands can fail silently with no indication
+1. **Separate stderr stream** - Only stdout captured, stderr lost unless redirected
+1. **Regex support** - Not in stdlib, external package not available
 
 ### Most Critical Issue: Silent Failures
 
@@ -306,7 +306,7 @@ The most dangerous limitation is that **commands fail silently**:
 var output = run("gh auth status")
 // No exception raised, no exit code to check
 // Script continues as if everything worked
-```
+```text
 
 This makes Mojo's `run()` **unsafe for production scripts** that need reliability.
 
@@ -314,7 +314,7 @@ This makes Mojo's `run()` **unsafe for production scripts** that need reliabilit
 
 **Original claim**: "Convert Python scripts to Mojo"
 
-**Reality**:
+### Reality
 
 - ✗ NOT FEASIBLE for existing scripts
 - ✗ NOT RECOMMENDED even if possible
@@ -323,7 +323,7 @@ This makes Mojo's `run()` **unsafe for production scripts** that need reliabilit
 
 ### Recommendation for Issue #8
 
-**Close issue with reasoning**:
+### Close issue with reasoning
 
 > After thorough testing, Mojo's subprocess API is too limited for script conversion:
 >
@@ -340,20 +340,20 @@ This makes Mojo's `run()` **unsafe for production scripts** that need reliabilit
 **Instead of Issue #8**, focus on:
 
 1. **Issue #4**: Implement LeNet-5 in Mojo (real value-add)
-2. **Issue #62**: Document agent patterns (Python is fine here)
-3. **New work**: Write ML algorithms in Mojo (performance-critical)
+1. **Issue #62**: Document agent patterns (Python is fine here)
+1. **New work**: Write ML algorithms in Mojo (performance-critical)
 
 ## Appendix: Test Script
 
 **Location**: `/home/mvillmow/ml-odyssey/test_mojo_capabilities.mojo`
 
-**Run tests**:
+### Run tests
 
 ```bash
 pixi run mojo test_mojo_capabilities.mojo
-```
+```text
 
-**Test coverage**:
+### Test coverage
 
 - ✓ Subprocess stdout capture
 - ✓ External command execution (gh CLI)

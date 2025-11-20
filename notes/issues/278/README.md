@@ -30,7 +30,7 @@ Implement accuracy metrics for evaluating classification model performance, incl
 
 **Rationale**: Different parts of the training pipeline may produce either raw logits (pre-softmax) or normalized probabilities (post-softmax). Supporting both input types makes the metrics more flexible and easier to integrate.
 
-**Implementation approach**:
+### Implementation approach
 
 - Auto-detect input type or allow explicit specification
 - Convert logits to probabilities internally when needed
@@ -42,7 +42,7 @@ Implement accuracy metrics for evaluating classification model performance, incl
 
 **Rationale**: Large datasets may not fit in memory, requiring incremental metric updates across mini-batches. However, single-batch computation is simpler and sufficient for smaller evaluations.
 
-**Implementation approach**:
+### Implementation approach
 
 - Provide stateful accumulator for incremental updates
 - Maintain running counts and totals
@@ -55,7 +55,7 @@ Implement accuracy metrics for evaluating classification model performance, incl
 
 **Rationale**: For classification with many classes, top-1 accuracy can be overly strict. Top-k accuracy (checking if correct label is in top k predictions) provides a more nuanced evaluation metric.
 
-**Implementation approach**:
+### Implementation approach
 
 - Use efficient k-largest selection (not full sort)
 - Support configurable k value
@@ -67,7 +67,7 @@ Implement accuracy metrics for evaluating classification model performance, incl
 
 **Rationale**: Per-class accuracy helps identify which classes the model struggles with. A structured output (e.g., dictionary or tensor indexed by class) makes this data easy to analyze and visualize.
 
-**Implementation approach**:
+### Implementation approach
 
 - Track correct predictions and total samples per class
 - Return accuracy values indexed by class ID
@@ -78,7 +78,7 @@ Implement accuracy metrics for evaluating classification model performance, incl
 
 **Decision**: Define clear behavior for edge cases
 
-**Edge cases to handle**:
+### Edge cases to handle
 
 - Empty batches (no samples): Return None or NaN
 - Single-class prediction: Return 1.0 or 0.0 based on correctness
@@ -93,7 +93,7 @@ Implement accuracy metrics for evaluating classification model performance, incl
 
 **Rationale**: Accuracy metrics may process large tensors. Using Mojo's `owned` and `borrowed` parameters ensures efficient memory usage without unnecessary copies.
 
-**Implementation approach**:
+### Implementation approach
 
 - Accept predictions and labels as `borrowed` (read-only)
 - Return metric values as owned primitives (Float64)
@@ -101,7 +101,7 @@ Implement accuracy metrics for evaluating classification model performance, incl
 
 ### 7. API Design
 
-**Proposed interfaces**:
+### Proposed interfaces
 
 ```mojo
 # Top-1 accuracy - single batch
@@ -156,11 +156,11 @@ struct AccuracyMetric:
     fn reset(inout self):
         """Reset accumulated values."""
         pass
-```
+```text
 
 ### 8. Testing Strategy
 
-**Unit tests needed**:
+### Unit tests needed
 
 - Perfect predictions (100% accuracy)
 - Random predictions (approximately 1/num_classes accuracy)
@@ -168,7 +168,7 @@ struct AccuracyMetric:
 - Incremental updates match batch computation
 - Per-class accuracy sums correctly
 
-**Integration tests needed**:
+### Integration tests needed
 
 - Use with actual model outputs
 - Verify compatibility with tensor operations

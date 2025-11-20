@@ -63,9 +63,9 @@ Shared Library Orchestrator:
   - Determines: This belongs in shared library (02-shared-library/core_ops/)
   - Creates GitHub issue #150: [Plan] BatchNorm2D Implementation
   - Delegates to Architecture Design Agent
-```
+```text
 
-**Artifacts**:
+### Artifacts
 
 - GitHub Issue #150 created
 - Initial requirements documented
@@ -90,9 +90,9 @@ Architecture Design Agent:
     * Requires: Tensor operations from core_ops
     * Integration: Will be used by LeNet-5 and future papers
   - Creates detailed specification in notes/issues/150/
-```
+```text
 
-**Artifacts**:
+### Artifacts
 
 - Component specification: `notes/issues/150/component-spec.md`
 - Interface definitions: `notes/issues/150/interfaces.md`
@@ -138,9 +138,9 @@ Documentation Specialist:
     * Performance benchmarks
     * Integration guide for papers
   - Creates documentation outline
-```
+```text
 
-**Artifacts**:
+### Artifacts
 
 - Implementation plan: `notes/issues/150/implementation-plan.md`
 - Test plan: `notes/issues/150/test-plan.md`
@@ -150,14 +150,14 @@ Documentation Specialist:
 
 #### Phase 2-4: Test/Implementation/Packaging (Parallel)
 
-**Git Worktree Setup**:
+### Git Worktree Setup
 
 ```bash
 # Create parallel worktrees
 git worktree add worktrees/issue-151-test-batchnorm -b 151-test-batchnorm
 git worktree add worktrees/issue-152-impl-batchnorm -b 152-impl-batchnorm
 git worktree add worktrees/issue-153-pkg-batchnorm -b 153-pkg-batchnorm
-```
+```text
 
 #### Phase 2: Test (Parallel)
 
@@ -232,9 +232,9 @@ Test Engineer (Level 4):
   - Creates test fixtures (tests/fixtures/batchnorm_data.mojo)
   - Commits tests to test worktree
   - Status update: "Tests ready, waiting for implementation"
-```
+```text
 
-**Artifacts**:
+### Artifacts
 
 - Test files: `tests/test_batchnorm.mojo`
 - Test fixtures: `tests/fixtures/batchnorm_data.mojo`
@@ -421,9 +421,9 @@ Junior Implementation Engineer (Level 5):
     * Tests fail: backward (not implemented yet)
   - Commits implementation to impl worktree
   - Status update: "Core implementation complete, backward pass pending"
-```
+```text
 
-**Artifacts**:
+### Artifacts
 
 - Implementation: `src/core_ops/layers/batchnorm.mojo`
 - Most tests passing
@@ -464,7 +464,9 @@ Documentation Engineer (Level 4):
   ### Constructor
 
   ```mojo
+
   BatchNorm2D(num_features: Int, eps: Float32 = 1e-5, momentum: Float32 = 0.1)
+
   ```
 
 ### Methods
@@ -472,13 +474,17 @@ Documentation Engineer (Level 4):
 #### forward (Inference Mode)
 
 ```mojo
+
   fn forward(self, input: Tensor[DType.float32]) -> Tensor[DType.float32]
+
   ```
 
 #### forward_train (Training Mode)
 
   ```mojo
+
   fn forward_train(inout self, input: Tensor[DType.float32]) -> Tensor[DType.float32]
+
   ```
 
 ## Usage Examples
@@ -486,6 +492,7 @@ Documentation Engineer (Level 4):
 ### Basic Usage
 
 ```mojo
+
   from core_ops.layers import BatchNorm2D
   from tensor import Tensor
 
@@ -499,11 +506,12 @@ Documentation Engineer (Level 4):
   # Inference
   var test_input = Tensor[DType.float32](1, 64, 28, 28)
   var test_output = bn.forward(test_input)
-```
 
+```text
 ### In a Model
 
 ```mojo
+
   from core_ops.layers import Conv2D, BatchNorm2D, ReLU
 
   struct ConvBlock:
@@ -521,8 +529,8 @@ Documentation Engineer (Level 4):
           x = self.bn.forward_train(x)  # Training mode
           x = self.relu.forward(x)
           return x
-```
 
+```text
 ## Performance
 
 SIMD-optimized implementation provides significant speedup:
@@ -536,12 +544,13 @@ SIMD-optimized implementation provides significant speedup:
 To use in your paper implementation:
 
 ```mojo
+
   from core_ops.layers import BatchNorm2D
 
   # Add to your model
   var bn = BatchNorm2D(num_features=128)
-```
 
+```text
 ## See Also
 
 - [Conv2D Layer](./conv2d.md)
@@ -555,12 +564,14 @@ To use in your paper implementation:
 
 ```text
 
-**Artifacts**:
+### Artifacts
+
 - API documentation: `docs/api/batchnorm.md`
 - Usage guide: `docs/guides/using-batchnorm.md`
 - Updated README: `src/core_ops/README.md`
 
-**Coordination During Parallel Phases**:
+### Coordination During Parallel Phases
+
 ```text
 Week 1:
   - Test: Tests 80% complete
@@ -575,7 +586,7 @@ Week 2:
 Week 3:
   - All phases complete
   - Ready for integration and cleanup
-```
+```text
 
 ### Phase 5: Cleanup (Sequential)
 
@@ -626,9 +637,9 @@ Shared Library Orchestrator (Cleanup):
   - Final review
   - Merges cleanup PR
   - Updates project roadmap
-```
+```text
 
-**Artifacts**:
+### Artifacts
 
 - Complete, production-ready BatchNorm2D
 - Full test coverage including backward pass
@@ -637,19 +648,19 @@ Shared Library Orchestrator (Cleanup):
 
 ### Expected Outputs
 
-**Code**:
+### Code
 
 - `src/core_ops/layers/batchnorm.mojo` - Implementation
 - `tests/test_batchnorm.mojo` - Tests
 - `tests/fixtures/batchnorm_data.mojo` - Test fixtures
 
-**Documentation**:
+### Documentation
 
 - `docs/api/batchnorm.md` - API reference
 - `docs/guides/using-batchnorm.md` - Usage guide
 - `src/core_ops/README.md` - Updated with BatchNorm
 
-**GitHub**:
+### GitHub
 
 - 5 Issues (#150-154) - Plan, Test, Impl, Package, Cleanup
 - 5 PRs - One per phase
@@ -694,7 +705,7 @@ Test Specialist:
     * Test 3x5 kernel (currently fails)
     * Test 5x3 kernel
     * Test various rectangular kernels
-```
+```text
 
 **Time**: 30 minutes
 
@@ -704,7 +715,7 @@ Test Specialist:
 # Create worktrees
 git worktree add worktrees/issue-201-test-conv2d-bug -b 201-test-conv2d-bug
 git worktree add worktrees/issue-202-impl-conv2d-bug -b 202-impl-conv2d-bug
-```
+```text
 
 ```text
 Test Engineer:
@@ -741,7 +752,7 @@ Implementation Engineer:
 
   - Runs test: PASSES ✓
   - Commits fix
-```
+```text
 
 **Time**: 1-2 hours
 
@@ -759,22 +770,22 @@ Implementation Engineer:
 Documentation Engineer:
   - Updates Conv2D documentation to highlight rectangular kernel support
   - Adds example with rectangular kernel
-```
+```text
 
 **Time**: 1 hour
 
 ### Expected Outputs
 
-**Code**:
+### Code
 
 - Fixed `src/core_ops/layers/conv2d.mojo`
 - New test `tests/test_conv2d.mojo::test_rectangular_kernel()`
 
-**Documentation**:
+### Documentation
 
 - Updated `docs/api/conv2d.md` with rectangular kernel examples
 
-**GitHub**:
+### GitHub
 
 - 3 Issues (#200-202) - Plan, Test+Impl combined, Cleanup
 - 2 PRs - One for fix, one for cleanup
@@ -830,7 +841,7 @@ Implementation Specialist:
   - Identifies potential risks:
     * Performance regression
     * Behavior changes
-```
+```text
 
 **Time**: 1 week
 
@@ -842,7 +853,7 @@ Test Engineer:
     * Baseline performance benchmarks
     * Baseline correctness tests for all layers
   - Tests will verify refactoring doesn't change behavior
-```
+```text
 
 #### Phase 3: Implementation
 
@@ -881,7 +892,7 @@ Implementation Engineer:
 
   - Refactors other layers similarly
   - Removes duplicated code
-```
+```text
 
 #### Phase 4: Packaging
 
@@ -890,7 +901,7 @@ Documentation Engineer:
   - Documents new simd_helpers module
   - Updates layer documentation to reference helpers
   - Creates migration guide for future layer implementations
-```
+```text
 
 #### Phase 5: Cleanup
 
@@ -908,22 +919,22 @@ Implementation Engineer:
 Architecture Design Agent:
   - Validates refactoring maintains architectural integrity
   - Approves design
-```
+```text
 
 ### Expected Outputs
 
-**Code**:
+### Code
 
 - New module: `src/core_ops/utils/simd_helpers.mojo`
 - Refactored: `conv2d.mojo`, `batchnorm.mojo`, `dense.mojo`
 - Removed: ~200 lines of duplicated code
 
-**Tests**:
+### Tests
 
 - Regression tests confirming no behavior changes
 - Unit tests for simd_helpers
 
-**Documentation**:
+### Documentation
 
 - API docs for simd_helpers
 - Migration guide for future implementations
@@ -1005,7 +1016,7 @@ Final Review:
 
 Merge:
   Implementation Specialist merges PR
-```
+```text
 
 ### Expected Outputs
 
@@ -1072,9 +1083,9 @@ Component Specialists (Level 3):
     * Implementation Specialist: Break into functions/classes
     * Test Specialist: Define test cases
     * Documentation Specialist: Plan docs
-```
+```text
 
-**Plan Phase Artifacts**:
+### Plan Phase Artifacts
 
 - Module specifications: `notes/issues/400-403/`
 - Interface definitions
@@ -1155,7 +1166,7 @@ Packaging (Issue #413):
   - Create usage examples
   - Write training guide
   - Benchmark performance vs PyTorch
-```
+```text
 
 **Similar for other modules**: Data, Training, Evaluation
 
@@ -1173,29 +1184,29 @@ All agents participate in cleanup:
   - Performance Engineer optimizes training
   - Implementation Engineer adds features
   - Documentation Engineer writes reproduction report
-```
+```text
 
 ### Expected Outputs
 
-**Code**:
+### Code
 
 - Complete LeNet-5 implementation
 - MNIST data loading
 - Training loop
 - Evaluation scripts
 
-**Documentation**:
+### Documentation
 
 - LeNet-5 architecture guide
 - Training tutorial
 - Reproduction report comparing with original paper
 
-**Results**:
+### Results
 
 - Model achieves ~99% accuracy on MNIST (matching paper)
 - Performance benchmarks vs PyTorch
 
-**GitHub**:
+### GitHub
 
 - 20+ issues (Plan, Test, Impl, Package, Cleanup for each module)
 - 20+ PRs
@@ -1240,7 +1251,7 @@ Performance Specialist:
   - Defines success criteria:
     * 2x speedup on 32x3x224x224 input
     * No accuracy regression
-```
+```text
 
 #### Phase 2: Test
 
@@ -1248,7 +1259,7 @@ Performance Specialist:
 Test Engineer:
   - Creates baseline benchmarks
   - Creates correctness tests (compare optimized vs original)
-```
+```text
 
 #### Phase 3: Implementation
 
@@ -1260,7 +1271,7 @@ Performance Engineer:
     * Inlining: @always_inline for hot paths
   - Benchmarks: 2.3x speedup achieved ✓
   - Validates: All correctness tests pass ✓
-```
+```text
 
 #### Phase 5: Cleanup
 
@@ -1272,7 +1283,7 @@ Test Engineer:
 Documentation Engineer:
   - Documents optimization techniques
   - Adds performance tips for other layers
-```
+```text
 
 ### Expected Outputs
 
@@ -1314,7 +1325,7 @@ Documentation Specialist:
     * Repository structure overview
     * Contribution guide
   - Creates documentation outline
-```
+```text
 
 #### Phase 4: Packaging (Main Phase)
 
@@ -1327,7 +1338,7 @@ Documentation Engineer:
     * Next steps (how to implement a paper)
   - Creates example code
   - Adds diagrams and screenshots
-```
+```text
 
 #### Phase 5: Cleanup
 
@@ -1336,7 +1347,7 @@ Documentation Specialist:
   - Reviews guide for clarity
   - Tests instructions on fresh system
   - Fixes any issues
-```
+```text
 
 ### Expected Outputs
 
@@ -1378,7 +1389,7 @@ Security Design Agent:
     * Review random number generation (predictability)
     * Review dependencies (known CVEs)
   - Defines security standards
-```
+```text
 
 #### Phase 2: Test
 
@@ -1388,7 +1399,7 @@ Security Specialist:
     * Fuzz testing for tensor operations
     * Invalid input tests
     * Boundary condition tests
-```
+```text
 
 #### Phase 3: Implementation
 
@@ -1404,7 +1415,7 @@ Implementation Engineer:
     * Add input validation for kernel size
     * Sanitize file paths in dataset loader
     * Update dependency
-```
+```text
 
 #### Phase 5: Cleanup
 
@@ -1416,7 +1427,7 @@ Security Specialist:
 Documentation Engineer:
   - Documents security practices
   - Adds security section to contribution guide
-```
+```text
 
 ### Expected Outputs
 
@@ -1453,27 +1464,27 @@ Documentation Engineer:
 
 ### Common Agent Combinations
 
-**Feature Development**:
+### Feature Development
 
 - Chief Architect (strategic) + Section Orchestrator (tactical) + Design Agents (architecture) + Specialists (execution)
 
-**Bug Fixes**:
+### Bug Fixes
 
 - Implementation Specialist + Test Engineer + Implementation Engineer
 
-**Refactoring**:
+### Refactoring
 
 - Architecture Design Agent + Implementation Specialist + Implementation Engineers
 
-**Documentation**:
+### Documentation
 
 - Documentation Specialist + Documentation Engineer
 
-**Security**:
+### Security
 
 - Security Design Agent + Security Specialist + Implementation Engineers
 
-**Performance**:
+### Performance
 
 - Performance Specialist + Performance Engineer + Test Engineer
 

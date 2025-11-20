@@ -28,14 +28,14 @@ Design and document the approach for customizing the selected code of conduct te
 
 **Decision**: Use a well-established code of conduct template (e.g., Contributor Covenant, Mozilla Community Participation Guidelines)
 
-**Rationale**:
+### Rationale
 
 - Established templates have been reviewed and vetted by the open source community
 - Proven effectiveness in setting community standards
 - Legal considerations already addressed
 - Widely recognized and respected
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Custom code of conduct from scratch - Rejected due to legal complexity and lack of community vetting
 - No code of conduct - Rejected as it fails to establish community standards
@@ -44,20 +44,20 @@ Design and document the approach for customizing the selected code of conduct te
 
 **Decision**: Minimal customization approach - only modify what is absolutely necessary for project context
 
-**Rationale**:
+### Rationale
 
 - Maintains the strength and integrity of the vetted template
 - Reduces risk of introducing gaps or inconsistencies
 - Keeps the document focused and professional
 - Easier to maintain and update in the future
 
-**Key Customization Areas**:
+### Key Customization Areas
 
 1. **Contact Information** - Project maintainer email(s) for reporting
-2. **Enforcement Contacts** - Designated individuals for handling violations
-3. **Scope Clarification** - If needed, clarify application to project spaces (GitHub, Discord, etc.)
+1. **Enforcement Contacts** - Designated individuals for handling violations
+1. **Scope Clarification** - If needed, clarify application to project spaces (GitHub, Discord, etc.)
 
-**Areas to Avoid Customizing**:
+### Areas to Avoid Customizing
 
 - Core behavioral standards and guidelines
 - Examples of unacceptable behavior
@@ -68,7 +68,7 @@ Design and document the approach for customizing the selected code of conduct te
 
 **Decision**: Use primary maintainer contact with clear reporting channels
 
-**Schema**:
+### Schema
 
 ```yaml
 Primary Contact:
@@ -81,9 +81,9 @@ Enforcement Team:
 
 Escalation Path:
   - [If needed for larger projects]
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Clear reporting path for community members
 - Transparent accountability
@@ -93,14 +93,14 @@ Escalation Path:
 
 **Decision**: Specify clear, proportional enforcement approach aligned with template guidance
 
-**Key Elements**:
+### Key Elements
 
 1. **Initial Response** - Acknowledgment timeline (e.g., 48 hours)
-2. **Investigation Process** - Confidential review by enforcement team
-3. **Consequence Spectrum** - From warning to permanent ban based on severity
-4. **Appeal Process** - Mechanism for appeals if included in template
+1. **Investigation Process** - Confidential review by enforcement team
+1. **Consequence Spectrum** - From warning to permanent ban based on severity
+1. **Appeal Process** - Mechanism for appeals if included in template
 
-**Rationale**:
+### Rationale
 
 - Transparency builds trust in the community
 - Clear consequences deter violations
@@ -110,7 +110,7 @@ Escalation Path:
 
 **Decision**: Place CODE_OF_CONDUCT.md at repository root in Markdown format
 
-**Rationale**:
+### Rationale
 
 - Standard GitHub convention for discoverability
 - Automatically recognized and linked by GitHub
@@ -121,7 +121,7 @@ Escalation Path:
 
 **Decision**: Document requires review by Documentation Specialist before implementation
 
-**Review Checklist**:
+### Review Checklist
 
 - [ ] All placeholder contact information filled in
 - [ ] Enforcement procedures are clear and actionable
@@ -135,30 +135,30 @@ Escalation Path:
 ### Phase 1: Template Analysis
 
 1. Review selected template in detail
-2. Identify required customization points
-3. Document template structure and sections
-4. Note any optional sections to include/exclude
+1. Identify required customization points
+1. Document template structure and sections
+1. Note any optional sections to include/exclude
 
 ### Phase 2: Information Gathering
 
 1. Collect project contact information
-2. Determine enforcement team members
-3. Define reporting channels
-4. Establish response time commitments
+1. Determine enforcement team members
+1. Define reporting channels
+1. Establish response time commitments
 
 ### Phase 3: Customization Specification
 
 1. Map project information to template placeholders
-2. Specify any scope clarifications needed
-3. Document enforcement procedure details
-4. Define verification criteria
+1. Specify any scope clarifications needed
+1. Document enforcement procedure details
+1. Define verification criteria
 
 ### Phase 4: Documentation
 
 1. Create comprehensive implementation guide for Test phase (#712)
-2. Provide validation criteria for Testing phase
-3. Document acceptance criteria for Implementation phase (#713)
-4. Specify integration requirements for Packaging phase (#714)
+1. Provide validation criteria for Testing phase
+1. Document acceptance criteria for Implementation phase (#713)
+1. Specify integration requirements for Packaging phase (#714)
 
 ## References
 

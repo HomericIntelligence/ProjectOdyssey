@@ -41,7 +41,7 @@ Scheduled or on-demand - performance validation.
 
 **Purpose**: Enforce code quality standards with automated formatting and linting.
 
-**What it checks**:
+### What it checks
 
 - Mojo code formatting (`mojo format`)
 - Markdown linting (`markdownlint-cli2`)
@@ -51,7 +51,7 @@ Scheduled or on-demand - performance validation.
 
 **When it runs**: Every PR and push to main
 
-**Local execution**:
+### Local execution
 
 ```bash
 # Install pre-commit
@@ -63,7 +63,7 @@ pre-commit run --all-files
 
 # Run specific hook
 pre-commit run mojo-format --all-files
-```
+```text
 
 ---
 
@@ -71,7 +71,7 @@ pre-commit run mojo-format --all-files
 
 **Purpose**: Run fast unit tests for both Mojo and Python code with coverage reporting.
 
-**What it does**:
+### What it does
 
 - Runs Mojo unit tests (when they exist)
 - Runs Python unit tests with pytest
@@ -81,7 +81,7 @@ pre-commit run mojo-format --all-files
 
 **When it runs**: Every PR and push to main
 
-**Local execution**:
+### Local execution
 
 ```bash
 # Run Mojo tests
@@ -92,7 +92,7 @@ pixi run pytest tests/unit/ --cov --cov-report=term
 
 # Run both and check coverage threshold
 pixi run pytest tests/unit/ --cov --cov-fail-under=80
-```
+```text
 
 **Expected output**: Coverage report in PR comment, artifacts with detailed results.
 
@@ -102,13 +102,13 @@ pixi run pytest tests/unit/ --cov --cov-fail-under=80
 
 **Purpose**: Validate component interactions across three test suites.
 
-**Test suites**:
+### Test suites
 
 1. **agent-workflows**: Agent system integration
-2. **paper-pipeline**: Paper implementation workflows
-3. **data-pipeline**: Data loading and processing
+1. **paper-pipeline**: Paper implementation workflows
+1. **data-pipeline**: Data loading and processing
 
-**What it does**:
+### What it does
 
 - Runs all three test suites in parallel (matrix strategy)
 - Generates combined report
@@ -117,7 +117,7 @@ pixi run pytest tests/unit/ --cov --cov-fail-under=80
 
 **When it runs**: Every PR (except drafts) and pushes to main
 
-**Local execution**:
+### Local execution
 
 ```bash
 # Run specific integration suite
@@ -125,7 +125,7 @@ pixi run pytest tests/integration/agent-workflows/ -v
 
 # Run all integration tests
 pixi run pytest tests/integration/ -v
-```
+```text
 
 **Expected output**: Integration test report in PR comment with pass/fail status per suite.
 
@@ -135,27 +135,27 @@ pixi run pytest tests/integration/ -v
 
 **Purpose**: Comprehensive security scanning for vulnerabilities, secrets, and code issues.
 
-**Scanning components**:
+### Scanning components
 
 1. **Dependency Scan**: Check Python dependencies for known vulnerabilities (Safety, OSV Scanner)
-2. **Secret Scan**: Detect exposed secrets (Gitleaks)
-3. **SAST Scan**: Static Application Security Testing (Semgrep)
-4. **Supply Chain Scan**: Dependency review for PRs (GitHub API)
+1. **Secret Scan**: Detect exposed secrets (Gitleaks)
+1. **SAST Scan**: Static Application Security Testing (Semgrep)
+1. **Supply Chain Scan**: Dependency review for PRs (GitHub API)
 
-**Severity handling**:
+### Severity handling
 
 - **Critical**: Block merge immediately
 - **High**: Block merge, require fix or exception
 - **Medium**: Warning only
 - **Low**: Info only
 
-**When it runs**:
+### When it runs
 
 - Every PR and push to main
 - Weekly schedule (Monday 9 AM UTC)
 - Manual dispatch
 
-**Local execution**:
+### Local execution
 
 ```bash
 # Run dependency scan
@@ -166,7 +166,7 @@ gitleaks detect --source . --verbose
 
 # Run SAST
 semgrep --config auto
-```
+```text
 
 **Expected output**: Security report in PR comment with findings by severity.
 
@@ -176,13 +176,13 @@ semgrep --config auto
 
 **Purpose**: Validate that all packages build successfully.
 
-**Build targets**:
+### Build targets
 
 1. **Mojo Packages**: Compile all Mojo source files
-2. **Python Packages**: Build Python distributions (wheel, sdist)
-3. **Documentation**: Build MkDocs site
+1. **Python Packages**: Build Python distributions (wheel, sdist)
+1. **Documentation**: Build MkDocs site
 
-**What it validates**:
+### What it validates
 
 - All source files compile without errors
 - Package metadata is valid
@@ -192,7 +192,7 @@ semgrep --config auto
 
 **When it runs**: Every PR and push to main
 
-**Local execution**:
+### Local execution
 
 ```bash
 # Build Mojo packages
@@ -206,7 +206,7 @@ twine check dist/*
 
 # Build documentation
 mkdocs build --strict
-```
+```text
 
 **Expected output**: Build report in PR comment with status for each build target.
 
@@ -216,26 +216,26 @@ mkdocs build --strict
 
 **Purpose**: Validate paper implementations against required structure and specifications.
 
-**Validation stages**:
+### Validation stages
 
 1. **Structure Validation** (~1 min):
    - Required files present (README.md, metadata.yml)
    - Required directories (implementation/, tests/)
    - Valid metadata structure (title, authors, year, URL)
 
-2. **Implementation Validation** (~3 min):
+1. **Implementation Validation** (~3 min):
    - Implementation files exist
    - Test files exist
    - Paper-specific tests pass
 
-3. **Reproducibility Validation** (~10 min, optional):
+1. **Reproducibility Validation** (~10 min, optional):
    - Training scripts run successfully
    - Results match expected metrics (±5% tolerance)
    - Only runs with `validate-reproducibility` label
 
 **When it runs**: PRs or pushes affecting `papers/` directory
 
-**Local execution**:
+### Local execution
 
 ```bash
 # Validate paper structure
@@ -246,7 +246,7 @@ pytest papers/lenet5/tests/ -v
 
 # Run training for reproducibility
 python papers/lenet5/train.py --quick-validation
-```
+```text
 
 **Expected output**: Paper validation report in PR comment with pass/fail for each stage.
 
@@ -256,25 +256,25 @@ python papers/lenet5/train.py --quick-validation
 
 **Purpose**: Execute performance benchmarks and detect regressions.
 
-**Benchmark suites**:
+### Benchmark suites
 
 1. **tensor-ops**: Basic tensor operations (SIMD, vectorization)
-2. **model-training**: End-to-end training performance
-3. **data-loading**: Data pipeline throughput
+1. **model-training**: End-to-end training performance
+1. **data-loading**: Data pipeline throughput
 
-**Regression thresholds**:
+### Regression thresholds
 
 - **Critical** (> 25% slower): Block merge
 - **High** (10-25% slower): Require justification
 - **Medium** (5-10% slower): Warning only
 
-**When it runs**:
+### When it runs
 
 - Manual dispatch (primary trigger)
 - Nightly schedule (2 AM UTC)
 - PRs with `benchmark` label
 
-**Local execution**:
+### Local execution
 
 ```bash
 # Run specific benchmark suite
@@ -282,7 +282,7 @@ pixi run python benchmarks/tensor-ops/run_benchmark.py
 
 # Run all benchmarks
 pixi run python benchmarks/run_all.py
-```
+```text
 
 **Expected output**: Benchmark report with performance metrics and regression analysis.
 
@@ -292,24 +292,24 @@ pixi run python benchmarks/run_all.py
 
 **Purpose**: Detect broken links in markdown documentation.
 
-**What it checks**:
+### What it checks
 
 - Internal links (relative paths)
 - External links (HTTP/HTTPS)
 - Anchor links within documents
 
-**When it runs**:
+### When it runs
 
 - PRs or pushes affecting markdown files
 - Weekly schedule (Sunday)
 - Manual dispatch
 
-**Local execution**:
+### Local execution
 
 ```bash
 # Check links with lychee
 lychee --verbose --no-progress '**/*.md'
-```
+```text
 
 **Expected output**: List of broken links (if any).
 
@@ -319,7 +319,7 @@ lychee --verbose --no-progress '**/*.md'
 
 **Purpose**: Validate agent configuration files.
 
-**What it validates**:
+### What it validates
 
 - Agent markdown files are valid
 - Delegation patterns are correct
@@ -328,12 +328,12 @@ lychee --verbose --no-progress '**/*.md'
 
 **When it runs**: PRs affecting `agents/` or `.claude/agents/`
 
-**Local execution**:
+### Local execution
 
 ```bash
 # Run agent validation script
 python scripts/validate_agents.py
-```
+```text
 
 **Expected output**: Validation report with any configuration errors.
 
@@ -360,7 +360,7 @@ When you open a PR, workflows run in this order:
    └─ Paper Validation (if applicable)
 
 4. Optional: Benchmarks (if labeled, 30 min)
-```
+```text
 
 **Total time**: ~15-20 minutes for a typical PR (without benchmarks)
 
@@ -389,7 +389,7 @@ All workflows use caching to improve performance:
 
 **Problem**: Formatting checks fail
 
-**Solution**:
+### Solution
 
 ```bash
 # Auto-fix most issues
@@ -398,7 +398,7 @@ pre-commit run --all-files
 # Commit the fixes
 git add .
 git commit -m "fix: apply pre-commit auto-fixes"
-```
+```text
 
 #### Test coverage below threshold
 
@@ -410,28 +410,28 @@ git commit -m "fix: apply pre-commit auto-fixes"
 # Exclude specific lines
 def debug_function():  # pragma: no cover
     print("Debug only")
-```
+```text
 
 #### Security scan failures
 
 **Problem**: Secrets detected
 
-**Solution**:
+### Solution
 
 1. Remove the secret from code
-2. Use environment variables or GitHub Secrets
-3. Rotate the exposed credential
+1. Use environment variables or GitHub Secrets
+1. Rotate the exposed credential
 
 **Problem**: Dependency vulnerabilities
 
-**Solution**:
+### Solution
 
 ```bash
 # Update vulnerable package
 pip install --upgrade <package-name>
 
 # Or add exception in .safety-policy.yml (with justification)
-```
+```text
 
 #### Build failures
 
@@ -441,7 +441,7 @@ pip install --upgrade <package-name>
 
 ```bash
 mojo build src/your_file.mojo
-```
+```text
 
 #### Integration test failures
 
@@ -484,7 +484,7 @@ EOF
 
 chmod +x scripts/ci-local.sh
 ./scripts/ci-local.sh
-```
+```text
 
 ---
 
@@ -503,13 +503,13 @@ chmod +x scripts/ci-local.sh
 
 **Total**: ~400 min/day ≈ 12,000 min/month (over free tier)
 
-**Optimizations applied**:
+### Optimizations applied
 
 1. Conditional execution (paper validation only on papers/ changes)
-2. Aggressive caching (saves ~30-60s per run)
-3. Parallel jobs where possible
-4. Skip duplicate checks on draft PRs
-5. Benchmarks optional/scheduled only
+1. Aggressive caching (saves ~30-60s per run)
+1. Parallel jobs where possible
+1. Skip duplicate checks on draft PRs
+1. Benchmarks optional/scheduled only
 
 **Optimized estimate**: ~8,000 min/month (within free tier)
 
@@ -547,7 +547,7 @@ Track these metrics for CI/CD health:
 To add a new workflow:
 
 1. Create `.github/workflows/your-workflow.yml`
-2. Follow the template structure:
+1. Follow the template structure:
 
 ```yaml
 name: Your Workflow
@@ -570,12 +570,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Your step
         run: echo "Your commands"
-```
+```text
 
 1. Add caching where appropriate
-2. Add timeout limits
-3. Test locally first
-4. Document in this README
+1. Add timeout limits
+1. Test locally first
+1. Document in this README
 
 ---
 
@@ -583,7 +583,7 @@ jobs:
 
 Configure for `main` branch:
 
-**Required status checks**:
+### Required status checks
 
 - pre-commit
 - test-unit / test-mojo
@@ -594,7 +594,7 @@ Configure for `main` branch:
 
 **Required reviews**: 1
 
-**Additional rules**:
+### Additional rules
 
 - Dismiss stale reviews: true
 - Require code owner reviews: true

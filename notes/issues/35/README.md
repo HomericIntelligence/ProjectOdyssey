@@ -28,16 +28,16 @@ library as a standalone Mojo package.
 
 **File**: `dist/training-0.1.0.mojopkg`
 
-**Build Command**:
+### Build Command
 
 ```bash
 mkdir -p dist/
 mojo package shared/training -o dist/training-0.1.0.mojopkg
-```
+```text
 
 **Purpose**: Distributable binary package containing compiled training module
 
-**Contents**:
+### Contents
 
 - Compiled Mojo bytecode for all training module components
 - Package metadata (name: "training", version: "0.1.0")
@@ -51,26 +51,26 @@ mojo package shared/training -o dist/training-0.1.0.mojopkg
 
 **Purpose**: Automated testing of package installation and functionality
 
-**Tests Performed**:
+### Tests Performed
 
 1. Package file existence check
-2. Clean environment creation (temporary directory)
-3. Package installation via `mojo install`
-4. Import verification for all key exports:
+1. Clean environment creation (temporary directory)
+1. Package installation via `mojo install`
+1. Import verification for all key exports:
    - Callback system (Callback, CallbackSignal, CONTINUE, STOP)
    - TrainingState
    - LRScheduler interface
    - Scheduler implementations (StepLR, CosineAnnealingLR, WarmupLR)
    - Callback implementations (EarlyStopping, ModelCheckpoint, LoggingCallback)
    - Utility functions (is_valid_loss, clip_gradients)
-5. Clean environment cleanup
+1. Clean environment cleanup
 
-**Usage**:
+### Usage
 
 ```bash
 chmod +x scripts/install_verify_training.sh
 ./scripts/install_verify_training.sh
-```
+```text
 
 ### 3. Build Automation Script
 
@@ -78,19 +78,19 @@ chmod +x scripts/install_verify_training.sh
 
 **Purpose**: Automated package building with error checking
 
-**Process**:
+### Process
 
 1. Creates `dist/` directory if needed
-2. Runs `mojo package` command
-3. Verifies package file was created
-4. Displays package file details
+1. Runs `mojo package` command
+1. Verifies package file was created
+1. Displays package file details
 
-**Usage**:
+### Usage
 
 ```bash
 chmod +x scripts/build_training_package.sh
 ./scripts/build_training_package.sh
-```
+```text
 
 ### 4. Build Documentation
 
@@ -98,7 +98,7 @@ chmod +x scripts/build_training_package.sh
 
 **Purpose**: Comprehensive documentation of build process
 
-**Contents**:
+### Contents
 
 - Prerequisites and requirements
 - Step-by-step build instructions
@@ -121,25 +121,25 @@ chmod +x scripts/build_training_package.sh
 
 ```bash
 mkdir -p dist/
-```
+```text
 
 1. **Build binary package**:
 
 ```bash
 mojo package shared/training -o dist/training-0.1.0.mojopkg
-```
+```text
 
 1. **Verify package created**:
 
 ```bash
 ls -lh dist/training-0.1.0.mojopkg
-```
+```text
 
 1. **Test installation** (optional but recommended):
 
 ```bash
 ./scripts/install_verify_training.sh
-```
+```text
 
 ### Expected Artifacts
 
@@ -154,7 +154,7 @@ scripts/
 └── install_verify_training.sh          # Installation testing (in git)
 
 BUILD_PACKAGE.md                        # Build documentation (in git)
-```
+```text
 
 ## Installation Instructions
 
@@ -168,7 +168,7 @@ mojo install dist/training-0.1.0.mojopkg
 
 # Verify installation
 mojo run -c "from training import Callback, LRScheduler; print('Training module ready!')"
-```
+```text
 
 ### Import in Code
 
@@ -191,20 +191,20 @@ from training import (
     ModelCheckpoint,
     LoggingCallback,
 )
-```
+```text
 
 ## Git Ignore Configuration
 
 Binary artifacts must be excluded from version control:
 
-**Add to `.gitignore`**:
+### Add to `.gitignore`
 
 ```text
 # Binary package artifacts
 dist/*.mojopkg
 build/
 *.mojopkg
-```
+```text
 
 Scripts and documentation ARE committed:
 
@@ -239,7 +239,7 @@ Package phase completion criteria:
 
 This issue creates ACTUAL distributable artifacts, not just documentation:
 
-**Created**:
+### Created
 
 - Build scripts for creating .mojopkg file
 - Installation verification script
@@ -265,9 +265,9 @@ This issue creates ACTUAL distributable artifacts, not just documentation:
 The verification script ensures:
 
 1. Package installs without errors
-2. All public exports are accessible
-3. Imports work in clean environment (not just dev environment)
-4. Package is self-contained and usable
+1. All public exports are accessible
+1. Imports work in clean environment (not just dev environment)
+1. Package is self-contained and usable
 
 ## References
 
@@ -281,14 +281,14 @@ The verification script ensures:
 After completing this packaging phase:
 
 1. Build the package: `./scripts/build_training_package.sh`
-2. Test installation: `./scripts/install_verify_training.sh`
-3. Commit build scripts and documentation (NOT the .mojopkg file)
-4. Create PR linking to Issue #35
-5. Proceed to Cleanup phase (Issue #36) if needed
+1. Test installation: `./scripts/install_verify_training.sh`
+1. Commit build scripts and documentation (NOT the .mojopkg file)
+1. Create PR linking to Issue #35
+1. Proceed to Cleanup phase (Issue #36) if needed
 
 ## Files Created/Modified
 
-**Created**:
+### Created
 
 - `/home/mvillmow/ml-odyssey/worktrees/35-pkg-training/scripts/build_training_package.sh` (executable build script)
 - `/home/mvillmow/ml-odyssey/worktrees/35-pkg-training/scripts/install_verify_training.sh` (executable test script)
@@ -300,6 +300,6 @@ After completing this packaging phase:
 - `dist/` directory
 - `dist/training-0.1.0.mojopkg` (binary package - excluded from git)
 
-**To be modified**:
+### To be modified
 
 - `.gitignore` (add dist/*.mojopkg exclusion)

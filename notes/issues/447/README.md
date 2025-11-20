@@ -27,7 +27,8 @@ Refactor and finalize test fixtures based on learnings from Test, Implementation
 
 **conftest.mojo TestFixtures** (lines 139-181):
 
-**Implemented**:
+### Implemented
+
 ```mojo
 struct TestFixtures:
     @staticmethod
@@ -39,32 +40,36 @@ struct TestFixtures:
     fn set_seed():
         """Set random seed for deterministic test execution."""
         seed(Self.deterministic_seed())
-```
+```text
 
-**Strengths**:
+### Strengths
+
 - Simple, focused implementation
 - Well-documented
 - Follows Mojo patterns
 
 **TODO/Placeholder** (lines 160-181):
+
 ```mojo
 # TODO(#1538): Add tensor fixture methods when Tensor type is implemented
 # @staticmethod
-# fn small_tensor() -> Tensor:
+# fn small_tensor() -> Tensor
 #     """Create small 3x3 tensor for unit tests."""
 #     pass
-```
+```text
 
 **Decision Needed**: Keep, implement, or remove commented code
 
 **Data Generators** (lines 288-337):
 
-**Implemented**:
+### Implemented
+
 - `create_test_vector()`
 - `create_test_matrix()`
 - `create_sequential_vector()`
 
-**Strengths**:
+### Strengths
+
 - Simple implementations
 - Good docstrings
 - Efficient (pre-allocated capacity)
@@ -74,16 +79,17 @@ struct TestFixtures:
 **helpers/fixtures.mojo** (17 lines):
 
 **Status**: All placeholders
+
 ```mojo
 # TODO: Implement fixture functions once ExTensor is fully functional
-# These will include:
+# These will include
 # - random_tensor(shape, dtype) -> ExTensor
 # - sequential_tensor(shape, dtype) -> ExTensor
 # - nan_tensor(shape) -> ExTensor
 # - inf_tensor(shape) -> ExTensor
 # - ones_like(tensor) -> ExTensor
 # - zeros_like(tensor) -> ExTensor
-```
+```text
 
 **Decision Needed**: Implement, remove file, or keep as tracked TODO
 
@@ -93,17 +99,19 @@ struct TestFixtures:
 
 **Commented Tensor Fixtures** (conftest.mojo, lines 160-181):
 
-**Options**:
-1. **Implement** if Tensor is now available and fixtures are needed
-2. **Remove** commented code (confusing to have commented code)
-3. **Convert to docstring TODO** with issue tracking
+### Options
 
-**Recommended Action**:
+1. **Implement** if Tensor is now available and fixtures are needed
+1. **Remove** commented code (confusing to have commented code)
+1. **Convert to docstring TODO** with issue tracking
+
+### Recommended Action
+
 ```mojo
 // Instead of commented code:
 # TODO(#1538): Add tensor fixture methods when Tensor type is implemented
 # @staticmethod
-# fn small_tensor() -> Tensor:
+# fn small_tensor() -> Tensor
 #     pass
 
 // Do this:
@@ -115,13 +123,14 @@ struct TestFixtures:
     # - random_tensor(rows, cols) -> Tensor  (Issue #1538)
     # - simple_linear_model() -> Linear  (Issue #1538)
     # - synthetic_dataset(n_samples) -> TensorDataset  (Issue #1538)
-```
+```text
 
 **Rationale**: Cleaner than commented code, still documents intentions
 
 **helpers/fixtures.mojo Placeholders**:
 
-**Assessment**:
+### Assessment
+
 ```bash
 # Check if ExTensor is available
 ls shared/core/tensor*.mojo
@@ -129,36 +138,40 @@ ls extensor/*.mojo
 
 # Check if fixtures are used
 grep -r "from tests.helpers.fixtures import" tests/
-```
+```text
 
-**Decision Matrix**:
+### Decision Matrix
+
 | ExTensor Available? | Fixtures Used? | Action |
 |-------------------|----------------|--------|
 | Yes | Yes | Implement now |
 | Yes | No | Implement if beneficial |
 | No | - | Remove file or keep tracked TODO |
 
-**Recommended Actions**:
+### Recommended Actions
+
 - **If ExTensor ready AND fixtures needed**: Implement (see Issue #445)
 - **If ExTensor ready BUT fixtures not needed**: Remove placeholders
 - **If ExTensor not ready**: Remove file, add TODO to conftest.mojo docstring
 
 ### 2. Code Quality Improvements
 
-**Data Generator Optimization**:
+### Data Generator Optimization
 
 **Current** (create_test_vector):
+
 ```mojo
 fn create_test_vector(size: Int, value: Float32 = 1.0) -> List[Float32]:
     var vec = List[Float32](capacity=size)  // Good: pre-allocate
     for _ in range(size):
         vec.append(value)
     return vec
-```
+```text
 
 **Assessment**: Already efficient (pre-allocated)
 
 **Potential Enhancement** (if needed):
+
 ```mojo
 fn create_test_vector(size: Int, value: Float32 = 1.0) -> List[Float32]:
     """Create test vector filled with specific value.
@@ -176,13 +189,14 @@ fn create_test_vector(size: Int, value: Float32 = 1.0) -> List[Float32]:
     for _ in range(size):
         vec.append(value)
     return vec
-```
+```text
 
-**Add performance notes to docstrings if helpful**
+### Add performance notes to docstrings if helpful
 
-**Error Handling**:
+### Error Handling
 
-**Consider edge cases**:
+### Consider edge cases
+
 ```mojo
 fn create_test_vector(size: Int, value: Float32 = 1.0) -> List[Float32]:
     """Create test vector filled with specific value.
@@ -204,20 +218,22 @@ fn create_test_vector(size: Int, value: Float32 = 1.0) -> List[Float32]:
     for _ in range(size):
         vec.append(value)
     return vec
-```
+```text
 
 **Decision**: Only add if tests actually pass invalid sizes
 
 ### 3. Documentation Accuracy
 
-**Review Checklist**:
+### Review Checklist
+
 - [ ] All docstrings match current implementations
 - [ ] Parameter descriptions are accurate
 - [ ] Return value descriptions are accurate
 - [ ] Usage examples work correctly
 - [ ] Performance characteristics documented (if relevant)
 
-**Actions**:
+### Actions
+
 - Verify all docstrings
 - Update any outdated information
 - Add missing details
@@ -225,7 +241,8 @@ fn create_test_vector(size: Int, value: Float32 = 1.0) -> List[Float32]:
 
 ### 4. Naming Consistency
 
-**Review Current Names**:
+### Review Current Names
+
 - `TestFixtures` - Good (struct for fixtures)
 - `deterministic_seed()` - Good (clear purpose)
 - `set_seed()` - Good (action verb)
@@ -233,19 +250,22 @@ fn create_test_vector(size: Int, value: Float32 = 1.0) -> List[Float32]:
 - `create_test_matrix()` - Good (consistent with vector)
 - `create_sequential_vector()` - Good (descriptive adjective)
 
-**Ensure Future Fixtures Follow Patterns**:
+### Ensure Future Fixtures Follow Patterns
+
 - Generators: `create_*` or `*_fixture`
 - Models: `simple_*_model` or `test_*_model`
 - Datasets: `toy_*_dataset` or `test_*_dataset`
 
 ### 5. Redundancy Check
 
-**Questions**:
+### Questions
+
 - Are any fixtures duplicated?
 - Are any fixtures unused?
 - Can any fixtures be consolidated?
 
-**Analysis**:
+### Analysis
+
 ```bash
 # Check which fixtures are actually used
 grep -r "create_test_vector" tests/
@@ -253,21 +273,24 @@ grep -r "create_test_matrix" tests/
 grep -r "create_sequential_vector" tests/
 grep -r "TestFixtures.set_seed" tests/
 grep -r "TestFixtures.deterministic_seed" tests/
-```
+```text
 
-**Actions**:
+### Actions
+
 - Keep used fixtures
 - Consider removing unused fixtures (or document why they're kept)
 - Consolidate similar fixtures if beneficial
 
 ### 6. Performance Validation
 
-**Questions**:
+### Questions
+
 - Are fixtures fast enough?
 - Do fixtures allocate unnecessarily?
 - Are there performance bottlenecks?
 
 **Benchmarking** (if needed):
+
 ```mojo
 fn benchmark_vector_creation() raises:
     """Benchmark vector fixture creation."""
@@ -281,9 +304,10 @@ fn benchmark_vector_creation() raises:
     var duration = (end - start).milliseconds()
     print("Created", iterations, "vectors in", duration, "ms")
     print("Average:", duration / iterations, "ms per vector")
-```
+```text
 
 **Optimization** (if needed):
+
 - Profile slow fixtures
 - Optimize hot paths
 - Consider caching if appropriate
@@ -296,15 +320,15 @@ fn benchmark_vector_creation() raises:
    - List all TODOs in fixture code
    - Categorize: implement now, track, or remove
 
-2. **Check Usage**:
+1. **Check Usage**:
    - Find which fixtures are actually used
    - Identify unused fixtures
 
-3. **Performance Check**:
+1. **Performance Check**:
    - Benchmark fixture creation (if concerns exist)
    - Identify any slow fixtures
 
-4. **Documentation Review**:
+1. **Documentation Review**:
    - Check all docstrings for accuracy
    - Verify examples work
 
@@ -315,11 +339,11 @@ fn benchmark_vector_creation() raises:
    - Remove if not needed
    - Track in issues if deferred
 
-2. **Remove Unused Code**:
+1. **Remove Unused Code**:
    - Delete unused fixtures (with justification)
    - Clean up commented code
 
-3. **Fix Issues**:
+1. **Fix Issues**:
    - Correct inaccurate documentation
    - Fix any performance issues
    - Resolve any code quality issues
@@ -330,11 +354,11 @@ fn benchmark_vector_creation() raises:
    - Run all tests to ensure no regressions
    - Verify fixtures still work correctly
 
-2. **Documentation**:
+1. **Documentation**:
    - Verify all docstrings are accurate
    - Check examples work
 
-3. **CI**:
+1. **CI**:
    - Ensure CI passes
    - No new warnings or errors
 
@@ -345,7 +369,7 @@ fn benchmark_vector_creation() raises:
    - Update usage guide
    - Document cleanup decisions
 
-2. **Track Deferred Work**:
+1. **Track Deferred Work**:
    - Create issues for deferred TODOs
    - Document dependencies for future fixtures
 
@@ -369,35 +393,44 @@ fn benchmark_vector_creation() raises:
 
 (To be filled during cleanup phase)
 
-**TODOs Resolved**:
+### TODOs Resolved
+
 - TBD
 
 **TODOs Deferred** (with tracking):
+
 - TBD
 
-**Code Removed**:
+### Code Removed
+
 - TBD
 
-**Code Optimized**:
+### Code Optimized
+
 - TBD
 
-**Documentation Updated**:
+### Documentation Updated
+
 - TBD
 
 ### Lessons Learned
 
-**What Worked Well**:
+### What Worked Well
+
 - TBD
 
-**What Could Be Improved**:
+### What Could Be Improved
+
 - TBD
 
-**Recommendations for Future Fixtures**:
+### Recommendations for Future Fixtures
+
 - TBD
 
 ### Final State
 
 After cleanup:
+
 - All fixtures are production-ready
 - No placeholder code without tracking
 - Documentation is accurate and complete

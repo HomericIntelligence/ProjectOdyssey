@@ -27,9 +27,9 @@ None (leaf node)
 ## Steps
 
 1. Implement numerically stable softmax with axis support
-2. Create GELU using exact or approximation formula
-3. Ensure proper gradient computation
-4. Handle edge cases and numerical stability
+1. Create GELU using exact or approximation formula
+1. Ensure proper gradient computation
+1. Handle edge cases and numerical stability
 
 ## Success Criteria
 

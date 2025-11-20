@@ -62,9 +62,9 @@ Create comprehensive planning documentation for the "Run Paper Tests" feature. T
 The "Run Paper Tests" component is part of the broader paper test script system, which enables developers to:
 
 1. Identify and validate specific papers
-2. Validate paper structure and organization
-3. Execute paper-specific tests efficiently
-4. Collect and report test results
+1. Validate paper structure and organization
+1. Execute paper-specific tests efficiently
+1. Collect and report test results
 
 Issue #819 specifically focuses on the third component: executing paper tests and collecting results.
 
@@ -78,31 +78,31 @@ During this planning phase, the documentation should cover:
    - Support for unit tests and integration tests
    - Test ordering and dependency resolution
 
-2. **Test Execution Engine**
+1. **Test Execution Engine**
    - How tests are executed in the appropriate order
    - Parallel vs. sequential execution strategy
    - Test isolation and cleanup between tests
    - Timeout and resource management
 
-3. **Result Collection and Reporting**
+1. **Result Collection and Reporting**
    - How test results are captured and stored
    - Format for success/failure reporting
    - Output formatting and presentation
    - Execution statistics (time, pass rate, etc.)
 
-4. **Progress Feedback**
+1. **Progress Feedback**
    - Real-time progress display during test execution
    - Intermediate result reporting
    - Verbose and quiet output modes
    - Error message formatting and clarity
 
-5. **Error Handling**
+1. **Error Handling**
    - How test failures are captured and reported
    - Stack trace and error detail collection
    - Recovery strategies for partial failures
    - Clean error messages for developers
 
-6. **Integration with Test Framework**
+1. **Integration with Test Framework**
    - How it integrates with pytest (or other test frameworks)
    - Plugin architecture (if applicable)
    - Compatibility with existing test infrastructure
@@ -118,7 +118,8 @@ During this planning phase, the documentation should cover:
 
 **Decision**: Use pytest as the primary test framework for paper tests.
 
-**Rationale**:
+### Rationale
+
 - pytest is the standard testing framework in the Python/Mojo ecosystem
 - Supports both unit and integration testing
 - Rich plugin ecosystem for extended functionality
@@ -127,7 +128,8 @@ During this planning phase, the documentation should cover:
 - Excellent support for parametrized tests and fixtures
 - Strong community and documentation
 
-**Implications**:
+### Implications
+
 - Tests must follow pytest naming conventions
 - Paper test scripts will invoke pytest programmatically
 - Test configuration through pytest.ini or pyproject.toml
@@ -137,9 +139,9 @@ During this planning phase, the documentation should cover:
 
 **Decision**: Implement multi-level test discovery focusing on paper-specific tests.
 
-**Test Discovery Hierarchy**:
+### Test Discovery Hierarchy
 
-```
+```text
 paper_directory/
 ├── tests/
 │   ├── unit/
@@ -153,24 +155,26 @@ paper_directory/
 │       └── test_data_loading.py    # Data pipeline tests
 └── src/
     └── ... (implementation code)
-```
+```text
 
-**Discovery Process**:
+### Discovery Process
 
 1. **Validation Phase**: Verify paper directory structure exists and contains tests/
-2. **File Discovery**: Recursively find all test_*.py and *_test.py files
-3. **Module Loading**: Import test modules to identify test classes/functions
-4. **Categorization**: Organize tests by type (unit, integration, etc.)
-5. **Ordering**: Determine execution order based on dependencies
+1. **File Discovery**: Recursively find all test_*.py and *_test.py files
+1. **Module Loading**: Import test modules to identify test classes/functions
+1. **Categorization**: Organize tests by type (unit, integration, etc.)
+1. **Ordering**: Determine execution order based on dependencies
 
-**Rationale**:
+### Rationale
+
 - Focuses on paper-specific tests only (not system-wide)
 - Supports multiple test types without configuration
 - Clear directory structure makes tests discoverable
 - Follows pytest conventions automatically
 - Enables selective test execution (unit-only, integration-only, etc.)
 
-**Edge Cases Handled**:
+### Edge Cases Handled
+
 - Papers with no tests directory
 - Empty test directories
 - Test files that don't match naming conventions
@@ -181,7 +185,7 @@ paper_directory/
 
 **Decision**: Implement sequential execution with optional parallelization.
 
-**Execution Modes**:
+### Execution Modes
 
 1. **Default (Sequential)**
    - Execute tests in discovered order
@@ -190,16 +194,16 @@ paper_directory/
    - Easier to reproduce issues
    - Consistent test ordering
 
-2. **Parallel (Optional)**
+1. **Parallel (Optional)**
    - Use pytest-xdist for test parallelization
    - Balance across available CPU cores
    - Faster test execution for independent tests
    - May reorder test output
    - Optional feature via command-line flag
 
-**Test Execution Flow**:
+### Test Execution Flow
 
-```
+```text
 1. Setup Phase
    ├── Load pytest configuration for the paper
    ├── Initialize test environment
@@ -220,9 +224,10 @@ paper_directory/
    ├── Teardown test environment
    ├── Clean up temporary files
    └── Generate final report
-```
+```text
 
-**Rationale**:
+### Rationale
+
 - Sequential is default for predictability and debugging
 - Parallelization available for CI/CD and fast feedback
 - Clear phase separation makes output understandable
@@ -232,9 +237,9 @@ paper_directory/
 
 **Decision**: Implement structured result collection with multiple output formats.
 
-**Result Collection**:
+### Result Collection
 
-```
+```text
 TestResults {
     paper_name: str
     test_directory: str
@@ -265,9 +270,9 @@ ResultsSummary {
     failed_tests: List[str]
     error_tests: List[str]
 }
-```
+```text
 
-**Output Formats**:
+### Output Formats
 
 1. **Console Output (Default)**
    - Real-time test execution display
@@ -276,19 +281,20 @@ ResultsSummary {
    - Detailed error messages for failures
    - Summary statistics at the end
 
-2. **JSON Output**
+1. **JSON Output**
    - Machine-readable result format
    - Useful for CI/CD integration
    - Complete test data for analysis
    - Optional via --output-json flag
 
-3. **Summary Format**
+1. **Summary Format**
    - Quick pass/fail overview
    - Key statistics (count, duration, pass rate)
    - Failed test names for quick reference
    - Recommendations for next steps
 
-**Rationale**:
+### Rationale
+
 - Multiple formats serve different use cases (development vs. automation)
 - Structured data enables further analysis and reporting
 - Real-time feedback improves development experience
@@ -298,7 +304,7 @@ ResultsSummary {
 
 **Decision**: Implement real-time progress display with configurable verbosity.
 
-**Verbosity Levels**:
+### Verbosity Levels
 
 1. **Quiet (-q)**
    - Only summary line (pass/fail count)
@@ -306,30 +312,30 @@ ResultsSummary {
    - Fastest feedback
    - Usage: batch processing, CI/CD final status
 
-2. **Normal (default)**
+1. **Normal (default)**
    - Progress indicator as tests run
    - Test name + status for each test
    - Failure details and error messages
    - Final summary with statistics
    - Usage: normal development workflow
 
-3. **Verbose (-v)**
+1. **Verbose (-v)**
    - Full test output from pytest
    - Captured stdout/stderr from tests
    - Detailed timing for each test
    - Full failure tracebacks
    - Usage: debugging test failures
 
-4. **Very Verbose (-vv)**
+1. **Very Verbose (-vv)**
    - Raw pytest output with all details
    - All captured output and logs
    - Test setup/teardown details
    - Plugin output and warnings
    - Usage: deep debugging and troubleshooting
 
-**Progress Indicator Format**:
+### Progress Indicator Format
 
-```
+```text
 Running tests for paper: lenet-5
 Discovered 45 tests (30 unit, 12 integration, 3 data)
 
@@ -349,9 +355,10 @@ Summary:
   Duration: 2m 34s
 
 Recommendation: Check gradient computation in optimizer
-```
+```text
 
-**Rationale**:
+### Rationale
+
 - Progress bars provide confidence during long test runs
 - Multiple verbosity levels serve different needs
 - Real-time feedback helps developers debug faster
@@ -361,7 +368,7 @@ Recommendation: Check gradient computation in optimizer
 
 **Decision**: Implement comprehensive error handling with clear diagnostics.
 
-**Error Categories**:
+### Error Categories
 
 1. **Configuration Errors**
    - Missing paper directory
@@ -370,26 +377,26 @@ Recommendation: Check gradient computation in optimizer
    - Invalid test configuration
    - **Handling**: Print clear error message, suggest fixes, exit with code 1
 
-2. **Test Collection Errors**
+1. **Test Collection Errors**
    - Import errors in test modules
    - Syntax errors in test files
    - Missing dependencies
    - Invalid test structure
    - **Handling**: Report file and line number, show error context, continue with other tests if possible
 
-3. **Test Execution Errors**
+1. **Test Execution Errors**
    - Test timeouts
    - Resource exhaustion
    - System errors (file not found, permission denied)
    - Unhandled exceptions in tests
    - **Handling**: Capture full traceback, mark test as error, continue with next test
 
-4. **Reporting Errors**
+1. **Reporting Errors**
    - File I/O errors when writing reports
    - JSON serialization errors
    - **Handling**: Log to stderr, continue with console output, note in final summary
 
-**Error Messages**:
+### Error Messages
 
 - **Clear Location**: Show file, line number, and context
 - **Error Category**: Identify type of error (import, assertion, timeout, etc.)
@@ -397,9 +404,9 @@ Recommendation: Check gradient computation in optimizer
 - **Suggested Action**: Provide guidance on how to fix the issue
 - **Related Logs**: Reference any relevant configuration files or logs
 
-**Example Error Message**:
+### Example Error Message
 
-```
+```text
 ERROR: Failed to import test module
 
 File: papers/lenet-5/tests/unit/test_model.py
@@ -413,9 +420,10 @@ Suggested Fixes:
   3. Check that __init__.py files exist in source directories
 
 For more details, run with --verbose flag
-```
+```text
 
-**Rationale**:
+### Rationale
+
 - Clear errors help developers fix problems quickly
 - Suggested fixes reduce feedback cycles
 - Grouped error handling prevents cascading failures
@@ -425,9 +433,9 @@ For more details, run with --verbose flag
 
 **Decision**: Coordinate with Paper Test Script structure validation component.
 
-**Workflow Integration**:
+### Workflow Integration
 
-```
+```text
 User Command: run-paper-tests lenet-5
 
 1. Validate Paper Identity (01-test-specific-paper)
@@ -443,9 +451,9 @@ User Command: run-paper-tests lenet-5
    ├─> Execute tests
    ├─> Collect results
    └─> Generate report
-```
+```text
 
-**API Contract**:
+### API Contract
 
 The run-paper-tests component receives:
 
@@ -458,9 +466,10 @@ def run_paper_tests(
     parallel: bool = False,     # CLI argument
     output_format: str = "console"  # CLI argument
 ) -> TestResults
-```
+```text
 
-**Rationale**:
+### Rationale
+
 - Leverages validation from earlier component
 - Separates concerns (identification, validation, execution)
 - Coordinates workflow through shared data structures
@@ -470,7 +479,7 @@ def run_paper_tests(
 
 **Decision**: Implement caching and parallelization strategies.
 
-**Performance Considerations**:
+### Performance Considerations
 
 1. **Test Discovery Caching**
    - Cache discovered tests between runs
@@ -478,31 +487,32 @@ def run_paper_tests(
    - Optional --no-cache flag to force rediscovery
    - Reduces startup time for large test suites
 
-2. **Parallel Execution**
+1. **Parallel Execution**
    - Optional pytest-xdist integration
    - Automatically use available CPU cores
    - Configurable via --parallel or -j flags
    - Shared test fixtures properly isolated
 
-3. **Output Buffering**
+1. **Output Buffering**
    - Buffer output to avoid interleaving in parallel mode
    - Flush after each test for real-time feedback
    - Organize output by test for readability
 
-4. **Resource Management**
+1. **Resource Management**
    - Configurable timeout for tests (default 5 minutes)
    - Memory limit monitoring (optional)
    - Cleanup between tests to prevent resource leaks
    - Handle hanging tests gracefully
 
-**Performance Targets**:
+### Performance Targets
 
 - Test discovery: < 1 second for typical paper
 - Test execution: Proportional to test complexity
 - Parallel speedup: 3x-4x on 4-core system
 - Memory overhead: < 100MB for test runner
 
-**Rationale**:
+### Rationale
+
 - Caching reduces iteration time during development
 - Parallelization enables fast feedback in CI/CD
 - Proper resource management prevents system issues
@@ -512,9 +522,9 @@ def run_paper_tests(
 
 **Decision**: Support optional result persistence for analysis and trends.
 
-**Result Storage**:
+### Result Storage
 
-```
+```text
 logs/
 ├── paper-test-results/
 │   ├── lenet-5/
@@ -524,9 +534,9 @@ logs/
 │   └── resnet/
 │       ├── 2024-01-15_14-28-10.json
 │       └── latest.json
-```
+```text
 
-**Result Metadata**:
+### Result Metadata
 
 ```json
 {
@@ -545,9 +555,9 @@ logs/
     "errors": 0
   }
 }
-```
+```text
 
-**Usage**:
+### Usage
 
 - Track test performance over time
 - Identify flaky tests (sometimes pass, sometimes fail)
@@ -555,7 +565,8 @@ logs/
 - Compare against baseline metrics
 - Generate trend reports for CI/CD
 
-**Rationale**:
+### Rationale
+
 - Result history enables trend analysis
 - Metadata supports debugging and correlation
 - Optional feature doesn't burden single-run users
@@ -565,25 +576,29 @@ logs/
 
 ### Component Responsibilities
 
-**Test Discovery**
+### Test Discovery
+
 - Locate all test files in paper's test directory
 - Parse test structure to identify test items
 - Handle missing or empty test directories
 - Report discovery progress and statistics
 
-**Test Execution**
+### Test Execution
+
 - Execute tests in determined order (or parallel)
 - Stream output in real-time
 - Capture results and metrics
 - Handle timeouts and failures gracefully
 
-**Result Collection**
+### Result Collection
+
 - Aggregate test results
 - Calculate statistics and summary
 - Format output according to requested format
 - Generate actionable insights
 
-**Error Handling**
+### Error Handling
+
 - Catch and classify errors
 - Provide clear diagnostic messages
 - Suggest remediation steps
@@ -614,7 +629,7 @@ markers = [
     "integration: integration tests",
     "slow: slow running tests",
 ]
-```
+```text
 
 ## Next Steps
 
@@ -627,21 +642,21 @@ After this planning phase is complete, the following phases will proceed:
    - Error handling cases
    - Reporting functionality
 
-2. **Issue #**: [Implementation] Run Paper Tests - Implementation
+1. **Issue #**: [Implementation] Run Paper Tests - Implementation
    - Implement test discovery engine
    - Build test execution runner
    - Create result collection and reporting
    - Add error handling and diagnostics
    - Implement progress feedback
 
-3. **Issue #**: [Packaging] Run Paper Tests - Integration and Packaging
+1. **Issue #**: [Packaging] Run Paper Tests - Integration and Packaging
    - Integrate with paper test script system
    - Create command-line interface
    - Package as distributable component
    - Create CI/CD integration
    - Document usage and configuration
 
-4. **Issue #**: [Cleanup] Run Paper Tests - Cleanup and Finalization
+1. **Issue #**: [Cleanup] Run Paper Tests - Cleanup and Finalization
    - Refactor and optimize code
    - Improve performance
    - Enhance user experience

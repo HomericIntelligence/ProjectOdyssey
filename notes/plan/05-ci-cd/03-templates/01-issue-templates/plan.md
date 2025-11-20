@@ -30,8 +30,8 @@ Create GitHub issue templates for common request types including paper implement
 ## Steps
 
 1. Paper Request
-2. Bug Report
-3. Performance Issue
+1. Bug Report
+1. Performance Issue
 
 ## Success Criteria
 

@@ -76,13 +76,13 @@ Create 3 mock paper implementations in `/tests/papers/mock_papers/`:
    - Complete documentation
    - Proper structure
 
-2. **incomplete_paper/** - Missing required components
+1. **incomplete_paper/** - Missing required components
    - Missing src/ directory
    - Missing tests
    - Incomplete README
    - Invalid configuration
 
-3. **failing_paper/** - Structure valid but tests fail
+1. **failing_paper/** - Structure valid but tests fail
    - All directories present
    - Some tests failing
    - Broken implementations
@@ -161,12 +161,12 @@ Create `/notes/issues/825/test-results.md` (200+ lines):
    - Report generation functions
    - Output formatting functions
 
-2. **Integration Tests**: Test component interactions
+1. **Integration Tests**: Test component interactions
    - Validation -> Execution -> Reporting pipeline
    - Error propagation and handling
    - State management across phases
 
-3. **End-to-End Tests**: Test complete workflows
+1. **End-to-End Tests**: Test complete workflows
    - Full paper testing on mock papers
    - Batch operations with multiple papers
    - Real paper testing (template)
@@ -183,14 +183,16 @@ Create `/notes/issues/825/test-results.md` (200+ lines):
 
 ### Test Data Strategy
 
-**Input Variations**:
+### Input Variations
+
 - Valid complete papers
 - Incomplete/missing components
 - Invalid configurations
 - Malformed files
 - Edge cases (empty files, large files, special characters)
 
-**Expected Outputs**:
+### Expected Outputs
+
 - Success reports with metrics
 - Failure reports with recommendations
 - Error messages with context
@@ -220,7 +222,7 @@ valid_paper/
 │   └── config.yaml
 └── examples/
     └── train.mojo
-```
+```text
 
 Status: All tests pass, complete documentation
 
@@ -233,7 +235,7 @@ incomplete_paper/
 │   └── __init__.mojo
 ├── tests/ (empty or missing)
 └── configs/ (missing)
-```
+```text
 
 Status: Missing required components
 
@@ -250,7 +252,7 @@ failing_paper/
 │   └── test_models.mojo (will fail)
 └── configs/
     └── config.yaml
-```
+```text
 
 Status: Structure valid, but tests fail
 
@@ -261,37 +263,37 @@ Status: Structure valid, but tests fail
 Test each function in the paper test script:
 
 1. `validate_paper()` - Validation logic
-2. `execute_paper_tests()` - Test execution
-3. `generate_report()` - Report generation
-4. `format_output()` - Output formatting
+1. `execute_paper_tests()` - Test execution
+1. `generate_report()` - Report generation
+1. `format_output()` - Output formatting
 
 ### Phase 2: Integration Tests (Component Interaction)
 
 Test how components work together:
 
 1. Validation -> Execution pipeline
-2. Execution -> Reporting pipeline
-3. Error handling and recovery
-4. State management
+1. Execution -> Reporting pipeline
+1. Error handling and recovery
+1. State management
 
 ### Phase 3: End-to-End Tests (Complete Workflow)
 
 Test full workflows:
 
 1. Test valid_paper (should pass)
-2. Test incomplete_paper (should report missing components)
-3. Test failing_paper (should report test failures)
-4. Test batch operations (multiple papers)
-5. Test real template paper
+1. Test incomplete_paper (should report missing components)
+1. Test failing_paper (should report test failures)
+1. Test batch operations (multiple papers)
+1. Test real template paper
 
 ### Phase 4: Performance Tests
 
 Benchmark critical paths:
 
 1. Validation time for single paper
-2. Test execution time for paper with 20 tests
-3. Report generation time
-4. Batch processing time (5 papers)
+1. Test execution time for paper with 20 tests
+1. Report generation time
+1. Batch processing time (5 papers)
 
 ## Implementation Notes
 
@@ -303,18 +305,18 @@ Benchmark critical paths:
    - Compatibility with pytest framework
    - Flexible test fixtures with conftest.py
 
-2. **Mock Papers Approach**: Creating minimal but functional mock papers
+1. **Mock Papers Approach**: Creating minimal but functional mock papers
    - Representative of real paper structure
    - Fast execution for test loops
    - Easy to create variations
 
-3. **pytest Framework**: Using pytest for test execution
+1. **pytest Framework**: Using pytest for test execution
    - Better assertions and error messages
    - Fixture support with conftest.py
    - Parallel execution support
    - Good integration with CI/CD
 
-4. **TDD Methodology**: Writing tests before implementation
+1. **TDD Methodology**: Writing tests before implementation
    - Ensures paper_test.py meets all requirements
    - Catches edge cases early
    - Provides executable specification
@@ -322,7 +324,7 @@ Benchmark critical paths:
 
 ### Test File Organization
 
-```
+```text
 tests/
 └── papers/
     ├── __init__.py
@@ -340,7 +342,7 @@ tests/
         ├── valid_paper/
         ├── incomplete_paper/
         └── failing_paper/
-```
+```text
 
 ### Running Tests
 
@@ -359,15 +361,15 @@ pytest tests/papers/test_paper_integration.py -v
 
 # Run tests in parallel
 pytest tests/papers/ -n auto
-```
+```text
 
 ### Test Execution Strategy
 
 1. **Fast Feedback Loop**: Unit tests should run < 5 seconds
-2. **Isolated Tests**: Each test is independent and can run in any order
-3. **Deterministic Results**: No random failures or flakiness
-4. **Clear Assertions**: Test failures clearly indicate what went wrong
-5. **Good Naming**: Test names describe what they test
+1. **Isolated Tests**: Each test is independent and can run in any order
+1. **Deterministic Results**: No random failures or flakiness
+1. **Clear Assertions**: Test failures clearly indicate what went wrong
+1. **Good Naming**: Test names describe what they test
 
 ## Success Metrics
 
@@ -406,7 +408,7 @@ pytest tests/papers/ -n auto
 
 **Estimated Duration**: 1-2 work sessions
 
-**Breakdown**:
+### Breakdown
 
 - Test infrastructure setup: 30 minutes
 - Mock papers creation: 1 hour
@@ -427,7 +429,8 @@ pytest tests/papers/ -n auto
 
 **Next Phase**: Implementation (#826) - uses these tests to drive implementation
 
-**Completion Criteria**:
+### Completion Criteria
+
 - All 90+ tests written and documented
 - Tests pass against mock papers
 - Test plan and results documentation complete
@@ -438,10 +441,10 @@ pytest tests/papers/ -n auto
 After this issue completes, Issue #826 will:
 
 1. Implement `test_paper.py` script using these tests as specification
-2. Ensure all 90+ tests pass
-3. Verify 95%+ code coverage
-4. Profile performance against benchmarks
-5. Test on real paper implementations
+1. Ensure all 90+ tests pass
+1. Verify 95%+ code coverage
+1. Profile performance against benchmarks
+1. Test on real paper implementations
 
 ## Implementation Notes
 
@@ -459,10 +462,10 @@ After this issue completes, Issue #826 will:
 Based on Issue #63 (Agent Testing):
 
 1. **Comprehensive Fixtures**: Create reusable fixture functions for common operations
-2. **Mock Objects**: Build realistic but minimal mocks that are quick to set up
-3. **Error Testing**: Don't forget to test error paths and edge cases
-4. **Performance Baselines**: Document expected performance for future regression testing
-5. **Documentation Priority**: Well-documented tests are easier to maintain and update
+1. **Mock Objects**: Build realistic but minimal mocks that are quick to set up
+1. **Error Testing**: Don't forget to test error paths and edge cases
+1. **Performance Baselines**: Document expected performance for future regression testing
+1. **Documentation Priority**: Well-documented tests are easier to maintain and update
 
 ## Questions and Clarifications
 

@@ -32,12 +32,12 @@ Create the `.claude/skills/` directory to house Claude Code Skills - reusable, a
 
 **Key Decision**: Skills are algorithmic/computational operations invoked by the model in the current context, while sub-agents are decision-making entities with separate conversation contexts.
 
-**Rationale**:
+### Rationale
 
 - **Skills**: Deterministic, pattern-based operations (code generation, analysis, testing)
 - **Sub-Agents**: Complex multi-step reasoning requiring judgment and context
 
-**When to Use Skills**:
+### When to Use Skills
 
 - Code generation templates and boilerplate
 - Code analysis patterns (AST parsing, metrics)
@@ -45,7 +45,7 @@ Create the `.claude/skills/` directory to house Claude Code Skills - reusable, a
 - Data extraction and transformation
 - Documentation generation
 
-**When to Use Sub-Agents**:
+### When to Use Sub-Agents
 
 - Complex multi-step decisions
 - Research requiring judgment
@@ -56,19 +56,19 @@ Create the `.claude/skills/` directory to house Claude Code Skills - reusable, a
 
 **Design Decision**: Organize skills into three tiers based on usage frequency and scope.
 
-**Tier 1 - Foundational Skills**:
+### Tier 1 - Foundational Skills
 
 - **Usage**: All agents across all levels
 - **Examples**: `analyze_code_structure`, `generate_boilerplate`, `run_tests`, `refactor_code`
 - **Purpose**: Universal operations used throughout development workflow
 
-**Tier 2 - Domain-Specific Skills**:
+### Tier 2 - Domain-Specific Skills
 
 - **Usage**: Specific agent types (Implementation Engineers, Test Specialists, Documentation Writers)
 - **Examples**: `extract_algorithm`, `prepare_dataset`, `generate_docstrings`, `evaluate_model`
 - **Purpose**: Specialized operations for particular problem domains
 
-**Tier 3 - Specialized Skills**:
+### Tier 3 - Specialized Skills
 
 - **Usage**: Few agents for narrow use cases
 - **Examples**: `scan_vulnerabilities`, `profile_code`, `optimize_simd`, `benchmark_functions`
@@ -80,7 +80,7 @@ Create the `.claude/skills/` directory to house Claude Code Skills - reusable, a
 
 **Design Decision**: Follow Claude Code SKILL.md frontmatter and structure conventions strictly.
 
-**Required Frontmatter**:
+### Required Frontmatter
 
 ```yaml
 ---
@@ -88,16 +88,16 @@ name: skill-name
 description: Brief description triggering appropriate auto-invocation
 allowed-tools: Read,Write,Bash
 ---
-```
+```text
 
-**Required Sections**:
+### Required Sections
 
 1. Purpose - What this skill does
-2. When to Use - Scenarios for invocation
-3. How It Works - Step-by-step process
-4. Inputs / Outputs - Clear specifications
-5. Examples - Realistic usage scenarios
-6. Error Handling - How to handle failures
+1. When to Use - Scenarios for invocation
+1. How It Works - Step-by-step process
+1. Inputs / Outputs - Clear specifications
+1. Examples - Realistic usage scenarios
+1. Error Handling - How to handle failures
 
 **Rationale**: Following Claude Code conventions ensures skills are automatically discovered and invoked appropriately.
 
@@ -105,7 +105,7 @@ allowed-tools: Read,Write,Bash
 
 **Design Decision**: Include Mojo-specific skills in Tier 3 for specialized optimization and analysis.
 
-**Planned Mojo Skills**:
+### Planned Mojo Skills
 
 - `optimize_simd` - Suggest SIMD vectorization patterns
 - `analyze_mojo_code` - Parse Mojo-specific syntax (fn vs def, structs, traits)
@@ -146,7 +146,7 @@ allowed-tools: Read,Write,Bash
     │   └── SKILL.md
     └── scan-vulnerabilities/
         └── SKILL.md
-```
+```text
 
 **Rationale**: Clear separation by tier makes skills easy to find and maintain. One directory per skill allows for future expansion (config files, examples, tests).
 
@@ -154,13 +154,13 @@ allowed-tools: Read,Write,Bash
 
 **Design Decision**: Document clear mappings between agent levels/types and skill usage.
 
-**By Agent Level**:
+### By Agent Level
 
 - **Level 0-2** (Architects): Analysis and extraction skills
 - **Level 3** (Specialists): Domain-specific and analysis skills
 - **Level 4-5** (Engineers): Generation, testing, and refactoring skills
 
-**By Agent Type**:
+### By Agent Type
 
 - **Implementation Engineers**: Code generation, refactoring, testing skills
 - **Test Engineers**: Testing, coverage, fixture generation skills
@@ -178,7 +178,7 @@ allowed-tools: Read,Write,Bash
 
 ### Related Issues
 
-**This Component (Skills)**:
+### This Component (Skills)
 
 - #510 [Plan] Skills ← **YOU ARE HERE**
 - #511 [Test] Skills - Write Tests
@@ -186,12 +186,12 @@ allowed-tools: Read,Write,Bash
 - #513 [Package] Skills - Integration and Packaging
 - #514 [Cleanup] Skills - Refactor and Finalize
 
-**Dependencies**:
+### Dependencies
 
 - #62 [Plan] Agents - Sub-agent system design (completed ✅)
 - #64 [Impl] Agents - Agent implementation (recommended to wait for progress)
 
-**Related Documentation**:
+### Related Documentation
 
 - `/agents/README.md` - Agent hierarchy overview
 - `/agents/hierarchy.md` - Visual agent hierarchy

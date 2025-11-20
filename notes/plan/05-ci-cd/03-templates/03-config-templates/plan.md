@@ -30,8 +30,8 @@ Create repository configuration templates including Dependabot configuration for
 ## Steps
 
 1. Dependabot Config
-2. CODEOWNERS
-3. Funding
+1. CODEOWNERS
+1. Funding
 
 ## Success Criteria
 

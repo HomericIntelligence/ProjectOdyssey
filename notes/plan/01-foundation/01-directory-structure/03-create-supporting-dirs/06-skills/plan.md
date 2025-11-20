@@ -33,19 +33,19 @@ None (leaf node)
 ## Steps
 
 1. Create `.claude/skills/` directory structure with tier-based organization (tier-1/, tier-2/, tier-3/)
-2. Document skills taxonomy and tier definitions in `.claude/skills/README.md`
-3. Create Tier 1 foundational skills with SKILL.md files:
+1. Document skills taxonomy and tier definitions in `.claude/skills/README.md`
+1. Create Tier 1 foundational skills with SKILL.md files:
    - Code analysis patterns (structure, dependencies, complexity)
    - Code generation templates (boilerplate, patterns)
    - Testing orchestration (run, analyze, report)
-4. Create Tier 2 domain-specific skills with SKILL.md files:
+1. Create Tier 2 domain-specific skills with SKILL.md files:
    - Paper analysis (extract algorithms, concepts, architecture)
    - ML operations (dataset prep, training patterns, evaluation)
    - Documentation generation (API docs, README templates)
-5. Define Tier 3 specialized skills structure for future narrow-use-case skills
-6. Create skills vs sub-agents decision matrix documentation
-7. Document skills usage guidelines and integration with agent hierarchy
-8. Verify all SKILL.md files follow Claude Code conventions (frontmatter, structure, examples)
+1. Define Tier 3 specialized skills structure for future narrow-use-case skills
+1. Create skills vs sub-agents decision matrix documentation
+1. Document skills usage guidelines and integration with agent hierarchy
+1. Verify all SKILL.md files follow Claude Code conventions (frontmatter, structure, examples)
 
 ## Success Criteria
 

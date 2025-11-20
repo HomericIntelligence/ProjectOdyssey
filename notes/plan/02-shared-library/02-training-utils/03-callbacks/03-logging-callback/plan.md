@@ -29,10 +29,10 @@ None (leaf node)
 ## Steps
 
 1. Implement console logging with formatting
-2. Add file logging with rotation support
-3. Create structured metric recording
-4. Support configurable logging frequency
-5. Provide summary reports per epoch
+1. Add file logging with rotation support
+1. Create structured metric recording
+1. Support configurable logging frequency
+1. Provide summary reports per epoch
 
 ## Success Criteria
 

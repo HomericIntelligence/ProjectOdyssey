@@ -40,7 +40,7 @@ created in Issue #59.
 
 **Purpose**: Validate 4-tier documentation hierarchy exists and is properly organized.
 
-**Key Test Cases**:
+### Key Test Cases
 
 - All 4 tiers present and accessible
 - Tier directories have correct structure
@@ -53,7 +53,7 @@ created in Issue #59.
 
 **Purpose**: Validate all 24 documents exist with minimum required content.
 
-**Key Test Cases**:
+### Key Test Cases
 
 - All Tier 1 docs exist (6 documents)
 - All Tier 2 docs exist (8 documents)
@@ -68,7 +68,7 @@ created in Issue #59.
 
 **Purpose**: Validate internal and external links are correct and reachable.
 
-**Key Test Cases**:
+### Key Test Cases
 
 - Internal markdown links resolve correctly
 - Relative path links work
@@ -82,7 +82,7 @@ created in Issue #59.
 
 **Purpose**: Validate Tier 1 (Getting Started) documents - 6 documents.
 
-**Key Test Cases**:
+### Key Test Cases
 
 - README.md: Project overview, setup instructions, links
 - quickstart.md: Quick start guide, examples
@@ -97,7 +97,7 @@ created in Issue #59.
 
 **Purpose**: Validate Tier 2 (Core Documentation) - 8 documents.
 
-**Key Test Cases**:
+### Key Test Cases
 
 - project-structure.md: Directory layout
 - shared-library.md: Library documentation
@@ -114,7 +114,7 @@ created in Issue #59.
 
 **Purpose**: Validate Tier 3 (Advanced Topics) - 6 documents.
 
-**Key Test Cases**:
+### Key Test Cases
 
 - performance.md: Optimization guides
 - custom-layers.md: Layer development
@@ -129,7 +129,7 @@ created in Issue #59.
 
 **Purpose**: Validate Tier 4 (Development Guides) - 4 documents.
 
-**Key Test Cases**:
+### Key Test Cases
 
 - architecture.md: System architecture
 - api-reference.md: API documentation
@@ -143,7 +143,8 @@ created in Issue #59.
 **Total Test Files**: 6
 **Total Test Cases**: Approximately 150+ (collected by pytest)
 **Total Lines of Code**: 2,976 lines
-**Coverage Areas**:
+
+### Coverage Areas
 
 - Structure validation (1 file)
 - Completeness checking (1 file)
@@ -161,7 +162,7 @@ created in Issue #59.
 
 ## Shared Infrastructure Used
 
-**Test Patterns from test_papers_directory.py**:
+### Test Patterns from test_papers_directory.py
 
 - pytest fixtures for directory paths
 - tmp_path for isolated testing
@@ -169,7 +170,7 @@ created in Issue #59.
 - Parametrized tests for multiple documents
 - Mock objects for error conditions
 
-**Standard pytest Features**:
+### Standard pytest Features
 
 - @pytest.fixture for test setup
 - @pytest.mark.parametrize for data-driven tests
@@ -188,7 +189,7 @@ created in Issue #59.
 
 **Decision**: Create 8 separate test files instead of one monolithic file.
 
-**Rationale**:
+### Rationale
 
 - Each file has a single responsibility
 - Easier to run specific test categories
@@ -199,7 +200,7 @@ created in Issue #59.
 
 **Decision**: Create separate test file for each tier (Tier 1-4).
 
-**Rationale**:
+### Rationale
 
 - Matches documentation organization (4-tier structure)
 - Each tier has different validation requirements
@@ -210,7 +211,7 @@ created in Issue #59.
 
 **Decision**: Use @pytest.mark.parametrize for document lists.
 
-**Rationale**:
+### Rationale
 
 - Test all documents with same validation logic
 - Clear failure messages (shows which document failed)
@@ -221,7 +222,7 @@ created in Issue #59.
 
 **Decision**: Test for existence and basic structure, not content quality.
 
-**Rationale**:
+### Rationale
 
 - TDD principle - write tests before implementation
 - Content quality testing comes in implementation phase
@@ -232,7 +233,7 @@ created in Issue #59.
 
 **Decision**: Validate internal links only, mark external links for future work.
 
-**Rationale**:
+### Rationale
 
 - Internal links under our control
 - External links may change (network required)
@@ -243,7 +244,7 @@ created in Issue #59.
 
 **Decision**: Check key markdownlint rules, not all rules.
 
-**Rationale**:
+### Rationale
 
 - Focus on most common issues (blank lines, languages)
 - Matches project's .markdownlint.json configuration
@@ -252,7 +253,7 @@ created in Issue #59.
 
 ## Alignment with Planning
 
-**From Issue #57 Planning Docs**:
+### From Issue #57 Planning Docs
 
 ### 4-Tier Structure (✅ Fully Covered)
 
@@ -277,30 +278,30 @@ created in Issue #59.
 - Implementation phase (Issue #59) will make tests pass
 - Tests are executable specifications
 
-**TDD Workflow**:
+### TDD Workflow
 
 1. Write tests (Issue #58) ← **Current phase**
-2. Run tests (expect failures - no docs yet)
-3. Implement docs (Issue #59) to make tests pass
-4. Refactor and polish (Issue #61)
+1. Run tests (expect failures - no docs yet)
+1. Implement docs (Issue #59) to make tests pass
+1. Refactor and polish (Issue #61)
 
 ## Key Test Cases Implemented
 
 ### Critical Tests (High Priority)
 
 1. **All 24 documents exist** - Ensures complete documentation set
-2. **4-tier structure present** - Validates hierarchy organization
-3. **Internal links resolve** - Ensures navigation works
-4. **Markdown compliance** - Ensures quality and consistency
-5. **Minimum content present** - Ensures docs aren't empty stubs
+1. **4-tier structure present** - Validates hierarchy organization
+1. **Internal links resolve** - Ensures navigation works
+1. **Markdown compliance** - Ensures quality and consistency
+1. **Minimum content present** - Ensures docs aren't empty stubs
 
 ### Important Tests (Medium Priority)
 
 1. **Directory structure correct** - Validates organization
-2. **Document headers present** - Ensures structure
-3. **Cross-tier references valid** - Ensures cohesion
-4. **Getting started complete** - Critical user docs
-5. **Core docs complete** - Critical developer docs
+1. **Document headers present** - Ensures structure
+1. **Cross-tier references valid** - Ensures cohesion
+1. **Getting started complete** - Critical user docs
+1. **Core docs complete** - Critical developer docs
 
 ### Edge Cases Covered
 
@@ -317,50 +318,50 @@ created in Issue #59.
 ```bash
 cd /home/mvillmow/ml-odyssey/worktrees/issue-58-test-docs
 pytest tests/foundation/docs/ -v
-```
+```text
 
 ### Run Specific Test File
 
 ```bash
 pytest tests/foundation/docs/test_doc_structure.py -v
 pytest tests/foundation/docs/test_getting_started.py -v
-```
+```text
 
 ### Run Specific Test Category
 
 ```bash
 pytest tests/foundation/docs/ -k "structure" -v
 pytest tests/foundation/docs/ -k "completeness" -v
-```
+```text
 
 ### Generate Coverage Report
 
 ```bash
 pytest tests/foundation/docs/ --cov=docs --cov-report=html
-```
+```text
 
 ## Next Steps
 
 ### Implementation Phase (Issue #59)
 
 1. Create all 24 documents based on test specifications
-2. Run tests to verify implementation
-3. Fix failing tests by improving docs
-4. Ensure all tests pass before PR
+1. Run tests to verify implementation
+1. Fix failing tests by improving docs
+1. Ensure all tests pass before PR
 
 ### Packaging Phase (Issue #60)
 
 1. Generate HTML documentation (mkdocs)
-2. Test documentation builds
-3. Validate generated output
-4. Deploy documentation site
+1. Test documentation builds
+1. Validate generated output
+1. Deploy documentation site
 
 ### Cleanup Phase (Issue #61)
 
 1. Review test coverage
-2. Add any missing edge cases
-3. Refactor test code (remove duplication)
-4. Update documentation as needed
+1. Add any missing edge cases
+1. Refactor test code (remove duplication)
+1. Update documentation as needed
 
 ## CI/CD Integration
 
@@ -373,7 +374,7 @@ pytest tests/foundation/docs/ --cov=docs --cov-report=html
 ```yaml
 - name: Test Documentation
   run: pytest tests/foundation/docs/ -v
-```
+```text
 
 ## Blockers and Issues
 

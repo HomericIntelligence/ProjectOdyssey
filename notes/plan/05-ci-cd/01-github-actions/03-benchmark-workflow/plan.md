@@ -30,8 +30,8 @@ Create a GitHub Actions workflow that runs performance benchmarks on paper imple
 ## Steps
 
 1. Run Benchmarks
-2. Compare Baseline
-3. Publish Results
+1. Compare Baseline
+1. Publish Results
 
 ## Success Criteria
 

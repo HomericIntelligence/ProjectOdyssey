@@ -61,7 +61,7 @@ This catalog lists all 23 agent types in the ML Odyssey hierarchical agent syste
 **Description**: Makes system-wide strategic decisions, selects papers to implement, and coordinates across all
 repository sections
 
-**When to Use**:
+### When to Use
 
 - Selecting which research paper to implement next
 - Making repository-wide architectural decisions
@@ -70,7 +70,7 @@ repository sections
 - Establishing project-wide standards and conventions
 - Evaluating overall project health and direction
 
-**Capabilities**:
+### Capabilities
 
 - Paper analysis and selection based on project goals
 - System-wide architecture design
@@ -79,7 +79,7 @@ repository sections
 - Strategic planning and roadmap creation
 - Repository-wide standard establishment
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Should we implement ResNet-50 or Transformer architecture next?"
@@ -91,7 +91,7 @@ repository sections
 "Establish repository-wide naming conventions and code standards"
 
 "Evaluate if we should migrate from Python to Mojo for data loading"
-```
+```text
 
 **Delegates To**: Section Orchestrators (Level 1)
 
@@ -109,7 +109,7 @@ repository sections
 
 **Description**: Manages repository structure, directory organization, and configuration files (Section 01)
 
-**When to Use**:
+### When to Use
 
 - Setting up initial repository structure
 - Creating or reorganizing directory hierarchies
@@ -117,7 +117,7 @@ repository sections
 - Establishing foundational documentation
 - Coordinating infrastructure setup
 
-**Capabilities**:
+### Capabilities
 
 - Directory structure design and creation
 - Configuration file management
@@ -125,7 +125,7 @@ repository sections
 - Foundation readiness validation
 - Prerequisite coordination for other sections
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Set up the directory structure for our new paper implementation"
@@ -135,7 +135,7 @@ repository sections
 "Create the foundational README and documentation structure"
 
 "Ensure the papers/ directory is ready for LeNet-5 implementation"
-```
+```text
 
 **Delegates To**: Module Design Agents (Level 2)
 
@@ -152,7 +152,7 @@ repository sections
 **Description**: Coordinates core reusable components including tensor operations, neural network layers, and
 training utilities (Section 02)
 
-**When to Use**:
+### When to Use
 
 - Adding new neural network layer types
 - Implementing core tensor operations
@@ -160,7 +160,7 @@ training utilities (Section 02)
 - Designing shared data structures
 - Managing API compatibility across the library
 
-**Capabilities**:
+### Capabilities
 
 - Shared component architecture design
 - API consistency enforcement
@@ -168,7 +168,7 @@ training utilities (Section 02)
 - Core operations coordination (tensor ops, layers, training utils)
 - Cross-paper component reusability
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Add a batch normalization layer to the shared library"
@@ -180,7 +180,7 @@ training utilities (Section 02)
 "Create shared dropout layer with configurable drop rate"
 
 "Ensure new Conv2D layer is compatible with existing Dense layer"
-```
+```text
 
 **Delegates To**: Architecture, Integration, Security Design Agents (Level 2)
 
@@ -196,7 +196,7 @@ training utilities (Section 02)
 
 **Description**: Manages developer tools, CLI utilities, and automation scripts (Section 03)
 
-**When to Use**:
+### When to Use
 
 - Creating CLI tools for common tasks
 - Developing automation scripts
@@ -204,7 +204,7 @@ training utilities (Section 02)
 - Implementing helper tools for workflows
 - Coordinating tool integration
 
-**Capabilities**:
+### Capabilities
 
 - CLI tool design and implementation
 - Automation script coordination
@@ -212,7 +212,7 @@ training utilities (Section 02)
 - Tool integration with existing systems
 - Script organization and documentation
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Create a CLI tool for generating new paper scaffolding"
@@ -222,7 +222,7 @@ training utilities (Section 02)
 "Implement a utility for converting datasets to Mojo format"
 
 "Design a tool for profiling neural network layers"
-```
+```text
 
 **Delegates To**: Architecture Design, Integration Design Agents (Level 2)
 
@@ -239,7 +239,7 @@ training utilities (Section 02)
 **Description**: Coordinates research paper implementations including data preparation, model architecture, training,
 and evaluation (Section 04)
 
-**When to Use**:
+### When to Use
 
 - Implementing a new research paper
 - Coordinating paper-specific components
@@ -247,7 +247,7 @@ and evaluation (Section 04)
 - Overseeing model training and evaluation
 - Ensuring paper implementation follows standards
 
-**Capabilities**:
+### Capabilities
 
 - Research paper analysis and breakdown
 - Paper-specific architecture design
@@ -256,7 +256,7 @@ and evaluation (Section 04)
 - Training and evaluation coordination
 - Results validation and documentation
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Implement the LeNet-5 paper end-to-end"
@@ -268,7 +268,7 @@ and evaluation (Section 04)
 "Oversee training pipeline for the current paper"
 
 "Ensure evaluation metrics match the paper's specifications"
-```
+```text
 
 **Delegates To**: Architecture, Integration Design Agents (Level 2)
 
@@ -285,7 +285,7 @@ and evaluation (Section 04)
 **Description**: Manages continuous integration, testing infrastructure, deployment pipelines, and quality gates
 (Section 05)
 
-**When to Use**:
+### When to Use
 
 - Setting up CI/CD pipelines
 - Configuring testing infrastructure
@@ -293,7 +293,7 @@ and evaluation (Section 04)
 - Establishing quality gates
 - Monitoring build and test health
 
-**Capabilities**:
+### Capabilities
 
 - CI/CD pipeline design and configuration
 - Testing infrastructure setup (unit, integration, performance tests)
@@ -302,7 +302,7 @@ and evaluation (Section 04)
 - Build and test monitoring
 - Pre-commit hook management
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Set up GitHub Actions for automated testing"
@@ -314,7 +314,7 @@ and evaluation (Section 04)
 "Implement quality gates for pull requests"
 
 "Set up performance regression testing"
-```
+```text
 
 **Delegates To**: Architecture Design, Integration Design Agents (Level 2)
 
@@ -331,7 +331,7 @@ and evaluation (Section 04)
 **Description**: Coordinates Claude-powered automation including research assistants, code review agents, and
 documentation generators (Section 06)
 
-**When to Use**:
+### When to Use
 
 - Creating new agent configurations
 - Designing automated workflows
@@ -339,7 +339,7 @@ documentation generators (Section 06)
 - Coordinating agent system improvements
 - Managing agent templates and documentation
 
-**Capabilities**:
+### Capabilities
 
 - Agent system architecture design
 - Sub-agent configuration creation
@@ -348,7 +348,7 @@ documentation generators (Section 06)
 - Agent coordination patterns
 - Skills system management
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Create a new agent for paper summarization"
@@ -360,7 +360,7 @@ documentation generators (Section 06)
 "Coordinate research assistant agent improvements"
 
 "Update agent templates with new best practices"
-```
+```text
 
 **Delegates To**: Architecture Design, Integration Design Agents (Level 2)
 
@@ -378,7 +378,7 @@ documentation generators (Section 06)
 
 **Description**: Designs module architecture, breaks modules into components, defines interfaces and data flow
 
-**When to Use**:
+### When to Use
 
 - Designing a new module's architecture
 - Breaking complex modules into components
@@ -387,7 +387,7 @@ documentation generators (Section 06)
 - Creating architectural documentation
 - Identifying reusable patterns
 
-**Capabilities**:
+### Capabilities
 
 - Component decomposition and design
 - Interface definition and API design
@@ -396,7 +396,7 @@ documentation generators (Section 06)
 - Mojo struct and trait design
 - Architectural documentation creation
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Design the architecture for the SGD optimizer module"
@@ -408,7 +408,7 @@ documentation generators (Section 06)
 "Create the architecture for tensor operations module"
 
 "Design Mojo struct hierarchy for neural network layers"
-```
+```text
 
 **Delegates To**: Component Specialists (Level 3)
 
@@ -424,7 +424,7 @@ documentation generators (Section 06)
 
 **Description**: Designs integration points between modules, defines cross-module APIs, and plans integration testing
 
-**When to Use**:
+### When to Use
 
 - Designing integration between modules
 - Defining cross-module APIs
@@ -433,7 +433,7 @@ documentation generators (Section 06)
 - Coordinating Mojo-Python interop
 - Resolving interface conflicts
 
-**Capabilities**:
+### Capabilities
 
 - Cross-module API design
 - Integration point identification
@@ -442,7 +442,7 @@ documentation generators (Section 06)
 - Interop design (Mojo-Python, FFI)
 - Interface negotiation and conflict resolution
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Design the integration between model and optimizer"
@@ -454,7 +454,7 @@ documentation generators (Section 06)
 "Resolve interface conflicts between two modules"
 
 "Design FFI bindings for Mojo-Python integration"
-```
+```text
 
 **Delegates To**: Component Specialists (Level 3)
 
@@ -470,7 +470,7 @@ documentation generators (Section 06)
 
 **Description**: Performs threat modeling, defines security requirements, and designs secure architectures
 
-**When to Use**:
+### When to Use
 
 - Threat modeling for new modules
 - Defining security requirements
@@ -479,7 +479,7 @@ documentation generators (Section 06)
 - Reviewing for security vulnerabilities
 - Ensuring memory safety in Mojo code
 
-**Capabilities**:
+### Capabilities
 
 - Threat modeling and risk assessment
 - Security requirements definition
@@ -488,7 +488,7 @@ documentation generators (Section 06)
 - Numerical stability review (NaN/Inf handling)
 - Security test planning
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Perform threat modeling for the model serving API"
@@ -500,7 +500,7 @@ documentation generators (Section 06)
 "Design secure authentication for API endpoints"
 
 "Review Mojo code for potential buffer overflows"
-```
+```text
 
 **Delegates To**: Security Specialist (Level 3)
 
@@ -519,7 +519,7 @@ documentation generators (Section 06)
 **Description**: Coordinates component implementation, breaks components into functions/classes, and manages
 implementation work
 
-**When to Use**:
+### When to Use
 
 - Creating detailed implementation plans
 - Breaking components into functions and classes
@@ -528,7 +528,7 @@ implementation work
 - Managing complex implementations
 - Coordinating with Test and Documentation Specialists
 
-**Capabilities**:
+### Capabilities
 
 - Component decomposition into functions/classes
 - Implementation planning and specification
@@ -537,7 +537,7 @@ implementation work
 - Mojo code organization
 - Refactoring guidance
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Create implementation plan for Conv2D layer"
@@ -549,7 +549,7 @@ implementation work
 "Review implementation quality for tensor operations"
 
 "Plan refactoring of model architecture code"
-```
+```text
 
 **Delegates To**: Implementation Engineers (Level 4)
 
@@ -565,7 +565,7 @@ implementation work
 
 **Description**: Plans comprehensive testing strategies, defines test cases, and coordinates test implementation
 
-**When to Use**:
+### When to Use
 
 - Creating test plans for components
 - Defining test cases (unit, integration, edge cases)
@@ -574,7 +574,7 @@ implementation work
 - Coordinating TDD workflows
 - Reviewing test quality
 
-**Capabilities**:
+### Capabilities
 
 - Test plan creation
 - Test case definition (unit, integration, property, performance)
@@ -583,7 +583,7 @@ implementation work
 - TDD coordination with Implementation Engineers
 - Test quality review
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Create comprehensive test plan for ReLU activation"
@@ -595,7 +595,7 @@ implementation work
 "Design test fixtures for MNIST data loading"
 
 "Coordinate TDD workflow for new layer type"
-```
+```text
 
 **Delegates To**: Test Engineers (Level 4)
 
@@ -611,7 +611,7 @@ implementation work
 
 **Description**: Coordinates documentation efforts, plans documentation structure, and ensures comprehensive coverage
 
-**When to Use**:
+### When to Use
 
 - Planning component documentation
 - Creating documentation structure
@@ -620,7 +620,7 @@ implementation work
 - Creating tutorials and examples
 - Reviewing documentation quality
 
-**Capabilities**:
+### Capabilities
 
 - Documentation planning and structure
 - README creation
@@ -629,7 +629,7 @@ implementation work
 - Documentation quality review
 - User guide creation
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Plan documentation for tensor operations module"
@@ -641,7 +641,7 @@ implementation work
 "Design tutorial for implementing custom layers"
 
 "Review documentation for completeness and clarity"
-```
+```text
 
 **Delegates To**: Documentation Writers (Level 4)
 
@@ -657,7 +657,7 @@ implementation work
 
 **Description**: Defines performance requirements, plans optimizations, and coordinates performance engineering
 
-**When to Use**:
+### When to Use
 
 - Defining performance requirements
 - Planning performance optimization strategies
@@ -666,7 +666,7 @@ implementation work
 - Coordinating profiling and analysis
 - Reviewing performance characteristics
 
-**Capabilities**:
+### Capabilities
 
 - Performance requirement definition
 - Benchmark design
@@ -675,7 +675,7 @@ implementation work
 - SIMD optimization planning
 - Performance analysis and review
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Define performance requirements for convolution layer"
@@ -687,7 +687,7 @@ implementation work
 "Identify bottlenecks in training loop"
 
 "Coordinate profiling of neural network forward pass"
-```
+```text
 
 **Delegates To**: Performance Engineers (Level 4)
 
@@ -703,7 +703,7 @@ implementation work
 
 **Description**: Implements security requirements, performs security testing, and fixes vulnerabilities
 
-**When to Use**:
+### When to Use
 
 - Implementing security requirements
 - Performing security code reviews
@@ -712,7 +712,7 @@ implementation work
 - Ensuring memory safety in implementations
 - Validating numerical stability
 
-**Capabilities**:
+### Capabilities
 
 - Security implementation
 - Security code review
@@ -721,7 +721,7 @@ implementation work
 - Memory safety verification
 - Numerical stability validation
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Implement secure model serialization"
@@ -733,7 +733,7 @@ implementation work
 "Fix buffer overflow vulnerability in data loading"
 
 "Validate numerical stability in loss calculations"
-```
+```text
 
 **Delegates To**: Implementation Engineers (Level 4)
 
@@ -751,7 +751,7 @@ implementation work
 
 **Description**: Implements complex functions, performance-critical code, and advanced Mojo features like SIMD
 
-**When to Use**:
+### When to Use
 
 - Implementing complex algorithms
 - Writing performance-critical code
@@ -760,7 +760,7 @@ implementation work
 - Implementing low-level operations
 - Mentoring junior engineers
 
-**Capabilities**:
+### Capabilities
 
 - Complex algorithm implementation
 - SIMD vectorization and optimization
@@ -769,7 +769,7 @@ implementation work
 - Low-level memory management
 - Code review and mentorship
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Implement SIMD-optimized convolution operation"
@@ -781,7 +781,7 @@ implementation work
 "Implement complex attention mechanism"
 
 "Create zero-copy tensor operations using Mojo lifetimes"
-```
+```text
 
 **Delegates To**: Junior Engineers (Level 5) for boilerplate
 
@@ -797,7 +797,7 @@ implementation work
 
 **Description**: Implements standard functions and classes following specifications
 
-**When to Use**:
+### When to Use
 
 - Implementing standard functions
 - Writing typical Mojo classes and structs
@@ -806,7 +806,7 @@ implementation work
 - Writing well-specified code
 - Coordinating with test engineers (TDD)
 
-**Capabilities**:
+### Capabilities
 
 - Standard function and class implementation
 - Mojo code writing (fn, def, struct, class)
@@ -815,7 +815,7 @@ implementation work
 - Error handling and validation
 - TDD collaboration
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Implement the forward pass for Dense layer"
@@ -827,7 +827,7 @@ implementation work
 "Implement standard activation functions (sigmoid, tanh)"
 
 "Write data validation functions"
-```
+```text
 
 **Delegates To**: Junior Engineers (Level 5) for simple tasks
 
@@ -843,7 +843,7 @@ implementation work
 
 **Description**: Implements unit tests, integration tests, and maintains test suites
 
-**When to Use**:
+### When to Use
 
 - Writing unit tests
 - Implementing integration tests
@@ -852,7 +852,7 @@ implementation work
 - Maintaining test suites
 - Debugging failing tests
 
-**Capabilities**:
+### Capabilities
 
 - Unit test implementation
 - Integration test implementation
@@ -861,7 +861,7 @@ implementation work
 - Test suite maintenance
 - Test debugging and fixing
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Write unit tests for SGD optimizer step function"
@@ -873,7 +873,7 @@ implementation work
 "Debug failing test in convolution backward pass"
 
 "Maintain and update test suite for refactored code"
-```
+```text
 
 **Delegates To**: Junior Test Engineers (Level 5) for simple tests
 
@@ -889,7 +889,7 @@ implementation work
 
 **Description**: Writes docstrings, API documentation, code examples, and README content
 
-**When to Use**:
+### When to Use
 
 - Writing function and class docstrings
 - Creating API documentation
@@ -898,7 +898,7 @@ implementation work
 - Creating usage guides
 - Documenting code changes
 
-**Capabilities**:
+### Capabilities
 
 - Docstring writing (Google, NumPy, or custom style)
 - API documentation creation
@@ -907,7 +907,7 @@ implementation work
 - Usage guide creation
 - Documentation maintenance
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Write docstrings for all tensor operation functions"
@@ -919,7 +919,7 @@ implementation work
 "Update README with new feature documentation"
 
 "Create usage guide for training pipeline"
-```
+```text
 
 **Delegates To**: Junior Documentation Engineers (Level 5) for formatting
 
@@ -935,7 +935,7 @@ implementation work
 
 **Description**: Writes benchmarks, performs profiling, implements optimizations, and validates performance
 
-**When to Use**:
+### When to Use
 
 - Writing benchmark code
 - Profiling code execution
@@ -944,7 +944,7 @@ implementation work
 - Analyzing performance bottlenecks
 - Measuring performance regressions
 
-**Capabilities**:
+### Capabilities
 
 - Benchmark implementation
 - Profiling and analysis (CPU, memory, cache)
@@ -953,7 +953,7 @@ implementation work
 - Bottleneck identification
 - Performance reporting
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Write benchmarks for convolution layer performance"
@@ -965,7 +965,7 @@ implementation work
 "Validate SIMD optimization improvements"
 
 "Measure and report performance regressions in PR"
-```
+```text
 
 **Delegates To**: Junior Engineers (Level 5) for simple benchmarks
 
@@ -983,7 +983,7 @@ implementation work
 
 **Description**: Writes simple functions, generates boilerplate code, formats code, and runs automated tools
 
-**When to Use**:
+### When to Use
 
 - Writing simple, well-specified functions
 - Generating boilerplate code
@@ -992,7 +992,7 @@ implementation work
 - Running linters and formatters
 - Implementing template-based code
 
-**Capabilities**:
+### Capabilities
 
 - Simple function implementation
 - Boilerplate code generation
@@ -1001,7 +1001,7 @@ implementation work
 - Accessor method generation
 - Basic code maintenance
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Create getter and setter methods for optimizer hyperparameters"
@@ -1013,7 +1013,7 @@ implementation work
 "Run pre-commit hooks and fix linting errors"
 
 "Create simple helper functions following this pattern"
-```
+```text
 
 **No Delegation**: Lowest level of hierarchy
 
@@ -1029,7 +1029,7 @@ implementation work
 
 **Description**: Writes simple test cases, generates test boilerplate, and runs test suites
 
-**When to Use**:
+### When to Use
 
 - Writing simple unit tests
 - Generating test boilerplate
@@ -1038,7 +1038,7 @@ implementation work
 - Creating basic test fixtures
 - Executing automated tests
 
-**Capabilities**:
+### Capabilities
 
 - Simple unit test implementation
 - Test boilerplate generation
@@ -1047,7 +1047,7 @@ implementation work
 - Test maintenance and updates
 - Test automation execution
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Write simple unit test for this getter function"
@@ -1059,7 +1059,7 @@ implementation work
 "Update existing tests after function signature change"
 
 "Create basic test fixture for this data structure"
-```
+```text
 
 **No Delegation**: Lowest level of hierarchy
 
@@ -1075,7 +1075,7 @@ implementation work
 
 **Description**: Fills in docstring templates, formats documentation, and generates changelog entries
 
-**When to Use**:
+### When to Use
 
 - Filling in docstring templates
 - Formatting documentation files
@@ -1084,7 +1084,7 @@ implementation work
 - Applying documentation standards
 - Basic documentation maintenance
 
-**Capabilities**:
+### Capabilities
 
 - Docstring template filling
 - Documentation formatting (Markdown, etc.)
@@ -1093,7 +1093,7 @@ implementation work
 - Documentation standards application
 - Documentation consistency maintenance
 
-**Example Use Cases**:
+### Example Use Cases
 
 ```text
 "Fill in docstring templates for these functions"
@@ -1105,7 +1105,7 @@ implementation work
 "Update README with new installation instructions"
 
 "Apply consistent formatting to all docstrings"
-```
+```text
 
 **No Delegation**: Lowest level of hierarchy
 
@@ -1141,31 +1141,31 @@ implementation work
 
 #### By Expertise
 
-**Mojo Expertise**:
+### Mojo Expertise
 
 - Advanced Mojo: Senior Implementation Engineer
 - Standard Mojo: Implementation Engineer
 - Simple Mojo: Junior Implementation Engineer
 
-**Testing**:
+### Testing
 
 - Test strategy: Test Specialist
 - Test implementation: Test Engineer
 - Simple tests: Junior Test Engineer
 
-**Documentation**:
+### Documentation
 
 - Documentation strategy: Documentation Specialist
 - API docs and examples: Documentation Writer
 - Formatting and templates: Junior Documentation Engineer
 
-**Performance**:
+### Performance
 
 - Performance strategy: Performance Specialist
 - Optimization implementation: Performance Engineer, Senior Implementation Engineer
 - Benchmarking: Performance Engineer
 
-**Security**:
+### Security
 
 - Security architecture: Security Design Agent
 - Security implementation: Security Specialist
@@ -1192,7 +1192,7 @@ Just describe your task naturally:
 "I need to optimize the convolution performance" → Performance Specialist
 "Write tests for the optimizer" → Test Engineer
 "Design the model architecture" → Architecture Design Agent
-```
+```text
 
 #### Explicit Invocation
 
@@ -1202,7 +1202,7 @@ Name the agent specifically:
 "Use the senior implementation engineer to write SIMD-optimized code"
 "Have the test specialist create a comprehensive test plan"
 "Ask the chief architect about technology choices"
-```
+```text
 
 ### Common Workflows
 
@@ -1214,7 +1214,7 @@ Name the agent specifically:
 3. Implementation Specialist → plans
 4. Test Engineer + Implementation Engineer + Documentation Writer → execute (parallel)
 5. All → cleanup
-```
+```text
 
 #### Workflow 2: Bug Fix
 
@@ -1223,7 +1223,7 @@ Name the agent specifically:
 2. Implementation Engineer → fixes bug
 3. Test Engineer → verifies fix
 4. Documentation Writer → updates docs if needed
-```
+```text
 
 #### Workflow 3: Performance Optimization
 
@@ -1232,7 +1232,7 @@ Name the agent specifically:
 2. Performance Engineer → profiles code
 3. Senior Implementation Engineer → implements optimizations
 4. Performance Engineer → validates improvements
-```
+```text
 
 #### Workflow 4: New Paper Implementation
 
@@ -1243,7 +1243,7 @@ Name the agent specifically:
 4. Component Specialists → create detailed plans
 5. Engineers (Levels 4-5) → implement in parallel
 6. All → integrate and cleanup
-```
+```text
 
 ### Configuration Reference
 
@@ -1251,19 +1251,19 @@ All agent configurations are in:
 
 ```bash
 .claude/agents/[agent-name].md
-```
+```text
 
 Templates are in:
 
 ```bash
 agents/templates/level-[0-5]-*.md
-```
+```text
 
 To view an agent's full configuration:
 
 ```bash
 cat .claude/agents/architecture-design.md
-```
+```text
 
 ### Next Steps
 

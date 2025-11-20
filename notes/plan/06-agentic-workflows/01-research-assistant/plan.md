@@ -33,9 +33,9 @@ Create an AI research assistant that helps analyze academic papers, suggest arch
 ## Steps
 
 1. Configure agent with clear role, constraints, and available tools
-2. Create prompt templates for different research tasks
-3. Implement workflows that chain prompts and tools together
-4. Write comprehensive tests for all agent capabilities
+1. Create prompt templates for different research tasks
+1. Implement workflows that chain prompts and tools together
+1. Write comprehensive tests for all agent capabilities
 
 ## Success Criteria
 

@@ -12,16 +12,16 @@ File: `magic.toml` lines 18-20
 # Future: Dependencies section
 # [dependencies]
 # Add Mojo package dependencies here
-```
+```text
 
 ## Rationale
 
 Dependencies section is **intentionally left as placeholder** because:
 
 1. No Mojo package dependencies exist yet (foundation phase)
-2. Will be populated when implementing ML papers (Section 04)
-3. Structure is documented and ready for future use
-4. Magic package manager supports this format when needed
+1. Will be populated when implementing ML papers (Section 04)
+1. Structure is documented and ready for future use
+1. Magic package manager supports this format when needed
 
 ## Success Criteria
 
@@ -30,7 +30,7 @@ Dependencies section is **intentionally left as placeholder** because:
 - ✅ TOML syntax valid (verified by tests)
 - ✅ Ready for package additions in implementation phase
 
-**References:**
+### References:
 
 - Config file: `/magic.toml:18-20` (commented placeholder)
 - Test coverage: `/tests/dependencies/test_dependencies.py` (validates structure)

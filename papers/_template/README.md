@@ -21,7 +21,7 @@ cd papers/your-paper-name
 
 # Update this README with your paper details
 # Start implementing in src/
-```
+```text
 
 ## Directory Structure
 
@@ -50,7 +50,7 @@ your-paper-name/
 │   └── .gitkeep                # Placeholder for empty directory
 └── examples/                   # Demonstration scripts
     └── .gitkeep                # Placeholder for empty directory
-```
+```text
 
 ## Directory Purposes
 
@@ -58,7 +58,7 @@ your-paper-name/
 
 Contains the Mojo implementation of the paper's algorithms and models.
 
-**Suggested structure**:
+### Suggested structure
 
 ```text
 src/
@@ -75,13 +75,13 @@ src/
 └── data/                        # Data loading utilities
     ├── __init__.mojo
     └── loader.mojo             # Data loading logic
-```
+```text
 
 ### tests/
 
 Contains comprehensive tests for all implemented functionality.
 
-**Test organization**:
+### Test organization
 
 ```text
 tests/
@@ -90,9 +90,9 @@ tests/
 ├── test_layers.mojo            # Layer tests
 ├── test_utils.mojo             # Utility function tests
 └── test_data.mojo              # Data loading tests
-```
+```text
 
-**Testing principles**:
+### Testing principles
 
 - Write unit tests for individual functions and classes
 - Write integration tests for component interactions
@@ -104,13 +104,13 @@ tests/
 
 Manages datasets and processed data.
 
-**Subdirectories**:
+### Subdirectories
 
 - `raw/` - Original, immutable datasets downloaded from source
 - `processed/` - Cleaned, transformed, and ready-to-use datasets
 - `cache/` - Cached computations and intermediate results
 
-**Important notes**:
+### Important notes
 
 - Data files are NOT tracked in git (except .gitkeep files)
 - Add data files to `.gitignore` in the paper directory
@@ -122,13 +122,13 @@ Manages datasets and processed data.
 
 Configuration files for experiments, training, and model hyperparameters.
 
-**Example files**:
+### Example files
 
 - `config.yaml` - Main configuration file
 - `hyperparameters.yaml` - Model hyperparameters
 - `experiment.yaml` - Experiment configurations
 
-**Best practices**:
+### Best practices
 
 - Use YAML or JSON for configuration files
 - Keep configurations separate from code
@@ -139,14 +139,14 @@ Configuration files for experiments, training, and model hyperparameters.
 
 Jupyter notebooks for experimentation, visualization, and analysis.
 
-**Suggested notebooks**:
+### Suggested notebooks
 
 - `exploration.ipynb` - Data exploration and visualization
 - `training.ipynb` - Model training demonstrations
 - `results.ipynb` - Results analysis and visualization
 - `experiments.ipynb` - Experimental investigations
 
-**Guidelines**:
+### Guidelines
 
 - Keep notebooks focused and well-documented
 - Clear all outputs before committing (optional: use pre-commit hook)
@@ -157,13 +157,13 @@ Jupyter notebooks for experimentation, visualization, and analysis.
 
 Demonstration scripts showing how to use the implementation.
 
-**Example scripts**:
+### Example scripts
 
 - `train.mojo` - Training script
 - `evaluate.mojo` - Evaluation script
 - `inference.mojo` - Inference/prediction script
 
-**Characteristics**:
+### Characteristics
 
 - Self-contained and runnable
 - Well-commented
@@ -177,66 +177,66 @@ Demonstration scripts showing how to use the implementation.
 Replace this template README with paper-specific information:
 
 1. Paper title, authors, and publication details
-2. Brief description of the paper's contribution
-3. Link to original paper (arXiv, conference, etc.)
-4. Implementation notes and any deviations from the paper
-5. Results comparison with original paper
-6. Usage instructions specific to this implementation
+1. Brief description of the paper's contribution
+1. Link to original paper (arXiv, conference, etc.)
+1. Implementation notes and any deviations from the paper
+1. Results comparison with original paper
+1. Usage instructions specific to this implementation
 
 ### Step 2: Implement Models
 
 Start with the core model architecture in `src/models/`:
 
 1. Define model structure following the paper
-2. Implement forward pass
-3. Implement any custom layers in `src/layers/`
-4. Add utility functions in `src/utils/`
+1. Implement forward pass
+1. Implement any custom layers in `src/layers/`
+1. Add utility functions in `src/utils/`
 
 ### Step 3: Write Tests
 
 Follow Test-Driven Development (TDD) principles:
 
 1. Write tests before or alongside implementation
-2. Test individual components (unit tests)
-3. Test component interactions (integration tests)
-4. Test edge cases and error conditions
-5. Verify outputs match expected results
+1. Test individual components (unit tests)
+1. Test component interactions (integration tests)
+1. Test edge cases and error conditions
+1. Verify outputs match expected results
 
 ### Step 4: Data Handling
 
 Implement data loading and preprocessing:
 
 1. Create data download scripts in `examples/`
-2. Implement preprocessing in `src/data/`
-3. Document data sources and formats
-4. Add data validation checks
+1. Implement preprocessing in `src/data/`
+1. Document data sources and formats
+1. Add data validation checks
 
 ### Step 5: Configuration
 
 Set up configuration files:
 
 1. Define model hyperparameters in `configs/`
-2. Create experiment configurations
-3. Document all configuration options
-4. Provide sensible defaults
+1. Create experiment configurations
+1. Document all configuration options
+1. Provide sensible defaults
 
 ### Step 6: Examples
 
 Create demonstration scripts:
 
 1. Training script with argument parsing
-2. Evaluation script for testing
-3. Inference script for predictions
-4. Data download and setup script
+1. Evaluation script for testing
+1. Inference script for predictions
+1. Data download and setup script
 
 ### Step 7: Documentation
 
 Complete the documentation:
 
 1. Update README with comprehensive information
-2. Add docstrings to all functions and classes
-3. Create notebooks demonstrating usage
-4. Document results and comparisons
+1. Add docstrings to all functions and classes
+1. Create notebooks demonstrating usage
+1. Document results and comparisons
 
 ## Testing
 
@@ -251,7 +251,7 @@ mojo test tests/test_models.mojo
 
 # Run with verbose output
 mojo test tests/ --verbose
-```
+```text
 
 ## Data Management
 
@@ -265,7 +265,7 @@ fn download_dataset() raises:
     """Download and prepare the dataset."""
     # Implementation here
     pass
-```
+```text
 
 ### Data Preprocessing
 
@@ -283,7 +283,7 @@ struct DataLoader:
     fn load_data(self) raises -> Data:
         """Load and preprocess data."""
         pass
-```
+```text
 
 ## Configuration
 
@@ -299,7 +299,7 @@ training:
   batch_size: 32
   epochs: 10
   learning_rate: 0.001
-```
+```text
 
 ## Common Patterns
 
@@ -319,7 +319,7 @@ struct YourModel:
         """Forward pass through the model."""
         # Implementation
         pass
-```
+```text
 
 ### Training Loop
 
@@ -330,17 +330,17 @@ fn train(model: YourModel, data: DataLoader, config: TrainConfig) raises:
         for batch in data:
             # Training step
             pass
-```
+```text
 
 ## Contributing
 
 When extending this implementation:
 
 1. Follow the existing code structure
-2. Write tests for new functionality
-3. Update documentation
-4. Follow Mojo best practices
-5. Keep code modular and reusable
+1. Write tests for new functionality
+1. Update documentation
+1. Follow Mojo best practices
+1. Keep code modular and reusable
 
 ## References
 
@@ -397,7 +397,7 @@ fn main() raises:
     let model = YourModel(config)
     # Use the model
     pass
-```
+```text
 
 ### Citation
 
@@ -410,4 +410,4 @@ If you use this implementation, please cite the original paper:
   journal={...},
   year={...}
 }
-```
+```text

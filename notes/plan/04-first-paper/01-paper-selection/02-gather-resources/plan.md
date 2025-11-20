@@ -28,8 +28,8 @@ Collect all necessary resources for implementing LeNet-5, including the original
 ## Steps
 
 1. Download Paper
-2. Find Reference Implementations
-3. Understand Architecture
+1. Find Reference Implementations
+1. Understand Architecture
 
 ## Success Criteria
 

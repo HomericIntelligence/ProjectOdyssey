@@ -44,7 +44,7 @@ Refactor and finalize the augmentations master module based on learnings from pa
 
 **Current State**: Duplicate code for image dimension handling
 
-**Proposed Refactoring**:
+### Proposed Refactoring
 
 ```mojo
 # shared/data/transform_utils.mojo
@@ -79,7 +79,7 @@ fn validate_image_dimensions(height: Int, width: Int, channels: Int) raises:
     """
     if height <= 0 or width <= 0 or channels <= 0:
         raise Error("Invalid image dimensions")
-```
+```text
 
 **Impact**: Reduces code duplication across RandomCrop, RandomRotation, flips, etc.
 
@@ -87,7 +87,7 @@ fn validate_image_dimensions(height: Int, width: Int, channels: Int) raises:
 
 **Current State**: Each transform manages its own random number generation
 
-**Proposed Refactoring**:
+### Proposed Refactoring
 
 ```mojo
 # shared/data/random_utils.mojo
@@ -116,7 +116,7 @@ struct RandomState:
     fn random_int(inout self, min_val: Int, max_val: Int) -> Int:
         """Generate random int in [min_val, max_val)."""
         ...
-```
+```text
 
 **Impact**: Consistent random behavior, easier testing, better reproducibility
 
@@ -124,7 +124,7 @@ struct RandomState:
 
 **Current State**: Multiple composition implementations (Compose, Pipeline, TextCompose, SequentialTransform)
 
-**Proposed Refactoring**:
+### Proposed Refactoring
 
 Consolidate to single composition pattern with type parameterization:
 
@@ -146,7 +146,7 @@ struct TransformPipeline[T: Transform]:
         for transform in self.transforms:
             result = transform[](result)
         return result
-```
+```text
 
 **Impact**: Single composition implementation, reduced code duplication
 
@@ -154,7 +154,7 @@ struct TransformPipeline[T: Transform]:
 
 **Current State**: Inconsistent error messages and validation
 
-**Proposed Standards**:
+### Proposed Standards
 
 ```mojo
 # Standard error messages
@@ -187,7 +187,7 @@ fn validate_positive(value: Int, param_name: String) raises:
         raise Error(
             param_name + " must be positive, got " + str(value)
         )
-```
+```text
 
 **Impact**: Consistent, helpful error messages across all transforms
 
@@ -199,7 +199,8 @@ fn validate_positive(value: Int, param_name: String) raises:
 
 **Current Performance**: Baseline measurements needed
 
-**Optimization Approach**:
+### Optimization Approach
+
 - Vectorize pixel operations using SIMD
 - Process multiple pixels per iteration
 - Optimize memory access patterns for cache efficiency
@@ -212,7 +213,8 @@ fn validate_positive(value: Int, param_name: String) raises:
 
 **Current Issue**: Intermediate tensor allocations in pipelines
 
-**Optimization Approach**:
+### Optimization Approach
+
 - Reuse buffers where possible
 - In-place operations for compatible transforms
 - Memory pooling for batch processing
@@ -225,7 +227,8 @@ fn validate_positive(value: Int, param_name: String) raises:
 
 **Current Issue**: String concatenation creates many temporary strings
 
-**Optimization Approach**:
+### Optimization Approach
+
 - Preallocate string buffers
 - Use StringBuilder pattern for concatenation
 - Reduce string copies
@@ -259,7 +262,7 @@ struct RandomHorizontalFlip(Transform):
         >>> var flip = RandomHorizontalFlip(0.7)
         >>> var flipped = flip(image)
     """
-```
+```text
 
 ### 2. Common Pitfalls
 
@@ -274,13 +277,16 @@ Document known issues and best practices:
 
 **Solution**:
 ```mojo
+
 # Don't use horizontal flip for digits
+
 var transforms = List[Transform]()
 transforms.append(RandomRotation((5.0, 5.0)))  # Small rotations OK
 transforms.append(RandomCrop((28, 28)))        # Crops OK
-# transforms.append(RandomHorizontalFlip(0.5)) # AVOID for digits
-```
 
+# transforms.append(RandomHorizontalFlip(0.5)) # AVOID for digits
+
+```text
 ### 2. Over-Augmentation
 
 **Problem**: Too many augmentations destroy semantic content
@@ -292,7 +298,7 @@ transforms.append(RandomCrop((28, 28)))        # Crops OK
 **Problem**: Normalize before crop gives different results than crop before normalize
 
 **Solution**: Follow standard order: geometric → color → normalize
-```
+```text
 
 ### 3. Advanced Examples
 
@@ -316,13 +322,13 @@ fn create_conditional_augmentation() -> ConditionalTransform:
 
     var aggressive_aug = create_training_augmentation()
     return ConditionalTransform(is_large, aggressive_aug)
-```
+```text
 
 ## Testing and Validation
 
 ### 1. Performance Benchmarks
 
-**Benchmarks to Add**:
+### Benchmarks to Add
 
 ```mojo
 fn benchmark_image_pipeline():
@@ -341,18 +347,20 @@ fn benchmark_text_pipeline():
     """Benchmark text augmentation pipeline."""
     # Similar for text
     ...
-```
+```text
 
 ### 2. Memory Profiling
 
-**Profile**:
+### Profile
+
 - Peak memory usage during augmentation
 - Memory allocations per transform
 - Memory freed after pipeline completion
 
 ### 3. Stress Testing
 
-**Test**:
+### Test
+
 - Very large images (4K resolution)
 - Very long text (10,000+ words)
 - Deep pipelines (20+ transforms)
@@ -367,12 +375,12 @@ fn benchmark_text_pipeline():
    - Needs proper color space transformations
    - Consider HSV adjustments
 
-2. **Text Tokenization Simplistic**:
+1. **Text Tokenization Simplistic**:
    - Space-based splitting only
    - No punctuation handling
    - English-centric
 
-3. **No Inverse Transforms**:
+1. **No Inverse Transforms**:
    - Can't undo augmentations
    - Would be useful for visualization
    - Consider adding `inverse()` method to Transform trait
@@ -384,7 +392,7 @@ fn benchmark_text_pipeline():
    - Need commutativity tests
    - Need inverse property tests
 
-2. **Cross-Domain Integration Tests Incomplete**:
+1. **Cross-Domain Integration Tests Incomplete**:
    - Mixed pipelines not fully tested
    - Error handling gaps
 
@@ -394,7 +402,7 @@ fn benchmark_text_pipeline():
    - Need comprehensive usage guide
    - Missing API reference documentation
 
-2. **Import Paths Not Validated**:
+1. **Import Paths Not Validated**:
    - Need to verify all documented imports work
    - Check for circular dependencies
 
@@ -403,26 +411,26 @@ fn benchmark_text_pipeline():
 ### High Priority (Must Fix)
 
 1. ✅ Refactor duplicate dimension handling
-2. ✅ Standardize error messages
-3. ✅ Add performance characteristics to docs
-4. ⏳ Create module README
-5. ⏳ Implement ColorJitter properly
+1. ✅ Standardize error messages
+1. ✅ Add performance characteristics to docs
+1. ⏳ Create module README
+1. ⏳ Implement ColorJitter properly
 
 ### Medium Priority (Should Fix)
 
 1. Optimize SIMD usage in flips/rotations
-2. Add property-based tests
-3. Profile and optimize memory usage
-4. Create advanced usage examples
-5. Add inverse transforms
+1. Add property-based tests
+1. Profile and optimize memory usage
+1. Create advanced usage examples
+1. Add inverse transforms
 
 ### Low Priority (Nice to Have)
 
 1. Improve text tokenization
-2. Add preset augmentation strategies
-3. Create visual examples for docs
-4. Benchmark against other frameworks
-5. Support GPU acceleration
+1. Add preset augmentation strategies
+1. Create visual examples for docs
+1. Benchmark against other frameworks
+1. Support GPU acceleration
 
 ## References
 
@@ -445,26 +453,29 @@ fn benchmark_text_pipeline():
 ### Refactoring Strategy
 
 1. **Start with Utilities**: Extract common functions first
-2. **Test Continuously**: Run full test suite after each refactoring
-3. **Measure Impact**: Benchmark before and after optimizations
-4. **Document Changes**: Update docs as code evolves
-5. **Incremental Improvements**: Small, focused refactorings
+1. **Test Continuously**: Run full test suite after each refactoring
+1. **Measure Impact**: Benchmark before and after optimizations
+1. **Document Changes**: Update docs as code evolves
+1. **Incremental Improvements**: Small, focused refactorings
 
 ### Quality Metrics
 
-**Code Quality**:
+### Code Quality
+
 - ✅ All tests passing (91/91)
 - ⏳ Code coverage ≥ 90%
 - ⏳ No code duplication (DRY violations)
 - ⏳ All public APIs documented
 
-**Performance**:
+### Performance
+
 - ⏳ Baseline benchmarks established
 - ⏳ SIMD optimizations applied
 - ⏳ Memory usage profiled
 - ⏳ Performance targets met
 
-**Documentation**:
+### Documentation
+
 - ⏳ Module README complete
 - ⏳ All docstrings comprehensive
 - ⏳ Examples demonstrate best practices

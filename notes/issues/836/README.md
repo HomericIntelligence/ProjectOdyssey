@@ -39,17 +39,17 @@ developers identify test gaps and prioritize testing efforts.
    - Review parent component plan at `/notes/plan/03-tooling/02-testing-tools/03-coverage-tool/plan.md`
    - Understand how Generate Report fits into the larger Coverage Tool
 
-2. **Understand Data Flow**
+1. **Understand Data Flow**
    - Study #831 [Impl] Collect Coverage to understand input data format
    - Review the "Data Flow and Integration" section below for upstream/downstream dependencies
    - Examine sample coverage data formats
 
-3. **Check Related Implementations**
+1. **Check Related Implementations**
    - Look at #831 [Impl] Collect Coverage for data structure patterns
    - Review any existing report generation code in the repository
    - Check for similar components in the Testing Tools subsystem
 
-4. **Implementation Approach**
+1. **Implementation Approach**
    - Start with data structures (CoverageData, CoverageReport)
    - Implement HTML generator first (user-facing format)
    - Implement text generator (simpler format)
@@ -57,7 +57,7 @@ developers identify test gaps and prioritize testing efforts.
    - Integrate with coverage collection module
    - Create comprehensive tests (handled by #835)
 
-5. **Key Decisions to Make**
+1. **Key Decisions to Make**
    - Report storage strategy (single file vs. directory structure)
    - HTML styling approach (inline CSS vs. external stylesheet)
    - Performance optimization strategy for large projects
@@ -66,10 +66,10 @@ developers identify test gaps and prioritize testing efforts.
 ### Recommended Reading Order
 
 1. This file (README.md) - Complete overview
-2. Source plan file - Detailed specifications
-3. Parent component plan - Broader context
-4. Issue #831 implementation notes - Data format details
-5. Implementation sections below - Architecture and design decisions
+1. Source plan file - Detailed specifications
+1. Parent component plan - Broader context
+1. Issue #831 implementation notes - Data format details
+1. Implementation sections below - Architecture and design decisions
 
 ## References
 
@@ -121,26 +121,26 @@ This implementation is part of the **Coverage Tool** component in the **Testing 
 
 This implementation depends on data format specifications from **#831** [Impl] Collect Coverage:
 
-**Expected Input Format**:
+### Expected Input Format
 
-```
+```text
 CoverageData format provided by coverage collection module:
 - File paths (relative or absolute)
 - Line-by-line coverage status (covered/uncovered)
 - Function-level coverage information (if available)
 - Coverage metadata (timestamp, tool version, etc.)
-```
+```text
 
 ### Output Specifications
 
-**HTML Report Output**:
+### HTML Report Output
 
 - Single `.html` file or directory structure for large projects
 - Self-contained with embedded CSS for portability
 - Responsive design for desktop and mobile viewing
 - Support for browser history and deep linking
 
-**Text Report Output**:
+### Text Report Output
 
 - Single text file with ANSI color codes
 - Console-friendly formatting for CI/CD integration
@@ -254,14 +254,14 @@ Reports are implemented in Mojo for:
 
 #### Color Coding Strategy
 
-**HTML Reports**:
+### HTML Reports
 
 - Green (#4CAF50) for covered code lines
 - Red (#F44336) for uncovered code lines
 - Gray (#CCCCCC) for metadata/summary lines
 - Dark text (#333333) for readability
 
-**Text Reports**:
+### Text Reports
 
 - ANSI color codes for terminal compatibility
 - Green (32) for covered
@@ -303,7 +303,7 @@ struct CoverageReport:
     var overall_coverage: Float32
     var timestamp: String
 
-```
+```text
 
 #### SIMD for Percentage Calculations
 
@@ -320,7 +320,7 @@ fn calculate_coverage_percentages(coverage_data: List[CoverageData]) -> List[Flo
         percentages.append(pct)
     return percentages
 
-```
+```text
 
 #### Owned vs Borrowed for Report Construction
 
@@ -336,7 +336,7 @@ fn generate_html_report(owned report_data: CoverageReport) -> String:
     # ... build HTML ...
     return html
 
-```
+```text
 
 ### Implementation Constraints
 
@@ -452,8 +452,8 @@ Special handling for:
 After implementation phase:
 
 1. **Issue #837**: [Test] Generate Report - Create comprehensive test suite
-2. **Issue #838**: [Pkg] Generate Report - Integrate with CI/CD pipelines
-3. **Issue #839**: [Cleanup] Coverage Tool - Final refinement and documentation
+1. **Issue #838**: [Pkg] Generate Report - Integrate with CI/CD pipelines
+1. **Issue #839**: [Cleanup] Coverage Tool - Final refinement and documentation
 
 ## Workflow Integration
 
@@ -498,14 +498,14 @@ After implementation phase:
 
 ### Implementation Files (to be created)
 
-**Core Implementation**:
+### Core Implementation
 
 - `src/tooling/coverage/report_generator.mojo` - Main report generation orchestrator
 - `src/tooling/coverage/html_report.mojo` - HTML report generation with styling
 - `src/tooling/coverage/text_report.mojo` - Text/console report generation
 - `src/tooling/coverage/coverage_data.mojo` - Data structures and parsers
 
-**Supporting Modules**:
+### Supporting Modules
 
 - `src/tooling/coverage/__init__.mojo` - Package exports and interfaces
 - `src/tooling/coverage/formatters.mojo` - Color coding and formatting utilities
@@ -529,26 +529,26 @@ After implementation phase:
 
 ### Documentation References
 
-**Project-wide Documentation**:
+### Project-wide Documentation
 
 - [Project README](../../README.md) - Main project overview
 - [CLAUDE.md](../../CLAUDE.md) - Project conventions and guidelines
 - [5-Phase Workflow Guide](../review/README.md) - Detailed workflow documentation
 
-**Team Resources**:
+### Team Resources
 
 - [Agent Hierarchy](../../agents/hierarchy.md) - Team structure and responsibilities
 - [Delegation Rules](../../agents/delegation-rules.md) - Coordination patterns
 - [Implementation Specialist Guide](../../agents/implementation-specialist.md) - Implementation patterns and best practices
 
-**Language-Specific Resources**:
+### Language-Specific Resources
 
 - [Mojo Language Review](../../agents/mojo-language-review-specialist.md) - Mojo coding standards and patterns
 - [Test-Driven Development Guide](../../agents/test-specialist.md) - TDD methodology
 
 ### Getting Help
 
-**For Questions About**:
+### For Questions About
 
 - **Architecture or Design**: Check Issue #834 [Plan] Generate Report for planning decisions
 - **Data Formats**: Review Issue #831 [Impl] Collect Coverage for coverage data specifications
@@ -558,14 +558,14 @@ After implementation phase:
 
 ### Escalation
 
-**Escalate to Level 2 Orchestrator when**:
+### Escalate to Level 2 Orchestrator when
 
 - Design clarification needed (API modifications, architecture changes)
 - Blocking dependencies require resolution
 - Resource allocation or timeline adjustments needed
 - Cross-component coordination required
 
-**Escalate to Chief Architect when**:
+### Escalate to Chief Architect when
 
 - Fundamental design decisions conflict with project vision
 - Coverage tool scope needs redefinition
@@ -589,8 +589,8 @@ Before requesting code review:
 As you implement, update this document:
 
 1. **Implementation Notes** - Log decisions and challenges discovered
-2. **Key Files** - Add actual file locations as created
-3. **Success Criteria Checklist** - Mark items as completed
-4. **Related Issues** - Link to dependent or blocking issues
+1. **Key Files** - Add actual file locations as created
+1. **Success Criteria Checklist** - Mark items as completed
+1. **Related Issues** - Link to dependent or blocking issues
 
 Document progress to help team stay informed and enable smooth handoffs.

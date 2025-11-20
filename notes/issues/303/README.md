@@ -26,14 +26,14 @@ different models and papers.
 
 **Decision**: Use abstract base class or trait pattern for the trainer interface.
 
-**Rationale**:
+### Rationale
 
 - Enables compile-time type checking for implementations
 - Forces concrete trainers to implement all required methods
 - Provides clear contract for testing and mocking
 - Mojo supports trait-based polymorphism for type-safe abstraction
 
-**Considerations**:
+### Considerations
 
 - Keep interface minimal to avoid forcing unnecessary implementations
 - Design for extension through composition rather than inheritance
@@ -43,13 +43,13 @@ different models and papers.
 
 **Decision**: Include three essential training operations: train, validate, and test.
 
-**Rationale**:
+### Rationale
 
 - `train()`: Core method for executing the training loop with forward/backward passes
 - `validate()`: Periodic evaluation during training to monitor progress
 - `test()`: Final evaluation on held-out test set after training completes
 
-**API Design Principles**:
+### API Design Principles
 
 - Clear separation between training (updates weights) and evaluation (inference only)
 - Consistent method signatures across all trainer implementations
@@ -59,7 +59,7 @@ different models and papers.
 
 **Decision**: Define comprehensive state properties accessible through the interface.
 
-**Key State Properties**:
+### Key State Properties
 
 - Current epoch number
 - Training/validation loss history
@@ -68,7 +68,7 @@ different models and papers.
 - Learning rate schedule state
 - Early stopping criteria state
 
-**Rationale**:
+### Rationale
 
 - Enables saving and restoring training progress
 - Supports monitoring and visualization during training
@@ -79,7 +79,7 @@ different models and papers.
 
 **Decision**: Specify interface-level configuration parameters that all trainers must support.
 
-**Essential Parameters**:
+### Essential Parameters
 
 - Number of epochs
 - Batch size
@@ -88,7 +88,7 @@ different models and papers.
 - Validation frequency
 - Early stopping patience
 
-**Rationale**:
+### Rationale
 
 - Standardizes common hyperparameters across all implementations
 - Enables consistent experiment configuration
@@ -99,7 +99,7 @@ different models and papers.
 
 **Decision**: Define callback hooks at key points in the training lifecycle.
 
-**Hook Points**:
+### Hook Points
 
 - `on_train_begin()`: Before training starts
 - `on_epoch_begin()`: At start of each epoch
@@ -108,7 +108,7 @@ different models and papers.
 - `on_epoch_end()`: After completing each epoch
 - `on_train_end()`: After training completes
 
-**Rationale**:
+### Rationale
 
 - Enables custom logging, visualization, and monitoring
 - Supports experiment tracking integrations
@@ -119,14 +119,14 @@ different models and papers.
 
 **Decision**: Keep the interface focused on essential operations while designing for extensibility.
 
-**Approach**:
+### Approach
 
 - Interface defines only truly universal training operations
 - Concrete implementations can add paper-specific methods
 - Use composition to extend functionality (callbacks, hooks)
 - Avoid premature abstraction of paper-specific patterns
 
-**Rationale**:
+### Rationale
 
 - Prevents interface bloat and unnecessary complexity
 - Maintains flexibility for diverse paper implementations
@@ -195,6 +195,6 @@ decisions discovered during development.*
 ### Next Steps
 
 1. Review this planning document with stakeholders
-2. Address open questions and refine design decisions
-3. Proceed to Test phase (Issue #304) to define test cases
-4. Begin implementation phase (Issue #305) after tests are defined
+1. Address open questions and refine design decisions
+1. Proceed to Test phase (Issue #304) to define test cases
+1. Begin implementation phase (Issue #305) after tests are defined

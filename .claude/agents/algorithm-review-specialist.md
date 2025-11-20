@@ -73,9 +73,9 @@ gradient computations, numerical stability, and loss function correctness.
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -245,7 +245,7 @@ See [code-review-orchestrator.md](./code-review-orchestrator.md#review-comment-p
 
 ### Example 1: Incorrect Softmax Implementation
 
-**Code**:
+### Code
 
 ```mojo
 fn softmax(logits: Tensor) -> Tensor:
@@ -255,7 +255,7 @@ fn softmax(logits: Tensor) -> Tensor:
     return exp_logits / sum_exp
 ```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 CRITICAL: Numerically unstable softmax implementation
@@ -299,7 +299,7 @@ fn softmax(logits: Tensor) -> Tensor:
 
 ### Example 3: Incorrect LeNet-5 Architecture
 
-**Code**:
+### Code
 
 ```mojo
 struct LeNet5:
@@ -339,7 +339,7 @@ struct LeNet5:
         return x
 ```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 CRITICAL: Incorrect activation functions - does not match LeNet-5 paper
@@ -525,8 +525,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -558,7 +558,7 @@ After creating PR:
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -605,12 +605,12 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Reviewing a softmax implementation that causes overflow
 
-**Actions**:
+### Actions
 
 1. Identify direct exponentiation without max normalization
-2. Demonstrate overflow scenario with large logit values
-3. Provide mathematically correct log-sum-exp implementation
-4. Reference numerical stability best practices
+1. Demonstrate overflow scenario with large logit values
+1. Provide mathematically correct log-sum-exp implementation
+1. Reference numerical stability best practices
 
 **Outcome**: Numerically stable softmax preventing NaN propagation in training
 
@@ -618,12 +618,12 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Implementation uses ReLU instead of tanh as specified in 1998 paper
 
-**Actions**:
+### Actions
 
 1. Compare implementation against original LeNet-5 paper (LeCun et al., 1998)
-2. Identify incorrect ReLU activations (should be tanh)
-3. Provide historical context (ReLU came later with AlexNet 2012)
-4. Suggest either fixing to match paper or renaming to "LeNet5-Modern"
+1. Identify incorrect ReLU activations (should be tanh)
+1. Provide historical context (ReLU came later with AlexNet 2012)
+1. Suggest either fixing to match paper or renaming to "LeNet5-Modern"
 
 **Outcome**: Paper-faithful implementation or properly documented deviation
 

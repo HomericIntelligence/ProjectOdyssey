@@ -29,8 +29,8 @@ Create the foundational training infrastructure including a trainer interface, t
 ## Steps
 
 1. Define trainer interface with essential methods and properties
-2. Implement training loop with forward pass, loss computation, and optimization
-3. Create validation loop for model evaluation during training
+1. Implement training loop with forward pass, loss computation, and optimization
+1. Create validation loop for model evaluation during training
 
 ## Success Criteria
 

@@ -32,12 +32,12 @@ Create a unified test runner that discovers, executes, and reports on all tests 
 **Three-Component Pipeline**: The test runner follows a clear pipeline architecture with three distinct components:
 
 1. **Test Discovery** - Finds all test files in repository
-2. **Test Execution** - Runs tests with proper isolation
-3. **Result Reporting** - Formats and displays test results
+1. **Test Execution** - Runs tests with proper isolation
+1. **Result Reporting** - Formats and displays test results
 
 **Rationale**: Separating concerns allows each component to be developed, tested, and maintained independently. This modularity also enables future extensions (custom reporters, different execution strategies) without modifying the core pipeline.
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Monolithic runner: Rejected due to tight coupling and difficulty maintaining
 - Plugin-based architecture: Deferred to future enhancement (YAGNI principle)
@@ -63,34 +63,34 @@ Create a unified test runner that discovers, executes, and reports on all tests 
 
 **Rationale**: Standard naming conventions align with pytest and other Python testing tools, making the system familiar to developers. Caching improves performance for large repositories with many tests.
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Explicit test registration: Rejected as too manual and error-prone
 - Git-based discovery: Rejected due to complexity and git dependency
 
 ### Test Execution Strategy
 
-**Isolation Requirements**:
+### Isolation Requirements
 
 - Each test runs in separate process to prevent state contamination
 - Clean environment variables for each test
 - Temporary directories for test artifacts
 - Proper cleanup after test completion
 
-**Parallel Execution**:
+### Parallel Execution
 
 - Default: Run tests in parallel using worker pool
 - Worker count: CPU count or user-specified limit
 - Ordering: Deterministic within parallel batches for reproducibility
 - Fallback: Sequential execution when parallelism disabled
 
-**Timeout Handling**:
+### Timeout Handling
 
 - Default timeout: 30 seconds per test
 - User-configurable via command-line flag
 - Timeout results in test failure with clear error message
 
-**Error Recovery**:
+### Error Recovery
 
 - Failed tests don't stop execution (continue-on-error by default)
 - Option to stop on first failure (--fail-fast flag)
@@ -98,14 +98,14 @@ Create a unified test runner that discovers, executes, and reports on all tests 
 
 **Rationale**: Process isolation prevents test interference and matches industry best practices (pytest-xdist, Go test runner). Parallel execution improves developer productivity by reducing wait times. Continue-on-error provides complete test coverage in CI/CD.
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Thread-based parallelism: Rejected due to GIL limitations in Python components
 - Container-based isolation: Deferred to future enhancement (added complexity)
 
 ### Reporting Strategy
 
-**Output Formats**:
+### Output Formats
 
 1. **Console** (default): Human-readable with colors
    - Green checkmarks for passes
@@ -113,23 +113,23 @@ Create a unified test runner that discovers, executes, and reports on all tests 
    - Yellow warnings for skipped tests
    - Summary statistics at end
 
-2. **File**: Plain text report for CI/CD logs
+1. **File**: Plain text report for CI/CD logs
    - No ANSI color codes
    - Same content as console output
 
-3. **JSON**: Machine-readable for tooling integration
+1. **JSON**: Machine-readable for tooling integration
    - Structured test results
    - Execution timing data
    - Error details with stack traces
 
-**Information Priority**:
+### Information Priority
 
 1. Summary statistics (pass/fail counts, percentages)
-2. Failed test details (file, error, stack trace)
-3. Performance metrics (slowest tests, total time)
-4. Full test list (on verbose flag)
+1. Failed test details (file, error, stack trace)
+1. Performance metrics (slowest tests, total time)
+1. Full test list (on verbose flag)
 
-**Exit Codes**:
+### Exit Codes
 
 - 0: All tests passed
 - 1: One or more tests failed
@@ -138,26 +138,26 @@ Create a unified test runner that discovers, executes, and reports on all tests 
 
 **Rationale**: Multiple output formats serve different audiences (developers, CI/CD, tooling). Prioritizing failures helps developers quickly identify and fix issues. Standard exit codes integrate cleanly with CI/CD pipelines.
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - XML output (JUnit format): Deferred to future enhancement (low priority)
 - HTML reports: Deferred to future enhancement (requires web server or file viewing)
 
 ### Language Selection
 
-**Python for Test Runner Implementation**:
+### Python for Test Runner Implementation
 
 The test runner will be implemented in Python rather than Mojo based on the following justification:
 
-**Technical Reasons**:
+### Technical Reasons
 
 1. **Subprocess Output Capture**: Test execution requires capturing stdout/stderr from both Mojo and Python test processes. Mojo v0.25.7 lacks subprocess output capture capabilities (see ADR-001).
 
-2. **Regex Pattern Matching**: Test discovery uses regex patterns to match test files. Mojo lacks production-ready regex support (mojo-regex is alpha stage).
+1. **Regex Pattern Matching**: Test discovery uses regex patterns to match test files. Mojo lacks production-ready regex support (mojo-regex is alpha stage).
 
-3. **Process Management**: Managing parallel test execution requires robust process pool management, which Python's `multiprocessing` provides maturely.
+1. **Process Management**: Managing parallel test execution requires robust process pool management, which Python's `multiprocessing` provides maturely.
 
-4. **Cross-Language Test Support**: Runner must execute both Mojo and Python tests, making Python a natural choice as the orchestrator.
+1. **Cross-Language Test Support**: Runner must execute both Mojo and Python tests, making Python a natural choice as the orchestrator.
 
 **Alignment with ADR-001**: This decision follows the "Python for Automation" guideline in ADR-001. Test running is automation infrastructure, not ML/AI implementation. The runner automates test discovery, execution, and reporting - classic automation tasks.
 
@@ -166,23 +166,23 @@ The test runner will be implemented in Python rather than Mojo based on the foll
 ```python
 # Language Selection: Python
 #
-# Justification:
+# Justification
 # - Subprocess output capture required for test execution (Mojo v0.25.7 limitation)
 # - Regex pattern matching needed for test discovery (no Mojo stdlib support)
 # - Process pool management for parallel execution (Python multiprocessing)
 # - Cross-language test orchestration (Mojo + Python tests)
 #
 # See: ADR-001 (Language Selection - Tooling and Automation)
-```
+```text
 
 ### Filtering and Selection
 
-**Filter Types**:
+### Filter Types
 
 1. **By Paper**: Run only tests for specific paper (`--paper lenet5`)
-2. **By Pattern**: Match test names with glob pattern (`--pattern "test_conv*"`)
-3. **By Tag**: Run tests with specific tags (`--tag slow`)
-4. **By Directory**: Run tests in specific directory (`--dir papers/lenet5`)
+1. **By Pattern**: Match test names with glob pattern (`--pattern "test_conv*"`)
+1. **By Tag**: Run tests with specific tags (`--tag slow`)
+1. **By Directory**: Run tests in specific directory (`--dir papers/lenet5`)
 
 **Tag Support**: Tests can declare tags via docstrings or decorators:
 
@@ -193,20 +193,20 @@ def test_something():
     Tags: slow, integration
     """
     pass
-```
+```text
 
 **Rationale**: Flexible filtering enables targeted test runs during development (run just my paper's tests) and comprehensive runs in CI/CD (run all tests). Tag-based filtering allows logical grouping beyond directory structure.
 
 ### Performance Considerations
 
-**Optimization Targets**:
+### Optimization Targets
 
 - Fast discovery: < 1 second for repositories with < 1000 tests
 - Parallel execution: Near-linear speedup with CPU count
 - Minimal overhead: Test runner adds < 100ms per test
 - Efficient reporting: Report generation in < 100ms
 
-**Profiling Strategy**:
+### Profiling Strategy
 
 - Measure discovery time separately from execution
 - Track per-test overhead vs. actual test time

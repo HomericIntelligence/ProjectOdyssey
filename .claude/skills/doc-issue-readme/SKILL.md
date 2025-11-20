@@ -55,7 +55,7 @@ Test results and coverage (if applicable)
 ## Review Feedback
 
 PR review feedback and resolutions (if applicable)
-```
+```text
 
 ## Usage
 
@@ -65,12 +65,12 @@ PR review feedback and resolutions (if applicable)
 # Generate from issue number
 ./scripts/generate_issue_readme.sh 42
 
-# This:
+# This
 # 1. Fetches issue details from GitHub
 # 2. Creates /notes/issues/42/ directory
 # 3. Generates README.md with template
 # 4. Populates with issue information
-```
+```text
 
 ### Manual Creation
 
@@ -82,7 +82,7 @@ mkdir -p notes/issues/42
 cp .claude/skills/doc-issue-readme/templates/issue_readme.md notes/issues/42/README.md
 
 # Edit to fill in details
-```
+```text
 
 ## README Sections
 
@@ -112,7 +112,7 @@ Bad:
 
 ### 3. Deliverables
 
-**List specific files/outputs:**
+### List specific files/outputs:
 
 ```markdown
 ## Deliverables
@@ -121,11 +121,11 @@ Bad:
 - `tests/test_tensor_ops.mojo` - Comprehensive test suite
 - `examples/tensor_demo.mojo` - Usage examples
 - `notes/issues/42/performance-results.md` - Benchmark results
-```
+```text
 
 ### 4. Success Criteria
 
-**Measurable checkboxes:**
+### Measurable checkboxes:
 
 ```markdown
 ## Success Criteria
@@ -135,11 +135,11 @@ Bad:
 - [ ] Performance benchmarks meet requirements
 - [ ] Documentation complete
 - [ ] PR approved and merged
-```
+```text
 
 ### 5. References
 
-**Link to existing docs, don't duplicate:**
+### Link to existing docs, don't duplicate:
 
 ```markdown
 ## References
@@ -148,11 +148,11 @@ Bad:
 - Testing strategy: /notes/review/testing-strategy.md
 - Related issue: #41
 - GitHub issue: https://github.com/org/repo/issues/42
-```
+```text
 
 ### 6. Implementation Notes
 
-**Track discoveries during work:**
+### Track discoveries during work:
 
 ```markdown
 ## Implementation Notes
@@ -168,7 +168,7 @@ Bad:
 2024-11-17: Performance optimization
 - Applied loop tiling for cache efficiency
 - 3x speedup on large matrices
-```
+```text
 
 ## Documentation Rules
 
@@ -190,24 +190,24 @@ Bad:
 
 ## Examples
 
-**Generate for new issue:**
+### Generate for new issue:
 
 ```bash
 ./scripts/generate_issue_readme.sh 42
-```
+```text
 
-**Update with progress:**
+### Update with progress:
 
 ```bash
 # Edit README to add implementation notes
 echo "2024-11-15: Completed tensor add operation" >> notes/issues/42/README.md
-```
+```text
 
-**Check completeness:**
+### Check completeness:
 
 ```bash
 ./scripts/check_issue_docs.sh 42
-```
+```text
 
 ## Scripts Available
 
@@ -236,7 +236,7 @@ gh issue view 42
 cat notes/issues/42/README.md
 
 # 4. Start implementation
-```
+```text
 
 ### During Work
 
@@ -245,7 +245,7 @@ cat notes/issues/42/README.md
 vim notes/issues/42/README.md
 
 # Add discoveries, decisions, blockers
-```
+```text
 
 ### Before PR
 
@@ -254,7 +254,7 @@ vim notes/issues/42/README.md
 ./scripts/check_issue_docs.sh 42
 
 # Ensure all sections filled in
-```
+```text
 
 ## Success Criteria
 

@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Implement cosine annealing formula
-2. Support configurable minimum learning rate
-3. Handle both step-based and epoch-based scheduling
-4. Add state management for training resumption
+1. Support configurable minimum learning rate
+1. Handle both step-based and epoch-based scheduling
+1. Add state management for training resumption
 
 ## Success Criteria
 

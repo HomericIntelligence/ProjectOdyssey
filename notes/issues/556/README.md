@@ -30,14 +30,14 @@ Design and document the shared directory structure that will contain reusable co
 
 **Decision**: Organize shared code into four distinct subdirectories (core, training, data, utils).
 
-**Rationale**:
+### Rationale
 
 - **Separation of concerns**: Each subdirectory has a clear, single purpose
 - **Discoverability**: Contributors can easily find where to add or locate shared components
 - **Modularity**: Components in each tier can be developed and tested independently
 - **Scalability**: Structure accommodates future growth as more papers are implemented
 
-**Implications**:
+### Implications
 
 - Contributors must understand the distinction between subdirectories
 - Documentation must clearly explain what belongs where
@@ -47,21 +47,21 @@ Design and document the shared directory structure that will contain reusable co
 
 **Decision**: Define clear boundaries for what belongs in each subdirectory.
 
-**Subdirectory purposes**:
+### Subdirectory purposes
 
 - **core/**: Fundamental, low-level ML building blocks (basic layers, operations, essential components)
 - **training/**: Reusable training infrastructure (training loops, metrics, callbacks, schedulers)
 - **data/**: Data processing and dataset utilities (loaders, preprocessing, augmentation, dataset classes)
 - **utils/**: General-purpose helpers that don't fit elsewhere (logging, config, visualization, file I/O)
 
-**Rationale**:
+### Rationale
 
 - Avoids duplication across paper implementations
 - Provides a clear mental model for contributors
 - Enables focused development and testing
 - Facilitates code reuse and maintenance
 
-**Implications**:
+### Implications
 
 - Need detailed documentation explaining boundaries
 - Some components may span multiple subdirectories (requires careful design)
@@ -71,14 +71,14 @@ Design and document the shared directory structure that will contain reusable co
 
 **Decision**: Use `__init__.py` files to create proper Python packages for each subdirectory.
 
-**Rationale**:
+### Rationale
 
 - Enables standard Python import mechanisms
 - Supports future Mojo interoperability (Mojo can import Python packages)
 - Follows Python ecosystem conventions
 - Facilitates testing and module organization
 
-**Implications**:
+### Implications
 
 - Each subdirectory becomes an importable module
 - Need to maintain `__init__.py` files as components are added
@@ -88,14 +88,14 @@ Design and document the shared directory structure that will contain reusable co
 
 **Decision**: Every subdirectory must have a README explaining its purpose and expected contents.
 
-**Rationale**:
+### Rationale
 
 - Self-documenting structure
 - Reduces onboarding friction for contributors
 - Provides guidance at the point of need
 - Establishes expectations for what belongs where
 
-**Implications**:
+### Implications
 
 - READMEs must be comprehensive yet concise
 - Documentation must be kept up-to-date as subdirectories evolve
@@ -119,14 +119,14 @@ Code stays in `papers/` if it:
 - Cannot be generalized across papers
 - Is tightly coupled to paper-specific requirements
 
-**Rationale**:
+### Rationale
 
 - Prevents `shared/` from becoming a dumping ground
 - Encourages thoughtful abstraction and generalization
 - Balances code reuse with maintainability
 - Reduces coupling between papers
 
-**Implications**:
+### Implications
 
 - Contributors need guidance on making this decision
 - Some components may start paper-specific and move to shared later

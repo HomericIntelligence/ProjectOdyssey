@@ -34,21 +34,25 @@ As specified in the issue description.
 ## Implementation Notes
 
 ## Overview
+
 Create a prompt template for suggesting implementation architectures based on paper analysis. The template guides the agent through chain-of-thought reasoning to recommend appropriate designs, data structures, and module organization.
 
 ## Cleanup Objectives
+
 - Refactor code for optimal quality and maintainability
 - Remove technical debt and temporary workarounds
 - Ensure comprehensive documentation
 - Perform final validation and optimization
 
 ## Cleanup Tasks
+
 - Code review and refactoring
 - Documentation finalization
 - Performance optimization
 - Final testing and validation
 
 ## Success Criteria
+
 - [ ] Template uses chain-of-thought reasoning
 - [ ] Suggestions consider paper requirements
 - [ ] Module organization is clear and logical
@@ -57,6 +61,7 @@ Create a prompt template for suggesting implementation architectures based on pa
 - [ ] Few-shot examples show good designs
 
 ## Notes
+
 Guide the agent through: understanding requirements, identifying key components, suggesting module structure, recommending data structures, and explaining design rationale. Use XML tags like <requirements>, <components>, <architecture>, <rationale>.
 
 ## Status

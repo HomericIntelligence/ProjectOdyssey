@@ -434,16 +434,16 @@ Based on complexity ratings and skill requirements:
 
 **Assignment**: 8 high-complexity components (foundation + critical path)
 
-**Components**:
+### Components
 
 1. Tensor Type (CRITICAL - do first)
-2. Linear Layer
-3. Conv2D Layer
-4. SGD Optimizer
-5. Adam Optimizer
-6. AdamW Optimizer
-7. Basic Training Loop
-8. Validation Training Loop
+1. Linear Layer
+1. Conv2D Layer
+1. SGD Optimizer
+1. Adam Optimizer
+1. AdamW Optimizer
+1. Basic Training Loop
+1. Validation Training Loop
 
 **Rationale**: These require advanced Mojo features (SIMD, ownership, numerical stability) and form the critical path.
 
@@ -453,37 +453,37 @@ Based on complexity ratings and skill requirements:
 
 **Engineer A Assignment**: 13 medium-complexity components (layers + training infrastructure)
 
-**Components**:
+### Components
 
 1. ReLU Activation
-2. Sigmoid/Tanh Activations
-3. MaxPool2D Layer
-4. Module Base Class
-5. RMSprop Optimizer
-6. Accuracy Metric
-7. LossTracker Metric
-8. StepLR Scheduler
-9. Cosine Annealing Scheduler
-10. Exponential Scheduler
-11. Precision/Recall/F1 Metrics
-12. Confusion Matrix
-13. EarlyStopping Callback
+1. Sigmoid/Tanh Activations
+1. MaxPool2D Layer
+1. Module Base Class
+1. RMSprop Optimizer
+1. Accuracy Metric
+1. LossTracker Metric
+1. StepLR Scheduler
+1. Cosine Annealing Scheduler
+1. Exponential Scheduler
+1. Precision/Recall/F1 Metrics
+1. Confusion Matrix
+1. EarlyStopping Callback
 
 **Engineer B Assignment**: 12 medium-complexity components (data + utils + callbacks)
 
-**Components**:
+### Components
 
 1. Dataset Base Class
-2. DataLoader
-3. MNIST Dataset
-4. CIFAR-10 Dataset
-5. Normalize Transform
-6. ModelCheckpoint Callback
-7. Logger Callback
-8. Structured Logger
-9. YAML Config Parser
-10. Metric Plotter
-11. (Reserve capacity for support)
+1. DataLoader
+1. MNIST Dataset
+1. CIFAR-10 Dataset
+1. Normalize Transform
+1. ModelCheckpoint Callback
+1. Logger Callback
+1. Structured Logger
+1. YAML Config Parser
+1. Metric Plotter
+1. (Reserve capacity for support)
 
 **Estimated Time**: 6-8 weeks (parallel with Senior Engineer)
 
@@ -491,22 +491,22 @@ Based on complexity ratings and skill requirements:
 
 **Assignment**: 13 low-complexity components (traits, utilities, simple transforms)
 
-**Components**:
+### Components
 
 1. Xavier Initializer
-2. He Initializer
-3. Uniform/Normal Initializers
-4. Softmax Activation
-5. Optimizer Base Trait
-6. Scheduler Base Trait
-7. Metric Base Trait
-8. Callback Base Trait
-9. ImageFolder Dataset
-10. RandomCrop Transform
-11. RandomFlip Transform
-12. Resize Transform
-13. CLI Argument Parser
-14. Image Display
+1. He Initializer
+1. Uniform/Normal Initializers
+1. Softmax Activation
+1. Optimizer Base Trait
+1. Scheduler Base Trait
+1. Metric Base Trait
+1. Callback Base Trait
+1. ImageFolder Dataset
+1. RandomCrop Transform
+1. RandomFlip Transform
+1. Resize Transform
+1. CLI Argument Parser
+1. Image Display
 
 **Estimated Time**: 4-6 weeks (can start immediately on traits and initializers)
 
@@ -514,7 +514,7 @@ Based on complexity ratings and skill requirements:
 
 #### Phase 1: Foundation (Weeks 1-2)
 
-**Critical Path**:
+### Critical Path
 
 - Senior: Tensor Type (CRITICAL - blocks everything)
 - Junior: Base Traits (Optimizer, Scheduler, Metric, Callback)
@@ -524,7 +524,7 @@ Based on complexity ratings and skill requirements:
 
 #### Phase 2: Core Layers (Weeks 3-4)
 
-**Parallel Work**:
+### Parallel Work
 
 - Senior: Linear Layer, Conv2D Layer
 - Engineer A: ReLU, Sigmoid/Tanh, Softmax, MaxPool2D
@@ -535,7 +535,7 @@ Based on complexity ratings and skill requirements:
 
 #### Phase 3: Optimizers (Weeks 5-6)
 
-**Parallel Work**:
+### Parallel Work
 
 - Senior: SGD, Adam, AdamW
 - Engineer A: RMSprop, Schedulers (StepLR, Cosine, Exponential)
@@ -546,7 +546,7 @@ Based on complexity ratings and skill requirements:
 
 #### Phase 4: Training Infrastructure (Weeks 7-8)
 
-**Parallel Work**:
+### Parallel Work
 
 - Senior: Basic Training Loop, Validation Training Loop
 - Engineer A: Metrics (Accuracy, LossTracker, Precision, Recall, F1, Confusion)
@@ -557,7 +557,7 @@ Based on complexity ratings and skill requirements:
 
 #### Phase 5: Integration and Polish (Weeks 9-10)
 
-**All Engineers**:
+### All Engineers
 
 - Integration testing
 - Performance benchmarking
@@ -576,55 +576,55 @@ Based on complexity ratings and skill requirements:
 1. Tensor Type → 2. Linear Layer → 3. SGD → 4. Basic Training Loop
                                        ↓
                             5. Validation Training Loop
-```
+```text
 
 ### Parallel Tracks
 
-**Track A (Layers)**:
+### Track A (Layers)
 
 ```text
 Tensor → Linear → Conv2D
       → ReLU → Sigmoid/Tanh → Softmax
       → MaxPool2D
-```
+```text
 
-**Track B (Optimizers)**:
+### Track B (Optimizers)
 
 ```text
 Tensor → SGD → Adam → AdamW
               → RMSprop
          Base Trait
-```
+```text
 
-**Track C (Metrics)**:
+### Track C (Metrics)
 
 ```text
 Base Trait → Accuracy → Precision → Recall → F1
            → LossTracker
            → Confusion Matrix
-```
+```text
 
-**Track D (Data)**:
+### Track D (Data)
 
 ```text
 Dataset Base → MNIST → CIFAR-10 → ImageFolder
             → DataLoader
 Transforms (independent)
-```
+```text
 
-**Track E (Training)**:
+### Track E (Training)
 
 ```text
 Optimizers + Layers → Basic Loop → Validation Loop
 Callbacks (parallel) → EarlyStopping, Checkpoint, Logger
 Schedulers (parallel) → StepLR, Cosine, Exponential
-```
+```text
 
-**Track F (Utils)**:
+### Track F (Utils)
 
 ```text
 (Independent) → Logging, Config, Visualization
-```
+```text
 
 ## Coordination Strategy
 
@@ -632,25 +632,25 @@ Schedulers (parallel) → StepLR, Cosine, Exponential
 
 **Format**: Brief written update in shared channel
 
-**Questions**:
+### Questions
 
 1. What did you complete yesterday?
-2. What are you working on today?
-3. Any blockers or questions?
+1. What are you working on today?
+1. Any blockers or questions?
 
 ### Weekly Design Reviews
 
 **Format**: 1-hour sync meeting
 
-**Agenda**:
+### Agenda
 
 1. Review completed components (15 min)
-2. Design discussion for upcoming components (30 min)
-3. Address blockers and dependencies (15 min)
+1. Design discussion for upcoming components (30 min)
+1. Address blockers and dependencies (15 min)
 
 ### Code Review Process
 
-**Review Levels**:
+### Review Levels
 
 1. **Peer Review**: Engineer → Engineer (first pass)
 1. **Specialist Review**: Implementation Specialist (this role) reviews for:
@@ -659,7 +659,7 @@ Schedulers (parallel) → StepLR, Cosine, Exponential
    - Memory management (owned, borrowed, inout)
    - Performance considerations
 
-**Review Criteria**:
+### Review Criteria
 
 - All tests from Issue #48 pass
 - Comprehensive docstrings
@@ -669,14 +669,14 @@ Schedulers (parallel) → StepLR, Cosine, Exponential
 
 ### Test-Driven Development
 
-**TDD Process**:
+### TDD Process
 
 1. **Before Implementation**: Review test specification in Issue #48
 1. **During Implementation**: Run tests frequently
 1. **After Implementation**: All tests must pass
 1. **Edge Cases**: Add tests for edge cases discovered during implementation
 
-**Test Coordination with Issue #48**:
+### Test Coordination with Issue #48
 
 - Test Specialist owns test specifications
 - Implementation engineers run tests locally
@@ -685,7 +685,7 @@ Schedulers (parallel) → StepLR, Cosine, Exponential
 
 ### Quality Gates
 
-**Before PR Creation**:
+### Before PR Creation
 
 - [ ] All Issue #48 tests pass for component
 - [ ] Code formatted with `mojo format`
@@ -693,7 +693,7 @@ Schedulers (parallel) → StepLR, Cosine, Exponential
 - [ ] No compiler warnings
 - [ ] Manual testing completed
 
-**Before Merge**:
+### Before Merge
 
 - [ ] Peer review approved
 - [ ] Specialist review approved
@@ -703,7 +703,7 @@ Schedulers (parallel) → StepLR, Cosine, Exponential
 
 ### Blocker Resolution
 
-**Blocker Categories**:
+### Blocker Categories
 
 1. **Technical Blocker**: Missing dependency, unclear spec
    - Escalate to: Implementation Specialist
@@ -721,15 +721,15 @@ Schedulers (parallel) → StepLR, Cosine, Exponential
    - Escalate to: Performance Specialist
    - Resolution: Optimization strategy
 
-**Escalation Path**:
+### Escalation Path
 
 ```text
 Engineer → Implementation Specialist → Architecture Design Agent
-```
+```text
 
 ### Risk Management
 
-**Identified Risks**:
+### Identified Risks
 
 1. **Tensor Type Complexity**: Foundational component may take longer
    - Mitigation: Prioritize simple but functional Tensor first, optimize later
@@ -755,7 +755,7 @@ Engineer → Implementation Specialist → Architecture Design Agent
 
 ### Optimistic (8 weeks)
 
-**Assumptions**:
+### Assumptions
 
 - No major blockers
 - Mojo tooling works well
@@ -764,7 +764,7 @@ Engineer → Implementation Specialist → Architecture Design Agent
 
 ### Realistic (10 weeks)
 
-**Assumptions**:
+### Assumptions
 
 - 2-3 moderate blockers requiring escalation
 - 1-2 components need redesign
@@ -773,7 +773,7 @@ Engineer → Implementation Specialist → Architecture Design Agent
 
 ### Pessimistic (12 weeks)
 
-**Assumptions**:
+### Assumptions
 
 - Tensor type takes 2x estimate
 - Multiple Mojo language blockers
@@ -830,7 +830,7 @@ struct Tensor:
     fn __del__(owned self):
         """Free tensor memory."""
         self.data.free()
-```
+```text
 
 #### Linear Layer
 
@@ -883,7 +883,7 @@ struct Linear:
         # Compute grad_bias = sum(grad_output, dim=0)
         # Return grad_input
         pass  # Defer to implementation
-```
+```text
 
 #### SGD Optimizer
 
@@ -955,7 +955,7 @@ struct SGD:
             let p = params.load[simd_width](i)
             let g = grads.load[simd_width](i)
             params.store[simd_width](i, p - lr * g)
-```
+```text
 
 ### Memory Management Patterns
 
@@ -970,7 +970,7 @@ fn create_tensor() -> Tensor:
 fn consume_tensor(owned t: Tensor):
     """Take ownership of tensor."""
     # Can modify and destroy tensor
-```
+```text
 
 #### Borrowing (Read-Only Access)
 
@@ -981,7 +981,7 @@ fn compute_sum(borrowed t: Tensor) -> Float32:
     for i in range(t.size()):
         sum += t[i]
     return sum
-```
+```text
 
 #### In-Place Modification
 
@@ -990,7 +990,7 @@ fn normalize_inplace(inout t: Tensor, mean: Float32, std: Float32):
     """Modify tensor in-place."""
     for i in range(t.size()):
         t[i] = (t[i] - mean) / std
-```
+```text
 
 ### SIMD Optimization Opportunities
 
@@ -1007,7 +1007,7 @@ fn relu_vectorized(inout output: Tensor, input: Tensor):
         let zero = SIMD[DType.float32, simd_width](0.0)
         let result = max(x, zero)
         output.store[simd_width](i, result)
-```
+```text
 
 #### Reduction Operations
 
@@ -1025,7 +1025,7 @@ fn sum_vectorized(input: Tensor) -> Float32:
 
     # Horizontal sum of SIMD vector
     return acc.reduce_add()
-```
+```text
 
 ## Success Criteria
 
@@ -1117,13 +1117,13 @@ fn sum_vectorized(input: Tensor) -> Float32:
 
 ## Appendix: Component Complexity Ratings
 
-**Complexity Rating System**:
+### Complexity Rating System
 
 - **LOW**: < 100 lines, standard patterns, no SIMD, no complex algorithms
 - **MEDIUM**: 100-200 lines, some SIMD, moderate algorithms, state management
 - **HIGH**: > 200 lines, heavy SIMD, complex algorithms, numerical stability
 
-**Why These Ratings Matter**:
+### Why These Ratings Matter
 
 - Determines engineer assignment (Junior vs Standard vs Senior)
 - Estimates implementation time (1-3 days for LOW, 3-5 days for MEDIUM, 5-10 days for HIGH)

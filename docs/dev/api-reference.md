@@ -15,28 +15,33 @@ documentation.
 ```mojo
 
 # Creating tensors
+
 Tensor.zeros(shape: Tuple[Int, ...]) -> Tensor
 Tensor.ones(shape: Tuple[Int, ...]) -> Tensor
 Tensor.randn(shape: Tuple[Int, ...], seed: Int = 0) -> Tensor
 Tensor.randint(low: Int, high: Int, shape: Tuple[Int, ...]) -> Tensor
 
 # Element-wise operations
+
 tensor + other -> Tensor  # Addition
 tensor - other -> Tensor  # Subtraction
 tensor * other -> Tensor  # Multiplication
 tensor / other -> Tensor  # Division
 
 # Matrix operations
+
 tensor @ other -> Tensor  # Matrix multiplication
 tensor.T -> Tensor  # Transpose
 
 # Reductions
+
 tensor.sum(dim: Optional[Int] = None) -> Tensor
 tensor.mean(dim: Optional[Int] = None) -> Tensor
 tensor.max(dim: Optional[Int] = None) -> Tensor
 tensor.min(dim: Optional[Int] = None) -> Tensor
 
 # Shape manipulation
+
 tensor.reshape(shape: Tuple[Int, ...]) -> Tensor
 tensor.view(shape: Tuple[Int, ...]) -> Tensor
 tensor.flatten() -> Tensor
@@ -46,6 +51,7 @@ tensor.flatten() -> Tensor
 ### Neural Network Layers
 
 ```mojo
+
 ```mojo
 
 # Linear (Dense) Layer
@@ -82,6 +88,7 @@ struct AvgPool2D:
 ```mojo
 
 # Activation function signatures
+
 fn relu(x: Tensor) -> Tensor
 fn sigmoid(x: Tensor) -> Tensor
 fn tanh(x: Tensor) -> Tensor
@@ -89,6 +96,7 @@ fn softmax(x: Tensor, dim: Int = -1) -> Tensor
 fn gelu(x: Tensor) -> Tensor
 
 # Activation layers
+
 struct ReLU:
     fn forward(self, x: Tensor) -> Tensor
 
@@ -104,6 +112,7 @@ struct Softmax:
 ### Loss Functions
 
 ```mojo
+
 ```mojo
 
 fn mse_loss(predictions: Tensor, targets: Tensor) -> Float64
@@ -121,12 +130,14 @@ fn l1_loss(predictions: Tensor, targets: Tensor) -> Float64
 ```mojo
 
 # Stochastic Gradient Descent
+
 struct SGD:
     fn __init__(inout self, lr: Float64 = 0.01, momentum: Float64 = 0.0)
     fn step(inout self, inout parameters: List[Tensor])
     fn zero_grad(self, inout parameters: List[Tensor])
 
 # Adam Optimizer
+
 struct Adam:
     fn __init__(inout self,
                 lr: Float64 = 0.001,
@@ -140,6 +151,7 @@ struct Adam:
 ### Learning Rate Schedulers
 
 ```mojo
+
 ```mojo
 
 # Step LR
@@ -160,6 +172,7 @@ struct CosineAnnealingLR:
 ```mojo
 
 # Base callback interface
+
 trait Callback:
     fn on_train_begin(inout self, inout state: TrainingState) -> CallbackSignal
     fn on_epoch_begin(inout self, inout state: TrainingState) -> CallbackSignal
@@ -169,6 +182,7 @@ trait Callback:
     fn on_train_end(inout self, inout state: TrainingState) -> CallbackSignal
 
 # Built-in callbacks
+
 struct ModelCheckpoint(Callback):
     fn __init__(inout self, filepath: String, monitor: String = "val_loss")
 
@@ -185,6 +199,7 @@ struct LoggingCallback(Callback):
 ### Datasets
 
 ```mojo
+
 ```mojo
 
 # Base dataset interface
@@ -214,6 +229,7 @@ struct DataLoader:
     fn __len__(self) -> Int
 
 # Usage
+
 for batch in data_loader:
     var inputs = batch.data
     var targets = batch.targets
@@ -223,6 +239,7 @@ for batch in data_loader:
 ### Transforms
 
 ```mojo
+
 ```mojo
 
 # Image transformations
@@ -258,6 +275,7 @@ fn normal_init(tensor: Tensor, mean: Float64 = 0.0, std: Float64 = 0.01)
 ### Metrics
 
 ```mojo
+
 ```mojo
 
 fn accuracy(predictions: Tensor, targets: Tensor) -> Float64
@@ -294,6 +312,7 @@ For full API documentation with detailed examples and parameters:
 ### Basic Training Loop
 
 ```mojo
+
 ```mojo
 
 from shared.core import Linear, ReLU, Softmax

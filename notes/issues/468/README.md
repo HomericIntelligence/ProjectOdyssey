@@ -27,19 +27,19 @@ Design and document comprehensive unit tests for all shared library components. 
 
 ### Testing Strategy
 
-**Test-Driven Development (TDD)**
+### Test-Driven Development (TDD)
 
 - Write tests first when possible to drive implementation
 - Use tests as living documentation of expected behavior
 - Enable rapid feedback during development
 
-**Independence and Repeatability**
+### Independence and Repeatability
 
 - Tests must be independent (no shared state between tests)
 - Results must be deterministic and repeatable
 - Use controlled randomness (fixed seeds) when needed
 
-**Speed vs Coverage Trade-off**
+### Speed vs Coverage Trade-off
 
 - Use small, synthetic datasets for unit tests (speed)
 - Reserve large datasets for integration/validation tests
@@ -47,7 +47,7 @@ Design and document comprehensive unit tests for all shared library components. 
 
 ### Test Organization
 
-**Three-Layer Structure**
+### Three-Layer Structure
 
 1. **Core Operations Tests** (`01-test-core`)
    - Tensor operations (arithmetic, matrix, reductions)
@@ -55,13 +55,13 @@ Design and document comprehensive unit tests for all shared library components. 
    - Weight initializers (Xavier, He, uniform, etc.)
    - Metrics (accuracy, loss, confusion matrix)
 
-2. **Training Utilities Tests** (`02-test-training`)
+1. **Training Utilities Tests** (`02-test-training`)
    - Base trainer interface and training loops
    - Learning rate schedulers (step, exponential, cosine)
    - Callbacks (logging, checkpointing, early stopping)
    - Mock-based integration tests
 
-3. **Data Utilities Tests** (`03-test-data`)
+1. **Data Utilities Tests** (`03-test-data`)
    - Dataset interface compliance (`__len__`, `__getitem__`)
    - Data loader batching and shuffling
    - Augmentation operations (flip, rotate, crop, normalize)
@@ -69,7 +69,7 @@ Design and document comprehensive unit tests for all shared library components. 
 
 ### Verification Approaches
 
-**Mathematical Correctness**
+### Mathematical Correctness
 
 - Use known mathematical results for verification
   - Example: Matrix multiplication against NumPy
@@ -78,14 +78,14 @@ Design and document comprehensive unit tests for all shared library components. 
   - Check mean, variance, bounds
   - Use statistical tests (chi-square, KS test)
 
-**Edge Case Coverage**
+### Edge Case Coverage
 
 - Zero values (division by zero, empty tensors)
 - Special values (infinity, NaN)
 - Boundary conditions (single element, maximum size)
 - Invalid inputs (negative sizes, mismatched shapes)
 
-**Numerical Stability**
+### Numerical Stability
 
 - Test with extreme values (very small, very large)
 - Verify gradient computations don't explode/vanish
@@ -93,13 +93,13 @@ Design and document comprehensive unit tests for all shared library components. 
 
 ### Testing Patterns
 
-**Use Simple Test Cases**
+### Use Simple Test Cases
 
 - Toy models (single layer, few parameters)
 - Small datasets (10-100 examples)
 - Known ground truth results (manually verified)
 
-**Descriptive Test Names**
+### Descriptive Test Names
 
 ```python
 def test_relu_positive_values_unchanged():
@@ -113,9 +113,9 @@ def test_relu_negative_values_zeroed():
 def test_relu_preserves_zero():
     """ReLU should leave zero unchanged."""
     pass
-```
+```text
 
-**Mock for Speed**
+### Mock for Speed
 
 ```python
 # Mock expensive operations
@@ -124,32 +124,32 @@ def test_trainer_calls_forward_pass():
     trainer = Trainer(model)
     trainer.train_step(batch)
     model.forward.assert_called_once()
-```
+```text
 
-**Parametrized Tests**
+### Parametrized Tests
 
 ```python
 @pytest.mark.parametrize("shape", [(2, 3), (5, 5), (1, 10)])
 def test_matrix_multiply_shapes(shape):
     """Matrix multiply should handle various shapes."""
     pass
-```
+```text
 
 ### Test Data Strategy
 
-**Synthetic Data**
+### Synthetic Data
 
 - Generate deterministic test data
 - Use simple patterns (sequences, grids)
 - Prefer small sizes for speed
 
-**Known Results**
+### Known Results
 
 - Include cases with manually verified outputs
 - Use simple mathematical relationships
 - Document expected results in test docstrings
 
-**Seed Control**
+### Seed Control
 
 ```python
 def test_shuffle_reproducible():
@@ -159,23 +159,23 @@ def test_shuffle_reproducible():
     np.random.seed(42)
     shuffled2 = shuffle(data)
     assert shuffled1 == shuffled2
-```
+```text
 
 ### Coverage Requirements
 
-**Functional Coverage**
+### Functional Coverage
 
 - Every public function/method must have at least one test
 - Every branch in control flow should be exercised
 - Target: 90%+ line coverage for core components
 
-**Property Coverage**
+### Property Coverage
 
 - Verify mathematical properties (commutativity, associativity)
 - Check invariants (e.g., softmax sums to 1)
 - Test boundary conditions
 
-**Error Coverage**
+### Error Coverage
 
 - Test error handling paths
 - Verify exceptions raised for invalid inputs
@@ -183,24 +183,24 @@ def test_shuffle_reproducible():
 
 ## References
 
-**Source Plan**
+### Source Plan
 
 - [Unit Tests Plan](/home/mvillmow/ml-odyssey-manual/notes/plan/02-shared-library/04-testing/02-unit-tests/plan.md)
 
-**Child Plans**
+### Child Plans
 
 - [Test Core Operations](/home/mvillmow/ml-odyssey-manual/notes/plan/02-shared-library/04-testing/02-unit-tests/01-test-core/plan.md)
 - [Test Training Utilities](/home/mvillmow/ml-odyssey-manual/notes/plan/02-shared-library/04-testing/02-unit-tests/02-test-training/plan.md)
 - [Test Data Utilities](/home/mvillmow/ml-odyssey-manual/notes/plan/02-shared-library/04-testing/02-unit-tests/03-test-data/plan.md)
 
-**Related Issues**
+### Related Issues
 
 - Issue #469: [Test] Unit Tests - Write Tests
 - Issue #470: [Impl] Unit Tests - Implementation
 - Issue #471: [Package] Unit Tests - Integration
 - Issue #472: [Cleanup] Unit Tests - Cleanup and Refactoring
 
-**Project Documentation**
+### Project Documentation
 
 - [Testing Framework](/home/mvillmow/ml-odyssey-manual/notes/plan/02-shared-library/04-testing/01-test-framework/plan.md)
 - [Agent Hierarchy](/home/mvillmow/ml-odyssey-manual/agents/hierarchy.md)
@@ -210,19 +210,19 @@ def test_shuffle_reproducible():
 
 ### Current Implementation Status
 
-**Overall Test Coverage Summary**:
+### Overall Test Coverage Summary
 
 1. **Core Tests** (`tests/shared/core/`):
    - **Status**: Mostly TDD stubs (~50+ test functions with TODOs)
    - **Implementation**: 0% - all stubs waiting for implementation
    - **Files**: test_tensors.mojo (empty), test_layers.mojo (16 stubs), test_activations.mojo, test_initializers.mojo, test_module.mojo
 
-2. **Training Tests** (`tests/shared/training/`):
+1. **Training Tests** (`tests/shared/training/`):
    - **Status**: Mix of stubs and implementations (~100+ test functions, 95 TODOs)
    - **Implementation**: ~20% - some tests implemented, many stubs
    - **Files**: 15 test files covering optimizers, schedulers, loops, callbacks, metrics
 
-3. **Data Tests** (`tests/shared/data/`):
+1. **Data Tests** (`tests/shared/data/`):
    - **Status**: **EXCELLENT** - 91+ tests, many fully implemented
    - **Implementation**: ~80% - working test runner, real implementations
    - **Files**: Comprehensive coverage with test_datasets, test_loaders, test_transforms, test_samplers, test_augmentations
@@ -234,18 +234,20 @@ def test_shuffle_reproducible():
 
 ### Gap Analysis
 
-**What's Working Well**:
+### What's Working Well
+
 - Data tests have excellent coverage with working test runner
 - TDD approach with clear API contracts throughout
 - Good test organization by component
 - Test fixtures and utilities in place (`tests/shared/conftest.mojo`)
 
-**Critical Gaps**:
+### Critical Gaps
+
 1. **Core tests** - All stubs, no implementations
-2. **Training tests** - Many stubs, need mock frameworks
-3. **Test runners** - Core and training lack test runners
-4. **Coverage reports** - No automated coverage tracking
-5. **CI/CD integration** - Test execution in pipeline needs verification
+1. **Training tests** - Many stubs, need mock frameworks
+1. **Test runners** - Core and training lack test runners
+1. **Coverage reports** - No automated coverage tracking
+1. **CI/CD integration** - Test execution in pipeline needs verification
 
 ### Recommendations
 
@@ -254,17 +256,17 @@ def test_shuffle_reproducible():
    - Add missing edge cases
    - Establish performance baselines
 
-2. **Address Core Tests Next** - Foundation for everything:
+1. **Address Core Tests Next** - Foundation for everything:
    - Implement tensor operation tests first
    - Follow with activations and initializers
    - Create test runner similar to data tests
 
-3. **Tackle Training Tests** - Complex workflows:
+1. **Tackle Training Tests** - Complex workflows:
    - Develop mocking strategy
    - Implement scheduler tests (mathematical verification)
    - Build training loop integration tests
 
-4. **Create Unified Test Infrastructure**:
+1. **Create Unified Test Infrastructure**:
    - Test runners for each component
    - Coverage reporting automation
    - CI/CD integration verification

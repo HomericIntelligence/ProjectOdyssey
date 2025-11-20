@@ -25,7 +25,7 @@ Design and document matrix operations essential for linear algebra computations 
 
 ### 1. Core Operations
 
-**Matrix Multiplication (matmul)**:
+### Matrix Multiplication (matmul)
 
 - **Decision**: Implement standard matrix multiplication following mathematical conventions
 - **Rationale**: Essential for neural network layer computations (weight × input)
@@ -35,7 +35,7 @@ Design and document matrix operations essential for linear algebra computations 
   - Clear error messages for dimension mismatches
   - Mathematical correctness over performance optimization
 
-**Transpose**:
+### Transpose
 
 - **Decision**: Support flexible axis ordering for multi-dimensional tensors
 - **Rationale**: Required for gradient calculations and tensor reshaping
@@ -51,7 +51,7 @@ Design and document matrix operations essential for linear algebra computations 
 
 **Rationale**: Neural networks process multiple samples simultaneously (mini-batches)
 
-**Requirements**:
+### Requirements
 
 - Batch dimension treated separately from matrix dimensions
 - Example: `(batch, m, k) × (batch, k, n) → (batch, m, n)`
@@ -64,13 +64,13 @@ Design and document matrix operations essential for linear algebra computations 
 
 **Rationale**: Incremental development reduces complexity and enables thorough testing
 
-**Phases**:
+### Phases
 
 1. Basic 2D matrix multiplication
-2. 2D transpose operation
-3. Batched matrix multiplication
-4. Batched transpose
-5. Comprehensive dimension checking
+1. 2D transpose operation
+1. Batched matrix multiplication
+1. Batched transpose
+1. Comprehensive dimension checking
 
 ### 4. Dimension Checking and Error Handling
 
@@ -78,7 +78,7 @@ Design and document matrix operations essential for linear algebra computations 
 
 **Rationale**: Dimension mismatches are common errors in neural networks
 
-**Requirements**:
+### Requirements
 
 - Pre-operation dimension compatibility checks
 - Descriptive error messages including actual dimensions
@@ -91,7 +91,7 @@ Design and document matrix operations essential for linear algebra computations 
 
 **Rationale**: Neural networks can have large weight matrices (e.g., fully connected layers)
 
-**Requirements**:
+### Requirements
 
 - Avoid intermediate overflow/underflow
 - Use appropriate data types (FP32/FP64)
@@ -104,7 +104,7 @@ Design and document matrix operations essential for linear algebra computations 
 
 **Rationale**: Correctness first, performance optimization later
 
-**Approach**:
+### Approach
 
 - Focus on mathematical correctness
 - Clear, readable code
@@ -113,7 +113,7 @@ Design and document matrix operations essential for linear algebra computations 
 
 ### 7. API Design
 
-**Matmul API**:
+### Matmul API
 
 ```mojo
 fn matmul(a: Tensor, b: Tensor) -> Tensor:
@@ -130,9 +130,9 @@ fn matmul(a: Tensor, b: Tensor) -> Tensor:
     Raises:
         DimensionError: If inner dimensions don't match
     """
-```
+```text
 
-**Transpose API**:
+### Transpose API
 
 ```mojo
 fn transpose(tensor: Tensor, axes: Optional[List[Int]] = None) -> Tensor:
@@ -149,13 +149,13 @@ fn transpose(tensor: Tensor, axes: Optional[List[Int]] = None) -> Tensor:
     Raises:
         ValueError: If axes specification is invalid
     """
-```
+```text
 
 ### 8. Testing Strategy
 
 **Decision**: Comprehensive testing covering mathematical correctness and edge cases
 
-**Test Categories**:
+### Test Categories
 
 - **Basic Functionality**:
   - 2D matrix multiplication with known results
@@ -181,12 +181,12 @@ fn transpose(tensor: Tensor, axes: Optional[List[Int]] = None) -> Tensor:
 
 **Context**: Matrix operations are part of the broader Tensor Ops module
 
-**Related Components**:
+### Related Components
 
 - Basic Arithmetic (Issue #218-222): Element-wise operations
 - Reduction Ops (Issue #228-232): Aggregation operations
 
-**Integration Points**:
+### Integration Points
 
 - Shared tensor type and dimension handling
 - Consistent error handling patterns
@@ -195,7 +195,7 @@ fn transpose(tensor: Tensor, axes: Optional[List[Int]] = None) -> Tensor:
 
 ### 10. Future Enhancements (Out of Scope)
 
-**Deferred to Future Iterations**:
+### Deferred to Future Iterations
 
 - SIMD optimizations for performance
 - GPU acceleration

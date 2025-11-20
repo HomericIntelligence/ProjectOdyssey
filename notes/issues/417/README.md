@@ -52,7 +52,7 @@ text_transforms.mojo (426 lines)
 │   └── RandomSynonymReplacement (86 lines)
 └── Composition (52 lines)
     └── TextCompose/TextPipeline
-```
+```text
 
 **Assessment**: Well-organized with logical groupings and clear separation.
 
@@ -65,9 +65,10 @@ trait TextTransform:
     fn __call__(self, text: String) raises -> String:
         """Apply the transform to text."""
         ...
-```
+```text
 
-**Strengths**:
+### Strengths
+
 - ✅ Simple, focused interface
 - ✅ Follows callable object pattern
 - ✅ Consistent with Transform trait for tensors
@@ -82,11 +83,12 @@ trait TextTransform:
 ```mojo
 # Example from RandomSwap
 var words = split_words(text)  # Creates new list
-# ... manipulate words ...
+# ... manipulate words 
 return join_words(words)  # Creates new string
-```
+```text
 
-**Assessment**:
+### Assessment
+
 - ✅ Safe: No memory leaks or use-after-free issues
 - ✅ Clear: Ownership is explicit
 - ⚠️ Opportunity: Could optimize for in-place modifications
@@ -103,9 +105,10 @@ All transforms use consistent probability checking:
 var rand_val = float(random_si64(0, 1000000)) / 1000000.0
 if rand_val < self.p:
     # Apply augmentation
-```
+```text
 
-**Assessment**:
+### Assessment
+
 - ✅ Consistent across all transforms
 - ✅ Uses integer random for determinism
 - ✅ Scales to [0.0, 1.0] range
@@ -129,7 +132,7 @@ if len(words) <= 1:
 # Empty vocabulary (RandomInsertion)
 if len(self.vocabulary) == 0:
     return text
-```
+```text
 
 **Assessment**: ✅ Comprehensive edge case coverage.
 
@@ -143,7 +146,7 @@ var kept_words = List[String]()
 for i in range(len(words)):
     if should_keep(word):
         kept_words.append(words[i])
-```
+```text
 
 **Assessment**: ✅ Clear and correct, though could be optimized with filter/map patterns when available.
 
@@ -183,7 +186,7 @@ Define module-level constants for magic numbers:
 alias RANDOM_SCALE: Int = 1000000
 alias MIN_WORDS_FOR_DELETION: Int = 1
 alias MIN_WORDS_FOR_SWAP: Int = 2
-```
+```text
 
 **Impact**: Low effort, improves maintainability.
 
@@ -203,7 +206,7 @@ fn should_apply(p: Float64) -> Bool:
     """
     var rand_val = float(random_si64(0, RANDOM_SCALE)) / float(RANDOM_SCALE)
     return rand_val < p
-```
+```text
 
 **Impact**: Reduces code duplication, improves consistency.
 
@@ -224,7 +227,7 @@ fn validate_probability(p: Float64, name: String) raises:
     """
     if p < 0.0 or p > 1.0:
         raise Error(name + " must be in range [0.0, 1.0], got " + String(p))
-```
+```text
 
 **Impact**: Prevents invalid configurations, provides better error messages.
 
@@ -253,12 +256,12 @@ Based on typical use cases:
    - Bottleneck: String allocation, list operations
    - Optimization: Minimal benefit
 
-2. **Medium text** (100-200 words, e.g., paragraphs):
+1. **Medium text** (100-200 words, e.g., paragraphs):
    - Expected: < 5ms per transform
    - Bottleneck: List copying, string concatenation
    - Optimization: Moderate benefit from in-place operations
 
-3. **Long text** (1000+ words, e.g., documents):
+1. **Long text** (1000+ words, e.g., documents):
    - Expected: < 50ms per transform
    - Bottleneck: Memory allocation, string building
    - Optimization: Significant benefit from optimizations
@@ -269,11 +272,11 @@ Based on typical use cases:
    - Impact: Moderate for large texts
    - Mitigation: Could use string builder pattern
 
-2. **List Copying**: Operations create new word lists
+1. **List Copying**: Operations create new word lists
    - Impact: Low to moderate
    - Mitigation: In-place mutations where possible
 
-3. **Random Number Generation**: Used extensively
+1. **Random Number Generation**: Used extensively
    - Impact: Low (integer RNG is fast)
    - Mitigation: None needed
 
@@ -281,13 +284,13 @@ Based on typical use cases:
 
 #### Opportunity 1: String Builder Pattern
 
-**Current**:
+### Current
 
 ```mojo
 var result = words[0]
 for i in range(1, len(words)):
     result += " " + words[i]  # Creates new string each iteration
-```
+```text
 
 **Optimized** (future):
 
@@ -299,27 +302,27 @@ for i in range(1, len(words)):
     builder.append(" ")
     builder.append(words[i])
 return builder.build()
-```
+```text
 
 **Impact**: Reduces string allocations from O(n) to O(1).
 
 #### Opportunity 2: In-Place List Operations
 
-**Current**:
+### Current
 
 ```mojo
 var kept_words = List[String]()
 for i in range(len(words)):
     if should_keep(words[i]):
         kept_words.append(words[i])
-```
+```text
 
 **Optimized** (future):
 
 ```mojo
 # Use filter when available
 var kept_words = words.filter(should_keep)
-```
+```text
 
 **Impact**: More idiomatic, potentially faster with SIMD.
 
@@ -334,21 +337,24 @@ var kept_words = words.filter(should_keep)
 var pipeline = TextPipeline(transforms)
 var lazy_result = pipeline.lazy(text)  # Returns LazyTransform
 var result = lazy_result.evaluate()    # Evaluates only when called
-```
+```text
 
 **Impact**: Allows for transform fusion and optimization.
 
 ### Performance Recommendations
 
 **Priority 1**: Profile before optimizing
+
 - Current implementation is likely fast enough for most use cases
 - Measure actual performance on representative workloads
 
 **Priority 2**: Optimize only if bottleneck identified
+
 - String builder pattern (if profiling shows string concat is slow)
 - In-place list operations (if list copying is significant)
 
 **Priority 3**: Consider lazy evaluation for pipelines
+
 - Enables transform fusion
 - Reduces intermediate allocations
 - More complex implementation
@@ -372,7 +378,7 @@ var result = lazy_result.evaluate()    # Evaluates only when called
 
 ### Module-Level Documentation
 
-**Current**:
+### Current
 
 ```mojo
 """Text transformation and augmentation utilities.
@@ -388,15 +394,15 @@ Limitations:
 - May produce ungrammatical text
 - No advanced NLP features
 """
-```
+```text
 
 **Assessment**: ✅ Excellent module documentation with clear limitations stated.
 
 ### Missing Documentation
 
 1. **Usage Examples**: Would benefit from more complex examples in docstrings
-2. **Performance Notes**: Could add time/space complexity to each transform
-3. **Determinism**: Should document that transforms are deterministic with seeded RNG
+1. **Performance Notes**: Could add time/space complexity to each transform
+1. **Determinism**: Should document that transforms are deterministic with seeded RNG
 
 ### Documentation Recommendations
 
@@ -412,7 +418,7 @@ struct RandomSwap(TextTransform):
 
     Determinism: Results are deterministic when random seed is set.
     """
-```
+```text
 
 #### Add More Examples
 
@@ -434,7 +440,7 @@ fn __call__(self, text: String) raises -> String:
     Raises:
         Error if operation fails.
     """
-```
+```text
 
 ## Test Coverage Analysis
 
@@ -460,14 +466,16 @@ fn __call__(self, text: String) raises -> String:
 
 ### Test Quality
 
-**Strengths**:
+### Strengths
+
 - ✅ Edge cases tested (empty text, single word)
 - ✅ Probability bounds tested (p=0.0, p=1.0)
 - ✅ Determinism verified with seed
 - ✅ Composition and integration tested
 - ✅ Clear test names and documentation
 
-**Areas for Enhancement**:
+### Areas for Enhancement
+
 - Could add property-based tests (e.g., word count constraints)
 - Could add performance regression tests
 - Could add more integration scenarios
@@ -487,7 +495,7 @@ fn test_random_deletion_preserves_min_words_property() raises:
             var result = delete(text)
             var words = split_words(result)
             assert_true(len(words) >= 1)
-```
+```text
 
 #### Add Performance Tests
 
@@ -503,7 +511,7 @@ fn test_performance_large_text() raises:
 
     # Ensure performance is acceptable
     assert_true(duration < 100)  # < 100ms for 10K words
-```
+```text
 
 ## Integration Readiness
 
@@ -538,42 +546,42 @@ from .text_transforms import (
     split_words,
     join_words,
 )
-```
+```text
 
-2. **Test Integration**:
+1. **Test Integration**:
 
 ```mojo
 # Verify imports work from shared.data
 from shared.data import RandomSwap, TextPipeline
-```
+```text
 
-3. **Update Build Configuration**: Ensure text_transforms.mojo is included in package builds.
+1. **Update Build Configuration**: Ensure text_transforms.mojo is included in package builds.
 
 ## Future Enhancements
 
 ### Short-Term (Next 1-2 Releases)
 
 1. **Named Constants**: Add module constants for magic numbers
-2. **Probability Helper**: Extract `should_apply()` helper
-3. **Parameter Validation**: Add validation helpers
-4. **Performance Benchmarks**: Add benchmark suite
-5. **Property Tests**: Add property-based testing
+1. **Probability Helper**: Extract `should_apply()` helper
+1. **Parameter Validation**: Add validation helpers
+1. **Performance Benchmarks**: Add benchmark suite
+1. **Property Tests**: Add property-based testing
 
 ### Medium-Term (Next 3-6 Releases)
 
 1. **Advanced Tokenization**: Support punctuation-aware splitting
-2. **Contextual Synonyms**: Use embeddings for better replacements
-3. **Character-Level Augmentations**: Add typo simulation, spelling variations
-4. **Multi-Language Support**: Extend beyond English
-5. **Grammar Preservation**: Add syntax awareness
+1. **Contextual Synonyms**: Use embeddings for better replacements
+1. **Character-Level Augmentations**: Add typo simulation, spelling variations
+1. **Multi-Language Support**: Extend beyond English
+1. **Grammar Preservation**: Add syntax awareness
 
 ### Long-Term (Future Roadmap)
 
 1. **Semantic Augmentations**: Use transformer models for paraphrasing
-2. **Back-Translation**: Implement translation-based augmentation
-3. **Adversarial Augmentations**: Generate challenging examples
-4. **Controllable Generation**: Fine-grained control over augmentation types
-5. **Multi-Modal Integration**: Tight integration with image/audio augmentations
+1. **Back-Translation**: Implement translation-based augmentation
+1. **Adversarial Augmentations**: Generate challenging examples
+1. **Controllable Generation**: Fine-grained control over augmentation types
+1. **Multi-Modal Integration**: Tight integration with image/audio augmentations
 
 ## Recommendations Summary
 
@@ -584,22 +592,22 @@ None - code is production-ready.
 ### High Priority (Address in Next Release)
 
 1. **Add Named Constants**: Define `RANDOM_SCALE` and other magic numbers
-2. **Extract Probability Helper**: Reduce duplication with `should_apply()`
-3. **Add Parameter Validation**: Validate probability ranges at init
-4. **Verify Package Integration**: Ensure proper exports in shared.data
+1. **Extract Probability Helper**: Reduce duplication with `should_apply()`
+1. **Add Parameter Validation**: Validate probability ranges at init
+1. **Verify Package Integration**: Ensure proper exports in shared.data
 
 ### Medium Priority (Address in Future Releases)
 
 1. **Add Property Tests**: Strengthen test suite with property-based testing
-2. **Performance Benchmarks**: Create benchmark suite for regression testing
-3. **String Builder Optimization**: If profiling shows string concat is slow
-4. **Lazy Evaluation**: For advanced pipeline optimization
+1. **Performance Benchmarks**: Create benchmark suite for regression testing
+1. **String Builder Optimization**: If profiling shows string concat is slow
+1. **Lazy Evaluation**: For advanced pipeline optimization
 
 ### Low Priority (Future Enhancements)
 
 1. **Advanced Tokenization**: Improve word splitting
-2. **Contextual Synonyms**: Use embeddings
-3. **Multi-Language Support**: Extend beyond English
+1. **Contextual Synonyms**: Use embeddings
+1. **Multi-Language Support**: Extend beyond English
 
 ## Conclusion
 
@@ -612,17 +620,17 @@ The text augmentation implementation is of high quality and ready for integratio
 ### Strengths
 
 1. **Code Quality**: Clean, well-organized, follows best practices
-2. **Test Coverage**: 35 comprehensive tests
-3. **Documentation**: Excellent API documentation and module docs
-4. **Design**: Sound architectural decisions (traits, composition)
-5. **Robustness**: Handles edge cases properly
+1. **Test Coverage**: 35 comprehensive tests
+1. **Documentation**: Excellent API documentation and module docs
+1. **Design**: Sound architectural decisions (traits, composition)
+1. **Robustness**: Handles edge cases properly
 
 ### Areas for Improvement
 
 1. **Named Constants**: Add constants for magic numbers (low effort)
-2. **Helper Extraction**: Reduce duplication (low effort)
-3. **Parameter Validation**: Add init-time validation (low effort)
-4. **Performance Testing**: Add benchmark suite (medium effort)
+1. **Helper Extraction**: Reduce duplication (low effort)
+1. **Parameter Validation**: Add init-time validation (low effort)
+1. **Performance Testing**: Add benchmark suite (medium effort)
 
 ### Final Recommendation
 

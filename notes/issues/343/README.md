@@ -52,7 +52,7 @@ checkpoint_epoch_N.ckpt
 ├── optimizer_state: dict (optimizer internals)
 ├── scheduler_state: dict (scheduler internals)
 └── rng_state: dict (random state)
-```
+```text
 
 **Rationale**: Versioned format enables backward compatibility as the system evolves. Structured organization makes
 checkpoint inspection and debugging easier.
@@ -161,7 +161,7 @@ checkpoint_callback.save_checkpoint(trainer, epoch=10, metrics={"val_loss": 0.5}
 # Load and resume
 state = checkpoint_callback.load_checkpoint("checkpoint_epoch_0010.ckpt")
 trainer.restore_state(state)
-```
+```text
 
 **Rationale**: Simple, explicit API reduces cognitive load and makes common use cases straightforward while supporting
 advanced scenarios.

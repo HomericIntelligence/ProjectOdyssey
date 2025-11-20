@@ -19,7 +19,7 @@ examples/
 ├── mojo-patterns/       # Mojo-specific patterns and idioms
 ├── custom-layers/       # Building custom neural network components
 └── performance/         # Optimization and performance techniques
-```
+```text
 
 ## Getting Started
 
@@ -32,7 +32,7 @@ pixi run mojo run examples/getting-started/quickstart_example.mojo
 # Or navigate to examples directory first
 cd examples
 pixi run mojo run getting-started/quickstart_example.mojo
-```
+```text
 
 ### Example Categories
 
@@ -99,18 +99,18 @@ fn main() raises:
     """Entry point with demonstration code."""
     # Example usage with explanatory comments
     print("Example complete!")
-```
+```text
 
 ## Contributing Examples
 
 When adding new examples:
 
 1. **Follow the template** - Use consistent structure
-2. **Add docstrings** - Explain what the example demonstrates
-3. **Keep it focused** - One concept per example
-4. **Make it runnable** - Include all necessary code
-5. **Link to docs** - Reference the related documentation
-6. **Test it** - Verify it compiles and runs
+1. **Add docstrings** - Explain what the example demonstrates
+1. **Keep it focused** - One concept per example
+1. **Make it runnable** - Include all necessary code
+1. **Link to docs** - Reference the related documentation
+1. **Test it** - Verify it compiles and runs
 
 ## Example Usage Patterns
 
@@ -118,7 +118,7 @@ When adding new examples:
 
 ```bash
 pixi run mojo run examples/getting-started/quickstart_example.mojo
-```
+```text
 
 ### Pattern 2: With Custom Data
 
@@ -128,7 +128,7 @@ Modify examples to use your own data:
 # In the example file
 var X_train = load_your_data()  # Replace placeholder
 var y_train = load_your_labels()
-```
+```text
 
 ### Pattern 3: Building On Examples
 
@@ -138,7 +138,7 @@ Use examples as starting points:
 cp examples/getting-started/quickstart_example.mojo my_model.mojo
 # Edit my_model.mojo with your changes
 pixi run mojo run my_model.mojo
-```
+```text
 
 ## Documentation Links
 
@@ -163,7 +163,7 @@ ls shared/
 
 # Run from repository root
 pixi run mojo run examples/getting-started/quickstart_example.mojo
-```
+```text
 
 ### Placeholder Data
 
@@ -175,7 +175,7 @@ var X_train = Tensor.randn(1000, 784)
 
 # Replace with real data (for actual use)
 var X_train = load_mnist_data()
-```
+```text
 
 ## See Also
 

@@ -86,29 +86,29 @@ Update all 36 agent configuration files with correct tool specifications to enab
 
 ### Changes Made
 
-**Priority 1: Orchestrators**
+### Priority 1: Orchestrators
 
 - Standard orchestrators: `Read,Grep,Glob` → `Read,Grep,Glob,Bash,Task`
 - Research orchestrators: `Read,Grep,Glob,WebFetch` → `Read,Grep,Glob,Bash,Task,WebFetch`
 
-**Priority 2: Design Agents**
+### Priority 2: Design Agents
 
 - All design agents: `Read,Write,Grep,Glob` → `Read,Write,Grep,Glob,Bash,Task`
 
-**Priority 3: Coordination Specialists**
+### Priority 3: Coordination Specialists
 
 - All coordination specialists: `Read,Write,Edit,Grep,Glob` → `Read,Write,Edit,Grep,Glob,Bash,Task`
 
-**Priority 4: Specialists with Bash**
+### Priority 4: Specialists with Bash
 
 - Test/Performance specialists: `Read,Write,Edit,Bash,Grep,Glob` → `Read,Write,Edit,Bash,Grep,Glob,Task`
 - Blog writer specialist: `Read,Grep,Glob,Bash` → `Read,Grep,Glob,Bash,Task`
 
-**Priority 5: Review Specialists**
+### Priority 5: Review Specialists
 
 - All review specialists: `Read,Grep,Glob` → `Read,Grep,Glob,Bash`
 
-**Priority 6: Engineers**
+### Priority 6: Engineers
 
 - All engineers: `Read,Write,Edit,Grep,Glob` → `Read,Write,Edit,Grep,Glob,Bash`
 

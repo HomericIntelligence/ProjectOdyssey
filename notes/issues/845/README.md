@@ -87,7 +87,7 @@ tests/
 │       ├── coverage_data/               # Mock coverage data
 │       ├── configs/                     # Test configuration files
 │       └── expected_outputs/            # Baseline reports
-```
+```text
 
 ## References
 
@@ -103,7 +103,7 @@ tests/
 
 (Add notes here during test development)
 
-**Key Testing Principles**:
+### Key Testing Principles
 
 - Follow Test-Driven Development (TDD): Write tests before implementation
 - Use pytest fixtures for reusable test data and infrastructure
@@ -113,20 +113,20 @@ tests/
 - Clear test names that describe what is being tested
 - Comprehensive docstrings explaining test purpose
 
-**Default Thresholds**:
+### Default Thresholds
 
 - Line coverage minimum: 80% (configurable)
 - Per-file minimum: 70% (configurable)
 - Grace period for new files: No enforcement
 
-**Coverage Formats to Support**:
+### Coverage Formats to Support
 
 - Per-file coverage percentages
 - Per-function coverage percentages
 - List of uncovered lines with context
 - Summary statistics
 
-**Workflow**:
+### Workflow
 
 - Requires: #844 (Plan) complete ✅
 - Recommended: Parallel with #846 (Implementation)

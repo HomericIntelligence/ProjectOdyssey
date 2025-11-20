@@ -22,12 +22,12 @@ Scan code for security vulnerabilities.
 # Check for committed secrets
 ./scripts/scan_for_secrets.sh
 
-# Detects:
+# Detects
 # - API keys
 # - Passwords
 # - Private keys
 # - Tokens
-```
+```text
 
 ### 2. Dependency Vulnerabilities
 
@@ -37,7 +37,7 @@ pip-audit
 
 # Check for known vulnerabilities
 safety check
-```
+```text
 
 ### 3. Code Patterns
 
@@ -45,12 +45,12 @@ safety check
 # Check for unsafe patterns
 ./scripts/check_unsafe_patterns.sh
 
-# Looks for:
+# Looks for
 # - Hardcoded credentials
 # - SQL injection vectors
 # - Unsafe file operations
 # - Unvalidated input
-```
+```text
 
 ## Prevention
 
@@ -64,7 +64,7 @@ Ensure sensitive files ignored:
 *.pem
 credentials.json
 secrets/
-```
+```text
 
 ### Pre-commit Hook
 
@@ -73,7 +73,7 @@ secrets/
   name: Detect Private Key
 - id: detect-aws-credentials
   name: Detect AWS Credentials
-```
+```text
 
 ## Common Vulnerabilities
 
@@ -86,7 +86,7 @@ API_KEY = "sk_live_1234567890"
 # ✅ Correct
 import os
 API_KEY = os.getenv("API_KEY")
-```
+```text
 
 ### 2. Unsafe File Operations
 
@@ -99,6 +99,6 @@ fn load_file(path: String):
 fn load_file(path: String):
     if is_safe_path(path):
         open(path)
-```
+```text
 
 See security best practices documentation.

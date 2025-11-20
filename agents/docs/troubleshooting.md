@@ -12,31 +12,31 @@
 
 ### Issue 1: Wrong Agent Invoked
 
-**Symptoms**:
+### Symptoms
 
 - Claude invokes an agent that doesn't match your need
 - The agent seems confused about what to do
 - Response is off-topic or at wrong level of detail
 
-**Common Causes**:
+### Common Causes
 
 - Request was ambiguous
 - Multiple agents match the description
 - Agent description overlap
 
-**Solutions**:
+### Solutions
 
 #### Solution A: Explicitly name the agent
 
 ```text
 "Actually, use the [specific agent name] for this task"
-```
+```text
 
 Example:
 
 ```text
 "Actually, use the senior implementation engineer - this requires advanced Mojo expertise"
-```
+```text
 
 #### Solution B: Be more specific in your request
 
@@ -50,15 +50,15 @@ Use: "Write comprehensive API documentation with examples" (invokes Documentatio
 
 ```text
 "Use the [section] orchestrator to coordinate this work"
-```
+```text
 
 Example:
 
 ```text
 "Use the shared library orchestrator to coordinate adding batch normalization"
-```
+```text
 
-**Prevention**:
+### Prevention
 
 - Include keywords that match agent descriptions
 - Specify scope (repository-wide, module, function)
@@ -68,27 +68,27 @@ Example:
 
 ### Issue 2: Agent Seems Stuck or Blocked
 
-**Symptoms**:
+### Symptoms
 
 - Agent reports it can't proceed
 - Agent asks for information repeatedly
 - Agent reports missing prerequisites
 - Work has stalled
 
-**Common Causes**:
+### Common Causes
 
 - Missing specifications or requirements
 - Dependencies not ready
 - Insufficient authority for decision
 - Resource conflicts
 
-**Solutions**:
+### Solutions
 
 #### Solution A: Escalate to higher level
 
 ```text
 "Escalate this to the [higher level agent]"
-```
+```text
 
 Example:
 
@@ -96,7 +96,7 @@ Example:
 Junior Engineer stuck → "Escalate to Implementation Engineer"
 Implementation Engineer stuck → "Escalate to Implementation Specialist"
 Specialist stuck → "Escalate to Architecture Design Agent"
-```
+```text
 
 #### Solution B: Provide missing information
 
@@ -104,19 +104,19 @@ If agent asks for specifications:
 
 ```text
 "Here are the requirements: [detailed specifications]"
-```
+```text
 
 If agent needs decisions:
 
 ```text
 "Use approach X because [rationale]"
-```
+```text
 
 #### Solution C: Check prerequisites
 
 ```text
 "What prerequisites are missing? Let's address them first."
-```
+```text
 
 Then delegate to appropriate agent to handle prerequisites.
 
@@ -126,9 +126,9 @@ If multiple agents need same resource:
 
 ```text
 "Coordinate with [other agent] on [resource]. Use separate worktrees."
-```
+```text
 
-**Prevention**:
+### Prevention
 
 - Complete Plan phase before Test/Implementation phases
 - Use git worktrees for parallel work
@@ -139,20 +139,20 @@ If multiple agents need same resource:
 
 ### Issue 3: Don't Know Which Agent to Use
 
-**Symptoms**:
+### Symptoms
 
 - Task is complex or multi-faceted
 - Unclear who has the right expertise
 - Multiple agents seem relevant
 - New to the agent system
 
-**Common Causes**:
+### Common Causes
 
 - Task complexity
 - Unfamiliarity with hierarchy
 - Task crosses multiple domains
 
-**Solutions**:
+### Solutions
 
 #### Solution A: Start with an orchestrator
 
@@ -160,13 +160,13 @@ For repository-wide tasks:
 
 ```text
 "Use the chief architect to evaluate this"
-```
+```text
 
 For section-specific tasks:
 
 ```text
 "Use the [section] orchestrator to coordinate this"
-```
+```text
 
 Examples:
 
@@ -174,7 +174,7 @@ Examples:
 "Use the shared library orchestrator to add this feature"
 "Use the papers orchestrator to implement this research paper"
 "Use the CI/CD orchestrator to set up testing"
-```
+```text
 
 #### Solution B: Describe the task naturally and let auto-selection work
 
@@ -185,7 +185,7 @@ Just say what you want:
 
 "Write comprehensive tests for the training loop"
 → Auto-invokes Test Specialist
-```
+```text
 
 #### Solution C: Check the agent catalog
 
@@ -195,7 +195,7 @@ cat agents/docs/agent-catalog.md
 
 # Or check quick reference
 cat agents/hierarchy.md
-```
+```text
 
 #### Solution D: Use decision tree
 
@@ -210,9 +210,9 @@ Is this about:
 - Writing docs? → Documentation Writer
 - Performance? → Performance Specialist/Engineer
 - Security? → Security Design Agent/Specialist
-```
+```text
 
-**Prevention**:
+### Prevention
 
 - Familiarize yourself with [agent-catalog.md](agent-catalog.md)
 - Review [hierarchy.md](../hierarchy.md) visual diagram
@@ -222,7 +222,7 @@ Is this about:
 
 ### Issue 4: Agents Not Coordinating
 
-**Symptoms**:
+### Symptoms
 
 - Duplicate work
 - Conflicting implementations
@@ -230,38 +230,38 @@ Is this about:
 - Merge conflicts
 - Mismatched expectations
 
-**Common Causes**:
+### Common Causes
 
 - Lack of communication
 - No shared specifications
 - Working in silos
 - No coordination protocol
 
-**Solutions**:
+### Solutions
 
 #### Solution A: Use orchestrator for coordination
 
 ```text
 "Use the [appropriate orchestrator/specialist] to coordinate between these agents"
-```
+```text
 
 Example:
 
 ```text
 "Use the implementation specialist to coordinate between test and implementation engineers"
-```
+```text
 
 #### Solution B: Establish shared specifications
 
 ```text
 "Create detailed specifications that both [agent A] and [agent B] will follow"
-```
+```text
 
 Example:
 
 ```text
 "Architecture design agent: Create interface specification for both test and implementation engineers"
-```
+```text
 
 #### Solution C: Use git worktrees for isolation
 
@@ -270,16 +270,16 @@ Example:
 - Test Engineer → worktrees/issue-63-test-[component]/
 - Implementation Engineer → worktrees/issue-64-impl-[component]/
 - Documentation Writer → worktrees/issue-65-docs-[component]/"
-```
+```text
 
 #### Solution D: Implement handoff protocol
 
 ```text
 "[Agent A]: When you complete [task], create handoff document for [Agent B]
 Include: what was done, artifacts created, next steps, important notes"
-```
+```text
 
-**Prevention**:
+### Prevention
 
 - Always complete Plan phase before parallel execution
 - Use specifications as single source of truth
@@ -291,7 +291,7 @@ Include: what was done, artifacts created, next steps, important notes"
 
 ### Issue 5: Mojo-Specific Problems
 
-**Symptoms**:
+### Symptoms
 
 - Code doesn't compile
 - SIMD operations not working
@@ -299,13 +299,13 @@ Include: what was done, artifacts created, next steps, important notes"
 - Type errors
 - Lifetime/ownership errors
 
-**Common Causes**:
+### Common Causes
 
 - Incorrect Mojo syntax
 - Misunderstanding of Mojo features
 - Wrong agent for Mojo complexity level
 
-**Solutions**:
+### Solutions
 
 #### Solution A: Use appropriate expertise level
 
@@ -313,19 +313,19 @@ For advanced Mojo (SIMD, lifetimes, traits):
 
 ```text
 "Use the senior implementation engineer - this requires advanced Mojo knowledge"
-```
+```text
 
 For standard Mojo:
 
 ```text
 "Use the implementation engineer"
-```
+```text
 
 For simple Mojo:
 
 ```text
 "Use the junior implementation engineer"
-```
+```text
 
 #### Solution B: Ask for Mojo-specific review
 
@@ -335,7 +335,7 @@ For simple Mojo:
 - SIMD vectorization opportunities
 - Memory safety issues
 - Type system usage"
-```
+```text
 
 #### Solution C: Escalate to architecture level
 
@@ -343,7 +343,7 @@ For design issues:
 
 ```text
 "Escalate to architecture design agent - we need to redesign this Mojo API"
-```
+```text
 
 #### Solution D: Check Mojo documentation
 
@@ -353,9 +353,9 @@ https://docs.modular.com/mojo/manual/
 
 # Check Mojo examples in codebase
 cat papers/lenet5/src/*.mojo
-```
+```text
 
-**Prevention**:
+### Prevention
 
 - Use senior engineers for complex Mojo
 - Design Mojo APIs at architecture level
@@ -366,14 +366,14 @@ cat papers/lenet5/src/*.mojo
 
 ### Issue 6: Tests Failing
 
-**Symptoms**:
+### Symptoms
 
 - Unit tests failing
 - Integration tests failing
 - Tests pass locally but fail in CI
 - Flaky tests
 
-**Common Causes**:
+### Common Causes
 
 - Implementation doesn't match specification
 - Test assumptions incorrect
@@ -381,7 +381,7 @@ cat papers/lenet5/src/*.mojo
 - Race conditions
 - Floating-point precision issues
 
-**Solutions**:
+### Solutions
 
 #### Solution A: TDD coordination
 
@@ -390,7 +390,7 @@ cat papers/lenet5/src/*.mojo
 - Test Engineer: Verify test is correct
 - Implementation Engineer: Verify implementation matches spec
 - Both: Discuss and resolve discrepancy"
-```
+```text
 
 #### Solution B: Debug systematically
 
@@ -400,7 +400,7 @@ cat papers/lenet5/src/*.mojo
 2. Check test assumptions
 3. Verify expected vs actual values
 4. Report findings to Implementation Engineer"
-```
+```text
 
 #### Solution C: Check for environment issues
 
@@ -411,7 +411,7 @@ cat papers/lenet5/src/*.mojo
 - Clean environment
 
 Identify environment-specific issues"
-```
+```text
 
 #### Solution D: Review specifications
 
@@ -419,9 +419,9 @@ Identify environment-specific issues"
 "Escalate to Component Specialist:
 The specification may be ambiguous or incorrect
 Test and implementation engineers have different interpretations"
-```
+```text
 
-**Prevention**:
+### Prevention
 
 - Use TDD: tests written before/during implementation
 - Clear specifications from planning phase
@@ -431,28 +431,28 @@ Test and implementation engineers have different interpretations"
 
 ### Issue 7: Documentation Incomplete or Unclear
 
-**Symptoms**:
+### Symptoms
 
 - Missing docstrings
 - Unclear API documentation
 - No usage examples
 - Outdated documentation
 
-**Common Causes**:
+### Common Causes
 
 - Documentation not prioritized
 - Documentation created after code (not during)
 - No documentation review process
 - Specifications not documented
 
-**Solutions**:
+### Solutions
 
 #### Solution A: Assign documentation specialist
 
 ```text
 "Documentation Specialist: Create comprehensive documentation plan for [component]
 Include: API docs, examples, tutorials, README updates"
-```
+```text
 
 #### Solution B: Parallel documentation with implementation
 
@@ -461,7 +461,7 @@ Include: API docs, examples, tutorials, README updates"
 - Implementation Engineer: Write code with docstrings
 - Documentation Writer: Create API docs and examples in parallel
 - Both work in separate worktrees, merge in packaging phase"
-```
+```text
 
 #### Solution C: Documentation review
 
@@ -471,7 +471,7 @@ Include: API docs, examples, tutorials, README updates"
 - Clarity
 - Correct examples
 - Up-to-date with code"
-```
+```text
 
 #### Solution D: Generate from code
 
@@ -480,9 +480,9 @@ Include: API docs, examples, tutorials, README updates"
 - Extract docstrings into API documentation
 - Generate reference documentation
 - Format consistently"
-```
+```text
 
-**Prevention**:
+### Prevention
 
 - Include documentation in Plan phase
 - Write docstrings during implementation
@@ -493,21 +493,21 @@ Include: API docs, examples, tutorials, README updates"
 
 ### Issue 8: Performance Not Meeting Requirements
 
-**Symptoms**:
+### Symptoms
 
 - Code is slower than expected
 - Performance regressions detected
 - Not utilizing SIMD effectively
 - Memory bandwidth issues
 
-**Common Causes**:
+### Common Causes
 
 - No performance requirements in plan
 - Not using SIMD optimization
 - Poor memory access patterns
 - Not profiling before optimizing
 
-**Solutions**:
+### Solutions
 
 #### Solution A: Performance planning
 
@@ -517,7 +517,7 @@ Include: API docs, examples, tutorials, README updates"
 2. Design benchmarks
 3. Identify optimization opportunities
 4. Plan SIMD vectorization"
-```
+```text
 
 #### Solution B: Profile first
 
@@ -527,7 +527,7 @@ Include: API docs, examples, tutorials, README updates"
 2. Measure CPU usage, memory bandwidth
 3. Check SIMD utilization
 4. Report findings"
-```
+```text
 
 #### Solution C: Optimize with senior engineer
 
@@ -537,7 +537,7 @@ Include: API docs, examples, tutorials, README updates"
 - Improve memory access patterns
 - Use compile-time computation (@parameter)
 - Leverage Mojo's zero-cost abstractions"
-```
+```text
 
 #### Solution D: Validate improvements
 
@@ -547,9 +547,9 @@ Include: API docs, examples, tutorials, README updates"
 2. Verify correctness maintained
 3. Check for regressions in other areas
 4. Document improvements"
-```
+```text
 
-**Prevention**:
+### Prevention
 
 - Define performance requirements in Plan phase
 - Include Performance Specialist in design
@@ -561,20 +561,20 @@ Include: API docs, examples, tutorials, README updates"
 
 ### Issue 9: Merge Conflicts
 
-**Symptoms**:
+### Symptoms
 
 - Git merge conflicts
 - Conflicting changes from parallel worktrees
 - Integration failures during packaging phase
 
-**Common Causes**:
+### Common Causes
 
 - Insufficient coordination
 - No shared specifications
 - Modifying same code areas
 - Not using worktrees properly
 
-**Solutions**:
+### Solutions
 
 #### Solution A: Resolve at packaging phase
 
@@ -586,7 +586,7 @@ Include: API docs, examples, tutorials, README updates"
 4. Resolve conflicts carefully
 5. Run full test suite
 6. Verify integration"
-```
+```text
 
 #### Solution B: Coordinate on interfaces
 
@@ -595,7 +595,7 @@ Include: API docs, examples, tutorials, README updates"
 Architecture Design Agent: Define clear interfaces
 All engineers: Follow interface specifications exactly
 This prevents conflicting changes"
-```
+```text
 
 #### Solution C: Use cherry-pick for dependencies
 
@@ -603,7 +603,7 @@ This prevents conflicting changes"
 "If Implementation depends on Test fixtures:
 cd worktrees/issue-64-impl/
 git cherry-pick <commit-from-test-branch>"
-```
+```text
 
 #### Solution D: Escalate significant conflicts
 
@@ -611,9 +611,9 @@ git cherry-pick <commit-from-test-branch>"
 "If conflicts are fundamental (not just textual):
 Escalate to Architecture Design Agent
 May need to redesign interfaces or split work differently"
-```
+```text
 
-**Prevention**:
+### Prevention
 
 - Complete architecture design before parallel work
 - Clear interface definitions
@@ -625,20 +625,20 @@ May need to redesign interfaces or split work differently"
 
 ### Issue 10: Agent Exceeding Scope
 
-**Symptoms**:
+### Symptoms
 
 - Junior Engineer making architectural decisions
 - Implementation Engineer selecting technology stack
 - Engineer refactoring entire modules
 - Agent doing work outside its level
 
-**Common Causes**:
+### Common Causes
 
 - Unclear scope boundaries
 - Agent not understanding hierarchy
 - Missing escalation when scope exceeded
 
-**Solutions**:
+### Solutions
 
 #### Solution A: Remind of scope
 
@@ -647,7 +647,7 @@ May need to redesign interfaces or split work differently"
 Your scope: [specific scope]
 This decision requires: [higher level agent]
 Please escalate."
-```
+```text
 
 Example:
 
@@ -656,7 +656,7 @@ Example:
 Your scope: Implement functions following specifications
 This decision requires: Chief Architect
 Please escalate if you need technology decisions."
-```
+```text
 
 #### Solution B: Review agent hierarchy
 
@@ -668,7 +668,7 @@ Level 2: Module-wide
 Level 3: Component-wide
 Level 4: Function/class
 Level 5: Lines/boilerplate"
-```
+```text
 
 #### Solution C: Reset and delegate properly
 
@@ -676,9 +676,9 @@ Level 5: Lines/boilerplate"
 "Let's restart this task with proper delegation:
 [Appropriate higher-level agent]: Create specifications
 [Original agent]: Implement following those specifications"
-```
+```text
 
-**Prevention**:
+### Prevention
 
 - Clear specifications from higher levels
 - Agents understand their scope boundaries
@@ -693,7 +693,7 @@ Level 5: Lines/boilerplate"
 
 **Meaning**: Agent needs more detailed requirements
 
-**Action**:
+### Action
 
 ```text
 Option 1: Provide specifications
@@ -701,19 +701,19 @@ Option 1: Provide specifications
 
 Option 2: Create specifications
 "[Higher level agent]: Create specifications for [task]"
-```
+```text
 
 ### "This decision exceeds my authority"
 
 **Meaning**: Decision requires higher-level agent
 
-**Action**:
+### Action
 
 ```text
 "Escalate to [appropriate higher-level agent]"
-```
+```text
 
-**Decision authority reference**:
+### Decision authority reference
 
 - Level 0: System-wide architecture
 - Level 1: Section organization
@@ -726,7 +726,7 @@ Option 2: Create specifications
 
 **Meaning**: Agent is blocked and cannot proceed
 
-**Action**:
+### Action
 
 ```text
 1. Review blocker description
@@ -735,25 +735,25 @@ Option 2: Create specifications
    "Escalate this blocker to [superior agent]"
 4. If resolvable:
    "Here's how to resolve: [solution]"
-```
+```text
 
 ### "Conflict with [other agent]"
 
 **Meaning**: Agents have disagreement or conflict
 
-**Action**:
+### Action
 
 ```text
 "Escalate to common superior:
 Both [Agent A] and [Agent B] report to [Superior]
 [Superior]: Review conflict and make decision"
-```
+```text
 
 ### "Integration test failing"
 
 **Meaning**: Components don't integrate correctly
 
-**Action**:
+### Action
 
 ```text
 1. Check if interfaces match specification:
@@ -764,26 +764,26 @@ Both [Agent A] and [Agent B] report to [Superior]
 
 3. Fix implementation:
    "Implementation Engineers: Update implementations to match spec"
-```
+```text
 
 ### "Performance requirement not met"
 
 **Meaning**: Code doesn't meet performance targets
 
-**Action**:
+### Action
 
 ```text
 "Performance Specialist: Create optimization plan
 Performance Engineer: Profile and identify bottlenecks
 Senior Implementation Engineer: Implement optimizations
 Performance Engineer: Validate improvements"
-```
+```text
 
 ### "Memory safety issue detected"
 
 **Meaning**: Potential buffer overflow, memory leak, or use-after-free
 
-**Action**:
+### Action
 
 ```text
 "Security Design Agent: Review for memory safety
@@ -792,13 +792,13 @@ Use Mojo ownership system correctly:
 - Proper lifetimes
 - Correct use of owned vs borrowed
 - RAII patterns for cleanup"
-```
+```text
 
 ### "Test coverage insufficient"
 
 **Meaning**: Tests don't cover enough code paths
 
-**Action**:
+### Action
 
 ```text
 "Test Specialist: Identify coverage gaps
@@ -807,7 +807,7 @@ Test Engineer: Add tests for:
 - Edge cases
 - Error conditions
 Target: [X]% coverage"
-```
+```text
 
 ---
 
@@ -815,20 +815,20 @@ Target: [X]% coverage"
 
 ### How to Debug Agent Invocation
 
-**Check which agent was invoked**:
+### Check which agent was invoked
 
 ```text
 Agent should introduce itself:
 "I'm the [Agent Name], responsible for [role]"
-```
+```text
 
-**If wrong agent invoked**:
+### If wrong agent invoked
 
 ```text
 "Actually, I need [correct agent name] for this"
-```
+```text
 
-**Understand why agent was selected**:
+### Understand why agent was selected
 
 - Agents are selected based on description field in config
 - Check: `.claude/agents/[agent-name].md` description field
@@ -836,12 +836,12 @@ Agent should introduce itself:
 
 ### How to Debug Delegation Issues
 
-**Check delegation path**:
+### Check delegation path
 
 ```text
 "Show me the delegation path for this task:
 Who delegates to whom?"
-```
+```text
 
 Expected pattern:
 
@@ -851,31 +851,31 @@ Level 0/1 Orchestrator
     → Level 3 Specialist
       → Level 4 Engineer
         → Level 5 Junior (if needed)
-```
+```text
 
-**Verify delegation is appropriate**:
+### Verify delegation is appropriate
 
 - Each level should add detail, not skip steps
 - Specialists should coordinate, not micromanage
 - Engineers should execute, not decide architecture
 
-**Fix broken delegation**:
+### Fix broken delegation
 
 ```text
 "Let's restart with proper delegation:
 [Level N agent]: Create specifications
 [Level N+1 agent]: Implement following specs"
-```
+```text
 
 ### How to Debug Coordination Issues
 
-**Check for coordination**:
+### Check for coordination
 
 ```text
 "Are [Agent A] and [Agent B] coordinating on [shared resource]?"
-```
+```text
 
-**Establish coordination protocol**:
+### Establish coordination protocol
 
 ```text
 "[Agent A] and [Agent B]: Coordinate on [resource]
@@ -883,22 +883,22 @@ Level 0/1 Orchestrator
 - Share status updates
 - Use separate worktrees
 - Merge carefully in packaging phase"
-```
+```text
 
-**Review coordination patterns**:
+### Review coordination patterns
 
 ```bash
 cat notes/review/orchestration-patterns.md
 cat agents/delegation-rules.md
-```
+```text
 
 ### How to Debug Worktree Issues
 
-**Check worktree setup**:
+### Check worktree setup
 
 ```bash
 git worktree list
-```
+```text
 
 Expected:
 
@@ -908,9 +908,9 @@ worktrees/issue-63-test-[component]/
 worktrees/issue-64-impl-[component]/
 worktrees/issue-65-pkg-[component]/
 worktrees/issue-66-cleanup-[component]/
-```
+```text
 
-**Verify agent assignments**:
+### Verify agent assignments
 
 ```text
 Each worktree should have clear ownership:
@@ -918,9 +918,9 @@ Each worktree should have clear ownership:
 - issue-64-impl → Implementation Engineer
 - issue-65-pkg → Documentation Writer
 - etc.
-```
+```text
 
-**Fix worktree conflicts**:
+### Fix worktree conflicts
 
 ```text
 Option 1: Cherry-pick commits
@@ -930,7 +930,7 @@ Option 1: Cherry-pick commits
 Option 2: Coordinate through specs
 "Use specifications as single source of truth
  Implement independently in each worktree"
-```
+```text
 
 ---
 
@@ -938,31 +938,31 @@ Option 2: Coordinate through specs
 
 ### Optimize Agent Selection
 
-**Be specific in requests**:
+### Be specific in requests
 
 ```text
 ❌ "Make it faster"
 ✓ "Profile and optimize the convolution layer using SIMD vectorization"
-```
+```text
 
-**Include expertise keywords**:
+### Include expertise keywords
 
 ```text
 Keywords for Performance: "optimize", "SIMD", "profile", "benchmark"
 Keywords for Testing: "test", "TDD", "coverage", "edge cases"
 Keywords for Architecture: "design", "architecture", "interface", "structure"
-```
+```text
 
 ### Optimize Delegation
 
-**Start at right level**:
+### Start at right level
 
 ```text
 ❌ Chief Architect → Junior Engineer (skipping levels)
 ✓ Chief Architect → Orchestrator → Design Agent → Specialist → Engineer
-```
+```text
 
-**Use parallel delegation**:
+### Use parallel delegation
 
 ```text
 After Plan phase:
@@ -970,45 +970,45 @@ Specialist delegates to:
 ├─> Test Engineer (parallel)
 ├─> Implementation Engineer (parallel)
 └─> Documentation Writer (parallel)
-```
+```text
 
 ### Optimize Worktree Usage
 
-**One worktree per phase**:
+### One worktree per phase
 
 ```text
 ✓ Separate worktrees for Test, Impl, Docs
 ✓ Clean separation, no conflicts
 ✓ Parallel execution
-```
+```text
 
-**Minimal cross-worktree dependencies**:
+### Minimal cross-worktree dependencies
 
 ```text
 ✓ Use specifications, not shared code
 ✓ Cherry-pick only when absolutely necessary
 ✓ Integrate in packaging phase
-```
+```text
 
 ### Optimize Coordination
 
-**Clear specifications reduce coordination overhead**:
+### Clear specifications reduce coordination overhead
 
 ```text
 Time spent on specs in Plan phase
 = Time saved in coordination during Implementation
-```
+```text
 
-**Handoff protocols**:
+### Handoff protocols
 
 ```text
 Standard handoff format reduces questions and back-and-forth
 See agents/delegation-rules.md for templates
-```
+```text
 
 ### Optimize SIMD Usage (Mojo-Specific)
 
-**Plan SIMD from architecture phase**:
+### Plan SIMD from architecture phase
 
 ```text
 Architecture Design Agent:
@@ -1019,14 +1019,14 @@ Performance Specialist:
 
 Senior Implementation Engineer:
 "Implement with SIMD from the start"
-```
+```text
 
-**Don't retrofit SIMD**:
+### Don't retrofit SIMD
 
 ```text
 ❌ Write scalar code, then optimize later
 ✓ Design for SIMD, implement SIMD from start
-```
+```text
 
 ---
 
@@ -1034,38 +1034,38 @@ Senior Implementation Engineer:
 
 ### General Questions
 
-**Q: How do I know which agent to use?**
+### Q: How do I know which agent to use?
 
 A: Three approaches:
 
 1. Describe task naturally, let auto-selection work
-2. Use [agent-catalog.md](agent-catalog.md) to find the right agent
-3. Start with an orchestrator and let them delegate
+1. Use [agent-catalog.md](agent-catalog.md) to find the right agent
+1. Start with an orchestrator and let them delegate
 
-**Q: Can I switch agents mid-task?**
+### Q: Can I switch agents mid-task?
 
 A: Yes! Just explicitly invoke a different agent:
 
 ```text
 "Actually, use [different agent] for this"
-```
+```text
 
-**Q: What if an agent makes a mistake?**
+### Q: What if an agent makes a mistake?
 
 A: Provide feedback and ask for correction:
 
 ```text
 "This implementation has a bug: [description]
 Please fix it."
-```
+```text
 
 Or escalate:
 
 ```text
 "Escalate to [higher level] for review"
-```
+```text
 
-**Q: How do I see all available agents?**
+### Q: How do I see all available agents?
 
 A:
 
@@ -1073,11 +1073,11 @@ A:
 ls .claude/agents/         # See all agent configs
 cat agents/docs/agent-catalog.md  # Read agent catalog
 cat agents/hierarchy.md    # See visual hierarchy
-```
+```text
 
 ### Hierarchy Questions
 
-**Q: Why use a hierarchy instead of one agent?**
+### Q: Why use a hierarchy instead of one agent?
 
 A: Benefits:
 
@@ -1086,14 +1086,14 @@ A: Benefits:
 - Parallel execution: Multiple agents work simultaneously
 - Scalability: Clear organization as project grows
 
-**Q: Can I skip levels in the hierarchy?**
+### Q: Can I skip levels in the hierarchy?
 
 A: No, don't skip levels:
 
 ```text
 ❌ Chief Architect → Junior Engineer
 ✓ Chief Architect → Orchestrator → Design Agent → Specialist → Engineer → Junior
-```
+```text
 
 Skipping levels causes:
 
@@ -1101,19 +1101,19 @@ Skipping levels causes:
 - Unclear scope
 - Poor quality work
 
-**Q: What if I only have a simple task?**
+### Q: What if I only have a simple task?
 
 A: For truly simple tasks, use lower-level agents directly:
 
 ```text
 "Junior Implementation Engineer: Create getter/setter methods"
-```
+```text
 
 But most tasks benefit from at least minimal planning.
 
 ### Delegation Questions
 
-**Q: How do I know when to escalate?**
+### Q: How do I know when to escalate?
 
 A: Escalate when:
 
@@ -1123,15 +1123,15 @@ A: Escalate when:
 - Quality standards at risk
 - Scope is unclear
 
-**Q: How do agents coordinate?**
+### Q: How do agents coordinate?
 
 A: Three ways:
 
 1. Vertical: Superior delegates to subordinates, subordinates report up
-2. Horizontal: Peers coordinate directly (Test ↔ Implementation)
-3. Through specs: Shared specifications from planning phase
+1. Horizontal: Peers coordinate directly (Test ↔ Implementation)
+1. Through specs: Shared specifications from planning phase
 
-**Q: What's the handoff protocol?**
+### Q: What's the handoff protocol?
 
 A: See [delegation-rules.md](../delegation-rules.md) for template:
 
@@ -1144,11 +1144,11 @@ Work Completed: [...]
 Artifacts Produced: [...]
 Next Steps: [...]
 Notes: [...]
-```
+```text
 
 ### Mojo-Specific Questions
 
-**Q: Which agents know Mojo?**
+### Q: Which agents know Mojo?
 
 A:
 
@@ -1156,7 +1156,7 @@ A:
 - **Standard Mojo**: Implementation Engineer, Architecture Design Agent
 - **Simple Mojo**: Junior Implementation Engineer
 
-**Q: When should I use SIMD?**
+### Q: When should I use SIMD?
 
 A: SIMD for:
 
@@ -1171,7 +1171,7 @@ Not SIMD for:
 - I/O operations
 - Simple utilities
 
-**Q: How do I handle Mojo-Python interop?**
+### Q: How do I handle Mojo-Python interop?
 
 A:
 
@@ -1180,21 +1180,21 @@ A:
 2. Integration Design Agent: Design FFI interfaces
 3. Implementation Engineers: Implement both sides
 4. Test Engineer: Create integration tests
-```
+```text
 
 ### Workflow Questions
 
-**Q: What's the 5-phase workflow?**
+### Q: What's the 5-phase workflow?
 
 A:
 
 1. **Plan**: Levels 0-2 create specifications (sequential)
-2. **Test**: Write tests (parallel)
-3. **Implementation**: Write code (parallel)
-4. **Packaging**: Integrate and document (parallel)
-5. **Cleanup**: Review and refactor (sequential)
+1. **Test**: Write tests (parallel)
+1. **Implementation**: Write code (parallel)
+1. **Packaging**: Integrate and document (parallel)
+1. **Cleanup**: Review and refactor (sequential)
 
-**Q: Can Test and Implementation run in parallel?**
+### Q: Can Test and Implementation run in parallel?
 
 A: Yes! That's the design:
 
@@ -1205,22 +1205,22 @@ After Plan completes:
 └─> Documentation Writer (in worktrees/issue-65-docs/)
 
 All work in parallel, merge in Packaging phase
-```
+```text
 
-**Q: What are git worktrees?**
+### Q: What are git worktrees?
 
 A: Worktrees allow multiple branches checked out simultaneously:
 
 ```bash
 git worktree add worktrees/issue-63-test 63-test-component
 git worktree add worktrees/issue-64-impl 64-impl-component
-```
+```text
 
 Each agent works in their own worktree, no conflicts.
 
 ### Troubleshooting Questions
 
-**Q: Tests failing, what do I do?**
+### Q: Tests failing, what do I do?
 
 A:
 
@@ -1229,9 +1229,9 @@ A:
 2. Implementation Engineer: Verify implementation matches spec
 3. Both coordinate to identify discrepancy
 4. If spec is wrong: Escalate to Component Specialist
-```
+```text
 
-**Q: Performance not meeting requirements?**
+### Q: Performance not meeting requirements?
 
 A:
 
@@ -1240,9 +1240,9 @@ A:
 2. Performance Engineer: Profile code
 3. Senior Implementation Engineer: Implement optimizations
 4. Performance Engineer: Validate improvements
-```
+```text
 
-**Q: Documentation is outdated?**
+### Q: Documentation is outdated?
 
 A:
 
@@ -1250,33 +1250,33 @@ A:
 1. Documentation Specialist: Create update plan
 2. Documentation Writer: Update docs
 3. Implementation Engineer: Review for accuracy
-```
+```text
 
 ### Configuration Questions
 
-**Q: How do I create a new agent?**
+### Q: How do I create a new agent?
 
 A:
 
 1. Choose appropriate level (0-5)
-2. Use template from `agents/templates/`
-3. Customize for your need
-4. Place in `.claude/agents/`
-5. Test with explicit invocation
+1. Use template from `agents/templates/`
+1. Customize for your need
+1. Place in `.claude/agents/`
+1. Test with explicit invocation
 
-**Q: Can I modify existing agents?**
+### Q: Can I modify existing agents?
 
 A: Yes, edit `.claude/agents/[agent-name].md`
 
 Changes take effect immediately (Claude Code reloads configs)
 
-**Q: Where can I find agent templates?**
+### Q: Where can I find agent templates?
 
 A:
 
 ```bash
 ls agents/templates/
-```
+```text
 
 Templates for each level (0-5) available.
 
@@ -1307,16 +1307,16 @@ ls agents/templates/
 
 # View specific template
 cat agents/templates/level-[0-5]-*.md
-```
+```text
 
 ### Escalation Path
 
 If you can't resolve an issue:
 
 1. **First**: Check this troubleshooting guide
-2. **Second**: Review relevant documentation
-3. **Third**: Ask an orchestrator to coordinate
-4. **Fourth**: Escalate to Chief Architect for strategic issues
+1. **Second**: Review relevant documentation
+1. **Third**: Ask an orchestrator to coordinate
+1. **Fourth**: Escalate to Chief Architect for strategic issues
 
 ### Debugging Checklist
 
@@ -1335,9 +1335,9 @@ When something goes wrong:
 **Remember**: Most issues are resolved by:
 
 1. Clear communication
-2. Proper delegation
-3. Using the right agent for the task
-4. Following the 5-phase workflow
-5. Leveraging git worktrees for parallel work
+1. Proper delegation
+1. Using the right agent for the task
+1. Following the 5-phase workflow
+1. Leveraging git worktrees for parallel work
 
 Good luck! The agent system is designed to help you succeed.

@@ -12,10 +12,10 @@ classic ML papers with modern practices.
 ### Core Components
 
 1. **Hierarchical Agent Network** - 6-level structure from strategic to tactical execution
-2. **Skills Library** - Reusable capabilities invoked by agents
-3. **Orchestration Framework** - Coordination patterns and delegation rules
-4. **5-Phase Development Workflow** - Structured approach to component development
-5. **Documentation System** - Team guides, templates, and architectural records
+1. **Skills Library** - Reusable capabilities invoked by agents
+1. **Orchestration Framework** - Coordination patterns and delegation rules
+1. **5-Phase Development Workflow** - Structured approach to component development
+1. **Documentation System** - Team guides, templates, and architectural records
 
 ### Directory Structure
 
@@ -38,7 +38,7 @@ ml-odyssey/
         ├── skills-design.md                   # Skills taxonomy
         ├── orchestration-patterns.md          # Coordination rules
         └── worktree-strategy.md              # Git workflow
-```
+```text
 
 ## Agent Hierarchy
 
@@ -46,7 +46,7 @@ ml-odyssey/
 
 **Purpose**: Strategic decision-making and system-wide architecture
 
-**Responsibilities**:
+### Responsibilities
 
 - Select AI research papers for implementation
 - Define repository-wide architectural patterns
@@ -58,20 +58,20 @@ ml-odyssey/
 
 **Purpose**: Coordinate work within major sections of the repository
 
-**Sections**:
+### Sections
 
 1. **Foundation** - Repository structure and configuration
-2. **Shared Library** - Core reusable components
-3. **Tooling** - Development and testing tools
-4. **Papers** - Research paper implementations
-5. **CI/CD** - Continuous integration and deployment
-6. **Agentic Workflows** - Claude-powered automation
+1. **Shared Library** - Core reusable components
+1. **Tooling** - Development and testing tools
+1. **Papers** - Research paper implementations
+1. **CI/CD** - Continuous integration and deployment
+1. **Agentic Workflows** - Claude-powered automation
 
 ### Level 2: Module Design & Code Review (3-5 agents per section)
 
 **Purpose**: Design modules and coordinate code reviews
 
-**Types**:
+### Types
 
 - **Architecture Design** - Module structure and interfaces
 - **Integration Design** - Cross-module coordination
@@ -83,7 +83,7 @@ ml-odyssey/
 
 **Purpose**: Specialized expertise for components and reviews
 
-**Component Specialists**:
+### Component Specialists
 
 - Implementation - Core functionality
 - Test - Test strategy and coverage
@@ -110,7 +110,7 @@ ml-odyssey/
 
 **Purpose**: Execute implementation tasks
 
-**Types**:
+### Types
 
 - Senior Engineer - Complex implementations
 - Implementation Engineer - Standard features
@@ -122,7 +122,7 @@ ml-odyssey/
 
 **Purpose**: Simple, well-defined tasks
 
-**Types**:
+### Types
 
 - Junior Implementation - Basic coding
 - Junior Test - Simple tests
@@ -187,10 +187,10 @@ Advanced, context-specific capabilities:
 ### Delegation Rules
 
 1. **Strict Hierarchy**: Agents only delegate to the next level down
-2. **Skip-Level for Trivial Tasks**: Allowed for <20 line changes
-3. **Parallel Execution**: Independent tasks run concurrently
-4. **Sequential Dependencies**: Dependent tasks run in order
-5. **Escalation Path**: Problems escalate up the hierarchy
+1. **Skip-Level for Trivial Tasks**: Allowed for <20 line changes
+1. **Parallel Execution**: Independent tasks run concurrently
+1. **Sequential Dependencies**: Dependent tasks run in order
+1. **Escalation Path**: Problems escalate up the hierarchy
 
 ### Coordination Patterns
 
@@ -215,19 +215,19 @@ Every component follows this structured workflow:
 
 After planning completes, three phases run in parallel:
 
-**Test Phase**:
+### Test Phase
 
 - Write tests first (TDD)
 - Define test scenarios
 - Create fixtures
 
-**Implementation Phase**:
+### Implementation Phase
 
 - Build functionality
 - Follow specifications
 - Implement features
 
-**Package Phase**:
+### Package Phase
 
 - Create distributable artifacts
 - Build `.mojopkg` files
@@ -244,7 +244,7 @@ After planning completes, three phases run in parallel:
 
 ### Language Selection Strategy
 
-**Mojo Required**:
+### Mojo Required
 
 - ALL ML/AI implementations
 - Performance-critical code
@@ -274,12 +274,12 @@ After planning completes, three phases run in parallel:
    - Skills system setup
    - Core orchestration patterns
 
-2. **Integration Phase** (Issues 68-73)
+1. **Integration Phase** (Issues 68-73)
    - Skills implementation
    - Agent activation
    - Workflow integration
 
-3. **Optimization Phase** (Future)
+1. **Optimization Phase** (Future)
    - Performance tuning
    - Pattern refinement
    - Lessons learned integration
@@ -301,15 +301,15 @@ After planning completes, three phases run in parallel:
    - Mitigation: Start simple, add complexity as needed
    - Monitor: Track coordination overhead
 
-2. **Context Pollution**
+1. **Context Pollution**
    - Mitigation: Clear boundaries between agents
    - Monitor: Agent context size
 
-3. **Coordination Failures**
+1. **Coordination Failures**
    - Mitigation: Explicit delegation rules
    - Monitor: Failed delegations
 
-4. **Skill Redundancy**
+1. **Skill Redundancy**
    - Mitigation: Regular skill audit
    - Monitor: Skill usage patterns
 

@@ -71,7 +71,7 @@ def test_different_thresholds_for_metrics():
     # Given: Line coverage 85%, branch coverage 72%, thresholds 80%/75%
     # When: Check both gates
     # Then: Both pass
-```
+```text
 
 **2. Regression Detection**
 
@@ -95,7 +95,7 @@ def test_allows_small_decrease_within_tolerance():
     # Given: Main branch 85%, PR 84%, tolerance 2%
     # When: Check regression gate
     # Then: Gate passes (1% decrease within 2% tolerance)
-```
+```text
 
 **3. Exception Handling**
 
@@ -119,7 +119,7 @@ def test_exception_patterns_match_correctly():
     # Given: Exception pattern "**/*_pb2.py"
     # When: Check file "src/models/schema_pb2.py"
     # Then: File is excluded
-```
+```text
 
 **4. Failure Messages**
 
@@ -143,7 +143,7 @@ def test_regression_message_shows_delta():
     # Given: Main 85%, PR 80%
     # When: Regression gate fails
     # Then: Message shows "-5.0% vs main branch"
-```
+```text
 
 **5. CI Integration**
 
@@ -167,11 +167,11 @@ def test_gate_reads_config_from_file():
     # Given: pyproject.toml with thresholds
     # When: Run gate check
     # Then: Uses configured thresholds
-```
+```text
 
 ### Test Fixtures
 
-**Coverage Data Fixtures**:
+### Coverage Data Fixtures
 
 ```python
 @pytest.fixture
@@ -202,32 +202,36 @@ def coverage_with_exceptions():
             "vendor/lib.py": {"coverage": 60.0}
         }
     }
-```
+```text
 
 ### Key Test Scenarios
 
-**Threshold Checks**:
+### Threshold Checks
+
 - [ ] Fails when total coverage < threshold
 - [ ] Passes when coverage >= threshold
 - [ ] Handles edge case of exactly meeting threshold
 - [ ] Supports different thresholds per metric
 - [ ] Respects per-module threshold overrides
 
-**Regression Detection**:
+### Regression Detection
+
 - [ ] Detects coverage decrease
 - [ ] Allows coverage increase
 - [ ] Handles missing baseline (first run)
 - [ ] Respects configured tolerance
 - [ ] Works with partial coverage data
 
-**Exceptions**:
+### Exceptions
+
 - [ ] Excludes files matching patterns
 - [ ] Glob patterns work correctly
 - [ ] Multiple patterns supported
 - [ ] Exclusions don't affect gate logic
 - [ ] Exclusions documented in report
 
-**Messages**:
+### Messages
+
 - [ ] Clear failure reasons
 - [ ] Actionable guidance
 - [ ] Shows coverage numbers
@@ -250,7 +254,7 @@ def test_ci_pipeline_integration():
     # Given: Simulated CI environment
     # When: Run gate as CI step
     # Then: CI receives correct pass/fail status
-```
+```text
 
 ### Open Questions to Address
 

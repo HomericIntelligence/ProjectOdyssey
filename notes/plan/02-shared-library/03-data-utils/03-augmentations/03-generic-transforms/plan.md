@@ -31,10 +31,10 @@ None (leaf node)
 ## Steps
 
 1. Implement normalization with configurable ranges
-2. Create standardization with mean/std parameters
-3. Add type conversion utilities
-4. Build transform composition mechanism
-5. Support conditional transform application
+1. Create standardization with mean/std parameters
+1. Add type conversion utilities
+1. Build transform composition mechanism
+1. Support conditional transform application
 
 ## Success Criteria
 

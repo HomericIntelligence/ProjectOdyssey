@@ -18,13 +18,13 @@ This document provides instructions for building the distributable training modu
 # Navigate to repository root
 cd /path/to/ml-odyssey
 mkdir -p dist/
-```
+```text
 
 ### 2. Build the Package
 
 ```bash
 mojo package shared/training -o dist/training-0.1.0.mojopkg
-```
+```text
 
 This command will:
 
@@ -36,7 +36,7 @@ This command will:
 
 ```bash
 ls -lh dist/training-0.1.0.mojopkg
-```
+```text
 
 You should see a file with the package binary.
 
@@ -47,7 +47,7 @@ Make the verification script executable and run it:
 ```bash
 chmod +x scripts/install_verify_training.sh
 ./scripts/install_verify_training.sh
-```
+```text
 
 This will:
 
@@ -63,7 +63,7 @@ Alternatively, use the build script:
 ```bash
 chmod +x scripts/build_training_package.sh
 ./scripts/build_training_package.sh
-```
+```text
 
 ## Expected Output
 
@@ -72,18 +72,18 @@ After successful build:
 ```text
 dist/
 └── training-0.1.0.mojopkg     # Binary package (size varies)
-```
+```text
 
 ## Verification Tests
 
 The verification script tests:
 
 1. Callback system imports (Callback, CallbackSignal, CONTINUE, STOP)
-2. TrainingState import
-3. LRScheduler interface import
-4. Scheduler implementations (StepLR, CosineAnnealingLR, WarmupLR)
-5. Callback implementations (EarlyStopping, ModelCheckpoint, LoggingCallback)
-6. Utility functions (is_valid_loss, clip_gradients)
+1. TrainingState import
+1. LRScheduler interface import
+1. Scheduler implementations (StepLR, CosineAnnealingLR, WarmupLR)
+1. Callback implementations (EarlyStopping, ModelCheckpoint, LoggingCallback)
+1. Utility functions (is_valid_loss, clip_gradients)
 
 ## Troubleshooting
 
@@ -93,21 +93,21 @@ The verification script tests:
 which mojo
 mojo --version
 # Should be v0.25.7 or later
-```
+```text
 
 ### Build fails
 
 ```bash
 # Check source files compile
 mojo shared/training/__init__.mojo
-```
+```text
 
 ### Permission denied on dist/
 
 ```bash
 mkdir -p dist
 chmod 755 dist
-```
+```text
 
 ### Package Build Fails
 
@@ -120,7 +120,7 @@ mojo build shared/training/__init__.mojo
 mojo build shared/training/base.mojo
 mojo build shared/training/schedulers.mojo
 mojo build shared/training/callbacks.mojo
-```
+```text
 
 1. Check for syntax errors in source files
 1. Ensure all imports in `__init__.mojo` are correct

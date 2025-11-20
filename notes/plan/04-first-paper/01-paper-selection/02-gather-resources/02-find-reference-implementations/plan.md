@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Find PyTorch implementation
-2. Find TensorFlow implementation
-3. Review and validate implementations
+1. Find TensorFlow implementation
+1. Review and validate implementations
 
 ## Success Criteria
 

@@ -48,9 +48,9 @@ Level 1 Section Orchestrator responsible for coordinating the shared library imp
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -74,30 +74,30 @@ When working with Mojo code, follow patterns in
 ### 1. Receive Requirements
 
 1. Parse shared library requirements from Chief Architect
-2. Identify component needs (core ops, training utils, data utils)
-3. Check for API consistency requirements
-4. Validate performance targets are achievable
+1. Identify component needs (core ops, training utils, data utils)
+1. Check for API consistency requirements
+1. Validate performance targets are achievable
 
 ### 2. Coordinate Development
 
 1. Break down into component subtasks
-2. Delegate to appropriate design agents
-3. Monitor progress across multiple components
-4. Ensure API consistency across modules
+1. Delegate to appropriate design agents
+1. Monitor progress across multiple components
+1. Ensure API consistency across modules
 
 ### 3. Validate Library
 
 1. Collect implementations from specialists
-2. Review API consistency and completeness
-3. Validate performance benchmarks meet targets
-4. Ensure quality standards met (testing, docs)
+1. Review API consistency and completeness
+1. Validate performance benchmarks meet targets
+1. Ensure quality standards met (testing, docs)
 
 ### 4. Report Status
 
 1. Summarize library components completed
-2. Report on API stability and performance
-3. Identify any blockers or compatibility issues
-4. Escalate architectural concerns to Chief Architect
+1. Report on API stability and performance
+1. Identify any blockers or compatibility issues
+1. Escalate architectural concerns to Chief Architect
 
 ## Delegation
 
@@ -191,7 +191,7 @@ blockers with detailed report.
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -244,8 +244,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -290,13 +290,13 @@ After creating PR:
 
 **Scenario**: Implementing a new component across multiple subsections
 
-**Actions**:
+### Actions
 
 1. Break down component into design, implementation, and testing phases
-2. Delegate design work to design agents
-3. Delegate implementation to implementation specialists
-4. Coordinate parallel work streams
-5. Monitor progress and resolve blockers
+1. Delegate design work to design agents
+1. Delegate implementation to implementation specialists
+1. Coordinate parallel work streams
+1. Monitor progress and resolve blockers
 
 **Outcome**: Component delivered with all phases complete and integrated
 
@@ -304,12 +304,12 @@ After creating PR:
 
 **Scenario**: Two subsections have conflicting approaches to shared interface
 
-**Actions**:
+### Actions
 
 1. Identify dependency conflict between subsections
-2. Escalate to design agents for interface specification
-3. Coordinate implementation updates across both subsections
-4. Validate integration through testing phase
+1. Escalate to design agents for interface specification
+1. Coordinate implementation updates across both subsections
+1. Validate integration through testing phase
 
 **Outcome**: Unified interface with both components working correctly
 

@@ -46,7 +46,7 @@ Document progress and learnings in blog format.
 - Lines of code: X
 - Test coverage: Y%
 - Performance: Z% improvement
-```
+```text
 
 ## Location
 

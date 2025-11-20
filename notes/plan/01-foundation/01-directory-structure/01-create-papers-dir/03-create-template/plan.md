@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Create _template/ directory inside papers/
-2. Create standard subdirectories for paper implementations
-3. Add placeholder files demonstrating expected structure
-4. Write template README explaining how to use the template
+1. Create standard subdirectories for paper implementations
+1. Add placeholder files demonstrating expected structure
+1. Write template README explaining how to use the template
 
 ## Success Criteria
 

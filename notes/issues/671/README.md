@@ -27,13 +27,15 @@ Design and document the quickstart guide section of the README that helps users 
 
 **Decision**: Organize the quickstart into five clear sections: Prerequisites, Installation, Quick Start, Verification, and Troubleshooting.
 
-**Rationale**:
+### Rationale
+
 - Progressive flow matches user journey from zero to working setup
 - Clear section boundaries help users find specific information quickly
 - Troubleshooting section preemptively addresses common issues
 - Follows industry best practices for onboarding documentation
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Single-section approach: Rejected due to lack of structure and difficulty scanning
 - Installation-only focus: Rejected because it doesn't include verification or troubleshooting
 
@@ -41,13 +43,15 @@ Design and document the quickstart guide section of the README that helps users 
 
 **Decision**: List three core prerequisites: Mojo/MAX, Python 3.7+, and Git LFS.
 
-**Rationale**:
+### Rationale
+
 - Mojo/MAX is the primary language and runtime for the project
 - Python 3.7+ required for automation scripts and tooling
 - Git LFS needed for managing large model files and datasets
 - Keeps prerequisites minimal to lower barrier to entry
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Including optional tools (Docker, IDE plugins): Rejected for quickstart simplicity
 - Requiring specific Python version: Rejected to maintain compatibility with wider range of systems
 
@@ -55,13 +59,15 @@ Design and document the quickstart guide section of the README that helps users 
 
 **Decision**: Use magic/pip commands for package installation with step-by-step instructions.
 
-**Rationale**:
+### Rationale
+
 - Magic is the recommended package manager for Mojo projects
 - Pip provides fallback for Python dependencies
 - Step-by-step format reduces ambiguity and errors
 - Commands are copy-pasteable for quick setup
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Docker-based installation: Rejected as too complex for quickstart
 - Manual compilation: Rejected due to complexity and time requirements
 
@@ -69,13 +75,15 @@ Design and document the quickstart guide section of the README that helps users 
 
 **Decision**: Include a simple example that runs a basic operation and produces visible output.
 
-**Rationale**:
+### Rationale
+
 - Provides immediate feedback that setup succeeded
 - Builds user confidence before diving into complex features
 - Serves as smoke test for critical dependencies
 - Can be extended for more detailed testing later
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - No verification: Rejected because users need confirmation of successful setup
 - Complex example: Rejected as it defeats the "quick" in quickstart
 
@@ -83,13 +91,15 @@ Design and document the quickstart guide section of the README that helps users 
 
 **Decision**: Keep quickstart focused on essential steps; defer detailed documentation to separate files.
 
-**Rationale**:
+### Rationale
+
 - Quickstart should get users from zero to working as fast as possible
 - Detailed documentation can overwhelm new users
 - Separation of concerns improves maintainability
 - Follows KISS principle (Keep It Simple, Stupid)
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Comprehensive all-in-one guide: Rejected due to length and complexity
 - Minimal single-command setup: Rejected as insufficient for educational project
 
@@ -118,6 +128,7 @@ Design and document the quickstart guide section of the README that helps users 
 ## Implementation Notes
 
 This section will be populated during the implementation phase with:
+
 - Actual command outputs for verification
 - Common installation issues discovered
 - User feedback and improvements

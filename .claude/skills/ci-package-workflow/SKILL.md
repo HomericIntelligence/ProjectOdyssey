@@ -42,7 +42,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: packages/*.mojopkg
-```
+```text
 
 ## Common Workflows
 
@@ -55,7 +55,7 @@ on:
   push:
     tags:
       - 'v*.*.*'
-```
+```text
 
 ### 2. Build on PR
 
@@ -67,7 +67,7 @@ on:
     paths:
       - 'src/**'
       - 'scripts/build_*.sh'
-```
+```text
 
 ### 3. Manual Trigger
 
@@ -80,7 +80,7 @@ on:
       version:
         description: 'Version to build'
         required: true
-```
+```text
 
 ## Best Practices
 

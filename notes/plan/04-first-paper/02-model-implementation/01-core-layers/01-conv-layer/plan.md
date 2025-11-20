@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Implement 2D convolution operation
-2. Support padding and stride parameters
-3. Test with known inputs
+1. Support padding and stride parameters
+1. Test with known inputs
 
 ## Success Criteria
 

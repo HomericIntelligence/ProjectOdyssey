@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Implement uniform distribution with configurable range
-2. Create normal distribution with mean and standard deviation
-3. Add zero initialization helper
-4. Build constant initialization for specific values
+1. Create normal distribution with mean and standard deviation
+1. Add zero initialization helper
+1. Build constant initialization for specific values
 
 ## Success Criteria
 

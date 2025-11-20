@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Check required directories exist (src, tests, docs)
-2. Verify required files are present (README.md, etc.)
-3. Validate naming conventions
-4. Generate structure report
+1. Verify required files are present (README.md, etc.)
+1. Validate naming conventions
+1. Generate structure report
 
 ## Success Criteria
 

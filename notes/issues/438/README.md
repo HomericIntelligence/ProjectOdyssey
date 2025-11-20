@@ -37,7 +37,7 @@ equivalent results. The utility should:
 - Handle edge cases (NaN, infinity, zero)
 - Support different tensor shapes and dtypes
 
-**Key Considerations**:
+### Key Considerations
 
 - Default tolerances should match common testing needs (e.g., atol=1e-5, rtol=1e-5)
 - Error messages should indicate which elements differ and by how much
@@ -54,7 +54,7 @@ equivalent results. The utility should:
 - Type assertions: `assert_dtype_equals(tensor, expected_dtype)` for type safety
 - Zero/non-zero assertions: `assert_all_zero()`, `assert_any_nonzero()` for sparsity checks
 
-**Key Considerations**:
+### Key Considerations
 
 - Each helper should have a single responsibility (SOLID principle)
 - Error messages should be descriptive and include context
@@ -71,7 +71,7 @@ equivalent results. The utility should:
 - Support shape, dtype, and value range specifications
 - Generate both edge cases and typical cases
 
-**Key Patterns**:
+### Key Patterns
 
 ```mojo
 # Random tensor with specified distribution
@@ -83,7 +83,7 @@ fn random_range_tensor(shape: TensorShape, min: Float64, max: Float64, seed: Int
 # Common distributions
 fn random_normal(shape: TensorShape, mean: Float64, std: Float64, seed: Int) -> Tensor
 fn random_uniform(shape: TensorShape, low: Float64, high: Float64, seed: Int) -> Tensor
-```
+```text
 
 ### 4. Mock Object Strategy
 
@@ -95,7 +95,7 @@ fn random_uniform(shape: TensorShape, low: Float64, high: Float64, seed: Int) ->
 - Mock data loaders for testing training loops without real data
 - Mock timers for testing performance metrics without waiting
 
-**Key Considerations**:
+### Key Considerations
 
 - Mocks should have the same interface as real objects
 - Mocks should be stateful to verify interactions
@@ -111,7 +111,7 @@ fn random_uniform(shape: TensorShape, low: Float64, high: Float64, seed: Int) ->
 - Decorator for timing function calls: `@timed`
 - Simple profiling output (mean, std, min, max over multiple runs)
 
-**Key Considerations**:
+### Key Considerations
 
 - Timing should be wall-clock time for simplicity
 - Should support multiple runs and statistical aggregation
@@ -127,7 +127,7 @@ fn random_uniform(shape: TensorShape, low: Float64, high: Float64, seed: Int) ->
 - Generators return `owned` tensors (transfer ownership)
 - Assertion helpers take `borrowed` parameters (don't modify state)
 
-**Pattern Example**:
+### Pattern Example
 
 ```mojo
 fn assert_tensors_equal(borrowed t1: Tensor, borrowed t2: Tensor, atol: Float64, rtol: Float64) raises:
@@ -137,7 +137,7 @@ fn assert_tensors_equal(borrowed t1: Tensor, borrowed t2: Tensor, atol: Float64,
 fn random_tensor(shape: TensorShape, seed: Int) -> Tensor^:
     # Returns owned tensor to caller
     pass
-```
+```text
 
 ### 7. Documentation Requirements
 

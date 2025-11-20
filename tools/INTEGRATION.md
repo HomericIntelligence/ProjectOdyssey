@@ -24,7 +24,7 @@ Developer Workflow:
 3. Implement model → (direct Mojo implementation)
 4. Benchmark performance → tools/benchmarking/
 5. Generate boilerplate → tools/codegen/
-```
+```text
 
 ### 2. Scripts Directory Integration
 
@@ -37,7 +37,7 @@ Clear separation of concerns between tools and scripts:
 | **Usage Pattern** | Interactive, on-demand | Automated, scheduled |
 | **Examples** | scaffold.py, benchmark.mojo | create_issues.py, validate_configs.sh |
 
-**Integration Pattern**:
+### Integration Pattern
 
 - Scripts may invoke tools for validation (e.g., `scripts/validate_configs.sh` could use `tools/validation/`)
 - Tools do NOT invoke scripts (separation of concerns)
@@ -55,7 +55,7 @@ Tools can be integrated into GitHub Actions workflows:
   run: |
     mojo tools/benchmarking/model_bench.mojo
     python tools/benchmarking/report_generator.py
-```
+```text
 
 #### Example: Code Generation Validation
 
@@ -64,7 +64,7 @@ Tools can be integrated into GitHub Actions workflows:
 - name: Validate generated code
   run: |
     python tools/codegen/mojo_boilerplate.py --validate
-```
+```text
 
 #### Current Integration Status
 
@@ -80,14 +80,14 @@ Tools can be integrated into GitHub Actions workflows:
 
 Tools support agent-driven workflows (`.claude/agents/`):
 
-**Agent Tool Usage**:
+### Agent Tool Usage
 
 - **Planning Agents**: Reference tool capabilities in specifications
 - **Implementation Agents**: Use tools for code generation and scaffolding
 - **Test Agents**: Leverage test utilities and fixtures
 - **Package Agents**: Use tools for distribution preparation
 
-**Example Agent Integration**:
+### Example Agent Integration
 
 ```markdown
 ## Skills to Use
@@ -96,13 +96,13 @@ Tools support agent-driven workflows (`.claude/agents/`):
   → Wraps `tools/codegen/` for agent use
 - [`run_tests`](../skills/tier-1/run-tests/SKILL.md)
   → Uses `tools/test-utils/` for test execution
-```
+```text
 
 ## Usage Scenarios
 
 ### Scenario 1: Creating a New Paper Implementation
 
-**Workflow**:
+### Workflow
 
 ```bash
 # 1. Scaffold paper structure
@@ -121,11 +121,11 @@ python tools/codegen/mojo_boilerplate.py \
 # 3. Use test utilities
 # (Import fixtures in test files)
 from tools.test_utils import generate_batch, ModelFixture
-```
+```text
 
 ### Scenario 2: Running Benchmarks
 
-**Workflow**:
+### Workflow
 
 ```bash
 # 1. Benchmark model performance
@@ -137,11 +137,11 @@ mojo tools/benchmarking/model_bench.mojo \
 python tools/benchmarking/report_generator.py \
     --input benchmarks/lenet5.json \
     --output benchmarks/lenet5_report.html
-```
+```text
 
 ### Scenario 3: Test-Driven Development
 
-**Workflow**:
+### Workflow
 
 ```mojo
 // 1. Use test data generators
@@ -160,7 +160,7 @@ fn test_inference_speed():
     let model = MyModel()
     let latency = measure_latency(model, num_runs=100)
     assert latency < 10.0  # milliseconds
-```
+```text
 
 ## Configuration and Setup
 
@@ -169,12 +169,12 @@ fn test_inference_speed():
 Tools respect repository configuration:
 
 ```bash
-# Tools automatically detect:
+# Tools automatically detect
 - Repository root (via git)
 - Mojo version (via `mojo --version`)
 - Python version (via `python3 --version`)
 - Available dependencies
-```
+```text
 
 ### Installation
 
@@ -188,13 +188,13 @@ python tools/setup/install_tools.py
 
 # Verify installation
 python tools/setup/verify_tools.py
-```
+```text
 
 ## Tool Discovery
 
 ### Finding the Right Tool
 
-**Decision Tree**:
+### Decision Tree
 
 ```text
 What do you need?
@@ -209,7 +209,7 @@ What do you need?
     ├── Mojo structs → mojo_boilerplate.py
     ├── Training loops → training_template.py
     └── Data pipelines → data_pipeline.py
-```
+```text
 
 ### Tool Catalog
 
@@ -219,13 +219,13 @@ See [`CATALOG.md`](./CATALOG.md) for complete tool listing with examples.
 
 ### 1. Tool Selection
 
-**DO**:
+### DO
 
 - Use tools for repetitive tasks (scaffolding, code generation)
 - Use tools for performance measurement (benchmarking)
 - Use tools for test data generation (consistent, reproducible)
 
-**DON'T**:
+### DON'T
 
 - Use tools for one-off tasks (write code directly)
 - Over-complicate simple tasks (KISS principle)
@@ -233,7 +233,7 @@ See [`CATALOG.md`](./CATALOG.md) for complete tool listing with examples.
 
 ### 2. Integration Guidelines
 
-**When creating new tools**:
+### When creating new tools
 
 - Follow ADR-001 language selection
 - Document integration points
@@ -241,7 +241,7 @@ See [`CATALOG.md`](./CATALOG.md) for complete tool listing with examples.
 - Add to tool catalog
 - Update this integration guide
 
-**When modifying workflows**:
+### When modifying workflows
 
 - Consider tool integration opportunities
 - Update documentation
@@ -250,7 +250,7 @@ See [`CATALOG.md`](./CATALOG.md) for complete tool listing with examples.
 
 ### 3. Maintenance
 
-**Tool Health Checks**:
+### Tool Health Checks
 
 ```bash
 # Verify all tools are functional
@@ -258,9 +258,9 @@ python tools/setup/verify_tools.py --verbose
 
 # Check for dependency updates
 python tools/setup/check_dependencies.py
-```
+```text
 
-**Quarterly Reviews**:
+### Quarterly Reviews
 
 - Assess tool usage (which tools are actually used?)
 - Update dependencies
@@ -277,7 +277,7 @@ cd /path/to/ml-odyssey
 
 # Verify tool exists
 ls tools/paper-scaffold/scaffold.py
-```
+```text
 
 ### Import Errors
 
@@ -288,7 +288,7 @@ export MOJO_PATH=/path/to/ml-odyssey
 # Verify imports in Mojo REPL
 mojo
 >>> from tools.test_utils import generate_batch
-```
+```text
 
 ### Permission Issues
 
@@ -298,7 +298,7 @@ chmod +x tools/*/\*.py
 
 # Or run with Python explicitly
 python3 tools/paper-scaffold/scaffold.py
-```
+```text
 
 ## Examples
 
@@ -334,7 +334,7 @@ mojo tools/benchmarking/model_bench.mojo \
 # 7. Generate report
 python tools/benchmarking/report_generator.py \
     --paper resnet
-```
+```text
 
 ## References
 

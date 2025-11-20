@@ -23,7 +23,7 @@ fn consume(owned data: Tensor):
     # Takes ownership, original is invalidated
     process(data)
     # data is destroyed here
-```
+```text
 
 ### Borrowed Parameters
 
@@ -32,7 +32,7 @@ fn read_only(borrowed data: Tensor):
     # Read-only access, no ownership transfer
     let value = data[0]
     # data still valid in caller
-```
+```text
 
 ### Inout Parameters
 
@@ -41,7 +41,7 @@ fn modify(inout data: Tensor):
     # Mutable reference
     data[0] = 42
     # Changes visible in caller
-```
+```text
 
 ## Common Issues
 
@@ -60,7 +60,7 @@ fn good():
     let copy = data  # Copy if needed
     consume(data^)
     print(copy[0])  # OK
-```
+```text
 
 ### 2. Lifetime Issues
 
@@ -74,7 +74,7 @@ fn return_dangling() -> borrowed Tensor:
 fn return_owned() -> Tensor:
     let local = Tensor()
     return local^  # Move ownership
-```
+```text
 
 ### 3. Mutable Aliasing
 
@@ -88,7 +88,7 @@ fn no_alias(inout a: Tensor, borrowed b: Tensor):
     # Ensure a and b don't alias
     if a.ptr() != b.ptr():
         a[0] = b[0]
-```
+```text
 
 ## Checklist
 

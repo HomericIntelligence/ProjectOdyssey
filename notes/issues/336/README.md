@@ -51,7 +51,7 @@ struct WarmupLR(LRScheduler):
         # Linear warmup
         var progress = Float64(epoch) / Float64(self.warmup_epochs)
         return self.base_lr * progress
-```
+```text
 
 ## Implementation Decisions
 
@@ -59,7 +59,8 @@ struct WarmupLR(LRScheduler):
 
 **Decision**: LR starts at 0.0, not a small value
 
-**Rationale**:
+### Rationale
+
 - Simplest implementation
 - Matches PyTorch LinearLR default
 - Most common use case
@@ -68,7 +69,8 @@ struct WarmupLR(LRScheduler):
 
 **Decision**: Return base_lr if warmup_epochs <= 0
 
-**Rationale**:
+### Rationale
+
 - Prevents division by zero
 - Graceful degradation
 
@@ -76,7 +78,8 @@ struct WarmupLR(LRScheduler):
 
 **Decision**: Use Float64 for progress calculation
 
-**Rationale**:
+### Rationale
+
 - Higher precision
 - Consistent with other schedulers
 

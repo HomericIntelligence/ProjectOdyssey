@@ -26,7 +26,7 @@ architectural approach and design decisions for ensuring consistent code quality
 
 ### 1. Tool Selection Rationale
 
-**Black (Code Formatter)**:
+### Black (Code Formatter)
 
 - **Decision**: Use Black for Python code formatting
 - **Rationale**: Industry standard, opinionated formatter that eliminates style debates
@@ -35,7 +35,7 @@ architectural approach and design decisions for ensuring consistent code quality
   - Line length: 120 characters (matches ruff, accommodates modern displays)
   - Target Python version: 3.11+ (aligns with project requirements)
 
-**Ruff (Linter)**:
+### Ruff (Linter)
 
 - **Decision**: Use Ruff as primary linter (replaces flake8, isort, and several other tools)
 - **Rationale**:
@@ -48,7 +48,7 @@ architectural approach and design decisions for ensuring consistent code quality
   - Target version: py311 (matches project Python requirement)
   - Select rules: Start conservative, enable more as project matures
 
-**Pytest (Test Runner)**:
+### Pytest (Test Runner)
 
 - **Decision**: Use pytest as test framework
 - **Rationale**:
@@ -60,7 +60,7 @@ architectural approach and design decisions for ensuring consistent code quality
   - Coverage reporting: term-missing, xml, html
   - Verbose output for better debugging
 
-**Mypy (Type Checker)**:
+### Mypy (Type Checker)
 
 - **Decision**: Use mypy for static type checking
 - **Rationale**:
@@ -75,7 +75,7 @@ architectural approach and design decisions for ensuring consistent code quality
 
 ### 2. Configuration Philosophy
 
-**Progressive Strictness**:
+### Progressive Strictness
 
 - **Principle**: Start with reasonable defaults, tighten as project matures
 - **Rationale**: Overly strict initial settings can hinder rapid development
@@ -84,13 +84,13 @@ architectural approach and design decisions for ensuring consistent code quality
   - Ruff: Start with core rules, add specific checks as patterns emerge
   - Mypy: Enable `disallow_untyped_defs` but defer stricter options
 
-**Consistency Across Tools**:
+### Consistency Across Tools
 
 - **Line Length**: 120 characters across all tools (Black, Ruff, Mypy)
 - **Python Version**: 3.11 minimum across all tools
 - **Rationale**: Prevents conflicts between tools, reduces cognitive load
 
-**Documentation-First**:
+### Documentation-First
 
 - **Principle**: Every non-default setting must have an inline comment explaining why
 - **Rationale**: Future maintainers need to understand configuration decisions
@@ -98,19 +98,19 @@ architectural approach and design decisions for ensuring consistent code quality
 
 ### 3. Integration with Existing Infrastructure
 
-**Pre-commit Hooks**:
+### Pre-commit Hooks
 
 - Tools must integrate with existing pre-commit setup
 - Ruff already configured in `.pre-commit-config.yaml`
 - Consider adding Black and Mypy to pre-commit hooks
 
-**CI/CD Pipeline**:
+### CI/CD Pipeline
 
 - Tool configurations must work in CI environment
 - Test coverage reports must be compatible with CI tooling
 - Consider GitHub Actions integration
 
-**Developer Experience**:
+### Developer Experience
 
 - Configurations should provide clear, actionable error messages
 - Fast execution to avoid slowing down development workflow
@@ -118,23 +118,23 @@ architectural approach and design decisions for ensuring consistent code quality
 
 ### 4. Alternatives Considered
 
-**Black vs. Autopep8/YAPF**:
+### Black vs. Autopep8/YAPF
 
 - **Rejected**: Autopep8 and YAPF require more configuration decisions
 - **Chosen**: Black's opinionated approach reduces bikeshedding
 
-**Ruff vs. Flake8 + isort + pydocstyle**:
+### Ruff vs. Flake8 + isort + pydocstyle
 
 - **Rejected**: Multiple tools increase complexity and slow execution
 - **Chosen**: Ruff consolidates functionality with better performance
 
-**Mypy vs. Pyright**:
+### Mypy vs. Pyright
 
 - **Evaluated**: Pyright is faster and Microsoft-backed
 - **Chosen**: Mypy for broader ecosystem support and familiarity
 - **Future**: Could reconsider if Pyright adoption increases
 
-**Pytest vs. unittest**:
+### Pytest vs. unittest
 
 - **Rejected**: unittest is more verbose, less flexible
 - **Chosen**: pytest for superior fixtures, parametrization, and plugins
@@ -147,7 +147,7 @@ architectural approach and design decisions for ensuring consistent code quality
 [tool.black]
 line-length = 120              # Matches ruff, modern display standard
 target-version = ["py311"]     # Minimum Python version for project
-```
+```text
 
 **[tool.ruff]**:
 
@@ -162,7 +162,7 @@ ignore = []                    # Start permissive, add as needed
 
 [tool.ruff.lint.isort]
 known-first-party = ["src"]    # Local package for import sorting
-```
+```text
 
 **[tool.pytest.ini_options]** (already configured):
 
@@ -178,13 +178,13 @@ known-first-party = ["src"]    # Local package for import sorting
 
 ### 6. Documentation Requirements
 
-**Inline Comments**:
+### Inline Comments
 
 - Every configuration section must have a comment explaining its purpose
 - Non-default values must explain the rationale
 - Reference relevant PEPs or documentation where applicable
 
-**External Documentation**:
+### External Documentation
 
 - Link to tool documentation in comments where complex
 - Reference CLAUDE.md for coding standards alignment

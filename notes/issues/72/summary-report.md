@@ -4,7 +4,7 @@
 
 Issue #72 has successfully completed the design and documentation phase for the ML Odyssey configs/ directory system. The design provides a robust, scalable, three-tier configuration hierarchy (defaults → paper-specific → experiment) that integrates seamlessly with existing Mojo utilities while following KISS and YAGNI principles.
 
-**Key Achievements:**
+### Key Achievements:
 
 - ✅ Comprehensive architecture designed and documented
 - ✅ Integration with existing `shared/utils/config.mojo` specified
@@ -17,8 +17,8 @@ Issue #72 has successfully completed the design and documentation phase for the 
 ### Three-Tier Hierarchy
 
 1. **Defaults** (`configs/defaults/`): System-wide baseline configurations
-2. **Papers** (`configs/papers/`): Paper-specific reproducible settings
-3. **Experiments** (`configs/experiments/`): Experimental variations and ablations
+1. **Papers** (`configs/papers/`): Paper-specific reproducible settings
+1. **Experiments** (`configs/experiments/`): Experimental variations and ablations
 
 This hierarchy enables:
 
@@ -29,7 +29,7 @@ This hierarchy enables:
 
 ### Directory Structure
 
-```
+```text
 configs/
 ├── README.md                    # User guide
 ├── defaults/                    # System defaults
@@ -52,7 +52,7 @@ configs/
 └── templates/                   # Config templates
     ├── paper.yaml
     └── experiment.yaml
-```
+```text
 
 ## Key Design Decisions
 
@@ -60,7 +60,7 @@ configs/
 
 **Decision**: Use YAML for human-readable configs with JSON as secondary format
 
-**Rationale**:
+### Rationale
 
 - Human readability for research configs
 - Support for comments and documentation
@@ -71,7 +71,7 @@ configs/
 
 **Decision**: Leverage existing `shared/utils/config.mojo` utilities
 
-**Rationale**:
+### Rationale
 
 - Type-safe configuration access
 - Already implemented and tested
@@ -82,7 +82,7 @@ configs/
 
 **Decision**: Support `${VAR:-default}` syntax for deployment flexibility
 
-**Rationale**:
+### Rationale
 
 - Different paths across environments
 - Security for sensitive values
@@ -93,7 +93,7 @@ configs/
 
 **Decision**: Use JSON Schema for configuration validation
 
-**Rationale**:
+### Rationale
 
 - Industry standard format
 - Tooling ecosystem available
@@ -104,7 +104,7 @@ configs/
 
 **Decision**: Explicit `extends` field for configuration inheritance
 
-**Rationale**:
+### Rationale
 
 - Clear dependency chain
 - Predictable merge order
@@ -115,15 +115,15 @@ configs/
 
 ### For Issue #74 (Implementation)
 
-**Primary Tasks:**
+### Primary Tasks:
 
 1. Create directory structure
-2. Implement default configurations
-3. Create LeNet-5 paper configs
-4. Add experiment examples
-5. Write comprehensive README
+1. Implement default configurations
+1. Create LeNet-5 paper configs
+1. Add experiment examples
+1. Write comprehensive README
 
-**Key Files to Create:**
+### Key Files to Create:
 
 - `configs/defaults/training.yaml` - Default training parameters
 - `configs/papers/lenet5/model.yaml` - LeNet-5 architecture
@@ -132,15 +132,15 @@ configs/
 
 ### For Issue #73 (Testing)
 
-**Test Coverage Required:**
+### Test Coverage Required:
 
 1. Configuration loading tests
-2. Merge functionality tests
-3. Validation tests
-4. Environment variable tests
-5. Integration tests
+1. Merge functionality tests
+1. Validation tests
+1. Environment variable tests
+1. Integration tests
 
-**Test Files:**
+### Test Files:
 
 - `tests/configs/test_loading.mojo`
 - `tests/configs/test_merging.mojo`
@@ -149,14 +149,14 @@ configs/
 
 ### For Issue #75 (Packaging)
 
-**Integration Points:**
+### Integration Points:
 
 1. Update paper template to use configs
-2. Integrate with training utilities
-3. Add CI/CD validation
-4. Update documentation
+1. Integrate with training utilities
+1. Add CI/CD validation
+1. Update documentation
 
-**Key Updates:**
+### Key Updates:
 
 - `papers/_template/train.mojo` - Add config loading
 - `shared/training/trainer.mojo` - Config-driven initialization
@@ -164,15 +164,15 @@ configs/
 
 ### For Issue #76 (Cleanup)
 
-**Polish Tasks:**
+### Polish Tasks:
 
 1. Optimize config loading performance
-2. Complete documentation
-3. Add best practices guide
-4. Create configuration cookbook
-5. Achieve 100% test coverage
+1. Complete documentation
+1. Add best practices guide
+1. Create configuration cookbook
+1. Achieve 100% test coverage
 
-**Deliverables:**
+### Deliverables:
 
 - Performance < 10ms load time
 - Complete test coverage
@@ -189,12 +189,12 @@ configs/
    - Handles environment variables
    - Supports validation
 
-2. **Paper Implementations** (`papers/`)
+1. **Paper Implementations** (`papers/`)
    - Each paper references configs
    - Template updated with examples
    - Reproducible experiments
 
-3. **CI/CD** (`.github/workflows/`)
+1. **CI/CD** (`.github/workflows/`)
    - Validate config syntax
    - Test config loading
    - Check schema compliance
@@ -205,11 +205,11 @@ configs/
    - Configs define search space
    - Automatic hyperparameter tuning
 
-2. **Distributed Training**
+1. **Distributed Training**
    - Node-specific configurations
    - Cluster settings
 
-3. **Model Registry**
+1. **Model Registry**
    - Config versioning
    - Experiment tracking
 
@@ -221,15 +221,15 @@ configs/
    - Risk: Slow config loading affects training startup
    - Mitigation: Cache parsed configs, optimize loading
 
-2. **Breaking Changes**
+1. **Breaking Changes**
    - Risk: Config format changes break existing code
    - Mitigation: Version configs, maintain compatibility
 
-3. **Complexity Creep**
+1. **Complexity Creep**
    - Risk: Over-engineering configuration system
    - Mitigation: Follow KISS principle, start simple
 
-4. **Validation Overhead**
+1. **Validation Overhead**
    - Risk: Strict validation blocks experimentation
    - Mitigation: Validation warnings vs errors
 
@@ -258,8 +258,8 @@ configs/
 These can proceed in parallel after Issue #72:
 
 1. **Issue #73 (Test)**: Write comprehensive test suite
-2. **Issue #74 (Impl)**: Create directory and config files
-3. **Issue #75 (Package)**: Integrate with codebase
+1. **Issue #74 (Impl)**: Create directory and config files
+1. **Issue #75 (Package)**: Integrate with codebase
 
 ### Sequential Action (Issue #76)
 
@@ -270,10 +270,10 @@ After #73-75 complete:
 ### Recommended Approach
 
 1. **Day 1**: Start all three parallel tracks (#73-75)
-2. **Daily Sync**: Coordinate between tracks
-3. **Day 3-4**: Complete parallel work
-4. **Day 5**: Begin cleanup (#76)
-5. **Day 6**: Final review and merge
+1. **Daily Sync**: Coordinate between tracks
+1. **Day 3-4**: Complete parallel work
+1. **Day 5**: Begin cleanup (#76)
+1. **Day 6**: Final review and merge
 
 ## Conclusion
 
@@ -301,10 +301,10 @@ The design is ready for implementation in Issues #73-76, with all specifications
 ### B. Key Design Documents
 
 1. **Configs Architecture** - Comprehensive design specification
-2. **Implementation Specs** - Detailed tasks for Issue #74
-3. **Test Specifications** - Testing requirements for Issue #73
-4. **Example Configs** - Concrete configuration examples
-5. **Downstream Specs** - Requirements for Issues #75-76
+1. **Implementation Specs** - Detailed tasks for Issue #74
+1. **Test Specifications** - Testing requirements for Issue #73
+1. **Example Configs** - Concrete configuration examples
+1. **Downstream Specs** - Requirements for Issues #75-76
 
 ### C. Design Principles Applied
 

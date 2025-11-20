@@ -27,9 +27,9 @@ None (leaf node)
 ## Steps
 
 1. Add dependencies section to magic.toml
-2. Specify MAX and Mojo requirements
-3. Add Python and common ML library dependencies
-4. Document why each dependency is needed
+1. Specify MAX and Mojo requirements
+1. Add Python and common ML library dependencies
+1. Document why each dependency is needed
 
 ## Success Criteria
 

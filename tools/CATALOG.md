@@ -29,7 +29,7 @@ Comprehensive catalog of all development tools in the ML Odyssey repository.
 
 **Language**: Python (regex-heavy templating)
 
-**Usage**:
+### Usage
 
 ```bash
 python tools/paper-scaffold/scaffold.py \
@@ -37,9 +37,9 @@ python tools/paper-scaffold/scaffold.py \
     --author "Krizhevsky et al." \
     --year 2012 \
     --output papers/alexnet/
-```
+```text
 
-**Generated Structure**:
+### Generated Structure
 
 ```text
 papers/alexnet/
@@ -50,9 +50,9 @@ papers/alexnet/
 ├── data/
 ├── configs/
 └── tests/
-```
+```text
 
-**Options**:
+### Options
 
 - `--paper NAME` - Paper name (required)
 - `--author AUTHOR` - Paper author(s) (optional)
@@ -76,7 +76,7 @@ papers/alexnet/
 
 **Language**: Mojo (performance-critical, type-safe)
 
-**Usage**:
+### Usage
 
 ```mojo
 from tools.test_utils import generate_batch, generate_image
@@ -88,9 +88,9 @@ fn test_model():
     // Generate specific pattern
     let zeros = generate_image(shape=(1, 28, 28), fill=0.0)
     let ones = generate_image(shape=(1, 28, 28), fill=1.0)
-```
+```text
 
-**Functions**:
+### Functions
 
 - `generate_batch(shape, dtype, range)` - Random batches
 - `generate_image(shape, fill, pattern)` - Synthetic images
@@ -107,7 +107,7 @@ fn test_model():
 
 **Language**: Mojo (type-safe, consistent)
 
-**Usage**:
+### Usage
 
 ```mojo
 from tools.test_utils import ModelFixture, DataFixture
@@ -116,9 +116,9 @@ fn test_forward_pass():
     let model = ModelFixture.small_cnn()
     let data = DataFixture.mnist_batch()
     let output = model.forward(data)
-```
+```text
 
-**Fixtures**:
+### Fixtures
 
 - `ModelFixture.small_cnn()` - Tiny CNN for testing
 - `ModelFixture.linear_network()` - Simple MLP
@@ -133,15 +133,15 @@ fn test_forward_pass():
 
 **Language**: Python (integrates with pytest-cov)
 
-**Usage**:
+### Usage
 
 ```bash
 python tools/test-utils/coverage.py \
     --source papers/lenet5/ \
     --report-dir coverage/
-```
+```text
 
-**Features**:
+### Features
 
 - Line coverage measurement
 - Branch coverage analysis
@@ -156,7 +156,7 @@ python tools/test-utils/coverage.py \
 
 **Language**: Mojo (accurate timing)
 
-**Usage**:
+### Usage
 
 ```mojo
 from tools.test_utils import measure_latency, assert_max_latency
@@ -165,9 +165,9 @@ fn test_inference_speed():
     let model = MyModel()
     let latency = measure_latency(model, num_runs=100)
     assert_max_latency(latency, max_ms=10.0)
-```
+```text
 
-**Functions**:
+### Functions
 
 - `measure_latency(fn, num_runs)` - Average latency
 - `measure_throughput(fn, duration)` - Samples per second
@@ -186,16 +186,16 @@ fn test_inference_speed():
 
 **Language**: Mojo (accurate ML performance measurement)
 
-**Usage**:
+### Usage
 
 ```bash
 mojo tools/benchmarking/model_bench.mojo \
     --paper lenet5 \
     --batch-sizes 1,8,32,128 \
     --output benchmarks/lenet5.json
-```
+```text
 
-**Measurements**:
+### Measurements
 
 - Forward pass latency (per batch size)
 - Backward pass latency
@@ -212,7 +212,7 @@ mojo tools/benchmarking/model_bench.mojo \
   "memory_mb": [10, 25, 80, 320],
   "flops": 420000
 }
-```
+```text
 
 **Status**: Planned (Issue #69)
 
@@ -222,16 +222,16 @@ mojo tools/benchmarking/model_bench.mojo \
 
 **Language**: Mojo (accurate training metrics)
 
-**Usage**:
+### Usage
 
 ```bash
 mojo tools/benchmarking/training_bench.mojo \
     --paper lenet5 \
     --epochs 1 \
     --batch-size 32
-```
+```text
 
-**Measurements**:
+### Measurements
 
 - Training throughput (samples/sec)
 - Epoch duration
@@ -247,16 +247,16 @@ mojo tools/benchmarking/training_bench.mojo \
 
 **Language**: Mojo (production-like measurement)
 
-**Usage**:
+### Usage
 
 ```bash
 mojo tools/benchmarking/inference_bench.mojo \
     --model lenet5 \
     --batch-size 1 \
     --num-runs 1000
-```
+```text
 
-**Measurements**:
+### Measurements
 
 - Mean latency
 - P50/P95/P99 latency
@@ -271,15 +271,15 @@ mojo tools/benchmarking/inference_bench.mojo \
 
 **Language**: Mojo (direct memory access)
 
-**Usage**:
+### Usage
 
 ```bash
 mojo tools/benchmarking/memory_tracker.mojo \
     --paper lenet5 \
     --track training
-```
+```text
 
-**Measurements**:
+### Measurements
 
 - Peak memory usage
 - Memory over time
@@ -294,16 +294,16 @@ mojo tools/benchmarking/memory_tracker.mojo \
 
 **Language**: Python (matplotlib, pandas)
 
-**Usage**:
+### Usage
 
 ```bash
 python tools/benchmarking/report_generator.py \
     --input benchmarks/lenet5.json \
     --output benchmarks/lenet5_report.html \
     --format html
-```
+```text
 
-**Output Formats**:
+### Output Formats
 
 - HTML (interactive charts)
 - PDF (static report)
@@ -321,7 +321,7 @@ python tools/benchmarking/report_generator.py \
 
 **Language**: Python (string templating)
 
-**Usage**:
+### Usage
 
 ```bash
 # Generate layer
@@ -335,9 +335,9 @@ python tools/codegen/mojo_boilerplate.py \
     --type struct \
     --name ModelConfig \
     --fields "learning_rate:Float64,batch_size:Int"
-```
+```text
 
-**Template Types**:
+### Template Types
 
 - `layer` - Neural network layer
 - `struct` - Data structure
@@ -352,7 +352,7 @@ python tools/codegen/mojo_boilerplate.py \
 
 **Language**: Python (code generation)
 
-**Usage**:
+### Usage
 
 ```bash
 python tools/codegen/training_template.py \
@@ -360,9 +360,9 @@ python tools/codegen/training_template.py \
     --loss CrossEntropy \
     --metrics "accuracy,loss" \
     --output train.mojo
-```
+```text
 
-**Options**:
+### Options
 
 - `--optimizer` - Optimizer type (SGD, Adam, RMSprop)
 - `--loss` - Loss function
@@ -378,16 +378,16 @@ python tools/codegen/training_template.py \
 
 **Language**: Python (code generation)
 
-**Usage**:
+### Usage
 
 ```bash
 python tools/codegen/data_pipeline.py \
     --dataset MNIST \
     --augmentation "flip,rotate,crop" \
     --output data.mojo
-```
+```text
 
-**Features**:
+### Features
 
 - Data loader generation
 - Augmentation pipeline
@@ -402,15 +402,15 @@ python tools/codegen/data_pipeline.py \
 
 **Language**: Python (code generation)
 
-**Usage**:
+### Usage
 
 ```bash
 python tools/codegen/metrics_generator.py \
     --metrics "accuracy,precision,recall,f1" \
     --output metrics.mojo
-```
+```text
 
-**Metrics**:
+### Metrics
 
 - Classification metrics
 - Regression metrics
@@ -424,27 +424,27 @@ python tools/codegen/metrics_generator.py \
 
 ### When to Use Each Tool
 
-**Paper Scaffolding**:
+### Paper Scaffolding
 
 - ✅ Starting new paper implementation
 - ✅ Need consistent directory structure
 - ❌ One-off file creation (create manually)
 
-**Test Utilities**:
+### Test Utilities
 
 - ✅ Need synthetic test data
 - ✅ Want reusable test fixtures
 - ✅ Performance testing required
 - ❌ Simple test cases (write directly)
 
-**Benchmarking**:
+### Benchmarking
 
 - ✅ Performance comparison across papers
 - ✅ Regression testing (detect slowdowns)
 - ✅ Production deployment sizing
 - ❌ Quick spot checks (use manual timing)
 
-**Code Generation**:
+### Code Generation
 
 - ✅ Repetitive boilerplate (layers, training loops)
 - ✅ Following strict patterns
@@ -473,7 +473,7 @@ Need to...
     ├── Training loop? → codegen/training_template.py
     ├── Data pipeline? → codegen/data_pipeline.py
     └── Metrics code? → codegen/metrics_generator.py
-```
+```text
 
 ---
 
@@ -486,7 +486,7 @@ Quick start:
 ```bash
 python tools/setup/install_tools.py
 python tools/setup/verify_tools.py
-```
+```text
 
 ---
 
@@ -495,11 +495,11 @@ python tools/setup/verify_tools.py
 ### Adding a New Tool
 
 1. Identify category (scaffolding, testing, benchmarking, codegen)
-2. Choose language (follow ADR-001)
-3. Create tool in appropriate directory
-4. Write documentation (README with examples)
-5. Add to this catalog
-6. Update INTEGRATION.md
+1. Choose language (follow ADR-001)
+1. Create tool in appropriate directory
+1. Write documentation (README with examples)
+1. Add to this catalog
+1. Update INTEGRATION.md
 
 ### Tool Documentation Template
 

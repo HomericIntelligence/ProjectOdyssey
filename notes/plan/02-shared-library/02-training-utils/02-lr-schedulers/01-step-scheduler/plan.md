@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Implement step counting and interval detection
-2. Apply decay factor at specified intervals
-3. Support both step-based and epoch-based scheduling
-4. Add state management for training resumption
+1. Apply decay factor at specified intervals
+1. Support both step-based and epoch-based scheduling
+1. Add state management for training resumption
 
 ## Success Criteria
 

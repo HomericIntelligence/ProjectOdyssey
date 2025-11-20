@@ -24,9 +24,9 @@ data/
 ├── datasets.mojo           # Dataset abstractions and implementations
 ├── loaders.mojo            # Data loaders and samplers
 └── transforms.mojo         # Data transformation and augmentation
-```
+```text
 
-## What Belongs in Data?
+## What Belongs in Data
 
 ### Include
 
@@ -57,7 +57,7 @@ trait Dataset:
     """Base interface for all datasets."""
     fn __len__(self) -> Int
     fn __getitem__(self, index: Int) -> (Tensor, Tensor)
-```
+```text
 
 #### TensorDataset
 
@@ -89,7 +89,7 @@ struct TensorDataset(Dataset):
             sample = self.transform.value()(sample)
 
         return (sample, target)
-```
+```text
 
 **Use Case**: Training on MNIST, CIFAR-10, or any in-memory dataset
 
@@ -122,7 +122,7 @@ struct ImageDataset(Dataset):
             image = self.transform.value()(image)
 
         return (image, label)
-```
+```text
 
 **Use Case**: ImageNet, custom image datasets
 
@@ -140,7 +140,7 @@ struct CSVDataset(Dataset):
         """Load CSV file and split features from targets."""
         # Load CSV and convert to tensors
         pass
-```
+```text
 
 **Use Case**: Tabular data, benchmarks
 
@@ -181,9 +181,9 @@ struct DataLoader:
         var sampler = RandomSampler(len(self.dataset)) if self.shuffle else SequentialSampler(len(self.dataset))
         var batch_sampler = BatchSampler(sampler, self.batch_size, self.drop_last)
         return DataLoaderIterator(self.dataset, batch_sampler)
-```
+```text
 
-**Features**:
+### Features
 
 - Batching: Group samples into batches
 - Shuffling: Randomize sample order per epoch
@@ -207,7 +207,7 @@ struct Batch:
         self.inputs = inputs
         self.targets = targets
         self.indices = indices
-```
+```text
 
 #### Samplers
 
@@ -232,7 +232,7 @@ struct WeightedRandomSampler(Sampler):
     """Sample elements with given probabilities."""
     var weights: Tensor
     var num_samples: Int
-```
+```text
 
 ### Transforms (`transforms.mojo`)
 
@@ -244,7 +244,7 @@ Data transformation and augmentation pipeline.
 trait Transform:
     """Base interface for transforms."""
     fn __call__(self, x: Tensor) -> Tensor
-```
+```text
 
 #### Core Transforms
 
@@ -256,7 +256,7 @@ struct ToTensor(Transform):
     fn __call__(self, x: Any) -> Tensor:
         """Convert to tensor."""
         return to_tensor(x)
-```
+```text
 
 **Normalize**: Normalize tensor values
 
@@ -273,7 +273,7 @@ struct Normalize(Transform):
     fn __call__(self, x: Tensor) -> Tensor:
         """Apply normalization: (x - mean) / std."""
         return (x - self.mean) / self.std
-```
+```text
 
 **Compose**: Chain multiple transforms
 
@@ -291,7 +291,7 @@ struct Compose(Transform):
         for transform in self.transforms:
             output = transform(output)
         return output
-```
+```text
 
 #### Image Transforms
 
@@ -307,7 +307,7 @@ struct Resize(Transform):
     fn __call__(self, x: Tensor) -> Tensor:
         """Resize image."""
         return resize_image(x, self.height, self.width, self.interpolation)
-```
+```text
 
 **CenterCrop**: Crop center region
 
@@ -319,7 +319,7 @@ struct CenterCrop(Transform):
     fn __call__(self, x: Tensor) -> Tensor:
         """Crop center."""
         return center_crop(x, self.size)
-```
+```text
 
 #### Data Augmentation
 
@@ -335,7 +335,7 @@ struct RandomCrop(Transform):
         """Apply random crop."""
         var padded = pad_image(x, self.padding) if self.padding > 0 else x
         return random_crop(padded, self.size)
-```
+```text
 
 **RandomHorizontalFlip**: Random horizontal flip
 
@@ -349,7 +349,7 @@ struct RandomHorizontalFlip(Transform):
         if random() < self.p:
             return horizontal_flip(x)
         return x
-```
+```text
 
 **RandomRotation**: Random rotation
 
@@ -362,7 +362,7 @@ struct RandomRotation(Transform):
         """Apply random rotation."""
         var angle = random_uniform(self.degrees[0], self.degrees[1])
         return rotate_image(x, angle)
-```
+```text
 
 ## Usage Examples
 
@@ -387,7 +387,7 @@ for batch in loader:
     var inputs = batch.inputs
     var targets = batch.targets
     # ... training code
-```
+```text
 
 ### With Transforms
 
@@ -407,7 +407,7 @@ var dataset = ImageDataset(image_paths, labels, transform=transform)
 
 # Create loader
 var loader = DataLoader(dataset, batch_size=128, shuffle=True)
-```
+```text
 
 ### Custom Dataset
 
@@ -430,7 +430,7 @@ struct MyDataset(Dataset):
 
 var dataset = MyDataset(my_data)
 var loader = DataLoader(dataset, batch_size=32)
-```
+```text
 
 ## Performance Considerations
 
@@ -438,64 +438,64 @@ var loader = DataLoader(dataset, batch_size=32)
 
 **Problem**: Loading large datasets can exhaust memory
 
-**Solutions**:
+### Solutions
 
 1. **Lazy Loading**: Load data on-demand rather than all at once
-2. **Memory Mapping**: Use memory-mapped files for large datasets
-3. **Streaming**: Process data in streaming fashion without full load
+1. **Memory Mapping**: Use memory-mapped files for large datasets
+1. **Streaming**: Process data in streaming fashion without full load
 
 ### Data Loading Bottlenecks
 
 **Problem**: Data loading can be slower than model computation
 
-**Solutions**:
+### Solutions
 
 1. **Prefetching**: Load next batch while training current batch
-2. **Multi-worker Loading**: Parallel data loading (future feature)
-3. **Caching**: Cache frequently accessed data in memory
+1. **Multi-worker Loading**: Parallel data loading (future feature)
+1. **Caching**: Cache frequently accessed data in memory
 
 ### Transform Performance
 
 **Problem**: Complex transforms slow down data loading
 
-**Solutions**:
+### Solutions
 
 1. **SIMD Optimization**: Vectorize transform operations
-2. **Batch Transforms**: Apply transforms to entire batches
-3. **Precompute**: Cache transformed data when possible
+1. **Batch Transforms**: Apply transforms to entire batches
+1. **Precompute**: Cache transformed data when possible
 
 ## Best Practices
 
 ### Dataset Design
 
 1. **Keep It Simple**: Implement only essential loading logic in dataset
-2. **Lazy Loading**: Don't load all data in `__init__`
-3. **Validation**: Validate data integrity during loading
-4. **Error Handling**: Gracefully handle missing or corrupted data
+1. **Lazy Loading**: Don't load all data in `__init__`
+1. **Validation**: Validate data integrity during loading
+1. **Error Handling**: Gracefully handle missing or corrupted data
 
 ### Transform Design
 
 1. **Composability**: Design transforms to be composable
-2. **Determinism**: Support reproducible transforms with seed
-3. **Type Safety**: Ensure transforms preserve tensor properties
-4. **Documentation**: Document expected input/output formats
+1. **Determinism**: Support reproducible transforms with seed
+1. **Type Safety**: Ensure transforms preserve tensor properties
+1. **Documentation**: Document expected input/output formats
 
 ### Loader Configuration
 
 1. **Batch Size**: Choose based on GPU memory and model size
-2. **Shuffle**: Always shuffle training data
-3. **Drop Last**: Drop incomplete batches for consistent shapes
-4. **Num Workers**: Start with 0, increase if data loading is bottleneck
+1. **Shuffle**: Always shuffle training data
+1. **Drop Last**: Drop incomplete batches for consistent shapes
+1. **Num Workers**: Start with 0, increase if data loading is bottleneck
 
 ## Testing
 
 Data processing components should be tested for:
 
 1. **Correctness**: Transforms produce expected outputs
-2. **Shape Preservation**: Batch shapes are consistent
-3. **Memory Safety**: No leaks or corruption
-4. **Performance**: Loading speed meets requirements
-5. **Edge Cases**: Empty datasets, single samples, odd batch sizes
+1. **Shape Preservation**: Batch shapes are consistent
+1. **Memory Safety**: No leaks or corruption
+1. **Performance**: Loading speed meets requirements
+1. **Edge Cases**: Empty datasets, single samples, odd batch sizes
 
 See `tests/shared/data/` for comprehensive test suite.
 
@@ -515,18 +515,18 @@ var val_loader = DataLoader(val_dataset, batch_size=64, shuffle=False)
 for epoch in range(num_epochs):
     var train_loss = train_epoch(model, optimizer, train_loader, loss_fn)
     var val_loss = validate_epoch(model, val_loader, loss_fn)
-```
+```text
 
 ## Future Enhancements
 
 Planned features for future releases:
 
 1. **Multi-worker Data Loading**: Parallel loading with worker processes
-2. **Data Prefetching**: Overlap data loading with computation
-3. **Distributed Data Loading**: Sharding for distributed training
-4. **Advanced Samplers**: Stratified, cluster, importance sampling
-5. **Caching Layer**: Intelligent caching of transformed data
-6. **Streaming Datasets**: Support for infinite data streams
+1. **Data Prefetching**: Overlap data loading with computation
+1. **Distributed Data Loading**: Sharding for distributed training
+1. **Advanced Samplers**: Stratified, cluster, importance sampling
+1. **Caching Layer**: Intelligent caching of transformed data
+1. **Streaming Datasets**: Support for infinite data streams
 
 ## References
 
@@ -539,7 +539,7 @@ Planned features for future releases:
 When adding new data processing components:
 
 1. Follow the Dataset or Transform trait interface
-2. Add comprehensive tests in `tests/shared/data/`
-3. Document usage with examples
-4. Optimize hot paths with SIMD
-5. Update this README with new components
+1. Add comprehensive tests in `tests/shared/data/`
+1. Document usage with examples
+1. Optimize hot paths with SIMD
+1. Update this README with new components

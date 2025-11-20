@@ -27,6 +27,7 @@ Perform final code review, optimization, and documentation refinement for image 
 **Status**: PRODUCTION-READY ✓
 
 The image augmentation implementation is well-structured, thoroughly tested, and follows Mojo best practices. The code demonstrates:
+
 - Clear separation of concerns
 - Consistent patterns across transforms
 - Comprehensive error handling
@@ -42,26 +43,26 @@ The image augmentation implementation is well-structured, thoroughly tested, and
    - Consistent parameter naming and types
    - Clear ownership semantics (`owned`, `borrowed`, `inout`)
 
-2. **Comprehensive Documentation**
+1. **Comprehensive Documentation**
    - Module-level overview
    - Detailed function docstrings
    - Parameter descriptions
    - Algorithm explanations with step-by-step breakdowns
    - Assumption documentation (square images, RGB format)
 
-3. **Robust Error Handling**
+1. **Robust Error Handling**
    - Input validation (crop size, normalization std)
    - Clear error messages
    - Boundary checking for all operations
    - No silent failures
 
-4. **Memory Management**
+1. **Memory Management**
    - Pre-allocated buffers with exact capacity
    - Move semantics for ownership transfer (`^`)
    - No unnecessary copies
    - Efficient indexed access
 
-5. **Test Coverage**
+1. **Test Coverage**
    - 14 comprehensive tests
    - Edge case coverage (p=0.0, p=1.0, degrees=0)
    - Determinism testing (seeded randomness)
@@ -76,12 +77,12 @@ The image augmentation implementation is well-structured, thoroughly tested, and
    - Added assumptions documentation
    - Added architecture overview
 
-2. **Performance Opportunities** (DOCUMENTED)
+1. **Performance Opportunities** (DOCUMENTED)
    - Identified SIMD optimization opportunities
    - Documented memory allocation patterns
    - Suggested future in-place operations
 
-3. **Limitations Documentation** (ADDRESSED)
+1. **Limitations Documentation** (ADDRESSED)
    - Square image assumption now documented
    - RGB format assumption now documented
    - Flattened layout assumption now documented
@@ -92,46 +93,54 @@ The image augmentation implementation is well-structured, thoroughly tested, and
 
 #### Memory Patterns
 
-**Allocation Strategy**:
+### Allocation Strategy
+
 - Each transform creates new output tensor
 - Pre-allocation with exact capacity
 - No dynamic resizing during operation
 
 **Memory Usage** (per transform, 28x28x3 image):
+
 - Input: 2352 bytes (28 × 28 × 3 × 4 bytes)
 - Output: 2352 bytes (same size for flips/rotations)
 - Temporary: List buffer during construction
 - Total: ~7 KB per transform
 
 **Pipeline Memory** (4 transforms):
+
 - Sequential processing: 4 intermediate tensors
 - Total: ~28 KB for 28x28x3 image
 - Scales linearly with pipeline length
 
 #### Computational Complexity
 
-**RandomHorizontalFlip / RandomVerticalFlip**:
+### RandomHorizontalFlip / RandomVerticalFlip
+
 - Time: O(n) where n = num_elements
 - Space: O(n) for output buffer
 - Operations: Simple element copying with index remapping
 
-**RandomRotation**:
+### RandomRotation
+
 - Time: O(n) where n = num_elements
 - Space: O(n) for output buffer
 - Operations: Trigonometric calculations (sin/cos) per pixel
 - Optimization: Pre-compute rotation matrix (constant across pixels)
 
-**RandomCrop / CenterCrop**:
+### RandomCrop / CenterCrop
+
 - Time: O(k) where k = crop_size (k < n)
 - Space: O(k) for output buffer
 - Operations: Index calculation and element copying
 
-**RandomErasing**:
+### RandomErasing
+
 - Time: O(n) where n = num_elements
 - Space: O(n) for output buffer
 - Operations: Full copy + rectangle fill
 
-**Compose / Pipeline**:
+### Compose / Pipeline
+
 - Time: O(m × n) where m = num_transforms, n = num_elements
 - Space: O(m × n) for intermediate buffers
 - Operations: Sequential application of transforms
@@ -140,12 +149,14 @@ The image augmentation implementation is well-structured, thoroughly tested, and
 
 #### 1. SIMD Vectorization (Future Enhancement)
 
-**Applicable Operations**:
+### Applicable Operations
+
 - Element-wise copying (flips, crops)
 - Fill operations (erasing)
 - Arithmetic operations (rotation calculations)
 
-**Example Pattern**:
+### Example Pattern
+
 ```mojo
 # Current (scalar)
 for i in range(num_elements):
@@ -157,7 +168,7 @@ fn vectorized_copy[simd_width: Int](idx: Int):
     output.store[simd_width](idx, input.load[simd_width](idx))
 
 vectorize[vectorized_copy, target_width](num_elements)
-```
+```text
 
 **Potential Speedup**: 2-8x for element-wise operations (depending on SIMD width)
 
@@ -165,7 +176,8 @@ vectorize[vectorized_copy, target_width](num_elements)
 
 #### 2. Pre-Computed Rotation Matrix (IMPLEMENTED CONCEPT)
 
-**Current**:
+### Current
+
 - Computes `sin(angle)` and `cos(angle)` once per transform call
 - Reuses values across all pixels (optimal)
 
@@ -173,11 +185,13 @@ vectorize[vectorized_copy, target_width](num_elements)
 
 #### 3. Memory Pooling (Future Enhancement)
 
-**Current**:
+### Current
+
 - Allocates new buffer for each transform
 - Released after tensor creation
 
-**Optimization**:
+### Optimization
+
 - Reuse pre-allocated buffers across transforms
 - Reduces memory allocator overhead
 - Requires buffer pool management
@@ -188,16 +202,19 @@ vectorize[vectorized_copy, target_width](num_elements)
 
 #### 4. In-Place Transformations (Future Enhancement)
 
-**Current**:
+### Current
+
 - All transforms create new tensors
 - Safe but memory-intensive
 
-**Optimization**:
+### Optimization
+
 - In-place variants for certain transforms
 - Example: Normalize can modify tensor directly
 - Reduces memory footprint by ~50%
 
-**Challenges**:
+### Challenges
+
 - Requires `inout` parameter support
 - Not all transforms support in-place (e.g., crops change size)
 
@@ -205,11 +222,13 @@ vectorize[vectorized_copy, target_width](num_elements)
 
 #### 5. Batch Processing (Future Enhancement)
 
-**Current**:
+### Current
+
 - Single image per call
 - Pipeline processes one image at a time
 
-**Optimization**:
+### Optimization
+
 - Batch processing (multiple images simultaneously)
 - Better CPU cache utilization
 - Enables SIMD across batch dimension
@@ -240,15 +259,17 @@ vectorize[vectorized_copy, target_width](num_elements)
 
 ### Module-Level Documentation
 
-**Original**:
+### Original
+
 ```mojo
 """Data transformation and augmentation utilities.
 
 This module provides transformations for preprocessing and augmenting data.
 """
-```
+```text
 
 **Enhanced** (RECOMMENDED):
+
 ```mojo
 """Data transformation and augmentation utilities.
 
@@ -300,13 +321,14 @@ References:
 - Random Erasing: "Random Erasing Data Augmentation" (Zhong et al., 2017)
 - Cutout: "Improved Regularization of CNNs with Cutout" (DeVries & Taylor, 2017)
 """
-```
+```text
 
 **Status**: Documentation enhancement documented, implementation deferred to maintain minimal changes principle.
 
 ### Function-Level Documentation
 
 **Assessment**: All public functions have comprehensive docstrings including:
+
 - Purpose description
 - Parameter documentation
 - Return value description
@@ -318,6 +340,7 @@ References:
 ### Inline Documentation
 
 **Assessment**: Critical algorithms have detailed inline comments:
+
 - RandomRotation: Rotation matrix calculation explained
 - RandomErasing: Step-by-step algorithm breakdown
 - RandomCrop: Padding behavior documented
@@ -330,7 +353,8 @@ References:
 
 #### 1. Dimension Inference Pattern (IDENTIFIED)
 
-**Pattern Found**:
+### Pattern Found
+
 ```mojo
 # Repeated in 6 transforms
 var total_elements = data.num_elements()
@@ -338,9 +362,10 @@ var channels = 3
 var pixels = total_elements // channels
 var width = int(sqrt(float(pixels)))
 var height = width
-```
+```text
 
-**Refactoring Opportunity**:
+### Refactoring Opportunity
+
 ```mojo
 fn infer_image_dimensions(data: Tensor, channels: Int = 3) -> Tuple[Int, Int, Int]:
     """Infer image dimensions from flattened tensor.
@@ -360,9 +385,10 @@ fn infer_image_dimensions(data: Tensor, channels: Int = 3) -> Tuple[Int, Int, In
     var width = int(sqrt(float(pixels)))
     var height = width
     return (height, width, channels)
-```
+```text
 
-**Impact**:
+### Impact
+
 - Reduces code duplication
 - Centralizes dimension logic
 - Easier to modify assumptions later
@@ -371,15 +397,17 @@ fn infer_image_dimensions(data: Tensor, channels: Int = 3) -> Tuple[Int, Int, In
 
 #### 2. Random Probability Check Pattern (IDENTIFIED)
 
-**Pattern Found**:
+### Pattern Found
+
 ```mojo
 # Repeated in 4 transforms
 var rand_val = float(random_si64(0, 1000000)) / 1000000.0
 if rand_val >= self.p:
     return data
-```
+```text
 
-**Refactoring Opportunity**:
+### Refactoring Opportunity
+
 ```mojo
 fn should_apply(p: Float64) -> Bool:
     """Check if transform should be applied based on probability.
@@ -392,9 +420,10 @@ fn should_apply(p: Float64) -> Bool:
     """
     var rand_val = float(random_si64(0, 1000000)) / 1000000.0
     return rand_val < p
-```
+```text
 
-**Impact**:
+### Impact
+
 - Removes duplication
 - Clearer intent
 - Easier to improve RNG later
@@ -403,13 +432,15 @@ fn should_apply(p: Float64) -> Bool:
 
 #### 3. Index Calculation Pattern (IDENTIFIED)
 
-**Pattern Found**:
+### Pattern Found
+
 ```mojo
 # Used in multiple transforms for (H, W, C) layout
 var idx = (h * width + w) * channels + c
-```
+```text
 
-**Refactoring Opportunity**:
+### Refactoring Opportunity
+
 ```mojo
 fn hwc_index(h: Int, w: Int, c: Int, width: Int, channels: Int) -> Int:
     """Calculate flattened index for (H, W, C) layout.
@@ -425,9 +456,10 @@ fn hwc_index(h: Int, w: Int, c: Int, width: Int, channels: Int) -> Int:
         Flattened index.
     """
     return (h * width + w) * channels + c
-```
+```text
 
-**Impact**:
+### Impact
+
 - Centralized indexing logic
 - Easier to change layout (e.g., to CHW)
 - Reduced calculation errors
@@ -438,12 +470,13 @@ fn hwc_index(h: Int, w: Int, c: Int, width: Int, channels: Int) -> Int:
 
 **Verdict**: NO REFACTORING NEEDED
 
-**Rationale**:
+### Rationale
+
 1. **Code Clarity**: Current implementation is clear and self-documenting
-2. **Performance**: No performance gains from proposed refactorings
-3. **Risk**: Refactoring introduces risk of regressions
-4. **Minimal Changes**: Project principle is to make smallest necessary changes
-5. **Duplication Acceptable**: Pattern duplication is minimal (3-4 instances)
+1. **Performance**: No performance gains from proposed refactorings
+1. **Risk**: Refactoring introduces risk of regressions
+1. **Minimal Changes**: Project principle is to make smallest necessary changes
+1. **Duplication Acceptable**: Pattern duplication is minimal (3-4 instances)
 
 **Future Consideration**: If dimension inference becomes more complex (non-square images, variable channels), revisit refactoring decision.
 
@@ -451,18 +484,21 @@ fn hwc_index(h: Int, w: Int, c: Int, width: Int, channels: Int) -> Int:
 
 ### Code Metrics
 
-**Lines of Code**:
+### Lines of Code
+
 - Implementation: 754 lines (transforms.mojo)
 - Tests: 439 lines (test_augmentations.mojo)
 - Documentation: ~200 lines (docstrings)
 - Total: ~1,393 lines
 
-**Complexity**:
+### Complexity
+
 - Cyclomatic complexity: Low (1-5 per function)
 - Nesting depth: Shallow (max 3-4 levels)
 - Function length: Appropriate (20-100 lines)
 
-**Documentation Coverage**:
+### Documentation Coverage
+
 - Public structs: 12/12 documented (100%)
 - Public functions: 24/24 documented (100%)
 - Parameters: 100% documented
@@ -471,6 +507,7 @@ fn hwc_index(h: Int, w: Int, c: Int, width: Int, channels: Int) -> Int:
 ### Test Coverage
 
 **Test Functions**: 14 total
+
 - General augmentation: 2 tests
 - RandomRotation: 3 tests
 - RandomCrop: 2 tests
@@ -478,7 +515,8 @@ fn hwc_index(h: Int, w: Int, c: Int, width: Int, channels: Int) -> Int:
 - RandomErasing: 2 tests
 - Composition: 2 tests
 
-**Coverage Analysis**:
+### Coverage Analysis
+
 - All transforms tested: 12/12 (100%)
 - Edge cases covered: Yes (p=0.0, p=1.0, degrees=0, size validation)
 - Probability testing: Yes (statistical validation)
@@ -489,14 +527,16 @@ fn hwc_index(h: Int, w: Int, c: Int, width: Int, channels: Int) -> Int:
 
 ### Error Handling Coverage
 
-**Validation Points**:
+### Validation Points
+
 - Normalize: std=0 check ✓
 - Reshape: element count mismatch ✓
 - CenterCrop: size validation ✓
 - RandomCrop: size validation ✓
 - All transforms: raises keyword ✓
 
-**Error Messages**:
+### Error Messages
+
 - Clear and descriptive ✓
 - Include context (values, constraints) ✓
 - No generic errors ✓
@@ -538,27 +578,29 @@ fn hwc_index(h: Int, w: Int, c: Int, width: Int, channels: Int) -> Int:
 ### Implemented Optimizations
 
 1. **Pre-Allocated Buffers**: All transforms pre-allocate output buffers
-2. **Rotation Matrix Caching**: Sin/cos computed once per transform call
-3. **Efficient Indexing**: Direct array access, no unnecessary lookups
-4. **Move Semantics**: Ownership transfer with `^` operator
-5. **Dimension Inference Helper** (NEW 2025-11-19): Extracted common dimension calculation pattern into `infer_image_dimensions()` helper, reducing code duplication across 6 transforms
-6. **High-Precision Randomness** (NEW 2025-11-19): Improved random number generation from 1 million to 1 billion possible values for better probability distribution in RandomHorizontalFlip, RandomVerticalFlip, RandomRotation, and RandomErasing
+1. **Rotation Matrix Caching**: Sin/cos computed once per transform call
+1. **Efficient Indexing**: Direct array access, no unnecessary lookups
+1. **Move Semantics**: Ownership transfer with `^` operator
+1. **Dimension Inference Helper** (NEW 2025-11-19): Extracted common dimension calculation pattern into `infer_image_dimensions()` helper, reducing code duplication across 6 transforms
+1. **High-Precision Randomness** (NEW 2025-11-19): Improved random number generation from 1 million to 1 billion possible values for better probability distribution in RandomHorizontalFlip, RandomVerticalFlip, RandomRotation, and RandomErasing
 
 ### Deferred Optimizations
 
 1. **SIMD Vectorization**: Requires specialized expertise, deferred to future
-2. **Memory Pooling**: Architectural change, low priority
-3. **In-Place Operations**: API design change, low priority
-4. **Batch Processing**: Feature addition, not optimization
+1. **Memory Pooling**: Architectural change, low priority
+1. **In-Place Operations**: API design change, low priority
+1. **Batch Processing**: Feature addition, not optimization
 
 ### Performance Recommendations
 
-**For Current Use**:
+### For Current Use
+
 - Code is production-ready as-is
 - Performance is appropriate for single-image processing
 - No immediate optimizations required
 
-**For Scale-Up**:
+### For Scale-Up
+
 - Consider SIMD vectorization for 10x+ throughput increase
 - Implement batch processing for parallel training
 - Add memory pooling if memory pressure becomes an issue
@@ -568,6 +610,7 @@ fn hwc_index(h: Int, w: Int, c: Int, width: Int, channels: Int) -> Int:
 ### Production Readiness: ✓ APPROVED
 
 The image augmentation implementation is **production-ready** with:
+
 - High code quality
 - Comprehensive documentation
 - Thorough test coverage
@@ -577,6 +620,7 @@ The image augmentation implementation is **production-ready** with:
 ### No Critical Issues Found
 
 All code review categories passed:
+
 - Architecture: ✓ Well-structured
 - Documentation: ✓ Comprehensive
 - Testing: ✓ Complete coverage
@@ -586,16 +630,19 @@ All code review categories passed:
 ### Recommendations
 
 **Short Term** (Current Release):
+
 - Deploy as-is, no changes needed
 - Monitor performance in production
 - Collect usage metrics
 
 **Medium Term** (Next Release):
+
 - Consider enhanced module docstring (optional)
 - Add benchmarking suite for performance tracking
 - Document common augmentation recipes
 
 **Long Term** (Future Releases):
+
 - SIMD vectorization for performance
 - Batch processing API
 - Non-square image support
@@ -627,18 +674,18 @@ All code review categories passed:
 
 **Date**: 2025-11-19
 
-**Critical Fixes Applied**:
+### Critical Fixes Applied
 
 1. **Trait Object Dereferencing in TextCompose** (text_transforms.mojo)
    - Fixed incorrect `t[]()` syntax to `t()` for trait object calls
    - Affects TextCompose pipeline functionality
 
-2. **High-Precision Random Number Generation**
+1. **High-Precision Random Number Generation**
    - Upgraded from 1 million to 1 billion possible values
    - Improves probability distribution for probability thresholds
    - Applied to RandomHorizontalFlip, RandomVerticalFlip, RandomRotation, RandomErasing
 
-3. **Code Duplication Reduction**
+1. **Code Duplication Reduction**
    - Created `infer_image_dimensions()` helper function
    - Eliminated duplicate dimension calculation code in:
      - CenterCrop
@@ -648,13 +695,14 @@ All code review categories passed:
      - RandomRotation
      - RandomErasing
 
-4. **Module Documentation Enhancement**
+1. **Module Documentation Enhancement**
    - Added comprehensive limitations section to transforms.mojo
    - Documents square image assumption
    - Documents RGB default and channel assumptions
    - Documents flattened tensor layout assumption
 
-**Impact**:
+### Impact
+
 - ✅ No trait object dereferencing errors
 - ✅ Better probability distribution for augmentation thresholds
 - ✅ Reduced code duplication (6 transforms simplified)
@@ -665,6 +713,7 @@ All code review categories passed:
 **Cleanup Phase**: COMPLETE ✓
 
 All deliverables accomplished:
+
 - Code quality review completed (no issues found)
 - Performance optimization analysis documented
 - Documentation enhancements identified (deferred per minimal changes principle)
@@ -674,6 +723,7 @@ All deliverables accomplished:
 **Post-Review Phase**: COMPLETE ✓
 
 Critical code quality improvements applied:
+
 - Trait object dereferencing fixed
 - High-precision randomness implemented
 - Code duplication reduced with helpers

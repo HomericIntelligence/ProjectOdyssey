@@ -5,8 +5,8 @@
 External reviewer provided feedback after reading README.md and scripts/README.md, focusing on:
 
 1. Plan file generation documentation
-2. Missing outcomes/results in README
-3. Potential to extract automation framework as standalone project
+1. Missing outcomes/results in README
+1. Potential to extract automation framework as standalone project
 
 ## Strategic Analysis
 
@@ -14,7 +14,7 @@ External reviewer provided feedback after reading README.md and scripts/README.m
 
 **Quote**: "it's not super clear how to generate a plan file. Some documentation on what is required in order for create_issues.py to parse it would be super helpful."
 
-**Analysis**:
+### Analysis
 
 - **Current state**: Plan format documented in CLAUDE.md (Template 1, 9 sections) but scattered
 - **Problem**: No tutorial-style guide or discoverable examples
@@ -33,7 +33,7 @@ External reviewer provided feedback after reading README.md and scripts/README.m
 
 **Quote**: "the main README is missing an overview of what the outcome was of replacing Python with mojo for these old papers. Maybe some neat pictures or something are called for."
 
-**Analysis**:
+### Analysis
 
 - **Current state**: README describes structure but doesn't clarify planning phase status
 - **Problem**: Reviewer expected to see implementation results, but no papers implemented yet
@@ -52,20 +52,20 @@ External reviewer provided feedback after reading README.md and scripts/README.m
 
 **Quote**: "There's really two projects going on here that could each stand on their own two feet. I wonder if it would be worthwhile to fork the automated GH interactions into their own GitHub template and focus on that as a repo of its own."
 
-**Analysis**:
+### Analysis
 
 - **Current state**: Unified repository mixing ML implementation goals with automation infrastructure
 - **Problem**: Automation framework (planning hierarchy + issue creation + agents) has standalone value
 - **Impact**: Unclear separation of concerns, potentially limiting reusability
 - **Priority**: MEDIUM - Strategic architectural decision
 
-**Options**:
+### Options
 
 1. **Extract automation framework** into separate GitHub template repository
    - Pros: Clearer focus, reusable for other projects, simpler for each audience
    - Cons: Maintenance overhead, coordination complexity, risk of fragmentation
 
-2. **Keep unified with better documentation**
+1. **Keep unified with better documentation**
    - Pros: Simpler to maintain, dogfooding the automation, shared evolution
    - Cons: Mixed audiences, potentially confusing purpose
 
@@ -86,7 +86,7 @@ External reviewer provided feedback after reading README.md and scripts/README.m
 
 **Objective**: Make plan file creation accessible to new contributors
 
-**Deliverables**:
+### Deliverables
 
 - Comprehensive tutorial in `docs/plan-file-guide.md` or `notes/review/plan-file-guide.md`
 - Template file at `.templates/plan-template.md`
@@ -94,7 +94,7 @@ External reviewer provided feedback after reading README.md and scripts/README.m
 - Troubleshooting section for common errors
 - Update README.md to link to the guide
 
-**Success Criteria**:
+### Success Criteria
 
 - Someone unfamiliar with the project can create a valid plan file from scratch
 - Guide covers all 9 required sections from Template 1
@@ -109,7 +109,7 @@ External reviewer provided feedback after reading README.md and scripts/README.m
 
 **Objective**: Set clear expectations about current status and future outcomes
 
-**Deliverables**:
+### Deliverables
 
 - New "Current Status" section in README.md
 - New "Vision & Expected Outcomes" section
@@ -117,7 +117,7 @@ External reviewer provided feedback after reading README.md and scripts/README.m
 - Link to blog posts documenting infrastructure work
 - Optional: "Coming Soon" section with projected performance comparisons
 
-**Success Criteria**:
+### Success Criteria
 
 - README clearly states this is in planning/infrastructure phase
 - Readers understand eventual goal is Mojo implementations of classic papers
@@ -134,7 +134,7 @@ External reviewer provided feedback after reading README.md and scripts/README.m
 
 **Objective**: Make informed decision about extracting automation framework
 
-**Deliverables**:
+### Deliverables
 
 - ADR document in `notes/review/adr/ADR-002-automation-framework-architecture.md`
 - Analysis of extraction vs unified approach
@@ -143,26 +143,26 @@ External reviewer provided feedback after reading README.md and scripts/README.m
 - If extracting: migration plan outline
 - If staying unified: documentation strategy for dual-purpose repo
 
-**Success Criteria**:
+### Success Criteria
 
 - Decision is documented with clear rationale
 - Trade-offs are analyzed objectively
 - Implementation path is outlined (regardless of decision)
 - Community feedback is considered
 
-**Key Questions**:
+### Key Questions
 
 1. What is the target audience for each concern (ML researchers vs project managers)?
-2. How much maintenance overhead would dual repos create?
-3. Is there community demand for standalone automation framework?
-4. How does extraction impact dogfooding of automation on ML implementation?
-5. What is the timeline for ML implementations (does extraction make sense now)?
+1. How much maintenance overhead would dual repos create?
+1. Is there community demand for standalone automation framework?
+1. How does extraction impact dogfooding of automation on ML implementation?
+1. What is the timeline for ML implementations (does extraction make sense now)?
 
 ## Implementation Order
 
 1. **Issue 1** (Plan File Guide) - Immediate impact on usability
-2. **Issue 2** (README Status/Vision) - Clear communication of current state
-3. **Issue 3** (Strategic Decision) - Longer-term architectural consideration
+1. **Issue 2** (README Status/Vision) - Clear communication of current state
+1. **Issue 3** (Strategic Decision) - Longer-term architectural consideration
 
 ## Notes
 

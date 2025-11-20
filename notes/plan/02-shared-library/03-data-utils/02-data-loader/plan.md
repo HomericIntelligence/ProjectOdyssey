@@ -29,8 +29,8 @@ Create a data loader for efficient batch processing of datasets. This includes b
 ## Steps
 
 1. Implement batching to group dataset samples
-2. Add shuffling for randomized sample order
-3. Create iterator for traversing batches
+1. Add shuffling for randomized sample order
+1. Create iterator for traversing batches
 
 ## Success Criteria
 

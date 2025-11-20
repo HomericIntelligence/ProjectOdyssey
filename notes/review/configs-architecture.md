@@ -7,15 +7,15 @@ The configs/ directory provides centralized configuration management for ML Odys
 ## Design Principles
 
 1. **Hierarchy and Inheritance**: Three-tier configuration hierarchy (defaults → paper-specific → experiment)
-2. **Type Safety**: Leverage Mojo's type system through existing config utilities
-3. **Reproducibility**: Every experiment must be fully reproducible from configuration
-4. **Validation**: All configurations validated against schemas
-5. **DRY Principle**: Avoid duplication through inheritance and merging
-6. **Environment Flexibility**: Support environment variables for deployment
+1. **Type Safety**: Leverage Mojo's type system through existing config utilities
+1. **Reproducibility**: Every experiment must be fully reproducible from configuration
+1. **Validation**: All configurations validated against schemas
+1. **DRY Principle**: Avoid duplication through inheritance and merging
+1. **Environment Flexibility**: Support environment variables for deployment
 
 ## Directory Structure
 
-```
+```text
 configs/
 ├── README.md                    # User guide and documentation
 ├── defaults/                    # System-wide default configurations
@@ -46,7 +46,7 @@ configs/
     ├── paper.yaml              # Template for new paper configs
     ├── experiment.yaml         # Template for new experiments
     └── README.md               # Template usage guide
-```
+```text
 
 ## Configuration Hierarchy
 
@@ -84,7 +84,7 @@ logging:
   interval: 10  # Log every N batches
   save_checkpoints: true
   checkpoint_frequency: 5  # Save every N epochs
-```
+```text
 
 **model.yaml**:
 
@@ -104,7 +104,7 @@ regularization:
 architecture:
   activation: "relu"
   pooling: "max"
-```
+```text
 
 **data.yaml**:
 
@@ -127,7 +127,7 @@ loader:
   pin_memory: true
   shuffle_train: true
   shuffle_val: false
-```
+```text
 
 ### 2. Paper Configurations (`papers/`)
 
@@ -166,7 +166,7 @@ layers:
   - type: "linear"
     units: 10
     activation: "softmax"
-```
+```text
 
 ### 3. Experiment Configurations (`experiments/`)
 
@@ -199,7 +199,7 @@ data:
 training:
   epochs: 50  # Fewer epochs needed with augmentation
   batch_size: 64
-```
+```text
 
 ## Configuration Formats
 
@@ -207,14 +207,14 @@ training:
 
 YAML is the primary format for human-readable configurations.
 
-**Advantages**:
+### Advantages
 
 - Human-readable and writable
 - Support for comments and documentation
 - Hierarchical structure
 - Multi-line strings for descriptions
 
-**Example Structure**:
+### Example Structure
 
 ```yaml
 # Configuration header comment
@@ -233,13 +233,13 @@ section:
 paths:
   data_dir: "${DATA_DIR:-./data}"
   cache_dir: "${CACHE_DIR:-./cache}"
-```
+```text
 
 ### JSON Format (Secondary)
 
 JSON supported for programmatic generation and interoperability.
 
-**Use Cases**:
+### Use Cases
 
 - Auto-generated configurations
 - API responses
@@ -278,7 +278,7 @@ properties:
         type: integer
         minimum: 1
         multipleOf: 1
-```
+```text
 
 ### Validation Implementation
 
@@ -315,7 +315,7 @@ fn validate_training_config(config: Config) raises:
     valid_optimizers.append("adam")
     valid_optimizers.append("adamw")
     config.validate_enum("optimizer.name", valid_optimizers)
-```
+```text
 
 ## Configuration Loading Pattern
 
@@ -351,7 +351,7 @@ fn load_experiment_config(experiment_name: String) raises -> Config:
     validate_training_config(config)
     
     return config
-```
+```text
 
 ## Naming Conventions
 
@@ -387,7 +387,7 @@ cache_dir: "${CACHE_DIR:-./cache}"
 
 # Nested substitution
 model_path: "${MODEL_DIR:-./models}/${EXPERIMENT_NAME}/checkpoint.pt"
-```
+```text
 
 ### Common Variables
 
@@ -417,7 +417,7 @@ fn main() raises:
     # Check for optional values
     if config.has("scheduler.step_size"):
         var step_size = config.get_int("scheduler.step_size")
-```
+```text
 
 ### Creating Configurations Programmatically
 
@@ -440,7 +440,7 @@ fn create_experiment_config(
     config.to_yaml("configs/experiments/generated/exp001.yaml")
     
     return config
-```
+```text
 
 ## Templates
 
@@ -474,7 +474,7 @@ training:
 data:
   dataset: "dataset_name"
   # Paper-specific data configuration
-```
+```text
 
 ### Experiment Template
 
@@ -505,7 +505,7 @@ tracking:
   metrics: ["loss", "accuracy", "f1_score"]
   log_frequency: 10
   save_predictions: false
-```
+```text
 
 ## Best Practices
 
@@ -549,19 +549,19 @@ tracking:
 ### For Existing Paper Implementations
 
 1. Identify all hardcoded parameters
-2. Create paper-specific config in `configs/papers/<paper>/`
-3. Update code to load from configuration
-4. Test reproduction with config-driven approach
-5. Document any paper-specific quirks
+1. Create paper-specific config in `configs/papers/<paper>/`
+1. Update code to load from configuration
+1. Test reproduction with config-driven approach
+1. Document any paper-specific quirks
 
 ### For New Papers
 
 1. Start with paper template
-2. Define architecture in `model.yaml`
-3. Set training parameters in `training.yaml`
-4. Configure data in `data.yaml`
-5. Create baseline experiment config
-6. Run and validate reproduction
+1. Define architecture in `model.yaml`
+1. Set training parameters in `training.yaml`
+1. Configure data in `data.yaml`
+1. Create baseline experiment config
+1. Run and validate reproduction
 
 ## Testing Strategy
 
@@ -599,7 +599,7 @@ fn test_validate_training_config():
     except:
         raised = True
     assert raised
-```
+```text
 
 ### Integration Tests
 
@@ -629,17 +629,17 @@ fn test_validate_training_config():
 ### Version 2.0 Features
 
 1. **Config Server**: REST API for configuration management
-2. **Hot Reloading**: Update configs without restart
-3. **A/B Testing**: Built-in experiment comparison
-4. **Distributed Configs**: Support for distributed training
-5. **Config UI**: Web interface for configuration editing
+1. **Hot Reloading**: Update configs without restart
+1. **A/B Testing**: Built-in experiment comparison
+1. **Distributed Configs**: Support for distributed training
+1. **Config UI**: Web interface for configuration editing
 
 ### Version 3.0 Vision
 
 1. **AutoML Integration**: Automatic hyperparameter search
-2. **Config Optimization**: Learn optimal configs from results
-3. **Cross-Paper Transfer**: Transfer learning for configs
-4. **Config Recommendation**: ML-based config suggestions
+1. **Config Optimization**: Learn optimal configs from results
+1. **Cross-Paper Transfer**: Transfer learning for configs
+1. **Config Recommendation**: ML-based config suggestions
 
 ## Conclusion
 

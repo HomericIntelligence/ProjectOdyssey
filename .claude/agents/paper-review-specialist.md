@@ -96,9 +96,9 @@ presentation aspects of research papers.
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -316,7 +316,7 @@ See [code-review-orchestrator.md](./code-review-orchestrator.md#review-comment-p
 
 ### Example 1: Poor Abstract
 
-**Paper Abstract**:
+### Paper Abstract
 
 ```text
 This paper presents a new method for image classification. We use a
@@ -325,7 +325,7 @@ method works well and achieves good results. We show that our method
 is better than some other methods.
 ```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 🔴 CRITICAL: Abstract is too vague and lacks essential details
@@ -382,17 +382,17 @@ enables [benefit]. These results demonstrate [implication].
 
 🟠 MAJOR: Figure 3 lacks clarity and essential information
 
-**Issues**:
+### Issues
 
 1. Caption too brief - doesn't describe what figure shows
-2. No labels on components (what are the boxes/layers?)
-3. Arrows need explanation (data flow? gradients?)
-4. Color coding unexplained (what do colors represent?)
-5. Font size too small (likely unreadable when printed)
+1. No labels on components (what are the boxes/layers?)
+1. Arrows need explanation (data flow? gradients?)
+1. Color coding unexplained (what do colors represent?)
+1. Font size too small (likely unreadable when printed)
 
-**Recommended Improvements**:
+### Recommended Improvements
 
-**Caption**:
+### Caption
 
 ```text
 
@@ -405,7 +405,7 @@ shown in gray text.
 
 ```text
 
-**Figure Requirements**:
+### Figure Requirements
 
 - Label each component (e.g., "Conv 3x3, 64 channels")
 - Add legend explaining colors and arrow types
@@ -413,7 +413,7 @@ shown in gray text.
 - Add input/output dimensions at each stage
 - Consider breaking into subfigures if too complex
 
-**Accessibility**:
+### Accessibility
 
 - Use colorblind-friendly palette (avoid red-green)
 - Add patterns/textures in addition to colors
@@ -562,8 +562,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -714,7 +714,7 @@ Use this comprehensive checklist when reviewing ML papers:
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -766,13 +766,13 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Reviewing implementation with potential overflow issues
 
-**Actions**:
+### Actions
 
 1. Identify operations that could overflow (exp, large multiplications)
-2. Check for numerical stability patterns (log-sum-exp, epsilon values)
-3. Provide specific fixes with mathematical justification
-4. Reference best practices and paper specifications
-5. Categorize findings by severity
+1. Check for numerical stability patterns (log-sum-exp, epsilon values)
+1. Provide specific fixes with mathematical justification
+1. Reference best practices and paper specifications
+1. Categorize findings by severity
 
 **Outcome**: Numerically stable implementation preventing runtime errors
 
@@ -780,12 +780,12 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Implementation tightly coupling unrelated components
 
-**Actions**:
+### Actions
 
 1. Analyze component dependencies and coupling
-2. Identify violations of separation of concerns
-3. Suggest refactoring with interface-based design
-4. Provide concrete code examples of improvements
-5. Group similar issues into single review comment
+1. Identify violations of separation of concerns
+1. Suggest refactoring with interface-based design
+1. Provide concrete code examples of improvements
+1. Group similar issues into single review comment
 
 **Outcome**: Actionable feedback leading to better architecture

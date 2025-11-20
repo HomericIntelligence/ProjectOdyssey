@@ -35,15 +35,15 @@ The planning phase produces specifications for:
 **Decision**: Organize workflow documentation into five main sections:
 
 1. Environment Setup (Prerequisites, Pixi installation, verification)
-2. Branching Strategy (Branch naming, creation, lifecycle)
-3. Development Cycle (TDD workflow, code-test-commit pattern)
-4. Local Testing (Running tests, coverage, debugging)
-5. Troubleshooting (Common issues, solutions, support channels)
+1. Branching Strategy (Branch naming, creation, lifecycle)
+1. Development Cycle (TDD workflow, code-test-commit pattern)
+1. Local Testing (Running tests, coverage, debugging)
+1. Troubleshooting (Common issues, solutions, support channels)
 
 **Rationale**: This structure mirrors the natural progression of a contributor's journey - from initial setup to
 productive development. Each section builds on the previous one, creating a logical learning path.
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Single "Getting Started" section: Too monolithic, harder to navigate for experienced contributors who need specific
   information
@@ -54,14 +54,14 @@ productive development. Each section builds on the previous one, creating a logi
 
 **Decision**: Use Pixi as the primary environment management tool, with clear verification steps after setup.
 
-**Rationale**:
+### Rationale
 
 - Pixi provides consistent, reproducible environments across platforms
 - Eliminates common dependency conflicts that plague manual setups
 - Aligns with project's existing infrastructure (pixi.toml already configured)
 - Verification steps build confidence and catch issues early
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Manual dependency installation: Higher risk of version conflicts, platform-specific issues
 - Docker containers: Additional complexity, larger download size, less native feel for development
@@ -71,7 +71,7 @@ productive development. Each section builds on the previous one, creating a logi
 **Decision**: Document a feature-branch workflow with issue-linked branches using the pattern
 `<issue-number>-<description>`.
 
-**Rationale**:
+### Rationale
 
 - Issue-linked branches create clear traceability between work and requirements
 - Descriptive names improve collaboration and code review
@@ -80,7 +80,7 @@ productive development. Each section builds on the previous one, creating a logi
 
 **Example**: `42-add-convolution-layer` for issue #42
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - GitFlow (develop/release branches): Too complex for this project's needs, adds ceremony without value
 - Trunk-based development: Requires more sophisticated CI/CD, higher risk for this stage of the project
@@ -90,25 +90,25 @@ productive development. Each section builds on the previous one, creating a logi
 **Decision**: Document a Test-Driven Development (TDD) cycle with the pattern: Write Test → Run (Fail) → Implement →
 Run (Pass) → Refactor → Commit.
 
-**Rationale**:
+### Rationale
 
 - TDD aligns with project principles (see CLAUDE.md)
 - Tests become living documentation of expected behavior
 - Higher code quality and confidence in changes
 - Easier code review (tests show intent, implementation shows execution)
 
-**Workflow Steps**:
+### Workflow Steps
 
 1. Create/check out feature branch
-2. Write failing test for new functionality
-3. Implement minimal code to pass the test
-4. Run full test suite to verify no regressions
-5. Refactor if needed while keeping tests green
-6. Run pre-commit hooks
-7. Commit with conventional commit message
-8. Push and create PR linked to issue
+1. Write failing test for new functionality
+1. Implement minimal code to pass the test
+1. Run full test suite to verify no regressions
+1. Refactor if needed while keeping tests green
+1. Run pre-commit hooks
+1. Commit with conventional commit message
+1. Push and create PR linked to issue
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Code-first approach: Lower initial quality, more debugging time, tests as afterthought
 - Behavior-Driven Development (BDD): Additional tooling overhead, less familiar to many contributors
@@ -118,16 +118,16 @@ Run (Pass) → Refactor → Commit.
 **Decision**: Document three levels of testing instructions:
 
 1. **Quick validation** (`pixi run test`) - Run all tests, fast feedback
-2. **Module-specific testing** (`pixi run test path/to/module`) - Focused development
-3. **Coverage analysis** (`pixi run test --cov`) - Quality verification
+1. **Module-specific testing** (`pixi run test path/to/module`) - Focused development
+1. **Coverage analysis** (`pixi run test --cov`) - Quality verification
 
-**Rationale**:
+### Rationale
 
 - Quick validation supports rapid iteration during development
 - Module-specific testing reduces wait time when working on isolated components
 - Coverage analysis helps identify untested code paths
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Only document full test suite: Slower feedback, discourages frequent testing
 - Include integration/E2E test documentation: Premature - project doesn't have these yet
@@ -142,13 +142,13 @@ Run (Pass) → Refactor → Commit.
 - Test execution problems
 - Links to support channels (GitHub issues, discussions)
 
-**Rationale**:
+### Rationale
 
 - Reduces frustration and support burden
 - Builds contributor confidence ("The docs anticipated my problem!")
 - Creates feedback loop for improving documentation
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Separate troubleshooting document: Harder to discover, breaks flow
 - No troubleshooting section: Higher support burden, contributor frustration
@@ -173,14 +173,14 @@ CONTRIBUTING.md
 ├── Code Style Guidelines (existing)
 ├── Pull Request Process (existing)
 └── Troubleshooting (new)
-```
+```text
 
 ### Integration Points
 
 1. **Environment Setup**: Links to existing "Development Setup" section
-2. **Testing**: Expands on existing "Running Tests" section with workflow context
-3. **Code Style**: References existing style guidelines within development cycle
-4. **PR Process**: Connects development cycle to existing PR documentation
+1. **Testing**: Expands on existing "Running Tests" section with workflow context
+1. **Code Style**: References existing style guidelines within development cycle
+1. **PR Process**: Connects development cycle to existing PR documentation
 
 ## Implementation Approach
 

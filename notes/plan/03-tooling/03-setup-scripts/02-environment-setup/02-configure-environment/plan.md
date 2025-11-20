@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Create environment configuration from templates
-2. Set required environment variables
-3. Update shell configuration files
-4. Document configuration for users
+1. Set required environment variables
+1. Update shell configuration files
+1. Document configuration for users
 
 ## Success Criteria
 

@@ -51,7 +51,7 @@ Lines of code in function:
 
 # Generate report
 ./scripts/complexity_report.sh > complexity.txt
-```
+```text
 
 ## Refactoring Strategies
 
@@ -75,7 +75,7 @@ def process(data):
         return
     filtered = filter_valid_items(data)
     return process_items(filtered)
-```
+```text
 
 ### Deep Nesting
 

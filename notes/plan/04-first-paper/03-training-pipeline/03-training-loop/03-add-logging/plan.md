@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Log training progress
-2. Display loss each epoch
-3. Show progress indicators
+1. Display loss each epoch
+1. Show progress indicators
 
 ## Success Criteria
 

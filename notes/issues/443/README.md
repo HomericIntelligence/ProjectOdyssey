@@ -31,14 +31,14 @@ configurations that multiple tests can share, reducing duplication and improving
 
 **Decision**: Implement pytest-style fixtures adapted for Mojo
 
-**Rationale**:
+### Rationale
 
 - Pytest fixtures are industry-standard and well-understood
 - Provides familiar patterns for developers transitioning from Python
 - Supports dependency injection for clean test design
 - Enables scoping to balance performance and isolation
 
-**Implementation Considerations**:
+### Implementation Considerations
 
 - Investigate Mojo's capabilities for implementing fixture-like patterns
 - May need to adapt patterns if Mojo lacks certain Python features
@@ -53,25 +53,25 @@ configurations that multiple tests can share, reducing duplication and improving
    - Common data types (int32, float32, float64)
    - Known values for verification (zeros, ones, sequential, random with seed)
 
-2. **Model Fixtures**:
+1. **Model Fixtures**:
    - Simple linear model (single layer)
    - Small neural network (2-3 layers)
    - Minimal CNN architecture
    - Pre-initialized weights for reproducibility
 
-3. **Dataset Fixtures**:
+1. **Dataset Fixtures**:
    - Toy classification dataset (XOR, circles)
    - Small regression dataset
    - Known ground truth for validation
    - Consistent random seed for reproducibility
 
-4. **Configuration Fixtures**:
+1. **Configuration Fixtures**:
    - Default training configuration
    - Common optimizer settings
    - Various learning rate schedules
    - Batch size configurations
 
-**Rationale**:
+### Rationale
 
 - Covers common testing needs across ML workflows
 - Provides graduated complexity for different test scenarios
@@ -87,17 +87,17 @@ configurations that multiple tests can share, reducing duplication and improving
    - Maximum isolation between tests
    - Use for mutable fixtures (tensors that will be modified)
 
-2. **Module Scope**: For expensive-to-create immutable fixtures
+1. **Module Scope**: For expensive-to-create immutable fixtures
    - Shared across tests in a single module
    - Reduces overhead for large tensor allocations
    - Use for read-only reference data
 
-3. **Session Scope**: For very expensive setup
+1. **Session Scope**: For very expensive setup
    - Shared across entire test session
    - Use sparingly (only for truly immutable data)
    - Example: large pre-computed validation datasets
 
-**Rationale**:
+### Rationale
 
 - Balances test isolation with performance
 - Function scope prevents test interactions
@@ -108,7 +108,7 @@ configurations that multiple tests can share, reducing duplication and improving
 
 **Decision**: Explicit resource management with RAII principles
 
-**Pattern**:
+### Pattern
 
 ```mojo
 struct TensorFixture:
@@ -121,9 +121,9 @@ struct TensorFixture:
     fn __del__(owned self):
         # Teardown: automatic cleanup via RAII
         pass  # Tensor handles its own cleanup
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Mojo's ownership system provides automatic cleanup
 - RAII ensures resources are freed even if test fails
@@ -134,14 +134,14 @@ struct TensorFixture:
 
 **Decision**: Centralized fixture registry with type-safe access
 
-**Pattern**:
+### Pattern
 
 - Single `fixtures.mojo` module with all fixtures
 - Each fixture is a function returning the fixture data
 - Tests import fixtures explicitly (no magic discovery)
 - Type system ensures correct fixture usage
 
-**Rationale**:
+### Rationale
 
 - Mojo's type system provides compile-time safety
 - Explicit imports make dependencies clear
@@ -153,12 +153,12 @@ struct TensorFixture:
 **Decision**: Each fixture must document:
 
 1. Purpose and intended use cases
-2. Data characteristics (size, type, value distribution)
-3. Scope (function/module/session)
-4. Mutability expectations (read-only vs. modifiable)
-5. Example usage in tests
+1. Data characteristics (size, type, value distribution)
+1. Scope (function/module/session)
+1. Mutability expectations (read-only vs. modifiable)
+1. Example usage in tests
 
-**Rationale**:
+### Rationale
 
 - Clear documentation prevents fixture misuse
 - New contributors understand fixture purpose quickly

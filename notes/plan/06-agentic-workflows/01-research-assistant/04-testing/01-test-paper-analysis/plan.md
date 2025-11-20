@@ -29,9 +29,9 @@ None (implementation level)
 ## Steps
 
 1. Collect sample papers for testing
-2. Define expected outputs for each paper
-3. Write tests for paper analysis prompt
-4. Validate output structure and content
+1. Define expected outputs for each paper
+1. Write tests for paper analysis prompt
+1. Validate output structure and content
 
 ## Success Criteria
 

@@ -97,14 +97,14 @@ Following TDD principles and FIRST testing guidelines:
 
 #### 1. Unit Tests (MUST have - Critical)
 
-**Papers Directory Structure**:
+### Papers Directory Structure
 
 - ✅ `papers/` directory exists at repository root
 - ✅ `papers/README.md` exists and has correct content
 - ✅ `papers/_template/` directory exists
 - ✅ Directory permissions are correct (read, write, execute)
 
-**Shared Directory Structure**:
+### Shared Directory Structure
 
 - ✅ `shared/` directory exists at repository root
 - ✅ `shared/README.md` exists
@@ -113,7 +113,7 @@ Following TDD principles and FIRST testing guidelines:
 - ✅ Each subdirectory has README.md
 - ✅ Each subdirectory has **init**.mojo
 
-**Template Structure**:
+### Template Structure
 
 - ✅ Template has all required directories
 - ✅ Template has all required placeholder files
@@ -122,14 +122,14 @@ Following TDD principles and FIRST testing guidelines:
 
 #### 2. Integration Tests (MUST have - Critical)
 
-**Template Usage**:
+### Template Usage
 
 - ✅ Template can be copied to create new paper
 - ✅ Copied template has independent file system
 - ✅ Template files can be modified without affecting original
 - ✅ Template structure is complete after copy
 
-**Cross-Directory Integration**:
+### Cross-Directory Integration
 
 - ✅ Papers can reference shared library paths
 - ✅ Import paths resolve correctly
@@ -138,14 +138,14 @@ Following TDD principles and FIRST testing guidelines:
 
 #### 3. API Contract Tests (SHOULD have - Important)
 
-**Interface Definitions**:
+### Interface Definitions
 
 - ✅ Module interface structure documented
 - ✅ Layer interface structure documented
 - ✅ Optimizer interface structure documented
 - ✅ Dataset interface structure documented
 
-**Type Specifications**:
+### Type Specifications
 
 - ✅ Tensor shape conventions documented
 - ✅ Data type specifications documented
@@ -153,7 +153,7 @@ Following TDD principles and FIRST testing guidelines:
 
 #### 4. Edge Cases (SHOULD have - Important)
 
-**Error Handling**:
+### Error Handling
 
 - ✅ Missing directories are detected
 - ✅ Missing required files are detected
@@ -164,7 +164,7 @@ Following TDD principles and FIRST testing guidelines:
 
 **Coverage Target**: 100% for directory structure validation
 
-**Focus Areas**:
+### Focus Areas
 
 - ✅ Directory existence and structure (100%)
 - ✅ Required files presence (100%)
@@ -179,14 +179,14 @@ Following TDD principles and FIRST testing guidelines:
 
 ### Test Data Approach
 
-**Use Real Implementations**:
+### Use Real Implementations
 
 - ✅ Test against actual repository structure
 - ✅ Use real file paths from `repo_root` fixture
 - ✅ Verify actual files exist, not mocks
 - ✅ Use temporary directories only for modification tests
 
-**Simple, Concrete Data**:
+### Simple, Concrete Data
 
 - ✅ Direct path validation (Path.exists(), Path.is_dir())
 - ✅ String matching for file contents
@@ -196,14 +196,14 @@ Following TDD principles and FIRST testing guidelines:
 
 ### CI/CD Integration
 
-**Test Execution**:
+### Test Execution
 
 - Tests run automatically on all PRs
 - Tests run on pushes to main branch
 - Tests are part of `.github/workflows/test.yml`
 - All tests must pass before merge
 
-**Test Command**:
+### Test Command
 
 ```bash
 # Run all foundation tests
@@ -214,9 +214,9 @@ pytest tests/foundation/test_directory_structure.py -v
 
 # Run with coverage
 pytest tests/foundation/ --cov=. --cov-report=term-missing
-```
+```text
 
-**CI Configuration**:
+### CI Configuration
 
 - Already integrated in existing test workflow
 - No new test framework needed (using pytest)
@@ -234,37 +234,37 @@ tests/foundation/
 ├── test_template_structure.py       # NEW: Template validation
 ├── test_api_contracts.py            # NEW: API contract validation
 └── test_structure_integration.py    # NEW: Integration tests
-```
+```text
 
 ### Test Implementation Priority
 
 **Phase 1: Core Structure Tests** (Immediate)
 
 1. ✅ Directory existence validation
-2. ✅ Required files validation
-3. ✅ Subdirectory structure validation
+1. ✅ Required files validation
+1. ✅ Subdirectory structure validation
 
 **Phase 2: Template Tests** (Next)
 
 1. ✅ Template completeness
-2. ✅ Template file validation
-3. ✅ Template copy functionality
+1. ✅ Template file validation
+1. ✅ Template copy functionality
 
 **Phase 3: API Contract Tests** (Then)
 
 1. ✅ Interface structure validation
-2. ✅ Type specification validation
-3. ✅ Documentation completeness
+1. ✅ Type specification validation
+1. ✅ Documentation completeness
 
 **Phase 4: Integration Tests** (Finally)
 
 1. ✅ Cross-directory integration
-2. ✅ Import path validation
-3. ✅ Workflow validation
+1. ✅ Import path validation
+1. ✅ Workflow validation
 
 ### Test Fixtures
 
-**Enhanced conftest.py**:
+### Enhanced conftest.py
 
 ```python
 @pytest.fixture
@@ -290,11 +290,11 @@ def expected_template_structure() -> Dict[str, List[str]]:
         "notebooks": [".gitkeep"],
         "examples": [".gitkeep"]
     }
-```
+```text
 
 ### Validation Functions
 
-**Helper utilities for validation**:
+### Helper utilities for validation
 
 ```python
 def validate_directory_structure(base_path: Path, expected_structure: Dict[str, List[str]]) -> List[str]:
@@ -318,11 +318,11 @@ def validate_directory_structure(base_path: Path, expected_structure: Dict[str, 
                 errors.append(f"Required item missing: {item_path}")
 
     return errors
-```
+```text
 
 ### Test Examples
 
-**Example: Directory Structure Test**
+### Example: Directory Structure Test
 
 ```python
 def test_papers_directory_has_required_structure(repo_root: Path) -> None:
@@ -340,9 +340,9 @@ def test_papers_directory_has_required_structure(repo_root: Path) -> None:
     # Assert permissions
     assert os.access(papers_dir, os.R_OK | os.W_OK | os.X_OK), \
         "papers/ must have read, write, execute permissions"
-```
+```text
 
-**Example: Template Completeness Test**
+### Example: Template Completeness Test
 
 ```python
 def test_template_has_all_required_directories(
@@ -353,9 +353,9 @@ def test_template_has_all_required_directories(
     errors = validate_directory_structure(papers_template_dir, expected_template_structure)
 
     assert not errors, f"Template structure validation failed:\n" + "\n".join(errors)
-```
+```text
 
-**Example: API Contract Test**
+### Example: API Contract Test
 
 ```python
 def test_shared_module_interface_documented() -> None:
@@ -370,17 +370,17 @@ def test_shared_module_interface_documented() -> None:
         "Module.forward() method must be documented"
     assert "fn parameters(self) -> List[Parameter]:" in content, \
         "Module.parameters() method must be documented"
-```
+```text
 
 ### Coverage Tracking
 
-**Coverage Requirements**:
+### Coverage Requirements
 
 - Line coverage: 100% for validation code
 - Branch coverage: 100% for conditional logic
 - Path coverage: All directory paths tested
 
-**Coverage Report**:
+### Coverage Report
 
 ```bash
 # Generate coverage report
@@ -388,7 +388,7 @@ pytest tests/foundation/ --cov=tests/foundation --cov-report=html
 
 # View in browser
 open htmlcov/index.html
-```
+```text
 
 ## Testing Checklist
 
@@ -411,8 +411,8 @@ Before marking this issue complete:
 After this TEST phase completes:
 
 1. **Implementation Phase** (Issue #84): Create actual directories and files
-2. **Package Phase** (Issue #85): Create distributable packages
-3. **Cleanup Phase**: Refine based on test findings
+1. **Package Phase** (Issue #85): Create distributable packages
+1. **Cleanup Phase**: Refine based on test findings
 
 The tests created here will serve as the validation suite for the implementation phase, ensuring all requirements are met.
 
@@ -420,21 +420,21 @@ The tests created here will serve as the validation suite for the implementation
 
 ### Design Decisions
 
-**Why test against real repository structure?**
+### Why test against real repository structure?
 
 - Ensures tests reflect actual state
 - Catches real-world issues
 - No mock drift from reality
 - Simpler test setup
 
-**Why 100% coverage target?**
+### Why 100% coverage target?
 
 - Directory structure is foundational
 - Small, focused scope makes 100% achievable
 - High confidence needed for critical infrastructure
 - Clear pass/fail criteria
 
-**Why separate test files?**
+### Why separate test files?
 
 - Clear organization by concern
 - Easier to run specific test categories
@@ -445,19 +445,19 @@ The tests created here will serve as the validation suite for the implementation
 
 1. **Test Against Reality**: Tests validate actual repository structure, not mocks. This ensures tests reflect production reality and catch real issues.
 
-2. **Template Documentation Inconsistency**: Found minor inconsistency in template README (uses "script/" singular vs actual "scripts/" directory). Test adjusted to be lenient.
+1. **Template Documentation Inconsistency**: Found minor inconsistency in template README (uses "script/" singular vs actual "scripts/" directory). Test adjusted to be lenient.
 
-3. **Comprehensive Fixtures**: Enhanced `conftest.py` with additional fixtures for papers, shared, and template directories. This makes tests cleaner and more maintainable.
+1. **Comprehensive Fixtures**: Enhanced `conftest.py` with additional fixtures for papers, shared, and template directories. This makes tests cleaner and more maintainable.
 
-4. **100% Test Pass Rate**: All 69 tests pass on first run, demonstrating the value of:
+1. **100% Test Pass Rate**: All 69 tests pass on first run, demonstrating the value of:
    - Clear planning documentation (Issue #82)
    - Well-defined directory structure
    - Consistent naming conventions
    - Comprehensive fixtures
 
-5. **Fast Test Execution**: All tests complete in < 1 second, making them suitable for frequent CI/CD runs without slowing down development.
+1. **Fast Test Execution**: All tests complete in < 1 second, making them suitable for frequent CI/CD runs without slowing down development.
 
-6. **Test Organization**: Separating tests into logical files (structure, template, contracts, integration) makes it easy to:
+1. **Test Organization**: Separating tests into logical files (structure, template, contracts, integration) makes it easy to:
    - Run specific test categories
    - Understand what's being tested
    - Maintain tests as requirements evolve

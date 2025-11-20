@@ -30,8 +30,8 @@ Configure pre-commit hooks for linting Mojo code, including static analysis, typ
 ## Steps
 
 1. Mojo Linter
-2. Type Checker
-3. Style Checker
+1. Type Checker
+1. Style Checker
 
 ## Success Criteria
 

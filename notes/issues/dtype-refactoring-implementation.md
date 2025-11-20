@@ -13,7 +13,8 @@
 
 **File Created:** `shared/core/dtype_dispatch.mojo` (410 lines)
 
-**Exported Functions:**
+### Exported Functions:
+
 - `dispatch_unary` - Runtime dispatch for unary operations (all dtypes)
 - `dispatch_binary` - Runtime dispatch for binary operations (all dtypes)
 - `dispatch_scalar` - Runtime dispatch for tensor-scalar operations (all dtypes)
@@ -21,13 +22,14 @@
 - `dispatch_float_binary` - Runtime dispatch for float-only binary operations
 - `dispatch_float_scalar` - Runtime dispatch for float-only scalar operations
 
-**Key Features:**
+### Key Features:
+
 - Compile-time specialization using `@parameter`
 - Zero runtime overhead compared to manual dtype branching
 - Support for 11 dtypes: float16, float32, float64, int8, int16, int32, int64, uint8, uint16, uint32, uint64
 - Separate dispatchers for all-dtype and float-only operations
 
-**Design Pattern:**
+### Design Pattern:
 
 ```mojo
 # Define the operation
@@ -36,13 +38,14 @@ fn my_op[T: DType](x: Scalar[T]) -> Scalar[T]:
 
 # Use the dispatcher (66 lines → 1 line)
 return dispatch_unary[my_op](tensor)
-```
+```text
 
 ### 2. Module Integration ✅
 
 **Modified:** `shared/core/__init__.mojo`
 
 Added imports and exports for dtype_dispatch module:
+
 - Imported 6 dispatch functions
 - Added to `__all__` public API
 - Updated module documentation
@@ -68,7 +71,7 @@ Demonstrates refactoring for 3 activation functions with before/after comparison
 
 ### Example 1: ReLU Activation
 
-**BEFORE (66 lines with 11 dtype branches):**
+### BEFORE (66 lines with 11 dtype branches):
 
 ```mojo
 fn relu(tensor: ExTensor) raises -> ExTensor:
@@ -87,9 +90,9 @@ fn relu(tensor: ExTensor) raises -> ExTensor:
         raise Error("relu: unsupported dtype")
 
     return result
-```
+```text
 
-**AFTER (8 lines with dispatch helper):**
+### AFTER (8 lines with dispatch helper):
 
 ```mojo
 fn relu_op[T: DType](x: Scalar[T]) -> Scalar[T]:
@@ -97,7 +100,7 @@ fn relu_op[T: DType](x: Scalar[T]) -> Scalar[T]:
 
 fn relu(tensor: ExTensor) raises -> ExTensor:
     return dispatch_unary[relu_op](tensor)
-```
+```text
 
 **Code Reduction:** 66 → 8 lines (88% reduction)
 
@@ -123,9 +126,9 @@ fn sigmoid(tensor: ExTensor) raises -> ExTensor:
     # ... repeat for float16 and float64 ...
 
     return result
-```
+```text
 
-**AFTER (12 lines with logic written once):**
+### AFTER (12 lines with logic written once):
 
 ```mojo
 fn sigmoid_op[T: DType](x: Scalar[T]) -> Scalar[T]:
@@ -138,7 +141,7 @@ fn sigmoid_op[T: DType](x: Scalar[T]) -> Scalar[T]:
 
 fn sigmoid(tensor: ExTensor) raises -> ExTensor:
     return dispatch_float_unary[sigmoid_op](tensor)
-```
+```text
 
 **Code Reduction:** 47 → 12 lines (74% reduction)
 
@@ -150,7 +153,7 @@ fn sigmoid(tensor: ExTensor) raises -> ExTensor:
 
 **Target File:** `shared/core/activation.mojo`
 
-**Functions to Refactor (10 total):**
+### Functions to Refactor (10 total):
 
 | Function      | Current Lines | Estimated After | Reduction |
 |---------------|--------------|-----------------|-----------|
@@ -173,6 +176,7 @@ fn sigmoid(tensor: ExTensor) raises -> ExTensor:
 **Target File:** `shared/core/elementwise.mojo`
 
 **Functions to Refactor:** 26 operations including:
+
 - abs, sign, exp, log, sqrt, sin, cos
 - ceil, floor, round, trunc
 - logical operations (and, or, not, xor)
@@ -185,6 +189,7 @@ fn sigmoid(tensor: ExTensor) raises -> ExTensor:
 **Target File:** `shared/core/arithmetic.mojo`
 
 **Functions to Refactor:** 12 operations including:
+
 - add, subtract, multiply, divide
 - floor_divide, modulo, power
 - Backward passes for all operations
@@ -198,38 +203,45 @@ fn sigmoid(tensor: ExTensor) raises -> ExTensor:
 ### 1. Code Quality
 
 ✅ **Single Source of Truth**
+
 - Operation logic written once, not repeated 3-11 times
 - Easier to fix bugs (one place instead of multiple)
 - Easier to add new dtypes (one runtime dispatch branch)
 
 ✅ **Improved Maintainability**
+
 - Less code to read and understand
 - Clear separation of operation logic (op function) and dtype dispatch
 - Self-documenting pattern (operation name + _op suffix)
 
 ✅ **Type Safety**
+
 - Compile-time dtype specialization ensures type correctness
 - No risk of type mismatches in manual branching
 
 ### 2. Performance
 
 ✅ **Zero Overhead**
+
 - Dispatch uses `@parameter` for compile-time specialization
 - Final generated code is identical to manual branching
 - No runtime performance regression
 
 ✅ **Potential Speedups**
+
 - Compiler can better optimize generic operations
 - Easier to add SIMD vectorization later (one place to optimize)
 
 ### 3. Developer Experience
 
 ✅ **Faster Development**
+
 - New operations require 8-15 lines instead of 40-70 lines
 - Less copy-paste-modify (reduces bugs)
 - Clear pattern to follow
 
 ✅ **Easier Testing**
+
 - Single operation function can be tested in isolation
 - Dispatcher tested once, applies to all operations
 
@@ -240,26 +252,26 @@ fn sigmoid(tensor: ExTensor) raises -> ExTensor:
 ### Immediate (Current Session)
 
 1. ✅ Create dtype dispatch helper module
-2. ✅ Update __init__.mojo with exports
-3. ✅ Create proof-of-concept demonstration
-4. ⏳ Refactor activation.mojo (starting with relu)
-5. ⏳ Run existing test suite to verify no regressions
-6. ⏳ Measure actual code reduction achieved
-7. ⏳ Commit changes with detailed message
+1. ✅ Update __init__.mojo with exports
+1. ✅ Create proof-of-concept demonstration
+1. ⏳ Refactor activation.mojo (starting with relu)
+1. ⏳ Run existing test suite to verify no regressions
+1. ⏳ Measure actual code reduction achieved
+1. ⏳ Commit changes with detailed message
 
 ### Short-term (Next Session)
 
 1. Complete activation.mojo refactoring (all 10 functions)
-2. Refactor backward pass functions similarly
-3. Apply pattern to elementwise.mojo
-4. Apply pattern to arithmetic.mojo
+1. Refactor backward pass functions similarly
+1. Apply pattern to elementwise.mojo
+1. Apply pattern to arithmetic.mojo
 
 ### Long-term (Future Work)
 
 1. Add inline hints (`@always_inline`) to operation functions
-2. Investigate SIMD vectorization opportunities
-3. Document refactoring pattern in architecture guide
-4. Create template for new operations
+1. Investigate SIMD vectorization opportunities
+1. Document refactoring pattern in architecture guide
+1. Create template for new operations
 
 ---
 
@@ -272,12 +284,12 @@ fn sigmoid(tensor: ExTensor) raises -> ExTensor:
    - Comprehensive dtype support (11 types)
    - Zero-overhead compile-time specialization
 
-2. `shared/core/activation_refactored_demo.mojo` (290 lines)
+1. `shared/core/activation_refactored_demo.mojo` (290 lines)
    - Before/after comparison for 3 functions
    - Demonstrates 80% code reduction
    - Serves as reference for refactoring pattern
 
-3. `notes/issues/dtype-refactoring-implementation.md` (this file)
+1. `notes/issues/dtype-refactoring-implementation.md` (this file)
    - Complete implementation documentation
    - Progress tracking and metrics
    - Examples and benefits analysis
@@ -310,13 +322,15 @@ Before committing, verify:
 
 **Target:** 75-80% code reduction in refactored modules
 
-**Achieved (Proof-of-Concept):**
+### Achieved (Proof-of-Concept):
+
 - ReLU: 88% reduction (66 → 8 lines)
 - Tanh: 76% reduction (33 → 8 lines)
 - Sigmoid: 74% reduction (47 → 12 lines)
 - **Average: 79.7% ✅ Exceeds target**
 
-**Estimated Total Impact (All Modules):**
+### Estimated Total Impact (All Modules):
+
 - activation.mojo: ~646 → ~160 lines (486 lines removed)
 - elementwise.mojo: ~800 → ~200 lines (600 lines removed)
 - arithmetic.mojo: ~400 → ~100 lines (300 lines removed)

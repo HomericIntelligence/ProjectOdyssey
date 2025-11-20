@@ -59,9 +59,9 @@ Design tensor operations module.
 Architecture Design Agent:
 
 1. Analyzes requirements
-2. Breaks into components: Tensor, Operations, SIMD Utils
-3. Defines interfaces between components
-4. Delegates implementation to specialists
+1. Breaks into components: Tensor, Operations, SIMD Utils
+1. Defines interfaces between components
+1. Delegates implementation to specialists
 
 ### Example 2: Interface Design
 
@@ -70,9 +70,9 @@ Create API for data loading module.
 Architecture Design Agent:
 
 1. Designs interface contracts
-2. Documents function signatures
-3. Coordinates with Integration Design Agent
-4. Delegates to specialists
+1. Documents function signatures
+1. Coordinates with Integration Design Agent
+1. Delegates to specialists
 
 ## Constraints
 

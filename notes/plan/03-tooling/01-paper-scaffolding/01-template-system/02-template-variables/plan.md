@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Define standard variables (title, author, date, etc.)
-2. Create validation rules for variable values
-3. Set up default values for optional variables
-4. Document variable usage and examples
+1. Create validation rules for variable values
+1. Set up default values for optional variables
+1. Document variable usage and examples
 
 ## Success Criteria
 

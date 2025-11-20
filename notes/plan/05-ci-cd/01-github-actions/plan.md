@@ -31,9 +31,9 @@ Set up GitHub Actions workflows to automate testing, validation, benchmarking, a
 ## Steps
 
 1. CI Workflow
-2. Paper Validation Workflow
-3. Benchmark Workflow
-4. Security Scan Workflow
+1. Paper Validation Workflow
+1. Benchmark Workflow
+1. Security Scan Workflow
 
 ## Success Criteria
 

@@ -9,9 +9,9 @@
 ### Key Findings
 
 1. **All 40 [Plan] issues are CLOSED** ✅ - Planning phase complete for all components
-2. **160 issues remain OPEN** (Test, Impl, Package, Cleanup phases)
-3. **MASSIVE DUPLICATION** - Many components target the SAME directories/files
-4. **Most work is ALREADY DONE** - Repository has most directories, files, and implementations
+1. **160 issues remain OPEN** (Test, Impl, Package, Cleanup phases)
+1. **MASSIVE DUPLICATION** - Many components target the SAME directories/files
+1. **Most work is ALREADY DONE** - Repository has most directories, files, and implementations
 
 ### Status Breakdown
 
@@ -175,6 +175,7 @@
 The issue structure creates multiple levels of parent-child relationships, resulting in **significant duplication**:
 
 #### Level 1: Individual Components (Most Granular)
+
 - #561-565: Benchmarks directory
 - #566-570: Docs directory
 - #571-575: Agents directory
@@ -183,6 +184,7 @@ The issue structure creates multiple levels of parent-child relationships, resul
 - #586-590: Skills directory
 
 #### Level 2: Component Groups
+
 - #591-595: **Supporting Directories** (covers #561-590)
 - #601-615: Magic TOML sub-tasks
 - #616-620: **Magic TOML** (covers #601-615)
@@ -192,6 +194,7 @@ The issue structure creates multiple levels of parent-child relationships, resul
 - #656-660: **Git Config** (covers #641-655)
 
 #### Level 3: Section Parents
+
 - #596-600: **Directory Structure** (covers #516-595)
 - #661-665: **Configuration Files** (covers #601-660)
 - #666-680: README sections
@@ -203,6 +206,7 @@ The issue structure creates multiple levels of parent-child relationships, resul
 - #721-725: **Initial Documentation** (covers #666-720)
 
 #### Level 4: Top-Level Parent
+
 - #726-730: **Foundation** (covers #561-725)
 
 ### Duplication Summary
@@ -262,17 +266,20 @@ All these files already exist:
 
 ### Missing/Incomplete Items ⚠️
 
-**Git LFS Setup**:
+### Git LFS Setup
+
 - [ ] Verify Git LFS is configured (#651-655)
 - [ ] Check if large files are tracked with LFS
 
 **Directory Generator Tool** (NEW WORK):
+
 - [ ] Create directory generator CLI (#744-763)
 - [ ] Implement structure creation logic
 - [ ] Implement file generation from templates
 - [ ] Implement validation logic
 
 **Template System** (Duplicate with #503-509):
+
 - [ ] Complete template rendering implementation (#734-738)
 - [ ] Already tracked in #503-509 analysis
 
@@ -286,9 +293,10 @@ All these files already exist:
 
 **Rationale**: Working on 200 separate issues when 150 are duplicates wastes time and creates confusion.
 
-**Suggested Closures**:
+### Suggested Closures
 
 Close these ranges as duplicates:
+
 - #561-590 → Close, work on #591-595 only
 - #601-615 → Close, work on #616-620 only
 - #621-635 → Close, work on #636-640 only
@@ -301,29 +309,32 @@ Close these ranges as duplicates:
 
 ### 2. Focus on Parent Issues Only (MEDIUM PRIORITY)
 
-**Key Parent Issues to Work On**:
+### Key Parent Issues to Work On
 
 1. **#596-600: Directory Structure** - Complete Test, Impl, Package, Cleanup for ALL directories
-2. **#661-665: Configuration Files** - Complete Test, Impl, Package, Cleanup for ALL config files
-3. **#721-725: Initial Documentation** - Complete Test, Impl, Package, Cleanup for ALL docs
-4. **#726-730: Foundation** - Complete Test, Impl, Package, Cleanup for ENTIRE foundation
-5. **#759-763: Directory Generator** - NEW tooling to implement
+1. **#661-665: Configuration Files** - Complete Test, Impl, Package, Cleanup for ALL config files
+1. **#721-725: Initial Documentation** - Complete Test, Impl, Package, Cleanup for ALL docs
+1. **#726-730: Foundation** - Complete Test, Impl, Package, Cleanup for ENTIRE foundation
+1. **#759-763: Directory Generator** - NEW tooling to implement
 
 ### 3. Actual Work Needed (LOW - Most Already Done!)
 
 Given that directories, files, and documentation already exist:
 
-**High Priority Work**:
+### High Priority Work
+
 - [ ] Implement Directory Generator tool (#744-763) - This is NEW functionality
 - [ ] Verify Git LFS setup (#651-655)
 - [ ] Run validation tests to ensure everything meets success criteria
 
-**Medium Priority Work**:
+### Medium Priority Work
+
 - [ ] Create comprehensive tests for existing implementations (Test phase issues)
 - [ ] Package existing components (Package phase issues)
 - [ ] Cleanup and finalize documentation (Cleanup phase issues)
 
-**Low Priority Work**:
+### Low Priority Work
+
 - [ ] The "Impl" phase issues are mostly complete since implementations exist
 
 ---
@@ -337,23 +348,23 @@ Given that directories, files, and documentation already exist:
    - Keep only parent issues open
    - Add comments explaining duplication
 
-2. **Update Issue Documentation**:
+1. **Update Issue Documentation**:
    - Mark existing implementations as complete
    - Document what actually needs work
    - Update success criteria based on current state
 
 ### Week 2-3: Directory Generator (NEW WORK)
 
-**Issues #744-763: Directory Generator**
+### Issues #744-763: Directory Generator
 
 This is the ONLY truly new functionality in the range:
 
 1. **Design**: CLI tool to generate paper directories from templates
-2. **Implementation**:
+1. **Implementation**:
    - Create structure: Generate directory tree
    - Generate files: Populate from templates with variable substitution
    - Validate output: Ensure generated structure is correct
-3. **Integration**: Package as a tool in `tools/` directory
+1. **Integration**: Package as a tool in `tools/` directory
 
 **Estimated Effort**: 2 weeks
 
@@ -364,7 +375,7 @@ This is the ONLY truly new functionality in the range:
    - Verify all config files are valid
    - Verify all documentation is complete
 
-2. **Create Missing Tests**:
+1. **Create Missing Tests**:
    - Test directory structure validation
    - Test configuration file parsing
    - Test documentation completeness
@@ -375,7 +386,7 @@ This is the ONLY truly new functionality in the range:
    - Create distribution packages for reusable components
    - Document installation procedures
 
-2. **Cleanup Phase**:
+1. **Cleanup Phase**:
    - Refactor any technical debt
    - Finalize all documentation
    - Close remaining issues
@@ -384,20 +395,20 @@ This is the ONLY truly new functionality in the range:
 
 ## Summary
 
-**Key Insights**:
+### Key Insights
 
 1. ✅ **Planning Complete**: All 40 Plan issues are closed
-2. ⚠️ **Massive Duplication**: ~75% of issues are duplicates due to hierarchical structure
-3. ✅ **Most Work Done**: Repository already has directories, files, and documentation
-4. ⚠️ **One New Feature**: Directory Generator (#744-763) is the only truly new functionality
+1. ⚠️ **Massive Duplication**: ~75% of issues are duplicates due to hierarchical structure
+1. ✅ **Most Work Done**: Repository already has directories, files, and documentation
+1. ⚠️ **One New Feature**: Directory Generator (#744-763) is the only truly new functionality
 
-**Recommended Approach**:
+### Recommended Approach
 
 1. **Close ~150 duplicate issues** immediately
-2. **Focus on 5-10 parent issues** instead of 200
-3. **Implement Directory Generator** as the primary new work
-4. **Run validation tests** to verify existing implementations
-5. **Complete packaging and cleanup** phases
+1. **Focus on 5-10 parent issues** instead of 200
+1. **Implement Directory Generator** as the primary new work
+1. **Run validation tests** to verify existing implementations
+1. **Complete packaging and cleanup** phases
 
 **Timeline**: With focused effort, all remaining work can be completed in **4-5 weeks**.
 

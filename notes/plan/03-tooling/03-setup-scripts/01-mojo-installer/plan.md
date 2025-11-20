@@ -30,8 +30,8 @@ Build an automated installer for the Mojo compiler that handles platform detecti
 ## Steps
 
 1. Detect platform and architecture
-2. Download appropriate Mojo version
-3. Configure PATH and environment
+1. Download appropriate Mojo version
+1. Configure PATH and environment
 
 ## Success Criteria
 

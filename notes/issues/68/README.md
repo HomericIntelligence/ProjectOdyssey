@@ -42,7 +42,7 @@ tests/tooling/tools/
 ├── test_category_organization.py    # Category structure tests
 └── fixtures/
     └── __init__.py                  # Test data fixtures
-```
+```text
 
 ### Test Categories
 
@@ -64,7 +64,7 @@ tests/tooling/tools/
 - `test_category_directory_permissions` - Verify category dir permissions
 - `test_tools_readme_exists` - Verify main README.md present
 
-**Edge Cases**:
+### Edge Cases
 
 - Directory already exists (idempotent)
 - Parent directories missing (should not occur in real repo)
@@ -92,7 +92,8 @@ tests/tooling/tools/
 - `test_category_readme_has_coming_soon` - Documents future plans
 - `test_adr_001_reference` - Links to ADR-001 for language selection
 
-**Documentation Requirements**:
+### Documentation Requirements
+
 Each README.md must contain:
 
 - Clear purpose statement (what this tool/category does)
@@ -121,7 +122,7 @@ Each README.md must contain:
 - `test_category_supports_subdirectories` - Can create tool subdirectories
 - `test_language_strategy_alignment` - Category aligns with ADR-001
 
-**Edge Cases**:
+### Edge Cases
 
 - Category with no tools yet (expected state)
 - Category with placeholder README only
@@ -133,7 +134,7 @@ Each README.md must contain:
 
 **Purpose**: Provide reusable fixtures for future tool development tests.
 
-**Fixtures to Provide**:
+### Fixtures to Provide
 
 - `tools_root` - Path to tools/ directory
 - `category_paths` - Dictionary of category directory paths
@@ -141,13 +142,13 @@ Each README.md must contain:
 - `sample_mojo_template` - Example Mojo template file
 - `sample_python_tool` - Example Python tool with justification header
 
-**Usage Pattern**:
+### Usage Pattern
 
 ```python
 def test_tool_creation(tools_root, mock_tool_structure):
     """Test creating a new tool in a category."""
     # Tools can use fixtures for testing scaffolding
-```
+```text
 
 ### Test Prioritization
 
@@ -156,19 +157,19 @@ Following Test Specialist guidelines, focusing on **quality over quantity**:
 **MUST Write** (Critical Infrastructure):
 
 1. Directory structure exists and is accessible
-2. All 4 categories present with correct names
-3. Main README.md exists and has purpose
-4. Category READMEs exist
-5. All tests run in CI/CD pipeline
+1. All 4 categories present with correct names
+1. Main README.md exists and has purpose
+1. Category READMEs exist
+1. All tests run in CI/CD pipeline
 
 **SHOULD Write** (Important Validation):
 
 1. Documentation completeness checks
-2. Language strategy documented
-3. Contribution guidelines present
-4. Fixtures for future tool development
+1. Language strategy documented
+1. Contribution guidelines present
+1. Fixtures for future tool development
 
-**Skip These Tests**:
+### Skip These Tests
 
 - Implementation details of tools (no tools exist yet)
 - Performance tests (no code to benchmark)
@@ -179,20 +180,20 @@ Following Test Specialist guidelines, focusing on **quality over quantity**:
 
 Following guidelines for **real implementations over mocks**:
 
-**Use Real Filesystem**:
+### Use Real Filesystem
 
 - ✅ Test against actual repository structure
 - ✅ Use pathlib.Path for real file operations
 - ✅ Use pytest tmp_path for isolated test environments when needed
 
-**Minimal Test Doubles**:
+### Minimal Test Doubles
 
 - ✅ Use pytest fixtures for common paths
 - ✅ Create simple helper functions for validation
 - ❌ Do NOT create elaborate mocking frameworks
 - ❌ Do NOT mock filesystem operations (use tmp_path)
 
-**Example Approach**:
+### Example Approach
 
 ```python
 import pytest
@@ -207,28 +208,28 @@ def test_tools_exists(tools_root: Path) -> None:
     """Test tools/ directory exists."""
     assert tools_root.exists()
     assert tools_root.is_dir()
-```
+```text
 
 ### CI/CD Integration
 
-**Integration Requirements**:
+### Integration Requirements
 
 1. **Tests run in unit-tests.yml workflow**
    - Tests execute on every PR and push to main
    - Fast execution (< 5 seconds for all infrastructure tests)
    - Deterministic results (no flaky tests)
 
-2. **Test Discovery**:
+1. **Test Discovery**:
    - Tests in `tests/tooling/tools/` auto-discovered by pytest
    - Follow naming convention: `test_*.py`
    - No manual test registration required
 
-3. **Coverage Reporting**:
+1. **Coverage Reporting**:
    - Tests included in Python coverage report
    - Target: 100% coverage for infrastructure validation
    - Coverage enforced by CI (threshold: 80% overall)
 
-4. **Workflow Integration**:
+1. **Workflow Integration**:
 
    ```yaml
    # Already integrated via unit-tests.yml
@@ -295,7 +296,7 @@ pytest tests/tooling/tools/test_directory_structure.py -v
 
 # Run specific test
 pytest tests/tooling/tools/test_directory_structure.py::test_tools_directory_exists -v
-```
+```text
 
 ### CI/CD Testing
 
@@ -312,34 +313,34 @@ Workflow: `.github/workflows/unit-tests.yml`
 ### Expected Edge Cases
 
 1. **Tools directory already exists**: Tests should pass (idempotent)
-2. **Category has no tools yet**: Tests should pass (expected state)
-3. **README has minimal content**: Tests check structure, not content depth
+1. **Category has no tools yet**: Tests should pass (expected state)
+1. **README has minimal content**: Tests check structure, not content depth
 
 ### Unexpected Edge Cases
 
 1. **Tools directory missing**: Test should skip gracefully with clear message
-2. **Category directory missing**: Test should fail with clear error
-3. **README missing**: Test should fail and indicate which README
+1. **Category directory missing**: Test should fail with clear error
+1. **README missing**: Test should fail and indicate which README
 
 ### Error Messages
 
 Tests provide clear, actionable error messages:
 
-**Good Error**:
+### Good Error
 
-```
+```text
 AssertionError: tools/paper-scaffold/README.md should exist
 Expected: /home/user/ml-odyssey/tools/paper-scaffold/README.md
 Actual: File not found
 
 Fix: Create README.md in paper-scaffold directory
-```
+```text
 
-**Bad Error**:
+### Bad Error
 
-```
+```text
 AssertionError: False is not True
-```
+```text
 
 ## Test Results Documentation
 
@@ -372,7 +373,7 @@ tests/tooling/tools/test_documentation.py::test_main_readme_has_purpose PASSED
 tests/tooling/tools/test_category_organization.py::test_paper_scaffold_structure PASSED
 
 ========================= 15 passed in 1.23s =========================
-```
+```text
 
 ## References
 
@@ -389,32 +390,32 @@ tests/tooling/tools/test_category_organization.py::test_paper_scaffold_structure
 
 1. **Focus on Infrastructure**: Tests validate directory structure and documentation, not tool implementation (no tools exist yet)
 
-2. **Real Filesystem Over Mocks**: Use actual repository structure for tests, ensuring validation matches production
+1. **Real Filesystem Over Mocks**: Use actual repository structure for tests, ensuring validation matches production
 
-3. **Quality Over Quantity**: 15 critical tests that validate infrastructure completeness, not 100 tests for 100% coverage
+1. **Quality Over Quantity**: 15 critical tests that validate infrastructure completeness, not 100 tests for 100% coverage
 
-4. **Fast and Deterministic**: All tests complete in < 5 seconds with consistent results
+1. **Fast and Deterministic**: All tests complete in < 5 seconds with consistent results
 
-5. **Clear Error Messages**: Every assertion provides actionable feedback for failures
+1. **Clear Error Messages**: Every assertion provides actionable feedback for failures
 
 ### Lessons Learned
 
 1. **Test Discovery Works Seamlessly**: Pytest automatically discovered all 42 tests in the `tests/tooling/tools/` directory without any manual configuration.
 
-2. **Fast Test Execution**: All 42 tests complete in ~0.13 seconds, well under the 5-second target.
+1. **Fast Test Execution**: All 42 tests complete in ~0.13 seconds, well under the 5-second target.
 
-3. **Real Filesystem Testing**: Using actual repository structure (not mocks) made tests more reliable and caught real-world issues like the 'setup' directory.
+1. **Real Filesystem Testing**: Using actual repository structure (not mocks) made tests more reliable and caught real-world issues like the 'setup' directory.
 
-4. **Parallel Development**: The test suite successfully validated infrastructure created during parallel implementation phase (#69), demonstrating effective TDD coordination.
+1. **Parallel Development**: The test suite successfully validated infrastructure created during parallel implementation phase (#69), demonstrating effective TDD coordination.
 
-5. **Clear Error Messages**: Tests provide actionable error messages that guide developers to fix issues quickly.
+1. **Clear Error Messages**: Tests provide actionable error messages that guide developers to fix issues quickly.
 
 ### Future Enhancements
 
 1. **Tool Implementation Tests**: When tools are added, create specific test suites for each tool
-2. **Template Validation**: Test template files for paper-scaffold when created
-3. **Benchmarking Framework**: Add performance tests when benchmarking tools exist
-4. **Integration Tests**: Test tool interactions when multiple tools exist
+1. **Template Validation**: Test template files for paper-scaffold when created
+1. **Benchmarking Framework**: Add performance tests when benchmarking tools exist
+1. **Integration Tests**: Test tool interactions when multiple tools exist
 
 ---
 
@@ -426,20 +427,20 @@ tests/tooling/tools/test_category_organization.py::test_paper_scaffold_structure
 
 ## Test Results Summary
 
-**Test Execution**:
+### Test Execution
 
 - Total Tests: 42
 - Passed: 42 (100%)
 - Failed: 0
 - Execution Time: 0.13 seconds
 
-**Test Breakdown**:
+### Test Breakdown
 
 - Directory Structure Tests: 11 tests (all passed)
 - Documentation Tests: 16 tests (all passed)
 - Category Organization Tests: 15 tests (all passed)
 
-**Success Metrics**:
+### Success Metrics
 
 - All tests pass on first run after infrastructure creation
 - Execution time well under 5-second target (0.13s)
@@ -447,7 +448,7 @@ tests/tooling/tools/test_category_organization.py::test_paper_scaffold_structure
 - Clear, actionable error messages
 - Tests integrated into CI/CD pipeline via unit-tests.yml
 
-**Infrastructure Validated**:
+### Infrastructure Validated
 
 - tools/ directory exists at repository root with correct permissions
 - All 4 category directories present and accessible (paper-scaffold, test-utils, benchmarking, codegen)

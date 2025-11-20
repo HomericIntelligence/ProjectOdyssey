@@ -28,10 +28,10 @@ None (leaf node)
 ## Steps
 
 1. Copy selected template to CODE_OF_CONDUCT.md
-2. Add project-specific contact information
-3. Customize enforcement section with appropriate contacts
-4. Review document for completeness and accuracy
-5. Ensure document maintains template integrity
+1. Add project-specific contact information
+1. Customize enforcement section with appropriate contacts
+1. Review document for completeness and accuracy
+1. Ensure document maintains template integrity
 
 ## Success Criteria
 

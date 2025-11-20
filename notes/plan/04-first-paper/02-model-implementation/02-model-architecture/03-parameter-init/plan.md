@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Initialize weights appropriately
-2. Initialize biases
-3. Use suitable initialization strategy
+1. Initialize biases
+1. Use suitable initialization strategy
 
 ## Success Criteria
 

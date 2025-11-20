@@ -22,14 +22,14 @@ Verify complete agent system coverage.
 # Check all levels have agents
 ./scripts/check_level_coverage.sh
 
-# Expected:
+# Expected
 # L0: Chief Architect
 # L1: 6 orchestrators
 # L2: Design agents per section
 # L3: Specialists per module
 # L4: Engineers
 # L5: Junior engineers
-```
+```text
 
 ### 2. Phase Coverage
 
@@ -37,13 +37,13 @@ Verify complete agent system coverage.
 # Check phase coverage
 ./scripts/check_phase_coverage.sh
 
-# Expected phases:
+# Expected phases
 # - Plan
 # - Test
 # - Implementation
 # - Package
 # - Cleanup
-```
+```text
 
 ### 3. Section Coverage
 
@@ -51,14 +51,14 @@ Verify complete agent system coverage.
 # Check section coverage
 ./scripts/check_section_coverage.sh
 
-# Expected sections:
+# Expected sections
 # - Foundation
 # - Shared Library
 # - Tooling
 # - First Paper
 # - CI/CD
 # - Agentic Workflows
-```
+```text
 
 ## Reports
 
@@ -85,6 +85,6 @@ Sections:
   Foundation: ✅ Orchestrator + agents
   Shared Library: ✅ Orchestrator + agents
   ...
-```
+```text
 
 See `agent-validate-config` for validation.

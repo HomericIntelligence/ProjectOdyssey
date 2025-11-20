@@ -37,7 +37,7 @@ comprehensive team documentation for effective skill adoption.
 
 (Add notes here during implementation)
 
-**Workflow**:
+### Workflow
 
 - Requires: #510 (Plan) complete ✅
 - Can run in parallel with: #511 (Test), #512 (Implementation)

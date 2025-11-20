@@ -18,11 +18,12 @@ Design a step decay learning rate scheduler that reduces the learning rate by a 
 
 The step decay scheduler implements the following formula:
 
-```
+```text
 lr(epoch) = base_lr × gamma^⌊epoch / step_size⌋
-```
+```text
 
 Where:
+
 - `base_lr`: Initial learning rate (e.g., 0.1)
 - `gamma`: Multiplicative decay factor (e.g., 0.1 means reduce to 10%)
 - `step_size`: Number of epochs between each decay (e.g., 30)
@@ -31,6 +32,7 @@ Where:
 ### Example Behavior
 
 With `base_lr=0.1`, `step_size=10`, `gamma=0.1`:
+
 - Epochs 0-9: lr = 0.1
 - Epochs 10-19: lr = 0.01 (0.1 × 0.1¹)
 - Epochs 20-29: lr = 0.001 (0.1 × 0.1²)
@@ -55,7 +57,7 @@ struct StepLR(LRScheduler):
     var base_lr: Float64
     var step_size: Int
     var gamma: Float64
-```
+```text
 
 #### Constructor
 
@@ -78,7 +80,7 @@ fn __init__(
         Error if step_size <= 0
         Error if gamma <= 0
     """
-```
+```text
 
 #### Core Method
 
@@ -96,7 +98,7 @@ fn get_lr(self, epoch: Int, batch: Int = 0) -> Float64:
     Formula:
         lr = base_lr × gamma^⌊epoch / step_size⌋
     """
-```
+```text
 
 ### Interface Compliance
 
@@ -109,7 +111,7 @@ trait LRScheduler:
     fn get_lr(self, epoch: Int, batch: Int = 0) -> Float64:
         """Return learning rate for current epoch/batch."""
         ...
-```
+```text
 
 ### Configuration Parameters
 
@@ -119,17 +121,18 @@ trait LRScheduler:
 | `step_size` | Int | Required | [1, ∞) | Epochs between each decay |
 | `gamma` | Float64 | Required | (0, 1] | Multiplicative decay factor |
 
-**Common Values**:
+### Common Values
+
 - `step_size`: 30, 50, 100 (depends on total epochs)
 - `gamma`: 0.1, 0.5, 0.9 (0.1 is most common)
 
 ### Edge Cases
 
 1. **step_size = 0**: Should raise error (undefined behavior)
-2. **gamma = 1.0**: Valid but no decay (LR stays constant)
-3. **gamma = 0.0**: Edge case - LR becomes 0 after first step
-4. **Very large epochs**: LR may underflow to 0 (acceptable)
-5. **negative epoch**: Undefined behavior (should validate)
+1. **gamma = 1.0**: Valid but no decay (LR stays constant)
+1. **gamma = 0.0**: Edge case - LR becomes 0 after first step
+1. **Very large epochs**: LR may underflow to 0 (acceptable)
+1. **negative epoch**: Undefined behavior (should validate)
 
 ### Integration Points
 
@@ -146,7 +149,7 @@ var scheduler = StepLR(base_lr=0.1, step_size=30, gamma=0.1)
 for epoch in range(100):
     var new_lr = scheduler.get_lr(epoch)
     optimizer.set_lr(new_lr)  # Optimizer must implement this
-```
+```text
 
 #### With Training Loop
 
@@ -161,7 +164,7 @@ fn train(model, data, scheduler):
         for batch in data:
             # ... training logic ...
             pass
-```
+```text
 
 ### State Management
 
@@ -184,16 +187,16 @@ fn load_state_dict(inout self, state: Dict[String, Variant]):
     Args:
         state: Dictionary from state_dict()
     """
-```
+```text
 
 ## Design Rationale
 
-### Why Step Decay?
+### Why Step Decay
 
 1. **Simplicity**: Easy to understand and implement
-2. **Proven effectiveness**: Used in many classic papers (AlexNet, VGG, ResNet)
-3. **Predictable**: Discrete jumps make debugging easier
-4. **Hyperparameter efficiency**: Only 2 parameters (step_size, gamma)
+1. **Proven effectiveness**: Used in many classic papers (AlexNet, VGG, ResNet)
+1. **Predictable**: Discrete jumps make debugging easier
+1. **Hyperparameter efficiency**: Only 2 parameters (step_size, gamma)
 
 ### Design Decisions
 
@@ -201,15 +204,15 @@ fn load_state_dict(inout self, state: Dict[String, Variant]):
    - Rationale: Simpler implementation, easier to reason about
    - Training loop provides epoch number to `get_lr()`
 
-2. **Separate from optimizer**: Scheduler computes LR, doesn't modify optimizer
+1. **Separate from optimizer**: Scheduler computes LR, doesn't modify optimizer
    - Rationale: Separation of concerns, reusable across optimizers
    - Training loop applies LR to optimizer
 
-3. **Floor function**: Use integer division for step calculation
+1. **Floor function**: Use integer division for step calculation
    - Rationale: Standard implementation, no floating point issues
    - Ensures discrete steps at exact epochs
 
-4. **No minimum LR**: Allow LR to decay to very small values
+1. **No minimum LR**: Allow LR to decay to very small values
    - Rationale: Some training benefits from extremely small LR
    - User can control via gamma and step_size
 
@@ -222,9 +225,9 @@ fn load_state_dict(inout self, state: Dict[String, Variant]):
 ## Validation Strategy
 
 1. **Mathematical correctness**: Verify formula implementation
-2. **Edge cases**: Test boundary conditions (gamma=1, step_size=1, etc.)
-3. **Integration**: Test with actual optimizer and training loop
-4. **Reproducibility**: Same parameters → same LR schedule
+1. **Edge cases**: Test boundary conditions (gamma=1, step_size=1, etc.)
+1. **Integration**: Test with actual optimizer and training loop
+1. **Reproducibility**: Same parameters → same LR schedule
 
 ## Success Criteria
 
@@ -238,13 +241,16 @@ fn load_state_dict(inout self, state: Dict[String, Variant]):
 
 ## Files
 
-**Implementation**:
+### Implementation
+
 - `shared/training/schedulers.mojo` - StepLR struct implementation
 
-**Tests**:
+### Tests
+
 - `tests/shared/training/test_step_scheduler.mojo` - Comprehensive test suite
 
-**Documentation**:
+### Documentation
+
 - `shared/training/README.md` - Usage examples and API docs
 
 ## References

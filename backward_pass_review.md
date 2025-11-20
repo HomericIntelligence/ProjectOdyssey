@@ -8,7 +8,8 @@
 
 The ExTensor library has **partial backward pass support** with significant gaps that will **block production training**. While activation functions have good coverage and tests, arithmetic operations have critical broadcasting bugs, and many operations lack backward passes entirely.
 
-**Critical Findings**:
+### Critical Findings
+
 - Broadcasting reduction not implemented in arithmetic ops (blocks training)
 - 15+ operations missing backward passes (blocks advanced architectures)
 - Zero test coverage for matrix, arithmetic, and reduction backward passes
@@ -24,7 +25,8 @@ The ExTensor library has **partial backward pass support** with significant gaps
 
 **Problem**: All arithmetic backward passes (`add_backward`, `subtract_backward`, `multiply_backward`, `divide_backward`) fail when broadcasting was used in the forward pass.
 
-**Example**:
+### Example
+
 ```python
 # Forward pass with broadcasting
 a = ones([3, 1, 5])      # Shape (3, 1, 5)
@@ -35,26 +37,29 @@ c = add(a, b)            # Shape (3, 4, 5) - broadcasting happened
 grad_c = ones([3, 4, 5]) # Gradient has shape (3, 4, 5)
 grad_a, grad_b = add_backward(grad_c, a.shape(), b.shape())
 # grad_a should be shape (3, 1, 5) but will be (3, 4, 5) ❌
-# Missing sum over broadcast dimension!
-```
+# Missing sum over broadcast dimension
+```text
 
-**Impact**:
+### Impact
+
 - Any network using bias terms (broadcasting) will fail
 - Batch normalization won't work
 - Element-wise operations with different shapes fail
 
 **Code Evidence** (arithmetic.mojo:541-543):
+
 ```mojo
 # TODO: Implement proper broadcast reduction
 # For now, this is a simplified version that works for same-shape inputs
 return (grad_a, grad_b)
-```
+```text
 
 **Fix Required**: Sum gradients over broadcast dimensions
+
 ```mojo
-# If a was broadcast from (3, 1, 5) to (3, 4, 5):
+# If a was broadcast from (3, 1, 5) to (3, 4, 5)
 # grad_a = sum(grad_output, axis=1, keepdims=True)  # Sum over the broadcast dimension
-```
+```text
 
 ### 1.2 Division by Zero in Gradient ⚠️ **STABILITY ISSUE**
 
@@ -62,24 +67,27 @@ return (grad_a, grad_b)
 
 **Problem**: `divide_backward` computes `grad_b = -grad_output * a / b²` without checking if `b` is zero or near-zero.
 
-**Impact**:
+### Impact
+
 - NaN/Inf gradients when dividing by small values
 - Gradient explosion in denominators
 - Training instability
 
 **Code Evidence** (arithmetic.mojo:637-642):
+
 ```mojo
 # grad_b = -grad_output * a / b²
 var b_squared = multiply(b, b)  # If b=0, b²=0
 var grad_b_positive = divide(temp, b_squared)  # Division by zero!
-```
+```text
 
 **Fix Required**: Add epsilon or clip values
+
 ```mojo
 var b_squared = multiply(b, b)
 # Add small epsilon to prevent division by zero
 var b_squared_safe = add(b_squared, epsilon_tensor)
-```
+```text
 
 ### 1.3 Shape Validation Missing ⚠️ **SILENT FAILURES**
 
@@ -87,7 +95,8 @@ var b_squared_safe = add(b_squared, epsilon_tensor)
 
 **Problem**: No validation that gradient shapes match expected output shapes.
 
-**Impact**:
+### Impact
+
 - Silent bugs where wrong gradients are used
 - Memory corruption from shape mismatches
 - Difficult debugging
@@ -103,18 +112,20 @@ var b_squared_safe = add(b_squared, epsilon_tensor)
 **Location**: `src/extensor/elementwise_math.mojo`
 
 **Missing operations** (15 functions):
-1. `abs` - Need: `grad * sign(x)`
-2. `sign` - Need: `0` everywhere (non-differentiable)
-3. `exp` - Need: `grad * exp(x)`
-4. `log` - Need: `grad / x`
-5. `sqrt` - Need: `grad / (2 * sqrt(x))`
-6. `sin` - Need: `grad * cos(x)`
-7. `cos` - Need: `grad * (-sin(x))`
-8. `clip` - Need: `grad * (min <= x <= max)`
-9. `ceil`, `floor`, `round`, `trunc` - Need: `0` (non-differentiable)
-10. `log10`, `log2` - Need: `grad / (x * ln(base))`
 
-**Impact**:
+1. `abs` - Need: `grad * sign(x)`
+1. `sign` - Need: `0` everywhere (non-differentiable)
+1. `exp` - Need: `grad * exp(x)`
+1. `log` - Need: `grad / x`
+1. `sqrt` - Need: `grad / (2 * sqrt(x))`
+1. `sin` - Need: `grad * cos(x)`
+1. `cos` - Need: `grad * (-sin(x))`
+1. `clip` - Need: `grad * (min <= x <= max)`
+1. `ceil`, `floor`, `round`, `trunc` - Need: `0` (non-differentiable)
+1. `log10`, `log2` - Need: `grad / (x * ln(base))`
+
+### Impact
+
 - Can't use exponential layers
 - Can't use trigonometric activations
 - Can't use logarithmic loss functions
@@ -124,11 +135,13 @@ var b_squared_safe = add(b_squared, epsilon_tensor)
 
 **Location**: `src/extensor/matrix.mojo`
 
-**Missing operations**:
-1. `dot` (1D · 1D) - Need: gradient for dot product
-2. `outer` (1D ⊗ 1D) - Need: gradient for outer product
+### Missing operations
 
-**Impact**:
+1. `dot` (1D · 1D) - Need: gradient for dot product
+1. `outer` (1D ⊗ 1D) - Need: gradient for outer product
+
+### Impact
+
 - Limits custom layer implementations
 - Blocks some optimization techniques
 
@@ -136,11 +149,13 @@ var b_squared_safe = add(b_squared, epsilon_tensor)
 
 **Location**: `src/extensor/reduction.mojo`
 
-**Missing operations**:
-1. `max_reduce` - Need: gradient flows only to maximum element
-2. `min_reduce` - Need: gradient flows only to minimum element
+### Missing operations
 
-**Impact**:
+1. `max_reduce` - Need: gradient flows only to maximum element
+1. `min_reduce` - Need: gradient flows only to minimum element
+
+### Impact
+
 - Can't implement max pooling backward pass
 - Blocks attention mechanisms with max operations
 
@@ -151,18 +166,20 @@ var b_squared_safe = add(b_squared, epsilon_tensor)
 **Problem**: `power` only supports integer exponents [0, 100), no backward pass exists.
 
 **Current limitation** (arithmetic.mojo:473-487):
+
 ```mojo
 # LIMITATION: Only supports integer exponents in range [0, 100)
-# For general case (fractional/large exponents), proper implementation requires:
+# For general case (fractional/large exponents), proper implementation requires
 #   - exp(b * log(a)) for general exponents
 if b_val == Float64(exp_int) and exp_int >= 0 and exp_int < 100:
     # Works
 else:
     # Returns base value as placeholder (incorrect result)
     pow_result = a_val
-```
+```text
 
-**Impact**:
+### Impact
+
 - Can't use `x^0.5` (equivalent to sqrt, but via power)
 - Can't use `x^2.5` or other fractional powers
 - Blocks polynomial activations
@@ -175,50 +192,55 @@ else:
 
 **Status**: No explicit handling
 
-**Test needed**:
+### Test needed
+
 ```python
 empty = zeros([0])
 grad = relu_backward(grad_output=empty, x=empty)
 # Should return empty tensor, not crash
-```
+```text
 
 ### 3.2 Zero Gradients
 
 **Status**: Should work but not tested
 
-**Test needed**:
+### Test needed
+
 ```python
 grad_zero = zeros([3, 4])
 result = sigmoid_backward(grad_zero, output)
 # Should produce all zeros
-```
+```text
 
 ### 3.3 ReLU at Exactly Zero
 
 **Current behavior**: Returns gradient of 0 at x=0
 
-**Alternatives**:
+### Alternatives
+
 - PyTorch: gradient = 0 at x=0
 - TensorFlow: gradient = 0 at x=0
 - Some implementations: gradient = 0.5 at x=0
 
 **Code** (activations.mojo:580):
+
 ```mojo
 result._data.bitcast[Float16]()[i] = grad if x_val > Float16(0) else Float16(0)
-```
+```text
 
 **Status**: Matches PyTorch, OK ✓
 
 ### 3.4 Softmax with Single Element
 
-**Test needed**:
+### Test needed
+
 ```python
 x = ones([1])
 y = softmax(x)  # y = [1.0]
 grad_y = ones([1])
 grad_x = softmax_backward(grad_y, y)
 # Should return [0.0] (derivative of constant)
-```
+```text
 
 ### 3.5 GELU Numerical Overflow
 
@@ -227,9 +249,10 @@ grad_x = softmax_backward(grad_y, y)
 **Problem**: Exact GELU backward uses `exp(-0.5 * x * x)` which can overflow for large |x|.
 
 **Code** (activations.mojo:868):
+
 ```mojo
 var pdf = Float32(INV_SQRT_2PI) * exp(-0.5 * x_val * x_val)  # exp(-50) for x=10
-```
+```text
 
 **Impact**: For |x| > 10, numerical issues may arise
 
@@ -239,11 +262,12 @@ var pdf = Float32(INV_SQRT_2PI) * exp(-0.5 * x_val * x_val)  # exp(-50) for x=10
 
 **Status**: Unclear if 0D tensors are supported
 
-**Test needed**:
+### Test needed
+
 ```python
 scalar = zeros([])  # 0D tensor
-# Do backward passes handle this?
-```
+# Do backward passes handle this
+```text
 
 ---
 
@@ -255,7 +279,8 @@ scalar = zeros([])  # 0D tensor
 
 **Issue**: Forward passes support int8/16, uint8/16/32/64 for ReLU, but backward passes only support float16/32/64 and int32/64.
 
-**Code comparison**:
+### Code comparison
+
 - Forward ReLU: supports int8, int16, uint8, uint16, uint32, uint64
 - Backward ReLU (lines 591-602): only supports float16/32/64, int32/64
 
@@ -265,12 +290,13 @@ scalar = zeros([])  # 0D tensor
 
 **Location**: `src/extensor/activations.mojo` lines 375-377
 
-**Limitation**:
+### Limitation
+
 ```mojo
 # TODO: Support arbitrary axis with proper reduction
 if norm_axis != ndim - 1:
     raise Error("softmax: only last axis currently supported")
-```
+```text
 
 **Impact**: Can't compute softmax along first or middle dimensions
 
@@ -290,14 +316,16 @@ if norm_axis != ndim - 1:
 
 ### 5.1 Zero Backward Pass Tests (Except Activations)
 
-**Coverage**:
+### Coverage
+
 - ✅ Activations: 7 backward pass tests (relu, leaky_relu, prelu, sigmoid, tanh, softmax, gelu)
 - ❌ Matrix: 0 backward pass tests
 - ❌ Arithmetic: 0 backward pass tests
 - ❌ Reduction: 0 backward pass tests
 - ❌ Elementwise Math: 0 backward passes implemented, so 0 tests
 
-**Files checked**:
+### Files checked
+
 - `tests/extensor/test_activations.mojo` - Lines 556-785 have gradient tests ✓
 - `tests/extensor/test_matrix.mojo` - grep found no "backward" or "gradient" tests
 - `tests/extensor/test_arithmetic.mojo` - grep found no "backward" or "gradient" tests
@@ -308,6 +336,7 @@ if norm_axis != ndim - 1:
 **Current approach**: Analytical gradient testing (compare to known formulas)
 
 **Better approach**: Numerical gradient checking
+
 ```python
 def numerical_gradient(f, x, eps=1e-5):
     grad = zeros_like(x)
@@ -319,11 +348,11 @@ def numerical_gradient(f, x, eps=1e-5):
         grad[i] = (f(x_plus) - f(x_minus)) / (2 * eps)
     return grad
 
-# Then compare:
+# Then compare
 analytical_grad = relu_backward(grad_output, x)
 numerical_grad = numerical_gradient(relu, x)
 assert_close(analytical_grad, numerical_grad, rtol=1e-4)
-```
+```text
 
 **Impact**: Would catch gradient bugs that analytical tests miss
 
@@ -331,7 +360,8 @@ assert_close(analytical_grad, numerical_grad, rtol=1e-4)
 
 **Missing**: Tests that chain multiple operations and verify end-to-end gradients
 
-**Example needed**:
+### Example needed
+
 ```python
 # Multi-layer network
 x = randn([10, 20])
@@ -347,7 +377,7 @@ y = softmax(matmul(h, W2) + b2)
 # Backward (full chain)
 grad_y = ones_like(y)
 grad_W2, grad_b2 = ...  # Should compute full backward pass
-```
+```text
 
 ---
 
@@ -356,20 +386,23 @@ grad_W2, grad_b2 = ...  # Should compute full backward pass
 ### Phase 1: CRITICAL FIXES (Blocks Training) - 2-3 days
 
 **Priority 1A: Fix Broadcasting in Arithmetic Backward**
+
 - **Files**: `src/extensor/arithmetic.mojo`
 - **Functions**: `add_backward`, `subtract_backward`, `multiply_backward`, `divide_backward`
 - **Fix**: Implement broadcast reduction (sum over broadcast dimensions)
 - **Verification**: Add tests with broadcasting scenarios
 - **Estimated effort**: 1 day implementation + 0.5 days testing
 
-**Priority 1B: Add Numerical Stability Checks**
+### Priority 1B: Add Numerical Stability Checks
+
 - **Files**: `src/extensor/arithmetic.mojo`
 - **Functions**: `divide_backward`, `power` (if implemented)
 - **Fix**: Add epsilon to prevent division by zero, clip large exponents
 - **Verification**: Test with near-zero denominators
 - **Estimated effort**: 0.5 days
 
-**Priority 1C: Add Shape Validation**
+### Priority 1C: Add Shape Validation
+
 - **Files**: All backward pass implementations
 - **Fix**: Validate input shapes before computation
 - **Verification**: Test with mismatched shapes
@@ -378,47 +411,56 @@ grad_W2, grad_b2 = ...  # Should compute full backward pass
 ### Phase 2: HIGH PRIORITY (Blocks Common Use Cases) - 3-4 days
 
 **Priority 2A: Implement Elementwise Math Backward Passes**
+
 - **Functions to implement**: `exp`, `log`, `sqrt`, `abs` (most important for training)
 - **Estimated effort**: 2 days implementation + 1 day testing
 
-**Priority 2B: Implement Max/Min Reduction Backward**
+### Priority 2B: Implement Max/Min Reduction Backward
+
 - **Reason**: Required for max pooling
 - **Challenge**: Need to track argmax/argmin from forward pass
 - **Solution**: Return (result, indices) from forward pass
 - **Estimated effort**: 1 day
 
-**Priority 2C: Comprehensive Test Suite**
+### Priority 2C: Comprehensive Test Suite
+
 - **Add tests for**: Matrix backward, arithmetic backward, reduction backward
 - **Add numerical gradient checking framework**
 - **Estimated effort**: 2-3 days
 
 ### Phase 3: MEDIUM PRIORITY (Advanced Features) - 2-3 days
 
-**Priority 3A: Implement Power Operation Properly**
+### Priority 3A: Implement Power Operation Properly
+
 - **Full implementation**: `a^b = exp(b * log(a))` for general case
 - **Backward**: `grad_a = grad * b * a^(b-1)`, `grad_b = grad * a^b * log(a)`
 - **Estimated effort**: 1 day
 
 **Priority 3B: Implement Remaining Math Backward Passes**
+
 - **Functions**: `sin`, `cos`, trigonometric functions
 - **Estimated effort**: 1 day
 
 **Priority 3C: Implement Matrix Operation Backward Passes**
+
 - **Functions**: `dot`, `outer`
 - **Estimated effort**: 0.5 days
 
 ### Phase 4: LOW PRIORITY (Polish) - 1-2 days
 
-**Priority 4A: Support Arbitrary Axis in Softmax**
+### Priority 4A: Support Arbitrary Axis in Softmax
+
 - **Current**: Only last axis
 - **Target**: Any axis
 - **Estimated effort**: 1 day
 
-**Priority 4B: Add Gradient Utilities**
+### Priority 4B: Add Gradient Utilities
+
 - **Functions**: `clip_grad_norm`, `clip_grad_value`
 - **Estimated effort**: 0.5 days
 
-**Priority 4C: Edge Case Testing**
+### Priority 4C: Edge Case Testing
+
 - **Test**: Empty tensors, zero gradients, scalar tensors
 - **Estimated effort**: 0.5 days
 
@@ -428,8 +470,9 @@ grad_W2, grad_b2 = ...  # Should compute full backward pass
 
 ### Broadcasting Reduction Implementation Guide
 
-**Algorithm**:
-```
+### Algorithm
+
+```text
 def reduce_gradient_to_shape(grad, original_shape, output_shape):
     """
     Reduce gradient from output_shape back to original_shape.
@@ -453,10 +496,11 @@ def reduce_gradient_to_shape(grad, original_shape, output_shape):
     result = reshape(result, original_shape)
 
     return result
-```
+```text
 
-**Example**:
-```
+### Example
+
+```text
 Forward:
   a.shape = [3, 1, 5]
   b.shape = [3, 4, 5]
@@ -474,13 +518,14 @@ Backward:
     - No broadcasting needed
     - grad_b = grad_c
     - Result: grad_b.shape = [3, 4, 5] ✓
-```
+```text
 
 ### Max/Min Reduction Backward Implementation Guide
 
 **Challenge**: Gradient only flows to the element(s) that were max/min.
 
-**Solution 1: Return indices from forward pass**
+### Solution 1: Return indices from forward pass
+
 ```mojo
 fn max_reduce(...) raises -> (ExTensor, ExTensor):
     """Return (max_values, max_indices)"""
@@ -492,9 +537,10 @@ fn max_reduce_backward(grad_output, indices, input_shape):
     grad_input = zeros(input_shape)
     # Scatter grad_output to positions indicated by indices
     return grad_input
-```
+```text
 
 **Solution 2: Recompute max in backward (less efficient)**
+
 ```mojo
 fn max_reduce_backward(grad_output, input, axis):
     """Compare input to max to find which elements were max"""
@@ -502,11 +548,12 @@ fn max_reduce_backward(grad_output, input, axis):
     mask = (input == max_vals)  # 1 where input equals max, 0 elsewhere
     grad_input = broadcast(grad_output) * mask
     return grad_input
-```
+```text
 
 ### Numerical Gradient Checking Framework
 
-**Implementation**:
+### Implementation
+
 ```mojo
 fn check_gradient(
     forward_fn: fn(ExTensor) -> ExTensor,
@@ -550,15 +597,16 @@ fn check_gradient(
 
     # Compare gradients
     return allclose(grad_analytical, grad_numerical, rtol=rtol)
-```
+```text
 
-**Usage**:
+### Usage
+
 ```mojo
 fn test_relu_gradient_numerical():
     var x = randn([5])
     var passed = check_gradient(relu, relu_backward, x)
     assert_true(passed, "ReLU numerical gradient check")
-```
+```text
 
 ---
 
@@ -574,6 +622,7 @@ fn test_relu_gradient_numerical():
 | **Broadcasting** | ⚠️ Utility | Used by broken arithmetic | - | P1 Critical |
 
 ### Operations Count
+
 - **Total operations with forward pass**: ~40
 - **Operations with backward pass**: 15 (37.5%)
 - **Operations with tests**: 7 (17.5%)
@@ -584,24 +633,28 @@ fn test_relu_gradient_numerical():
 ## 9. RECOMMENDATIONS
 
 ### Immediate Actions (This Week)
+
 1. **Fix arithmetic broadcasting** - Required for basic training
-2. **Add shape validation** - Prevent silent bugs
-3. **Add numerical stability checks** - Prevent NaN/Inf
+1. **Add shape validation** - Prevent silent bugs
+1. **Add numerical stability checks** - Prevent NaN/Inf
 
 ### Short-term (Next 2 Weeks)
+
 1. **Implement elementwise math backward passes** (exp, log, sqrt, abs)
-2. **Add comprehensive backward pass tests** for matrix, arithmetic, reduction
-3. **Implement max/min reduction backward** for pooling layers
+1. **Add comprehensive backward pass tests** for matrix, arithmetic, reduction
+1. **Implement max/min reduction backward** for pooling layers
 
 ### Medium-term (Next Month)
+
 1. **Implement remaining backward passes** (power, trig functions, etc.)
-2. **Add numerical gradient checking framework**
-3. **Create gradient integration tests** (multi-layer networks)
+1. **Add numerical gradient checking framework**
+1. **Create gradient integration tests** (multi-layer networks)
 
 ### Long-term
+
 1. **Performance optimization** (SIMD for backward passes)
-2. **Higher-order gradients** (gradients of gradients)
-3. **Automatic differentiation** (automatic backward pass generation)
+1. **Higher-order gradients** (gradients of gradients)
+1. **Automatic differentiation** (automatic backward pass generation)
 
 ---
 
@@ -609,12 +662,14 @@ fn test_relu_gradient_numerical():
 
 The ExTensor backward pass implementation is **approximately 40% complete** with **critical gaps** that prevent production use:
 
-**Strengths**:
+### Strengths
+
 - ✅ Activation functions well-implemented with good test coverage
 - ✅ Matrix operations have backward passes for core operations
 - ✅ Reduction operations have sum/mean backward passes
 
-**Critical Weaknesses**:
+### Critical Weaknesses
+
 - ❌ Broadcasting reduction completely missing (blocks training)
 - ❌ 15+ operations have no backward passes
 - ❌ Minimal test coverage (only activations tested)
@@ -624,15 +679,18 @@ The ExTensor backward pass implementation is **approximately 40% complete** with
 
 **Risk Level**: **HIGH** - Current state will cause training failures and silent bugs
 
-**Next Steps**:
+### Next Steps
+
 1. Prioritize Phase 1 fixes (broadcasting, stability, validation)
-2. Implement Phase 2 (critical missing backward passes)
-3. Add comprehensive test suite with numerical gradient checking
+1. Implement Phase 2 (critical missing backward passes)
+1. Add comprehensive test suite with numerical gradient checking
 
 ---
 
 **Report Generated**: 2025-11-18
-**Files Analyzed**:
+
+### Files Analyzed
+
 - `src/extensor/activations.mojo` (1052 lines)
 - `src/extensor/matrix.mojo` (457 lines)
 - `src/extensor/arithmetic.mojo` (676 lines)

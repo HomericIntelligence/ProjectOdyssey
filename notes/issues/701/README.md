@@ -32,35 +32,35 @@ The repository already has a comprehensive CONTRIBUTING.md file (7975 bytes) cov
    - Pixi-based environment management
    - Setup verification steps
 
-2. **Testing**
+1. **Testing**
    - TDD principles
    - Test running commands with pixi
    - Coverage reporting
 
-3. **Code Style Guidelines**
+1. **Code Style Guidelines**
    - Mojo style with `mojo format` and key principles (fn over def, owned/borrowed, SIMD)
    - Python style with PEP 8, type hints, black formatting
    - Documentation style with markdownlint-cli2 requirements
 
-4. **Pre-commit Hooks**
+1. **Pre-commit Hooks**
    - Automated quality checks (mojo format, markdownlint, trailing-whitespace, etc.)
    - Installation and usage instructions
 
-5. **Pull Request Process**
+1. **Pull Request Process**
    - Branch naming conventions
    - PR creation with GitHub CLI
    - Code review response protocol
    - Merging workflow
 
-6. **Issue Reporting**
+1. **Issue Reporting**
    - Bug report template
    - Feature request template
 
-7. **Documentation Organization**
+1. **Documentation Organization**
    - Team docs in `/agents/`
    - Issue-specific docs in `/notes/issues/<issue-number>/`
 
-8. **Testing Guidelines**
+1. **Testing Guidelines**
    - TDD principles
    - Test naming conventions
    - Coverage expectations (>80%)
@@ -72,8 +72,8 @@ The repository already has a comprehensive CONTRIBUTING.md file (7975 bytes) cov
 **Decision**: Organize CONTRIBUTING.md into three major sections matching the child plans:
 
 1. **Development Workflow** (Environment, Branching, Testing)
-2. **Coding Standards** (Style, Documentation, Commits)
-3. **Pull Request Process** (Creation, Review, Merging)
+1. **Coding Standards** (Style, Documentation, Commits)
+1. **Pull Request Process** (Creation, Review, Merging)
 
 **Rationale**: This structure aligns with the natural contributor journey from setup to submission.
 
@@ -83,7 +83,8 @@ The repository already has a comprehensive CONTRIBUTING.md file (7975 bytes) cov
 
 **Decision**: Use Pixi as the primary environment management tool.
 
-**Rationale**:
+### Rationale
+
 - Consistent dependency management across contributors
 - Already configured in the repository (pixi.toml)
 - Simplifies setup for new contributors
@@ -94,7 +95,8 @@ The repository already has a comprehensive CONTRIBUTING.md file (7975 bytes) cov
 
 **Decision**: Explicitly promote Test-Driven Development throughout the document.
 
-**Rationale**:
+### Rationale
+
 - Aligns with repository's development principles
 - Ensures quality contributions
 - Tests serve as documentation
@@ -105,7 +107,8 @@ The repository already has a comprehensive CONTRIBUTING.md file (7975 bytes) cov
 
 **Decision**: Default to Mojo for ML/AI implementations, Python only for automation with technical limitations.
 
-**Rationale**:
+### Rationale
+
 - Performance benefits for ML workloads
 - Type safety and memory safety
 - Future-proof for AI/ML development
@@ -117,7 +120,8 @@ The repository already has a comprehensive CONTRIBUTING.md file (7975 bytes) cov
 
 **Decision**: Use `gh` CLI for PR creation and review comment replies.
 
-**Rationale**:
+### Rationale
+
 - Automation-friendly
 - Links PRs to issues automatically
 - Consistent workflow across contributors
@@ -128,7 +132,8 @@ The repository already has a comprehensive CONTRIBUTING.md file (7975 bytes) cov
 
 **Decision**: Automate quality checks with pre-commit hooks.
 
-**Rationale**:
+### Rationale
+
 - Prevents common issues before commit
 - Consistent code quality
 - Reduces review overhead
@@ -139,7 +144,8 @@ The repository already has a comprehensive CONTRIBUTING.md file (7975 bytes) cov
 
 #### Development Workflow Section
 
-**Must Include**:
+### Must Include
+
 - Environment setup with Pixi (installation, activation, verification)
 - Branching strategy (naming convention: `<issue-number>-<description>`)
 - Development cycle (TDD: test → implement → commit)
@@ -150,7 +156,8 @@ The repository already has a comprehensive CONTRIBUTING.md file (7975 bytes) cov
 
 #### Coding Standards Section
 
-**Must Include**:
+### Must Include
+
 - Mojo code style (fn over def, owned/borrowed, SIMD, struct over class)
 - Python code style (PEP 8, type hints, black)
 - Documentation standards (markdownlint-cli2 rules, 120 char limit)
@@ -162,7 +169,8 @@ The repository already has a comprehensive CONTRIBUTING.md file (7975 bytes) cov
 
 #### Pull Request Process Section
 
-**Must Include**:
+### Must Include
+
 - PR requirements checklist (tests, documentation, style)
 - PR creation workflow (gh pr create --issue)
 - Review process explanation (what reviewers look for)
@@ -175,18 +183,18 @@ The repository already has a comprehensive CONTRIBUTING.md file (7975 bytes) cov
 ### Documentation Quality Standards
 
 1. **Clarity**: Use simple, direct language
-2. **Completeness**: Cover all essential topics
-3. **Examples**: Include code examples for all guidelines
-4. **Accessibility**: Organized for easy navigation
-5. **Maintenance**: Link to authoritative sources (CLAUDE.md, ADRs)
+1. **Completeness**: Cover all essential topics
+1. **Examples**: Include code examples for all guidelines
+1. **Accessibility**: Organized for easy navigation
+1. **Maintenance**: Link to authoritative sources (CLAUDE.md, ADRs)
 
 ### Integration Points
 
 1. **CLAUDE.md**: Primary reference for project-wide conventions
-2. **ADR-001**: Language selection strategy and justification
-3. **Pre-commit Config**: Code quality automation
-4. **Pixi Config**: Environment management
-5. **GitHub Workflows**: CI/CD integration
+1. **ADR-001**: Language selection strategy and justification
+1. **Pre-commit Config**: Code quality automation
+1. **Pixi Config**: Environment management
+1. **GitHub Workflows**: CI/CD integration
 
 ### Known Limitations
 
@@ -194,11 +202,11 @@ The repository already has a comprehensive CONTRIBUTING.md file (7975 bytes) cov
    - **Impact**: Planning phase validates existing content rather than creating new
    - **Mitigation**: Review and enhance during implementation phase if needed
 
-2. **Mojo Limitations**: Some automation requires Python (subprocess, regex)
+1. **Mojo Limitations**: Some automation requires Python (subprocess, regex)
    - **Impact**: Contributors may need to understand when to use Python vs Mojo
    - **Mitigation**: Clear guidelines in ADR-001, referenced in CONTRIBUTING.md
 
-3. **Tool Dependencies**: Requires Pixi, pre-commit, gh CLI
+1. **Tool Dependencies**: Requires Pixi, pre-commit, gh CLI
    - **Impact**: Additional setup overhead for new contributors
    - **Mitigation**: Clear installation instructions and verification steps
 

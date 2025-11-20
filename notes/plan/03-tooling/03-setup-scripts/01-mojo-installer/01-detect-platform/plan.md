@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Query operating system information
-2. Detect processor architecture
-3. Check OS version compatibility
-4. Return structured platform details
+1. Detect processor architecture
+1. Check OS version compatibility
+1. Return structured platform details
 
 ## Success Criteria
 

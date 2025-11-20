@@ -5,14 +5,15 @@
 This document outlines the implementation plan for three major improvements to ML Odyssey:
 
 1. **Dtype Refactoring** - Eliminate dtype branching with generics
-2. **Test Coverage** - Implement empty test files and add edge cases
-3. **Numerical Safety Mode** - Add optional NaN/Inf checking and gradient monitoring
+1. **Test Coverage** - Implement empty test files and add edge cases
+1. **Numerical Safety Mode** - Add optional NaN/Inf checking and gradient monitoring
 
 ## 1. Dtype Refactoring
 
 ### Current Problem
 
 Every operation has dtype-specific branches:
+
 ```mojo
 if tensor.dtype() == DType.float32:
     for i in range(size):
@@ -23,7 +24,7 @@ elif tensor.dtype() == DType.float64:
         var val = tensor._data.bitcast[Float64]()[i]
         result._data.bitcast[Float64]()[i] = process(val)
 # ... repeat for 10+ dtypes
-```
+```text
 
 This results in ~40 lines per operation, duplicated across all modules.
 
@@ -50,16 +51,17 @@ fn elementwise_unary[
     elif tensor.dtype() == DType.float64:
         dispatch[DType.float64]()
     # ... etc
-```
+```text
 
 ### Files to Refactor
 
 Priority order:
+
 1. `shared/core/activation.mojo` - 10 activation functions
-2. `shared/core/elementwise.mojo` - 26 element-wise ops
-3. `shared/core/arithmetic.mojo` - 12 arithmetic ops
-4. `shared/core/normalization.mojo` - 2 normalization ops
-5. `shared/core/dropout.mojo` - 2 dropout ops
+1. `shared/core/elementwise.mojo` - 26 element-wise ops
+1. `shared/core/arithmetic.mojo` - 12 arithmetic ops
+1. `shared/core/normalization.mojo` - 2 normalization ops
+1. `shared/core/dropout.mojo` - 2 dropout ops
 
 ### Benefits
 
@@ -110,7 +112,7 @@ fn check_gradient_norm(
 fn compute_total_norm(gradients: List[ExTensor]) -> Float64:
     """Compute L2 norm of all gradients."""
     # sqrt(sum(grad^2 for all grads))
-```
+```text
 
 ### Usage Pattern
 
@@ -126,18 +128,19 @@ var grad = cross_entropy_backward(grad_loss, output, targets)
 
 # Check for gradient explosion
 check_gradient_norm([grad], max_norm=100.0)
-```
+```text
 
 ### Configuration
 
 Add to model config:
+
 ```mojo
 struct SafetyConfig:
     var check_nan_inf: Bool
     var check_gradients: Bool
     var max_gradient_norm: Float64
     var verbose: Bool  # Print warnings instead of raising
-```
+```text
 
 ## 3. Test Coverage Improvements
 
@@ -164,9 +167,10 @@ fn test_relu_backward() raises:
     assert_almost_equal(grad_in[1], 1.0)  # x > 0
 
 # Repeat for: leaky_relu, prelu, sigmoid, tanh, softmax, gelu, swish, mish, elu
-```
+```text
 
 Tests per function:
+
 - Basic correctness (known values)
 - Backward pass (gradient checking)
 - Edge cases (0, very large, very small)
@@ -201,7 +205,7 @@ fn test_xavier_uniform_mean_std() raises:
     assert_almost_equal(std, expected_std, tol=0.01)
 
 # Repeat for: xavier_normal, kaiming_uniform, kaiming_normal, uniform, normal, constant
-```
+```text
 
 **Total:** ~20 tests
 
@@ -229,7 +233,7 @@ fn test_is_contiguous() raises:
     assert_true(t.is_contiguous())
 
     # TODO: Test after implementing transpose/view operations
-```
+```text
 
 **Total:** ~15 tests
 
@@ -238,17 +242,20 @@ fn test_is_contiguous() raises:
 Add to existing test files:
 
 **`test_conv.mojo`:**
+
 - Stride > 1
 - Padding > 0
 - Non-square kernels (3x5, 5x3)
 - Single channel vs multi-channel
 
 **`test_pooling.mojo`:**
+
 - Stride != kernel_size
 - Padding > 0
 - Non-square windows
 
 **`test_normalization.mojo`:**
+
 - Training vs inference mode
 - Running statistics correctness
 - Batch size = 1 edge case
@@ -256,17 +263,20 @@ Add to existing test files:
 ## Implementation Order
 
 ### Week 1: Dtype Dispatch Framework
+
 - [ ] Day 1-2: Create `dtype_dispatch.mojo` helpers
 - [ ] Day 3-4: Refactor `activation.mojo`
 - [ ] Day 5: Refactor `elementwise.mojo`
 
 ### Week 2: Numerical Safety + Test Coverage
+
 - [ ] Day 1-2: Create `numerical_safety.mojo`
 - [ ] Day 3: Implement `test_activations.mojo`
 - [ ] Day 4: Implement `test_initializers.mojo`
 - [ ] Day 5: Implement `test_tensors.mojo`
 
 ### Week 3: Remaining Refactoring + Edge Cases
+
 - [ ] Day 1-2: Refactor remaining modules
 - [ ] Day 3-4: Add edge case tests
 - [ ] Day 5: Integration testing and documentation
@@ -293,7 +303,7 @@ Add to existing test files:
 ## Next Steps
 
 1. Review this plan
-2. Create feature branch: `feature/dtype-refactor-safety-tests`
-3. Start with dtype dispatch helpers
-4. Implement incrementally with tests
-5. Create PR when complete
+1. Create feature branch: `feature/dtype-refactor-safety-tests`
+1. Start with dtype dispatch helpers
+1. Implement incrementally with tests
+1. Create PR when complete

@@ -28,8 +28,8 @@ Set up the project structure for the LeNet-5 implementation using scaffolding to
 ## Steps
 
 1. Use Scaffolding Tool
-2. Customize Structure
-3. Initialize Documentation
+1. Customize Structure
+1. Initialize Documentation
 
 ## Success Criteria
 

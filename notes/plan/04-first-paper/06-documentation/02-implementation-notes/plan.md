@@ -28,8 +28,8 @@ Document technical implementation details, design decisions, training tricks, an
 ## Steps
 
 1. Architecture Details
-2. Training Tricks
-3. Known Issues
+1. Training Tricks
+1. Known Issues
 
 ## Success Criteria
 

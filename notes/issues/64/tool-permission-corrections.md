@@ -111,10 +111,10 @@ restricting Bash access to only test and performance specialists/engineers.
 ## Implementation Steps
 
 1. **Backup**: Verify git status shows clean working tree
-2. **Apply Changes**: Update `tools:` line in YAML frontmatter for each agent
-3. **Validate**: Run validation script on all updated agents
-4. **Test**: Verify agents still load correctly in Claude Code
-5. **Commit**: Create commit with clear message documenting changes
+1. **Apply Changes**: Update `tools:` line in YAML frontmatter for each agent
+1. **Validate**: Run validation script on all updated agents
+1. **Test**: Verify agents still load correctly in Claude Code
+1. **Commit**: Create commit with clear message documenting changes
 
 ## Rationale
 

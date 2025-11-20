@@ -23,7 +23,7 @@ Formats Mojo code files:
 
 ```bash
 mojo format src/**/*.mojo
-```
+```text
 
 ### 2. Markdownlint
 
@@ -31,7 +31,7 @@ Lints markdown files:
 
 ```bash
 npx markdownlint-cli2 "**/*.md"
-```
+```text
 
 ### 3. Pre-commit Hooks
 
@@ -39,7 +39,7 @@ Runs all pre-commit hooks:
 
 ```bash
 pre-commit run --all-files
-```
+```text
 
 Includes:
 
@@ -57,11 +57,11 @@ Includes:
 # Run all linters with one command
 ./scripts/run_all_linters.sh
 
-# This runs:
+# This runs
 # 1. mojo format
 # 2. markdownlint
 # 3. pre-commit hooks
-```
+```text
 
 ### Run Specific Linter
 
@@ -74,7 +74,7 @@ Includes:
 
 # Pre-commit only
 ./scripts/run_linters.sh --precommit
-```
+```text
 
 ### Fix Mode vs Check Mode
 
@@ -84,13 +84,13 @@ Includes:
 
 # Check mode (report only, no changes)
 ./scripts/run_linters.sh --check
-```
+```text
 
 ## Linter Details
 
 ### Mojo Format
 
-**What it checks:**
+### What it checks:
 
 - Indentation (4 spaces)
 - Line length
@@ -105,11 +105,11 @@ mojo format src/tensor.mojo
 
 # Check only
 mojo format --check src/tensor.mojo
-```
+```text
 
 ### Markdownlint
 
-**What it checks:**
+### What it checks:
 
 - Code blocks have language specified
 - Blank lines around code blocks/lists/headings
@@ -124,11 +124,11 @@ npx markdownlint-cli2 "**/*.md"
 
 # Fix some issues
 npx markdownlint-cli2 --fix "**/*.md"
-```
+```text
 
 ### Pre-commit Hooks
 
-**What it checks:**
+### What it checks:
 
 - Trailing whitespace
 - File ends with newline
@@ -144,7 +144,7 @@ pre-commit run --all-files
 
 # Run specific hook
 pre-commit run trailing-whitespace --all-files
-```
+```text
 
 ## Common Issues
 
@@ -152,7 +152,7 @@ pre-commit run trailing-whitespace --all-files
 
 ```text
 Error: Syntax error in file.mojo
-```
+```text
 
 **Fix**: Correct syntax errors before formatting
 
@@ -160,13 +160,13 @@ Error: Syntax error in file.mojo
 
 ```text
 MD040: Code blocks should have language specified
-```
+```text
 
 **Fix**: Add language to code blocks (` ```python `)
 
 ```text
 MD031: Code blocks should be surrounded by blank lines
-```
+```text
 
 **Fix**: Add blank lines before and after code blocks
 
@@ -174,7 +174,7 @@ MD031: Code blocks should be surrounded by blank lines
 
 ```text
 Trailing whitespace found
-```
+```text
 
 **Fix**: Pre-commit auto-fixes this, just re-commit
 
@@ -187,7 +187,7 @@ Linters run automatically in CI:
   run: |
     pre-commit run --all-files
     mojo format --check src/**/*.mojo
-```
+```text
 
 ## Workflow Integration
 
@@ -202,7 +202,7 @@ git add .
 
 # Commit
 git commit -m "message"
-```
+```text
 
 ### Pre-commit Hook (Automatic)
 
@@ -212,7 +212,7 @@ git commit -m "message"
 # Pre-commit runs, fixes issues, and aborts if needed
 # If fixed, re-commit
 git commit -m "message"
-```
+```text
 
 ### Before PR
 
@@ -226,33 +226,33 @@ git commit -m "message"
 # Commit fixes
 git add .
 git commit -m "fix: address linting issues"
-```
+```text
 
 ## Examples
 
-**Run all linters:**
+### Run all linters:
 
 ```bash
 ./scripts/run_all_linters.sh
-```
+```text
 
-**Check without fixing:**
+### Check without fixing:
 
 ```bash
 ./scripts/run_all_linters.sh --check
-```
+```text
 
-**Run specific linter:**
+### Run specific linter:
 
 ```bash
 ./scripts/run_linters.sh --mojo
-```
+```text
 
-**Fix markdown issues:**
+### Fix markdown issues:
 
 ```bash
 npx markdownlint-cli2 --fix "**/*.md"
-```
+```text
 
 ## Scripts Available
 
@@ -265,10 +265,10 @@ npx markdownlint-cli2 --fix "**/*.md"
 ### Linter Fails in CI
 
 1. **Run locally**: `./scripts/run_all_linters.sh`
-2. **Review errors**: Check what failed
-3. **Fix issues**: Auto-fix or manual
-4. **Re-run**: Verify passing
-5. **Commit**: Push fixes
+1. **Review errors**: Check what failed
+1. **Fix issues**: Auto-fix or manual
+1. **Re-run**: Verify passing
+1. **Commit**: Push fixes
 
 ### False Positives
 
@@ -287,9 +287,9 @@ If linter reports false positive:
 ## Best Practices
 
 1. **Run before commit** - Always run linters locally first
-2. **Auto-fix when possible** - Use fix mode to save time
-3. **Understand errors** - Don't blindly ignore warnings
-4. **Keep updated** - Update linter versions regularly
-5. **CI enforcement** - Ensure CI runs all linters
+1. **Auto-fix when possible** - Use fix mode to save time
+1. **Understand errors** - Don't blindly ignore warnings
+1. **Keep updated** - Update linter versions regularly
+1. **CI enforcement** - Ensure CI runs all linters
 
 See `.pre-commit-config.yaml` for complete linter configuration.

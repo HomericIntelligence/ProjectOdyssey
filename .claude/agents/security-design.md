@@ -49,9 +49,9 @@ Level 2 Module Design Agent responsible for designing security measures for modu
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -75,30 +75,30 @@ When working with Mojo code, follow patterns in
 ### 1. Receive Security Requirements
 
 1. Parse module specifications from Section Orchestrator
-2. Identify potential threats using STRIDE model
-3. Assess risk levels and prioritize
-4. Validate security requirements are achievable
+1. Identify potential threats using STRIDE model
+1. Assess risk levels and prioritize
+1. Validate security requirements are achievable
 
 ### 2. Design Security
 
 1. Design input validation and sanitization strategy
-2. Plan secure data handling and memory management
-3. Define authentication/authorization if needed
-4. Create security specifications
+1. Plan secure data handling and memory management
+1. Define authentication/authorization if needed
+1. Create security specifications
 
 ### 3. Produce Security Plan
 
 1. Document security design and threat mitigations
-2. Specify security testing requirements
-3. Define security review criteria
-4. Ensure specifications are implementable
+1. Specify security testing requirements
+1. Define security review criteria
+1. Ensure specifications are implementable
 
 ### 4. Validate and Delegate
 
 1. Review with Section Orchestrator and Architecture Design
-2. Get approval on security approach
-3. Delegate implementation to Security Specialist
-4. Validate final implementation meets security standards
+1. Get approval on security approach
+1. Delegate implementation to Security Specialist
+1. Validate final implementation meets security standards
 
 ## Delegation
 
@@ -150,8 +150,8 @@ trivial fixes (` 20 lines, no design decisions).
 When receiving conflicting guidance from delegated agents:
 
 1. Attempt to resolve conflicts based on specifications and priorities
-2. If unable to resolve: escalate to parent level with full context
-3. Document the conflict and resolution in status updates
+1. If unable to resolve: escalate to parent level with full context
+1. Document the conflict and resolution in status updates
 
 ### Failure Modes
 
@@ -182,7 +182,7 @@ Escalate errors when:
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -238,8 +238,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -291,13 +291,13 @@ After creating PR:
 
 **Scenario**: Designing architecture for neural network training module
 
-**Actions**:
+### Actions
 
 1. Analyze requirements and define module boundaries
-2. Design component interfaces and data flow
-3. Create architectural diagrams and specifications
-4. Define integration points with existing modules
-5. Document design decisions and trade-offs
+1. Design component interfaces and data flow
+1. Create architectural diagrams and specifications
+1. Define integration points with existing modules
+1. Document design decisions and trade-offs
 
 **Outcome**: Clear architectural specification ready for implementation
 
@@ -305,13 +305,13 @@ After creating PR:
 
 **Scenario**: Simplifying complex API with too many parameters
 
-**Actions**:
+### Actions
 
 1. Analyze current interface usage patterns
-2. Identify common parameter combinations
-3. Design simplified API with sensible defaults
-4. Plan backward compatibility strategy
-5. Document migration path
+1. Identify common parameter combinations
+1. Design simplified API with sensible defaults
+1. Plan backward compatibility strategy
+1. Document migration path
 
 **Outcome**: Cleaner API with improved developer experience
 

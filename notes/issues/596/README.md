@@ -28,14 +28,14 @@ Create the complete directory structure for the Mojo AI Research Repository, inc
 
 **Decision**: Separate paper implementations from reusable components.
 
-**Rationale**:
+### Rationale
 
 - **papers/**: Individual paper implementations are self-contained
 - **shared/**: Reusable components used across multiple papers
 - Clear separation prevents coupling and enables independent paper development
 - Shared code reduces duplication while maintaining paper isolation
 
-**Impact**:
+### Impact
 
 - Each paper can evolve independently
 - Shared components promote code reuse
@@ -45,7 +45,7 @@ Create the complete directory structure for the Mojo AI Research Repository, inc
 
 **Decision**: Organize shared code into core, training, data, and utils subdirectories.
 
-**Rationale**:
+### Rationale
 
 - **core/**: Fundamental building blocks (tensors, layers, operations)
 - **training/**: Training utilities (optimizers, schedulers, loops)
@@ -53,7 +53,7 @@ Create the complete directory structure for the Mojo AI Research Repository, inc
 - **utils/**: General helpers (logging, config, metrics)
 - Functional organization makes it easy to locate code by purpose
 
-**Impact**:
+### Impact
 
 - Developers can quickly find relevant components
 - Reduces cognitive load when navigating codebase
@@ -63,7 +63,7 @@ Create the complete directory structure for the Mojo AI Research Repository, inc
 
 **Decision**: Create dedicated directories for benchmarks, docs, agents, tools, configs, and skills.
 
-**Rationale**:
+### Rationale
 
 - **benchmarks/**: Performance testing isolated from implementations
 - **docs/**: Comprehensive documentation separate from code
@@ -72,7 +72,7 @@ Create the complete directory structure for the Mojo AI Research Repository, inc
 - **configs/**: Configuration files (CI/CD, project settings)
 - **.claude/skills/**: Reusable Claude Code skills for automation
 
-**Impact**:
+### Impact
 
 - Clean separation of concerns
 - Infrastructure code doesn't clutter implementation directories
@@ -83,14 +83,14 @@ Create the complete directory structure for the Mojo AI Research Repository, inc
 
 **Decision**: Provide a _template/ directory in papers/ for new implementations.
 
-**Rationale**:
+### Rationale
 
 - Standardizes paper implementation structure
 - Reduces setup time for new papers
 - Ensures consistency across implementations
 - Guides contributors on expected organization
 
-**Impact**:
+### Impact
 
 - Faster onboarding for new papers
 - Consistent structure across all papers
@@ -100,14 +100,14 @@ Create the complete directory structure for the Mojo AI Research Repository, inc
 
 **Decision**: Every major directory includes a README explaining its purpose.
 
-**Rationale**:
+### Rationale
 
 - Self-documenting directory structure
 - Reduces onboarding friction
 - Clarifies intent for each directory
 - Prevents misuse of directories
 
-**Impact**:
+### Impact
 
 - New contributors can navigate independently
 - Reduces questions about directory purpose
@@ -117,14 +117,14 @@ Create the complete directory structure for the Mojo AI Research Repository, inc
 
 **Decision**: Keep directory structure simple with each directory having a clear, single purpose.
 
-**Rationale**:
+### Rationale
 
 - Follows KISS (Keep It Simple, Stupid) principle
 - Reduces cognitive complexity
 - Makes navigation intuitive
 - Prevents directory bloat
 
-**Impact**:
+### Impact
 
 - Easier to understand and maintain
 - Less confusion about where code belongs
@@ -164,7 +164,7 @@ ml-odyssey/
 └── .claude/
     └── skills/           # Claude Code Skills
         └── README.md
-```
+```text
 
 ### API Contracts
 
@@ -172,7 +172,7 @@ ml-odyssey/
 
 **Purpose**: Individual paper implementations, self-contained but can use shared components.
 
-**Contract**:
+### Contract
 
 - Each paper lives in its own subdirectory
 - Papers can import from shared/ but not from other papers
@@ -183,7 +183,7 @@ ml-odyssey/
 
 **Purpose**: Reusable components used across multiple papers.
 
-**Contract**:
+### Contract
 
 - Code in shared/ must be general-purpose (used by 2+ papers)
 - Shared components must not depend on specific papers
@@ -194,7 +194,7 @@ ml-odyssey/
 
 **Purpose**: Infrastructure that supports main work in papers and shared.
 
-**Contract**:
+### Contract
 
 - **benchmarks/**: Performance tests, comparison scripts
 - **docs/**: Comprehensive documentation, guides, references
@@ -206,11 +206,11 @@ ml-odyssey/
 ### Integration Points
 
 1. **Papers → Shared**: Papers import shared components
-2. **Benchmarks → Papers**: Benchmarks test paper implementations
-3. **Benchmarks → Shared**: Benchmarks test shared components
-4. **Tools → All**: Development tools operate on all code
-5. **Agents → All**: AI agents assist with all development
-6. **Skills → Agents**: Skills provide reusable capabilities for agents
+1. **Benchmarks → Papers**: Benchmarks test paper implementations
+1. **Benchmarks → Shared**: Benchmarks test shared components
+1. **Tools → All**: Development tools operate on all code
+1. **Agents → All**: AI agents assist with all development
+1. **Skills → Agents**: Skills provide reusable capabilities for agents
 
 ## References
 

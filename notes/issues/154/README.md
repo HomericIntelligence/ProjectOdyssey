@@ -28,7 +28,7 @@ Pre-commit hooks validate markdown syntax (`.pre-commit-config.yaml:9-16`):
   hooks:
     - id: markdownlint-cli2
       name: Lint Markdown files
-```
+```text
 
 ### 2. Content Structure Tests
 

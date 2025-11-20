@@ -30,7 +30,7 @@ cat notes/plan/<section>/<subsection>/plan.md
 
 # Review success criteria
 grep "Success Criteria" -A 10 plan.md
-```
+```text
 
 ### 2. Break Down Implementation
 
@@ -38,11 +38,11 @@ grep "Success Criteria" -A 10 plan.md
 # Generate implementation tasks
 ./scripts/create_implementation_tasks.sh <component-name>
 
-# This creates:
+# This creates
 # - Task list with priorities
 # - Delegation assignments
 # - Dependencies between tasks
-```
+```text
 
 ### 3. Delegate to Engineers
 
@@ -72,12 +72,12 @@ Delegate based on complexity:
 # Check implementation status
 ./scripts/check_implementation_status.sh
 
-# Shows:
+# Shows
 # - Completed tasks
 # - In-progress tasks
 # - Blocked tasks
 # - Quality metrics
-```
+```text
 
 ### 5. Code Review
 
@@ -109,7 +109,7 @@ fn add_vectors[dtype: DType](
 def helper_function(data: String):
     # Implementation
     pass
-```
+```text
 
 #### Memory Management
 
@@ -127,7 +127,7 @@ fn read_only(borrowed data: Tensor):
 fn modify(inout data: Tensor):
     # Can modify data
     pass
-```
+```text
 
 #### SIMD Optimization
 
@@ -139,7 +139,7 @@ fn simd_add[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]):
     alias simd_width = simdwidthof[dtype]()
     # Use SIMD operations
     pass
-```
+```text
 
 ## Delegation Examples
 
@@ -155,7 +155,7 @@ fn simd_add[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]):
 - multiply function → Engineer (standard SIMD)
 - matmul function → Senior Engineer (complex algorithm)
 - Type aliases → Junior Engineer (boilerplate)
-```
+```text
 
 ### Example 2: Data Loaders
 
@@ -168,7 +168,7 @@ fn simd_add[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]):
 - File reading → Engineer (IO operations)
 - Preprocessing → Senior Engineer (performance-critical)
 - Batching → Engineer (standard logic)
-```
+```text
 
 ## Quality Checks
 
@@ -189,7 +189,7 @@ mojo test tests/
 
 # Verify performance
 ./scripts/benchmark.sh
-```
+```text
 
 ## Error Handling
 
@@ -209,23 +209,23 @@ mojo test tests/
 
 ## Examples
 
-**Start implementation phase:**
+### Start implementation phase:
 
 ```bash
 ./scripts/start_implementation.sh tensor-operations
-```
+```text
 
-**Delegate task:**
+### Delegate task:
 
 ```bash
 ./scripts/delegate_task.sh "implement matmul" senior-engineer
-```
+```text
 
-**Check status:**
+### Check status:
 
 ```bash
 ./scripts/check_implementation_status.sh
-```
+```text
 
 ## Scripts Available
 

@@ -51,9 +51,9 @@ Examples:
 When unsure, ask:
 
 1. **Will ≥3 papers use this?** → `shared/`
-2. **Is it a standard ML component?** → `shared/`
-3. **Is it paper-specific innovation?** → `papers/`
-4. **Is the interface still changing?** → `papers/` (move to `shared/` when stable)
+1. **Is it a standard ML component?** → `shared/`
+1. **Is it paper-specific innovation?** → `papers/`
+1. **Is the interface still changing?** → `papers/` (move to `shared/` when stable)
 
 ## Directory Structure
 
@@ -72,7 +72,7 @@ shared/
 │   ├── README.md      # Utilities documentation
 │   └── ...            # Logging, metrics, plotting
 └── README.md          # This file
-```
+```text
 
 ## Subdirectories
 
@@ -80,7 +80,7 @@ shared/
 
 **Purpose**: Foundation that everything else builds on
 
-**Contents**:
+### Contents
 
 - Base neural network layers (Linear, Conv2D, MaxPool, etc.)
 - Tensor operations and utilities
@@ -89,7 +89,7 @@ shared/
 - Parameter initialization
 - Device management (CPU/GPU)
 
-**Example Usage**:
+### Example Usage
 
 ```mojo
 from shared.core.layers import Linear, ReLU
@@ -101,13 +101,13 @@ struct MyModel(Module):
 
     fn forward(self, x: Tensor) -> Tensor:
         return self.activation(self.layer1(x))
-```
+```text
 
 ### `training/` - Training Infrastructure
 
 **Purpose**: Everything needed to train models
 
-**Contents**:
+### Contents
 
 - Training loop framework
 - Optimizers (SGD, Adam, RMSprop, etc.)
@@ -116,7 +116,7 @@ struct MyModel(Module):
 - Checkpointing and model saving
 - Distributed training support (future)
 
-**Example Usage**:
+### Example Usage
 
 ```mojo
 from shared.training.optimizer import SGD
@@ -127,13 +127,13 @@ var optimizer = SGD(model.parameters(), lr=0.01, momentum=0.9)
 var scheduler = StepLR(optimizer, step_size=30, gamma=0.1)
 var trainer = Trainer(model, optimizer, scheduler)
 trainer.train(train_loader, epochs=100)
-```
+```text
 
 ### `data/` - Data Processing
 
 **Purpose**: Load, transform, and prepare data for training
 
-**Contents**:
+### Contents
 
 - Dataset base classes
 - Data loaders and batching
@@ -141,7 +141,7 @@ trainer.train(train_loader, epochs=100)
 - Data augmentation (random crops, flips, etc.)
 - Format conversions (images, tensors, etc.)
 
-**Example Usage**:
+### Example Usage
 
 ```mojo
 from shared.data.dataset import ImageDataset
@@ -155,13 +155,13 @@ var transform = Compose([
 ])
 var dataset = ImageDataset("path/to/images", transform=transform)
 var loader = DataLoader(dataset, batch_size=32, shuffle=True)
-```
+```text
 
 ### `utils/` - Helper Utilities
 
 **Purpose**: Supporting tools that don't fit elsewhere
 
-**Contents**:
+### Contents
 
 - Logging and progress tracking
 - Metrics computation (accuracy, loss, etc.)
@@ -170,7 +170,7 @@ var loader = DataLoader(dataset, batch_size=32, shuffle=True)
 - Random seed management
 - Timer and profiling utilities
 
-**Example Usage**:
+### Example Usage
 
 ```mojo
 from shared.utils.logger import Logger
@@ -184,7 +184,7 @@ var acc = accuracy(predictions, targets)
 logger.info("Accuracy: " + str(acc))
 
 plot_training_curves(train_losses, val_losses)
-```
+```text
 
 ## Development Guidelines
 
@@ -197,19 +197,19 @@ When adding to the shared library:
    - Minimal dependencies
    - Well-documented APIs
 
-2. **Follow Mojo Best Practices**
+1. **Follow Mojo Best Practices**
    - Use `fn` for performance-critical code
    - Leverage `owned`/`borrowed` for memory safety
    - Use SIMD for vectorizable operations
    - Prefer compile-time constants
 
-3. **Write Tests First**
+1. **Write Tests First**
    - Unit tests for all public functions
    - Integration tests for complex workflows
    - Property-based tests for invariants
    - Performance benchmarks for critical paths
 
-4. **Document Thoroughly**
+1. **Document Thoroughly**
    - API documentation with examples
    - Performance characteristics
    - Usage patterns and anti-patterns
@@ -251,7 +251,7 @@ core/       # No dependencies (foundation)
 training/   # Depends on: core/
 data/       # Depends on: core/, utils/
 utils/      # Depends on: core/
-```
+```text
 
 ### External Dependencies
 
@@ -272,7 +272,7 @@ struct LeNet5(Module):
     var conv1: Conv2D
     var pool1: MaxPool2D
     # ... model definition
-```
+```text
 
 Papers can extend shared components:
 
@@ -285,7 +285,7 @@ from shared.training.optimizer import SGD
 struct AlexNet(Module):
     var conv1: Conv2D  # From shared
     var custom_layer: CustomLayer  # Paper-specific
-```
+```text
 
 ## Contributing
 
@@ -294,21 +294,21 @@ struct AlexNet(Module):
 Before adding to `shared/`:
 
 1. **Check if it exists**: Review existing components
-2. **Verify reusability**: Will ≥3 papers use it?
-3. **Design the API**: Create interface spec
-4. **Get review**: Discuss with team
-5. **Implement + Test**: Follow TDD
-6. **Document**: Comprehensive docs + examples
+1. **Verify reusability**: Will ≥3 papers use it?
+1. **Design the API**: Create interface spec
+1. **Get review**: Discuss with team
+1. **Implement + Test**: Follow TDD
+1. **Document**: Comprehensive docs + examples
 
 ### Moving Code from Papers to Shared
 
 When a component proves reusable:
 
 1. **Refactor for generality**: Remove paper-specific logic
-2. **Design stable API**: Backward compatibility matters
-3. **Add comprehensive tests**: Higher bar than paper code
-4. **Write migration guide**: Help paper authors update
-5. **Update all papers**: Fix any breaking changes
+1. **Design stable API**: Backward compatibility matters
+1. **Add comprehensive tests**: Higher bar than paper code
+1. **Write migration guide**: Help paper authors update
+1. **Update all papers**: Fix any breaking changes
 
 ## Roadmap
 

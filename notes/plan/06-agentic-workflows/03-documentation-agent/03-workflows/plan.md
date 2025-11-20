@@ -32,8 +32,8 @@ Create end-to-end workflows that chain together documentation templates and tool
 ## Steps
 
 1. Create docstring generation workflow for code files
-2. Create README update workflow with project analysis
-3. Create tutorial creation workflow with examples
+1. Create README update workflow with project analysis
+1. Create tutorial creation workflow with examples
 
 ## Success Criteria
 

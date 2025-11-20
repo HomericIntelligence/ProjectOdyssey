@@ -30,8 +30,8 @@ Implement the complete LeNet-5 architecture including all core layers (convoluti
 ## Steps
 
 1. Core Layers
-2. Model Architecture
-3. Model Tests
+1. Model Architecture
+1. Model Tests
 
 ## Success Criteria
 

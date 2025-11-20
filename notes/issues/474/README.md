@@ -47,9 +47,9 @@ Write comprehensive tests to validate coverage tool setup, ensuring coverage col
 **Mojo Coverage Limitation**: As of Mojo v0.25.7, there are **no native Mojo coverage tools**. This test phase must:
 
 1. **Validate the architecture** from Issue #473
-2. **Test workarounds** for Mojo coverage limitations
-3. **Verify Python coverage** works for Python automation scripts
-4. **Document gaps** that will need custom solutions
+1. **Test workarounds** for Mojo coverage limitations
+1. **Verify Python coverage** works for Python automation scripts
+1. **Document gaps** that will need custom solutions
 
 ### Testing Approach
 
@@ -60,17 +60,17 @@ Since Mojo lacks native coverage tools, tests should focus on:
    - If using custom instrumentation: Test instrumentation hooks
    - If using LLVM coverage: Test LLVM integration
 
-2. **Data collection validation**:
+1. **Data collection validation**:
    - Test coverage data is captured during test runs
    - Validate data format (JSON, XML, binary)
    - Test data persistence and retrieval
 
-3. **Framework integration**:
+1. **Framework integration**:
    - Test coverage doesn't break existing test execution
    - Validate performance overhead is acceptable (< 20% slowdown)
    - Test opt-in/opt-out mechanisms
 
-4. **CI simulation**:
+1. **CI simulation**:
    - Test coverage collection in CI-like environment
    - Validate artifact storage and retrieval
    - Test coverage comparison logic
@@ -78,11 +78,11 @@ Since Mojo lacks native coverage tools, tests should focus on:
 ### Key Test Scenarios
 
 1. **Tool Availability**: Verify coverage tool can be installed and configured
-2. **Basic Collection**: Test coverage captures executed lines
-3. **Framework Integration**: Test coverage works with `mojo test`
-4. **Performance**: Validate overhead is within acceptable limits
-5. **Data Persistence**: Test coverage data can be saved and loaded
-6. **CI Compatibility**: Test coverage works in non-interactive environments
+1. **Basic Collection**: Test coverage captures executed lines
+1. **Framework Integration**: Test coverage works with `mojo test`
+1. **Performance**: Validate overhead is within acceptable limits
+1. **Data Persistence**: Test coverage data can be saved and loaded
+1. **CI Compatibility**: Test coverage works in non-interactive environments
 
 ### Open Questions to Address
 

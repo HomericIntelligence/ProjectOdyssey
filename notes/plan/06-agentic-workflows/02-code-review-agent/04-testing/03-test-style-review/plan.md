@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Create test cases with style violations
-2. Define expected style findings
-3. Write tests for style review
-4. Validate detection accuracy
+1. Define expected style findings
+1. Write tests for style review
+1. Validate detection accuracy
 
 ## Success Criteria
 

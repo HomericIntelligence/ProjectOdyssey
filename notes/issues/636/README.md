@@ -28,13 +28,15 @@ Create and configure the pyproject.toml file for Python project configuration. T
 
 **Decision**: Use setuptools as the build backend
 
-**Rationale**:
+### Rationale
+
 - Industry standard for Python packaging
 - Excellent compatibility with pip and other Python tools
 - Well-documented and widely understood
 - Supports both src-layout and flat-layout projects
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - poetry: More opinionated, additional dependency
 - flit: Simpler but less flexible for complex projects
 - hatch: Newer, still maturing ecosystem
@@ -45,13 +47,15 @@ Create and configure the pyproject.toml file for Python project configuration. T
 
 **Decision**: Separate runtime dependencies from development dependencies using optional-dependencies
 
-**Rationale**:
+### Rationale
+
 - Clear separation of concerns
 - Users installing ML Odyssey don't need dev tools
 - CI/CD can install specific dependency groups as needed
 - Follows PEP 621 best practices
 
-**Structure**:
+### Structure
+
 - [project.dependencies]: Core runtime dependencies (currently pytest for TDD)
 - [project.optional-dependencies.dev]: Development tools (pre-commit, ruff, mypy, mkdocs, etc.)
 
@@ -59,7 +63,8 @@ Create and configure the pyproject.toml file for Python project configuration. T
 
 **Decision**: Require Python >=3.11
 
-**Rationale**:
+### Rationale
+
 - Modern Python features (improved type hints, better error messages)
 - Performance improvements in 3.11+
 - Mojo interop benefits from modern Python
@@ -77,7 +82,8 @@ Create and configure the pyproject.toml file for Python project configuration. T
 
 **Decision**: Configure with 120-character line length, target Python 3.11
 
-**Rationale**:
+### Rationale
+
 - Fast, modern linter that replaces multiple tools (flake8, isort, etc.)
 - 120-character line length balances readability and modern displays
 - Target version ensures linter uses appropriate Python features
@@ -86,13 +92,15 @@ Create and configure the pyproject.toml file for Python project configuration. T
 
 **Decision**: Comprehensive test configuration with coverage reporting
 
-**Configuration**:
+### Configuration
+
 - Test discovery: tests/ directory, test_*.py files
 - Coverage: Track src/ directory, report missing lines
 - Output formats: terminal, XML (for CI), HTML (for review)
 - Verbose output for better debugging
 
-**Rationale**:
+### Rationale
+
 - TDD is a core development principle (see CLAUDE.md)
 - Coverage tracking ensures test quality
 - Multiple report formats support both local and CI workflows
@@ -101,12 +109,14 @@ Create and configure the pyproject.toml file for Python project configuration. T
 
 **Decision**: Strict type checking configuration
 
-**Configuration**:
+### Configuration
+
 - Disallow untyped function definitions
 - Warn on unused configs and return types
 - Target Python 3.11
 
-**Rationale**:
+### Rationale
+
 - Type safety is important for ML/AI code correctness
 - Catches errors early in development
 - Aligns with Mojo's type-safe philosophy
@@ -115,11 +125,13 @@ Create and configure the pyproject.toml file for Python project configuration. T
 
 **Decision**: Use setuptools package discovery with explicit include/exclude
 
-**Configuration**:
+### Configuration
+
 - Include: src* directories
 - Exclude: tests, notes, agents, papers, docs, logs, scripts
 
-**Rationale**:
+### Rationale
+
 - Prevents accidentally packaging development artifacts
 - Clear boundary between source code and supporting files
 - Supports potential src-layout migration
@@ -131,9 +143,9 @@ Create and configure the pyproject.toml file for Python project configuration. T
 The pyproject.toml follows a progressive disclosure pattern:
 
 1. **Build System** (lines 1-3): Foundation for packaging
-2. **Project Metadata** (lines 5-21): What is ML Odyssey?
-3. **Dependencies** (lines 16-38): What does it need?
-4. **Tool Configurations** (lines 40+): How do we maintain quality?
+1. **Project Metadata** (lines 5-21): What is ML Odyssey?
+1. **Dependencies** (lines 16-38): What does it need?
+1. **Tool Configurations** (lines 40+): How do we maintain quality?
 
 ### Integration Points
 
@@ -185,7 +197,8 @@ The current configuration supports:
 
 The existing pyproject.toml (71 lines) is already well-structured and comprehensive:
 
-**Strengths**:
+### Strengths
+
 - Complete project metadata (name, version, description, authors, license)
 - Clear dependency separation (runtime vs. dev)
 - Comprehensive pytest configuration with coverage tracking
@@ -193,12 +206,14 @@ The existing pyproject.toml (71 lines) is already well-structured and comprehens
 - Sensible defaults aligned with Python best practices
 
 **Potential Enhancements** (for implementation phase):
+
 - Consider adding [tool.ruff.lint] for more granular linting rules
 - Evaluate if black should be added (currently using ruff for formatting)
 - Add [project.urls] for repository, documentation, and issue tracker links
 - Consider adding [project.scripts] for future CLI entry points
 
-**Alignment with Plans**:
+### Alignment with Plans
+
 - Satisfies all three child plan objectives:
   - Base config with metadata ✓
   - Python dependencies organized ✓
@@ -207,6 +222,7 @@ The existing pyproject.toml (71 lines) is already well-structured and comprehens
 ### Testing Considerations
 
 The test phase (#637) should validate:
+
 - TOML syntax validity
 - PEP 621 compliance
 - All referenced tools are in dependencies
@@ -216,14 +232,16 @@ The test phase (#637) should validate:
 ### Implementation Approach
 
 Since pyproject.toml already exists, the implementation phase (#638) should:
+
 1. Review current configuration against plan requirements
-2. Identify any gaps or needed enhancements
-3. Make minimal, focused changes to address gaps
-4. Validate changes don't break existing functionality
+1. Identify any gaps or needed enhancements
+1. Make minimal, focused changes to address gaps
+1. Validate changes don't break existing functionality
 
 ### Packaging Integration
 
 The packaging phase (#639) should verify:
+
 - Build system can successfully create distributions
 - Dependencies install correctly
 - Tool configurations are honored

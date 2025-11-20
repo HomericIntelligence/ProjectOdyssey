@@ -24,18 +24,18 @@ Set up Git Large File Storage (LFS) for handling large files like trained models
 
 **Decision**: Use Git LFS for managing large ML artifacts within the main repository.
 
-**Rationale**:
+### Rationale
 
 - ML projects regularly produce large binary files (models, checkpoints, datasets)
 - Git LFS allows version control of large files without bloating repository size
 - Keeps project structure unified (code + artifacts) for easier workflow
 - Industry standard for ML/AI repositories (PyTorch, TensorFlow, Hugging Face)
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 1. **Separate artifact repository**: Would increase complexity for contributors and CI/CD
-2. **Cloud storage only**: Would lose version tracking and reproducibility
-3. **No large file management**: Would cause repository bloat and performance issues
+1. **Cloud storage only**: Would lose version tracking and reproducibility
+1. **No large file management**: Would cause repository bloat and performance issues
 
 ### File Type Categories for LFS Tracking
 
@@ -45,17 +45,17 @@ Set up Git Large File Storage (LFS) for handling large files like trained models
    - Extensions: `.pt`, `.pth`, `.onnx`, `.pb`, `.h5`, `.keras`, `.safetensors`
    - Rationale: Core ML artifacts that can be 100MB-10GB+
 
-2. **Dataset Files**: Training and validation datasets
+1. **Dataset Files**: Training and validation datasets
    - Extensions: `.npz`, `.npy`, `.parquet`, `.arrow`, `.feather`
    - Compressed archives: `.tar.gz`, `.zip` (in data directories)
    - Rationale: Large datasets that benefit from versioning
 
-3. **Checkpoint Files**: Training snapshots and intermediate states
+1. **Checkpoint Files**: Training snapshots and intermediate states
    - Extensions: `.ckpt`, `.checkpoint`
    - Directories: `checkpoints/`, `snapshots/`
    - Rationale: Training artifacts that can accumulate quickly
 
-**Why These Categories**:
+### Why These Categories
 
 - Covers all major ML artifact types in the project
 - Aligns with common ML framework conventions
@@ -66,7 +66,7 @@ Set up Git Large File Storage (LFS) for handling large files like trained models
 
 **Decision**: Use explicit pattern matching in .gitattributes with comments for each category.
 
-**Format**:
+### Format
 
 ```text
 # Git LFS - Model Files
@@ -82,20 +82,20 @@ Set up Git Large File Storage (LFS) for handling large files like trained models
 # Git LFS - Checkpoints
 *.ckpt filter=lfs diff=lfs merge=lfs -text
 ...
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Explicit patterns prevent surprises and make tracking rules obvious
 - Comments improve maintainability and understanding
 - Consistent with existing .gitattributes format in repository
 - Makes it easy to add/remove patterns as project evolves
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 1. **Directory-based tracking** (e.g., `models/**`): Less flexible, harder to maintain
-2. **Minimal patterns**: Risk missing important file types
-3. **Wildcard patterns**: Could catch unintended files
+1. **Minimal patterns**: Risk missing important file types
+1. **Wildcard patterns**: Could catch unintended files
 
 ### Documentation Requirements
 
@@ -105,15 +105,15 @@ Set up Git Large File Storage (LFS) for handling large files like trained models
    - Location: `docs/git-lfs-setup.md` or section in contributing guide
    - Audience: New contributors
 
-2. **Usage Instructions**: Working with LFS-tracked files
+1. **Usage Instructions**: Working with LFS-tracked files
    - Location: Main README.md or developer guide
    - Audience: All developers
 
-3. **Inline Comments**: Explain tracking rules in .gitattributes
+1. **Inline Comments**: Explain tracking rules in .gitattributes
    - Location: .gitattributes file itself
    - Audience: Advanced users modifying configuration
 
-**Rationale**:
+### Rationale
 
 - Multi-level documentation serves different user needs
 - Setup guide reduces friction for new contributors
@@ -124,20 +124,20 @@ Set up Git Large File Storage (LFS) for handling large files like trained models
 
 **Decision**: Extend existing .gitattributes file rather than replacing it.
 
-**Current .gitattributes**:
+### Current .gitattributes
 
 ```text
 # SCM syntax highlighting & preventing 3-way merges
 pixi.lock merge=binary linguist-language=YAML linguist-generated=true
-```
+```text
 
-**Approach**:
+### Approach
 
 - Add LFS patterns as a new section below existing rules
 - Preserve existing configuration for pixi.lock
 - Use section headers for organization
 
-**Rationale**:
+### Rationale
 
 - Maintains existing repository behavior
 - Clear separation between LFS and non-LFS rules

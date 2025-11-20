@@ -26,8 +26,8 @@ Create the docs/ directory for comprehensive project documentation including gui
 The docs/ directory will be organized by documentation type to make information easy to find:
 
 1. **By Type**: Separate guides, API documentation, and architectural documentation
-2. **By Audience**: Structure considers different user personas (end users, contributors, maintainers)
-3. **Progressive Disclosure**: Start simple, expand as needed per the plan notes
+1. **By Audience**: Structure considers different user personas (end users, contributors, maintainers)
+1. **Progressive Disclosure**: Start simple, expand as needed per the plan notes
 
 ### Documentation Organization Principles
 
@@ -36,17 +36,17 @@ The docs/ directory will be organized by documentation type to make information 
    - Developers: API documentation
    - Architects: Architectural decisions and design docs
 
-2. **Discoverability**: README.md serves as the entry point
+1. **Discoverability**: README.md serves as the entry point
    - Clear navigation structure
    - Cross-references to related documentation
    - Table of contents for quick access
 
-3. **Consistency**: Templates and guidelines ensure uniform documentation
+1. **Consistency**: Templates and guidelines ensure uniform documentation
    - Standard structure for different doc types
    - Consistent formatting and style
    - Clear examples to follow
 
-4. **Incremental Growth**: Start with essential structure, expand over time
+1. **Incremental Growth**: Start with essential structure, expand over time
    - Critical directories created upfront
    - Additional subdirectories added as needed
    - Avoid over-engineering initially (YAGNI principle)
@@ -67,9 +67,9 @@ This structure supports both the project's current documentation needs and futur
 Documentation templates should:
 
 1. **Provide Structure**: Clear sections that guide content creation
-2. **Show Examples**: Inline examples demonstrate proper usage
-3. **Be Lightweight**: Easy to use without being prescriptive
-4. **Support Standards**: Align with markdown linting rules (blank lines, code blocks, etc.)
+1. **Show Examples**: Inline examples demonstrate proper usage
+1. **Be Lightweight**: Easy to use without being prescriptive
+1. **Support Standards**: Align with markdown linting rules (blank lines, code blocks, etc.)
 
 ## References
 

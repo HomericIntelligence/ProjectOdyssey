@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. List technical requirements
-2. Document resource requirements
-3. Define feasibility criteria
+1. Document resource requirements
+1. Define feasibility criteria
 
 ## Success Criteria
 

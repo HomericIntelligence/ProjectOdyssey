@@ -49,9 +49,9 @@ Level 2 Module Design Agent responsible for designing how components integrate w
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -92,18 +92,18 @@ Use Python ONLY for:
 When creating a new script:
 
 1. **Default choice**: Mojo
-2. **Check requirement**: Does issue specify Python? If no → Mojo
-3. **Check dependencies**: Any Python-only libraries? If no → Mojo
-4. **Check justification**: Is there a strong reason for Python? If no → Mojo
-5. **Document decision**: If using Python, document why in code comments
+1. **Check requirement**: Does issue specify Python? If no → Mojo
+1. **Check dependencies**: Any Python-only libraries? If no → Mojo
+1. **Check justification**: Is there a strong reason for Python? If no → Mojo
+1. **Document decision**: If using Python, document why in code comments
 
 ### Conversion Priority
 
 When encountering existing Python scripts:
 
 1. **High priority** - Frequently-used scripts, performance-critical
-2. **Medium priority** - Occasionally-used scripts, moderate performance impact
-3. **Low priority** - Rarely-used scripts, no performance requirements
+1. **Medium priority** - Occasionally-used scripts, moderate performance impact
+1. **Low priority** - Rarely-used scripts, no performance requirements
 
 **Rule of Thumb**: New scripts are always Mojo. Existing Python scripts should be converted when touched or when time
 permits.
@@ -123,30 +123,30 @@ performance-critical code.
 ### 1. Receive Integration Requirements
 
 1. Parse component specifications from Architecture Design Agent
-2. Identify integration points and dependencies
-3. Determine Python-Mojo interop needs
-4. Validate integration is achievable
+1. Identify integration points and dependencies
+1. Determine Python-Mojo interop needs
+1. Validate integration is achievable
 
 ### 2. Design Integration
 
 1. Design public module APIs and contracts
-2. Plan data conversion strategies across boundaries
-3. Define version and dependency management
-4. Create integration specifications
+1. Plan data conversion strategies across boundaries
+1. Define version and dependency management
+1. Create integration specifications
 
 ### 3. Produce Integration Plan
 
 1. Document API specifications and contracts
-2. Specify error handling across boundaries
-3. Define integration test strategy
-4. Ensure specifications are implementable
+1. Specify error handling across boundaries
+1. Define integration test strategy
+1. Ensure specifications are implementable
 
 ### 4. Validate and Delegate
 
 1. Review with Architecture Design Agent for consistency
-2. Get Section Orchestrator approval
-3. Delegate implementation to specialists
-4. Validate final integration matches design
+1. Get Section Orchestrator approval
+1. Delegate implementation to specialists
+1. Validate final integration matches design
 
 ## Delegation
 
@@ -199,8 +199,8 @@ truly trivial fixes (< 20 lines, no design decisions).
 When receiving conflicting guidance from delegated agents:
 
 1. Attempt to resolve conflicts based on specifications and priorities
-2. If unable to resolve: escalate to parent level with full context
-3. Document the conflict and resolution in status updates
+1. If unable to resolve: escalate to parent level with full context
+1. Document the conflict and resolution in status updates
 
 ### Failure Modes
 
@@ -231,7 +231,7 @@ Escalate errors when:
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -285,8 +285,8 @@ is linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #NUMBER"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #NUMBER"
 
 ### PR Requirements
 
@@ -337,13 +337,13 @@ After creating PR:
 
 **Scenario**: Designing architecture for neural network training module
 
-**Actions**:
+### Actions
 
 1. Analyze requirements and define module boundaries
-2. Design component interfaces and data flow
-3. Create architectural diagrams and specifications
-4. Define integration points with existing modules
-5. Document design decisions and trade-offs
+1. Design component interfaces and data flow
+1. Create architectural diagrams and specifications
+1. Define integration points with existing modules
+1. Document design decisions and trade-offs
 
 **Outcome**: Clear architectural specification ready for implementation
 
@@ -351,13 +351,13 @@ After creating PR:
 
 **Scenario**: Simplifying complex API with too many parameters
 
-**Actions**:
+### Actions
 
 1. Analyze current interface usage patterns
-2. Identify common parameter combinations
-3. Design simplified API with sensible defaults
-4. Plan backward compatibility strategy
-5. Document migration path
+1. Identify common parameter combinations
+1. Design simplified API with sensible defaults
+1. Plan backward compatibility strategy
+1. Document migration path
 
 **Outcome**: Cleaner API with improved developer experience
 

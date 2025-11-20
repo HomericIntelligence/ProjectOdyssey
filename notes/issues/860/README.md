@@ -39,38 +39,39 @@ This planning phase will define:
    - Download sources: Official Modular/Mojo distribution URLs
    - Version selection: Support specific version or latest stable
 
-2. **API Design**
+1. **API Design**
    - Input: Platform info (from #855-859), target version, destination path
    - Output: Downloaded binary path, checksum result, download status
    - Progress callback interface for UI updates
 
-3. **Architecture Considerations**
+1. **Architecture Considerations**
    - URL construction based on platform and version
    - HTTP/HTTPS download with progress tracking
    - Checksum verification for security
    - Resume capability for interrupted downloads
    - Temporary storage before final placement
 
-4. **Security and Integrity**
+1. **Security and Integrity**
    - Download checksums (SHA256) from official sources
    - Verify file integrity after download
    - Reject corrupted or modified downloads
    - Use HTTPS for secure transmission
 
-5. **Error Handling**
+1. **Error Handling**
    - Network timeouts and connection failures
    - Invalid URLs or missing versions
    - Disk space issues
    - Checksum verification failures
    - Clear, actionable error messages for users
 
-6. **Progress Tracking**
+1. **Progress Tracking**
    - Show download progress (percentage, speed, ETA)
    - Progress bar for CLI interface
    - Callback interface for GUI integration
    - Minimal overhead for progress updates
 
 Key principles:
+
 - Use Magic package manager when possible (preferred method)
 - Graceful fallback to direct download
 - Show progress for large downloads (improve UX)

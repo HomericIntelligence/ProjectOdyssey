@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Create papers/ directory at repository root using mkdir
-2. Verify directory was created successfully
-3. Ensure proper permissions are set
+1. Verify directory was created successfully
+1. Ensure proper permissions are set
 
 ## Success Criteria
 

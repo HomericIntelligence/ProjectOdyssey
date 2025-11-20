@@ -27,9 +27,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Construct download URL for platform
-2. Download Mojo binary with progress indicator
-3. Verify checksum if available
-4. Extract and prepare for installation
+1. Download Mojo binary with progress indicator
+1. Verify checksum if available
+1. Extract and prepare for installation
 
 ## Success Criteria
 

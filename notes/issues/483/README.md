@@ -26,13 +26,13 @@ that reduces coverage or falls below thresholds while maintaining quality standa
 
 **Decision**: Implement dual-threshold enforcement (absolute minimum + no regression)
 
-**Rationale**:
+### Rationale
 
 - Absolute threshold (e.g., 80%) ensures baseline quality
 - Regression prevention stops incremental coverage erosion
 - Combination provides both floor and continuous improvement
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Absolute threshold only - allows gradual erosion above threshold
 - Regression only - no baseline quality guarantee
@@ -42,14 +42,14 @@ that reduces coverage or falls below thresholds while maintaining quality standa
 
 **Decision**: Start with reasonable thresholds (80%) and increase gradually
 
-**Rationale**:
+### Rationale
 
 - Immediate high thresholds (90%+) may block progress
 - Gradual increases allow team adaptation
 - 80% is industry standard baseline
 - Prevents "coverage theater" (high % without meaningful tests)
 
-**Implementation**:
+### Implementation
 
 - Configurable threshold values in CI configuration
 - Separate thresholds for different metrics (line, branch, function coverage)
@@ -59,13 +59,13 @@ that reduces coverage or falls below thresholds while maintaining quality standa
 
 **Decision**: Allow exceptions for generated and external code
 
-**Rationale**:
+### Rationale
 
 - Generated code (protobuf, parsers) shouldn't require tests
 - External/vendored code outside team control
 - Prevents artificial coverage inflation
 
-**Implementation**:
+### Implementation
 
 - Configuration file listing exception patterns
 - Clear documentation of exception criteria
@@ -75,13 +75,13 @@ that reduces coverage or falls below thresholds while maintaining quality standa
 
 **Decision**: Provide clear, actionable failure messages
 
-**Rationale**:
+### Rationale
 
 - Developers need to understand why CI failed
 - Specific guidance reduces frustration
 - Faster resolution of coverage issues
 
-**Message Components**:
+### Message Components
 
 - Current vs. required coverage percentage
 - Which files/functions lack coverage
@@ -92,13 +92,13 @@ that reduces coverage or falls below thresholds while maintaining quality standa
 
 **Decision**: Include coverage badge and PR comments
 
-**Rationale**:
+### Rationale
 
 - Badge provides quick project health indicator
 - PR comments show impact of changes
 - Transparency encourages quality culture
 
-**Implementation**:
+### Implementation
 
 - README.md coverage badge (shields.io or codecov)
 - Automated PR comments with coverage diff
@@ -108,13 +108,13 @@ that reduces coverage or falls below thresholds while maintaining quality standa
 
 **Decision**: Integrate at PR validation stage
 
-**Rationale**:
+### Rationale
 
 - Catch issues before merge
 - Fast feedback loop
 - Prevents main branch degradation
 
-**Integration**:
+### Integration
 
 - Pre-merge CI check (required status check)
 - Post-merge monitoring (alerts only)
@@ -129,17 +129,17 @@ that reduces coverage or falls below thresholds while maintaining quality standa
    - Output: Coverage metrics (line, branch, function)
    - Tool: pytest-cov or similar
 
-2. **Threshold Enforcement**
+1. **Threshold Enforcement**
    - Input: Coverage metrics, threshold configuration
    - Output: Pass/fail decision
    - Logic: Check absolute threshold AND compare to main branch
 
-3. **Exception Processing**
+1. **Exception Processing**
    - Input: Coverage data, exception rules
    - Output: Filtered coverage data
    - Implementation: Pattern matching on file paths
 
-4. **Reporting**
+1. **Reporting**
    - Input: Coverage data, historical data
    - Output: Badge, PR comments, detailed reports
    - Format: Markdown, JSON, HTML
@@ -158,7 +158,7 @@ Check Thresholds → Pass/Fail
 Generate Reports → PR Comments + Badge
     ↓
 CI Status Check
-```
+```text
 
 ### Configuration Schema
 
@@ -180,7 +180,7 @@ coverage_gates:
     badge: true
     pr_comments: true
     detailed_report: true
-```
+```text
 
 ## Implementation Phases
 
@@ -247,9 +247,9 @@ coverage_gates:
 ### Open Questions
 
 1. Which coverage tool best integrates with existing test framework?
-2. Should thresholds differ by directory/module?
-3. How to handle flaky coverage measurements?
-4. Notification strategy for threshold increases?
+1. Should thresholds differ by directory/module?
+1. How to handle flaky coverage measurements?
+1. Notification strategy for threshold increases?
 
 ### Dependencies
 
@@ -279,7 +279,7 @@ coverage_gates:
 ## Next Steps
 
 1. Review and approve planning documentation (this file)
-2. Proceed to Test phase (Issue #484)
-3. Proceed to Implementation phase (Issue #485)
-4. Proceed to Packaging phase (Issue #486)
-5. Complete with Cleanup phase (Issue #487)
+1. Proceed to Test phase (Issue #484)
+1. Proceed to Implementation phase (Issue #485)
+1. Proceed to Packaging phase (Issue #486)
+1. Complete with Cleanup phase (Issue #487)

@@ -25,17 +25,20 @@ Implement any missing components or improvements to the test framework based on 
 
 ### Framework Status
 
-**Child Components**:
-1. **Setup Testing** (#433-437): Test infrastructure setup
-2. **Test Utilities** (#438-442): Assertions, comparisons, generators
-3. **Test Fixtures** (#443-447): Seed fixtures, data generators
+### Child Components
 
-**Current State**:
+1. **Setup Testing** (#433-437): Test infrastructure setup
+1. **Test Utilities** (#438-442): Assertions, comparisons, generators
+1. **Test Fixtures** (#443-447): Seed fixtures, data generators
+
+### Current State
+
 - All child components implemented (or documented)
 - 91+ tests passing across codebase
 - Framework is functional and used successfully
 
 **Potential Gaps** (to be identified in Test phase #449):
+
 - Integration points between components
 - Missing convenience functions
 - Performance bottlenecks
@@ -45,13 +48,15 @@ Implement any missing components or improvements to the test framework based on 
 
 ### Phase 1: Review Test Phase Findings (#449)
 
-**Questions to Answer**:
-1. Do all components integrate smoothly?
-2. Are there reliability issues?
-3. Are there performance problems?
-4. Are there usability improvements needed?
+### Questions to Answer
 
-**Decision Process**:
+1. Do all components integrate smoothly?
+1. Are there reliability issues?
+1. Are there performance problems?
+1. Are there usability improvements needed?
+
+### Decision Process
+
 - **If no gaps found**: Document success, minimal implementation
 - **If minor gaps found**: Implement targeted fixes
 - **If major gaps found**: Implement comprehensive improvements
@@ -65,6 +70,7 @@ Implement any missing components or improvements to the test framework based on 
 **If Test Phase Finds**: Components don't import cleanly
 
 **Potential Solution**: Create unified import module
+
 ```mojo
 """Unified test framework imports for convenience."""
 
@@ -93,11 +99,12 @@ from tests.helpers.assertions import (
     assert_contiguous
 )
 
-# Then tests can do:
+# Then tests can do
 # from tests.framework import assert_true, TestFixtures, create_test_vector
-```
+```text
 
-**Trade-offs**:
+### Trade-offs
+
 - **Pro**: Single import for common needs
 - **Con**: Adds indirection, hides original sources
 - **Decision**: Only if tests show import pain
@@ -106,9 +113,10 @@ from tests.helpers.assertions import (
 
 **If Test Phase Finds**: Non-deterministic behavior
 
-**Potential Solutions**:
+### Potential Solutions
 
 **1. Automatic Seed Management**:
+
 ```mojo
 struct TestContext:
     """Automatic test setup/teardown."""
@@ -121,14 +129,15 @@ struct TestContext:
         """Teardown: cleanup if needed."""
         pass
 
-# Usage:
+# Usage
 fn test_something() raises:
     var ctx = TestContext()  // Auto-seeds
     // Test code here
     // Auto-cleanup on scope exit
-```
+```text
 
 **2. Test Isolation Helpers**:
+
 ```mojo
 fn with_isolated_seed[test_fn: fn () raises -> None](seed: Int = 42) raises:
     """Run test function with isolated random seed.
@@ -143,7 +152,7 @@ fn with_isolated_seed[test_fn: fn () raises -> None](seed: Int = 42) raises:
     random.seed(seed)
     test_fn()
     random.seed(old_seed)  // Restore
-```
+```text
 
 **Decision**: Only if Test phase shows isolation problems
 
@@ -151,9 +160,10 @@ fn with_isolated_seed[test_fn: fn () raises -> None](seed: Int = 42) raises:
 
 **If Test Phase Finds**: Slow fixture creation
 
-**Potential Solutions**:
+### Potential Solutions
 
 **1. Fixture Caching** (for expensive fixtures):
+
 ```mojo
 struct CachedFixture[T: AnyType]:
     """Cache fixture data across tests in same module."""
@@ -169,7 +179,7 @@ struct CachedFixture[T: AnyType]:
             self.cached_data = Some(create_fn())
         return self.cached_data.value()
 
-# Usage (module-level):
+# Usage (module-level)
 var expensive_fixture = CachedFixture[Tensor]()
 
 fn test_1() raises:
@@ -178,9 +188,10 @@ fn test_1() raises:
 fn test_2() raises:
     var data = expensive_fixture.get_or_create[create_large_tensor]()
     // Reuses cached data
-```
+```text
 
 **2. Lazy Fixture Initialization**:
+
 ```mojo
 struct LazyFixture[T: AnyType]:
     """Defer fixture creation until first use."""
@@ -192,7 +203,7 @@ struct LazyFixture[T: AnyType]:
         if self.data is None:
             self.data = Some(self.creator())
         return self.data.value()
-```
+```text
 
 **Decision**: Only if performance benchmarks show need
 
@@ -200,9 +211,10 @@ struct LazyFixture[T: AnyType]:
 
 **If Test Phase Finds**: Common patterns are verbose
 
-**Potential Solutions**:
+### Potential Solutions
 
 **1. Assertion Shortcuts**:
+
 ```mojo
 fn assert_vector_equals(
     actual: List[Float32],
@@ -235,9 +247,10 @@ fn assert_matrix_equals(
 
     for i in range(len(actual)):
         assert_vector_equals(actual[i], expected[i], tolerance)
-```
+```text
 
 **2. Test Data Builders**:
+
 ```mojo
 struct VectorBuilder:
     """Fluent builder for test vectors."""
@@ -268,13 +281,13 @@ struct VectorBuilder:
             random.seed(self.seed.value())
         return create_test_vector(self.size, self.value)
 
-# Usage:
+# Usage
 var vec = VectorBuilder()
     .with_size(100)
     .with_value(3.14)
     .with_seed(42)
     .build()
-```
+```text
 
 **Decision**: Only if tests show verbosity pain
 
@@ -283,6 +296,7 @@ var vec = VectorBuilder()
 **Always Implement** (regardless of Test phase):
 
 **1. Complete Examples**:
+
 ```mojo
 // File: tests/examples/example_basic_test.mojo
 """Example of basic test using framework."""
@@ -304,15 +318,17 @@ fn test_with_data_generator() raises:
     """Example: Using data generators."""
     var vec = create_test_vector(10, 5.0)
     assert_equal(len(vec), 10)
-```
+```text
 
 **2. Best Practices Guide** (update based on experience):
+
 ```markdown
 # Test Framework Best Practices
 
 ## 1. Always Use Deterministic Seeds for Random Data
 
 ```mojo
+
 // GOOD
 fn test_random_operation() raises:
     TestFixtures.set_seed()  // Ensures reproducibility
@@ -323,11 +339,12 @@ fn test_random_operation() raises:
 fn test_random_operation() raises:
     var data = generate_random_data()  // Non-deterministic!
     // test code
-```
 
+```text
 ## 2. Use Appropriate Assertions
 
 ```mojo
+
 // For exact equality (integers, strings)
 assert_equal(42, 42)
 
@@ -336,11 +353,12 @@ assert_almost_equal(0.1 + 0.2, 0.3, tolerance=1e-10)
 
 // For tensors
 assert_all_close(tensor1, tensor2, rtol=1e-5, atol=1e-8)
-```
 
+```text
 ## 3. Keep Tests Focused and Independent
 
 ```mojo
+
 // GOOD: Each test is independent
 fn test_addition() raises:
     assert_equal(2 + 2, 4)
@@ -358,22 +376,26 @@ fn test_1() raises:
 fn test_2() raises:
     global_counter += 1  // Depends on test_1
     assert_equal(global_counter, 2)
-```
-```
+
+```text
+```text
 
 ### Phase 3: Implementation Priorities
 
 **Priority 1: Critical Issues** (implement immediately):
+
 - Bugs in framework components
 - Reliability problems
 - Integration failures
 
 **Priority 2: High-Impact Improvements** (implement if beneficial):
+
 - Performance optimizations with measurable impact
 - Usability improvements that reduce test writing effort
 - Missing convenience functions used by many tests
 
 **Priority 3: Nice-to-Have** (consider for future):
+
 - Advanced features not needed now
 - Optimizations for uncommon cases
 - Features that can wait
@@ -381,10 +403,11 @@ fn test_2() raises:
 ### Phase 4: Testing and Validation
 
 After any implementations:
+
 1. **Run full test suite**: Ensure no regressions
-2. **Validate improvements**: Verify implementations solve identified problems
-3. **Update documentation**: Reflect new features/changes
-4. **Get feedback**: From other test developers if available
+1. **Validate improvements**: Verify implementations solve identified problems
+1. **Update documentation**: Reflect new features/changes
+1. **Get feedback**: From other test developers if available
 
 ## References
 
@@ -408,21 +431,25 @@ After any implementations:
 
 (To be filled based on Issue #449 results)
 
-**Integration Issues Found**:
+### Integration Issues Found
+
 - TBD
 
-**Reliability Issues Found**:
+### Reliability Issues Found
+
 - TBD
 
-**Performance Issues Found**:
+### Performance Issues Found
+
 - TBD
 
-**Usability Issues Found**:
+### Usability Issues Found
+
 - TBD
 
 ### Implementation Decisions
 
-**Decision Log**:
+### Decision Log
 
 | Date | Issue Type | Decision | Rationale |
 |------|-----------|----------|-----------|
@@ -433,13 +460,16 @@ After any implementations:
 
 ### Code Changes
 
-**Files Modified**:
+### Files Modified
+
 - TBD based on actual needs
 
-**Files Created**:
+### Files Created
+
 - TBD based on actual needs
 
-**Examples Added**:
+### Examples Added
+
 - `/tests/examples/` directory
 - Example tests demonstrating framework usage
 
@@ -447,13 +477,15 @@ After any implementations:
 
 **Key Insight**: The framework already works (91+ tests passing). Only implement what's truly needed.
 
-**Approach**:
-1. Start with minimal implementation
-2. Address only issues found in Test phase
-3. Don't over-engineer
-4. Keep simple and maintainable
+### Approach
 
-**Avoid**:
+1. Start with minimal implementation
+1. Address only issues found in Test phase
+1. Don't over-engineer
+1. Keep simple and maintainable
+
+### Avoid
+
 - Implementing features "just in case"
 - Adding complexity without clear benefit
 - Breaking existing tests

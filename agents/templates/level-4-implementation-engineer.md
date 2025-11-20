@@ -11,7 +11,7 @@ description: Implement [component name] functions and classes in Mojo following 
 tools: Read,Write,Edit,Bash,Grep,Glob
 model: sonnet
 ---
-```
+```text
 
 ## Implementation Engineer - [Component Name]
 
@@ -104,7 +104,7 @@ the [component name] component.
 3. Refactor for quality
 4. Repeat for next function
 
-```
+```text
 
 #### 4. Code Review
 
@@ -148,7 +148,7 @@ fn function_name[param: Int](
     # ...
 
     return result
-```
+```text
 
 #### Mojo Struct Template
 
@@ -175,7 +175,7 @@ struct StructName:
         # Implementation
 
         pass
-```
+```text
 
 ### Skills to Use
 
@@ -190,16 +190,16 @@ This agent commonly uses these skills:
 
 #### Example 1: Implement Tensor Addition
 
-**Spec from Component Specialist**:
+### Spec from Component Specialist
 
 ```text
 Function: add_tensors
 Input: Two tensors of same shape
 Output: New tensor with element-wise sum
 Performance: Use SIMD for vectorization
-```
+```text
 
-**Your Implementation**:
+### Your Implementation
 
 ```mojo
 fn add_tensors[
@@ -233,7 +233,7 @@ fn add_tensors[
 
     vectorize[vectorized_add, simd_width=16](size)
     return result
-```
+```text
 
 #### Example 2: Coordinate with Test Engineer
 
@@ -253,14 +253,14 @@ fn test_add_tensors():
 
     # Assert results...
 
-```
+```text
 
 **You** (in implementation worktree):
 
 1. See test exists
-2. Implement `add_tensors` to pass test
-3. Run test locally
-4. Coordinate if test needs adjustment
+1. Implement `add_tensors` to pass test
+1. Run test locally
+1. Coordinate if test needs adjustment
 
 ### Constraints
 
@@ -323,7 +323,7 @@ Report daily during active implementation:
 - Complete `function3()`
 - Request code review
 
-```
+```text
 
 ### Success Criteria
 
@@ -352,13 +352,13 @@ You're successful when:
 
 #### Documentation Guidelines
 
-**Follow the 3-location pattern**:
+### Follow the 3-location pattern
 
 1. **Team Docs** (`/agents/`) - Quick references and templates (read for guidance)
-2. **Comprehensive Specs** (`/notes/review/`) - Architectural decisions (read for context)
-3. **Issue-Specific** (`/notes/issues/<issue-number>/README.md`) - Implementation notes
+1. **Comprehensive Specs** (`/notes/review/`) - Architectural decisions (read for context)
+1. **Issue-Specific** (`/notes/issues/<issue-number>/README.md`) - Implementation notes
 
-**When documenting your work**:
+### When documenting your work
 
 - ✅ Add implementation notes to `/notes/issues/<your-issue>/README.md`
 - ✅ Link to comprehensive docs in `/agents/` and `/notes/review/`
@@ -410,7 +410,7 @@ cp this-template.md .claude/agents/implementation-engineer-example.md
 
 # 2. Test invocation
 
-# In Claude Code:
+# In Claude Code
 
 # User: "Implement the tensor addition function following the spec"
 
@@ -418,7 +418,7 @@ cp this-template.md .claude/agents/implementation-engineer-example.md
 
 # 3. Verify behavior
 
-# Agent should:
+# Agent should
 
 # - Read specification
 
@@ -428,8 +428,7 @@ cp this-template.md .claude/agents/implementation-engineer-example.md
 
 # - Coordinate with Test Engineer
 
-```
-
+```text
 ### See Also
 
 - [Level 3 Component Specialist Template](level-3-component-specialist.md)

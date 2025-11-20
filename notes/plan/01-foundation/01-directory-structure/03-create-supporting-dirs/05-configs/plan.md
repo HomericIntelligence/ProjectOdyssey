@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Create configs/ directory at repository root
-2. Write README explaining configuration approach
-3. Create subdirectories for different config types
-4. Provide example configurations and documentation
+1. Write README explaining configuration approach
+1. Create subdirectories for different config types
+1. Provide example configurations and documentation
 
 ## Success Criteria
 

@@ -29,9 +29,9 @@ None (implementation level)
 ## Steps
 
 1. Define test cases with paper specifications
-2. Write tests for architecture suggestions
-3. Test paper-to-code workflow end-to-end
-4. Validate generated code quality
+1. Write tests for architecture suggestions
+1. Test paper-to-code workflow end-to-end
+1. Validate generated code quality
 
 ## Success Criteria
 

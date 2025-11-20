@@ -54,7 +54,7 @@ Design and document a comprehensive coverage report generation system that produ
 
 The coverage report generation system follows a modular architecture with clear separation of concerns:
 
-```
+```text
 Coverage Data (from Issue #831)
         ↓
    Data Parser
@@ -65,7 +65,7 @@ Coverage Data (from Issue #831)
      └── JSON Generator
         ↓
    Report Output Files
-```
+```text
 
 #### Component Responsibilities
 
@@ -75,13 +75,13 @@ Coverage Data (from Issue #831)
    - Validates data integrity
    - Handles missing or incomplete data gracefully
 
-2. **Report Generators**
+1. **Report Generators**
    - Format-specific report creation
    - Apply styling and formatting rules
    - Calculate derived metrics
    - Organize data for readability
 
-3. **Output Handler**
+1. **Output Handler**
    - Write reports to file system
    - Manage report file naming conventions
    - Create index/navigation files
@@ -93,7 +93,8 @@ Coverage Data (from Issue #831)
 
 **Purpose**: Interactive, visually rich report for developers to explore coverage data.
 
-**Features**:
+### Features
+
 - Syntax-highlighted source code with line numbers
 - Color-coded coverage indicators
 - Clickable navigation between files
@@ -103,9 +104,9 @@ Coverage Data (from Issue #831)
 - Coverage statistics sidebar
 - Tooltips showing coverage details on hover
 
-**Structure**:
+### Structure
 
-```
+```text
 html_report/
 ├── index.html              # Main entry point with overall statistics
 ├── css/
@@ -116,15 +117,17 @@ html_report/
     ├── file1.html          # Per-file report (syntax highlighted)
     ├── file2.html
     └── ...
-```
+```text
 
-**Color Scheme**:
+### Color Scheme
+
 - **Green (#4CAF50)**: Lines covered by tests
 - **Red (#F44336)**: Lines not covered by tests
 - **Yellow (#FFC107)**: Partially covered lines (for branches)
 - **Gray (#9E9E9E)**: Non-executable lines (comments, blank lines)
 
-**Key Metrics Displayed**:
+### Key Metrics Displayed
+
 - Overall coverage percentage
 - Coverage by file
 - Coverage by function/method
@@ -135,9 +138,9 @@ html_report/
 
 **Purpose**: Quick command-line summary for CI/CD pipelines and scripting.
 
-**Format**:
+### Format
 
-```
+```text
 ================================================================================
 COVERAGE REPORT SUMMARY
 ================================================================================
@@ -174,21 +177,22 @@ src/inference/                    12.3%  (45/365 lines)
 src/export/                       8.5%   (23/270 lines)
 
 ================================================================================
-```
+```text
 
-**Report Components**:
+### Report Components
+
 1. Header with generation timestamp and tool info
-2. Overall statistics summary
-3. Top files by coverage (both high and low)
-4. Directory-level coverage breakdown
-5. Line count totals
-6. Coverage percentage trends (if historical data available)
+1. Overall statistics summary
+1. Top files by coverage (both high and low)
+1. Directory-level coverage breakdown
+1. Line count totals
+1. Coverage percentage trends (if historical data available)
 
 #### 2.3 JSON Format Report
 
 **Purpose**: Machine-readable format for programmatic processing and integration.
 
-**Schema**:
+### Schema
 
 ```json
 {
@@ -240,22 +244,23 @@ src/export/                       8.5%   (23/270 lines)
     }
   ]
 }
-```
+```text
 
 ### 3. HTML Report User Interface Design
 
 #### 3.1 Main Index Page
 
-**Layout**:
+### Layout
+
 - Header with project title and metadata
 - Summary statistics panel (overall coverage with gauge/progress bar)
 - Search bar for quick file filtering
 - Navigation tabs (Files, Directories, Uncovered Areas)
 - File list with coverage indicators
 
-**Summary Statistics Display**:
+### Summary Statistics Display
 
-```
+```text
 ┌─────────────────────────────────────────┐
 │  Coverage: 79.4%                        │
 │  ████████░ (4,156 / 5,234 lines)       │
@@ -263,11 +268,12 @@ src/export/                       8.5%   (23/270 lines)
 │ Files:     45      Covered:  42         │
 │ Avg File:  117 lines        75.2%       │
 └─────────────────────────────────────────┘
-```
+```text
 
 #### 3.2 Per-File Report Page
 
-**Features**:
+### Features
+
 - Source code with syntax highlighting
 - Line numbers and coverage indicators
 - Function/class navigation sidebar
@@ -275,9 +281,9 @@ src/export/                       8.5%   (23/270 lines)
 - Copy-to-clipboard functionality for code snippets
 - Line-level tooltips showing coverage status
 
-**Coverage Indicators**:
+### Coverage Indicators
 
-```
+```text
   1 | fn main():                           # Fully covered
   2 |     let x = 5                        # Fully covered
   3 |     if x > 0:                        # Fully covered
@@ -287,9 +293,10 @@ src/export/                       8.5%   (23/270 lines)
   7 |
   8 | fn helper():                         # NOT covered (red background)
   9 |     return 42
-```
+```text
 
-**Color Coding**:
+### Color Coding
+
 - Green line numbers/backgrounds: Line executed in tests
 - Red line numbers/backgrounds: Line NOT executed in tests
 - Yellow backgrounds: Partially executed (branch coverage)
@@ -297,18 +304,21 @@ src/export/                       8.5%   (23/270 lines)
 
 #### 3.3 Navigation Features
 
-**Breadcrumb Navigation**:
+### Breadcrumb Navigation
+
 - Show current file path in breadcrumb
 - Enable quick navigation to parent directories
 - Link to main index
 
-**Sidebar Navigation**:
+### Sidebar Navigation
+
 - File tree showing directory structure
 - Filter by coverage threshold
 - Sort options (by name, by coverage %)
 - Expandable/collapsible file groups
 
-**Search Features**:
+### Search Features
+
 - Quick file search with autocomplete
 - Filter by coverage percentage
 - Filter by file type/extension
@@ -320,12 +330,14 @@ src/export/                       8.5%   (23/270 lines)
 
 **Definition**: Percentage of executable lines that were executed during testing.
 
-**Formula**:
-```
-Line Coverage % = (Covered Lines / Total Executable Lines) × 100
-```
+### Formula
 
-**Calculation Rules**:
+```text
+Line Coverage % = (Covered Lines / Total Executable Lines) × 100
+```text
+
+### Calculation Rules
+
 - Count only executable lines (exclude comments, blank lines, decorators)
 - Include all lines with code statements
 - Track execution at bytecode instruction level
@@ -335,12 +347,14 @@ Line Coverage % = (Covered Lines / Total Executable Lines) × 100
 
 **Definition**: Coverage percentage for a specific source file.
 
-**Calculation**:
-```
-File Coverage % = (Covered Lines in File / Total Executable Lines in File) × 100
-```
+### Calculation
 
-**Aggregation**:
+```text
+File Coverage % = (Covered Lines in File / Total Executable Lines in File) × 100
+```text
+
+### Aggregation
+
 - Weight by file size to identify problem areas
 - Track both absolute coverage % and line counts
 - Support sorting by either metric
@@ -349,12 +363,14 @@ File Coverage % = (Covered Lines in File / Total Executable Lines in File) × 10
 
 **Definition**: Project-wide coverage percentage.
 
-**Calculation**:
-```
-Overall Coverage % = (Total Covered Lines / Total Executable Lines) × 100
-```
+### Calculation
 
-**Scope**:
+```text
+Overall Coverage % = (Total Covered Lines / Total Executable Lines) × 100
+```text
+
+### Scope
+
 - Include all source code files (exclude test files from coverage calculation)
 - Exclude generated code (protobuf, etc.)
 - Include vendored dependencies based on configuration
@@ -363,12 +379,14 @@ Overall Coverage % = (Total Covered Lines / Total Executable Lines) × 100
 
 **Definition**: Coverage percentage for all files within a directory.
 
-**Calculation**:
-```
-Directory Coverage % = (Sum of Covered Lines in Directory / Sum of Total Lines in Directory) × 100
-```
+### Calculation
 
-**Recursive Calculation**:
+```text
+Directory Coverage % = (Sum of Covered Lines in Directory / Sum of Total Lines in Directory) × 100
+```text
+
+### Recursive Calculation
+
 - Calculate for each directory level
 - Show summary statistics per directory
 - Enable drill-down from directory to individual files
@@ -377,28 +395,33 @@ Directory Coverage % = (Sum of Covered Lines in Directory / Sum of Total Lines i
 
 #### 5.1 Default Sort Orders
 
-**By Coverage Percentage (Ascending)**:
+### By Coverage Percentage (Ascending)
+
 - Purpose: Identify highest-priority areas for additional testing
 - Shows files most needing test coverage first
 - Example: `[0%, 5%, 12%, 42%, 78%, 95%]`
 
-**By File Size**:
+### By File Size
+
 - Purpose: Identify largest untested code areas
 - Sort by absolute line count of uncovered code
 - Example: `[1078 uncovered, 556 uncovered, 234 uncovered, ...]`
 
-**Alphabetically**:
+### Alphabetically
+
 - Purpose: Quick navigation by file name
 - Secondary sort when coverage is equal
 
 #### 5.2 Problem Area Highlighting
 
-**Coverage Threshold Rules**:
+### Coverage Threshold Rules
+
 - **Red**: Coverage < 50% (critical - needs testing)
 - **Yellow**: Coverage 50-75% (warning - improve coverage)
 - **Green**: Coverage > 75% (good - maintain level)
 
-**Summary Metrics**:
+### Summary Metrics
+
 - Top 10 files needing coverage
 - Total uncovered lines across project
 - Files with zero coverage (priority list)
@@ -410,7 +433,7 @@ Directory Coverage % = (Sum of Covered Lines in Directory / Sum of Total Lines i
 
 **Location**: `pyproject.toml` or dedicated `coverage_config.toml`
 
-**Schema**:
+### Schema
 
 ```toml
 [tool.coverage.report]
@@ -450,11 +473,11 @@ per_file_minimum = 50  # Warn if any file below this %
 skip_empty = true
 skip_covered = false
 precision = 2  # Decimal places for percentages
-```
+```text
 
 #### 6.2 Command-Line Options
 
-**Report Generation Command**:
+### Report Generation Command
 
 ```bash
 # Generate all configured reports
@@ -476,13 +499,13 @@ coverage-report generate --sort-by coverage
 
 # Exclude patterns
 coverage-report generate --exclude "tests/*,build/*"
-```
+```text
 
 ### 7. Integration with Coverage Analysis (Issue #831)
 
 #### 7.1 Data Flow
 
-```
+```text
 Coverage Analysis (Issue #831)
     ↓
 Coverage Data Files
@@ -493,17 +516,19 @@ Report Generator (Issue #834)
 HTML, Text, JSON Reports
     ↓
 CI/CD Pipeline / Developer Tools
-```
+```text
 
 #### 7.2 Data Format Compatibility
 
-**Supported Input Formats**:
+### Supported Input Formats
+
 - `.coverage` binary format (pytest-cov default)
 - `coverage.xml` (XML format for interoperability)
 - `coverage.json` (JSON for programmatic access)
 - Custom JSON schema (Issue #831 specification)
 
-**Format Detection**:
+### Format Detection
+
 - Auto-detect input format based on file extension
 - Support explicit format specification via CLI
 - Validate data before processing
@@ -511,13 +536,15 @@ CI/CD Pipeline / Developer Tools
 
 #### 7.3 Error Handling
 
-**Data Validation**:
+### Data Validation
+
 - Check coverage data file exists and is readable
 - Validate coverage data integrity
 - Handle missing source files gracefully
 - Report warnings for incomplete coverage data
 
-**Fallback Handling**:
+### Fallback Handling
+
 - Generate reports even if some files missing coverage data
 - Mark missing files with "No data" indicator
 - Continue processing remaining files on errors
@@ -527,12 +554,14 @@ CI/CD Pipeline / Developer Tools
 
 #### 8.1 Report Generation Performance
 
-**Targets**:
+### Targets
+
 - HTML report generation: < 5 seconds for typical project
 - Text report generation: < 1 second
 - JSON report generation: < 2 seconds
 
-**Optimization Strategies**:
+### Optimization Strategies
+
 - Stream large HTML files to avoid memory overhead
 - Cache parsed source code
 - Parallel file processing (if applicable)
@@ -540,12 +569,14 @@ CI/CD Pipeline / Developer Tools
 
 #### 8.2 HTML Report Size
 
-**Target Sizes**:
+### Target Sizes
+
 - HTML report for typical project (50 files): < 10MB
 - Index page: < 500KB
 - Per-file report pages: < 200KB average
 
-**Optimization Techniques**:
+### Optimization Techniques
+
 - Minify CSS and JavaScript
 - Use relative paths for file references
 - Compress common assets
@@ -555,7 +586,7 @@ CI/CD Pipeline / Developer Tools
 
 #### 9.1 Report Generator Interface
 
-**Base Generator Class**:
+### Base Generator Class
 
 ```python
 class CoverageReportGenerator:
@@ -576,7 +607,7 @@ class CoverageReportGenerator:
     def validate_data(self) -> bool:
         """Validate coverage data before generation."""
         pass
-```
+```text
 
 #### 9.2 HTML Report Generator
 
@@ -595,7 +626,7 @@ class HTMLReportGenerator(CoverageReportGenerator):
     def generate_assets(self) -> List[Path]:
         """Generate CSS, JavaScript, and other assets."""
         pass
-```
+```text
 
 #### 9.3 Text Report Generator
 
@@ -610,7 +641,7 @@ class TextReportGenerator(CoverageReportGenerator):
     def generate_detailed(self) -> str:
         """Generate detailed per-file coverage report."""
         pass
-```
+```text
 
 #### 9.4 JSON Report Generator
 
@@ -625,13 +656,14 @@ class JSONReportGenerator(CoverageReportGenerator):
     def to_dict(self) -> Dict:
         """Convert coverage data to dictionary."""
         pass
-```
+```text
 
 ### 10. Validation and Quality Assurance
 
 #### 10.1 Report Validation
 
-**Validation Checks**:
+### Validation Checks
+
 - All uncovered line numbers are within file bounds
 - Coverage percentages are between 0-100%
 - Total lines match sum of covered + uncovered
@@ -640,7 +672,8 @@ class JSONReportGenerator(CoverageReportGenerator):
 
 #### 10.2 Output Verification
 
-**Verification Steps**:
+### Verification Steps
+
 - HTML reports are valid, well-formed HTML
 - CSS and JavaScript assets are properly linked
 - All file paths are correctly computed
@@ -649,7 +682,8 @@ class JSONReportGenerator(CoverageReportGenerator):
 
 #### 10.3 Consistency Checks
 
-**Cross-Format Consistency**:
+### Cross-Format Consistency
+
 - Text and HTML reports show same statistics
 - JSON data matches HTML/text reports
 - Directory totals match sum of file coverage
@@ -659,7 +693,8 @@ class JSONReportGenerator(CoverageReportGenerator):
 
 #### 11.1 User Documentation
 
-**Content**:
+### Content
+
 - How to generate coverage reports
 - Interpreting report statistics
 - Understanding color coding
@@ -669,7 +704,8 @@ class JSONReportGenerator(CoverageReportGenerator):
 
 #### 11.2 API Documentation
 
-**Content**:
+### Content
+
 - Report generator class interfaces
 - Configuration options and schema
 - Input data format specifications
@@ -679,7 +715,8 @@ class JSONReportGenerator(CoverageReportGenerator):
 
 #### 11.3 Developer Guide
 
-**Content**:
+### Content
+
 - Architecture and design decisions
 - Extending report generators
 - Adding new report formats
@@ -691,6 +728,6 @@ class JSONReportGenerator(CoverageReportGenerator):
 After this planning phase is complete:
 
 1. **Issue #835**: Create test suite to validate coverage report generation
-2. **Issue #836**: Implement the coverage report generation system
-3. **Issue #837**: Integrate with CI/CD pipelines and packaging
-4. **Issue #838**: Cleanup, finalization, and performance optimization
+1. **Issue #836**: Implement the coverage report generation system
+1. **Issue #837**: Integrate with CI/CD pipelines and packaging
+1. **Issue #838**: Cleanup, finalization, and performance optimization

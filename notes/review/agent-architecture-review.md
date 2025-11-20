@@ -11,14 +11,14 @@ hierarchy implemented in issues 62-67.
 
 **Decision**: Implement a 6-level agent hierarchy from meta-orchestrator to junior engineers
 
-**Rationale**:
+### Rationale
 
 - Maps to proven organizational patterns (CTO → VP → Principal → Senior → Engineer → Junior)
 - Provides clear separation of concerns at each level
 - Enables effective task decomposition
 - Supports both small and large-scale projects
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Flat structure**: All agents at same level
   - Rejected: No clear authority, coordination chaos
@@ -27,7 +27,7 @@ hierarchy implemented in issues 62-67.
 - **8+ level hierarchy**: More fine-grained levels
   - Rejected: Excessive overhead, diminishing returns
 
-**Trade-offs**:
+### Trade-offs
 
 - ✅ Pros: Clear delegation, proven pattern, scalable
 - ❌ Cons: More complexity, coordination overhead
@@ -40,14 +40,14 @@ hierarchy implemented in issues 62-67.
 
 **Decision**: Use `.claude/agents/` for working configs, `agents/` for documentation
 
-**Rationale**:
+### Rationale
 
 - Follows Claude Code conventions (`.claude/agents/` is the standard location)
 - Separates operational code from documentation
 - Enables team documentation without cluttering operational configs
 - Clear distinction between "what runs" and "how to use"
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Single `agents/` directory**: Everything in repository root
   - Rejected: Doesn't follow Claude Code conventions
@@ -56,7 +56,7 @@ hierarchy implemented in issues 62-67.
 - **Different naming**: `agents-config/` and `agents-docs/`
   - Rejected: Confusing, doesn't follow conventions
 
-**Trade-offs**:
+### Trade-offs
 
 - ✅ Pros: Follows standards, clear separation, team-friendly
 - ❌ Cons: Two directories to maintain
@@ -69,7 +69,7 @@ hierarchy implemented in issues 62-67.
 
 **Decision**: Implement skills in `.claude/skills/` separate from sub-agents
 
-**Rationale**:
+### Rationale
 
 - Skills and sub-agents serve different purposes
 - Skills = reusable capabilities (algorithmic)
@@ -77,7 +77,7 @@ hierarchy implemented in issues 62-67.
 - Follows Claude Code architecture
 - Enables skill reuse across multiple agents
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Skills as sub-agents**: Everything is a sub-agent
   - Rejected: Overkill for simple operations, context pollution
@@ -86,7 +86,7 @@ hierarchy implemented in issues 62-67.
 - **Custom skill system**: Build our own
   - Rejected: Claude Code provides this, don't reinvent
 
-**Trade-offs**:
+### Trade-offs
 
 - ✅ Pros: Clear separation, reusable, follows conventions
 - ❌ Cons: Two systems to learn and maintain
@@ -99,14 +99,14 @@ hierarchy implemented in issues 62-67.
 
 **Decision**: Each GitHub issue gets its own git worktree
 
-**Rationale**:
+### Rationale
 
 - Enables parallel work on multiple issues
 - Isolates agent contexts (one agent per worktree)
 - Prevents merge conflicts during development
 - Natural mapping: 1 issue = 1 worktree = 1 PR
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Single main branch**: Everyone works on main
   - Rejected: Constant conflicts, risky
@@ -115,7 +115,7 @@ hierarchy implemented in issues 62-67.
 - **One worktree per agent**: Persistent worktrees
   - Rejected: Too many worktrees, harder to track
 
-**Trade-offs**:
+### Trade-offs
 
 - ✅ Pros: Isolation, parallel work, clear ownership
 - ❌ Cons: Disk space, more git commands
@@ -128,14 +128,14 @@ hierarchy implemented in issues 62-67.
 
 **Decision**: Organize skills into Tier 1 (Foundational), Tier 2 (Domain), Tier 3 (Specialized)
 
-**Rationale**:
+### Rationale
 
 - Clear organization by usage breadth
 - Easy to find appropriate tier for new skills
 - Matches common skill patterns (universal → domain → specialized)
 - Helps with discoverability
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Flat structure**: All skills in one directory
   - Rejected: Hard to navigate, unclear organization
@@ -144,7 +144,7 @@ hierarchy implemented in issues 62-67.
 - **By domain**: ML skills, code skills, doc skills
   - Rejected: Some skills span domains
 
-**Trade-offs**:
+### Trade-offs
 
 - ✅ Pros: Clear organization, easy to extend
 - ❌ Cons: Some skills could fit multiple tiers
@@ -157,14 +157,14 @@ hierarchy implemented in issues 62-67.
 
 **Decision**: Map agent levels to 5-phase workflow (Plan → Test/Impl/Package → Cleanup)
 
-**Rationale**:
+### Rationale
 
 - Leverages existing workflow
 - Clear phase boundaries
 - Enables parallel Test/Impl/Package phases
 - Natural fit: Planning agents → Plan, Implementation agents → Impl, etc.
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **New workflow**: Design workflow around agents
   - Rejected: Existing 5-phase workflow works well
@@ -173,7 +173,7 @@ hierarchy implemented in issues 62-67.
 - **Linear workflow**: No parallelism
   - Rejected: Misses parallel execution opportunities
 
-**Trade-offs**:
+### Trade-offs
 
 - ✅ Pros: Leverages existing structure, proven workflow
 - ❌ Cons: Must adapt agents to fit phases
@@ -188,12 +188,12 @@ hierarchy implemented in issues 62-67.
 
 **Trade-off**: 6-level hierarchy is complex but powerful
 
-**Analysis**:
+### Analysis
 
 - Complexity: More levels to understand, more coordination
 - Power: Fine-grained control, clear responsibilities, scalable
 
-**Mitigation**:
+### Mitigation
 
 - Comprehensive documentation
 - Templates for each level
@@ -208,12 +208,12 @@ hierarchy implemented in issues 62-67.
 
 **Trade-off**: Following Claude Code conventions vs custom approaches
 
-**Analysis**:
+### Analysis
 
 - Consistency: Easier for users familiar with Claude Code
 - Flexibility: Could customize to our exact needs
 
-**Mitigation**:
+### Mitigation
 
 - Follow conventions where they exist
 - Add customizations only when truly needed
@@ -227,12 +227,12 @@ hierarchy implemented in issues 62-67.
 
 **Trade-off**: Time spent on docs vs implementation
 
-**Analysis**:
+### Analysis
 
 - Good documentation: Helps team, reduces confusion, enables collaboration
 - Less documentation: Faster to implement, but harder to maintain
 
-**Mitigation**:
+### Mitigation
 
 - Document-first approach for foundational work
 - Templates reduce documentation burden
@@ -253,22 +253,22 @@ When reviewing `.claude/agents/` configurations:
    - ✅ Description clearly states when to use this agent
    - ✅ Tools list includes only necessary tools
 
-2. **Clear Responsibilities**:
+1. **Clear Responsibilities**:
    - ✅ Role and scope clearly defined
    - ✅ Responsibilities listed explicitly
    - ✅ Delegation patterns documented
 
-3. **Integration**:
+1. **Integration**:
    - ✅ Fits in hierarchy (correct level)
    - ✅ Coordinates with appropriate agents
    - ✅ Uses appropriate skills
 
-4. **Examples**:
+1. **Examples**:
    - ✅ Includes realistic examples
    - ✅ Shows common workflows
    - ✅ Demonstrates delegation
 
-5. **Constraints**:
+1. **Constraints**:
    - ✅ Documents what NOT to do
    - ✅ Clear boundaries
    - ✅ Escalation triggers defined
@@ -282,22 +282,22 @@ When reviewing `.claude/skills/` configurations:
    - ✅ Name follows naming conventions
    - ✅ Description triggers appropriate activation
 
-2. **Single Responsibility**:
+1. **Single Responsibility**:
    - ✅ Focused on one capability
    - ✅ Clear inputs and outputs
    - ✅ Deterministic behavior
 
-3. **Proper Tier**:
+1. **Proper Tier**:
    - ✅ Tier 1: Used by all/most agents
    - ✅ Tier 2: Domain-specific
    - ✅ Tier 3: Narrow use case
 
-4. **Complete Examples**:
+1. **Complete Examples**:
    - ✅ Shows realistic usage
    - ✅ Covers common scenarios
    - ✅ Includes error handling
 
-5. **Testing**:
+1. **Testing**:
    - ✅ Testable
    - ✅ Validation tests exist
    - ✅ Examples verified
@@ -309,22 +309,22 @@ When reviewing `.claude/skills/` configurations:
 ### What Worked Well
 
 1. **Research First**: Studying organizational patterns and multi-agent systems before designing
-2. **Claude Code Alignment**: Following established conventions saved time
-3. **Documentation-First**: Creating comprehensive docs before implementation
-4. **Parallel Planning**: Using multiple agents to update plan files simultaneously
+1. **Claude Code Alignment**: Following established conventions saved time
+1. **Documentation-First**: Creating comprehensive docs before implementation
+1. **Parallel Planning**: Using multiple agents to update plan files simultaneously
 
 ### What We'd Do Differently
 
 1. **Start Smaller**: Could have started with 3-4 levels, expanded later
-2. **More Examples**: Need more concrete examples of agent interactions
-3. **Testing Strategy**: Should have defined testing approach earlier
+1. **More Examples**: Need more concrete examples of agent interactions
+1. **Testing Strategy**: Should have defined testing approach earlier
 
 ### Open Questions
 
 1. **Performance**: How does 6-level delegation affect response time?
-2. **Coordination Overhead**: Is coordination overhead acceptable?
-3. **Skill Discovery**: Will Claude reliably discover and use skills?
-4. **Worktree Scale**: How many concurrent worktrees is manageable?
+1. **Coordination Overhead**: Is coordination overhead acceptable?
+1. **Skill Discovery**: Will Claude reliably discover and use skills?
+1. **Worktree Scale**: How many concurrent worktrees is manageable?
 
 ---
 
@@ -332,13 +332,13 @@ When reviewing `.claude/skills/` configurations:
 
 ### For Test Phase (Issues 63, 69)
 
-**Questions to Answer**:
+### Questions to Answer
 
 - How do we test agent delegation?
 - What validates successful agent loading?
 - How do we test skill activation?
 
-**Review Focus**:
+### Review Focus
 
 - Test coverage for all agent types
 - Validation tests for configurations
@@ -346,13 +346,13 @@ When reviewing `.claude/skills/` configurations:
 
 ### For Implementation Phase (Issues 64, 70)
 
-**Questions to Answer**:
+### Questions to Answer
 
 - Which agents to implement first?
 - How do we test agents in isolation?
 - What's the learning curve for team?
 
-**Review Focus**:
+### Review Focus
 
 - Configuration correctness
 - Follows templates
@@ -360,13 +360,13 @@ When reviewing `.claude/skills/` configurations:
 
 ### For Packaging Phase (Issues 65, 71)
 
-**Questions to Answer**:
+### Questions to Answer
 
 - How do team members discover agents?
 - What's the onboarding process?
 - How do we version control configs?
 
-**Review Focus**:
+### Review Focus
 
 - Documentation completeness
 - Setup instructions clarity
@@ -381,10 +381,10 @@ When reviewing `.claude/skills/` configurations:
 For this architecture to be successful:
 
 1. **Usable**: Team can create and use agents without extensive training
-2. **Scalable**: Hierarchy handles increasing complexity gracefully
-3. **Maintainable**: Easy to add new agents and skills
-4. **Effective**: Agents actually improve development workflow
-5. **Documented**: Clear docs enable self-service
+1. **Scalable**: Hierarchy handles increasing complexity gracefully
+1. **Maintainable**: Easy to add new agents and skills
+1. **Effective**: Agents actually improve development workflow
+1. **Documented**: Clear docs enable self-service
 
 ### Measurement Approach
 

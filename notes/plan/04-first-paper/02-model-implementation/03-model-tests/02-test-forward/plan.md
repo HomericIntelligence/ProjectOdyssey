@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Test forward pass with random inputs
-2. Test forward pass with known inputs
-3. Verify output correctness
+1. Test forward pass with known inputs
+1. Verify output correctness
 
 ## Success Criteria
 

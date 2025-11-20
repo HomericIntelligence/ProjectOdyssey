@@ -29,8 +29,8 @@ Write comprehensive unit tests for all shared library components. This includes 
 ## Steps
 
 1. Write tests for core operations covering all functionality
-2. Create tests for training utilities verifying training workflows
-3. Build tests for data utilities ensuring correct data handling
+1. Create tests for training utilities verifying training workflows
+1. Build tests for data utilities ensuring correct data handling
 
 ## Success Criteria
 

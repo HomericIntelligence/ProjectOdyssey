@@ -31,10 +31,10 @@ None (leaf node)
 ## Steps
 
 1. Implement synonym replacement using word embeddings or thesaurus
-2. Create random insertion with contextually appropriate words
-3. Add random swap for word order variation
-4. Implement random deletion with probability control
-5. Ensure semantic meaning preservation
+1. Create random insertion with contextually appropriate words
+1. Add random swap for word order variation
+1. Implement random deletion with probability control
+1. Ensure semantic meaning preservation
 
 ## Success Criteria
 

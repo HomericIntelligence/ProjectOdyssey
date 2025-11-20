@@ -23,7 +23,7 @@ Create the foundational training infrastructure including a trainer interface, t
 
 **Decision**: Use composition-based design rather than deep inheritance hierarchies.
 
-**Rationale**:
+### Rationale
 
 - Provides flexibility for paper-specific training requirements
 - Easier to test and mock individual components
@@ -36,7 +36,7 @@ Create the foundational training infrastructure including a trainer interface, t
 
 **Decision**: Define a focused interface with essential operations only.
 
-**Rationale**:
+### Rationale
 
 - Core methods: `train()`, `validate()`, `test()`
 - State management: model state, optimizer state, training metrics
@@ -49,16 +49,16 @@ Create the foundational training infrastructure including a trainer interface, t
 
 **Decision**: Implement training loop with distinct phases for each operation.
 
-**Components**:
+### Components
 
 1. **Batch iteration**: Loop over training data
-2. **Forward pass**: Model prediction + loss computation
-3. **Backward pass**: Gradient computation via backpropagation
-4. **Weight update**: Optimizer application
-5. **Metric tracking**: Loss and accuracy logging
-6. **Callback invocation**: Hooks for custom logic
+1. **Forward pass**: Model prediction + loss computation
+1. **Backward pass**: Gradient computation via backpropagation
+1. **Weight update**: Optimizer application
+1. **Metric tracking**: Loss and accuracy logging
+1. **Callback invocation**: Hooks for custom logic
 
-**Rationale**:
+### Rationale
 
 - Clear, readable code that follows standard training patterns
 - Easy to debug and modify individual phases
@@ -71,7 +71,7 @@ Create the foundational training infrastructure including a trainer interface, t
 
 **Decision**: Implement validation without gradient computation or weight updates.
 
-**Key Features**:
+### Key Features
 
 - Model evaluation mode (disable dropout, use running batch norm stats)
 - No gradient storage to conserve memory
@@ -79,7 +79,7 @@ Create the foundational training infrastructure including a trainer interface, t
 - Support for both during-training and post-training validation
 - Optional subset validation for faster feedback
 
-**Rationale**:
+### Rationale
 
 - Memory efficiency: no gradient buffers needed
 - Correct evaluation: evaluation mode ensures consistent behavior
@@ -92,7 +92,7 @@ Create the foundational training infrastructure including a trainer interface, t
 
 **Decision**: Track all necessary state for training resumption.
 
-**State Components**:
+### State Components
 
 - Model weights and architecture
 - Optimizer state (momentum, learning rate schedule)
@@ -100,7 +100,7 @@ Create the foundational training infrastructure including a trainer interface, t
 - Metrics history (loss, accuracy over time)
 - Random state (for reproducibility)
 
-**Rationale**:
+### Rationale
 
 - Enables training resumption after interruptions
 - Supports distributed training scenarios
@@ -113,14 +113,14 @@ Create the foundational training infrastructure including a trainer interface, t
 
 **Decision**: Define callback hooks at strategic points in training lifecycle.
 
-**Hook Points**:
+### Hook Points
 
 - `on_train_begin()` / `on_train_end()`
 - `on_epoch_begin()` / `on_epoch_end()`
 - `on_batch_begin()` / `on_batch_end()`
 - `on_validation_begin()` / `on_validation_end()`
 
-**Rationale**:
+### Rationale
 
 - Enables custom behavior without modifying trainer code
 - Supports logging, checkpointing, early stopping, learning rate scheduling
@@ -133,14 +133,14 @@ Create the foundational training infrastructure including a trainer interface, t
 
 **Decision**: Use explicit configuration objects rather than keyword arguments.
 
-**Configuration Sections**:
+### Configuration Sections
 
 - Training config: epochs, batch size, logging frequency
 - Optimizer config: learning rate, momentum, weight decay
 - Validation config: validation frequency, subset size
 - Checkpoint config: save frequency, checkpoint directory
 
-**Rationale**:
+### Rationale
 
 - Type safety and validation
 - Clear documentation of available options
@@ -153,14 +153,14 @@ Create the foundational training infrastructure including a trainer interface, t
 
 **Decision**: Validate inputs early and provide informative error messages.
 
-**Validation Points**:
+### Validation Points
 
 - Model architecture compatibility
 - Data loader consistency (batch sizes, data types)
 - Optimizer and loss function compatibility
 - Configuration parameter validity
 
-**Rationale**:
+### Rationale
 
 - Catches errors before expensive training begins
 - Clear error messages accelerate debugging
@@ -175,14 +175,14 @@ Create the foundational training infrastructure including a trainer interface, t
 
 **Purpose**: Define the contract for all training implementations.
 
-**Outputs**:
+### Outputs
 
 - Core methods: `train()`, `validate()`, `test()`
 - State properties: model state, optimizer state, metrics
 - Configuration specifications
 - Callback hook points
 
-**Design Notes**:
+### Design Notes
 
 - Use Mojo trait pattern or abstract base struct
 - Keep interface minimal (essential operations only)
@@ -193,14 +193,14 @@ Create the foundational training infrastructure including a trainer interface, t
 
 **Purpose**: Implement the core training iteration logic.
 
-**Outputs**:
+### Outputs
 
 - Trained model with updated weights
 - Training metrics (loss, accuracy per batch/epoch)
 - Training state for resumption
 - Callback invocations
 
-**Design Notes**:
+### Design Notes
 
 - Straightforward, readable implementation
 - Handle edge cases (empty batches)
@@ -211,14 +211,14 @@ Create the foundational training infrastructure including a trainer interface, t
 
 **Purpose**: Evaluate model performance without weight updates.
 
-**Outputs**:
+### Outputs
 
 - Validation metrics (loss, accuracy, etc.)
 - Aggregated statistics across validation set
 - Per-batch and overall results
 - Callback invocations for validation events
 
-**Design Notes**:
+### Design Notes
 
 - Ensure model is in evaluation mode
 - No gradient computation (memory efficiency)
@@ -245,8 +245,8 @@ Create the foundational training infrastructure including a trainer interface, t
 ### Child Components
 
 1. [Trainer Interface](../../../plan/02-shared-library/02-training-utils/01-base-trainer/01-trainer-interface/plan.md)
-2. [Training Loop](../../../plan/02-shared-library/02-training-utils/01-base-trainer/02-training-loop/plan.md)
-3. [Validation Loop](../../../plan/02-shared-library/02-training-utils/01-base-trainer/03-validation-loop/plan.md)
+1. [Training Loop](../../../plan/02-shared-library/02-training-utils/01-base-trainer/02-training-loop/plan.md)
+1. [Validation Loop](../../../plan/02-shared-library/02-training-utils/01-base-trainer/03-validation-loop/plan.md)
 
 ### Documentation Resources
 

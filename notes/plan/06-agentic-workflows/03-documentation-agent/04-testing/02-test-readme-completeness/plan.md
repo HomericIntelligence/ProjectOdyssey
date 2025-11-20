@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Create test cases with sample projects
-2. Define expected README content
-3. Write tests for README generation
-4. Validate completeness and accuracy
+1. Define expected README content
+1. Write tests for README generation
+1. Validate completeness and accuracy
 
 ## Success Criteria
 

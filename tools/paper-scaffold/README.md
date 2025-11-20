@@ -10,7 +10,7 @@ Generate a complete paper implementation directory with all boilerplate files.
 
 **Language**: Python (justified by template processing, file generation)
 
-**Usage**:
+### Usage
 
 ```bash
 python tools/paper-scaffold/scaffold.py \
@@ -21,9 +21,9 @@ python tools/paper-scaffold/scaffold.py \
     --url "http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf" \
     --description "Convolutional neural network for handwritten digit recognition" \
     --output papers/
-```
+```text
 
-**Generated Structure**:
+### Generated Structure
 
 ```text
 papers/lenet5/
@@ -37,7 +37,7 @@ papers/lenet5/
 └── notes/
     ├── architecture.md    # Architecture notes
     └── results.md         # Results tracking
-```
+```text
 
 ## Templates
 
@@ -48,7 +48,7 @@ The scaffolder uses simple string substitution templates:
 - `train.mojo.tmpl` - Training script
 - `test_model.mojo.tmpl` - Test file
 
-**Template Variables**:
+### Template Variables
 
 - `{{PAPER_NAME}}` - Short name (e.g., "lenet5")
 - `{{PAPER_TITLE}}` - Full title

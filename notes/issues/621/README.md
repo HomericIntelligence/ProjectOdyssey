@@ -26,39 +26,39 @@ Python requirements. This establishes the foundation for Python project configur
 
 **Decision**: Use setuptools as the build backend
 
-**Rationale**:
+### Rationale
 
 - Industry standard for Python packaging
 - Well-documented and widely supported
 - Compatible with modern PEP standards (PEP 517, PEP 518)
 - Supports both pure Python and extension modules (future Mojo integration)
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Poetry: More opinionated, adds dependency management complexity
 - Flit: Simpler but less flexible for complex projects
 - Hatchling: Modern but less mature ecosystem
 
-**Implementation**:
+### Implementation
 
 ```toml
 [build-system]
 requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
-```
+```text
 
 ### 2. Project Metadata Structure
 
 **Decision**: Follow PEP 621 for all project metadata
 
-**Rationale**:
+### Rationale
 
 - Standard format for Python projects
 - Ensures compatibility with packaging tools
 - Machine-readable format for automated processing
 - Forward-compatible with ecosystem evolution
 
-**Required Fields**:
+### Required Fields
 
 - name: "ml-odyssey" (project identifier)
 - version: "0.1.0" (semantic versioning)
@@ -70,14 +70,14 @@ build-backend = "setuptools.build_meta"
 
 **Decision**: Require Python 3.11 or higher
 
-**Rationale**:
+### Rationale
 
 - Mojo requires modern Python for interoperability
 - Access to latest type hinting features
 - Performance improvements in 3.11+
 - Modern syntax and standard library features
 
-**Trade-offs**:
+### Trade-offs
 
 - Excludes users on older Python versions
 - Acceptable given project's focus on cutting-edge ML/AI
@@ -86,7 +86,7 @@ build-backend = "setuptools.build_meta"
 
 **Decision**: Use BSD license
 
-**Rationale**:
+### Rationale
 
 - Permissive license suitable for research code
 - Compatible with academic and commercial use
@@ -97,14 +97,14 @@ build-backend = "setuptools.build_meta"
 
 **Decision**: Start with minimal valid configuration
 
-**Rationale**:
+### Rationale
 
 - YAGNI principle - don't add until needed
 - Dependencies will be added in subsequent issues (#622-625)
 - Tool configurations handled separately (issue #627-630)
 - Easier to review and validate incrementally
 
-**What's Excluded from Base Config**:
+### What's Excluded from Base Config
 
 - Python dependencies (handled in issue #626)
 - Development dependencies (handled in issue #626)
@@ -125,7 +125,7 @@ pyproject.toml (root level)
     ├── requires-python
     ├── license
     └── authors
-```
+```text
 
 ### Standards Compliance
 
@@ -144,8 +144,8 @@ pyproject.toml (root level)
 ## Implementation Steps
 
 1. Create pyproject.toml file at repository root
-2. Add [build-system] section with setuptools configuration
-3. Add [project] section with:
+1. Add [build-system] section with setuptools configuration
+1. Add [project] section with:
    - name: "ml-odyssey"
    - version: "0.1.0"
    - description: Project summary
@@ -153,8 +153,8 @@ pyproject.toml (root level)
    - readme: "README.md"
    - requires-python: ">=3.11"
    - license: BSD
-4. Validate TOML syntax
-5. Verify PEP 621 compliance
+1. Validate TOML syntax
+1. Verify PEP 621 compliance
 
 ## Validation Requirements
 
@@ -163,7 +163,7 @@ pyproject.toml (root level)
 ```bash
 # Validate TOML syntax
 python3 -c "import tomllib; tomllib.load(open('pyproject.toml', 'rb'))"
-```
+```text
 
 ### PEP 621 Compliance
 
@@ -178,13 +178,13 @@ python3 -c "import tomllib; tomllib.load(open('pyproject.toml', 'rb'))"
 # Verify build system works
 pip install build
 python -m build --sdist --wheel
-```
+```text
 
 ## Current State Assessment
 
 **Status**: pyproject.toml already exists with comprehensive configuration
 
-**Findings**:
+### Findings
 
 - Base configuration is complete and correct
 - Includes build system configuration (setuptools)
@@ -196,7 +196,7 @@ python -m build --sdist --wheel
   - optional-dependencies (should be in issue #626)
   - tool configurations (should be in issues #627-630)
 
-**Implications**:
+### Implications
 
 - The "base config" scope has been exceeded
 - Current file includes content from multiple planned issues
@@ -243,13 +243,13 @@ subsequent issues. This doesn't violate the plan but represents early implementa
 
 **Status**: Complete
 
-**Decisions Made**:
+### Decisions Made
 
 1. Use setuptools as build backend (standard choice)
-2. Require Python 3.11+ (compatible with Mojo)
-3. Use BSD license (appropriate for research)
-4. Start with minimal valid configuration (YAGNI)
-5. Follow PEP 621 for all metadata
+1. Require Python 3.11+ (compatible with Mojo)
+1. Use BSD license (appropriate for research)
+1. Start with minimal valid configuration (YAGNI)
+1. Follow PEP 621 for all metadata
 
 **Current State**: pyproject.toml exists with comprehensive configuration that exceeds the minimal base config scope.
 The file includes dependencies and tool configurations that were planned for subsequent issues, representing early

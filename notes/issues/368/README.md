@@ -24,7 +24,7 @@ Define the base dataset interface that all dataset implementations must follow, 
 
 **Decision**: Follow the Python sequence protocol by implementing `__len__` and `__getitem__` as required methods.
 
-**Rationale**:
+### Rationale
 
 - Enables standard Python idioms (iteration, indexing, slicing)
 - Makes datasets work with built-in Python functions (len(), list(), etc.)
@@ -35,7 +35,7 @@ Define the base dataset interface that all dataset implementations must follow, 
 
 **Decision**: Keep the interface minimal with only essential methods as required.
 
-**Rationale**:
+### Rationale
 
 - Reduces implementation burden for custom datasets
 - Easier to understand and use
@@ -46,7 +46,7 @@ Define the base dataset interface that all dataset implementations must follow, 
 
 **Decision**: Use an abstract base class (or Mojo trait) to define the interface.
 
-**Rationale**:
+### Rationale
 
 - Provides clear contract for implementers
 - Enables type checking and validation
@@ -57,7 +57,7 @@ Define the base dataset interface that all dataset implementations must follow, 
 
 **Decision**: Only `__len__` and `__getitem__` are required; transform and collate are optional.
 
-**Rationale**:
+### Rationale
 
 - Core operations (length and indexing) are universally needed
 - Transform and collate are dataset-specific features
@@ -68,7 +68,7 @@ Define the base dataset interface that all dataset implementations must follow, 
 
 **Decision**: Interface should be data-agnostic, supporting images, text, tabular data, etc.
 
-**Rationale**:
+### Rationale
 
 - Maximizes reusability across different ML tasks
 - Prevents coupling to specific data formats
@@ -79,7 +79,7 @@ Define the base dataset interface that all dataset implementations must follow, 
 
 **Decision**: Interface must support both indexed access and iteration.
 
-**Rationale**:
+### Rationale
 
 - Indexed access enables random sampling and batching
 - Iteration enables sequential processing
@@ -101,7 +101,7 @@ Implementation Examples:
 ├── ImageDataset
 ├── TextDataset
 └── TabularDataset
-```
+```text
 
 ## API Contract
 
@@ -149,7 +149,7 @@ struct SimpleDataset(Dataset):
         if index < 0 or index >= len(self):
             raise IndexError("Index out of range")
         return self.data[index]
-```
+```text
 
 ### Using Dataset with Standard Python Idioms
 
@@ -169,7 +169,7 @@ for sample in dataset:
 
 # Slice dataset (if supported)
 subset = dataset[0:10]
-```
+```text
 
 ### Custom Dataset with Transform
 
@@ -189,7 +189,7 @@ struct ImageDataset(Dataset):
 
     fn transform(self, fn: Transform) -> ImageDataset:
         return ImageDataset(self.paths, fn)
-```
+```text
 
 ## Integration with Other Components
 
@@ -207,9 +207,9 @@ The dataset interface will be consumed by the dataset loader component, which:
 The dataset interface is part of the broader data pipeline:
 
 1. **Dataset Interface** (this component) - Defines how to access data
-2. **Dataset Length** (#369-372) - Implements size tracking
-3. **Dataset Getitem** (#377-380) - Implements indexed access
-4. **Dataset Loader** (#373-376) - Creates and configures datasets
+1. **Dataset Length** (#369-372) - Implements size tracking
+1. **Dataset Getitem** (#377-380) - Implements indexed access
+1. **Dataset Loader** (#373-376) - Creates and configures datasets
 
 ## References
 
@@ -253,8 +253,8 @@ This section will be populated during the Test (#369), Implementation (#370), Pa
 After this planning phase is complete:
 
 1. **Test Phase (Issue #369)**: Write test suite following TDD principles
-2. **Implementation Phase (Issue #370)**: Implement the dataset interface
-3. **Packaging Phase (Issue #371)**: Integrate with build system and documentation
-4. **Cleanup Phase (Issue #372)**: Refactor and finalize based on insights from parallel phases
+1. **Implementation Phase (Issue #370)**: Implement the dataset interface
+1. **Packaging Phase (Issue #371)**: Integrate with build system and documentation
+1. **Cleanup Phase (Issue #372)**: Refactor and finalize based on insights from parallel phases
 
 All phases depend on this planning documentation being complete and approved.

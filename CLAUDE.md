@@ -43,7 +43,7 @@ Agents delegate to skills for automation using five standard patterns:
 Use the `skill-name` skill to [action]:
 - **Invoke when**: [trigger condition]
 - **The skill handles**: [specific automation]
-```
+```text
 
 **Pattern 2: Conditional Delegation** - Agent decides based on conditions
 
@@ -52,7 +52,7 @@ If [condition]:
   - Use the `skill-name` skill to [action]
 Otherwise:
   - [alternative approach]
-```
+```text
 
 **Pattern 3: Multi-Skill Workflow** - Agent orchestrates multiple skills
 
@@ -61,7 +61,7 @@ To accomplish [goal]:
 1. Use the `skill-1` skill to [step 1]
 2. Use the `skill-2` skill to [step 2]
 3. Review results and [decision]
-```
+```text
 
 **Pattern 4: Skill Selection** - Orchestrator chooses skill based on analysis
 
@@ -69,14 +69,14 @@ To accomplish [goal]:
 Analyze [context]:
 - If [scenario A]: Use `skill-A`
 - If [scenario B]: Use `skill-B`
-```
+```text
 
 **Pattern 5: Background vs Foreground** - Distinguishing automatic vs explicit invocation
 
 ```markdown
 Background automation: `ci-run-precommit` (runs automatically)
 Foreground tasks: `gh-create-pr-linked` (invoke explicitly)
-```
+```text
 
 **Available Skills** (43 total across 9 categories):
 
@@ -146,12 +146,12 @@ Relevant links:
 **Rule of Thumb** (Decision Tree):
 
 1. **ML/AI implementation?** → Mojo (required)
-2. **Automation needing subprocess output?** → Python (allowed, document why)
-3. **Automation needing regex?** → Python (allowed, document why)
-4. **Interface with Python-only libraries?** → Python (allowed, document why)
-5. **Everything else?** → Mojo (default)
+1. **Automation needing subprocess output?** → Python (allowed, document why)
+1. **Automation needing regex?** → Python (allowed, document why)
+1. **Interface with Python-only libraries?** → Python (allowed, document why)
+1. **Everything else?** → Mojo (default)
 
-**Why Mojo for ML/AI**:
+### Why Mojo for ML/AI
 
 - Performance: Faster for ML workloads
 - Type safety: Catch errors at compile time
@@ -159,7 +159,7 @@ Relevant links:
 - SIMD optimization: Parallel tensor operations
 - Future-proof: Designed for AI/ML from the ground up
 
-**Why Python for Automation**:
+### Why Python for Automation
 
 - Mojo's subprocess API lacks exit code access (causes silent failures)
 - Regex support not production-ready (mojo-regex is alpha stage)
@@ -179,7 +179,7 @@ This project uses Pixi for environment management:
 # Pixi is already configured - dependencies are in pixi.toml
 # Mojo is the primary language target for future implementations
 
-```
+```text
 
 ## Common Commands
 
@@ -202,27 +202,27 @@ gh issue view <number>
 # Reply to PR review comments (addressing feedback)
 
 gh pr comment <pr-number> --body "Short, concise explanation of what was done"
-```
+```text
 
 ### Handling PR Review Comments
 
 **CRITICAL**: There are TWO types of comments - do NOT confuse them:
 
 1. **PR-level comments** - General comments in the PR timeline (`gh pr comment`)
-2. **Review comment replies** - Specific replies to inline code review comments (GitHub API)
+1. **Review comment replies** - Specific replies to inline code review comments (GitHub API)
 
 When addressing review comments on a pull request:
 
 1. **Make the requested changes** in your code
-2. **Reply to EACH review comment individually** using the correct API
-3. **Verify replies were posted** before reporting completion
-4. **Check CI status** after pushing changes
+1. **Reply to EACH review comment individually** using the correct API
+1. **Verify replies were posted** before reporting completion
+1. **Check CI status** after pushing changes
 
 #### Correct Way to Reply to Review Comments
 
 **DO NOT USE** `gh pr comment` - that creates a general PR comment, not a reply to review comments.
 
-**CORRECT approach:**
+### CORRECT approach:
 
 ```bash
 # Step 1: Get review comment IDs
@@ -239,15 +239,15 @@ gh api repos/OWNER/REPO/pulls/PR/comments --jq '.[] | select(.in_reply_to_id)'
 # Step 4: Check CI status
 sleep 30  # Wait for CI to start
 gh pr checks PR
-```
+```text
 
-**Example responses**:
+### Example responses
 
 - `✅ Fixed - Updated conftest.py to use real repository root instead of mock tmp_path`
 - `✅ Fixed - Deleted test_link_validation.py since link validation is handled by pre-commit`
 - `✅ Fixed - Removed markdown linting section from README.md`
 
-**Important**:
+### Important
 
 - Keep responses SHORT and CONCISE (1 line preferred)
 - Start with ✅ to indicate the issue is resolved
@@ -284,9 +284,9 @@ python3 tests/agents/test_mojo_patterns.py .claude/agents/
 for script in tests/agents/test_*.py tests/agents/validate_*.py; do
     python3 "$script" .claude/agents/
 done
-```
+```text
 
-**Test Coverage**:
+### Test Coverage
 
 - Configuration validation (YAML frontmatter, required fields, tool specifications)
 - Agent discovery and loading (hierarchy coverage, activation patterns)
@@ -319,9 +319,9 @@ pre-commit run
 # Skip hooks (use sparingly, only when necessary)
 
 git commit --no-verify
-```
+```text
 
-**Configured Hooks**:
+### Configured Hooks
 
 - `mojo format` - Auto-format Mojo code (`.mojo`, `.🔥` files)
 - `markdownlint-cli2` - Lint markdown files (currently disabled, will enable after fixing existing files)
@@ -364,16 +364,16 @@ ml-odyssey/
 ├── scripts/                     # Python automation scripts
 ├── logs/                        # Execution logs and state files
 └── .clinerules                 # Claude Code conventions
-```
+```text
 
 ### Planning Hierarchy
 
 **4 Levels** (in `notes/plan/` directory):
 
 1. **Section** (e.g., 01-foundation) - Major area of work
-2. **Subsection** (e.g., 01-directory-structure) - Logical grouping
-3. **Component** (e.g., 01-create-papers-dir) - Specific deliverable
-4. **Subcomponent** (e.g., 01-create-base-dir) - Atomic task
+1. **Subsection** (e.g., 01-directory-structure) - Logical grouping
+1. **Component** (e.g., 01-create-papers-dir) - Specific deliverable
+1. **Subcomponent** (e.g., 01-create-base-dir) - Atomic task
 
 ### Documentation Organization
 
@@ -383,7 +383,7 @@ The repository uses three separate locations for documentation to avoid duplicat
 
 **Purpose**: Quick start guides, visual references, and templates for team onboarding.
 
-**Contents**:
+### Contents
 
 - Quick start guides (README.md)
 - Visual diagrams (hierarchy.md)
@@ -396,7 +396,7 @@ The repository uses three separate locations for documentation to avoid duplicat
 
 **Purpose**: Detailed architectural decisions, comprehensive specifications, and design documents.
 
-**Contents**:
+### Contents
 
 - Architectural reviews and decisions
 - Comprehensive design specifications (agent-hierarchy.md, skills-design.md)
@@ -437,9 +437,9 @@ What this specific issue accomplishes (1-2 sentences)
 - Notes discovered during implementation
 - Initially empty, filled as work progresses
 
-```
+```text
 
-**Important Rules**:
+### Important Rules
 
 - ✅ DO: Link to comprehensive docs in `/agents/` and `/notes/review/`
 - ✅ DO: Add issue-specific findings and decisions
@@ -453,9 +453,9 @@ Every component follows a hierarchical workflow with clear dependencies:
 **Workflow**: Plan → [Test | Implementation | Package] → Cleanup
 
 1. **Plan** - Design and documentation (MUST complete first)
-2. **Test** - Write tests following TDD (parallel after Plan)
-3. **Implementation** - Build the functionality (parallel after Plan)
-4. **Package** - Create distributable packages (parallel after Plan)
+1. **Test** - Write tests following TDD (parallel after Plan)
+1. **Implementation** - Build the functionality (parallel after Plan)
+1. **Package** - Create distributable packages (parallel after Plan)
    - Build binary packages (`.mojopkg` files for Mojo modules)
    - Create distribution archives (`.tar.gz`, `.zip` for tooling/docs)
    - Configure package metadata and installation procedures
@@ -463,9 +463,9 @@ Every component follows a hierarchical workflow with clear dependencies:
    - Test package installation in clean environments
    - Create CI/CD packaging workflows
    - **NOT just documenting** - must create actual distributable artifacts
-5. **Cleanup** - Refactor and finalize (runs after parallel phases complete)
+1. **Cleanup** - Refactor and finalize (runs after parallel phases complete)
 
-**Key Points**:
+### Key Points
 
 - Plan phase produces specifications for all other phases
 - Test/Implementation/Package can run in parallel after Plan completes
@@ -515,7 +515,7 @@ Or "None (leaf node)" for level 4
 ## Notes
 
 Additional context
-```
+```text
 
 **Important**: When modifying plans:
 
@@ -531,16 +531,16 @@ Additional context
 ### Creating a New Component
 
 1. Create directory structure under `notes/plan/`
-2. Create `plan.md` following Template 1 format (9 sections)
-3. Update parent plan's "Child Plans" section
-4. Regenerate github_issue.md: `python3 scripts/regenerate_github_issues.py --section <section>`
-5. Test issue creation: `python3 scripts/create_single_component_issues.py notes/plan/.../github_issue.md`
+1. Create `plan.md` following Template 1 format (9 sections)
+1. Update parent plan's "Child Plans" section
+1. Regenerate github_issue.md: `python3 scripts/regenerate_github_issues.py --section <section>`
+1. Test issue creation: `python3 scripts/create_single_component_issues.py notes/plan/.../github_issue.md`
 
 ### Modifying Existing Plans
 
 1. Edit the `plan.md` file (maintain Template 1 format)
-2. Regenerate github_issue.md: `python3 scripts/regenerate_github_issues.py`
-3. If issues were already created, update them manually in GitHub
+1. Regenerate github_issue.md: `python3 scripts/regenerate_github_issues.py`
+1. If issues were already created, update them manually in GitHub
 
 ### File Locations
 
@@ -566,7 +566,7 @@ feat(section): Add new component
 fix(scripts): Correct parsing issue
 docs(readme): Update instructions
 refactor(plans): Standardize to Template 1
-```
+```text
 
 ## Labels
 
@@ -604,9 +604,9 @@ from typing import List, Dict, Optional
 def function_name(param: str) -> bool:
     """Clear docstring with purpose, params, returns."""
     pass
-```
+```text
 
-**Requirements**:
+### Requirements
 
 - Python 3.7+
 - Type hints required for all functions
@@ -623,9 +623,9 @@ All markdown files must follow these standards to pass `markdownlint-cli2` linti
 **Rule**: Fenced code blocks must be:
 
 1. Surrounded by blank lines (before and after)
-2. Have a language specified
+1. Have a language specified
 
-**Correct**:
+### Correct
 
 ```markdown
 
@@ -636,13 +636,12 @@ Some text before.
 def hello():
     print("world")
 
-```
-
+```text
 Some text after.
 
 ```text
 
-**Incorrect**:
+### Incorrect
 
 ```markdown
 Some text before.
@@ -652,9 +651,9 @@ def hello():
 
 ```text
 Some text after.
-```
+```text
 
-**Language Examples**:
+### Language Examples
 
 - Python: ` ```python `
 - Bash: ` ```bash `
@@ -668,7 +667,7 @@ Some text after.
 
 **Rule**: Lists must be surrounded by blank lines (before and after)
 
-**Correct**:
+### Correct
 
 ```markdown
 Some text before.
@@ -678,22 +677,22 @@ Some text before.
 - Item 3
 
 Some text after.
-```
+```text
 
-**Incorrect**:
+### Incorrect
 
 ```markdown
 Some text before.
 - Item 1
 - Item 2
 Some text after.
-```
+```text
 
 ### Headings (MD022)
 
 **Rule**: Headings must be surrounded by blank lines (one blank line before and after)
 
-**Correct**:
+### Correct
 
 ```markdown
 Some content here.
@@ -701,40 +700,40 @@ Some content here.
 ## Section Heading
 
 More content here.
-```
+```text
 
-**Incorrect**:
+### Incorrect
 
 ```markdown
 Some content here.
 ## Section Heading
 More content here.
-```
+```text
 
 ### Line Length (MD013)
 
 **Rule**: Lines should not exceed 120 characters (except for URLs or code blocks)
 
-**Guidelines**:
+### Guidelines
 
 - Break long lines at 120 characters
 - For long sentences, break at natural boundaries (clauses, lists, etc.)
 - Code in code blocks is exempt
 - URLs in links are exempt (use reference-style links if needed)
 
-**Example**:
+### Example
 
 ```markdown
 This is a very long sentence that exceeds the 120 character limit and should be broken into
 multiple lines at a natural boundary point for better readability.
-```
+```text
 
 ### Best Practices
 
 1. **Always add blank lines around code blocks and lists** - This is the #1 cause of linting failures
-2. **Always specify language for code blocks** - Use appropriate language tags
-3. **Check headings have surrounding blank lines** - Especially after subheadings
-4. **Use reference-style links for long URLs** - Helps avoid line length issues
+1. **Always specify language for code blocks** - Use appropriate language tags
+1. **Check headings have surrounding blank lines** - Especially after subheadings
+1. **Use reference-style links for long URLs** - Helps avoid line length issues
 
 ### Quick Checklist for New Content
 
@@ -761,7 +760,7 @@ pre-commit run markdownlint-cli2 --all-files
 # View detailed errors
 npx markdownlint-cli2 path/to/file.md 2>&1
 
-```
+```text
 
 ## Debugging
 
@@ -776,7 +775,7 @@ tail -100 logs/create_issues_*.log | tail -100
 # View specific log
 
 cat logs/create_issues_20251107_180746.log
-```
+```text
 
 ### Check State Files
 
@@ -785,7 +784,7 @@ cat logs/create_issues_20251107_180746.log
 # View saved state (for resume capability)
 
 cat logs/.issue_creation_state_*.json
-```
+```text
 
 ### Test Parsing
 
@@ -798,7 +797,7 @@ python3 scripts/create_issues.py --dry-run
 # Test single component
 
 python3 scripts/create_single_component_issues.py notes/plan/01-foundation/github_issue.md
-```
+```text
 
 ## Troubleshooting
 
@@ -813,7 +812,7 @@ gh auth status
 # If missing scopes, refresh authentication
 
 gh auth refresh -h github.com
-```
+```text
 
 ### Issue Creation Failures
 

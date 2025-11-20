@@ -31,12 +31,14 @@ The ExTensors 5-phase workflow has made **significant progress with Issues #219-
 The actual GitHub issues request a **focused implementation** of basic arithmetic:
 
 **Issue #219 [Test]**: Write tests for 4 basic arithmetic operations
+
 - Addition with broadcasting
 - Subtraction with broadcasting
 - Multiplication with broadcasting
 - Division with broadcasting and zero handling
 
 **Issue #220 [Impl]**: Implement 4 basic arithmetic operations
+
 - Addition with broadcasting
 - Subtraction with broadcasting
 - Multiplication with broadcasting
@@ -49,6 +51,7 @@ The actual GitHub issues request a **focused implementation** of basic arithmeti
 ### Local README Files (Expanded Scope)
 
 The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **comprehensive ExTensor library**:
+
 - 150+ operations across 10+ categories
 - 15 test files with 675+ planned tests
 - Full Array API Standard 2024 compliance
@@ -68,6 +71,7 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
 ### What's Done
 
 ✅ **Design Decisions Documented**:
+
 - Dual type system rationale (static + dynamic)
 - Tensor calculus foundation
 - Array API Standard 2024 compliance
@@ -79,28 +83,34 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
 - Performance optimization strategy
 
 ✅ **Implementation Prompt Created**:
+
 - Comprehensive specification document (`extensor-implementation-prompt.md`)
 - Following Anthropic's prompting best practices
 
 ### What's Missing
 
 ❌ **Detailed API Specification**:
+
 - Complete function signatures for all 150+ operations
 - Type annotations and parameter descriptions
 - Return value documentation
 
 ❌ **Broadcasting Algorithm Documentation**:
+
 - Pseudocode for broadcasting implementation
 - Stride calculation algorithms
 
 ❌ **Trait Interface Definitions**:
+
 - Formal trait specifications for ExTensor
 
 ❌ **SIMD Optimization Specifications**:
+
 - Detailed vectorization opportunities
 - SIMD width selection criteria
 
 ❌ **Usage Pattern Examples**:
+
 - Static vs dynamic tensor usage patterns
 - Zero-copy operation examples
 
@@ -142,6 +152,7 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
 | benchmark_simd.mojo | N/A | ❌ Missing | Not implemented |
 
 **Additional files** (not in spec):
+
 - test_properties.mojo ✅
 - test_integration.mojo ✅
 
@@ -154,6 +165,7 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
 ### Test Files: 10/15 (67%)
 
 ✅ **Implemented** (10 files):
+
 - test_creation.mojo
 - test_arithmetic.mojo
 - test_comparison_ops.mojo
@@ -166,6 +178,7 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
 - test_edge_cases.mojo
 
 ❌ **Missing** (5 files):
+
 - test_bitwise.mojo
 - test_indexing.mojo
 - test_dtype.mojo
@@ -201,6 +214,7 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
 ### Implementation Files: 9/12 (75%)
 
 ✅ **Implemented**:
+
 - `extensor.mojo` - Core ExTensor struct (21,495 bytes)
 - `arithmetic.mojo` - Arithmetic operations with broadcasting (12,165 bytes)
 - `broadcasting.mojo` - Broadcasting infrastructure (6,750 bytes)
@@ -212,6 +226,7 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
 - `__init__.mojo` - Package initialization (2,661 bytes)
 
 ❌ **Missing**:
+
 - `creation.mojo` - Creation operations (likely integrated into extensor.mojo)
 - `bitwise.mojo` - Bitwise operations for integer/bool tensors
 - `indexing.mojo` - Indexing and slicing operations
@@ -219,6 +234,7 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
 ### GitHub Issue #220 Requirements: ✅ COMPLETE
 
 #### ✅ Core Arithmetic Operations (4/4) - **All with Broadcasting**
+
 - ✅ Addition with broadcasting - **COMPLETE**
 - ✅ Subtraction with broadcasting - **COMPLETE**
 - ✅ Multiplication with broadcasting - **COMPLETE**
@@ -229,22 +245,27 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
 ### Extended Operations Implemented: 57/150+ (38%)
 
 #### ✅ Creation Operations (7/8+)
+
 - zeros, ones, full, empty, arange, eye, linspace
 - **Missing**: from_array
 
 #### ✅ Arithmetic Operations (7/7) - **All with Full Broadcasting** 🎉
+
 - add, subtract, multiply, divide, floor_divide, modulo, power
 - **All operations now have full NumPy-style broadcasting**
 - **Stride-based indexing** for efficient broadcasting without copying
 - **Commit**: cc6c7cb - "feat(extensor): complete broadcasting for all arithmetic operations"
 
 #### ❌ Bitwise Operations (0/5)
+
 - **Missing**: bitwise_and, bitwise_or, bitwise_xor, left_shift, right_shift
 
 #### ✅ Comparison Operations (6/6)
+
 - equal, not_equal, less, less_equal, greater, greater_equal
 
 #### ✅ Element-wise Math Operations (19/30+)
+
 - **Implemented**: abs, sign, exp, log, sqrt, sin, cos, tanh, clip
 - **Rounding**: ceil, floor, round, trunc
 - **Logical**: logical_and, logical_or, logical_not, logical_xor
@@ -252,21 +273,26 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
 - **Missing**: tan, asin, acos, atan, atan2, sinh, cosh, asinh, acosh, atanh, exp2, expm1, log1p, cbrt, square, rsqrt, copysign, fma, reciprocal
 
 #### ✅ Matrix Operations (4/6)
+
 - matmul, transpose, dot, outer
 - **Missing**: inner, tensordot
 
 #### ✅ Reduction Operations (4/14)
+
 - sum, mean, max_reduce (as max), min_reduce (as min)
 - **Missing**: prod, var, std, argmax, argmin, count_nonzero, cumulative_sum, cumulative_prod, all, any
 
 #### ✅ Shape Operations (8/13)
+
 - reshape, squeeze, unsqueeze, expand_dims, flatten, ravel, concatenate, stack
 - **Missing**: split, tile, repeat, broadcast_to, permute
 
 #### ❌ Indexing Operations (0/9)
+
 - **Missing**: __getitem__, __setitem__, take, take_along_axis, put, gather, scatter, where, masked_select
 
 #### ✅ Utility Operations (2/18+)
+
 - **Broadcasting utils**: broadcast_shapes, are_shapes_broadcastable
 - **Missing**: copy, clone, diff, __len__, __bool__, __int__, __float__, __str__, __repr__, __hash__, __contains__, __divmod__, item, tolist, numel, dim, size, stride, is_contiguous, contiguous
 
@@ -277,24 +303,24 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
    - Apply broadcasting to comparison operations
    - Apply broadcasting to logical operations
 
-2. **Bitwise Operations** (Medium Priority):
+1. **Bitwise Operations** (Medium Priority):
    - Implement 5 bitwise operations
    - Create test file (test_bitwise.mojo)
 
-3. **Indexing/Slicing** (High Priority):
+1. **Indexing/Slicing** (High Priority):
    - Implement 9 indexing operations
    - Create test file (test_indexing.mojo)
 
-4. **Additional Element-wise Math** (Medium Priority):
+1. **Additional Element-wise Math** (Medium Priority):
    - Implement 11+ missing math operations
 
-5. **Additional Reduction Operations** (Medium Priority):
+1. **Additional Reduction Operations** (Medium Priority):
    - Implement 10 missing reduction operations
 
-6. **Additional Shape Operations** (Low Priority):
+1. **Additional Shape Operations** (Low Priority):
    - Implement 5 missing shape operations
 
-7. **Utility Operations** (Medium Priority):
+1. **Utility Operations** (Medium Priority):
    - Implement 16+ utility operations
    - Critical for usability: __str__, __repr__, item, tolist
 
@@ -324,17 +350,20 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
 ### What's Needed
 
 ❌ **Package Build**:
+
 - Create .mojopkg package file
 - Package metadata and configuration
 - Version information
 
 ❌ **Documentation**:
+
 - API reference documentation
 - User guide and tutorials
 - Integration guide
 - Example code
 
 ❌ **Distribution**:
+
 - Installation instructions
 - Compatibility matrix
 - Performance benchmarks
@@ -354,21 +383,25 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
 ### What's Needed
 
 ❌ **Code Quality**:
+
 - Refactoring and optimization
 - Technical debt resolution
 - Code review
 
 ❌ **Performance**:
+
 - Profiling and optimization
 - SIMD vectorization verification
 - Performance regression tests
 
 ❌ **Documentation**:
+
 - Polish API documentation
 - Update user guide
 - Add troubleshooting section
 
 ❌ **Quality Assurance**:
+
 - Final integration testing
 - Coverage verification
 - Pre-commit hooks validation
@@ -393,12 +426,12 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
    - modulo() - Full broadcasting with stride-based indexing
    - power() - Full broadcasting with stride-based indexing
 
-2. **Scope Clarification** - Identified mismatch between GitHub issues and local docs:
+1. **Scope Clarification** - Identified mismatch between GitHub issues and local docs:
    - GitHub issues #219-222 request **basic arithmetic** (4 ops: add, subtract, multiply, divide)
    - Local README files describe **comprehensive ExTensor** (150+ operations)
    - Resolution: Core requirements for #219-220 are **complete**
 
-3. **Documentation Updates**:
+1. **Documentation Updates**:
    - Created completion status summary
    - Updated with broadcasting completion status
    - Added scope clarification section
@@ -416,12 +449,12 @@ The local documentation in `/home/user/ml-odyssey/notes/issues/` describes a **c
    - All support negative indexing and proper error handling
    - Tests uncommented (11 tests in test_shape.mojo)
 
-2. **Additional Element-wise Operations** - Implemented 10 operations:
+1. **Additional Element-wise Operations** - Implemented 10 operations:
    - **Rounding**: ceil, floor, round, trunc
    - **Logical**: logical_and, logical_or, logical_not, logical_xor (return DType.bool)
    - **Transcendentals**: log10, log2
 
-3. **Broadcasting Integration** - Implemented for add() operation:
+1. **Broadcasting Integration** - Implemented for add() operation:
    - Uses broadcast_shapes() and compute_broadcast_strides()
    - Stride-based indexing (no unnecessary copying)
    - Pattern established for all other operations
@@ -450,13 +483,13 @@ All changes pushed to: `claude/extensor-test-specification-01UBGH2iQS4sgfQrXUE5j
    - Apply broadcasting to 4 logical ops (~30 min)
    - **Impact**: Brings 16 operations to full spec compliance
 
-2. **Indexing/Slicing Implementation** (Critical Feature):
+1. **Indexing/Slicing Implementation** (Critical Feature):
    - Implement __getitem__ and __setitem__ (~3-4 hours)
    - Implement take, gather, where (~2-3 hours)
    - Create test_indexing.mojo (~2-3 hours)
    - **Impact**: Enables tensor manipulation - critical for neural networks
 
-3. **Utility Operations** (Usability):
+1. **Utility Operations** (Usability):
    - Implement __str__, __repr__ (~1 hour)
    - Implement item, tolist (~1 hour)
    - Implement numel, dim, size (~30 min)
@@ -464,17 +497,17 @@ All changes pushed to: `claude/extensor-test-specification-01UBGH2iQS4sgfQrXUE5j
 
 ### Medium-term Goals (Week 2-3)
 
-4. **Bitwise Operations**:
+1. **Bitwise Operations**:
    - Implement 5 bitwise operations
    - Create test_bitwise.mojo
    - **Impact**: Required for integer/bool tensors
 
-5. **Additional Math Operations**:
+1. **Additional Math Operations**:
    - Implement remaining trigonometric functions
    - Implement hyperbolic functions
    - **Impact**: Scientific computing completeness
 
-6. **Additional Reduction Operations**:
+1. **Additional Reduction Operations**:
    - Implement prod, var, std
    - Implement argmax, argmin
    - Implement cumulative operations
@@ -482,20 +515,20 @@ All changes pushed to: `claude/extensor-test-specification-01UBGH2iQS4sgfQrXUE5j
 
 ### Long-term Goals (Week 4+)
 
-7. **Complete Issue #219** (Tests):
+1. **Complete Issue #219** (Tests):
    - Create test_dtype.mojo
    - Create test_memory.mojo
    - Create benchmark_simd.mojo
 
-8. **Complete Issue #220** (Implementation):
+1. **Complete Issue #220** (Implementation):
    - Finish remaining operations to reach 150+
    - Verify all tests pass
 
-9. **Start Issue #221** (Package):
+1. **Start Issue #221** (Package):
    - Create .mojopkg package
    - Write comprehensive documentation
 
-10. **Issue #222** (Cleanup):
+1. **Issue #222** (Cleanup):
     - Code review and refactoring
     - Performance optimization
     - Final integration testing
@@ -521,8 +554,8 @@ All changes pushed to: `claude/extensor-test-specification-01UBGH2iQS4sgfQrXUE5j
 The ExTensors implementation is **well underway** with solid foundational infrastructure in place. The core tensor struct, broadcasting system, and ~38% of operations are complete. The main work ahead is:
 
 1. **Broadcasting completion** across all operations (relatively straightforward)
-2. **Indexing/slicing** (critical feature, moderate complexity)
-3. **Remaining operations** (primarily math, reduction, utility functions)
-4. **Testing and packaging** (after implementation reaches 80%+)
+1. **Indexing/slicing** (critical feature, moderate complexity)
+1. **Remaining operations** (primarily math, reduction, utility functions)
+1. **Testing and packaging** (after implementation reaches 80%+)
 
 With focused effort, Issue #220 (Implementation) could reach 80% completion within 2-3 weeks, enabling progression to packaging and cleanup phases.

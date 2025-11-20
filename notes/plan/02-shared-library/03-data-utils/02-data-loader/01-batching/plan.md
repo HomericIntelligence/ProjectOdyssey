@@ -29,9 +29,9 @@ None (leaf node)
 ## Steps
 
 1. Implement basic batching with fixed size
-2. Handle final partial batch (drop or pad)
-3. Add collate function for custom batch assembly
-4. Support variable-length sequence batching
+1. Handle final partial batch (drop or pad)
+1. Add collate function for custom batch assembly
+1. Support variable-length sequence batching
 
 ## Success Criteria
 

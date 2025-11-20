@@ -27,9 +27,9 @@ None (leaf node)
 ## Steps
 
 1. Create core/ subdirectory inside shared/
-2. Write README explaining what goes in core/
-3. Create __init__.py to make it a Python package
-4. Document expected contents and organization
+1. Write README explaining what goes in core/
+1. Create __init__.py to make it a Python package
+1. Document expected contents and organization
 
 ## Success Criteria
 

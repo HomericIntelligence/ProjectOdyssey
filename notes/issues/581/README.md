@@ -34,7 +34,7 @@ Create the configs/ directory for shared configuration files that can be used ac
 
 **Decision**: Use YAML or TOML for configuration files
 
-**Rationale**:
+### Rationale
 
 - Human-readable and easy to edit
 - Strong support in Python ecosystem
@@ -46,7 +46,7 @@ Create the configs/ directory for shared configuration files that can be used ac
 
 **Decision**: Organize configs into subdirectories by configuration type
 
-**Proposed Structure**:
+### Proposed Structure
 
 ```text
 configs/
@@ -65,9 +65,9 @@ configs/
     ├── training.yaml   # Training config template
     ├── model.yaml      # Model config template
     └── experiment.yaml # Experiment config template
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Clear separation by configuration domain
 - Scalable as more papers are implemented
@@ -78,13 +78,13 @@ configs/
 
 **Decision**: Document expected configuration schema in README
 
-**Components**:
+### Components
 
 - **Training Configs**: batch_size, learning_rate, epochs, optimizer, scheduler
 - **Model Configs**: architecture, layers, activation functions, initialization
 - **Experiment Configs**: dataset, preprocessing, augmentation, metrics
 
-**Rationale**:
+### Rationale
 
 - Provides clear contract for configuration consumers
 - Enables validation of configuration files
@@ -96,13 +96,13 @@ configs/
 
 **Pattern**: `{domain}-{variant}-{version}.yaml`
 
-**Examples**:
+### Examples
 
 - `training/sgd-momentum-v1.yaml`
 - `models/lenet-5-original.yaml`
 - `experiments/mnist-baseline-v1.yaml`
 
-**Rationale**:
+### Rationale
 
 - Consistent with repository file naming conventions
 - Easy to parse and understand
@@ -112,13 +112,13 @@ configs/
 
 **Decision**: Support configuration composition via includes/references
 
-**Approach**:
+### Approach
 
 - Allow configs to reference other configs
 - Support environment variable substitution
 - Enable override mechanisms
 
-**Example**:
+### Example
 
 ```yaml
 # training/sgd-lenet.yaml
@@ -127,9 +127,9 @@ optimizer:
   type: sgd
   learning_rate: 0.01
   momentum: 0.9
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Reduces duplication across similar configurations
 - Enables experimentation with parameter variations
@@ -139,7 +139,7 @@ optimizer:
 
 **Decision**: configs/README.md serves as comprehensive guide
 
-**Contents**:
+### Contents
 
 - Overview of configuration system
 - Directory structure explanation
@@ -148,7 +148,7 @@ optimizer:
 - Schema reference
 - Examples and best practices
 
-**Rationale**:
+### Rationale
 
 - Self-documenting configuration system
 - Reduces onboarding time for new contributors

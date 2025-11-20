@@ -11,7 +11,7 @@ See [playground/README.md](playground/README.md) for details on deprecated scrip
 
 Comprehensive validation of all agent configuration files.
 
-**Checks:**
+### Checks:
 
 - YAML frontmatter syntax and required fields
 - Tool names are valid
@@ -21,7 +21,7 @@ Comprehensive validation of all agent configuration files.
 - Workflow phases specified
 - Links to other agents are valid
 
-**Usage:**
+### Usage:
 
 ```bash
 # Validate all agents
@@ -32,9 +32,9 @@ python scripts/agents/validate_agents.py --verbose
 
 # Custom agents directory
 python scripts/agents/validate_agents.py --agents-dir /path/to/agents
-```
+```text
 
-**Exit Codes:**
+### Exit Codes:
 
 - 0 = All validations passed
 - 1 = Errors found
@@ -43,7 +43,7 @@ python scripts/agents/validate_agents.py --agents-dir /path/to/agents
 
 Verify YAML frontmatter in agent configuration files.
 
-**Checks:**
+### Checks:
 
 - YAML syntax validity
 - Required fields present (name, description, tools, model)
@@ -52,7 +52,7 @@ Verify YAML frontmatter in agent configuration files.
 - Name format follows conventions (lowercase-with-hyphens)
 - Tools field is not empty
 
-**Usage:**
+### Usage:
 
 ```bash
 # Check all agent frontmatter
@@ -63,9 +63,9 @@ python scripts/agents/check_frontmatter.py --verbose
 
 # Custom agents directory
 python scripts/agents/check_frontmatter.py --agents-dir /path/to/agents
-```
+```text
 
-**Exit Codes:**
+### Exit Codes:
 
 - 0 = All frontmatter is valid
 - 1 = Errors found
@@ -74,7 +74,7 @@ python scripts/agents/check_frontmatter.py --agents-dir /path/to/agents
 
 Test agent discovery and loading.
 
-**Checks:**
+### Checks:
 
 - All markdown files can be read
 - YAML frontmatter can be parsed
@@ -82,7 +82,7 @@ Test agent discovery and loading.
 - No duplicate agent names
 - Files are accessible
 
-**Usage:**
+### Usage:
 
 ```bash
 # Test agent loading
@@ -93,9 +93,9 @@ python scripts/agents/test_agent_loading.py --verbose
 
 # Custom agents directory
 python scripts/agents/test_agent_loading.py --agents-dir /path/to/agents
-```
+```text
 
-**Exit Codes:**
+### Exit Codes:
 
 - 0 = All agents loaded successfully
 - 1 = Errors during loading
@@ -104,14 +104,14 @@ python scripts/agents/test_agent_loading.py --agents-dir /path/to/agents
 
 Display all available agents organized by level.
 
-**Features:**
+### Features:
 
 - Lists agents by level (0-5)
 - Shows name, description, and tools
 - Supports filtering by level
 - Compact and verbose display modes
 
-**Agent Levels:**
+### Agent Levels:
 
 - 0 - Meta-Orchestrator (Chief Architect)
 - 1 - Section Orchestrators (Foundation, Shared Library, Tooling, Papers, CI/CD, Agentic Workflows)
@@ -120,7 +120,7 @@ Display all available agents organized by level.
 - 4 - Senior Engineers
 - 5 - Junior Engineers
 
-**Usage:**
+### Usage:
 
 ```bash
 # List all agents
@@ -137,9 +137,9 @@ python scripts/agents/list_agents.py --level 5 --verbose
 
 # Custom agents directory
 python scripts/agents/list_agents.py --agents-dir /path/to/agents
-```
+```text
 
-**Exit Codes:**
+### Exit Codes:
 
 - 0 = Success
 - 1 = Errors occurred
@@ -152,7 +152,7 @@ Run validation before committing changes to agent files:
 
 ```bash
 python scripts/agents/validate_agents.py
-```
+```text
 
 ### Quick Health Check
 
@@ -160,7 +160,7 @@ Check if all agents can be loaded:
 
 ```bash
 python scripts/agents/test_agent_loading.py
-```
+```text
 
 ### Explore Available Agents
 
@@ -175,7 +175,7 @@ python scripts/agents/list_agents.py --level 1
 
 # Just junior engineers
 python scripts/agents/list_agents.py --level 5
-```
+```text
 
 ### Detailed Validation
 
@@ -183,7 +183,7 @@ Get comprehensive validation with all warnings:
 
 ```bash
 python scripts/agents/validate_agents.py --verbose
-```
+```text
 
 ## Integration with CI/CD
 
@@ -195,7 +195,7 @@ These scripts can be integrated into CI/CD pipelines:
   run: |
     python scripts/agents/validate_agents.py
     python scripts/agents/test_agent_loading.py
-```
+```text
 
 ## Requirements
 
@@ -203,7 +203,7 @@ All scripts require Python 3.7+ and PyYAML:
 
 ```bash
 pip install pyyaml
-```
+```text
 
 ## Exit Codes
 
@@ -217,7 +217,7 @@ This allows them to be used in shell scripts and CI/CD pipelines:
 ```bash
 # Example: Run validation and exit on failure
 python scripts/agents/validate_agents.py || exit 1
-```
+```text
 
 ## Development
 
@@ -226,9 +226,9 @@ python scripts/agents/validate_agents.py || exit 1
 To add new validation checks:
 
 1. Add the check logic to `validate_agents.py`
-2. Update the `ValidationResult` class if needed
-3. Add corresponding test cases
-4. Update this README
+1. Update the `ValidationResult` class if needed
+1. Add corresponding test cases
+1. Update this README
 
 ### Modifying Required Fields
 
@@ -247,7 +247,7 @@ Update these constants to change validation requirements.
 
 ```bash
 pip install pyyaml
-```
+```text
 
 ### Permission Denied
 
@@ -255,7 +255,7 @@ Make scripts executable:
 
 ```bash
 chmod +x scripts/agents/*.py
-```
+```text
 
 ### Agent Directory Not Found
 
@@ -263,7 +263,7 @@ Ensure you're running from the repository root or use `--agents-dir`:
 
 ```bash
 python scripts/agents/validate_agents.py --agents-dir /path/to/agents
-```
+```text
 
 ## See Also
 

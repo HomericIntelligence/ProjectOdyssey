@@ -27,9 +27,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Define supported arguments and options
-2. Implement parsing logic using standard library
-3. Validate argument values and combinations
-4. Generate help text and usage documentation
+1. Implement parsing logic using standard library
+1. Validate argument values and combinations
+1. Generate help text and usage documentation
 
 ## Success Criteria
 

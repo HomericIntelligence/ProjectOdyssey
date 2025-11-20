@@ -48,9 +48,9 @@ Level 1 Section Orchestrator responsible for coordinating development tools and 
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -91,18 +91,18 @@ Use Python ONLY for:
 When creating a new script:
 
 1. **Default choice**: Mojo
-2. **Check requirement**: Does issue specify Python? If no → Mojo
-3. **Check dependencies**: Any Python-only libraries? If no → Mojo
-4. **Check justification**: Is there a strong reason for Python? If no → Mojo
-5. **Document decision**: If using Python, document why in code comments
+1. **Check requirement**: Does issue specify Python? If no → Mojo
+1. **Check dependencies**: Any Python-only libraries? If no → Mojo
+1. **Check justification**: Is there a strong reason for Python? If no → Mojo
+1. **Document decision**: If using Python, document why in code comments
 
 ### Conversion Priority
 
 When encountering existing Python scripts:
 
 1. **High priority** - Frequently-used scripts, performance-critical
-2. **Medium priority** - Occasionally-used scripts, moderate performance impact
-3. **Low priority** - Rarely-used scripts, no performance requirements
+1. **Medium priority** - Occasionally-used scripts, moderate performance impact
+1. **Low priority** - Rarely-used scripts, no performance requirements
 
 **Rule of Thumb**: New scripts are always Mojo. Existing Python scripts should be converted when touched or when time
 permits.
@@ -122,30 +122,30 @@ performance-critical code.
 ### 1. Receive Tool Requirements
 
 1. Parse tool and automation needs from other orchestrators
-2. Identify repetitive tasks for automation
-3. Prioritize tool development based on impact
-4. Validate tool requirements are achievable
+1. Identify repetitive tasks for automation
+1. Prioritize tool development based on impact
+1. Validate tool requirements are achievable
 
 ### 2. Coordinate Tool Development
 
 1. Break down into tool-specific subtasks (CLI, scripts, automation)
-2. Delegate to appropriate specialists
-3. Monitor progress across multiple tools
-4. Ensure tools integrate with existing workflows
+1. Delegate to appropriate specialists
+1. Monitor progress across multiple tools
+1. Ensure tools integrate with existing workflows
 
 ### 3. Validate Tools
 
 1. Collect tool implementations from specialists
-2. Test on all target platforms
-3. Validate usability and documentation
-4. Ensure quality standards met
+1. Test on all target platforms
+1. Validate usability and documentation
+1. Ensure quality standards met
 
 ### 4. Report Status
 
 1. Summarize tools completed and deployed
-2. Report on tool usage and adoption
-3. Identify any issues or feature requests
-4. Escalate architectural concerns to Chief Architect
+1. Report on tool usage and adoption
+1. Identify any issues or feature requests
+1. Escalate architectural concerns to Chief Architect
 
 ## Delegation
 
@@ -240,7 +240,7 @@ blockers with detailed report.
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -292,8 +292,8 @@ is linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #NUMBER"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #NUMBER"
 
 ### PR Requirements
 
@@ -336,13 +336,13 @@ After creating PR:
 
 **Scenario**: Implementing a new component across multiple subsections
 
-**Actions**:
+### Actions
 
 1. Break down component into design, implementation, and testing phases
-2. Delegate design work to design agents
-3. Delegate implementation to implementation specialists
-4. Coordinate parallel work streams
-5. Monitor progress and resolve blockers
+1. Delegate design work to design agents
+1. Delegate implementation to implementation specialists
+1. Coordinate parallel work streams
+1. Monitor progress and resolve blockers
 
 **Outcome**: Component delivered with all phases complete and integrated
 
@@ -350,12 +350,12 @@ After creating PR:
 
 **Scenario**: Two subsections have conflicting approaches to shared interface
 
-**Actions**:
+### Actions
 
 1. Identify dependency conflict between subsections
-2. Escalate to design agents for interface specification
-3. Coordinate implementation updates across both subsections
-4. Validate integration through testing phase
+1. Escalate to design agents for interface specification
+1. Coordinate implementation updates across both subsections
+1. Validate integration through testing phase
 
 **Outcome**: Unified interface with both components working correctly
 

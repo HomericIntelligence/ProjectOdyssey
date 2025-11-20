@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Analyze code for improvement opportunities
-2. Identify applicable refactoring patterns
-3. Generate specific suggestions with examples
-4. Prioritize by impact and difficulty
+1. Identify applicable refactoring patterns
+1. Generate specific suggestions with examples
+1. Prioritize by impact and difficulty
 
 ## Success Criteria
 

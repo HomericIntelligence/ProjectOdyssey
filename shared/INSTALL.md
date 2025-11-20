@@ -30,15 +30,15 @@ mojo package shared --install
 
 # Verify installation
 mojo run scripts/verify_installation.mojo
-```
+```text
 
-**Benefits**:
+### Benefits
 
 - Changes to shared library immediately available
 - No need to reinstall after modifications
 - Easy to contribute changes back
 
-**Use When**:
+### Use When
 
 - Contributing to the shared library
 - Developing new paper implementations
@@ -57,15 +57,15 @@ mojo install ml_odyssey_shared.mojopkg
 
 # Verify installation
 mojo run scripts/verify_installation.mojo
-```
+```text
 
-**Benefits**:
+### Benefits
 
 - Fast installation
 - No repository needed
 - Stable, tested version
 
-**Use When**:
+### Use When
 
 - Using the library without modifications
 - Deploying paper implementations
@@ -84,21 +84,21 @@ version = "0.1.0"
 
 [dependencies]
 ml-odyssey-shared = { path = "../ml-odyssey/shared" }
-```
+```text
 
 Then use in your code:
 
 ```mojo
 from shared import Linear, SGD, Tensor
-```
+```text
 
-**Benefits**:
+### Benefits
 
 - Easy setup for related projects
 - Automatic updates when shared library changes
 - Good for monorepo setups
 
-**Use When**:
+### Use When
 
 - Working in a monorepo with ml-odyssey
 - Local development across multiple projects
@@ -117,7 +117,7 @@ mojo package shared --release -o dist/ml_odyssey_shared-0.1.0.mojopkg
 
 # Build with debug symbols
 mojo package shared --debug -o build/ml_odyssey_shared_debug.mojopkg
-```
+```text
 
 ### Build Options
 
@@ -134,7 +134,7 @@ Run the verification script to check if installation succeeded:
 
 ```bash
 mojo run scripts/verify_installation.mojo
-```
+```text
 
 Expected output:
 
@@ -145,7 +145,7 @@ Expected output:
 ✓ Utils functionality working
 
 ✅ Shared library installation verified!
-```
+```text
 
 ### Manual Verification
 
@@ -156,7 +156,7 @@ from shared import Linear, SGD, DataLoader, Logger
 
 # If this imports without error, installation successful
 print("Shared library installed successfully!")
-```
+```text
 
 ### Detailed Verification
 
@@ -171,7 +171,7 @@ mojo test tests/shared/integration/
 
 # Run all tests
 mojo test tests/shared/
-```
+```text
 
 ## Usage
 
@@ -192,7 +192,7 @@ var model = Sequential([
 
 # Create optimizer
 var optimizer = SGD(learning_rate=0.01, momentum=0.9)
-```
+```text
 
 ### Advanced Usage
 
@@ -204,7 +204,7 @@ from shared.core.layers import MaxPool2D, Dropout, BatchNorm2D
 from shared.training.schedulers import CosineAnnealingLR
 from shared.training.metrics import Precision, Recall
 from shared.data.transforms import RandomCrop, RandomHorizontalFlip
-```
+```text
 
 See [EXAMPLES.md](EXAMPLES.md) for complete usage examples.
 
@@ -221,7 +221,7 @@ pixi install
 # Run commands in Pixi environment
 pixi run mojo --version
 pixi run mojo package shared --install
-```
+```text
 
 ### Manual Setup
 
@@ -236,7 +236,7 @@ mojo --version
 
 # Install shared library
 mojo package shared --install
-```
+```text
 
 ## Troubleshooting
 
@@ -246,16 +246,16 @@ mojo package shared --install
 
 **Problem**: `Error: Cannot find module 'shared'`
 
-**Solution**:
+### Solution
 
 1. Verify installation: `mojo list` should show `ml-odyssey-shared`
-2. Reinstall: `mojo package shared --install`
-3. Check MOJO_PATH: `echo $MOJO_PATH`
-4. Verify using: `mojo run scripts/verify_installation.mojo`
+1. Reinstall: `mojo package shared --install`
+1. Check MOJO_PATH: `echo $MOJO_PATH`
+1. Verify using: `mojo run scripts/verify_installation.mojo`
 
 **Problem**: `Error: Module 'shared' found but component 'Linear' not found`
 
-**Solution**:
+### Solution
 
 - The implementation is not yet complete for that component
 - Check Issue #49 for implementation status
@@ -270,11 +270,11 @@ find shared/ -name "*.mojo" -type f | while read f; do
         echo "○ $f (stub/planning)"
     fi
 done
-```
+```text
 
 **Problem**: `ImportError: cannot import name 'Linear' from 'shared.core'`
 
-**Solution**:
+### Solution
 
 ```bash
 # Verify installation
@@ -287,20 +287,20 @@ mojo package shared --install
 mojo repl
 # Then type: from shared import *
 # Then type: dir()
-```
+```text
 
 #### Build Errors
 
 **Problem**: Build fails with compilation errors
 
-**Solution**:
+### Solution
 
 1. Check Mojo version: `mojo --version` (requires 24.5+)
-2. Clean build artifacts: `rm -rf build/`
-3. Update dependencies in `pixi.toml`
-4. Report issue if problem persists
+1. Clean build artifacts: `rm -rf build/`
+1. Update dependencies in `pixi.toml`
+1. Report issue if problem persists
 
-**Additional Solutions**:
+### Additional Solutions
 
 ```bash
 # Update Mojo to latest version
@@ -311,13 +311,13 @@ mojo package shared --verbose
 
 # Check for syntax errors
 mojo check shared/
-```
+```text
 
 #### Version Conflicts
 
 **Problem**: Multiple versions of shared library installed
 
-**Solution**:
+### Solution
 
 ```bash
 # List installed packages
@@ -328,11 +328,11 @@ mojo uninstall ml-odyssey-shared
 
 # Reinstall correct version
 mojo package shared --install
-```
+```text
 
 **Problem**: API doesn't match documentation
 
-**Solution**:
+### Solution
 
 ```bash
 # Check installed version
@@ -343,13 +343,13 @@ mojo repl
 # Reinstall latest version
 git pull
 mojo package shared --install --force
-```
+```text
 
 #### Performance Issues
 
 **Problem**: Code runs slower than expected
 
-**Solutions**:
+### Solutions
 
 ```bash
 # Build release version for better performance
@@ -360,13 +360,13 @@ mojo build --help
 
 # Profile your code to find bottlenecks
 mojo run --profile your_code.mojo
-```
+```text
 
 #### Platform-Specific Issues
 
 **Problem**: Installation fails on WSL/Linux
 
-**Solutions**:
+### Solutions
 
 ```bash
 # Ensure proper permissions on scripts
@@ -377,11 +377,11 @@ MOJO_PATH=/path/to/packages mojo run script.mojo
 
 # Check file system case sensitivity
 ls -la shared/
-```
+```text
 
 **Problem**: Installation fails on macOS
 
-**Solutions**:
+### Solutions
 
 ```bash
 # Install Xcode Command Line Tools if needed
@@ -392,7 +392,7 @@ uname -m
 
 # Ensure Mojo is installed for correct architecture
 modular install mojo
-```
+```text
 
 ### Verification Steps
 
@@ -416,7 +416,7 @@ mojo repl
 # 4. Run verification script
 mojo run scripts/verify_installation.mojo
 # Should complete without errors
-```
+```text
 
 ### Known Limitations
 
@@ -456,7 +456,7 @@ rm -rf shared/__pycache__ shared/**/__pycache__
 # Reinstall from scratch
 git pull
 mojo package shared --install
-```
+```text
 
 **2. Check Environment** - Print diagnostic information:
 
@@ -466,7 +466,7 @@ echo "Mojo: $(mojo --version)"
 echo "OS: $(uname -a)"
 echo "PATH: $PATH"
 echo "MOJO_PATH: $MOJO_PATH"
-```
+```text
 
 **3. Minimal Test Case** - Create a minimal test:
 
@@ -476,7 +476,7 @@ from shared import __version__
 
 fn main():
     print("Shared library version:", __version__)
-```
+```text
 
 Run it: `mojo run test_import.mojo`
 
@@ -498,7 +498,7 @@ mojo uninstall ml-odyssey-shared
 
 # Verify removal
 mojo list | grep ml-odyssey
-```
+```text
 
 ### Clean Build Artifacts
 
@@ -508,7 +508,7 @@ rm -rf build/ dist/
 
 # Remove cached files (if any)
 rm -rf .mojo_cache/
-```
+```text
 
 ## Platform Support
 
@@ -520,7 +520,7 @@ rm -rf .mojo_cache/
 
 ### Platform-Specific Notes
 
-**Linux**:
+### Linux
 
 - Works out of the box on most distributions
 - Ensure glibc 2.31+ for optimal performance
@@ -530,7 +530,7 @@ rm -rf .mojo_cache/
 - Works on Intel and Apple Silicon
 - May require Xcode Command Line Tools
 
-**Windows**:
+### Windows
 
 - Use WSL2 (Windows Subsystem for Linux)
 - Native Windows support planned
@@ -560,17 +560,17 @@ mojo test tests/shared/
 
 # Format code
 mojo format shared/
-```
+```text
 
 ### IDE Setup
 
-**VS Code**:
+### VS Code
 
 1. Install Mojo extension
-2. Set Mojo path in settings
-3. Configure formatter: `mojo format`
+1. Set Mojo path in settings
+1. Configure formatter: `mojo format`
 
-**Other Editors**:
+### Other Editors
 
 - Configure LSP for Mojo (if available)
 - Set formatter to `mojo format`
@@ -581,9 +581,9 @@ mojo format shared/
 After installation:
 
 1. **Read Examples**: See [EXAMPLES.md](EXAMPLES.md) for usage patterns
-2. **Check API Docs**: Review auto-generated API documentation
-3. **Run Tests**: Verify everything works with test suite
-4. **Start Building**: Begin implementing your paper
+1. **Check API Docs**: Review auto-generated API documentation
+1. **Run Tests**: Verify everything works with test suite
+1. **Start Building**: Begin implementing your paper
 
 ## Support
 
@@ -599,9 +599,9 @@ After installation:
 When reporting installation issues:
 
 1. Include Mojo version: `mojo --version`
-2. Include OS and architecture: `uname -a`
-3. Provide full error message
-4. Describe steps to reproduce
+1. Include OS and architecture: `uname -a`
+1. Provide full error message
+1. Describe steps to reproduce
 
 ## Additional Resources
 

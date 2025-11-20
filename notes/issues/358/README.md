@@ -21,7 +21,7 @@ Build a callback system for extending training functionality without modifying c
 
 ### Architecture
 
-**Callback Hook System**
+### Callback Hook System
 
 The callback system will use a clean hook-based architecture that allows extending training workflows without tight coupling to the trainer implementation. Key hook points in the training loop:
 
@@ -32,7 +32,7 @@ The callback system will use a clean hook-based architecture that allows extendi
 - `on_epoch_end(epoch, metrics)` - Epoch completion, checkpoint/early-stop decisions
 - `on_train_end()` - Cleanup and final reporting
 
-**Interface Design**
+### Interface Design
 
 Callbacks will implement a common base interface with optional hook methods. The trainer will iterate through registered callbacks and invoke hooks at appropriate points. This design ensures:
 
@@ -82,19 +82,19 @@ Key design decisions:
 
 ### Key Principles
 
-**Simplicity and Composability**
+### Simplicity and Composability
 
 - Callbacks should do one thing well
 - Multiple callbacks can be combined without conflicts
 - Configuration should be straightforward and intuitive
 
-**Loose Coupling**
+### Loose Coupling
 
 - Callbacks receive state through method parameters, not direct references
 - Trainer doesn't need to know callback implementation details
 - Callbacks don't depend on specific trainer implementations
 
-**Extensibility**
+### Extensibility
 
 - Users can create custom callbacks by implementing the base interface
 - Common patterns (checkpointing, early stopping, logging) provided out of the box
@@ -106,13 +106,13 @@ Key design decisions:
 
 **Parent Plan**: [notes/plan/02-shared-library/02-training-utils/plan.md](/home/mvillmow/ml-odyssey-manual/notes/plan/02-shared-library/02-training-utils/plan.md)
 
-**Child Plans**:
+### Child Plans
 
 - [Checkpointing](/home/mvillmow/ml-odyssey-manual/notes/plan/02-shared-library/02-training-utils/03-callbacks/01-checkpointing/plan.md)
 - [Early Stopping](/home/mvillmow/ml-odyssey-manual/notes/plan/02-shared-library/02-training-utils/03-callbacks/02-early-stopping/plan.md)
 - [Logging Callback](/home/mvillmow/ml-odyssey-manual/notes/plan/02-shared-library/02-training-utils/03-callbacks/03-logging-callback/plan.md)
 
-**Related Issues**:
+### Related Issues
 
 - Issue #359: [Test] Callbacks
 - Issue #360: [Impl] Callbacks

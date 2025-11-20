@@ -34,9 +34,9 @@ None (leaf node)
 ## Steps
 
 1. Create tools/ directory at repository root
-2. Write README explaining tool directory purpose and distinction from scripts/
-3. Document expected types of development utilities (CLI tools, code generators, paper implementation helpers, workflow automation)
-4. Provide guidelines for adding new development tools
+1. Write README explaining tool directory purpose and distinction from scripts/
+1. Document expected types of development utilities (CLI tools, code generators, paper implementation helpers, workflow automation)
+1. Provide guidelines for adding new development tools
 
 ## Success Criteria
 

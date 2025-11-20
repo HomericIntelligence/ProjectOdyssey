@@ -8,13 +8,13 @@ repository.
 
 ## Audience Analysis
 
-**Primary Audience**:
+### Primary Audience
 
 - Researchers implementing research papers
 - ML engineers building Mojo implementations
 - First-time contributors to the project
 
-**Secondary Audience**:
+### Secondary Audience
 
 - Project maintainers reviewing submissions
 - Other team members looking for examples
@@ -27,7 +27,7 @@ repository.
 
 **Purpose**: Welcome contributors and explain the papers directory
 
-**Content Requirements**:
+### Content Requirements
 
 - What papers/ contains
 - Why this directory exists
@@ -35,7 +35,7 @@ repository.
 - Quick summary of available papers (links)
 - Estimated reading time for different sections
 
-**Key Points to Cover**:
+### Key Points to Cover
 
 - ML Odyssey focuses on reproducing classic AI research in Mojo
 - papers/ directory contains implementations of these papers
@@ -45,7 +45,7 @@ repository.
 
 **Tone**: Welcoming, encouraging collaboration
 
-**Example Opening**:
+### Example Opening
 
 ```markdown
 # Papers
@@ -54,20 +54,20 @@ Welcome to the ML Odyssey papers directory! This is where we implement
 classic AI research papers using the Mojo programming language. Each
 paper includes production-quality implementations, comprehensive tests,
 and documentation to help you understand both the research and the code.
-```
+```text
 
 ### Section 2: Quick Start (100-150 words)
 
 **Purpose**: Help newcomers get oriented quickly
 
-**Content Requirements**:
+### Content Requirements
 
 - What you should know before starting
 - Link to first paper implementation
 - How to choose a paper to implement
 - Pointer to full step-by-step guide
 
-**Elements**:
+### Elements
 
 - Single paragraph overview
 - Key links in bullet format
@@ -77,14 +77,14 @@ and documentation to help you understand both the research and the code.
 
 **Purpose**: Explain how papers are organized
 
-**Content Requirements**:
+### Content Requirements
 
 - Visual directory tree showing structure
 - Explanation of each directory/file type
 - Standard vs. optional components
 - Link to paper-specific README template
 
-**Visual Structure**:
+### Visual Structure
 
 ```text
 papers/
@@ -107,9 +107,9 @@ papers/
 ├── alexnet/               # Another paper
 │   └── ...
 └── .gitkeep
-```
+```text
 
-**Explanations**:
+### Explanations
 
 - `README.md` - Paper-specific overview, setup, usage
 - `src/` - All implementation code in Mojo
@@ -118,7 +118,7 @@ papers/
 - `data/` - Optional sample data for demonstrations
 - `pyproject.toml` - Dependencies and project metadata
 
-**Notes**:
+### Notes
 
 - Each paper is self-contained in its directory
 - All files follow repository conventions
@@ -132,11 +132,11 @@ papers/
 
 **Structure**: Numbered steps with substeps
 
-**Content**:
+### Content
 
 #### Step 1: Planning and Research
 
-**Prepare before coding**:
+### Prepare before coding
 
 1. Research the paper thoroughly
    - Read the original research paper
@@ -144,18 +144,18 @@ papers/
    - Identify core components to implement
    - Review existing implementations in other languages
 
-2. Plan the implementation structure
+1. Plan the implementation structure
    - List main modules needed
    - Define public API for each module
    - Identify dependencies
    - Plan test coverage
 
-3. Document your plan
+1. Document your plan
    - Create `IMPLEMENTATION.md` outline
    - List architecture decisions
    - Identify potential challenges
 
-**Deliverables**:
+### Deliverables
 
 - Understanding of paper fundamentals
 - Implementation plan document
@@ -163,15 +163,15 @@ papers/
 
 #### Step 2: Create Paper Directory
 
-**Basic setup**:
+### Basic setup
 
 ```bash
 mkdir papers/<paper-name>
 cd papers/<paper-name>
 mkdir src tests docs data  # create directories
-```
+```text
 
-**Create stub files**:
+### Create stub files
 
 - `README.md` - Start with template
 - `src/main.mojo` - Create empty
@@ -181,15 +181,15 @@ mkdir src tests docs data  # create directories
 
 #### Step 3: Follow 5-Phase Workflow
 
-**Explain the workflow**:
+### Explain the workflow
 
 1. **Plan Phase** - Design detailed implementation
-2. **Test Phase** - Write tests first (TDD)
-3. **Implementation Phase** - Code the functionality
-4. **Packaging Phase** - Integration and optimization
-5. **Cleanup Phase** - Refactoring and finalization
+1. **Test Phase** - Write tests first (TDD)
+1. **Implementation Phase** - Code the functionality
+1. **Packaging Phase** - Integration and optimization
+1. **Cleanup Phase** - Refactoring and finalization
 
-**Mapping to GitHub Issues**:
+### Mapping to GitHub Issues
 
 - Create Plan issue for the paper
 - Test, Implementation, Packaging issues run in parallel
@@ -199,14 +199,14 @@ mkdir src tests docs data  # create directories
 
 #### Step 4: Code Standards
 
-**Mojo Code Style**:
+### Mojo Code Style
 
 - Follow repository code conventions
 - Use type hints consistently
 - Document public APIs with docstrings
 - Keep functions focused and testable
 
-**Reference Example**:
+### Reference Example
 
 ```mojo
 fn create_tensor(shape: List[Int]) -> Tensor:
@@ -218,9 +218,9 @@ fn create_tensor(shape: List[Int]) -> Tensor:
     Returns:
         Tensor: A new tensor with the specified shape
     """
-```
+```text
 
-**Standards to Follow**:
+### Standards to Follow
 
 - Mojo formatting (auto-formatted by pre-commit)
 - Docstring format (with Args, Returns, Raises sections)
@@ -231,20 +231,20 @@ fn create_tensor(shape: List[Int]) -> Tensor:
 
 #### Step 5: Testing Requirements
 
-**Test-Driven Development**:
+### Test-Driven Development
 
 - Write tests before implementation
 - Aim for comprehensive coverage
 - Test edge cases and error conditions
 - Use meaningful test names
 
-**Testing Tools**:
+### Testing Tools
 
 - Testing framework (pytest or mojo test runner)
 - Coverage tracking
 - Benchmarking utilities
 
-**Test Organization**:
+### Test Organization
 
 ```text
 tests/
@@ -254,9 +254,9 @@ tests/
 └── unit/
     ├── test_math.mojo
     └── test_layers.mojo
-```
+```text
 
-**Coverage Goals**:
+### Coverage Goals
 
 - Minimum 80% code coverage
 - All public APIs tested
@@ -264,7 +264,7 @@ tests/
 
 #### Step 6: Documentation
 
-**Required Documentation Files**:
+### Required Documentation Files
 
 1. **README.md** - Paper overview and usage
    - Paper title and citation
@@ -272,24 +272,24 @@ tests/
    - How to use the code
    - Results/examples
 
-2. **IMPLEMENTATION.md** - Implementation details
+1. **IMPLEMENTATION.md** - Implementation details
    - Architecture decisions
    - Module descriptions
    - Known limitations
    - Performance characteristics
 
-3. **RESEARCH_PAPER.md** - Paper summary
+1. **RESEARCH_PAPER.md** - Paper summary
    - Paper abstract
    - Key algorithms
    - Mathematical background
    - Links to original paper
 
-4. **ARCHITECTURE.md** - Design decisions
+1. **ARCHITECTURE.md** - Design decisions
    - Module organization
    - API design
    - Dependencies and trade-offs
 
-**Markdown Standards**:
+### Markdown Standards
 
 - Follow 120-character line limit
 - Use proper heading hierarchy
@@ -298,21 +298,21 @@ tests/
 
 #### Step 7: Submission and Review
 
-**Before submitting**:
+### Before submitting
 
 1. Run pre-commit hooks: `pre-commit run --all-files`
-2. Verify tests pass: `mojo test tests/`
-3. Check coverage: `coverage report`
-4. Update main README if needed
+1. Verify tests pass: `mojo test tests/`
+1. Check coverage: `coverage report`
+1. Update main README if needed
 
-**Pull Request**:
+### Pull Request
 
 - Reference the GitHub issue
 - Describe implementation approach
 - List any challenges overcome
 - Provide usage examples
 
-**Review Process**:
+### Review Process
 
 - Code review for implementation quality
 - Test coverage verification
@@ -323,7 +323,7 @@ tests/
 
 **Purpose**: Define repository-wide standards for papers
 
-**Subsections**:
+### Subsections
 
 #### 5.1 Code Standards
 
@@ -378,25 +378,25 @@ tests/
    - Outline modules and API
    - Plan test coverage
 
-2. **Test Phase** (Issue #N-3)
+1. **Test Phase** (Issue #N-3)
    - Write comprehensive test suite
    - Design test data
    - Establish coverage targets
    - Test edge cases
 
-3. **Implementation Phase** (Issue #N-4)
+1. **Implementation Phase** (Issue #N-4)
    - Code modules in order of dependency
    - Pass all existing tests
    - Add docstrings and comments
    - Optimize performance
 
-4. **Packaging Phase** (Issue #N-5)
+1. **Packaging Phase** (Issue #N-5)
    - Integrate with CI/CD pipeline
    - Add benchmarking
    - Write comprehensive docs
    - Create examples/demos
 
-5. **Cleanup Phase** (Issue #N-6)
+1. **Cleanup Phase** (Issue #N-6)
    - Address review feedback
    - Refactor for clarity
    - Finalize documentation
@@ -411,7 +411,7 @@ completes
 
 **Purpose**: Point contributors to helpful external resources
 
-**Subsections**:
+### Subsections
 
 Learning Mojo:
 
@@ -447,14 +447,14 @@ Tools & Libraries:
 
 **Purpose**: Reference existing paper implementations
 
-**Content**:
+### Content
 
 - List of implemented papers with status
 - Quick links to each paper
 - Brief summary of what each implements
 - Key learnings from each implementation
 
-**Example Entry**:
+### Example Entry
 
 ```markdown
 ### LeNet-5: CNN for Digit Recognition
@@ -473,7 +473,7 @@ Tools & Libraries:
 **Try It**:
 - See [papers/lenet-5/README.md](lenet-5/)
 - Run: `mojo papers/lenet-5/src/main.mojo`
-```
+```text
 
 **When to Add**: As papers are implemented
 
@@ -481,7 +481,7 @@ Tools & Libraries:
 
 ### Markdown Standards Compliance
 
-**Follow CLAUDE.md requirements**:
+### Follow CLAUDE.md requirements
 
 - 120 character line limit
 - Blank lines around sections, lists, code blocks
@@ -489,11 +489,11 @@ Tools & Libraries:
 - Language specified for all code blocks
 - Headings surrounded by blank lines
 
-**Checking**:
+### Checking
 
 ```bash
 npx markdownlint-cli2 papers/README.md
-```
+```text
 
 ### File Organization
 
@@ -523,28 +523,28 @@ npx markdownlint-cli2 papers/README.md
 When implementing papers/README.md (Issue #11), ensure:
 
 1. ✅ All 8 sections present and complete
-2. ✅ Clear visual structure (headings, lists, code blocks)
-3. ✅ Markdown validation passes
-4. ✅ All internal links valid
-5. ✅ Step-by-step guide is actionable
-6. ✅ Standards are explicit and testable
-7. ✅ Examples are practical and work
-8. ✅ Resource links are current
+1. ✅ Clear visual structure (headings, lists, code blocks)
+1. ✅ Markdown validation passes
+1. ✅ All internal links valid
+1. ✅ Step-by-step guide is actionable
+1. ✅ Standards are explicit and testable
+1. ✅ Examples are practical and work
+1. ✅ Resource links are current
 
 ## Design Rationale
 
-### Why This Structure?
+### Why This Structure
 
 1. **Overview First**: Welcomes contributors and explains purpose
-2. **Quick Start**: Gets people oriented immediately
-3. **Structure**: Shows what they'll be working with
-4. **Step-by-Step Guide**: Removes guesswork from implementation
-5. **Standards**: Ensures consistency across papers
-6. **Workflow**: Clarifies how work is organized
-7. **Resources**: Points to external help
-8. **Examples**: Shows real implementations
+1. **Quick Start**: Gets people oriented immediately
+1. **Structure**: Shows what they'll be working with
+1. **Step-by-Step Guide**: Removes guesswork from implementation
+1. **Standards**: Ensures consistency across papers
+1. **Workflow**: Clarifies how work is organized
+1. **Resources**: Points to external help
+1. **Examples**: Shows real implementations
 
-### Why 8 Sections?
+### Why 8 Sections
 
 - Sufficient detail for comprehensive guidance
 - Not overwhelming for first-time readers
@@ -555,11 +555,11 @@ When implementing papers/README.md (Issue #11), ensure:
 ### Key Design Decisions
 
 1. **Self-Contained**: README doesn't duplicate existing docs
-2. **Actionable**: Steps are concrete and testable
-3. **Links**: References external docs instead of duplicating
-4. **Living Document**: Designed to evolve as papers are added
-5. **Beginner-Friendly**: Assumes minimal prior knowledge
-6. **Production-Ready**: Standards emphasize quality and testing
+1. **Actionable**: Steps are concrete and testable
+1. **Links**: References external docs instead of duplicating
+1. **Living Document**: Designed to evolve as papers are added
+1. **Beginner-Friendly**: Assumes minimal prior knowledge
+1. **Production-Ready**: Standards emphasize quality and testing
 
 ## Next Steps
 

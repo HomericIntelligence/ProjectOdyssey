@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Copy hook scripts to .git/hooks directory
-2. Make hooks executable
-3. Configure hook behavior
-4. Test hooks work correctly
+1. Make hooks executable
+1. Configure hook behavior
+1. Test hooks work correctly
 
 ## Success Criteria
 

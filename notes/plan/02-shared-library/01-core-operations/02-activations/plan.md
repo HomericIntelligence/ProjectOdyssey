@@ -29,8 +29,8 @@ Implement common activation functions used in neural networks including ReLU fam
 ## Steps
 
 1. Implement ReLU family with variants for different sparsity needs
-2. Create sigmoid and tanh with numerically stable implementations
-3. Build softmax and GELU for modern architectures
+1. Create sigmoid and tanh with numerically stable implementations
+1. Build softmax and GELU for modern architectures
 
 ## Success Criteria
 

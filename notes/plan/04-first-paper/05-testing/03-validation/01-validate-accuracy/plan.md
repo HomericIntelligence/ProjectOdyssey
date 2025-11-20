@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Complete Validate Accuracy implementation
-2. Test thoroughly
-3. Document results
+1. Test thoroughly
+1. Document results
 
 ## Success Criteria
 

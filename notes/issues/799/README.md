@@ -30,12 +30,14 @@ Design and document a comprehensive test reporting system that generates clear, 
 
 **Decision**: Three-tier report structure (Summary → Failures → Successes)
 
-**Rationale**:
+### Rationale
+
 - Developers need to see failures immediately without scrolling
 - Summary provides quick overview of test run health
 - Successes are confirmatory information (less urgent)
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Chronological order: Rejected because failures may be buried in output
 - Grouped by test suite: Rejected because cross-cutting failures harder to spot
 
@@ -43,81 +45,95 @@ Design and document a comprehensive test reporting system that generates clear, 
 
 **Decision**: Support three output formats (Console, File, JSON)
 
-**Rationale**:
+### Rationale
+
 - **Console**: Human-readable output with colors for local development
 - **File**: Persistent record for debugging and auditing
 - **JSON**: Machine-readable for CI/CD tooling and analysis
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - XML output (JUnit format): Deferred to future enhancement
 - HTML reports: Deferred to future enhancement
 
 ### 3. Color Scheme
 
 **Decision**: Use ANSI color codes with semantic meaning
+
 - Red: Failures and errors
 - Green: Successes
 - Yellow: Warnings and skipped tests
 - Cyan: Informational context
 - Bold: Important statistics
 
-**Rationale**:
+### Rationale
+
 - Standard color conventions match developer expectations
 - Improves scanability of console output
 - Compatible with most terminal emulators
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - No colors: Rejected because reduces usability
 - Custom color schemes: Rejected to maintain consistency with ecosystem
 
 ### 4. Failure Detail Level
 
 **Decision**: Include comprehensive failure context by default
+
 - Test name and location (file path, line number)
 - Error message and stack trace
 - Expected vs. actual values (for assertions)
 - Execution time
 
-**Rationale**:
+### Rationale
+
 - Developers need complete context to debug failures
 - Reduces need for re-running tests with verbose flags
 - Balance between information density and readability
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Minimal output by default: Rejected because forces verbose flag usage
 - Extremely verbose output: Rejected because overwhelming for many failures
 
 ### 5. Statistics Calculation
 
 **Decision**: Display both absolute counts and percentages
+
 - Total tests run
 - Passed/Failed/Skipped counts
 - Pass rate percentage
 - Total execution time
 - Average time per test
 
-**Rationale**:
+### Rationale
+
 - Absolute counts show scale
 - Percentages show trends and health
 - Timing information helps identify performance issues
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Only counts: Rejected because percentages provide context
 - Only percentages: Rejected because hides scale
 
 ### 6. Exit Code Strategy
 
 **Decision**: Use standard Unix exit codes
+
 - 0: All tests passed
 - 1: One or more tests failed
 - 2: Error in test runner itself
 
-**Rationale**:
+### Rationale
+
 - Standard Unix convention
 - CI/CD pipelines expect this pattern
 - Distinguishes between test failures and infrastructure failures
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Exit code equals failure count: Rejected because 0 is only reliable success signal
 - Different codes for different failure types: Rejected as over-engineered
 
@@ -125,12 +141,14 @@ Design and document a comprehensive test reporting system that generates clear, 
 
 **Decision**: Collect all results before generating report (batch mode)
 
-**Rationale**:
+### Rationale
+
 - Enables accurate statistics calculation
 - Allows sorting failures first
 - Supports multiple output formats from same data
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Streaming output: Deferred to future enhancement for long test runs
 - Progressive updates: Adds complexity without clear benefit for typical test runs
 
@@ -138,13 +156,15 @@ Design and document a comprehensive test reporting system that generates clear, 
 
 **Decision**: Implement in Python for test runner tooling
 
-**Rationale**:
+### Rationale
+
 - Test runner is automation infrastructure (not ML/AI implementation)
 - Python has rich string formatting and terminal control libraries
 - Easier JSON serialization and file I/O
 - See [ADR-001](../../review/adr/ADR-001-language-selection-tooling.md) for language selection strategy
 
 **Justification**: Test reporting requires:
+
 - Rich text formatting with ANSI colors (Python: `colorama`, `rich`)
 - JSON serialization (Python: native `json` module)
 - File I/O with multiple formats
@@ -165,7 +185,7 @@ Report Generator (03-report-results)
 └─────────────┴──────────────┴──────────────┘
     ↓               ↓               ↓
 Terminal        Report.txt      Report.json
-```
+```text
 
 ### Data Flow
 
@@ -175,13 +195,13 @@ Terminal        Report.txt      Report.json
    - Error messages and stack traces
    - Execution timing
 
-2. **Processing**: Aggregate and analyze results
+1. **Processing**: Aggregate and analyze results
    - Calculate summary statistics
    - Sort failures to top
    - Format failure details
    - Generate timing analysis
 
-3. **Output**: Generate reports in multiple formats
+1. **Output**: Generate reports in multiple formats
    - Console output with colors
    - Plain text file
    - JSON for tooling
@@ -217,26 +237,30 @@ class TestSummary:
     total_time: float
     average_time: float
     failures: List[TestResult]
-```
+```text
 
 ## Implementation Strategy
 
 ### Phase 1: Core Report Generation
+
 - Implement TestResult and TestSummary data structures
 - Build aggregation logic for statistics calculation
 - Create basic console formatter with ANSI colors
 
 ### Phase 2: Multi-format Output
+
 - Add file output formatter (plain text)
 - Add JSON output formatter
 - Implement output destination selection (stdout, file)
 
 ### Phase 3: Enhanced Formatting
+
 - Add color scheme and visual hierarchy
 - Implement failure detail formatting
 - Add execution time analysis
 
 ### Phase 4: CI/CD Integration
+
 - Implement exit code strategy
 - Test integration with GitHub Actions
 - Validate JSON output format for tooling
@@ -244,25 +268,30 @@ class TestSummary:
 ## References
 
 ### Source Documentation
+
 - [Source Plan](../../../plan/03-tooling/02-testing-tools/01-test-runner/03-report-results/plan.md)
 - [Parent Plan - Test Runner](../../../plan/03-tooling/02-testing-tools/01-test-runner/plan.md)
 
 ### Related Issues
+
 - Issue #800: [Test] Report Results - Write Tests
 - Issue #801: [Implementation] Report Results - Build Functionality
 - Issue #802: [Packaging] Report Results - Integration and Packaging
 - Issue #803: [Cleanup] Report Results - Refactor and Finalize
 
 ### Architectural Decisions
+
 - [ADR-001: Language Selection - Tooling](../../review/adr/ADR-001-language-selection-tooling.md)
 
 ### Standards and Guidelines
+
 - [Python Coding Standards](../../../CLAUDE.md#python-coding-standards)
 - [Testing Tools Overview](../../../plan/03-tooling/02-testing-tools/plan.md)
 
 ## Implementation Notes
 
 *This section will be populated during the implementation phase with:*
+
 - Technical discoveries and insights
 - Integration challenges and solutions
 - Performance observations

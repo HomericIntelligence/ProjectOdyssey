@@ -6,9 +6,7 @@ Add GitHub workflow for markdown link validation
 
 ## Deliverables
 
-
 ## Success Criteria
-
 
 ## References
 

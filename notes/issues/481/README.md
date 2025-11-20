@@ -52,13 +52,16 @@ Package coverage reporting functionality with comprehensive documentation, usage
 Generate coverage reports locally:
 
 ```bash
+
 # All report types
+
 pytest --cov=scripts --cov-report=html --cov-report=term
 
 # Open HTML report
-open htmlcov/index.html
-```
 
+open htmlcov/index.html
+
+```text
 ## Report Types
 
 ### Console Report
@@ -80,7 +83,7 @@ Detailed line-by-line analysis:
 Machine-readable for CI integration:
 - Cobertura format
 - Used by CI tools and coverage services
-```
+```text
 
 **2. Report Interpretation Guide** (`docs/testing/interpreting-coverage.md`):
 
@@ -120,7 +123,7 @@ Some code is hard to test but not critical:
 - External integrations
 - Platform-specific code
 - **Document why coverage is lower**
-```
+```text
 
 **3. CI Integration Guide** (`docs/ci/coverage-reports-ci.md`):
 
@@ -143,22 +146,27 @@ Coverage reports are generated automatically on all PRs.
 Update README.md:
 
 ```markdown
-[![Coverage](https://img.shields.io/codecov/c/github/mvillmow/ml-odyssey)](https://codecov.io/gh/mvillmow/ml-odyssey)
-```
 
+[![Coverage](https://img.shields.io/codecov/c/github/mvillmow/ml-odyssey)](https://codecov.io/gh/mvillmow/ml-odyssey)
+
+```text
 ## Local CI Simulation
 
 Test coverage collection locally:
 
 ```bash
+
 # Install act (GitHub Actions locally)
+
 brew install act  # macOS
 apt-get install act  # Linux
 
 # Run coverage workflow
+
 act -j test
-```
-```
+
+```text
+```text
 
 **4. Usage Examples** (`docs/testing/coverage-examples.md`):
 
@@ -168,42 +176,54 @@ act -j test
 ## Example 1: Quick Check
 
 ```bash
-# Run tests, show coverage
-pytest --cov=scripts --cov-report=term-missing
-```
 
+# Run tests, show coverage
+
+pytest --cov=scripts --cov-report=term-missing
+
+```text
 ## Example 2: Detailed Analysis
 
 ```bash
+
 # Generate HTML report
+
 pytest --cov=scripts --cov-report=html
 
 # Open in browser
+
 open htmlcov/index.html
 
 # Find files with < 80% coverage
-grep -E '[0-7][0-9]%' htmlcov/index.html
-```
 
+grep -E '[0-7][0-9]%' htmlcov/index.html
+
+```text
 ## Example 3: Focused Coverage
 
 Test specific module:
 
 ```bash
-# Coverage for single module
-pytest tests/test_utils.py --cov=scripts.utils --cov-report=term
-```
 
+# Coverage for single module
+
+pytest tests/test_utils.py --cov=scripts.utils --cov-report=term
+
+```text
 ## Example 4: Historical Comparison
 
 ```bash
+
 # Store current coverage
+
 coverage json -o coverage-$(git rev-parse --short HEAD).json
 
 # Compare with previous
+
 diff coverage-main.json coverage-feature.json
-```
-```
+
+```text
+```text
 
 **5. Troubleshooting Guide** (`docs/testing/coverage-troubleshooting.md`):
 
@@ -247,11 +267,12 @@ diff coverage-main.json coverage-feature.json
 1. Verify artifact path in workflow
 2. Check coverage.xml exists
 3. Review CI logs for errors
-```
+```text
 
 ### Deliverable Checklist
 
 Documentation Files:
+
 - [ ] `docs/testing/coverage-reports.md` - Report generation guide
 - [ ] `docs/testing/interpreting-coverage.md` - Interpretation guide
 - [ ] `docs/ci/coverage-reports-ci.md` - CI integration guide
@@ -259,6 +280,7 @@ Documentation Files:
 - [ ] `docs/testing/coverage-troubleshooting.md` - Troubleshooting
 
 Updates:
+
 - [ ] Main `README.md` - Add coverage badge
 - [ ] `CONTRIBUTING.md` - Add report usage section
 - [ ] `docs/README.md` - Link to coverage documentation
@@ -278,7 +300,7 @@ Create `docs/testing/coverage-quick-reference.md`:
 | Open HTML | `open htmlcov/index.html` |
 | XML for CI | `--cov-report=xml` |
 | Fail if < 80% | `--cov-fail-under=80` |
-```
+```text
 
 ### Status
 

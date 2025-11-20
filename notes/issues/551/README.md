@@ -39,22 +39,22 @@ Based on the plan notes, the utils directory will organize utilities into the fo
    - Progress tracking and reporting
    - Debug and info level logging helpers
 
-2. **Configuration Management**
+1. **Configuration Management**
    - Config file parsing (YAML, JSON, etc.)
    - Environment variable handling
    - Hyperparameter management
 
-3. **Visualization Utilities**
+1. **Visualization Utilities**
    - Plotting helpers for training metrics
    - Model architecture visualization
    - Data distribution visualization
 
-4. **File I/O Utilities**
+1. **File I/O Utilities**
    - Safe file reading/writing
    - Directory creation and management
    - Path handling utilities
 
-5. **General-Purpose Helpers**
+1. **General-Purpose Helpers**
    - Type checking and validation
    - Math utilities not specific to ML
    - String formatting and parsing
@@ -73,17 +73,17 @@ Based on the plan notes, the utils directory will organize utilities into the fo
 ### API Design Guidelines
 
 1. **Clear naming**: Function names should be self-documenting (e.g., `load_yaml_config()` not `load_config()`)
-2. **Type hints**: All public functions must have type hints for parameters and return values
-3. **Docstrings**: All public functions must have clear docstrings explaining purpose, parameters, and return values
-4. **Error handling**: Utilities should raise informative exceptions with clear error messages
-5. **Default behavior**: Sensible defaults that work for 80% of use cases
+1. **Type hints**: All public functions must have type hints for parameters and return values
+1. **Docstrings**: All public functions must have clear docstrings explaining purpose, parameters, and return values
+1. **Error handling**: Utilities should raise informative exceptions with clear error messages
+1. **Default behavior**: Sensible defaults that work for 80% of use cases
 
 ### Documentation Strategy
 
 The `README.md` will serve as both:
 
 1. **User Guide**: How to import and use utilities
-2. **Developer Guide**: Guidelines for adding new utilities
+1. **Developer Guide**: Guidelines for adding new utilities
 
 It will include:
 

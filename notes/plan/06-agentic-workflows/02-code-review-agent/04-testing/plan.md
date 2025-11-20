@@ -32,9 +32,9 @@ Create comprehensive tests for all code review agent capabilities including corr
 ## Steps
 
 1. Create tests for correctness review capabilities
-2. Create tests for performance review capabilities
-3. Create tests for style review capabilities
-4. Set up continuous testing
+1. Create tests for performance review capabilities
+1. Create tests for style review capabilities
+1. Set up continuous testing
 
 ## Success Criteria
 

@@ -47,7 +47,7 @@ Build comprehensive testing infrastructure including test runners, paper-specifi
 
 **Status**: Planning phase - test requirements and architecture documented
 
-**Testing Objectives**
+### Testing Objectives
 
 This phase focuses on:
 
@@ -66,7 +66,8 @@ Discover and execute all repository tests with comprehensive reporting.
 
 #### Components
 
-**Test Discovery**:
+### Test Discovery
+
 - Automatic discovery of test files from standard locations:
   - `tests/**/*.mojo` - Mojo test files
   - `tests/**/*.py` - Python test files
@@ -74,13 +75,15 @@ Discover and execute all repository tests with comprehensive reporting.
 - Directory scanning with configurable patterns
 - Test collection and reporting
 
-**Test Execution**:
+### Test Execution
+
 - Sequential or parallel test execution modes
 - Test isolation and cleanup between tests
 - Timeout handling for long-running tests
 - Proper exit code handling and reporting
 
-**Test Reporting**:
+### Test Reporting
+
 - Summary statistics (passed, failed, skipped)
 - Detailed failure information with stack traces
 - Test timing and performance metrics
@@ -103,7 +106,7 @@ python tests/runners/test_runner.py --coverage
 
 # Parallel execution
 python tests/runners/test_runner.py --parallel
-```
+```text
 
 #### Test Output Format
 
@@ -128,7 +131,7 @@ Failed Tests:
 
 Test Execution Time: 2.34 seconds
 Coverage: 87%
-```
+```text
 
 ### 2. Paper-Specific Test Script
 
@@ -138,17 +141,20 @@ Validate and test individual paper implementations with focused testing.
 
 #### Components
 
-**Paper Test Discovery**:
+### Paper Test Discovery
+
 - Locate paper-specific tests
 - Load paper metadata and configuration
 - Discover test cases for specific paper
 
-**Test Validation**:
+### Test Validation
+
 - Verify paper structure and requirements
 - Validate paper implementation completeness
 - Test paper's public API
 
-**Focused Test Execution**:
+### Focused Test Execution
+
 - Run only tests relevant to specific paper
 - Provide paper-specific reporting
 - Validate against paper requirements
@@ -167,7 +173,7 @@ python tests/runners/paper_tester.py --paper lenet5 --verbose
 
 # Generate paper test report
 python tests/runners/paper_tester.py --paper lenet5 --report
-```
+```text
 
 #### Paper Test Report Format
 
@@ -199,7 +205,7 @@ Recommendations:
 1. Profile training loop for bottlenecks
 2. Consider parallel computation with SIMD
 3. Add caching for intermediate computations
-```
+```text
 
 ### 3. Coverage Measurement Tool
 
@@ -209,18 +215,21 @@ Measure and report test coverage with threshold validation.
 
 #### Components
 
-**Coverage Collection**:
+### Coverage Collection
+
 - Instrument code for coverage measurement
 - Track covered and uncovered lines
 - Measure branch coverage
 - Measure function coverage
 
-**Coverage Analysis**:
+### Coverage Analysis
+
 - Calculate coverage percentages
 - Identify uncovered code sections
 - Compare against baselines
 
-**Threshold Validation**:
+### Threshold Validation
+
 - Validate against configured thresholds
 - Generate warnings for under-coverage
 - Support per-module coverage requirements
@@ -239,7 +248,7 @@ python tests/runners/coverage_tool.py --validate
 
 # Generate HTML coverage report
 python tests/runners/coverage_tool.py --html coverage/
-```
+```text
 
 #### Coverage Report Format
 
@@ -266,7 +275,7 @@ Threshold Status:
 - Overall threshold (85%): PASS
 - Module threshold (80%): All modules pass
 - Branch coverage (75%): PASS
-```
+```text
 
 ## Test Infrastructure Components
 
@@ -278,19 +287,22 @@ Provide shared testing infrastructure and helper functions.
 
 #### Components
 
-**Test Fixtures**:
+### Test Fixtures
+
 - Configuration test fixtures
 - Sample data fixtures
 - Mock implementations
 - Setup/teardown utilities
 
-**Test Helpers**:
+### Test Helpers
+
 - Assertion helpers
 - Comparison utilities
 - File I/O helpers
 - Mock object factories
 
-**Test Markers**:
+### Test Markers
+
 - Skip markers for conditional tests
 - Category markers (unit, integration, slow)
 - Paper-specific markers
@@ -304,7 +316,7 @@ from test_helpers import assert_equals, assert_raises
 fn test_config_loading() raises:
     var config = sample_config()
     assert_equals(config.name, "test-config")
-```
+```text
 
 ### Test Discovery Patterns
 
@@ -336,21 +348,22 @@ tests/
         ├── test_architecture.mojo
         ├── test_forward_pass.mojo
         └── test_training.mojo
-```
+```text
 
 #### Test Discovery Rules
 
 1. Files matching `test_*.mojo` or `*_test.mojo` in `tests/` directories
-2. Files matching `test_*.py` in `tests/` directories
-3. Functions matching `test_*` or `*_test` prefixes
-4. Methods in classes matching `Test*` pattern
-5. Functions decorated with `@test` or similar markers
+1. Files matching `test_*.py` in `tests/` directories
+1. Functions matching `test_*` or `*_test` prefixes
+1. Methods in classes matching `Test*` pattern
+1. Functions decorated with `@test` or similar markers
 
 ### Test Scenarios and Coverage
 
 #### Configuration Tests
 
-**Loading scenarios**:
+### Loading scenarios
+
 - Load default configuration
 - Load paper-specific configuration
 - Load experiment configuration
@@ -358,14 +371,16 @@ tests/
 - Load invalid YAML
 - Load with environment variable substitution
 
-**Merging scenarios**:
+### Merging scenarios
+
 - Merge 2-level hierarchy (default + paper)
 - Merge 3-level hierarchy (default + paper + experiment)
 - Override default values
 - Add new keys
 - Merge with missing files
 
-**Validation scenarios**:
+### Validation scenarios
+
 - Validate required fields
 - Validate type constraints
 - Validate range constraints
@@ -375,7 +390,8 @@ tests/
 
 #### Core Component Tests
 
-**Tensor operations**:
+### Tensor operations
+
 - Creation and initialization
 - Shape and dimension queries
 - Element access and modification
@@ -383,7 +399,8 @@ tests/
 - Broadcasting and reshaping
 - Memory alignment
 
-**Operators**:
+### Operators
+
 - Linear operations
 - Activation functions
 - Loss calculations
@@ -392,19 +409,22 @@ tests/
 
 #### Paper Implementation Tests
 
-**Architecture tests**:
+### Architecture tests
+
 - Correct layer structure
 - Correct parameter dimensions
 - Correct initialization
 - Input/output shape matching
 
-**Forward pass tests**:
+### Forward pass tests
+
 - Forward computation
 - Intermediate activations
 - Output shape validation
 - Numerical correctness
 
-**Training tests**:
+### Training tests
+
 - Backward pass computation
 - Gradient computation
 - Parameter updates
@@ -437,7 +457,7 @@ python tests/runners/benchmark_tool.py --compare baseline
 
 # Generate benchmark report
 python tests/runners/benchmark_tool.py --report
-```
+```text
 
 ## Testing Workflow
 
@@ -448,17 +468,17 @@ python tests/runners/benchmark_tool.py --report
    - Tests should fail initially
    - Tests drive implementation
 
-2. **Implement Functionality**
+1. **Implement Functionality**
    - Implement code to make tests pass
    - Follow existing code patterns
    - Maintain backward compatibility
 
-3. **Refactor** (if needed)
+1. **Refactor** (if needed)
    - Improve code quality
    - Ensure tests still pass
    - Maintain test coverage
 
-4. **Review and Merge**
+1. **Review and Merge**
    - Code review with test coverage check
    - Verify all tests pass in CI
    - Merge to main branch
@@ -487,7 +507,7 @@ python tests/runners/benchmark_tool.py --report
 
 ## File Structure
 
-**New files to create**:
+### New files to create
 
 ```text
 tests/
@@ -499,15 +519,15 @@ tests/
 │   └── utils.py                # Utility functions
 ├── conftest.py                 # pytest configuration
 └── conftest.mojo               # Mojo test configuration
-```
+```text
 
 ## Next Steps
 
 After this planning phase is complete:
 
 1. **Issue #852**: Implement test runner, paper tester, and coverage tool
-2. **Issue #853**: Integrate testing tools with CI/CD pipeline and package them
-3. **Issue #854**: Finalize, optimize, and document testing infrastructure
+1. **Issue #853**: Integrate testing tools with CI/CD pipeline and package them
+1. **Issue #854**: Finalize, optimize, and document testing infrastructure
 
 ## Key Considerations
 

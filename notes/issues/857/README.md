@@ -55,7 +55,7 @@ scripts/install/
 ├── platform_detector.py    # This implementation
 ├── version_detector.py      # Related module
 └── installer.py             # Main installer
-```
+```text
 
 ### 2. Core Functions
 
@@ -65,7 +65,7 @@ scripts/install/
 - Output: Structured dictionary with platform information
 - Should be the primary public API
 
-**Helper Functions**:
+### Helper Functions
 
 - `_get_os_type()` - Query OS using `platform.system()`
 - `_normalize_platform_name()` - Standardize platform identifier
@@ -90,11 +90,11 @@ All platform detection should return this standardized structure:
         "arch_raw": "x86_64",            # Raw architecture from system
     }
 }
-```
+```text
 
 ### 4. Supported Platforms Matrix
 
-**Linux Support**:
+### Linux Support
 
 - Architectures: x86_64 (AMD64), ARM64 (aarch64)
 - Distributions: Ubuntu, Debian, RHEL/CentOS, Fedora (via generic Linux detection)
@@ -105,7 +105,7 @@ All platform detection should return this standardized structure:
 - Architectures: x86_64 (Intel), ARM64 (Apple Silicon)
 - Version tracking: Capture macOS version (e.g., "14.1" for Sonoma)
 
-**Unsupported Platforms**:
+### Unsupported Platforms
 
 - Windows - Should warn and set `compatible: False`
 - Other architectures (i386, ppc64, etc.) - Should warn and set `compatible: False`
@@ -121,9 +121,9 @@ class UnsupportedPlatformError(Exception):
 class PlatformDetectionError(Exception):
     """Raised when platform detection fails."""
     pass
-```
+```text
 
-**Error Message Examples**:
+### Error Message Examples
 
 - `"Unsupported platform 'Windows'. Please use Linux or macOS."`
 - `"Unsupported architecture 'i386'. Please use x86_64 or arm64."`
@@ -131,7 +131,7 @@ class PlatformDetectionError(Exception):
 
 ### 6. Code Quality Standards
 
-**Type Hints**:
+### Type Hints
 
 ```python
 def detect_platform() -> Dict[str, Any]:
@@ -141,7 +141,7 @@ def detect_platform() -> Dict[str, Any]:
 def _get_os_type() -> str:
     """Get normalized OS type."""
     pass
-```
+```text
 
 **Docstrings** (Google style):
 
@@ -166,9 +166,9 @@ def detect_platform() -> Dict[str, Any]:
     Raises:
         PlatformDetectionError: If platform detection fails
     """
-```
+```text
 
-**Style Guidelines**:
+### Style Guidelines
 
 - PEP 8 compliance (enforced by pre-commit hooks)
 - Maximum line length: 120 characters
@@ -193,14 +193,14 @@ Test files to integrate with:
 ### 8. Implementation Approach (TDD-First)
 
 1. **Start with test review** - Understand what #856 expects
-2. **Implement incrementally**:
+1. **Implement incrementally**:
    - Step 1: Implement `_get_os_type()`
    - Step 2: Implement `_detect_architecture()`
    - Step 3: Implement `_get_os_version()`
    - Step 4: Implement `_assess_compatibility()`
    - Step 5: Integrate into `detect_platform()`
-3. **Run tests after each step** - Ensure TDD compliance
-4. **Cross-platform validation** - Test on Linux (primary), verify macOS compatibility
+1. **Run tests after each step** - Ensure TDD compliance
+1. **Cross-platform validation** - Test on Linux (primary), verify macOS compatibility
 
 ### 9. Logging and Debugging
 
@@ -211,11 +211,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# In functions:
+# In functions
 logger.debug(f"Detected platform: {platform}")
 logger.warning(f"Platform may not be fully supported: {platform}")
 logger.error(f"Failed to detect architecture: {e}")
-```
+```text
 
 ### 10. No External Dependencies
 
@@ -231,12 +231,12 @@ Do NOT add pip dependencies unless absolutely necessary (and document justificat
 ## Implementation Workflow
 
 1. **Review tests** from #856 to understand expected behavior
-2. **Create module file** with stub functions
-3. **Implement OS detection** - Use platform.system()
-4. **Implement architecture detection** - Use platform.machine()
-5. **Implement version detection** - Parse version strings
-6. **Implement compatibility assessment** - Check support matrix
-7. **Add error handling** - Clear exceptions and messages
-8. **Add logging** - Debug-level diagnostics
-9. **Run tests** - Validate all #856 tests pass
-10. **Code review** - Ensure PEP 8 compliance and documentation quality
+1. **Create module file** with stub functions
+1. **Implement OS detection** - Use platform.system()
+1. **Implement architecture detection** - Use platform.machine()
+1. **Implement version detection** - Parse version strings
+1. **Implement compatibility assessment** - Check support matrix
+1. **Add error handling** - Clear exceptions and messages
+1. **Add logging** - Debug-level diagnostics
+1. **Run tests** - Validate all #856 tests pass
+1. **Code review** - Ensure PEP 8 compliance and documentation quality

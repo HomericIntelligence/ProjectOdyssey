@@ -10,7 +10,7 @@ Core benchmarking framework for measuring model performance.
 
 **Language**: Mojo (required for accurate ML performance measurement)
 
-**Usage**:
+### Usage
 
 ```mojo
 from tools.benchmarking.benchmark import ModelBenchmark, BenchmarkResult
@@ -33,9 +33,9 @@ fn benchmark_example():
     # Measure inference
     let result = bench.measure_inference(model, input, batch_size=32)
     result.print_summary()
-```
+```text
 
-**Features**:
+### Features
 
 - Inference latency measurement
 - Training step benchmarking
@@ -49,14 +49,14 @@ CLI tool for running benchmark suites.
 
 **Language**: Mojo (required for accurate performance measurement)
 
-**Usage**:
+### Usage
 
 ```bash
 # Run benchmark suite
 mojo tools/benchmarking/runner.mojo
-```
+```text
 
-**Output**:
+### Output
 
 ```text
 ============================================================
@@ -77,7 +77,7 @@ Running quick benchmark...
 ============================================================
 Benchmark complete!
 ============================================================
-```
+```text
 
 ## Benchmark Results
 

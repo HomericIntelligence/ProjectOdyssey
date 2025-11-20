@@ -26,14 +26,14 @@ Design and document common image augmentation transforms to increase training da
 
 **Decision**: Implement transforms as composable, standalone functions/structs
 
-**Rationale**:
+### Rationale
 
 - Allows flexible combination of transforms in pipelines
 - Each transform can be tested independently
 - Easy to add new transforms without modifying existing code
 - Follows SOLID principles (Single Responsibility, Open-Closed)
 
-**Design Pattern**:
+### Design Pattern
 
 ```mojo
 # Base transform interface concept
@@ -52,20 +52,20 @@ struct RandomHorizontalFlip(Transform):
     fn apply(self, image: Tensor) -> Tensor:
         # Implementation
         pass
-```
+```text
 
 ### 2. Probability-Based Augmentation
 
 **Decision**: Each transform accepts a probability parameter (0.0-1.0) for random application
 
-**Rationale**:
+### Rationale
 
 - Provides fine-grained control over augmentation intensity
 - Allows different augmentation strategies for different datasets
 - Prevents over-augmentation which can degrade model performance
 - Standard practice in ML frameworks (torchvision, albumentations)
 
-**Implementation**:
+### Implementation
 
 - Default probabilities should be sensible (typically 0.5)
 - Use reproducible random number generation with configurable seed
@@ -75,14 +75,14 @@ struct RandomHorizontalFlip(Transform):
 
 **Decision**: Transforms must preserve label validity (no semantic changes)
 
-**Rationale**:
+### Rationale
 
 - Horizontal flip is safe for most images (except text, asymmetric objects)
 - Vertical flip changes orientation significantly (use with caution)
 - Rotation should be limited (e.g., ±15°) to avoid extreme distortions
 - Color augmentations don't affect spatial labels
 
-**Guidelines**:
+### Guidelines
 
 - Document which transforms are safe for which task types
 - Provide warnings for potentially problematic transforms
@@ -91,27 +91,27 @@ struct RandomHorizontalFlip(Transform):
 
 ### 4. Geometric Transforms
 
-**Transforms to Implement**:
+### Transforms to Implement
 
 1. **RandomHorizontalFlip**: Mirror image left-right
    - Default probability: 0.5
    - Safe for most vision tasks (except OCR, asymmetric objects)
 
-2. **RandomVerticalFlip**: Mirror image top-bottom
+1. **RandomVerticalFlip**: Mirror image top-bottom
    - Default probability: 0.0 (disabled by default - less commonly used)
    - Can change semantic meaning significantly
 
-3. **RandomRotation**: Rotate image within angle range
+1. **RandomRotation**: Rotate image within angle range
    - Default range: ±15 degrees
    - Fills new pixels with edge padding or constant value
    - Preserves label validity for small rotations
 
-4. **RandomCrop**: Extract random patch and resize
+1. **RandomCrop**: Extract random patch and resize
    - Crop size configurable (e.g., 0.8-1.0 of original)
    - Resize back to original dimensions
    - Useful for learning scale invariance
 
-**Implementation Considerations**:
+### Implementation Considerations
 
 - Use Mojo's SIMD operations for efficient pixel manipulation
 - Implement efficient memory-safe tensor operations
@@ -120,7 +120,7 @@ struct RandomHorizontalFlip(Transform):
 
 ### 5. Color Augmentations
 
-**Transforms to Implement**:
+### Transforms to Implement
 
 1. **ColorJitter**: Random brightness, contrast, saturation adjustments
    - Brightness: ±20% default range
@@ -128,15 +128,15 @@ struct RandomHorizontalFlip(Transform):
    - Saturation: ±20% default range
    - Apply as multiplicative factors
 
-2. **RandomBrightness**: Adjust image brightness
+1. **RandomBrightness**: Adjust image brightness
    - Range: 0.8-1.2 of original
    - Clamp values to valid range [0, 255]
 
-3. **RandomContrast**: Adjust image contrast
+1. **RandomContrast**: Adjust image contrast
    - Range: 0.8-1.2 of original
    - Center around mean pixel value
 
-**Implementation Considerations**:
+### Implementation Considerations
 
 - Work in appropriate color space (RGB vs HSV for saturation)
 - Ensure values stay in valid range after transformation
@@ -145,19 +145,19 @@ struct RandomHorizontalFlip(Transform):
 
 ### 6. Noise and Blur Effects
 
-**Transforms to Implement**:
+### Transforms to Implement
 
 1. **GaussianNoise**: Add random Gaussian noise to image
    - Default stddev: 0.01-0.05 (relative to pixel value range)
    - Helps model learn robustness to noise
    - Clamp final values to valid range
 
-2. **GaussianBlur**: Apply Gaussian blur filter
+1. **GaussianBlur**: Apply Gaussian blur filter
    - Kernel size: 3x3 or 5x5
    - Random sigma selection within range
    - Helps model learn to focus on structure vs texture
 
-**Implementation Considerations**:
+### Implementation Considerations
 
 - Use efficient convolution for Gaussian blur
 - Generate noise efficiently using SIMD operations
@@ -167,7 +167,7 @@ struct RandomHorizontalFlip(Transform):
 
 **Decision**: Implement composable pipeline that chains transforms
 
-**Design**:
+### Design
 
 ```mojo
 struct TransformPipeline:
@@ -184,9 +184,9 @@ struct TransformPipeline:
         for transform in self.transforms:
             result = transform.apply(result)
         return result
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Allows users to create custom augmentation strategies
 - Easy to experiment with different combinations
@@ -195,7 +195,7 @@ struct TransformPipeline:
 
 ### 8. API Design
 
-**Public Interface**:
+### Public Interface
 
 ```mojo
 # Individual transforms
@@ -209,9 +209,9 @@ fn gaussian_blur(image: Tensor, kernel_size: Int, sigma_range: Tuple[Float32, Fl
 
 # Pipeline builder
 fn create_augmentation_pipeline(transforms: List[Transform], seed: Int = 42) -> TransformPipeline
-```
+```text
 
-**Design Principles**:
+### Design Principles
 
 - Functional interface (pure functions when possible)
 - Sensible defaults for all parameters
@@ -222,14 +222,14 @@ fn create_augmentation_pipeline(transforms: List[Transform], seed: Int = 42) -> 
 
 **Decision**: Support reproducible augmentation through configurable random seed
 
-**Implementation**:
+### Implementation
 
 - Accept optional seed parameter at pipeline level
 - Use Mojo's random number generation with seed control
 - Document seed behavior in API reference
 - Allow per-transform seed override for fine-grained control
 
-**Use Cases**:
+### Use Cases
 
 - Debugging: Same augmentation sequence for same input
 - Validation: Ensure consistent augmentation during evaluation
@@ -237,14 +237,14 @@ fn create_augmentation_pipeline(transforms: List[Transform], seed: Int = 42) -> 
 
 ### 10. Performance Considerations
 
-**Optimizations**:
+### Optimizations
 
 1. **SIMD Vectorization**: Use Mojo's SIMD for pixel-wise operations
-2. **Memory Reuse**: Implement in-place transforms where possible
-3. **Lazy Evaluation**: Only compute transforms when probability triggers
-4. **Batch Processing**: Design for efficient batch augmentation
+1. **Memory Reuse**: Implement in-place transforms where possible
+1. **Lazy Evaluation**: Only compute transforms when probability triggers
+1. **Batch Processing**: Design for efficient batch augmentation
 
-**Benchmarking Plan**:
+### Benchmarking Plan
 
 - Measure transform throughput (images/second)
 - Compare with Python implementations (torchvision)
@@ -253,14 +253,14 @@ fn create_augmentation_pipeline(transforms: List[Transform], seed: Int = 42) -> 
 
 ### 11. Error Handling
 
-**Strategy**:
+### Strategy
 
 - Validate input tensor dimensions (must be 3D: H x W x C)
 - Check parameter ranges (probabilities in [0, 1])
 - Handle edge cases (empty tensors, single-pixel images)
 - Provide clear error messages with parameter constraints
 
-**Graceful Degradation**:
+### Graceful Degradation
 
 - If transform fails, return original image (log warning)
 - Allow pipeline to continue even if one transform fails
@@ -268,7 +268,7 @@ fn create_augmentation_pipeline(transforms: List[Transform], seed: Int = 42) -> 
 
 ### 12. Testing Strategy
 
-**Test Coverage**:
+### Test Coverage
 
 1. **Unit Tests**: Each transform tested independently
    - Correct output dimensions
@@ -276,16 +276,16 @@ fn create_augmentation_pipeline(transforms: List[Transform], seed: Int = 42) -> 
    - Parameter validation
    - Edge cases (min/max sizes, extreme parameters)
 
-2. **Integration Tests**: Pipeline composition
+1. **Integration Tests**: Pipeline composition
    - Multiple transforms in sequence
    - Reproducibility with same seed
    - Memory safety (no leaks)
 
-3. **Visual Tests**: Sample outputs for manual inspection
+1. **Visual Tests**: Sample outputs for manual inspection
    - Generate augmented samples for documentation
    - Verify transforms produce expected visual effects
 
-4. **Performance Tests**: Benchmarks
+1. **Performance Tests**: Benchmarks
    - Throughput measurement
    - Memory usage profiling
    - Comparison with baseline implementations

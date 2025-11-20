@@ -7,9 +7,9 @@ This guide explains how to integrate the shared library into paper implementatio
 The shared library (`shared/`) provides reusable components for implementing research papers. This guide covers:
 
 1. How to import and use shared components
-2. When to use shared vs custom implementations
-3. Common patterns and best practices
-4. Migration examples from standalone to shared-based code
+1. When to use shared vs custom implementations
+1. Common patterns and best practices
+1. Migration examples from standalone to shared-based code
 
 ## Quick Start
 
@@ -30,14 +30,14 @@ var model = Sequential([
 ])
 
 var optimizer = SGD(learning_rate=0.01, momentum=0.9)
-```
+```text
 
 ### Verify Installation
 
 ```bash
 # Test that shared library is importable
 mojo run scripts/verify_installation.mojo
-```
+```text
 
 ## Import Patterns
 
@@ -47,7 +47,7 @@ For commonly-used components, import from root:
 
 ```mojo
 from shared import Linear, Conv2D, ReLU, SGD, DataLoader, Logger
-```
+```text
 
 **Exports from Root** (`shared/__init__.mojo`):
 
@@ -65,7 +65,7 @@ from shared.core import BatchNorm2D, LayerNorm, Softmax
 from shared.training import CosineAnnealingLR, EarlyStopping, ModelCheckpoint
 from shared.data import ImageDataset, RandomCrop, RandomHorizontalFlip
 from shared.utils import plot_training_curves, set_seed
-```
+```text
 
 ### Importing from Sub-Subpackages
 
@@ -76,7 +76,7 @@ from shared.training.optimizers import AdamW, RMSprop
 from shared.training.schedulers import WarmupLR, ExponentialLR
 from shared.training.metrics import Precision, Recall, ConfusionMatrix
 from shared.training.callbacks import LRSchedulerCallback
-```
+```text
 
 ## When to Use Shared vs Custom
 
@@ -159,7 +159,7 @@ struct LeNet5:
     fn __init__(inout self):
         self.conv1 = Conv2D(1, 6, 5)
         self.conv2 = Conv2D(6, 16, 5)
-```
+```text
 
 **After** (using shared):
 
@@ -188,9 +188,9 @@ struct LeNet5:
 
     fn forward(self, x: Tensor) -> Tensor:
         return self.model.forward(x)
-```
+```text
 
-**Benefits**:
+### Benefits
 
 - ✅ Less code to maintain
 - ✅ SIMD-optimized convolution
@@ -226,7 +226,7 @@ fn train_one_epoch(
         total_loss += loss
 
     return total_loss / Float32(len(data))
-```
+```text
 
 **After** (using shared):
 
@@ -248,9 +248,9 @@ fn train_lenet5(
         var val_loss = validate_epoch(model, val_loader, loss_fn)
 
         print(f"Epoch {epoch}: train={train_loss:.4f}, val={val_loss:.4f}")
-```
+```text
 
-**Benefits**:
+### Benefits
 
 - ✅ Much less code
 - ✅ Correct gradient computation
@@ -277,7 +277,7 @@ fn create_batches(
         batches.append((batch_data, batch_labels))
 
     return batches
-```
+```text
 
 **After** (using shared):
 
@@ -307,9 +307,9 @@ fn create_data_loaders(
     var test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
     return (train_loader, test_loader)
-```
+```text
 
-**Benefits**:
+### Benefits
 
 - ✅ Built-in shuffling
 - ✅ Transform pipeline
@@ -358,7 +358,7 @@ struct ResidualBlock(Module):
 
         out = out + identity
         return self.relu(out)
-```
+```text
 
 **Pattern**: Use shared components as building blocks, add paper-specific logic on top.
 
@@ -379,7 +379,7 @@ var model = Sequential([
     Dropout(0.2),
     Linear(128, 10),
 ])
-```
+```text
 
 ### Pattern 2: Training Setup
 
@@ -400,7 +400,7 @@ var scheduler = CosineAnnealingLR(optimizer, T_max=100)
 # Callbacks
 var early_stop = EarlyStopping(patience=10)
 var checkpoint = ModelCheckpoint("best_model.mojo", monitor="val_loss")
-```
+```text
 
 ### Pattern 3: Data Pipeline
 
@@ -423,7 +423,7 @@ var val_dataset = ImageDataset(val_paths, val_labels, val_transform)
 
 var train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True)
 var val_loader = DataLoader(val_dataset, batch_size=256, shuffle=False)
-```
+```text
 
 ### Pattern 4: Complete Training Script
 
@@ -461,7 +461,7 @@ fn main():
 
     # Visualization
     plot_training_curves(train_losses, val_losses, save_path="results/curves.png")
-```
+```text
 
 ## Best Practices
 
@@ -471,13 +471,13 @@ fn main():
 
 ```mojo
 from shared.core import *  # Avoid this
-```
+```text
 
 ✅ **Do**: Explicit imports
 
 ```mojo
 from shared.core import Linear, Conv2D, ReLU
-```
+```text
 
 ### 2. Use Type Hints
 
@@ -488,7 +488,7 @@ from shared.training import Optimizer
 fn train(model: Module, optimizer: Optimizer):
     # Type-safe function
     pass
-```
+```text
 
 ### 3. Follow Mojo Best Practices
 
@@ -500,7 +500,7 @@ fn forward(self, x: Tensor) -> Tensor:
 # Use owned/borrowed appropriately
 fn train_step(inout model: Module, borrowed batch: Batch):
     pass
-```
+```text
 
 ### 4. Keep Paper-Specific Code Separate
 
@@ -513,7 +513,7 @@ papers/lenet5/
 ├── data/
 │   └── mnist.mojo       # Paper-specific data handling
 └── README.md
-```
+```text
 
 ### 5. Document Dependencies
 
@@ -525,7 +525,7 @@ papers/lenet5/
 - `shared.core`: Linear, Conv2D, ReLU, MaxPool2D
 - `shared.training`: SGD, train_epoch
 - `shared.data`: DataLoader, TensorDataset
-```
+```text
 
 ## Troubleshooting
 
@@ -533,42 +533,42 @@ papers/lenet5/
 
 **Problem**: `ImportError: cannot import name 'Linear' from 'shared.core'`
 
-**Solution**:
+### Solution
 
 1. Verify shared library is installed: `mojo run scripts/verify_installation.mojo`
-2. Check that component is implemented (not just planned)
-3. Use correct import path (check `shared/__init__.mojo`)
+1. Check that component is implemented (not just planned)
+1. Use correct import path (check `shared/__init__.mojo`)
 
 ### API Mismatches
 
 **Problem**: Method signature doesn't match documentation
 
-**Solution**:
+### Solution
 
 1. Check shared library version
-2. Refer to implemented API in code, not just docs
-3. File issue if documentation is incorrect
+1. Refer to implemented API in code, not just docs
+1. File issue if documentation is incorrect
 
 ### Performance Issues
 
 **Problem**: Shared component slower than expected
 
-**Solution**:
+### Solution
 
 1. Verify you're using release build: `mojo build --release`
-2. Check if SIMD optimization is enabled
-3. Profile to identify bottleneck
-4. File performance issue with benchmark
+1. Check if SIMD optimization is enabled
+1. Profile to identify bottleneck
+1. File performance issue with benchmark
 
 ### Missing Components
 
 **Problem**: Need component that isn't in shared library yet
 
-**Solution**:
+### Solution
 
 1. Implement custom version in paper directory
-2. Mark as candidate for shared library
-3. Contribute back to shared library after validation
+1. Mark as candidate for shared library
+1. Contribute back to shared library after validation
 
 ## Version Compatibility
 
@@ -577,7 +577,7 @@ papers/lenet5/
 ```mojo
 from shared import __version__
 print(__version__)  # "0.1.0"
-```
+```text
 
 ### Version Requirements
 
@@ -588,17 +588,17 @@ In `papers/lenet5/README.md`:
 
 - Shared library: >=0.1.0, <0.2.0
 - Mojo: >=24.5
-```
+```text
 
 ## Contributing Back to Shared
 
 When you implement something useful in a paper that could be shared:
 
 1. **Identify candidate**: Is it used in multiple papers?
-2. **Generalize**: Remove paper-specific assumptions
-3. **Test thoroughly**: Add comprehensive tests
-4. **Document**: Add docstrings and examples
-5. **Submit PR**: Contribute to `shared/`
+1. **Generalize**: Remove paper-specific assumptions
+1. **Test thoroughly**: Add comprehensive tests
+1. **Document**: Add docstrings and examples
+1. **Submit PR**: Contribute to `shared/`
 
 ## Migration Checklist
 
@@ -623,13 +623,13 @@ When migrating a paper to use shared library:
 
 ## Summary
 
-**Key Takeaways**:
+### Key Takeaways
 
 1. Use shared library for standard components
-2. Keep paper-specific code separate
-3. Import explicitly, not with wildcards
-4. Follow Mojo best practices
-5. Contribute useful components back
+1. Keep paper-specific code separate
+1. Import explicitly, not with wildcards
+1. Follow Mojo best practices
+1. Contribute useful components back
 
 The shared library makes paper implementations:
 

@@ -37,18 +37,18 @@ This planning phase will define:
    - Support matrix: Linux (x86_64, arm64), macOS (Intel, Apple Silicon)
    - Fail-fast approach with clear messages for unsupported platforms
 
-2. **API Design**
+1. **API Design**
    - Input: None (detect from system)
    - Output: Structured platform details (identifier, architecture, version, compatibility)
    - Platform identifier format: lowercase, consistent (e.g., "linux", "macos")
 
-3. **Architecture Considerations**
+1. **Architecture Considerations**
    - Query OS information using platform.system()
    - Detect architecture using platform.machine()
    - Check OS version for compatibility requirements
    - Return structured data for use by downstream components
 
-4. **Error Handling**
+1. **Error Handling**
    - Clear error messages for unsupported platforms
    - Warning system for deprecated or untested platforms
    - Graceful degradation where possible

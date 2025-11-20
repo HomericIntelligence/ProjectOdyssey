@@ -48,10 +48,10 @@ decomposition, specialized agents, and reusable skills.
 ### Key Architectural Decisions
 
 1. **Directory Separation**: Operational configs in `.claude/`, documentation in repository root
-2. **6-Level Hierarchy**: From meta-orchestrator to junior engineers
-3. **Skills as Capabilities**: Separate from sub-agents, used for algorithmic operations
-4. **Git Worktree Integration**: Each issue gets its own worktree for isolation
-5. **5-Phase Workflow Integration**: Agents map to Plan → Test/Impl/Package → Cleanup phases
+1. **6-Level Hierarchy**: From meta-orchestrator to junior engineers
+1. **Skills as Capabilities**: Separate from sub-agents, used for algorithmic operations
+1. **Git Worktree Integration**: Each issue gets its own worktree for isolation
+1. **5-Phase Workflow Integration**: Agents map to Plan → Test/Impl/Package → Cleanup phases
 
 ## Agent Hierarchy (6 Levels)
 
@@ -169,14 +169,14 @@ See [worktree-strategy.md](./worktree-strategy.md) for complete details.
 
 ### Sub-Agents vs Skills
 
-**Sub-Agents**:
+### Sub-Agents
 
 - Separate conversation contexts
 - Make complex decisions
 - Persistent state across invocations
 - Example: Architecture Design Agent
 
-**Skills**:
+### Skills
 
 - Run in current context
 - Algorithmic/template-based
@@ -222,11 +222,11 @@ See [worktree-strategy.md](./worktree-strategy.md) for complete details.
 ## Next Steps
 
 1. ✅ Update plan.md files (Complete)
-2. ✅ Create tracked documentation in notes/issues/ (In Progress)
-3. Regenerate github_issue.md files (local, from plan.md)
-4. Update GitHub issues 62-67
-5. Create new GitHub issues 68-73 for skills
-6. Begin implementation in respective worktrees
+1. ✅ Create tracked documentation in notes/issues/ (In Progress)
+1. Regenerate github_issue.md files (local, from plan.md)
+1. Update GitHub issues 62-67
+1. Create new GitHub issues 68-73 for skills
+1. Begin implementation in respective worktrees
 
 **Note**: plan.md and github_issue.md files are task-relative and NOT tracked in git. Tracked team
 documentation is in notes/issues/, notes/review/, and agents/.

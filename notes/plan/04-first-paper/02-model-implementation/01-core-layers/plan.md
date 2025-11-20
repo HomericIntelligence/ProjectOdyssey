@@ -29,8 +29,8 @@ Implement the three fundamental layer types needed for LeNet-5: 2D convolutional
 ## Steps
 
 1. Conv Layer
-2. Pooling Layer
-3. FC Layer
+1. Pooling Layer
+1. FC Layer
 
 ## Success Criteria
 

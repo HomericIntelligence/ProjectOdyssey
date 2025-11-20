@@ -3,6 +3,7 @@
 ## Context
 
 The ML Odyssey repository has a design mismatch:
+
 - Implementation provides functional APIs (`relu()`, `sgd_step()`) - this is CORRECT
 - Tensor implementation (`ExTensor`) is in wrong location (`src/extensor/` instead of `shared/core/`)
 - Tests expect class-based APIs, but we'll fix tests later - keep everything functional
@@ -16,13 +17,14 @@ Redesign the `shared/` directory to implement a **pure functional architecture**
 ## Requirements
 
 ### 1. No Tensor Alias
+
 - Everything uses `ExTensor` directly (no `Tensor` → `ExTensor` aliases)
 - ExTensor is the universal type throughout the codebase
 - Scalars represented as 0-D ExTensors when needed
 
 ### 2. Directory Structure
 
-```
+```text
 shared/
 ├── core/
 │   ├── extensor.mojo       # ExTensor type + creation (from src/extensor/)
@@ -39,11 +41,12 @@ shared/
 │   └── optimizers.mojo     # sgd_step, adam_step (return new state)
 ├── data/               # Fix imports: tensor.Tensor → ExTensor
 └── ...
-```
+```text
 
 ### 3. Pure Functional Design
 
-**Everything is a function**:
+### Everything is a function
+
 - Pure functions: `fn relu(x: ExTensor) -> ExTensor`
 - Stateless, composable, type-generic
 - Caller manages ALL state (weights, momentum buffers, etc.)
@@ -51,7 +54,7 @@ shared/
 
 ### 4. Migration Tasks
 
-**Move from `src/extensor/` to `shared/core/`:**
+### Move from `src/extensor/` to `shared/core/`:
 
 | Source File | Destination | Notes |
 |------------|-------------|-------|
@@ -67,7 +70,7 @@ shared/
 | `comparison.mojo` | `shared/core/comparison.mojo` | Pure functions |
 | `broadcasting.mojo` | `shared/core/broadcasting.mojo` | Pure functions |
 
-**Create new functional operations:**
+### Create new functional operations:
 
 | File | Purpose | Signature |
 |------|---------|-----------|
@@ -76,7 +79,8 @@ shared/
 | `shared/core/pooling.mojo` | Pooling ops | `fn maxpool2d(x, ...) -> ExTensor` |
 | `shared/training/optimizers.mojo` | Update SGD | `fn sgd_step(...) -> (params, velocity)` |
 
-**Fix imports in:**
+### Fix imports in:
+
 - `shared/data/datasets.mojo` - Change `from tensor import Tensor` → `from shared.core.types import ExTensor`
 - `shared/data/transforms.mojo` - Same
 - `shared/data/loaders.mojo` - Same
@@ -107,7 +111,7 @@ fn linear(x: ExTensor, weights: ExTensor, bias: ExTensor) raises -> ExTensor:
     """
     var out = matmul(x, transpose(weights))
     return add(out, bias)
-```
+```text
 
 ### SGD Function (Pure Functional)
 
@@ -150,7 +154,7 @@ fn sgd_step(
     )
 
     return (new_params, new_velocity)
-```
+```text
 
 ### Usage Example (Caller Manages State)
 
@@ -185,7 +189,7 @@ for epoch in range(100):
     (b1, b1_vel) = sgd_step(b1, grad_b1, b1_vel, lr=0.01, momentum=0.9)
     (w2, w2_vel) = sgd_step(w2, grad_w2, w2_vel, lr=0.01, momentum=0.9)
     (b2, b2_vel) = sgd_step(b2, grad_b2, b2_vel, lr=0.01, momentum=0.9)
-```
+```text
 
 ## Execution Steps
 
@@ -193,7 +197,7 @@ for epoch in range(100):
    - Move `src/extensor/extensor.mojo` → `shared/core/extensor.mojo`
    - Merge `src/extensor/shape.mojo` into `extensor.mojo` (or keep separate)
 
-2. **Migrate Operations** (Phase 2):
+1. **Migrate Operations** (Phase 2):
    - Move `src/extensor/arithmetic.mojo` → `shared/core/arithmetic.mojo`
    - Move `src/extensor/matrix.mojo` → `shared/core/matrix.mojo`
    - Move `src/extensor/reduction.mojo` → `shared/core/reduction.mojo`
@@ -204,16 +208,16 @@ for epoch in range(100):
    - Move `src/extensor/comparison.mojo` → `shared/core/comparison.mojo`
    - Move `src/extensor/broadcasting.mojo` → `shared/core/broadcasting.mojo`
 
-3. **Create New Functional Operations** (Phase 3):
+1. **Create New Functional Operations** (Phase 3):
    - Create `shared/core/linear.mojo` with `fn linear(x, w, b) -> ExTensor`
    - Create `shared/core/conv.mojo` with `fn conv2d(x, kernel, ...) -> ExTensor` (stub for now)
    - Create `shared/core/pooling.mojo` with `fn maxpool2d(x, ...)` and `fn avgpool2d(x, ...)`
 
-4. **Update Optimizers to Functional** (Phase 4):
+1. **Update Optimizers to Functional** (Phase 4):
    - Update `shared/training/optimizers/sgd.mojo` signature to return `(params, velocity)`
    - Create `shared/training/optimizers/__init__.mojo` exporting `sgd_step`, `adam_step`, etc.
 
-5. **Fix Imports** (Phase 5):
+1. **Fix Imports** (Phase 5):
    - Replace `from tensor import Tensor` → `from shared.core.extensor import ExTensor`:
      - `shared/data/datasets.mojo`
      - `shared/data/transforms.mojo`
@@ -223,12 +227,12 @@ for epoch in range(100):
      - `shared/training/loops/training_loop.mojo`
      - `shared/training/loops/validation_loop.mojo`
 
-6. **Update Module Exports** (Phase 6):
+1. **Update Module Exports** (Phase 6):
    - Create `shared/core/__init__.mojo` exporting all functions
    - Create `shared/training/__init__.mojo` exporting optimizer functions
    - Verify all imports work
 
-7. **Clean Up** (Phase 7):
+1. **Clean Up** (Phase 7):
    - Delete `src/extensor/` directory entirely
    - Update documentation to reflect pure functional architecture
    - Tests will be updated later - keep them commented for now
@@ -236,6 +240,7 @@ for epoch in range(100):
 ## Success Criteria
 
 After completion:
+
 - [ ] `src/extensor/` deleted (all code moved to `shared/core/`)
 - [ ] No `Tensor` aliases anywhere (everything uses `ExTensor`)
 - [ ] All operations in `shared/core/` as pure functions
@@ -249,10 +254,10 @@ After completion:
 ## Design Principles to Follow
 
 1. **Pure Functions**: All operations are stateless, return new values
-2. **Composability**: Functions work with any ExTensor dtype
-3. **Caller Manages State**: Functions don't hold weights, momentum, etc.
-4. **Explicit Data Flow**: All state passed in, all changes returned
-5. **No Side Effects**: Functions don't mutate inputs (except where explicitly documented)
+1. **Composability**: Functions work with any ExTensor dtype
+1. **Caller Manages State**: Functions don't hold weights, momentum, etc.
+1. **Explicit Data Flow**: All state passed in, all changes returned
+1. **No Side Effects**: Functions don't mutate inputs (except where explicitly documented)
 
 ## Focus
 

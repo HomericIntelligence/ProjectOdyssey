@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Discover all tests for the paper
-2. Execute tests in appropriate order
-3. Collect results and output
-4. Generate paper test report
+1. Execute tests in appropriate order
+1. Collect results and output
+1. Generate paper test report
 
 ## Success Criteria
 

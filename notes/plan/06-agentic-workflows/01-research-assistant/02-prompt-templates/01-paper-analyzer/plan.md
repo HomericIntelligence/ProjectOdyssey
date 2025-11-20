@@ -29,9 +29,9 @@ None (implementation level)
 ## Steps
 
 1. Design structured output format with XML tags
-2. Create prompt with clear analysis instructions
-3. Add 2-3 few-shot examples
-4. Define extraction guidelines for each section
+1. Create prompt with clear analysis instructions
+1. Add 2-3 few-shot examples
+1. Define extraction guidelines for each section
 
 ## Success Criteria
 

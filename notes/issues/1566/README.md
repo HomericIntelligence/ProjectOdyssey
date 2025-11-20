@@ -28,11 +28,11 @@ PR #1565 added the `Task` tool to 17 agent configurations to enable sub-agent de
 
 However, the validation script was not updated, causing CI failures:
 
-```
+```text
 FAIL: code-review-orchestrator.md
   Errors:
     - Invalid tools: Task
-```
+```text
 
 ## Root Cause
 
@@ -44,7 +44,7 @@ VALID_TOOLS = {
     "WebFetch", "WebSearch", "NotebookEdit",
     "AskUserQuestion", "TodoWrite", "Skill", "SlashCommand"
 }
-```
+```text
 
 ## Solution
 
@@ -56,13 +56,13 @@ VALID_TOOLS = {
     "WebFetch", "WebSearch", "NotebookEdit",
     "AskUserQuestion", "TodoWrite", "Task", "Skill", "SlashCommand"
 }
-```
+```text
 
 ## Implementation Notes
 
 ### Changes Made
 
-**File: tests/agents/validate_configs.py**
+### File: tests/agents/validate_configs.py
 
 - Line 81: Added `"Task"` to `VALID_TOOLS` set
 
@@ -70,21 +70,21 @@ VALID_TOOLS = {
 
 Before fix:
 
-```
+```text
 Total files: 38
 Passed: 21
 Failed: 17
 Total errors: 17
-```
+```text
 
 After fix:
 
-```
+```text
 Total files: 38
 Passed: 38
 Failed: 0
 Total errors: 0
-```
+```text
 
 ### Affected Agents (17 total)
 

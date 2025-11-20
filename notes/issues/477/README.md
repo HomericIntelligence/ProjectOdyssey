@@ -51,11 +51,12 @@ Review and consolidate coverage settings:
 grep -r "coverage" pyproject.toml .coveragerc setup.cfg
 
 # Ensure single source of truth (prefer pyproject.toml)
-```
+```text
 
 **2. Remove Temporary Workarounds**
 
 Identify and address any temporary solutions:
+
 - Hardcoded paths → Configuration variables
 - Manual steps → Automated scripts
 - Temporary exclusions → Permanent or removed
@@ -79,13 +80,14 @@ time pytest tests/
 time pytest --cov=scripts tests/
 
 # Calculate overhead percentage
-```
+```text
 
 Target: < 20% slowdown (from Issue #473)
 
 **5. Technical Debt Resolution**
 
 Common items to address:
+
 - [ ] TODOs in configuration files
 - [ ] Commented-out settings
 - [ ] Experimental flags
@@ -93,16 +95,19 @@ Common items to address:
 
 ### Refactoring Checklist
 
-**Configuration Files**:
+### Configuration Files
+
 - [ ] `pyproject.toml` - Clean, well-commented coverage section
 - [ ] `.gitignore` - Proper coverage file exclusions
 - [ ] `.github/workflows/*.yml` - Optimized coverage collection
 
-**Scripts**:
+### Scripts
+
 - [ ] `scripts/collect_coverage.py` - If created, ensure clean and documented
 - [ ] Remove any debugging/testing scripts
 
-**Documentation**:
+### Documentation
+
 - [ ] All guides reviewed for accuracy
 - [ ] Examples tested and verified
 - [ ] Links checked and working
@@ -150,11 +155,11 @@ Document in `/notes/issues/477/lessons-learned.md`:
 - Proceed to Coverage Reports (Issue #478-482)
 - Revisit Mojo coverage in 6 months
 - Integrate with coverage services if beneficial
-```
+```text
 
 ### Final Validation
 
-**Pre-completion checklist**:
+### Pre-completion checklist
 
 1. **Configuration**:
    ```bash
@@ -163,21 +168,26 @@ Document in `/notes/issues/477/lessons-learned.md`:
 
    # Test coverage collection
    pytest --cov=scripts --cov-report=term
+
    ```
 
 2. **Documentation**:
    ```bash
+
    # Check all links
    find docs/ -name "*.md" -exec markdown-link-check {} \;
 
    # Validate markdown formatting
    markdownlint docs/testing/coverage-*.md
+
    ```
 
 3. **CI Integration**:
    ```bash
+
    # Test workflow locally
    act -j coverage  # Using nektos/act
+
    ```
 
 4. **Performance**:

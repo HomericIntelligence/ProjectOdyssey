@@ -24,7 +24,8 @@ Package test utilities for easy reuse across the project and potentially in othe
 
 ### Existing Organization
 
-**File Structure**:
+### File Structure
+
 ```text
 tests/
 ├── shared/
@@ -40,25 +41,28 @@ tests/
 │   │   └── ExTensor-Specific Assertions (8 functions)
 │   ├── fixtures.mojo          # Placeholder (17 lines)
 │   └── utils.mojo             # Placeholder (14 lines)
-```
+```text
 
-**Current Import Patterns**:
+### Current Import Patterns
+
 ```mojo
 // From any test file
 from tests.shared.conftest import assert_true, assert_equal, TestFixtures
 from tests.helpers.assertions import assert_shape, assert_all_close
-```
+```text
 
 ### Packaging Considerations
 
-**What "Packaging" Means for Test Utilities**:
-1. **Organization**: Clear module structure
-2. **Accessibility**: Easy imports from any test
-3. **Documentation**: Usage guides and API reference
-4. **Discoverability**: Developers can find what they need
-5. **Consistency**: Uniform patterns across utilities
+### What "Packaging" Means for Test Utilities
 
-**NOT about**:
+1. **Organization**: Clear module structure
+1. **Accessibility**: Easy imports from any test
+1. **Documentation**: Usage guides and API reference
+1. **Discoverability**: Developers can find what they need
+1. **Consistency**: Uniform patterns across utilities
+
+### NOT about
+
 - Creating `.mojopkg` binary packages (test utils are source-distributed)
 - External distribution (internal project use)
 - Version management (follows project versioning)
@@ -67,12 +71,14 @@ from tests.helpers.assertions import assert_shape, assert_all_close
 
 ### 1. Module Organization
 
-**Current Structure is Good**:
+### Current Structure is Good
+
 - `conftest.mojo` for general test utilities ✓
 - `helpers/assertions.mojo` for ExTensor-specific assertions ✓
 - Clear separation of concerns ✓
 
 **Potential Improvements** (if needed):
+
 ```text
 tests/
 ├── shared/
@@ -83,13 +89,14 @@ tests/
 │   ├── fixtures.mojo           # Fixtures (implement or remove)
 │   ├── utils.mojo              # Utilities (implement or remove)
 │   └── mocks.mojo              # Mock objects (if implemented)
-```
+```text
 
 **Decision**: Only split if modules become unwieldy (>500 lines)
 
 ### 2. Import Path Standardization
 
-**Recommended Pattern**:
+### Recommended Pattern
+
 ```mojo
 // Core assertions and utilities
 from tests.shared.conftest import (
@@ -108,9 +115,10 @@ from tests.helpers.assertions import (
 from tests.helpers.fixtures import (
     random_tensor, sequential_tensor
 )
-```
+```text
 
-**Best Practices**:
+### Best Practices
+
 - Import explicitly (no `import *`)
 - Group imports by module
 - Document commonly used imports
@@ -120,20 +128,22 @@ from tests.helpers.fixtures import (
 **Create**: `docs/testing/` directory with:
 
 **3.1. Quick Start Guide** (`docs/testing/quick-start.md`):
+
 ```markdown
 # Test Utilities Quick Start
 
 ## Writing Your First Test
 
 ```mojo
+
 from tests.shared.conftest import assert_true, assert_equal
 
 fn test_my_feature() raises:
     """Test description."""
     var result = my_function(42)
     assert_equal(result, expected_value)
-```
 
+```text
 ## Common Assertions
 
 - `assert_true(condition)` - Boolean assertion
@@ -143,55 +153,66 @@ fn test_my_feature() raises:
 ## Test Data Generation
 
 ```mojo
+
 from tests.shared.conftest import create_test_vector
 
 fn test_with_data() raises:
     var data = create_test_vector(100, value=1.0)
     # Use data in test
-```
 
+```text
 **3.2. API Reference** (`docs/testing/api-reference.md`):
 ```markdown
+
 # Test Utilities API Reference
 
 ## Assertion Functions
 
 ### assert_true(condition, message="")
+
 Assert that condition is true.
 
-**Parameters**:
+### Parameters
+
 - `condition: Bool` - The condition to check
 - `message: String` - Optional error message
 
-**Raises**:
+### Raises
+
 - `Error` if condition is false
 
-**Example**:
+### Example
+
 ```mojo
 assert_true(x > 0, "x must be positive")
-```
+```text
 
 ### assert_equal[T: Comparable](a, b, message="")
+
 Assert exact equality of two values.
 
-**Parameters**:
+### Parameters
+
 - `a: T` - First value
 - `b: T` - Second value
 - `message: String` - Optional error message
 
-**Raises**:
+### Raises
+
 - `Error` if a != b
 
-**Example**:
+### Example
+
 ```mojo
 assert_equal(result, 42, "Expected 42")
-```
+```text
 
 [... document all utilities ...]
-```
 
+```text
 **3.3. Best Practices** (`docs/testing/best-practices.md`):
 ```markdown
+
 # Test Utilities Best Practices
 
 ## Choosing the Right Assertion
@@ -209,7 +230,7 @@ assert_equal(0.1 + 0.2, 0.3)  // May fail!
 
 // RIGHT: Use tolerance
 assert_almost_equal(0.1 + 0.2, 0.3, tolerance=1e-10)
-```
+```text
 
 ## Test Data Generation
 
@@ -217,7 +238,7 @@ assert_almost_equal(0.1 + 0.2, 0.3, tolerance=1e-10)
 // Use deterministic seeding for reproducible tests
 TestFixtures.set_seed()
 var random_data = create_random_vector(100)
-```
+```text
 
 ## Error Message Guidelines
 
@@ -230,11 +251,12 @@ assert_true(x > 0)  // Uses generic "Assertion failed"
 
 // AVOID: Redundant message
 assert_true(x > 0, "x > 0")  // Doesn't add information
-```
-```
+```text
 
+```text
 **3.4. Examples** (`docs/testing/examples.md`):
 ```markdown
+
 # Test Utilities Examples
 
 ## Example 1: Simple Unit Test
@@ -246,7 +268,7 @@ fn test_addition() raises:
     """Test integer addition."""
     var result = 2 + 2
     assert_equal(result, 4)
-```
+```text
 
 ## Example 2: Float Comparison
 
@@ -257,7 +279,7 @@ fn test_division() raises:
     """Test floating-point division."""
     var result = 1.0 / 3.0
     assert_almost_equal(result, 0.333333, tolerance=1e-6)
-```
+```text
 
 ## Example 3: Tensor Validation
 
@@ -271,18 +293,20 @@ fn test_tensor_operation() raises:
 
     assert_shape(output, DynamicVector[Int](3, 4))
     assert_all_close(output, expected, rtol=1e-5, atol=1e-8)
-```
-```
+```text
 
+```text
 ### 4. Utility Catalog
 
 **Create**: `tests/README.md` with utility catalog:
 ```markdown
+
 # Test Utilities Catalog
 
 ## Core Utilities (`tests/shared/conftest.mojo`)
 
 ### Assertions
+
 - `assert_true(condition, message="")`
 - `assert_false(condition, message="")`
 - `assert_equal[T](a, b, message="")`
@@ -292,10 +316,12 @@ fn test_tensor_operation() raises:
 - `assert_less(a, b, message="")`
 
 ### Fixtures
+
 - `TestFixtures.deterministic_seed() -> Int`
 - `TestFixtures.set_seed()`
 
 ### Data Generators
+
 - `create_test_vector(size, value=1.0) -> List[Float32]`
 - `create_test_matrix(rows, cols, value=1.0) -> List[List[Float32]]`
 - `create_sequential_vector(size, start=0.0) -> List[Float32]`
@@ -303,20 +329,23 @@ fn test_tensor_operation() raises:
 ## ExTensor Utilities (`tests/helpers/assertions.mojo`)
 
 ### Shape & Type Assertions
+
 - `assert_shape[T](tensor, expected, message="")`
 - `assert_dtype[T](tensor, expected_dtype, message="")`
 - `assert_numel[T](tensor, expected_numel, message="")`
 - `assert_dim[T](tensor, expected_dim, message="")`
 
 ### Value Assertions
+
 - `assert_value_at[T](tensor, index, expected, tolerance=1e-8, message="")`
 - `assert_all_values[T](tensor, expected, tolerance=1e-8, message="")`
 - `assert_all_close[T](a, b, rtol=1e-5, atol=1e-8, message="")`
 
 ### Memory Assertions
-- `assert_contiguous[T](tensor, message="")`
-```
 
+- `assert_contiguous[T](tensor, message="")`
+
+```text
 ## Deliverables Summary
 
 ### 1. Module Organization

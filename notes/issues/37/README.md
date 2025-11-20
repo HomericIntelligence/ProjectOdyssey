@@ -40,7 +40,7 @@ The data utilities are organized into four major subsystems with 13 total compon
 
 ### File Structure
 
-```
+```text
 shared/data/
 ├── __init__.mojo
 ├── datasets/
@@ -60,7 +60,7 @@ shared/data/
     ├── sequential.mojo
     ├── random.mojo
     └── weighted.mojo
-```
+```text
 
 ### Key Interfaces
 
@@ -72,7 +72,7 @@ trait Dataset:
 trait DataLoader:
     fn __iter__(self) -> Iterator[Batch]
     fn __len__(self) -> Int
-```
+```text
 
 ## Implementation Phases
 
@@ -85,14 +85,14 @@ trait DataLoader:
 ## Child Components
 
 1. [Base Dataset](../../plan/02-shared-library/03-data-utils/01-datasets/01-base-dataset/plan.md)
-2. [Tensor Dataset](../../plan/02-shared-library/03-data-utils/01-datasets/02-tensor-dataset/plan.md)
-3. [File Dataset](../../plan/02-shared-library/03-data-utils/01-datasets/03-file-dataset/plan.md)
-4. [Base Loader](../../plan/02-shared-library/03-data-utils/02-loaders/01-base-loader/plan.md)
-5. [Batch Loader](../../plan/02-shared-library/03-data-utils/02-loaders/02-batch-loader/plan.md)
-6. [Parallel Loader](../../plan/02-shared-library/03-data-utils/02-loaders/03-parallel-loader/plan.md)
-7. [Transform Pipeline](../../plan/02-shared-library/03-data-utils/03-transforms/01-pipeline/plan.md)
-8. [Image Transforms](../../plan/02-shared-library/03-data-utils/03-transforms/02-image-transforms/plan.md)
-9. [Tensor Transforms](../../plan/02-shared-library/03-data-utils/03-transforms/03-tensor-transforms/plan.md)
+1. [Tensor Dataset](../../plan/02-shared-library/03-data-utils/01-datasets/02-tensor-dataset/plan.md)
+1. [File Dataset](../../plan/02-shared-library/03-data-utils/01-datasets/03-file-dataset/plan.md)
+1. [Base Loader](../../plan/02-shared-library/03-data-utils/02-loaders/01-base-loader/plan.md)
+1. [Batch Loader](../../plan/02-shared-library/03-data-utils/02-loaders/02-batch-loader/plan.md)
+1. [Parallel Loader](../../plan/02-shared-library/03-data-utils/02-loaders/03-parallel-loader/plan.md)
+1. [Transform Pipeline](../../plan/02-shared-library/03-data-utils/03-transforms/01-pipeline/plan.md)
+1. [Image Transforms](../../plan/02-shared-library/03-data-utils/03-transforms/02-image-transforms/plan.md)
+1. [Tensor Transforms](../../plan/02-shared-library/03-data-utils/03-transforms/03-tensor-transforms/plan.md)
 
 ## Success Criteria
 

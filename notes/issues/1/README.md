@@ -60,7 +60,7 @@ python3 scripts/regenerate_github_issues.py --section 01-foundation
 # Resume from previous run
 
 python3 scripts/regenerate_github_issues.py --resume
-```
+```text
 
 **Note**: Both plan.md and github_issue.md files are task-relative and kept locally (not in git).
 
@@ -93,7 +93,7 @@ python3 scripts/create_issues.py --no-color
 # Specify repository explicitly
 
 python3 scripts/create_issues.py --repo username/repo
-```
+```text
 
 ## 5-Phase Development Workflow
 
@@ -106,21 +106,21 @@ Each component follows a hierarchical development process:
    - Defines requirements for other phases
    - Documents design decisions
 
-2. **Test** (Parallel after Plan)
+1. **Test** (Parallel after Plan)
    - Documents and implements test cases
    - Follows TDD principles
    - Can run in parallel with Implementation and Packaging
 
-3. **Implementation** (Parallel after Plan)
+1. **Implementation** (Parallel after Plan)
    - Main implementation work
    - Can run in parallel with Test and Packaging
 
-4. **Packaging** (Parallel after Plan)
+1. **Packaging** (Parallel after Plan)
    - Integrates Test and Implementation artifacts
    - Creates reproducible installer/package
    - Can run in parallel with Test and Implementation
 
-5. **Cleanup** (Sequential - runs after parallel phases)
+1. **Cleanup** (Sequential - runs after parallel phases)
    - Collects issues discovered during other phases
    - Handles refactoring and finalization
    - Final validation
@@ -163,7 +163,7 @@ notes/plan/              # Task-relative, NOT tracked in git
 ├── 04-first-paper/
 ├── 05-ci-cd/
 └── 06-agentic-workflows/
-```
+```text
 
 Each directory contains (locally):
 
@@ -181,7 +181,7 @@ scripts/
 ├── regenerate_github_issues.py      # Regenerate github_issue.md files
 ├── README.md                        # Scripts documentation
 └── SCRIPTS_ANALYSIS.md              # Comprehensive scripts analysis
-```
+```text
 
 ### Logs
 
@@ -189,7 +189,7 @@ scripts/
 logs/
 ├── create_issues_*.log                   # Issue creation logs
 └── .issue_creation_state_*.json          # State files with timestamps
-```
+```text
 
 ## Important Notes
 
@@ -228,7 +228,7 @@ If github_issue.md files are missing, regenerate them:
 
 ```bash
 python3 scripts/regenerate_github_issues.py
-```
+```text
 
 ### Script Failures
 
@@ -243,7 +243,7 @@ If script is interrupted:
 
 ```bash
 python3 scripts/create_issues.py --resume
-```
+```text
 
 ## Related Documentation
 

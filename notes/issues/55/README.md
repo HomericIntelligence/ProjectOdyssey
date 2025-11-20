@@ -35,7 +35,7 @@ benchmarks/
 │   ├── run_benchmarks.mojo             # Main benchmark runner
 │   └── compare_results.mojo            # Baseline comparison tool
 └── results/                            # Timestamped results (empty initially)
-```
+```text
 
 ### Components
 
@@ -43,7 +43,7 @@ benchmarks/
 
 **Purpose**: Execute performance benchmarks and generate JSON results.
 
-**Features**:
+### Features
 
 - 4 benchmark tests:
   - `tensor_add_small`: 100x100 tensor element-wise addition
@@ -57,18 +57,18 @@ benchmarks/
 - ISO 8601 timestamp formatting
 - JSON output generation
 
-**Usage**:
+### Usage
 
 ```bash
 mojo benchmarks/scripts/run_benchmarks.mojo
 # Output: benchmarks/results/benchmark_results.json
-```
+```text
 
 #### 2. Baseline Comparator (`scripts/compare_results.mojo`)
 
 **Purpose**: Compare current benchmark results against baseline to detect regressions.
 
-**Features**:
+### Features
 
 - JSON parsing for baseline and current results
 - Percentage change calculation
@@ -79,19 +79,19 @@ mojo benchmarks/scripts/run_benchmarks.mojo
   - Severe: >50% slowdown
 - Exit code 0 (no regressions) or 1 (regressions detected)
 
-**Usage**:
+### Usage
 
 ```bash
 mojo benchmarks/scripts/compare_results.mojo \
   --baseline benchmarks/baselines/baseline_results.json \
   --current benchmarks/results/{timestamp}_results.json
-```
+```text
 
 #### 3. Baseline Results (`baselines/baseline_results.json`)
 
 **Status**: Placeholder values from Issue #53 (TDD Test Suite)
 
-**Structure**:
+### Structure
 
 ```json
 {
@@ -115,13 +115,13 @@ mojo benchmarks/scripts/compare_results.mojo \
     ...
   ]
 }
-```
+```text
 
 **Note**: Baseline values will be updated with real benchmarks in Issue #54 (Implementation).
 
 #### 4. Documentation (`README.md`)
 
-**Contents**:
+### Contents
 
 - Architecture overview (3-tier system)
 - Directory structure
@@ -163,13 +163,13 @@ The benchmarking system follows a clean separation of concerns:
 
 **Responsibility**: Performance testing infrastructure
 
-**Components**:
+### Components
 
 - Benchmark scripts (execution)
 - Results storage (timestamped JSON)
 - Baseline storage (reference data)
 
-**Design Rationale**:
+### Design Rationale
 
 - Self-contained execution environment
 - Clear separation of scripts and data
@@ -179,14 +179,14 @@ The benchmarking system follows a clean separation of concerns:
 
 **Responsibility**: Baseline comparison and regression detection
 
-**Components**:
+### Components
 
 - Baseline loader
 - Result comparator
 - Regression detector
 - Severity classifier
 
-**Design Rationale**:
+### Design Rationale
 
 - Automated comparison reduces manual effort
 - Clear exit codes (0/1) for CI/CD integration
@@ -196,13 +196,13 @@ The benchmarking system follows a clean separation of concerns:
 
 **Responsibility**: Automated benchmark execution in pipelines
 
-**Components**:
+### Components
 
 - GitHub Actions workflow (`.github/workflows/benchmarks.yml`)
 - PR benchmark checks
 - Baseline update automation
 
-**Design Rationale**:
+### Design Rationale
 
 - Continuous performance monitoring
 - Prevent performance regressions before merge
@@ -250,17 +250,17 @@ These targets balance:
    - Located at `/home/mvillmow/ml-odyssey/worktrees/55-pkg-benchmarks/benchmarks/`
    - Contains all expected subdirectories
 
-2. **README clearly explains purpose and contents**: ✓
+1. **README clearly explains purpose and contents**: ✓
    - 143 lines of comprehensive documentation
    - Covers architecture, usage, and development
    - Includes references to related issues
 
-3. **Directory is set up properly**: ✓
+1. **Directory is set up properly**: ✓
    - `baselines/` - Contains baseline_results.json
    - `scripts/` - Contains run_benchmarks.mojo and compare_results.mojo
    - `results/` - Empty (ready for results)
 
-4. **Documentation guides usage**: ✓
+1. **Documentation guides usage**: ✓
    - Clear usage examples for running benchmarks
    - Clear usage examples for comparing results
    - Development guidelines for adding new benchmarks
@@ -298,25 +298,25 @@ All expected files exist:
 
 **File**: `dist/benchmarks-0.1.0.tar.gz`
 
-**Contents**:
+### Contents
 
 - `benchmarks/` directory (all scripts, baselines, documentation)
 - `LICENSE` file
 
-**Creation**:
+### Creation
 
 ```bash
 ./scripts/create_benchmark_distribution.sh
-```
+```text
 
-**Verification**:
+### Verification
 
 ```bash
 # Extract and test
 tar -xzf dist/benchmarks-0.1.0.tar.gz
 cd benchmarks
 mojo scripts/run_benchmarks.mojo
-```
+```text
 
 ### Packaging Script
 
@@ -324,24 +324,24 @@ mojo scripts/run_benchmarks.mojo
 
 **Purpose**: Automated creation of distribution archive
 
-**Features**:
+### Features
 
 1. Creates `dist/` directory
-2. Verifies all required files exist
-3. Ensures `benchmarks/results/.gitkeep` exists
-4. Creates `dist/benchmarks-0.1.0.tar.gz` archive
-5. Verifies archive integrity
-6. Tests extraction in temporary directory
-7. Reports summary of archive contents
+1. Verifies all required files exist
+1. Ensures `benchmarks/results/.gitkeep` exists
+1. Creates `dist/benchmarks-0.1.0.tar.gz` archive
+1. Verifies archive integrity
+1. Tests extraction in temporary directory
+1. Reports summary of archive contents
 
-**Usage**:
+### Usage
 
 ```bash
 cd /path/to/ml-odyssey
 ./scripts/create_benchmark_distribution.sh
-```
+```text
 
-**Output**:
+### Output
 
 ```text
 ==========================================
@@ -358,7 +358,7 @@ To install:
 
 CI/CD workflow: .github/workflows/benchmark.yml
 ==========================================
-```
+```text
 
 ### CI/CD Workflow
 
@@ -366,7 +366,7 @@ CI/CD workflow: .github/workflows/benchmark.yml
 
 **Status**: Already exists (created in previous phase)
 
-**Features**:
+### Features
 
 - **Matrix strategy**: Parallel execution of tensor-ops, model-training, data-loading suites
 - **Triggers**: Manual dispatch, scheduled (nightly), PR with `benchmark` label
@@ -374,23 +374,23 @@ CI/CD workflow: .github/workflows/benchmark.yml
 - **PR comments**: Posts benchmark results to pull requests
 - **Artifact retention**: Stores results for 90 days
 
-**Trigger manually**:
+### Trigger manually
 
 ```bash
 gh workflow run benchmark.yml -f suite=all
-```
+```text
 
-**Trigger on PR**:
+### Trigger on PR
 
 ```bash
 gh pr edit <PR_NUMBER> --add-label benchmark
-```
+```text
 
 ### Installation Guide
 
 **File**: `INSTALL.md`
 
-**Contents**:
+### Contents
 
 - Distribution package overview
 - Installation instructions
@@ -405,12 +405,12 @@ gh pr edit <PR_NUMBER> --add-label benchmark
 
 **Purpose**: Preserves empty `results/` directory in version control
 
-**Contents**:
+### Contents
 
 ```text
 # This file preserves the results/ directory in version control
 # Benchmark results will be stored here with timestamps
-```
+```text
 
 ## Implementation Notes
 
@@ -419,9 +419,9 @@ gh pr edit <PR_NUMBER> --add-label benchmark
 The Package phase creates ACTUAL distributable artifacts:
 
 1. **Distribution archive**: `dist/benchmarks-0.1.0.tar.gz` containing all benchmarking infrastructure
-2. **Packaging automation**: Executable script to create the archive
-3. **Installation documentation**: Comprehensive guide for users
-4. **CI/CD integration**: Workflow for automated benchmark execution (already exists)
+1. **Packaging automation**: Executable script to create the archive
+1. **Installation documentation**: Comprehensive guide for users
+1. **CI/CD integration**: Workflow for automated benchmark execution (already exists)
 
 This phase does NOT include:
 
@@ -435,7 +435,7 @@ This phase does NOT include:
 
 **Decision**: Use Mojo for both run_benchmarks.mojo and compare_results.mojo
 
-**Rationale**:
+### Rationale
 
 - Performance: Benchmarks measure Mojo code, so Mojo benchmarks are more accurate
 - Consistency: Same language reduces context switching
@@ -448,7 +448,7 @@ This phase does NOT include:
 
 **Decision**: Use JSON for benchmark results storage
 
-**Rationale**:
+### Rationale
 
 - Human-readable: Easy to inspect and debug
 - Machine-parsable: Easy to process in CI/CD
@@ -461,7 +461,7 @@ This phase does NOT include:
 
 **Decision**: Use placeholder values initially, update in Implementation phase
 
-**Rationale**:
+### Rationale
 
 - TDD approach: Tests written before implementation
 - Infrastructure focus: Package phase focuses on structure, not execution
@@ -477,15 +477,15 @@ The benchmark infrastructure integrates with:
    - Benchmarks test shared components (layers, optimizers, data loading)
    - Located in `tests/shared/benchmarks/`
 
-2. **Tooling** (`tooling/`):
+1. **Tooling** (`tooling/`):
    - Benchmark validator tool (future component)
    - Tests located in `tests/tooling/benchmarks/`
 
-3. **CI/CD** (Section 05-ci-cd):
+1. **CI/CD** (Section 05-ci-cd):
    - GitHub Actions workflow (future work)
    - Automated benchmark execution on PRs
 
-4. **Testing Infrastructure**:
+1. **Testing Infrastructure**:
    - pytest integration (future work)
    - Test discovery and execution
 
@@ -502,16 +502,16 @@ chmod +x scripts/create_benchmark_distribution.sh
 
 # 3. Run packaging script
 ./scripts/create_benchmark_distribution.sh
-```
+```text
 
 This will:
 
 1. Create `dist/` directory
-2. Verify all required files exist
-3. Create `benchmarks/results/.gitkeep`
-4. Generate `dist/benchmarks-0.1.0.tar.gz` archive
-5. Test extraction and verify archive integrity
-6. Report packaging summary
+1. Verify all required files exist
+1. Create `benchmarks/results/.gitkeep`
+1. Generate `dist/benchmarks-0.1.0.tar.gz` archive
+1. Test extraction and verify archive integrity
+1. Report packaging summary
 
 ## Verification Steps
 
@@ -521,13 +521,13 @@ After running the packaging script:
 
 ```bash
 ls -lh dist/benchmarks-0.1.0.tar.gz
-```
+```text
 
 1. **Check archive contents**:
 
 ```bash
 tar -tzf dist/benchmarks-0.1.0.tar.gz | head -20
-```
+```text
 
 1. **Test extraction**:
 
@@ -536,13 +536,13 @@ mkdir -p /tmp/test_benchmark_install
 cd /tmp/test_benchmark_install
 tar -xzf /home/mvillmow/ml-odyssey/worktrees/55-pkg-benchmarks/dist/benchmarks-0.1.0.tar.gz
 ls -la benchmarks/
-```
+```text
 
 1. **Verify CI/CD workflow**:
 
 ```bash
 cat .github/workflows/benchmark.yml | grep "name:"
-```
+```text
 
 ## Commit Instructions
 
@@ -578,7 +578,7 @@ Closes #55"
 
 # Push to remote
 git push origin 55-pkg-benchmarks
-```
+```text
 
 ## Pull Request Creation
 
@@ -626,13 +626,13 @@ The CI/CD workflow is already in place:
 - Features: Matrix execution, regression detection, PR comments
 
 Closes #55"
-```
+```text
 
 ## Conclusion
 
 The benchmarking infrastructure package phase is **COMPLETE**. All packaging artifacts have been created:
 
-**Created Artifacts**:
+### Created Artifacts
 
 - ✅ `scripts/create_benchmark_distribution.sh` - Automated packaging script
 - ✅ `INSTALL.md` - Comprehensive installation guide
@@ -647,7 +647,7 @@ The benchmarking infrastructure package phase is **COMPLETE**. All packaging art
 
 - ✅ `.github/workflows/benchmark.yml` - CI/CD workflow
 
-**All success criteria met**:
+### All success criteria met
 
 - ✓ Distribution archive can be created via automated script
 - ✓ Archive contains all required files (benchmarks/, LICENSE)
@@ -659,8 +659,8 @@ The benchmarking infrastructure package phase is **COMPLETE**. All packaging art
 The package is ready for:
 
 1. **Distribution** - Users can extract and use the benchmarking tools
-2. **CI/CD automation** - Workflow executes benchmarks automatically
-3. **Ongoing development** - Easy to add new benchmarks and rebuild package
+1. **CI/CD automation** - Workflow executes benchmarks automatically
+1. **Ongoing development** - Easy to add new benchmarks and rebuild package
 
 **Next Steps** (not in this issue):
 

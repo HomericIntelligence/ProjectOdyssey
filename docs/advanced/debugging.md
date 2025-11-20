@@ -7,14 +7,14 @@ Comprehensive guide to debugging machine learning implementations in Mojo.
 Common ML bugs fall into three categories:
 
 1. **Implementation Errors** - Incorrect logic, shape mismatches, type errors
-2. **Numerical Issues** - NaN, infinity, gradient explosions/vanishing
-3. **Performance Problems** - Slow training, memory leaks, inefficient code
+1. **Numerical Issues** - NaN, infinity, gradient explosions/vanishing
+1. **Performance Problems** - Slow training, memory leaks, inefficient code
 
 ## Debugging Strategies
 
 ### Systematic Approach
 
-**Step 1: Isolate the Problem**
+### Step 1: Isolate the Problem
 
 ```mojo
 
@@ -28,7 +28,7 @@ fn test_layer_isolation():
 
 ```text
 
-**Step 2: Verify Shapes**
+### Step 2: Verify Shapes
 
 ```mojo
 
@@ -42,7 +42,7 @@ fn debug_shapes(model: Model, input: Tensor):
 
 ```text
 
-**Step 3: Check for NaN/Inf**
+### Step 3: Check for NaN/Inf
 
 ```mojo
 
@@ -100,13 +100,13 @@ if DEBUG:
 
 **Symptoms**: Loss becomes NaN after a few iterations
 
-**Causes**:
+### Causes
 
 - Learning rate too high
 - Numerical instability in loss function
 - Exploding gradients
 
-**Solutions**:
+### Solutions
 
 ```mojo
 
@@ -139,7 +139,7 @@ var optimizer = SGD(lr=0.001)  # Start smaller
 
 **Symptoms**: Gradients become very large (>1e10) or very small (<1e-10)
 
-**Diagnosis**:
+### Diagnosis
 
 ```mojo
 
@@ -157,7 +157,7 @@ fn diagnose_gradients(model: Model):
 
 ```text
 
-**Solutions**:
+### Solutions
 
 ```mojo
 
@@ -184,7 +184,7 @@ fn forward_with_skip(self, x: Tensor) -> Tensor:
 
 **Symptoms**: Runtime errors about incompatible shapes
 
-**Diagnosis**:
+### Diagnosis
 
 ```mojo
 
@@ -204,7 +204,7 @@ fn trace_shapes(model: Model, input: Tensor):
 
 ```text
 
-**Prevention**:
+### Prevention
 
 ```mojo
 
@@ -226,7 +226,7 @@ struct Layer:
 
 **Symptoms**: Memory usage grows over time
 
-**Diagnosis**:
+### Diagnosis
 
 ```mojo
 
@@ -242,7 +242,7 @@ fn monitor_memory():
 
 ```text
 
-**Solutions**:
+### Solutions
 
 ```mojo
 
@@ -427,12 +427,12 @@ fn profile_memory():
 ## Best Practices
 
 1. **Start Simple** - Begin with small model and dataset to isolate issues
-2. **Validate Incrementally** - Test each component before integrating
-3. **Use Assertions** - Add shape and value checks liberally
-4. **Monitor Everything** - Track loss, gradients, activations, memory
-5. **Compare Baselines** - Verify against known implementations (PyTorch)
-6. **Test Edge Cases** - Empty batches, single examples, large batches
-7. **Profile Before Optimizing** - Measure to find real bottlenecks
+1. **Validate Incrementally** - Test each component before integrating
+1. **Use Assertions** - Add shape and value checks liberally
+1. **Monitor Everything** - Track loss, gradients, activations, memory
+1. **Compare Baselines** - Verify against known implementations (PyTorch)
+1. **Test Edge Cases** - Empty batches, single examples, large batches
+1. **Profile Before Optimizing** - Measure to find real bottlenecks
 
 ## Related Documentation
 
@@ -443,16 +443,16 @@ fn profile_memory():
 
 ## Summary
 
-**Debugging workflow**:
+### Debugging workflow
 
 1. Isolate the problem (which layer/component)
-2. Verify shapes and data flow
-3. Check for numerical issues (NaN, inf)
-4. Validate gradients with numerical checking
-5. Profile to find performance bottlenecks
-6. Test edge cases systematically
+1. Verify shapes and data flow
+1. Check for numerical issues (NaN, inf)
+1. Validate gradients with numerical checking
+1. Profile to find performance bottlenecks
+1. Test edge cases systematically
 
-**Key tools**:
+### Key tools
 
 - Print debugging with shape/value checks
 - Assertions for invariants

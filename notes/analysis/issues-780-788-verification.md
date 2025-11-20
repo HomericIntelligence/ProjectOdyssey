@@ -17,9 +17,11 @@
 ### CLI Interface Issues (#780-783)
 
 #### ✅ Issue #782 [Package] CLI Interface - **CLOSE**
+
 **Success Criteria**: Integration and packaging complete
 
-**Evidence**:
+### Evidence
+
 - ✓ Tool integrated: `tools/paper-scaffold/scaffold_enhanced.py`
 - ✓ Documentation: `tools/paper-scaffold/README_ENHANCED.md`
 - ✓ Examples in help text
@@ -28,9 +30,11 @@
 **Recommendation**: Close with comment "CLI packaging and integration complete"
 
 #### ✅ Issue #783 [Cleanup] CLI Interface - **CLOSE**
+
 **Success Criteria**: Code refactored, documented, optimized
 
-**Evidence**:
+### Evidence
+
 - ✓ Clean architecture (489 lines, well-structured)
 - ✓ Comprehensive docstrings throughout
 - ✓ Type hints on all functions
@@ -40,23 +44,28 @@
 **Recommendation**: Close with comment "Code cleanup and documentation complete"
 
 #### ⚠️ Issue #780 [Test] CLI Interface - **KEEP OPEN**
-**Success Criteria**:
+
+### Success Criteria
+
 - ✓ Arguments parse correctly (verified)
 - ✗ Prompts guide users through paper creation (MISSING - no interactive mode)
 - ✓ Output is clear and well-formatted
 - ✓ Help text is comprehensive and useful
 - ⚠️ Tests for CLI argument parsing missing
 
-**Blockers**:
+### Blockers
+
 1. No tests for argparse validation
-2. Interactive prompts not implemented (see #770-773)
+1. Interactive prompts not implemented (see #770-773)
 
 **Recommendation**: Keep open, add to Priority 3 in implementation plan
 
 #### ⚠️ Issue #781 [Impl] CLI Interface - **KEEP OPEN**
+
 **Success Criteria**: Same as #780
 
-**Current State**:
+### Current State
+
 - ✓ CLI implementation exists
 - ✓ All arguments work
 - ✗ Interactive prompts NOT implemented
@@ -70,14 +79,17 @@
 ### Paper Scaffolding Issues (#785-788)
 
 #### ✅ Issue #785 [Test] Paper Scaffolding - **CLOSE**
-**Success Criteria**:
+
+### Success Criteria
+
 - ✓ Templates customizable with paper metadata
 - ✓ Generator produces complete, valid directory structure
 - ✓ CLI offers intuitive interface for paper creation
 - ✓ Generated papers adhere to repository conventions
 - ✓ All child plans completed successfully
 
-**Evidence**:
+### Evidence
+
 - ✓ Tests exist: `tests/tooling/test_paper_scaffold.py` (306 lines)
 - ✓ Test coverage includes:
   - Paper name normalization (5 tests)
@@ -87,23 +99,26 @@
   - End-to-end integration (2 tests)
 - ✓ Total: 16 test methods covering all major functionality
 
-**Test Classes**:
+### Test Classes
+
 ```python
 TestPaperNameNormalization  # 5 tests
 TestDirectoryCreation       # 2 tests
 TestFileGeneration          # 2 tests
 TestValidation              # 5 tests
 TestEndToEnd                # 2 tests
-```
+```text
 
 **Recommendation**: Close with comment "Comprehensive test suite complete"
 
 **Note**: Tests require pytest which isn't installed, but the test code is complete and well-structured.
 
 #### ✅ Issue #786 [Impl] Paper Scaffolding - **CLOSE**
+
 **Success Criteria**: Same as #785
 
-**Evidence**:
+### Evidence
+
 - ✓ Implementation complete: `tools/paper-scaffold/scaffold_enhanced.py` (489 lines)
 - ✓ Validation module: `tools/paper-scaffold/validate.py` (9301 bytes)
 - ✓ Templates directory exists: `tools/paper-scaffold/templates/`
@@ -114,7 +129,8 @@ TestEndToEnd                # 2 tests
   - Progress reporting
   - Error handling
 
-**Key Features Implemented**:
+### Key Features Implemented
+
 - Idempotent directory creation
 - Template variable substitution
 - Three-stage pipeline (Create → Generate → Validate)
@@ -125,9 +141,11 @@ TestEndToEnd                # 2 tests
 **Recommendation**: Close with comment "Implementation complete and tested"
 
 #### ✅ Issue #787 [Package] Paper Scaffolding - **CLOSE**
+
 **Success Criteria**: Integration and packaging complete
 
-**Evidence**:
+### Evidence
+
 - ✓ Integrated in repository: `tools/paper-scaffold/`
 - ✓ Documentation complete:
   - `README.md` (basic usage)
@@ -139,9 +157,11 @@ TestEndToEnd                # 2 tests
 **Recommendation**: Close with comment "Packaging and integration complete"
 
 #### ✅ Issue #788 [Cleanup] Paper Scaffolding - **CLOSE**
+
 **Success Criteria**: Code refactored, documented, optimized
 
-**Evidence**:
+### Evidence
+
 - ✓ Well-structured code with clear separation of concerns
 - ✓ Comprehensive docstrings on all classes and functions
 - ✓ Type hints throughout (Python 3.10+ syntax with `|`)
@@ -150,7 +170,8 @@ TestEndToEnd                # 2 tests
 - ✓ Code follows PEP 8 and repository standards
 - ✓ ADR-001 justification for Python vs Mojo choice
 
-**Code Quality Metrics**:
+### Code Quality Metrics
+
 - Functions are focused and single-purpose
 - Classes follow single responsibility principle
 - Clear variable and function names
@@ -250,16 +271,18 @@ See: tools/paper-scaffold/scaffold_enhanced.py
 - Comprehensive docstrings and type hints
 - Error handling and performance considerations
 - Follows all repository standards
-```
+```text
 
 ### Keep Open (2 Issues)
 
 **#780 [Test] CLI Interface**:
+
 - Add to Priority 4: Add CLI Tests
 - Blocked by: Missing interactive prompts (#770-773)
 - Action: Keep open until CLI tests added
 
 **#781 [Impl] CLI Interface**:
+
 - Blocked by: Missing interactive prompts (#770-773)
 - Action: Keep open until interactive mode implemented
 - Note: This will be resolved when #770-773 are completed
@@ -271,11 +294,13 @@ See: tools/paper-scaffold/scaffold_enhanced.py
 After closing 6 issues, the priority list becomes:
 
 ### Priority 1: Implement User Prompts ✅ (Already Priority 3)
+
 - Issues: #770-773
 - **Also unblocks**: #780, #781
 - Impact: Resolves 6 total issues (4 direct + 2 blocked)
 
 ### Priority 2: Add CLI Tests (New)
+
 - Issue: #780
 - Estimated: 1-2 hours
 - Add tests for argparse validation to test_paper_scaffold.py
@@ -284,16 +309,19 @@ After closing 6 issues, the priority list becomes:
 
 ## Files Verified
 
-**Implementation Files**:
+### Implementation Files
+
 - ✅ `tools/paper-scaffold/scaffold.py` - Basic version
 - ✅ `tools/paper-scaffold/scaffold_enhanced.py` - Enhanced with validation (489 lines)
 - ✅ `tools/paper-scaffold/validate.py` - Structure validation (9301 bytes)
 - ✅ `tools/paper-scaffold/templates/` - Template files
 
-**Test Files**:
+### Test Files
+
 - ✅ `tests/tooling/test_paper_scaffold.py` - Comprehensive tests (306 lines)
 
-**Documentation Files**:
+### Documentation Files
+
 - ✅ `tools/paper-scaffold/README.md` - Basic documentation
 - ✅ `tools/paper-scaffold/README_ENHANCED.md` - Comprehensive guide
 

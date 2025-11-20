@@ -30,18 +30,18 @@ and set up the appropriate test context for validating a single paper implementa
 **Decision**: Support multiple identification methods with progressive fallback:
 
 1. **Exact path match** - Direct path to paper directory (highest priority)
-2. **Full name match** - Exact match against paper name in repository
-3. **Partial name match** - Fuzzy/substring matching for convenience
-4. **Interactive selection** - If multiple matches, prompt user to select
+1. **Full name match** - Exact match against paper name in repository
+1. **Partial name match** - Fuzzy/substring matching for convenience
+1. **Interactive selection** - If multiple matches, prompt user to select
 
-**Rationale**:
+### Rationale
 
 - Developers may not remember exact paper names during rapid iteration
 - Direct path support enables integration with shell workflows (tab completion, scripting)
 - Partial matching reduces friction during development
 - Interactive fallback prevents ambiguity while maintaining usability
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Exact name only**: Too rigid, poor developer experience
 - **Path only**: Misses opportunity for convenient name-based lookup
@@ -60,16 +60,16 @@ class PaperMetadata:
     test_directory: Path         # Path to paper-specific tests
     description: Optional[str]   # Short description from config
     tags: List[str]              # Classification tags (e.g., ["cnn", "vision"])
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Minimal fields cover immediate testing needs
 - Extensible for future requirements (versioning, dependencies, etc.)
 - Clear separation of path information and metadata
 - Type-safe using Python dataclasses
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Dictionary-based**: Less type safety, harder to maintain
 - **Full configuration object**: Overly complex for test targeting needs
@@ -83,14 +83,14 @@ class PaperMetadata:
 - **Invalid path**: Suggest correct directory structure
 - **Missing metadata**: Provide template for paper configuration
 
-**Rationale**:
+### Rationale
 
 - Clear error messages reduce debugging time
 - Actionable guidance helps developers fix issues quickly
 - Similar paper suggestions handle typos gracefully
 - Interactive selection maintains flow without manual retry
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Fail fast**: Poor developer experience, requires manual investigation
 - **Auto-select first match**: Dangerous, could test wrong paper
@@ -103,14 +103,14 @@ class PaperMetadata:
 - Invalidate on directory structure changes (use file modification times)
 - Scope cache to script execution (no persistent state)
 
-**Rationale**:
+### Rationale
 
 - Repeated test runs benefit from cached metadata
 - File system overhead reduced for large repositories
 - No stale data issues (cache per execution)
 - Simple implementation without external dependencies
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **No caching**: Acceptable performance for small repos, scales poorly
 - **Persistent cache**: Complexity of invalidation outweighs benefits
@@ -129,16 +129,16 @@ papers/
 │   └── tests/               # Paper-specific tests
 └── alexnet/
     └── ...
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Consistent structure enables automated validation
 - Config file provides single source of truth for metadata
 - Separate test directory supports isolated paper testing
 - Aligns with repository standards (see tooling/testing-tools plan)
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Flexible structure**: Too complex to validate reliably
 - **Flat structure**: Doesn't scale to many papers
@@ -189,7 +189,7 @@ def setup_test_context(paper: PaperMetadata) -> TestContext:
         TestContext configured for the paper
     """
     pass
-```
+```text
 
 ### Error Classes
 
@@ -218,7 +218,7 @@ class InvalidPaperError(PaperError):
         self.path = path
         self.missing_files = missing_files
         super().__init__(f"Invalid paper at {path}")
-```
+```text
 
 ### Configuration File Format
 
@@ -236,7 +236,7 @@ authors:
   - Léon Bottou
 year: 1998
 paper_url: http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf
-```
+```text
 
 ## References
 

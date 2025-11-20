@@ -26,36 +26,40 @@ Implement missing test fixtures and enhance existing ones based on findings from
 ### Existing Fixtures
 
 **Implemented** (conftest.mojo):
+
 - `TestFixtures.deterministic_seed()` - Returns 42
 - `TestFixtures.set_seed()` - Sets deterministic random seed
 
 **Placeholders/TODOs** (conftest.mojo, lines 160-181):
+
 ```mojo
 # TODO(#1538): Add tensor fixture methods when Tensor type is implemented
 # @staticmethod
-# fn small_tensor() -> Tensor:
+# fn small_tensor() -> Tensor
 #     """Create small 3x3 tensor for unit tests."""
 #     pass
 #
 # @staticmethod
-# fn random_tensor(rows: Int, cols: Int) -> Tensor:
+# fn random_tensor(rows: Int, cols: Int) -> Tensor
 #     """Create random tensor with deterministic seed."""
 #     pass
-```
+```text
 
 **Placeholders** (helpers/fixtures.mojo):
+
 ```mojo
 # TODO: Implement fixture functions once ExTensor is fully functional
-# These will include:
+# These will include
 # - random_tensor(shape, dtype) -> ExTensor
 # - sequential_tensor(shape, dtype) -> ExTensor
 # - nan_tensor(shape) -> ExTensor
 # - inf_tensor(shape) -> ExTensor
 # - ones_like(tensor) -> ExTensor
 # - zeros_like(tensor) -> ExTensor
-```
+```text
 
 **Data Generators** (conftest.mojo, implemented):
+
 - `create_test_vector(size, value)` - Uniform value vector
 - `create_test_matrix(rows, cols, value)` - Uniform value matrix
 - `create_sequential_vector(size, start)` - Sequential values
@@ -64,7 +68,7 @@ Implement missing test fixtures and enhance existing ones based on findings from
 
 Based on **YAGNI** and **Minimal Changes** principles:
 
-**Decision Matrix**:
+### Decision Matrix
 
 | Fixture Type | Needed Now? | Dependencies Ready? | Action |
 |-------------|-------------|---------------------|--------|
@@ -80,22 +84,25 @@ Based on **YAGNI** and **Minimal Changes** principles:
 ### Phase 1: Assess Actual Needs (from Test Phase #444)
 
 Review Test phase findings to determine:
+
 1. Are seed fixtures sufficient?
-2. Are data generators adequate?
-3. Are tensor fixtures actually needed now?
-4. Are there gaps in current fixtures?
+1. Are data generators adequate?
+1. Are tensor fixtures actually needed now?
+1. Are there gaps in current fixtures?
 
 ### Phase 2: Implement High-Priority Fixtures
 
 #### Option A: Tensor Fixtures (if ExTensor ready)
 
-**Check Availability**:
+### Check Availability
+
 ```mojo
 // Try importing ExTensor
 from extensor import ExTensor  // If this works, implement fixtures
-```
+```text
 
 **If Available**, implement in `helpers/fixtures.mojo`:
+
 ```mojo
 """Test fixtures for ExTensor testing."""
 
@@ -198,11 +205,12 @@ fn inf_tensor(shape: DynamicVector[Int]) -> ExTensor:
         data.append(inf_val)
 
     return ExTensor(data, shape, dtype=DType.float64)
-```
+```text
 
 #### Option B: Model Fixtures (if models ready)
 
 **If model classes are available**, add to conftest.mojo:
+
 ```mojo
 @staticmethod
 fn simple_linear_model() -> Linear:
@@ -227,11 +235,12 @@ fn small_mlp() -> Sequential:
         ReLU(),
         Linear(20, 5)
     )
-```
+```text
 
 #### Option C: Dataset Fixtures (if needed)
 
-**If dataset classes are available**:
+### If dataset classes are available
+
 ```mojo
 @staticmethod
 fn toy_classification_dataset() -> Dataset:
@@ -254,11 +263,12 @@ fn toy_regression_dataset() -> Dataset:
     Self.set_seed()
     # Implement linear regression dataset
     return LinearDataset(n_samples=100, slope=2.0, intercept=1.0)
-```
+```text
 
 #### Option D: Configuration Fixtures (if needed)
 
-**If configuration management is in place**:
+### If configuration management is in place
+
 ```mojo
 @staticmethod
 fn default_training_config() -> TrainingConfig:
@@ -286,13 +296,14 @@ fn test_optimizer_config() -> OptimizerConfig:
         momentum=0.9,
         weight_decay=1e-4
     )
-```
+```text
 
 ### Phase 3: Enhance Existing Fixtures (if gaps found)
 
-**Potential Enhancements**:
+### Potential Enhancements
 
 **1. Additional Data Generators**:
+
 ```mojo
 fn create_random_vector(size: Int, min_val: Float32 = 0.0, max_val: Float32 = 1.0) -> List[Float32]:
     """Create random vector in range [min_val, max_val].
@@ -334,9 +345,10 @@ fn create_sparse_vector(size: Int, sparsity: Float32 = 0.9) -> List[Float32]:
             vec.append(randn())
 
     return vec
-```
+```text
 
 **2. Fixture Cleanup Helpers**:
+
 ```mojo
 fn reset_global_state():
     """Reset global test state between tests.
@@ -347,11 +359,12 @@ fn reset_global_state():
     # Clear any global caches
     # Reset any singletons
     # etc.
-```
+```text
 
 ### Phase 4: Documentation
 
 Update all new fixtures with:
+
 - Clear docstrings
 - Usage examples
 - Parameter descriptions
@@ -361,22 +374,26 @@ Update all new fixtures with:
 ## Decision Process
 
 **Step 1**: Review Test phase (#444) findings
+
 - What fixtures are actually used in tests?
 - What gaps were identified?
 - What pain points exist?
 
 **Step 2**: Check dependencies
+
 - Is ExTensor available? Check imports
 - Are model classes available? Check shared/core/
 - Are dataset classes available? Check shared/data/
 - Are config classes available? Check shared/utils/
 
 **Step 3**: Prioritize implementations
+
 - **Must have**: Fixtures actively used in tests
 - **Nice to have**: Fixtures that would reduce duplication
 - **Skip**: Fixtures with unavailable dependencies
 
 **Step 4**: Implement based on priorities
+
 - Start with most impactful
 - Follow minimal changes principle
 - Document as you go
@@ -399,21 +416,24 @@ Update all new fixtures with:
 
 (To be filled based on Issue #444 results)
 
-**Fixtures Actually Needed**:
+### Fixtures Actually Needed
+
 - TBD
 
-**Dependencies Available**:
+### Dependencies Available
+
 - ExTensor: TBD
 - Models: TBD
 - Datasets: TBD
 - Configs: TBD
 
-**Gaps Identified**:
+### Gaps Identified
+
 - TBD
 
 ### Implementation Decisions
 
-**Decision Log**:
+### Decision Log
 
 | Date | Fixture Type | Decision | Rationale |
 |------|-------------|----------|-----------|
@@ -425,17 +445,20 @@ Update all new fixtures with:
 
 ### Code Changes
 
-**Files Modified**:
+### Files Modified
+
 - `/tests/shared/conftest.mojo` - Add new fixtures if needed
 - `/tests/helpers/fixtures.mojo` - Implement or remove placeholders
 
-**Files Created**:
+### Files Created
+
 - TBD based on actual needs
 
 ### Testing Validation
 
 After implementation:
+
 1. Run fixture tests from Issue #444
-2. Verify all new fixtures pass their tests
-3. Run full test suite to ensure fixtures work in real tests
-4. Verify fixtures reduce code duplication as intended
+1. Verify all new fixtures pass their tests
+1. Run full test suite to ensure fixtures work in real tests
+1. Verify fixtures reduce code duplication as intended

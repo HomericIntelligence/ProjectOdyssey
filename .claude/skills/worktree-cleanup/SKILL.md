@@ -24,7 +24,7 @@ Clean up git worktrees after work is complete.
 
 # Or by path
 git worktree remove ../ml-odyssey-42-feature
-```
+```text
 
 ### Clean Up Merged Worktrees
 
@@ -32,18 +32,18 @@ git worktree remove ../ml-odyssey-42-feature
 # Remove all merged worktrees
 ./scripts/cleanup_merged_worktrees.sh
 
-# This:
+# This
 # 1. Checks which branches are merged
 # 2. Finds worktrees for merged branches
 # 3. Removes them (with confirmation)
-```
+```text
 
 ### Force Remove
 
 ```bash
 # Force remove (if has uncommitted changes)
 git worktree remove --force ../ml-odyssey-42-feature
-```
+```text
 
 ## Safety Checks
 
@@ -61,7 +61,7 @@ cd ../ml-odyssey
 
 # Then remove
 git worktree remove ../ml-odyssey-42-feature
-```
+```text
 
 ## Scripts
 

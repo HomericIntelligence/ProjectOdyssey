@@ -23,7 +23,7 @@ Implement Xavier (Glorot) initialization for neural network weights, providing b
 
 ### 1. Mathematical Foundation
 
-**Xavier/Glorot Initialization Theory:**
+### Xavier/Glorot Initialization Theory:
 
 The Xavier initialization method was introduced by Xavier Glorot and Yoshua Bengio in their 2010 paper "Understanding the difficulty of training deep feedforward neural networks." The core principle is to maintain consistent variance of activations and gradients across layers.
 
@@ -31,7 +31,7 @@ The Xavier initialization method was introduced by Xavier Glorot and Yoshua Beng
 
 ```text
 Var(W) = 2 / (fan_in + fan_out)
-```
+```text
 
 This ensures that:
 
@@ -40,25 +40,25 @@ This ensures that:
 
 ### 2. Distribution Variants
 
-**Uniform Distribution:**
+### Uniform Distribution:
 
 For a uniform distribution U(-a, a), the variance is a²/3. To achieve Var(W) = 2/(fan_in + fan_out):
 
 ```text
 a²/3 = 2/(fan_in + fan_out)
 a = sqrt(6/(fan_in + fan_out))
-```
+```text
 
 Result: U(-sqrt(6/(fan_in + fan_out)), sqrt(6/(fan_in + fan_out)))
 
-**Normal Distribution:**
+### Normal Distribution:
 
 For a normal distribution N(0, σ²), the variance is σ². To achieve Var(W) = 2/(fan_in + fan_out):
 
 ```text
 σ² = 2/(fan_in + fan_out)
 σ = sqrt(2/(fan_in + fan_out))
-```
+```text
 
 Result: N(0, sqrt(2/(fan_in + fan_out)))
 
@@ -73,12 +73,12 @@ The method assumes activations are roughly linear around zero, which is true for
 
 ### 4. Fan-in and Fan-out Calculation
 
-**Definition:**
+### Definition:
 
 - `fan_in`: Number of input units to the layer
 - `fan_out`: Number of output units from the layer
 
-**For different layer types:**
+### For different layer types:
 
 - Fully connected: fan_in = input_size, fan_out = output_size
 - Convolutional: fan_in = kernel_height × kernel_width × input_channels
@@ -86,15 +86,15 @@ The method assumes activations are roughly linear around zero, which is true for
 
 ### 5. Implementation Approach
 
-**Key implementation steps:**
+### Key implementation steps:
 
 1. Calculate fan_in and fan_out from layer dimensions
-2. Compute scaling factor based on distribution type
-3. Generate random values from base distribution (uniform or normal)
-4. Scale random values by computed factor
-5. Support optional random seed for reproducibility
+1. Compute scaling factor based on distribution type
+1. Generate random values from base distribution (uniform or normal)
+1. Scale random values by computed factor
+1. Support optional random seed for reproducibility
 
-**API Design Considerations:**
+### API Design Considerations:
 
 - Separate functions for uniform and normal variants (clarity over single function with flag)
 - Consistent interface with other initializers in the module
@@ -103,14 +103,14 @@ The method assumes activations are roughly linear around zero, which is true for
 
 ### 6. Variance Validation Strategy
 
-**Testing approach:**
+### Testing approach:
 
 - Initialize large weight matrices (e.g., 1000 × 1000)
 - Calculate empirical variance of initialized weights
 - Compare to theoretical variance: 2/(fan_in + fan_out)
 - Accept small statistical deviation (e.g., within 5% for large samples)
 
-**Statistical considerations:**
+### Statistical considerations:
 
 - Larger weight matrices needed for accurate variance estimation
 - Multiple trials can confirm reproducibility with same seed
@@ -118,14 +118,14 @@ The method assumes activations are roughly linear around zero, which is true for
 
 ### 7. Edge Cases and Constraints
 
-**Considerations:**
+### Considerations:
 
 - **Minimum dimensions:** fan_in and fan_out should be positive integers
 - **Very small fan values:** Variance becomes large (might require clipping)
 - **Very large fan values:** Variance becomes very small (might underflow)
 - **Square vs. rectangular:** Works for any (fan_in, fan_out) combination
 
-**Error handling:**
+### Error handling:
 
 - Validate fan_in > 0 and fan_out > 0
 - Consider bounds checking for extreme variance values

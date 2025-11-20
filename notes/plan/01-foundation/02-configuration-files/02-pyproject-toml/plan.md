@@ -30,8 +30,8 @@ Create and configure the pyproject.toml file for Python project configuration. T
 ## Steps
 
 1. Create base pyproject.toml with project metadata
-2. Add Python dependencies for development and testing
-3. Configure development tools like formatters and linters
+1. Add Python dependencies for development and testing
+1. Configure development tools like formatters and linters
 
 ## Success Criteria
 

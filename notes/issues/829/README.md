@@ -56,7 +56,7 @@ The coverage collection system will use a **dual-strategy approach**:
    - Format: SQLite database (.coverage file)
    - Rationale: Python ecosystem standard, proven reliability, excellent reporting tools
 
-2. **Mojo Code Coverage** (ML implementation)
+1. **Mojo Code Coverage** (ML implementation)
    - Strategy: To be determined based on Mojo language capabilities
    - Options to evaluate:
      - Mojo compiler instrumentation support
@@ -74,12 +74,12 @@ Coverage will be collected at the following execution points:
    - Collect coverage for all modules under test
    - Store in test-specific coverage files
 
-2. **Integration Test Execution**
+1. **Integration Test Execution**
    - Track coverage across multiple component interactions
    - Measure coverage for integration scenarios
    - Combine with unit test coverage
 
-3. **CI Pipeline Execution**
+1. **CI Pipeline Execution**
    - Automated coverage collection on all commits
    - Parallel collection for different test types
    - Aggregation of coverage data
@@ -103,9 +103,10 @@ Coverage will be collected at the following execution points:
     ├── Execution counts per line
     ├── Branch coverage (when enabled)
     └── Call counts for functions
-```
+```text
 
-**Rationale**:
+### Rationale
+
 - Standard format supported by coverage.py
 - Enables integration with existing reporting tools
 - Supports parallel test execution
@@ -151,9 +152,10 @@ Coverage will be collected at the following execution points:
     "platform": "linux|macos|windows"
   }
 }
-```
+```text
 
-**Purposes**:
+### Purposes
+
 - Documents coverage configuration and execution context
 - Enables reproducible coverage collection
 - Supports multi-platform coverage tracking
@@ -188,7 +190,7 @@ class CoverageCollector:
 
     def merge(self, other: 'CoverageCollector') -> None:
         """Merge coverage from another collector."""
-```
+```text
 
 #### Mojo Coverage Instrumentation (To Be Designed)
 
@@ -206,9 +208,10 @@ struct CoverageData:
     lines: List[CoverageLine]
     functions_covered: Int
     functions_total: Int
-```
+```text
 
-**Interface Properties**:
+### Interface Properties
+
 - Non-invasive to tested code
 - Minimal performance overhead
 - Support for parallel execution
@@ -234,9 +237,10 @@ exclude_lines =
     raise AssertionError
     raise NotImplementedError
     if __name__ == .__main__.:
-```
+```text
 
-**Integration Points**:
+### Integration Points
+
 - pytest plugin: `pytest-cov` for automatic coverage
 - Pytest fixtures to manage coverage lifecycle
 - Coverage data stored per test session
@@ -274,9 +278,10 @@ Development/Config files (excluded):
 - conftest.py (test configuration)
 - __init__.py (Python package markers)
 - *.toml (configuration files)
-```
+```text
 
-**Rationale**:
+### Rationale
+
 - Test code shouldn't measure test code (circular)
 - Generated code is outside source control scope
 - Configuration files not part of implementation coverage
@@ -297,9 +302,10 @@ Model/Implementation code:
 - training/**/*.mojo (training algorithms)
 - inference/**/*.mojo (inference engines)
 - utilities/**/*.py (Python utilities)
-```
+```text
 
-**Rationale**:
+### Rationale
+
 - Comprehensive coverage of implementation
 - Excludes only test and generated code
 - Focuses on production/research code
@@ -315,12 +321,13 @@ Model/Implementation code:
 | Integration Tests | 30s | 31.5s | 5% | ✓ |
 | Full Test Suite | 60s | 63s | 5% | ✓ |
 
-**Optimization Strategies**:
+### Optimization Strategies
+
 1. Lazy initialization of coverage tracking
-2. Efficient data structure for execution tracking
-3. Batch writing of coverage data
-4. Parallel coverage collection (when supported)
-5. Optional coverage (disabled by default during development)
+1. Efficient data structure for execution tracking
+1. Batch writing of coverage data
+1. Parallel coverage collection (when supported)
+1. Optional coverage (disabled by default during development)
 
 #### Mitigation Techniques
 
@@ -329,12 +336,12 @@ Model/Implementation code:
    - Disable coverage for unrelated dependencies
    - Use coverage contexts for parallel test execution
 
-2. **Data Compression**
+1. **Data Compression**
    - SQLite compression for .coverage files
    - Separate coverage for different test runs
    - Merge only when necessary
 
-3. **Caching**
+1. **Caching**
    - Cache coverage calculations
    - Reuse coverage data within test session
    - Incremental coverage updates
@@ -363,7 +370,7 @@ Scenario 4: Parallel execution conflicts
 - Detection: Lock file management
 - Recovery: Graceful merge of parallel coverage
 - Prevention: Use coverage.py parallel mode
-```
+```text
 
 #### Error Handling Strategy
 
@@ -379,7 +386,7 @@ class CoverageReadError(CoverageError):
 
 class CoverageMergeError(CoverageError):
     """Error merging coverage data."""
-```
+```text
 
 ### 8. Configuration Schema
 
@@ -422,13 +429,13 @@ coverage:
     max_overhead_percent: 5
     enable_caching: true
     batch_size: 1000
-```
+```text
 
 ## Architecture Overview
 
 ### Coverage Collection Pipeline
 
-```
+```text
 Test Execution Start
         ↓
 [Coverage Initialization]
@@ -456,11 +463,11 @@ Test Execution Start
         └─→ Coverage finalization
 
 Test Execution End
-```
+```text
 
 ### Component Interactions
 
-```
+```text
 pytest/Test Runner
         ↓
 [Coverage Plugin]
@@ -478,13 +485,14 @@ pytest/Test Runner
         ├─→ .coverage file (SQLite)
         ├─→ coverage_metadata.json
         └─→ Checksum files
-```
+```text
 
 ## Implementation Considerations
 
 ### Language-Specific Approaches
 
 #### Python Coverage (Proven)
+
 - **Tool**: coverage.py
 - **Method**: sys.trace instrumentation
 - **Advantages**: Mature, standard, reliable
@@ -493,24 +501,25 @@ pytest/Test Runner
 #### Mojo Coverage (To Be Designed)
 
 Options to evaluate:
+
 1. **Compiler Plugin Approach**
    - Instrument LLVM IR generated by Mojo
    - Requires Mojo compiler integration
    - Complexity: High
    - Coverage Accuracy: Excellent
 
-2. **Runtime Tracing Approach**
+1. **Runtime Tracing Approach**
    - Use Mojo's debug facilities
    - Hook function entry/exit
    - Complexity: Medium
    - Coverage Accuracy: Good (function-level)
 
-3. **Source-to-Source Transformation**
+1. **Source-to-Source Transformation**
    - Rewrite source code to insert counters
    - Complexity: Very High
    - Coverage Accuracy: Excellent
 
-4. **Integration with Existing Tools**
+1. **Integration with Existing Tools**
    - Wrap Mojo code in Python test harness
    - Use Python coverage for outer harness
    - Complexity: Medium
@@ -533,9 +542,9 @@ Options to evaluate:
 After this planning phase is complete:
 
 1. **Issue #830 (Hypothetical Test Phase)**: Create test suite for coverage collection
-2. **Issue #831 (Hypothetical Implementation Phase)**: Implement coverage data collection system
-3. **Issue #832 (Hypothetical Packaging Phase)**: Integrate coverage with test infrastructure
-4. **Issue #833 (Hypothetical Cleanup Phase)**: Finalize and optimize coverage system
+1. **Issue #831 (Hypothetical Implementation Phase)**: Implement coverage data collection system
+1. **Issue #832 (Hypothetical Packaging Phase)**: Integrate coverage with test infrastructure
+1. **Issue #833 (Hypothetical Cleanup Phase)**: Finalize and optimize coverage system
 
 ## Related Work
 
@@ -548,14 +557,16 @@ After this planning phase is complete:
 
 ### coverage.py (Python)
 
-**Pros**:
+### Pros
+
 - Mature and well-tested (15+ years of development)
 - Industry standard for Python
 - Comprehensive reporting (line, branch, call)
 - Large plugin ecosystem
 - Excellent documentation
 
-**Cons**:
+### Cons
+
 - Python-only (though can wrap other languages)
 - Slight performance overhead (~5-10%)
 
@@ -568,10 +579,11 @@ After this planning phase is complete:
 ### Integration Strategy
 
 The coverage system will be designed as:
+
 1. **Primary Collection**: coverage.py for Python code
-2. **Adapter Pattern**: Integration layer for Mojo code
-3. **Unified Reporting**: Combined reports from both sources
-4. **Standard Format**: Conversion to standard coverage formats
+1. **Adapter Pattern**: Integration layer for Mojo code
+1. **Unified Reporting**: Combined reports from both sources
+1. **Standard Format**: Conversion to standard coverage formats
 
 ---
 

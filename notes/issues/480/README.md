@@ -50,15 +50,17 @@ Implement coverage reporting functionality that generates console and HTML repor
 **Leverage Existing Tools**: Python's coverage.py already provides report generation. Our implementation focuses on:
 
 1. **Configuration** - Not new code
-2. **Integration** - Connecting to CI
-3. **Customization** - Project-specific needs
+1. **Integration** - Connecting to CI
+1. **Customization** - Project-specific needs
 
-**What NOT to Build**:
+### What NOT to Build
+
 - ❌ New report generator (coverage.py has this)
 - ❌ HTML renderer (coverage.py has this)
 - ❌ Coverage calculation (coverage.py does this)
 
-**What to Build**:
+### What to Build
+
 - ✅ Configuration for project needs
 - ✅ CI integration scripts
 - ✅ Custom report filtering (if needed)
@@ -72,7 +74,7 @@ Implement coverage reporting functionality that generates console and HTML repor
 # Generate console report
 pytest --cov=scripts --cov-report=term-missing
 
-# Output example:
+# Output example
 # ---------- coverage: platform linux, python 3.11 ----------
 # Name                  Stmts   Miss  Cover   Missing
 # ---------------------------------------------------
@@ -80,7 +82,7 @@ pytest --cov=scripts --cov-report=term-missing
 # scripts/utils.py         45      5    89%   23, 45-48
 # ---------------------------------------------------
 # TOTAL                    45      5    89%
-```
+```text
 
 **HTML Reports** (Already works):
 
@@ -88,11 +90,11 @@ pytest --cov=scripts --cov-report=term-missing
 # Generate HTML report
 pytest --cov=scripts --cov-report=html
 
-# Creates htmlcov/ directory with:
+# Creates htmlcov/ directory with
 # - index.html (file listing)
 # - *.html (per-file coverage)
 # - Built-in styling and highlighting
-```
+```text
 
 **XML Reports** (For CI integration):
 
@@ -101,7 +103,7 @@ pytest --cov=scripts --cov-report=html
 pytest --cov=scripts --cov-report=xml
 
 # Creates coverage.xml for CI tools
-```
+```text
 
 ### Implementation Tasks
 
@@ -127,7 +129,7 @@ fail_under = 80            # Fail if coverage < 80%
 [tool.coverage.html]
 directory = "htmlcov"      # Output directory
 title = "ML Odyssey Coverage Report"
-```
+```text
 
 **2. CI Integration**
 
@@ -152,7 +154,7 @@ Update `.github/workflows/test.yml`:
   with:
     file: ./coverage.xml
     fail_ci_if_error: false
-```
+```text
 
 **3. Historical Tracking (Optional)**
 
@@ -197,7 +199,7 @@ def get_git_commit():
         text=True
     )
     return result.stdout.strip()
-```
+```text
 
 **4. Custom Report Filtering (If Needed)**
 
@@ -221,19 +223,22 @@ def generate_filtered_report():
 
     # Generate filtered report
     cov.html_report()
-```
+```text
 
 ### Files to Create/Modify
 
 **Configuration** (Primary work):
+
 - `pyproject.toml` - Update coverage report settings
 - `.github/workflows/test.yml` - Add coverage reporting steps
 
 **Scripts** (Optional, only if needed):
+
 - `scripts/track_coverage.py` - Historical tracking (if not using Codecov)
 - `scripts/filter_coverage_report.py` - Custom filtering (if needed)
 
-**Documentation**:
+### Documentation
+
 - Update from Issue #476 with report usage examples
 
 ### Validation Checklist

@@ -27,19 +27,19 @@ Planned the README overview section following requirements from
    - Core purpose and goals
    - Value proposition
 
-2. **Key Features** (4-6 bullet points):
+1. **Key Features** (4-6 bullet points):
    - Mojo-first development
    - Paper reproductions
    - Testing approach
    - Modern tooling
    - Documentation
 
-3. **Target Audience**:
+1. **Target Audience**:
    - ML researchers
    - Mojo developers
    - Students and learners
 
-4. **Badges**:
+1. **Badges**:
    - Build status
    - License
    - Documentation links

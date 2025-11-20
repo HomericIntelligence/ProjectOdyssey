@@ -31,26 +31,26 @@ Create the `.claude/skills/` directory structure to house Claude Code Skills - r
 
 **Decision**: Skills are model-invoked computational patterns; sub-agents are separate decision-making contexts.
 
-**Rationale**:
+### Rationale
 
 - Skills provide deterministic, algorithmic operations that can be invoked inline during agent execution
 - Sub-agents handle complex multi-step decisions requiring judgment and planning in separate conversation threads
 - This separation enables efficient reuse of patterns while maintaining clear boundaries for delegation
 
-**Key Distinctions**:
+### Key Distinctions
 
 1. **Execution Context**: Skills run in current context; sub-agents have separate conversation threads
-2. **Nature of Work**: Skills are computational/algorithmic; sub-agents make decisions with judgment
-3. **Invocation Pattern**: Skills are pattern-based with clear inputs/outputs; sub-agents coordinate multiple tools with planning
+1. **Nature of Work**: Skills are computational/algorithmic; sub-agents make decisions with judgment
+1. **Invocation Pattern**: Skills are pattern-based with clear inputs/outputs; sub-agents coordinate multiple tools with planning
 
-**Use Skills For**:
+### Use Skills For
 
 - Code generation templates and boilerplate creation
 - Analysis patterns (structure, dependencies, complexity)
 - Test orchestration (run, analyze, report)
 - Data extraction from structured sources
 
-**Use Sub-Agents For**:
+### Use Sub-Agents For
 
 - Complex multi-step decisions requiring planning
 - Research requiring judgment and context evaluation
@@ -61,24 +61,24 @@ Create the `.claude/skills/` directory structure to house Claude Code Skills - r
 
 **Decision**: Organize skills into three tiers based on scope and specialization.
 
-**Tier 1 - Foundational Skills**:
+### Tier 1 - Foundational Skills
 
 - Universal capabilities usable by all agents
 - Examples: code analysis, code generation templates, testing patterns
 - Target: At least 3 foundational skills in initial implementation
 
-**Tier 2 - Domain-Specific Skills**:
+### Tier 2 - Domain-Specific Skills
 
 - Specialized capabilities for specific agent types
 - Examples: paper analysis, ML operations, documentation generation
 - Target: At least 3 domain-specific skills in initial implementation
 
-**Tier 3 - Specialized Skills**:
+### Tier 3 - Specialized Skills
 
 - Narrow use-case skills for specific scenarios
 - Initial implementation: directory structure only (populated as needed)
 
-**Rationale**:
+### Rationale
 
 - Clear organization enables agents to quickly find appropriate skills
 - Tier-based structure scales as more skills are added
@@ -88,14 +88,14 @@ Create the `.claude/skills/` directory structure to house Claude Code Skills - r
 
 **Decision**: All skills follow Claude Code SKILL.md format with required frontmatter.
 
-**Required Components**:
+### Required Components
 
 - Frontmatter: name, description, tier, parameters, returns
 - Clear examples demonstrating usage patterns
 - Input/output specifications
 - Integration guidance for agents
 
-**Rationale**:
+### Rationale
 
 - Standardized format enables consistent skill discovery and usage
 - Frontmatter metadata supports automated tooling and skill validation
@@ -105,13 +105,13 @@ Create the `.claude/skills/` directory structure to house Claude Code Skills - r
 
 **Decision**: Document which agent types can invoke which skills in both skill definitions and agent configurations.
 
-**Integration Points**:
+### Integration Points
 
 - Skills reference compatible agent types in SKILL.md
 - Agent configurations list available skills for that role
 - README.md provides mapping between agent hierarchy and skill tiers
 
-**Rationale**:
+### Rationale
 
 - Bidirectional references prevent skill misuse
 - Clear mappings enable efficient skill discovery
@@ -121,14 +121,14 @@ Create the `.claude/skills/` directory structure to house Claude Code Skills - r
 
 **Decision**: Create explicit decision matrix documenting selection criteria.
 
-**Matrix Criteria**:
+### Matrix Criteria
 
 - Deterministic vs judgment-based work
 - Single-context vs multi-context execution
 - Pattern-based vs planning-based workflow
 - Immediate invocation vs delegated execution
 
-**Rationale**:
+### Rationale
 
 - Reduces ambiguity when designing new capabilities
 - Ensures consistent architectural patterns
@@ -157,7 +157,7 @@ Create the `.claude/skills/` directory structure to house Claude Code Skills - r
 
 ### Phase 1: Planning (Current)
 
-**Completed**:
+### Completed
 
 - Analyzed source plan and component requirements
 - Documented design decisions for skills vs sub-agents architecture
@@ -165,7 +165,7 @@ Create the `.claude/skills/` directory structure to house Claude Code Skills - r
 - Established SKILL.md format requirements
 - Created decision matrix criteria
 
-**Next Steps**:
+### Next Steps
 
 - Implementation phase (#588) will create directory structure and initial SKILL.md files
 - Test phase (#587) will validate skill invocation patterns and frontmatter parsing
@@ -175,37 +175,37 @@ Create the `.claude/skills/` directory structure to house Claude Code Skills - r
 ### Key Design Principles
 
 1. **Skills are Deterministic**: Each skill should have predictable behavior with clear inputs/outputs
-2. **Skills are Reusable**: Design skills for use across multiple agents and scenarios
-3. **Skills are Discoverable**: Clear naming, organization, and documentation enable easy discovery
-4. **Skills are Documented**: Every skill includes examples and integration guidance
+1. **Skills are Reusable**: Design skills for use across multiple agents and scenarios
+1. **Skills are Discoverable**: Clear naming, organization, and documentation enable easy discovery
+1. **Skills are Documented**: Every skill includes examples and integration guidance
 
 ### Example Skills (Planned)
 
-**Tier 1 - Foundational**:
+### Tier 1 - Foundational
 
 - `analyze_code_structure` - Analyze code dependencies, complexity, and structure
 - `generate_boilerplate` - Generate standard code templates and patterns
 - `run_test_suite` - Orchestrate test execution and result analysis
 
-**Tier 2 - Domain-Specific**:
+### Tier 2 - Domain-Specific
 
 - `extract_algorithm_from_paper` - Parse research papers to extract algorithms and concepts
 - `prepare_ml_dataset` - Standardize dataset preparation workflows
 - `generate_api_docs` - Create API reference documentation from code
 
-**Tier 3 - Specialized**:
+### Tier 3 - Specialized
 
 - Directory structure reserved for future narrow-use-case skills
 
 ### Dependencies
 
-**Requires**:
+### Requires
 
 - Repository root exists
 - `.claude/` directory structure established
 - Agent hierarchy designed and documented
 
-**Enables**:
+### Enables
 
 - Agents can leverage skills for efficient pattern-based operations
 - Reduced code duplication across agent implementations

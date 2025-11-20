@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Parse code to identify undocumented elements
-2. Extract function/class signatures
-3. Generate docstrings using template
-4. Validate and insert documentation
+1. Extract function/class signatures
+1. Generate docstrings using template
+1. Validate and insert documentation
 
 ## Success Criteria
 

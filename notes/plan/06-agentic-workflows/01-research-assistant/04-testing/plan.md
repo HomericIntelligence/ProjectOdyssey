@@ -32,9 +32,9 @@ Create comprehensive tests for all research assistant capabilities including pap
 ## Steps
 
 1. Create tests for paper analysis capabilities
-2. Create tests for code suggestion workflows
-3. Create tests for debugging assistance
-4. Set up continuous testing
+1. Create tests for code suggestion workflows
+1. Create tests for debugging assistance
+1. Set up continuous testing
 
 ## Success Criteria
 

@@ -17,7 +17,7 @@ random seed management, and profiling) following TDD principles to drive impleme
 
 **Purpose**: Test logging utilities including log levels, formatters, handlers, and training-specific logging.
 
-**Core Functionality Tested**:
+### Core Functionality Tested
 
 - Log level hierarchy (DEBUG < INFO < WARNING < ERROR)
 - Log level filtering by configured threshold
@@ -29,7 +29,7 @@ random seed management, and profiling) following TDD principles to drive impleme
 
 **Test Count**: 23 test functions
 
-**Key Test Cases**:
+### Key Test Cases
 
 - `test_log_level_filtering()` - Ensures messages below threshold are not logged
 - `test_timestamp_formatter()` - Verifies timestamp format in log messages
@@ -41,7 +41,7 @@ random seed management, and profiling) following TDD principles to drive impleme
 
 **Purpose**: Test configuration management including loading, validation, merging, and environment variable substitution.
 
-**Core Functionality Tested**:
+### Core Functionality Tested
 
 - YAML and JSON configuration file loading
 - Nested configuration sections and list values
@@ -54,7 +54,7 @@ random seed management, and profiling) following TDD principles to drive impleme
 
 **Test Count**: 33 test functions
 
-**Key Test Cases**:
+### Key Test Cases
 
 - `test_load_nested_config()` - Tests nested dictionary access (config.model.layers)
 - `test_validate_required_fields()` - Ensures required fields are present
@@ -66,7 +66,7 @@ random seed management, and profiling) following TDD principles to drive impleme
 
 **Purpose**: Test file I/O utilities including checkpoint save/load, tensor serialization, and safe file operations.
 
-**Core Functionality Tested**:
+### Core Functionality Tested
 
 - Model checkpoint save/load with metadata
 - Atomic checkpoint saves (no partial writes)
@@ -82,7 +82,7 @@ random seed management, and profiling) following TDD principles to drive impleme
 
 **Test Count**: 36 test functions
 
-**Key Test Cases**:
+### Key Test Cases
 
 - `test_checkpoint_roundtrip()` - Ensures save/load preserves all parameters
 - `test_save_checkpoint_atomic()` - Validates no partial writes on interruption
@@ -94,7 +94,7 @@ random seed management, and profiling) following TDD principles to drive impleme
 
 **Purpose**: Test visualization utilities including training curves, confusion matrices, and model architecture diagrams.
 
-**Core Functionality Tested**:
+### Core Functionality Tested
 
 - Training loss and accuracy plotting
 - Multiple series on same plot (train vs validation)
@@ -113,7 +113,7 @@ random seed management, and profiling) following TDD principles to drive impleme
 
 **Test Count**: 34 test functions
 
-**Key Test Cases**:
+### Key Test Cases
 
 - `test_plot_training_and_validation_loss()` - Validates dual-series plotting
 - `test_confusion_matrix_normalization()` - Tests row-normalized percentages
@@ -125,7 +125,7 @@ random seed management, and profiling) following TDD principles to drive impleme
 
 **Purpose**: Test random seed management for reproducibility including global seeds, state save/restore, and cross-library sync.
 
-**Core Functionality Tested**:
+### Core Functionality Tested
 
 - Global seed setting affects all generators
 - Different seeds produce different sequences
@@ -143,7 +143,7 @@ random seed management, and profiling) following TDD principles to drive impleme
 
 **Test Count**: 32 test functions
 
-**Key Test Cases**:
+### Key Test Cases
 
 - `test_set_global_seed()` - Ensures identical sequences with same seed
 - `test_state_roundtrip()` - Validates save/restore preserves state correctly
@@ -155,7 +155,7 @@ random seed management, and profiling) following TDD principles to drive impleme
 
 **Purpose**: Test profiling utilities including timing, memory tracking, and performance report generation.
 
-**Core Functionality Tested**:
+### Core Functionality Tested
 
 - Function execution timing
 - Timing decorator and context manager
@@ -178,7 +178,7 @@ random seed management, and profiling) following TDD principles to drive impleme
 
 **Test Count**: 39 test functions
 
-**Key Test Cases**:
+### Key Test Cases
 
 - `test_profiling_overhead_timing()` - Ensures overhead < 5%
 - `test_track_peak_memory()` - Validates peak memory tracking (not just final)
@@ -205,7 +205,7 @@ random seed management, and profiling) following TDD principles to drive impleme
 
 ## Shared Infrastructure Used
 
-**From `tests/shared/conftest.mojo`**:
+### From `tests/shared/conftest.mojo`
 
 - `assert_true()`, `assert_false()` - Boolean assertions
 - `assert_equal()`, `assert_not_equal()` - Equality assertions
@@ -290,11 +290,11 @@ The test suite aligns with the architecture specified in Issue #42:
 ### Planned Modules (from Issue #42)
 
 1. ✅ **Logging Utilities** - test_logging.mojo created
-2. ✅ **Configuration Management** - test_config.mojo created
-3. ✅ **File I/O Utilities** - test_io.mojo created
-4. ✅ **Visualization Tools** - test_visualization.mojo created
-5. ✅ **Random Seed Management** - test_random.mojo created
-6. ✅ **Profiling Utilities** - test_profiling.mojo created
+1. ✅ **Configuration Management** - test_config.mojo created
+1. ✅ **File I/O Utilities** - test_io.mojo created
+1. ✅ **Visualization Tools** - test_visualization.mojo created
+1. ✅ **Random Seed Management** - test_random.mojo created
+1. ✅ **Profiling Utilities** - test_profiling.mojo created
 
 ### Planned File Structure (from Issue #42)
 
@@ -309,7 +309,7 @@ shared/utils/
 ├── visualization.mojo
 ├── random.mojo
 └── profiling.mojo
-```
+```text
 
 Test structure mirrors this:
 
@@ -322,7 +322,7 @@ tests/shared/utils/
 ├── test_visualization.mojo
 ├── test_random.mojo
 └── test_profiling.mojo
-```
+```text
 
 ### Success Criteria from Issue #42
 
@@ -361,7 +361,7 @@ fn test_example():
 
     # Assert: Verify expected behavior
     assert_equal(result.learning_rate, 0.001)
-```
+```text
 
 ### Docstrings
 
@@ -389,19 +389,19 @@ Every test function includes a docstring explaining:
    - Then random.mojo (reproducibility)
    - Then visualization.mojo and profiling.mojo
 
-2. **Remove TODO comments** as implementations are completed
+1. **Remove TODO comments** as implementations are completed
 
-3. **Run tests continuously** to validate implementation
+1. **Run tests continuously** to validate implementation
 
-4. **Add missing fixtures** if tests require shared test data
+1. **Add missing fixtures** if tests require shared test data
 
 ### For Cleanup Phase (Issue #46)
 
 1. **Add edge case tests** (error handling, boundary conditions)
-2. **Add property-based tests** for mathematical invariants
-3. **Optimize slow tests** if CI time exceeds limits
-4. **Add performance benchmarks** for critical operations
-5. **Validate cross-platform compatibility** on Windows/macOS
+1. **Add property-based tests** for mathematical invariants
+1. **Optimize slow tests** if CI time exceeds limits
+1. **Add performance benchmarks** for critical operations
+1. **Validate cross-platform compatibility** on Windows/macOS
 
 ## CI/CD Integration
 
@@ -427,7 +427,7 @@ mojo test --coverage tests/shared/utils/
 
 # Run in CI (automated)
 # See .github/workflows/test-shared.yml
-```
+```text
 
 ## References
 
@@ -453,7 +453,7 @@ mojo test --coverage tests/shared/utils/
 
 **None** - Test suite is complete and ready for implementation phase.
 
-**Notes**:
+### Notes
 
 - Tests are currently empty implementations with TODO comments
 - Implementation in Issue #44 will make tests pass

@@ -72,7 +72,7 @@ rich = ">=13.0.0,<14.0.0"          # Rich terminal output for better UX
 # pillow = ">=10.0.0,<11.0.0"      # Image processing for vision models
 # scikit-learn = ">=1.3.0,<2.0.0"  # ML algorithms for comparison
 # pandas = ">=2.1.0,<3.0.0"        # Data manipulation (if needed)
-```
+```text
 
 ### 3. Dependency Categories
 
@@ -122,9 +122,9 @@ rich = ">=13.0.0,<14.0.0"          # Rich terminal output for better UX
 #### 4.1 Constraint Types
 
 1. **Caret (^)**: Allow compatible updates (not used in Magic, use >= and < instead)
-2. **Tilde (~)**: Allow patch updates only (not used in Magic)
-3. **Range (>=X,<Y)**: Explicit range for clarity (preferred approach)
-4. **Exact (==)**: Pin to specific version (avoid unless necessary)
+1. **Tilde (~)**: Allow patch updates only (not used in Magic)
+1. **Range (>=X,<Y)**: Explicit range for clarity (preferred approach)
+1. **Exact (==)**: Pin to specific version (avoid unless necessary)
 
 #### 4.2 Strategy by Package Type
 
@@ -142,24 +142,24 @@ rich = ">=13.0.0,<14.0.0"          # Rich terminal output for better UX
 
 ### 5. Migration from Pixi
 
-**Current pixi.toml dependencies:**
+### Current pixi.toml dependencies:
 
 ```toml
 mojo = ">=0.25.7.0.dev2025110405,<0.26"
 pre-commit = ">=3.5.0"
-```
+```text
 
-**Migration mapping:**
+### Migration mapping:
 
 - `mojo` → Replaced by `max` (includes Mojo)
 - `pre-commit` → Maintained with upper bound added
 
-**Migration steps:**
+### Migration steps:
 
 1. Create magic.toml with all dependencies
-2. Test both environments work
-3. Gradually transition workflows
-4. Deprecate pixi.toml when stable
+1. Test both environments work
+1. Gradually transition workflows
+1. Deprecate pixi.toml when stable
 
 ### 6. Dependency Management Best Practices
 
@@ -227,7 +227,7 @@ with open('magic.toml', 'r') as f:
     config = toml.load(f)
     assert 'dependencies' in config
     assert isinstance(config['dependencies'], dict)
-```
+```text
 
 #### 8.2 Version Constraint Validation
 
@@ -242,7 +242,7 @@ with open('magic.toml', 'r') as f:
 magic env create -f magic.toml
 magic run python -c "import numpy, matplotlib"
 magic run mojo --version
-```
+```text
 
 ### 9. Implementation Checklist
 
@@ -266,27 +266,27 @@ The dependencies section will integrate with the base configuration from Issue #
 name = "ml-odyssey"
 version = "0.1.0"
 description = "A Mojo-based AI research platform for reproducing classic research papers"
-# ... other project fields from Issue #87 ...
+# ... other project fields from Issue #87 
 
 [dependencies]
 # Dependencies as specified above
 max = ">=24.5.0,<25.0.0"
 python = ">=3.11,<3.13"
-# ... additional dependencies ...
+# ... additional dependencies 
 
 # Channels section (Issue #89) will follow
 # [channels]
 # default = ["conda-forge", "https://conda.modular.com/max"]
-```
+```text
 
 ## Implementation Notes
 
 ### Key Decisions
 
 1. **No PyTorch/TensorFlow**: Intentionally excluded to encourage Mojo implementations
-2. **Conservative Core Versions**: MAX and Python pinned to major versions
-3. **Development Tool Flexibility**: Wider ranges for non-critical tools
-4. **Minimal Initial Set**: Start with essentials, add as needed
+1. **Conservative Core Versions**: MAX and Python pinned to major versions
+1. **Development Tool Flexibility**: Wider ranges for non-critical tools
+1. **Minimal Initial Set**: Start with essentials, add as needed
 
 ### Trade-offs
 
@@ -306,9 +306,9 @@ python = ">=3.11,<3.13"
 ## Next Steps
 
 1. **Issue #93: [Test] Add Dependencies** - Write tests for dependency validation
-2. **Issue #94: [Implementation] Add Dependencies** - Add dependencies to magic.toml
-3. **Issue #95: [Package] Add Dependencies** - Test installation and packaging
-4. **Issue #96: [Cleanup] Add Dependencies** - Optimize and document
+1. **Issue #94: [Implementation] Add Dependencies** - Add dependencies to magic.toml
+1. **Issue #95: [Package] Add Dependencies** - Test installation and packaging
+1. **Issue #96: [Cleanup] Add Dependencies** - Optimize and document
 
 ---
 

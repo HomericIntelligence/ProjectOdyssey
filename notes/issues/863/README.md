@@ -32,16 +32,16 @@ Integrate the Mojo download implementation with the installer workflow and ensur
 This is a **packaging phase** issue in the 5-phase development workflow:
 
 1. **Plan** - #860 (Design and specification complete)
-2. **Test** - #861 (Write comprehensive test suite)
-3. **Implementation** - #862 (Build the download module)
-4. **Package** - #863 (THIS ISSUE - Create distributable artifacts)
-5. **Cleanup** - #864 (Refactor and finalization)
+1. **Test** - #861 (Write comprehensive test suite)
+1. **Implementation** - #862 (Build the download module)
+1. **Package** - #863 (THIS ISSUE - Create distributable artifacts)
+1. **Cleanup** - #864 (Refactor and finalization)
 
 ### What "Package" Means
 
 This phase creates actual distributable artifacts, not just documentation:
 
-**Created**:
+### Created
 
 - Build scripts for creating distributable archives/packages
 - Installation verification scripts
@@ -49,7 +49,7 @@ This phase creates actual distributable artifacts, not just documentation:
 - Configuration files for production deployment
 - Clear separation between source code (committed) and built artifacts (excluded)
 
-**NOT Created**:
+### NOT Created
 
 - Documentation-only deliverables
 - Verification that existing code is "ready"
@@ -78,7 +78,7 @@ This module is part of the three-phase Mojo installation process:
    - Detects Python version and environment
    - Output: Platform information tuple
 
-2. **Download Mojo** (#860-864) - Fetch Mojo compiler binary
+1. **Download Mojo** (#860-864) - Fetch Mojo compiler binary
    - Uses platform information from phase 1
    - Constructs appropriate download URL
    - Downloads binary with progress tracking
@@ -86,7 +86,7 @@ This module is part of the three-phase Mojo installation process:
    - Extracts files if needed
    - Output: Downloaded and verified Mojo binary
 
-3. **Install Mojo** (future phase) - Configure system for Mojo
+1. **Install Mojo** (future phase) - Configure system for Mojo
    - Uses downloaded binary from phase 2
    - Installs to system paths
    - Configures PATH and environment variables
@@ -95,7 +95,7 @@ This module is part of the three-phase Mojo installation process:
 
 ### Architecture Overview
 
-```
+```text
 installer/
 ├── platform_detector.py    (Issues #855-859)
 │   └── Outputs: PlatformInfo(os, arch, python_version)
@@ -116,7 +116,7 @@ installer/
 ├── __init__.py
 └── config/
     └── download_urls.yaml  (Configuration data)
-```
+```text
 
 ## Implementation Notes
 
@@ -141,7 +141,7 @@ if download_result.success:
     print(f"Checksum verified: {download_result.checksum_verified}")
 else:
     print(f"Download failed: {download_result.error}")
-```
+```text
 
 ### 2. Configuration File Structure
 
@@ -178,11 +178,11 @@ download:
   retry_delay_seconds: 5
   chunk_size_bytes: 8192  # For progress bar
   verify_checksum: true
-```
+```text
 
 ### 3. Package Structure
 
-```
+```text
 mojo_installer/
 ├── __init__.py                 # Package exports
 ├── platform_detector.py        # From #855-859
@@ -198,7 +198,7 @@ mojo_installer/
 └── scripts/
     ├── build_installer_pkg.sh  # Build script
     └── install_verify.sh       # Verification script
-```
+```text
 
 ### 4. Build Process
 
@@ -228,7 +228,7 @@ fi
 
 echo "Package build complete: $DIST_DIR"
 ls -lh "$DIST_DIR"
-```
+```text
 
 ### 5. Integration Testing
 
@@ -254,7 +254,7 @@ else
     echo "FAILURE: Download did not complete"
     exit 1
 fi
-```
+```text
 
 ### 6. Dependency Configuration
 
@@ -271,7 +271,7 @@ fi
 requests>=2.28.0
 tqdm>=4.65.0
 pyyaml>=6.0
-```
+```text
 
 ### 7. Production Considerations
 
@@ -282,12 +282,12 @@ pyyaml>=6.0
    - Per-chunk timeout: 30 seconds
    - Total download timeout: 5 minutes (configurable)
 
-2. **Retry Logic**:
+1. **Retry Logic**:
    - Automatic retries on transient failures (3 attempts)
    - Exponential backoff between retries
    - Clear error messages for persistent failures
 
-3. **Progress Tracking**:
+1. **Progress Tracking**:
    - Show download percentage
    - Show speed and estimated time
    - Show downloaded/total file size
@@ -299,12 +299,12 @@ pyyaml>=6.0
    - Support multiple checksum algorithms (SHA256 primary)
    - Fail safely if checksum cannot be verified
 
-2. **HTTPS**:
+1. **HTTPS**:
    - Always use HTTPS for downloads
    - Verify SSL certificates
    - Fail if certificate validation fails
 
-3. **File Permissions**:
+1. **File Permissions**:
    - Set appropriate permissions on downloaded files
    - Prevent world-writable downloads
    - Remove temporary/partial downloads on failure
@@ -318,23 +318,26 @@ pyyaml>=6.0
    - Code follows project standards
    - Documentation is present
 
-2. **Create Build Artifacts**
+1. **Create Build Artifacts**
    ```bash
    # Build the package
    ./scripts/build_installer_pkg.sh
 
    # Verify artifacts created
    ls -lh dist/
+
    ```
 
 3. **Create Verification Scripts**
    ```bash
+
    # Make scripts executable
    chmod +x scripts/build_installer_pkg.sh
    chmod +x scripts/install_verify.sh
 
    # Test installation in clean environment
    ./scripts/install_verify.sh
+
    ```
 
 4. **Document Build Process**
@@ -353,7 +356,8 @@ pyyaml>=6.0
 
 After successful packaging:
 
-```
+```text
+
 dist/
 ├── mojo-installer-0.1.0.tar.gz    # Source distribution
 ├── mojo_installer-0.1.0-py3-*.whl  # Wheel distribution (if Python)
@@ -364,14 +368,16 @@ scripts/
 └── install_verify.sh                # Verification script (in git)
 
 BUILD_PACKAGE.md                      # Documentation (in git)
-```
 
+```text
 ## Git Configuration
 
 ### .gitignore Updates
 
 ```text
+
 # Build and distribution artifacts
+
 dist/
 build/
 *.egg-info/
@@ -382,14 +388,16 @@ __pycache__/
 *.pyc
 
 # Download cache (if implemented)
+
 cache/
 downloads/
 
 # Temporary files
+
 *.tmp
 .tmp/
-```
 
+```text
 ### What Gets Committed
 
 **YES - Commit These**:
@@ -536,18 +544,24 @@ After completing this packaging phase:
 
 1. **Build Package**:
    ```bash
+
    ./scripts/build_installer_pkg.sh
+
    ```
 
 2. **Test Installation**:
    ```bash
+
    ./scripts/install_verify.sh
+
    ```
 
 3. **Verify Integration**:
    ```bash
+
    # Test complete installer workflow
    python -m pytest tests/integration/test_complete_installer.py -v
+
    ```
 
 4. **Create PR**:

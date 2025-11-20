@@ -69,9 +69,9 @@ and accuracy.
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -346,7 +346,7 @@ Run pip install.
 Import and use.
 ```text
 
-**Review Feedback**
+### Review Feedback
 
 ```text
 🟠 MAJOR: README lacks essential information and structure

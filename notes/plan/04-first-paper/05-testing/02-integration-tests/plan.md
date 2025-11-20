@@ -28,8 +28,8 @@ Implement integration tests that verify complete workflows work correctly, inclu
 ## Steps
 
 1. Test End-to-End
-2. Test Checkpointing
-3. Test Reproducibility
+1. Test Checkpointing
+1. Test Reproducibility
 
 ## Success Criteria
 

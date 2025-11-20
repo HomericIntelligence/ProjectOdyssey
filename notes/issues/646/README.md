@@ -30,14 +30,14 @@ systems and properly configures Git LFS for large files like model weights.
 
 **Decision**: Use `text=auto` as the default, with specific overrides for file types that require explicit handling.
 
-**Rationale**:
+### Rationale
 
 - `text=auto` lets Git automatically detect text files and normalize line endings
 - Ensures LF in repository, platform-appropriate in working directory
 - Prevents CRLF/LF conflicts across Windows, Linux, and macOS development environments
 - Explicit overrides for shell scripts, Python, Mojo to guarantee LF
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - `* text=auto eol=lf` (force LF everywhere) - Rejected: Can cause issues with Windows tools expecting CRLF
 - No normalization - Rejected: Would result in inconsistent line endings across platforms
@@ -47,14 +47,14 @@ systems and properly configures Git LFS for large files like model weights.
 
 **Decision**: Explicitly mark binary files with `binary` attribute to prevent text-based operations.
 
-**Rationale**:
+### Rationale
 
 - Prevents Git from attempting text diffs on binary files (images, PDFs, compiled files)
 - Avoids corruption from line ending normalization
 - Improves performance by skipping text analysis
 - Makes merge conflicts clearer (binary files can't be auto-merged)
 
-**File Types to Mark**:
+### File Types to Mark
 
 - Images: `*.png`, `*.jpg`, `*.jpeg`, `*.gif`, `*.ico`, `*.svg`
 - Documents: `*.pdf`, `*.docx`
@@ -66,21 +66,21 @@ systems and properly configures Git LFS for large files like model weights.
 
 **Decision**: Configure LFS patterns in .gitattributes using `filter=lfs` attribute.
 
-**Rationale**:
+### Rationale
 
 - Centralizes LFS configuration in .gitattributes (single source of truth)
 - Makes LFS tracking visible in version control
 - Ensures consistent LFS behavior across all contributors
 - Supports both `git lfs track` command output and manual editing
 
-**Patterns to Include**:
+### Patterns to Include
 
 - Model weights: `*.pt`, `*.pth`, `*.onnx`, `*.pb`, `*.h5`, `*.safetensors`
 - Checkpoints: `*.ckpt`, `*.checkpoint`
 - Datasets: `*.parquet`, `*.feather`, `*.arrow`
 - Large binaries: Files >100MB should be tracked
 
-**Integration with Setup Git LFS**:
+### Integration with Setup Git LFS
 
 - This component creates the .gitattributes structure
 - Issue #651 (Setup Git LFS) will run `git lfs install` and add specific track patterns
@@ -90,32 +90,32 @@ systems and properly configures Git LFS for large files like model weights.
 
 **Decision**: Include linguist directives for accurate language statistics and syntax highlighting.
 
-**Rationale**:
+### Rationale
 
 - `linguist-language` helps GitHub understand file types (e.g., `pixi.lock` is YAML)
 - `linguist-generated=true` excludes generated/vendor files from stats
 - `linguist-vendored=true` marks third-party code
 - Improves repository insights and code browsing experience
 
-**Current Example**:
+### Current Example
 
 ```gitattributes
 pixi.lock merge=binary linguist-language=YAML linguist-generated=true
-```
+```text
 
 ### File Organization
 
 **Decision**: Organize .gitattributes into logical sections with clear comments.
 
-**Sections**:
+### Sections
 
 1. Auto-detection and defaults
-2. Text files (language-specific)
-3. Binary files
-4. Git LFS patterns
-5. SCM-specific configurations (linguist, merge strategies)
+1. Text files (language-specific)
+1. Binary files
+1. Git LFS patterns
+1. SCM-specific configurations (linguist, merge strategies)
 
-**Rationale**:
+### Rationale
 
 - Makes file easier to maintain and understand
 - Clear separation of concerns
@@ -126,7 +126,7 @@ pixi.lock merge=binary linguist-language=YAML linguist-generated=true
 
 **Decision**: Ensure configurations work identically on Windows, Linux, and macOS.
 
-**Key Aspects**:
+### Key Aspects
 
 - Use forward slashes in patterns (Git standard)
 - Avoid platform-specific paths or assumptions

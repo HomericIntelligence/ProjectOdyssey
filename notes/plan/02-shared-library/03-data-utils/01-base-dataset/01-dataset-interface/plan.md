@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Define abstract dataset interface
-2. Specify required methods with type signatures
-3. Document expected behavior and contracts
-4. Provide usage examples and patterns
+1. Specify required methods with type signatures
+1. Document expected behavior and contracts
+1. Provide usage examples and patterns
 
 ## Success Criteria
 

@@ -27,9 +27,9 @@ Write comprehensive unit tests for all core operations including tensor ops, act
 The test suite for core operations will be organized into four major categories:
 
 1. **Tensor Operations**: Tests for arithmetic operations (add, subtract, multiply, divide), matrix operations (matmul, transpose), and reduction operations (sum, mean, max, min)
-2. **Activation Functions**: Tests for common activation functions (ReLU, sigmoid, tanh, softmax) with focus on gradient computation correctness
-3. **Initializers**: Tests for weight initialization strategies (Xavier, He, uniform, normal) with statistical verification of distribution properties
-4. **Metrics**: Tests for training metrics (accuracy, loss functions, confusion matrix) with manual verification on small examples
+1. **Activation Functions**: Tests for common activation functions (ReLU, sigmoid, tanh, softmax) with focus on gradient computation correctness
+1. **Initializers**: Tests for weight initialization strategies (Xavier, He, uniform, normal) with statistical verification of distribution properties
+1. **Metrics**: Tests for training metrics (accuracy, loss functions, confusion matrix) with manual verification on small examples
 
 ### Verification Approach
 
@@ -80,10 +80,10 @@ For weight initialization functions, verify:
 Use multiple approaches for test data:
 
 1. **Known Results**: Small hand-calculated examples with exact expected outputs
-2. **Property-Based**: Verify mathematical properties hold (e.g., softmax outputs sum to 1)
-3. **Random Testing**: Generate random inputs within valid ranges
-4. **Reference Implementation**: Compare against NumPy/SciPy for complex operations
-5. **Edge Cases**: Explicitly constructed pathological cases
+1. **Property-Based**: Verify mathematical properties hold (e.g., softmax outputs sum to 1)
+1. **Random Testing**: Generate random inputs within valid ranges
+1. **Reference Implementation**: Compare against NumPy/SciPy for complex operations
+1. **Edge Cases**: Explicitly constructed pathological cases
 
 ### Performance Baselines
 
@@ -125,38 +125,43 @@ Use Mojo's testing infrastructure:
 ### Current Test Coverage
 
 **Existing Test Files** (in `/home/user/ml-odyssey/tests/shared/core/`):
+
 - `test_tensors.mojo` - Empty (1 line only)
 - `test_module.mojo` - TDD stubs with TODOs
 - `test_layers.mojo` - TDD stubs with 16 test functions defined
 - `test_initializers.mojo` - TDD stubs with TODOs
 - `test_activations.mojo` - TDD stubs with TODOs
 
-**Test Status Analysis**:
+### Test Status Analysis
+
 - **Total test functions**: ~50+ defined across core test files
 - **Implementation status**: Mostly TDD stubs with TODO(#1538) markers
 - **Working tests**: 0 (all are stubs waiting for implementation)
 - **Test runner**: Not yet created for core tests
 
 **Comparison with Data Tests** (for reference):
+
 - Data tests have 91+ implemented tests
 - Data tests include working test runner (`tests/shared/data/run_all_tests.mojo`)
 - Data tests demonstrate good TDD practices with real implementations
 
 ### Gap Analysis
 
-**What Exists**:
-1. **Well-defined test structure** - Test files organized by component
-2. **Clear API contracts** - Test stubs document expected interfaces
-3. **Test utilities** - Shared fixtures in `tests/shared/conftest.mojo`
-4. **Comprehensive coverage plan** - TODOs reference all major components
+### What Exists
 
-**What's Missing**:
+1. **Well-defined test structure** - Test files organized by component
+1. **Clear API contracts** - Test stubs document expected interfaces
+1. **Test utilities** - Shared fixtures in `tests/shared/conftest.mojo`
+1. **Comprehensive coverage plan** - TODOs reference all major components
+
+### What's Missing
+
 1. **Implementations** - All core tests are stubs, need real test logic
-2. **Test data** - Need reference tensors and expected outputs
-3. **Mathematical verification** - Need golden values for correctness checks
-4. **Statistical tests** - Initializer distribution verification not implemented
-5. **Edge case tests** - Boundary conditions not yet implemented
-6. **Test runner** - No unified runner like data tests have
+1. **Test data** - Need reference tensors and expected outputs
+1. **Mathematical verification** - Need golden values for correctness checks
+1. **Statistical tests** - Initializer distribution verification not implemented
+1. **Edge case tests** - Boundary conditions not yet implemented
+1. **Test runner** - No unified runner like data tests have
 
 ### Recommendations for Planning Phase
 
@@ -166,21 +171,21 @@ Use Mojo's testing infrastructure:
    - Then initializers (depend on random and tensor ops)
    - Finally metrics (depend on all above)
 
-2. **Create Test Data Sets**:
+1. **Create Test Data Sets**:
    - Define standard test tensors (shapes: 1D, 2D, 3D, 4D)
    - Generate golden values using reference implementations
    - Document edge cases to test
 
-3. **Statistical Verification Plan**:
+1. **Statistical Verification Plan**:
    - Define acceptable tolerance levels (1e-6 for float32)
    - Specify sample sizes for statistical tests (N=1000+)
    - Document expected distributions for initializers
 
-4. **Test Runner Development**:
+1. **Test Runner Development**:
    - Create `tests/shared/core/run_all_tests.mojo` similar to data tests
    - Integrate with CI/CD pipeline
    - Add performance benchmarking
 
-5. **Update TODO References**:
+1. **Update TODO References**:
    - Change TODO(#1538) to TODO(#455) for implementation phase
    - Track which tests block others

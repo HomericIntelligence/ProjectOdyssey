@@ -40,7 +40,7 @@ Test Discovery    → Test Execution    → Coverage Measurement    → Reportin
         ↓                  ↓                      ↓                   ↓
 Find test files   Execute test suite  Measure code coverage   Generate reports
      in repo      with clear output    and validate thresholds and logs
-```
+```text
 
 ### Component Relationships
 
@@ -62,16 +62,16 @@ Find test files   Execute test suite  Measure code coverage   Generate reports
 │                    └─────────┘                                │
 │                                                                │
 └──────────────────────────────────────────────────────────────┘
-```
+```text
 
 ### Key Design Principles
 
 1. **Automatic Discovery** - Tests should be found automatically without manual registration
-2. **Single Command Execution** - Run all tests with one command (`mojo test` or equivalent)
-3. **Clear Output** - Test failures and successes should be immediately obvious
-4. **Paper-Specific Testing** - Each paper has focused test suite that validates paper-specific requirements
-5. **Coverage Measurement** - Track coverage and validate against thresholds
-6. **Modular Design** - Components should be independent and composable
+1. **Single Command Execution** - Run all tests with one command (`mojo test` or equivalent)
+1. **Clear Output** - Test failures and successes should be immediately obvious
+1. **Paper-Specific Testing** - Each paper has focused test suite that validates paper-specific requirements
+1. **Coverage Measurement** - Track coverage and validate against thresholds
+1. **Modular Design** - Components should be independent and composable
 
 ## Component Specifications
 
@@ -79,7 +79,7 @@ Find test files   Execute test suite  Measure code coverage   Generate reports
 
 **Purpose**: Discover and execute tests automatically, providing clear output and exit codes
 
-**Key Features**:
+### Key Features
 
 - Automatic test discovery in standard locations
 - Execution of test suites with clear pass/fail reporting
@@ -88,13 +88,13 @@ Find test files   Execute test suite  Measure code coverage   Generate reports
 - Detailed output for debugging failures
 - Integration with CI/CD pipelines via exit codes
 
-**Input Sources**:
+### Input Sources
 
 - Test files in `/tests/` directory
 - Paper-specific tests in `/papers/<paper-name>/tests/`
 - Configuration from `testing.config` or similar
 
-**Output Formats**:
+### Output Formats
 
 - Human-readable console output (development)
 - Machine-readable format for CI/CD (JSON, TAP, xUnit)
@@ -109,13 +109,13 @@ TestRunner:
   - get_summary() -> TestSummary
   - filter_by_pattern(pattern: String) -> List[TestFile]
   - filter_by_paper(paper_name: String) -> List[TestFile]
-```
+```text
 
 ### 2. Paper-Specific Test Scripts
 
 **Purpose**: Validate paper implementations against specific requirements and benchmarks
 
-**Key Features**:
+### Key Features
 
 - Per-paper configuration and test suites
 - Validation of model accuracy on reference datasets
@@ -123,7 +123,7 @@ TestRunner:
 - Reproducibility checks (deterministic output)
 - Visualization of results
 
-**Paper Configuration**:
+### Paper Configuration
 
 ```text
 Each paper has:
@@ -134,17 +134,17 @@ Each paper has:
   - performance targets
   - data file locations
   - expected outputs
-```
+```text
 
-**Test Categories**:
+### Test Categories
 
 1. **Correctness Tests** - Does the implementation match the paper's algorithm?
-2. **Accuracy Tests** - Does it achieve required accuracy on reference dataset?
-3. **Performance Tests** - Does it meet performance targets?
-4. **Reproducibility Tests** - Are outputs deterministic?
-5. **Integration Tests** - Does it work with the training pipeline?
+1. **Accuracy Tests** - Does it achieve required accuracy on reference dataset?
+1. **Performance Tests** - Does it meet performance targets?
+1. **Reproducibility Tests** - Are outputs deterministic?
+1. **Integration Tests** - Does it work with the training pipeline?
 
-**API Contract**:
+### API Contract
 
 ```text
 PaperTester:
@@ -153,20 +153,20 @@ PaperTester:
   - run_accuracy_tests(paper: String, data_path: String) -> AccuracyResults
   - run_performance_tests(paper: String) -> PerformanceResults
   - generate_report(results: TestResults) -> Report
-```
+```text
 
 ### 3. Coverage Measurement Tool
 
 **Purpose**: Track code coverage and validate against project thresholds
 
-**Key Metrics**:
+### Key Metrics
 
 - Line coverage (% of lines executed)
 - Branch coverage (% of branches taken)
 - Function coverage (% of functions called)
 - Per-module breakdown
 
-**Threshold Validation**:
+### Threshold Validation
 
 ```text
 Overall threshold: 75%
@@ -175,16 +175,16 @@ Module thresholds:
   - papers/: 70%
   - tests/: 90%
 Critical paths: 100%
-```
+```text
 
-**Output**:
+### Output
 
 - Coverage reports (HTML, text, JSON)
 - Coverage trend analysis
 - Threshold violation alerts
 - Per-file and per-function breakdowns
 
-**API Contract**:
+### API Contract
 
 ```text
 CoverageTool:
@@ -192,22 +192,22 @@ CoverageTool:
   - validate_thresholds(report: CoverageReport) -> Bool
   - generate_html_report(report: CoverageReport) -> String
   - get_coverage_trend() -> List[CoverageSnapshot]
-```
+```text
 
 ### 4. Reporting Engine
 
 **Purpose**: Aggregate results and generate actionable reports
 
-**Report Types**:
+### Report Types
 
 1. **Console Report** - Real-time test execution feedback
-2. **Summary Report** - Quick overview of test results
-3. **Detailed Report** - Failure analysis and debug information
-4. **Coverage Report** - Coverage metrics and trends
-5. **Performance Report** - Timing and benchmark comparisons
-6. **CI Report** - Machine-readable format for CI/CD
+1. **Summary Report** - Quick overview of test results
+1. **Detailed Report** - Failure analysis and debug information
+1. **Coverage Report** - Coverage metrics and trends
+1. **Performance Report** - Timing and benchmark comparisons
+1. **CI Report** - Machine-readable format for CI/CD
 
-**Report Contents**:
+### Report Contents
 
 - Test execution timeline
 - Pass/fail breakdown by category
@@ -225,12 +225,12 @@ CoverageTool:
    - Scan `/papers/<paper-name>/tests/` for paper-specific tests
    - Apply glob patterns (e.g., `test_*.mojo`, `*_test.mojo`)
 
-2. **Parse Test Files**:
+1. **Parse Test Files**:
    - Identify test functions (naming convention `test_*`)
    - Extract metadata (author, tags, requirements)
    - Build dependency graph
 
-3. **Filter Tests** (optional):
+1. **Filter Tests** (optional):
    - By pattern (e.g., `test_model*`)
    - By paper (e.g., `--paper lenet5`)
    - By tag (e.g., `--tag unit`)
@@ -244,12 +244,12 @@ CoverageTool:
    - Record timing information
    - Track pass/fail status
 
-2. **Handle Failures**:
+1. **Handle Failures**:
    - Collect error messages and stack traces
    - Continue to next test (unless `--fail-fast` flag)
    - Preserve artifacts (logs, outputs)
 
-3. **Parallel Execution**:
+1. **Parallel Execution**:
    - Run independent tests in parallel (optional optimization)
    - Maintain clear output despite concurrency
    - Serialize results for consistent reporting
@@ -261,12 +261,12 @@ CoverageTool:
    - Collect coverage information per test
    - Aggregate coverage across all tests
 
-2. **Analyze Coverage**:
+1. **Analyze Coverage**:
    - Calculate line/branch/function coverage
    - Compare against thresholds
    - Identify gaps and untested code
 
-3. **Generate Coverage Report**:
+1. **Generate Coverage Report**:
    - Per-file coverage breakdown
    - Per-function coverage details
    - Visualizations and trends
@@ -278,12 +278,12 @@ CoverageTool:
    - Combine with coverage data
    - Generate formatted reports
 
-2. **Validate Quality Gates**:
+1. **Validate Quality Gates**:
    - Check test pass rate
    - Validate coverage thresholds
    - Verify performance targets
 
-3. **Provide Feedback**:
+1. **Provide Feedback**:
    - Display results to developer
    - Suggest improvements
    - Flag regressions
@@ -320,7 +320,7 @@ ml-odyssey/
 │   └── ...
 │
 └── testing.config             # Global testing configuration
-```
+```text
 
 ## Testing Configuration
 
@@ -353,7 +353,7 @@ artifact_directory = "test_artifacts/"
 exit_on_first_failure = false
 machine_readable_output = true
 output_format = "json"
-```
+```text
 
 ## Integration Points
 
@@ -423,20 +423,20 @@ output_format = "json"
 
 **Phase**: Design and Documentation
 
-**Timeline**:
+### Timeline
 
 1. Design specification (current phase) - Complete architecture and API contracts
-2. Architecture review - Validate design decisions
-3. Implementation planning - Create detailed implementation tasks
-4. Child issue creation - Generate GitHub issues for each component
+1. Architecture review - Validate design decisions
+1. Implementation planning - Create detailed implementation tasks
+1. Child issue creation - Generate GitHub issues for each component
 
-**Next Steps**:
+### Next Steps
 
 1. Complete comprehensive design documents
-2. Create architecture review and get approval
-3. Design detailed API contracts and interfaces
-4. Generate child issues for implementation
-5. Create implementation timelines and dependencies
+1. Create architecture review and get approval
+1. Design detailed API contracts and interfaces
+1. Generate child issues for implementation
+1. Create implementation timelines and dependencies
 
 ## Design Decision Log
 
@@ -444,7 +444,7 @@ output_format = "json"
 
 **Question**: How should tests be discovered?
 
-**Options**:
+### Options
 
 - A. Manual registration (requires developer to register each test)
 - B. Convention-based (automatic discovery by naming pattern)
@@ -452,14 +452,14 @@ output_format = "json"
 
 **Decision**: Option B - Convention-based discovery
 
-**Rationale**:
+### Rationale
 
 - Minimal overhead for developers
 - Scalable as test suite grows
 - Self-documenting (clear naming convention)
 - Industry standard approach (pytest, unittest)
 
-**Trade-offs**:
+### Trade-offs
 
 - Less control over test order (handled via dependencies)
 - Naming convention must be enforced (via linting)
@@ -468,7 +468,7 @@ output_format = "json"
 
 **Question**: How should paper-specific tests be organized?
 
-**Options**:
+### Options
 
 - A. All tests in `/tests/` with paper prefixes (e.g., `test_lenet5_*.mojo`)
 - B. Paper-specific directory (e.g., `/papers/lenet5/tests/`)
@@ -476,14 +476,14 @@ output_format = "json"
 
 **Decision**: Option B - Paper-specific directories
 
-**Rationale**:
+### Rationale
 
 - Tests colocated with paper implementation
 - Easier to maintain (single worktree for paper + tests)
 - Supports paper-specific test data and config
 - Clear separation of concerns
 
-**Trade-offs**:
+### Trade-offs
 
 - Requires runner to look in multiple directories
 - Need coordination between shared and paper tests
@@ -492,7 +492,7 @@ output_format = "json"
 
 **Question**: How should coverage be measured?
 
-**Options**:
+### Options
 
 - A. Manual instrumentation (developers add coverage tracking)
 - B. Compiler-based (Mojo compiler provides coverage data)
@@ -500,14 +500,14 @@ output_format = "json"
 
 **Decision**: Option B - Compiler-based (when available)
 
-**Rationale**:
+### Rationale
 
 - Most accurate measurement
 - Minimal performance overhead
 - No manual instrumentation needed
 - Standard approach in mature testing tools
 
-**Trade-offs**:
+### Trade-offs
 
 - Depends on Mojo compiler capabilities
 - May require fallback approach if not available
@@ -516,7 +516,7 @@ output_format = "json"
 
 **Question**: Should tests run serially or in parallel?
 
-**Options**:
+### Options
 
 - A. Always serial (simpler, more deterministic)
 - B. Always parallel (faster)
@@ -524,13 +524,13 @@ output_format = "json"
 
 **Decision**: Option C - Configurable execution
 
-**Rationale**:
+### Rationale
 
 - Serial by default (deterministic, easier to debug)
 - Parallel option for CI/CD (faster feedback)
 - Configuration-driven based on environment
 
-**Trade-offs**:
+### Trade-offs
 
 - More complex implementation
 - Parallel requires careful output synchronization
@@ -576,7 +576,7 @@ Test Summary:
   Skipped: 1  (1.5%)
 
 Execution time: 2m 34s
-```
+```text
 
 ### JSON Output (CI/CD)
 
@@ -608,23 +608,23 @@ Execution time: 2m 34s
   "execution_time_ms": 154000,
   "quality_gates_passed": true
 }
-```
+```text
 
 ## Implementation Readiness
 
 This planning document is ready for:
 
 1. ✅ Architecture Review - Can be submitted for review
-2. ✅ Child Issue Creation - Has sufficient detail for implementation issues
-3. ✅ Implementation Planning - API contracts defined
-4. ✅ Team Communication - Comprehensive and clear
+1. ✅ Child Issue Creation - Has sufficient detail for implementation issues
+1. ✅ Implementation Planning - API contracts defined
+1. ✅ Team Communication - Comprehensive and clear
 
-**Remaining Before Implementation**:
+### Remaining Before Implementation
 
 1. Architecture review and approval
-2. Detailed API specification (separate document)
-3. Testing strategy validation
-4. Child issue creation and assignment
+1. Detailed API specification (separate document)
+1. Testing strategy validation
+1. Child issue creation and assignment
 
 ---
 

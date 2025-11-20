@@ -37,9 +37,9 @@ reusable tool that provides ongoing value.
 **Active Scripts** (keep in main scripts directory):
 
 1. `create_issues.py` - Main GitHub issue creation tool (854 LOC)
-2. `create_single_component_issues.py` - Testing utility for single component (198 LOC)
-3. `regenerate_github_issues.py` - Dynamic github_issue.md generation (450+ LOC)
-4. `fix_markdown.py` - Unified markdown linting fixer (NEW - consolidates 3 scripts)
+1. `create_single_component_issues.py` - Testing utility for single component (198 LOC)
+1. `regenerate_github_issues.py` - Dynamic github_issue.md generation (450+ LOC)
+1. `fix_markdown.py` - Unified markdown linting fixer (NEW - consolidates 3 scripts)
 
 **Agent Scripts** (keep in scripts/agents/ subdirectory):
 
@@ -54,8 +54,8 @@ reusable tool that provides ongoing value.
 **Duplicate Scripts** (remove and replace with unified version):
 
 1. `fix_markdown.py` (old) - Basic markdown linting fixes (170 LOC)
-2. `fix_markdown_linting.py` - Repository-wide markdown fixes (182 LOC)
-3. `fix_remaining_markdown.py` - Final cleanup pass (124 LOC)
+1. `fix_markdown_linting.py` - Repository-wide markdown fixes (182 LOC)
+1. `fix_remaining_markdown.py` - Final cleanup pass (124 LOC)
 
 ### Key Findings
 
@@ -63,14 +63,14 @@ reusable tool that provides ongoing value.
    `simple_update.py`, `update_tooling_issues.py`, `update_ci_cd_issues.py`, `update_agentic_workflows_issues.py`,
    and various `.sh` files. None of these exist in the current repository, suggesting cleanup already occurred.
 
-2. **Markdown Fix Scripts Are Useful**: The three markdown fix scripts were originally one-time utilities but
+1. **Markdown Fix Scripts Are Useful**: The three markdown fix scripts were originally one-time utilities but
    provide ongoing value for maintaining markdown quality. Instead of archiving, they should be consolidated
    into a single, well-designed, reusable tool.
 
-3. **Agent Scripts Are Active**: The `scripts/agents/` subdirectory contains active tooling for the agent system
+1. **Agent Scripts Are Active**: The `scripts/agents/` subdirectory contains active tooling for the agent system
    and should remain in the main scripts directory.
 
-4. **Decision on create_single_component_issues.py**: Keep as independent testing utility. This follows Option A
+1. **Decision on create_single_component_issues.py**: Keep as independent testing utility. This follows Option A
    from the planning phase - the script has clear independent value for validation and testing before bulk
    operations.
 
@@ -90,7 +90,7 @@ reusable tool that provides ongoing value.
 - Update scripts/README.md with comprehensive documentation
 - Provide usage examples
 
-**Rationale for Consolidation**:
+### Rationale for Consolidation
 
 - Markdown quality maintenance is an ongoing need (not one-time)
 - Unified tool is easier to maintain than 3 separate scripts

@@ -29,9 +29,9 @@ None (implementation level)
 ## Steps
 
 1. Write clear role definition describing agent purpose
-2. Define behavioral constraints to prevent issues
-3. Add guidelines for appropriate interactions
-4. Include examples of good and bad behavior
+1. Define behavioral constraints to prevent issues
+1. Add guidelines for appropriate interactions
+1. Include examples of good and bad behavior
 
 ## Success Criteria
 

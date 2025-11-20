@@ -26,9 +26,9 @@ None (leaf node)
 ## Steps
 
 1. Write README explaining what the papers directory contains
-2. Document the structure each paper implementation should follow
-3. Provide instructions on how to add a new paper implementation
-4. Include examples or references to the template
+1. Document the structure each paper implementation should follow
+1. Provide instructions on how to add a new paper implementation
+1. Include examples or references to the template
 
 ## Success Criteria
 

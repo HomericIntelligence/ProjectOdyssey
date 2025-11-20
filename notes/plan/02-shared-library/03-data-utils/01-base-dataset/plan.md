@@ -29,8 +29,8 @@ Define the foundational dataset interface for consistent data access across all 
 ## Steps
 
 1. Define dataset interface with core methods
-2. Implement length method for size tracking
-3. Create getitem method for data retrieval by index
+1. Implement length method for size tracking
+1. Create getitem method for data retrieval by index
 
 ## Success Criteria
 

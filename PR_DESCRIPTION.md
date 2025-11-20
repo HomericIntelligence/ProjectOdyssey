@@ -70,7 +70,7 @@ All arithmetic operations now use:
 
 **GitHub Issues #219-220** request **basic arithmetic operations** (add, subtract, multiply, divide) with broadcasting.
 
-**This PR delivers**:
+### This PR delivers
 
 - ✅ All 4 requested operations with full broadcasting
 - ✅ Additional 3 arithmetic operations (floor_divide, modulo, power) with broadcasting
@@ -86,14 +86,14 @@ Closes #222 (Cleanup)
 
 ## Key Commits
 
-**Implementation (#219-220)**:
+### Implementation (#219-220)
 
 - `cc6c7cb` - feat(extensor): complete broadcasting for all arithmetic operations
 - `43cd1b6` - feat(extensor): implement shape manipulation operations
 - `4cec606` - feat(extensor): add rounding, logical, and transcendental operations
 - `57da1d2` - feat(extensor): integrate broadcasting into add() operation
 
-**Packaging & Cleanup (#221-222)**:
+### Packaging & Cleanup (#221-222)
 
 - `47b075e` - feat(extensor): complete packaging and cleanup (#221, #222)
 - `2f8e448` - docs(extensor): update completion status - broadcasting complete
@@ -137,12 +137,12 @@ Future enhancements (outside scope of #219-222):
 ### Option 1: GitHub Web Interface
 
 1. Go to <https://github.com/mvillmow/ml-odyssey/pulls>
-2. Click "New pull request"
-3. Set base: `main`
-4. Set compare: `claude/extensor-test-specification-01UBGH2iQS4sgfQrXUE5j2BB`
-5. Copy the content above (Summary section onwards) into the PR description
-6. Title: "feat(extensor): Complete basic arithmetic with broadcasting, packaging, and cleanup (#219-222)"
-7. Create pull request
+1. Click "New pull request"
+1. Set base: `main`
+1. Set compare: `claude/extensor-test-specification-01UBGH2iQS4sgfQrXUE5j2BB`
+1. Copy the content above (Summary section onwards) into the PR description
+1. Title: "feat(extensor): Complete basic arithmetic with broadcasting, packaging, and cleanup (#219-222)"
+1. Create pull request
 
 ### Option 2: GitHub CLI (if available)
 
@@ -152,11 +152,11 @@ gh pr create \
   --head claude/extensor-test-specification-01UBGH2iQS4sgfQrXUE5j2BB \
   --title "feat(extensor): Complete basic arithmetic with broadcasting, packaging, and cleanup (#219-222)" \
   --body-file PR_DESCRIPTION.md
-```
+```text
 
 ### Option 3: Git Command Line
 
 ```bash
-# The branch is already pushed, just go to:
+# The branch is already pushed, just go to
 # https://github.com/mvillmow/ml-odyssey/compare/main...claude/extensor-test-specification-01UBGH2iQS4sgfQrXUE5j2BB
-```
+```text

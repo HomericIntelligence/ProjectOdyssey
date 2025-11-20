@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Create README template
-2. Initialize implementation notes
-3. Set up documentation structure
+1. Initialize implementation notes
+1. Set up documentation structure
 
 ## Success Criteria
 

@@ -17,24 +17,24 @@ Implement the data processing module (`shared/data/`) with datasets, loaders, tr
    - TensorDataset (in-memory storage)
    - FileDataset (lazy file loading with caching)
 
-2. **`shared/data/samplers.mojo`** (291 lines)
+1. **`shared/data/samplers.mojo`** (291 lines)
    - Sampler trait (base interface)
    - SequentialSampler (ordered access)
    - RandomSampler (shuffled access with/without replacement)
    - WeightedSampler (probability-weighted sampling)
 
-3. **`shared/data/loaders.mojo`** (254 lines)
+1. **`shared/data/loaders.mojo`** (254 lines)
    - Batch struct (batch container)
    - BaseLoader (core functionality)
    - BatchLoader (batching with shuffle support)
 
-4. **`shared/data/transforms.mojo`** (387 lines)
+1. **`shared/data/transforms.mojo`** (387 lines)
    - Transform trait (base interface)
    - Compose (transform pipeline)
    - Tensor transforms: ToTensor, Normalize, Reshape
    - Image transforms: Resize, CenterCrop, RandomCrop, RandomHorizontalFlip, RandomRotation
 
-5. **`shared/data/__init__.mojo`** (105 lines)
+1. **`shared/data/__init__.mojo`** (105 lines)
    - All components exported
    - Public API defined
    - Package documentation
@@ -77,9 +77,9 @@ Implementation covers all test requirements:
 ## Next Steps
 
 1. Run test suite to verify implementations
-2. Address any test failures
-3. Create pull request
-4. Code review
+1. Address any test failures
+1. Create pull request
+1. Code review
 
 ## Related Issues
 
@@ -102,15 +102,15 @@ Ran comprehensive test suite for all data module components:
 ### Passing Tests (4/7)
 
 1. ✓ `test_base_dataset.mojo` - Dataset interface tests
-2. ✓ `test_tensor_dataset.mojo` - In-memory tensor dataset tests
-3. ✓ `test_file_dataset.mojo` - File-based lazy dataset tests
-4. ✓ `test_batch_loader.mojo` - Batch loading tests
+1. ✓ `test_tensor_dataset.mojo` - In-memory tensor dataset tests
+1. ✓ `test_file_dataset.mojo` - File-based lazy dataset tests
+1. ✓ `test_batch_loader.mojo` - Batch loading tests
 
 ### Failing Tests (3/7)
 
 1. ✗ `test_base_loader.mojo` - List copy semantics issue
-2. ✗ `test_sequential.mojo` - Mojo type system compatibility
-3. ✗ `test_pipeline.mojo` - Transform pipeline tests
+1. ✗ `test_sequential.mojo` - Mojo type system compatibility
+1. ✗ `test_pipeline.mojo` - Transform pipeline tests
 
 ### Fixes Applied
 
@@ -119,16 +119,16 @@ Ran comprehensive test suite for all data module components:
    - Fixed `assert_equal` to handle non-Stringable types (avoid String conversion errors)
    - Fixed `assert_not_equal` similarly
 
-2. **test_base_dataset.mojo**
+1. **test_base_dataset.mojo**
    - Changed external `len()` calls to `.__len__()` (Mojo 0.25.7 limitation)
    - Fixed unused variable warning with `var _ =` syntax
 
-3. **test_tensor_dataset.mojo**
+1. **test_tensor_dataset.mojo**
    - Fixed parameter ownership: changed from `owned` to regular parameters with `.copy()`
    - Changed `len()` calls to `.__len__()`
    - Removed duplicate `test_tensor_dataset_getitem` function
 
-4. **test_base_loader.mojo** (partially fixed)
+1. **test_base_loader.mojo** (partially fixed)
    - Changed external `len()` calls to `.__len__()`
    - Fixed internal `len()` calls in stub implementations
    - Removed undefined test function references from main()
@@ -139,18 +139,18 @@ Ran comprehensive test suite for all data module components:
 ### Key Design Decisions
 
 1. **Dataset Trait**: Simple interface with `__len__` and `__getitem__` for flexibility
-2. **FileDataset Caching**: Optional caching to balance memory and performance
-3. **Transform Composition**: Pipeline pattern allows flexible data preprocessing
-4. **Sampler Flexibility**: Support for various sampling strategies (sequential, random, weighted)
+1. **FileDataset Caching**: Optional caching to balance memory and performance
+1. **Transform Composition**: Pipeline pattern allows flexible data preprocessing
+1. **Sampler Flexibility**: Support for various sampling strategies (sequential, random, weighted)
 
 ### Known Mojo Compatibility Issues
 
 The test suite revealed several Mojo 0.25.7 limitations:
 
 1. **`len()` builtin doesn't work with custom `__len__`**: Must use `.__len__()` directly
-2. **String type conversions**: `String(value)` requires `Stringable` trait, can't use with arbitrary `Comparable` types
-3. **List immutability**: Lists passed as parameters can't be transferred with `^`, must use `.copy()`
-4. **`inout` syntax**: Some struct methods have issues with `inout` parameter syntax in this version
+1. **String type conversions**: `String(value)` requires `Stringable` trait, can't use with arbitrary `Comparable` types
+1. **List immutability**: Lists passed as parameters can't be transferred with `^`, must use `.copy()`
+1. **`inout` syntax**: Some struct methods have issues with `inout` parameter syntax in this version
 
 ### Test Strategy
 
@@ -186,18 +186,18 @@ to be completed when needed for specific papers. The interfaces are complete and
 - `end-of-file-fixer`: Now excludes `^notes/(plan|review|issues)/`
 - `mixed-line-ending`: Now excludes `^notes/(plan|review|issues)/`
 
-**Files Changed**:
+### Files Changed
 
 - `.pre-commit-config.yaml` (lines 34, 37, 45)
 
-**Commits**:
+### Commits
 
 1. `6596626` - Initial exclusion of `notes/review/`
-2. `d0e01cd` - Updated exclusion to include `notes/issues/`
+1. `d0e01cd` - Updated exclusion to include `notes/issues/`
 
 ### CI/CD Status After Fix
 
-**All 19 checks passing**:
+### All 19 checks passing
 
 - pre-commit: ✓ PASS
 - test-mojo: ✓ PASS

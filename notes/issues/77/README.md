@@ -13,12 +13,12 @@ This document contains the comprehensive planning for supporting directories tha
 ### Primary Deliverables
 
 1. Detailed specifications for `benchmarks/` directory
-2. Comprehensive design for `docs/` directory
-3. Architecture for `agents/` directory
-4. Structure for `tools/` directory  
-5. Configuration management design for `configs/` directory
-6. README templates for each directory
-7. Content guidelines and standards
+1. Comprehensive design for `docs/` directory
+1. Architecture for `agents/` directory
+1. Structure for `tools/` directory  
+1. Configuration management design for `configs/` directory
+1. README templates for each directory
+1. Content guidelines and standards
 
 ## Supporting Directories Specification
 
@@ -82,7 +82,7 @@ benchmarks/
     ├── default.yaml         # Default benchmark settings
     ├── quick.yaml           # Fast sanity check settings
     └── comprehensive.yaml   # Full benchmark settings
-```
+```text
 
 ### README.md Template
 
@@ -94,16 +94,20 @@ Performance benchmarking infrastructure for ML Odyssey implementations.
 ## Quick Start
 
 ```bash
+
 # Run quick benchmarks
+
 python scripts/run_all.py --config configs/quick.yaml
 
 # Run specific suite
+
 mojo benchmarks/suites/inference/latency.mojo --model lenet5
 
 # Compare implementations
-python scripts/compare.py papers/lenet5 papers/alexnet
-```
 
+python scripts/compare.py papers/lenet5 papers/alexnet
+
+```text
 ## Benchmark Suites
 
 ### Inference Benchmarks
@@ -155,9 +159,10 @@ Benchmarks run automatically on:
 | Training Throughput | >1000 img/s | 1200 img/s |
 | Memory Efficiency | <100MB | 85MB |
 
-```
+```text
 
 ### Key Features
+
 - Automated performance regression detection
 - Historical trend analysis
 - Cross-implementation comparisons
@@ -168,9 +173,11 @@ Benchmarks run automatically on:
 ## 2. docs/ - User Documentation Hub
 
 ### Purpose
+
 Provide comprehensive, accessible documentation for users, contributors, and researchers using the ml-odyssey repository.
 
 ### Directory Structure
+
 ```text
 docs/
 ├── README.md                # Documentation index and navigation
@@ -216,7 +223,7 @@ docs/
     ├── images/             # Diagrams and screenshots
     ├── examples/           # Code examples
     └── templates/          # Document templates
-```
+```text
 
 ### README.md Template
 
@@ -266,7 +273,7 @@ Use GitHub's search with `path:docs/` to find specific topics.
 ## Feedback
 
 Found an issue or have suggestions? Please [open an issue](https://github.com/mvillmow/ml-odyssey/issues).
-```
+```text
 
 ### Key Features
 
@@ -327,7 +334,7 @@ agents/
     ├── pr-review.yaml      # PR review automation
     ├── issue-triage.yaml   # Issue classification
     └── release.yaml        # Release automation
-```
+```text
 
 ### README.md Template
 
@@ -341,13 +348,16 @@ AI-powered development automation using Claude agents.
 Agents are activated automatically based on GitHub issues and PRs. For manual activation:
 
 ```bash
+
 # Activate agent for specific task
+
 claude activate agents/orchestrators/shared-library.md --task "implement conv2d layer"
 
 # Run automated workflow
-claude workflow agents/workflows/pr-review.yaml --pr 123
-```
 
+claude workflow agents/workflows/pr-review.yaml --pr 123
+
+```text
 ## Agent Hierarchy
 
 See [hierarchy.md](hierarchy.md) for visual representation.
@@ -410,9 +420,10 @@ Automated multi-agent workflows for common tasks:
 4. Add delegation relationships
 5. Test with sample tasks
 
-```
+```text
 
 ### Key Features
+
 - Hierarchical agent organization
 - Clear delegation and escalation rules
 - Reusable skill definitions
@@ -422,9 +433,11 @@ Automated multi-agent workflows for common tasks:
 ## 4. tools/ - Development and Build Tools
 
 ### Purpose
+
 Provide essential development, build, testing, and deployment tools to support efficient repository maintenance and contribution.
 
 ### Directory Structure
+
 ```text
 tools/
 ├── README.md                # Tools overview and usage guide
@@ -466,7 +479,7 @@ tools/
     ├── pre-commit-config.yaml
     ├── ci-workflow.yaml
     └── tool-config.yaml
-```
+```text
 
 ### README.md Template
 
@@ -478,19 +491,24 @@ Comprehensive tooling for ML Odyssey development and maintenance.
 ## Quick Start
 
 ```bash
+
 # Install all tools
+
 python tools/INSTALL.py
 
 # Run formatter on all code
+
 python tools/development/formatter.py --all
 
 # Execute test suite
+
 python tools/testing/runner.py
 
 # Create release package
-python tools/build/package.py --version 0.1.0
-```
 
+python tools/build/package.py --version 0.1.0
+
+```text
 ## Tool Categories
 
 ### Build Tools
@@ -539,13 +557,14 @@ Tools use configuration from `configs/` directory:
 Most tools integrate with GitHub Actions:
 
 ```yaml
+
 - name: Run Tools
   run: |
     python tools/testing/runner.py
     python tools/development/linter.py
     python tools/analysis/security.py
-```
 
+```text
 ## Creating New Tools
 
 1. Choose appropriate category directory
@@ -560,9 +579,10 @@ Most tools integrate with GitHub Actions:
 - Mojo 0.7.0+
 - Additional requirements in `requirements.txt`
 
-```
+```text
 
 ### Key Features
+
 - Comprehensive development toolkit
 - CI/CD integration utilities
 - Code quality and security tools
@@ -572,9 +592,11 @@ Most tools integrate with GitHub Actions:
 ## 5. configs/ - Configuration Management
 
 ### Purpose
+
 Centralize all configuration files, templates, and environment settings to ensure consistency across the repository.
 
 ### Directory Structure
+
 ```text
 configs/
 ├── README.md                # Configuration overview
@@ -624,7 +646,7 @@ configs/
     ├── config-template.yaml # Generic config template
     ├── env-template         # Environment variables
     └── secrets-template.yaml # Secrets template
-```
+```text
 
 ### README.md Template
 
@@ -636,16 +658,20 @@ Centralized configuration for ML Odyssey repository.
 ## Quick Start
 
 ```bash
+
 # Copy environment template
+
 cp configs/templates/env-template .env
 
 # Install pre-commit hooks
+
 pre-commit install -c configs/ci/pre-commit-config.yaml
 
 # Set up development environment
-python scripts/setup.py --env configs/environments/development.yaml
-```
 
+python scripts/setup.py --env configs/environments/development.yaml
+
+```text
 ## Configuration Categories
 
 ### Mojo Configurations
@@ -685,13 +711,14 @@ Pre-configured settings for popular editors:
 ## Configuration Hierarchy
 
 ```text
+
 base.yaml
   ↓
 environment.yaml (dev/test/prod)
   ↓
 .env.local (git-ignored)
-```
 
+```text
 ## Environment Variables
 
 Required variables:
@@ -726,12 +753,14 @@ Optional variables:
 Validate configurations:
 
 ```bash
-python tools/validators/config_validator.py configs/
-```
 
-```
+python tools/validators/config_validator.py configs/
+
+```text
+```text
 
 ### Key Features
+
 - Centralized configuration management
 - Environment-specific settings
 - Editor integration configs
@@ -746,17 +775,21 @@ python tools/validators/config_validator.py configs/
 **Date**: 2025-11-15
 
 #### Context
+
 The ml-odyssey repository requires supporting infrastructure beyond core ML implementation directories.
 
 #### Decision
+
 Create five supporting directories with specific, non-overlapping responsibilities:
+
 1. `benchmarks/` - Performance measurement
-2. `docs/` - User-facing documentation
-3. `agents/` - AI automation
-4. `tools/` - Development utilities
-5. `configs/` - Configuration management
+1. `docs/` - User-facing documentation
+1. `agents/` - AI automation
+1. `tools/` - Development utilities
+1. `configs/` - Configuration management
 
 #### Consequences
+
 - Clear separation of concerns
 - Easier navigation for contributors
 - Consistent organization patterns
@@ -768,15 +801,19 @@ Create five supporting directories with specific, non-overlapping responsibiliti
 **Date**: 2025-11-15
 
 #### Context
+
 Documentation needs to serve multiple audiences: users, developers, contributors, and researchers.
 
 #### Decision
+
 Implement three-tier documentation:
+
 1. **Getting Started**: Quick onboarding
-2. **Tutorials**: In-depth learning
-3. **Reference**: Comprehensive API docs
+1. **Tutorials**: In-depth learning
+1. **Reference**: Comprehensive API docs
 
 #### Consequences
+
 - Progressive learning path
 - Reduced onboarding friction
 - Complete coverage for all audiences
@@ -787,17 +824,21 @@ Implement three-tier documentation:
 **Date**: 2025-11-15
 
 #### Context
+
 Tools should enhance developer productivity without adding complexity.
 
 #### Decision
+
 All tools must:
+
 1. Work standalone (no complex dependencies)
-2. Integrate with CI/CD
-3. Provide clear `--help` output
-4. Support configuration files
-5. Be testable
+1. Integrate with CI/CD
+1. Provide clear `--help` output
+1. Support configuration files
+1. Be testable
 
 #### Consequences
+
 - Consistent tool behavior
 - Easy CI/CD integration
 - Low barrier to tool usage
@@ -805,6 +846,7 @@ All tools must:
 ## Success Criteria
 
 ### Benchmarks Directory
+
 - [x] Comprehensive performance measurement infrastructure defined
 - [x] Multiple benchmark suite categories planned
 - [x] Results storage and reporting structure established
@@ -812,6 +854,7 @@ All tools must:
 - [x] README template with usage examples created
 
 ### Docs Directory
+
 - [x] Multi-tier documentation structure defined
 - [x] Progressive learning path established
 - [x] API documentation approach specified
@@ -819,6 +862,7 @@ All tools must:
 - [x] README template with navigation created
 
 ### Agents Directory
+
 - [x] Hierarchical agent organization defined
 - [x] Skill tier system established
 - [x] Workflow automation structure planned
@@ -826,6 +870,7 @@ All tools must:
 - [x] README template with activation examples created
 
 ### Tools Directory
+
 - [x] Tool categorization system established
 - [x] Development, testing, and build tools specified
 - [x] Automation utilities planned
@@ -833,6 +878,7 @@ All tools must:
 - [x] README template with tool usage created
 
 ### Configs Directory
+
 - [x] Configuration hierarchy established
 - [x] Environment-specific settings approach defined
 - [x] Editor integration configurations planned
@@ -842,14 +888,17 @@ All tools must:
 ## Implementation Notes
 
 ### Directory Creation Order
+
 1. Create root directories first
-2. Add README.md to each directory
-3. Create subdirectory structure
-4. Add specialized configuration files
-5. Implement templates and examples
+1. Add README.md to each directory
+1. Create subdirectory structure
+1. Add specialized configuration files
+1. Implement templates and examples
 
 ### Content Migration
+
 For existing content:
+
 - Review current file locations
 - Map to new directory structure
 - Plan migration in phases
@@ -857,15 +906,19 @@ For existing content:
 - Validate after migration
 
 ### Documentation Standards
+
 All README files should include:
+
 1. Purpose statement
-2. Quick start section
-3. Detailed usage examples
-4. Links to related documentation
-5. Contribution guidelines specific to that area
+1. Quick start section
+1. Detailed usage examples
+1. Links to related documentation
+1. Contribution guidelines specific to that area
 
 ### Testing Requirements
+
 Each supporting directory needs:
+
 - Validation tests for structure
 - Content verification tests
 - Link checking for documentation
@@ -875,11 +928,13 @@ Each supporting directory needs:
 ## Dependencies
 
 ### Internal Dependencies
+
 - Issue #82: Overall directory structure plan
 - Shared library components (for benchmarks)
 - Agent hierarchy definitions
 
 ### External Dependencies
+
 - Mojo toolchain for benchmarks
 - Python for automation tools
 - GitHub Actions for CI/CD configs
@@ -888,46 +943,51 @@ Each supporting directory needs:
 ## Risk Mitigation
 
 ### Identified Risks
+
 1. **Complexity Growth**: Directories become too deep
    - Mitigation: Limit to 3-4 levels maximum
    
-2. **Documentation Drift**: Docs become outdated
+1. **Documentation Drift**: Docs become outdated
    - Mitigation: Automated doc generation where possible
    
-3. **Tool Proliferation**: Too many similar tools
+1. **Tool Proliferation**: Too many similar tools
    - Mitigation: Regular tool consolidation reviews
    
-4. **Configuration Sprawl**: Configs become inconsistent
+1. **Configuration Sprawl**: Configs become inconsistent
    - Mitigation: Centralized config management
    
-5. **Performance Regression**: Benchmarks not run regularly
+1. **Performance Regression**: Benchmarks not run regularly
    - Mitigation: Automated CI/CD benchmark runs
 
 ## Next Steps
 
 ### Test Phase (Issue #78)
+
 1. Write directory structure validation tests
-2. Create content verification tests
-3. Implement link checking for documentation
-4. Add configuration validation tests
+1. Create content verification tests
+1. Implement link checking for documentation
+1. Add configuration validation tests
 
 ### Implementation Phase (Issue #79)
+
 1. Create actual directory structure
-2. Add README files with content
-3. Set up initial configurations
-4. Implement basic tools
+1. Add README files with content
+1. Set up initial configurations
+1. Implement basic tools
 
 ### Package Phase (Issue #80)
+
 1. Create template packages for each directory
-2. Bundle documentation for distribution
-3. Package tools for easy installation
-4. Create configuration bundles
+1. Bundle documentation for distribution
+1. Package tools for easy installation
+1. Create configuration bundles
 
 ### Cleanup Phase (Issue #81)
+
 1. Review and refine directory structure
-2. Consolidate duplicate content
-3. Update cross-references
-4. Polish documentation
+1. Consolidate duplicate content
+1. Update cross-references
+1. Polish documentation
 
 ## References
 

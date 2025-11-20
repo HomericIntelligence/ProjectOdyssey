@@ -32,9 +32,9 @@ Build the complete training infrastructure including loss function, optimizer, t
 ## Steps
 
 1. Loss Function
-2. Optimizer
-3. Training Loop
-4. Validation
+1. Optimizer
+1. Training Loop
+1. Validation
 
 ## Success Criteria
 

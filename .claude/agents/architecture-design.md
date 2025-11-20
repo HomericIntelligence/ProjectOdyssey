@@ -49,9 +49,9 @@ Level 2 Module Design Agent responsible for breaking down modules into component
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -92,18 +92,18 @@ Use Python ONLY for:
 When creating a new script:
 
 1. **Default choice**: Mojo
-2. **Check requirement**: Does issue specify Python? If no → Mojo
-3. **Check dependencies**: Any Python-only libraries? If no → Mojo
-4. **Check justification**: Is there a strong reason for Python? If no → Mojo
-5. **Document decision**: If using Python, document why in code comments
+1. **Check requirement**: Does issue specify Python? If no → Mojo
+1. **Check dependencies**: Any Python-only libraries? If no → Mojo
+1. **Check justification**: Is there a strong reason for Python? If no → Mojo
+1. **Document decision**: If using Python, document why in code comments
 
 ### Conversion Priority
 
 When encountering existing Python scripts:
 
 1. **High priority** - Frequently-used scripts, performance-critical
-2. **Medium priority** - Occasionally-used scripts, moderate performance impact
-3. **Low priority** - Rarely-used scripts, no performance requirements
+1. **Medium priority** - Occasionally-used scripts, moderate performance impact
+1. **Low priority** - Rarely-used scripts, no performance requirements
 
 **Rule of Thumb**: New scripts are always Mojo. Existing Python scripts should be converted when touched or when time
 permits.
@@ -230,7 +230,7 @@ Escalate errors when
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -284,8 +284,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -344,13 +344,13 @@ After creating PR:
 
 **Scenario**: Designing architecture for neural network training module
 
-**Actions**:
+### Actions
 
 1. Analyze requirements and define module boundaries
-2. Design component interfaces and data flow
-3. Create architectural diagrams and specifications
-4. Define integration points with existing modules
-5. Document design decisions and trade-offs
+1. Design component interfaces and data flow
+1. Create architectural diagrams and specifications
+1. Define integration points with existing modules
+1. Document design decisions and trade-offs
 
 **Outcome**: Clear architectural specification ready for implementation
 
@@ -358,13 +358,13 @@ After creating PR:
 
 **Scenario**: Simplifying complex API with too many parameters
 
-**Actions**:
+### Actions
 
 1. Analyze current interface usage patterns
-2. Identify common parameter combinations
-3. Design simplified API with sensible defaults
-4. Plan backward compatibility strategy
-5. Document migration path
+1. Identify common parameter combinations
+1. Design simplified API with sensible defaults
+1. Plan backward compatibility strategy
+1. Document migration path
 
 **Outcome**: Cleaner API with improved developer experience
 

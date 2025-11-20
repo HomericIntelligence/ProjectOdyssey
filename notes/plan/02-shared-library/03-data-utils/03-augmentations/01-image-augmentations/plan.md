@@ -31,10 +31,10 @@ None (leaf node)
 ## Steps
 
 1. Implement geometric transforms (flip, rotate, crop)
-2. Create color augmentations (jitter, brightness, contrast)
-3. Add noise and blur effects
-4. Make transforms composable and configurable
-5. Ensure label semantics preservation
+1. Create color augmentations (jitter, brightness, contrast)
+1. Add noise and blur effects
+1. Make transforms composable and configurable
+1. Ensure label semantics preservation
 
 ## Success Criteria
 

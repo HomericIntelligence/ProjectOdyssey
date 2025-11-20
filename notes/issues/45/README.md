@@ -16,9 +16,9 @@ Create distributable package artifacts for the Utils module, including binary .m
 The Package phase creates **actual distributable artifacts**, not just documentation. For the Utils module, this means:
 
 1. Building a `.mojopkg` binary package file
-2. Creating installation verification scripts
-3. Testing package installation in clean environments
-4. Documenting the build and installation process
+1. Creating installation verification scripts
+1. Testing package installation in clean environments
+1. Documenting the build and installation process
 
 **Reference**: See `agents/guides/package-phase-guide.md` for complete Package phase requirements.
 
@@ -28,13 +28,13 @@ The Package phase creates **actual distributable artifacts**, not just documenta
 
 **Purpose**: Distributable binary package containing compiled Utils module
 
-**Build Command**:
+### Build Command
 
 ```bash
 mojo package shared/utils -o dist/utils-0.1.0.mojopkg
-```
+```text
 
-**Package Contents**:
+### Package Contents
 
 - Logging utilities (Logger, LogLevel, handlers, formatters)
 - Configuration management (Config, load_config, save_config, merge_configs)
@@ -49,22 +49,22 @@ mojo package shared/utils -o dist/utils-0.1.0.mojopkg
 
 **Purpose**: Test that the package installs correctly and all imports work
 
-**Script Function**:
+### Script Function
 
 1. Creates temporary directory for clean environment
-2. Installs the package: `mojo install dist/utils-0.1.0.mojopkg`
-3. Tests key imports: `from utils import Logger, Config, set_seed`
-4. Verifies package functionality
-5. Cleans up temporary environment
+1. Installs the package: `mojo install dist/utils-0.1.0.mojopkg`
+1. Tests key imports: `from utils import Logger, Config, set_seed`
+1. Verifies package functionality
+1. Cleans up temporary environment
 
-**Usage**:
+### Usage
 
 ```bash
 chmod +x scripts/install_verify_utils.sh
 ./scripts/install_verify_utils.sh
-```
+```text
 
-**Exit Codes**:
+### Exit Codes
 
 - `0` - Package installed successfully and all tests passed
 - `1` - Package installation or import tests failed
@@ -75,25 +75,25 @@ chmod +x scripts/install_verify_utils.sh
 
 **Purpose**: Build-only script (no testing)
 
-**Function**:
+### Function
 
 - Creates `dist/` directory
 - Runs `mojo package` command
 - Verifies package file was created
 - Reports file size
 
-**Usage**:
+### Usage
 
 ```bash
 chmod +x scripts/build_utils_package.sh
 ./scripts/build_utils_package.sh
-```
+```text
 
 #### scripts/package_utils.sh
 
 **Purpose**: Complete packaging workflow (build + test)
 
-**Function**:
+### Function
 
 - Creates `dist/` directory
 - Builds `.mojopkg` package
@@ -101,15 +101,15 @@ chmod +x scripts/build_utils_package.sh
 - Runs installation tests
 - Reports all deliverables
 
-**Usage**:
+### Usage
 
 ```bash
 chmod +x scripts/package_utils.sh
 ./scripts/package_utils.sh
 
-# Skip installation test if environment issues:
+# Skip installation test if environment issues
 SKIP_INSTALL_TEST=1 ./scripts/package_utils.sh
-```
+```text
 
 ## Build Instructions
 
@@ -122,7 +122,7 @@ cd /path/to/ml-odyssey
 # Run complete packaging workflow
 chmod +x scripts/package_utils.sh
 ./scripts/package_utils.sh
-```
+```text
 
 ### Step-by-Step Manual Build
 
@@ -141,7 +141,7 @@ chmod +x scripts/install_verify_utils.sh
 
 # 5. Test installation
 ./scripts/install_verify_utils.sh
-```
+```text
 
 ## Installation Instructions
 
@@ -151,12 +151,12 @@ To install the Utils package:
 
 ```bash
 # Download or locate the package file
-# Then install it:
+# Then install it
 mojo install dist/utils-0.1.0.mojopkg
 
 # Verify installation
 mojo run -c "from utils import Logger; print('Utils installed!')"
-```
+```text
 
 ### For Developers
 
@@ -171,7 +171,7 @@ To rebuild and test the package:
 
 # Test only (assumes package exists)
 ./scripts/install_verify_utils.sh
-```
+```text
 
 ## Package Structure
 
@@ -186,7 +186,7 @@ shared/utils/
 ├── visualization.mojo      # Plotting and visualization
 ├── random.mojo             # Random seed utilities
 └── profiling.mojo          # Performance measurement
-```
+```text
 
 When packaged, this becomes `dist/utils-0.1.0.mojopkg` containing compiled versions of all modules.
 
@@ -206,70 +206,70 @@ The Utils package exports 50 public symbols (as defined in `shared/utils/__init_
 ### Logging Utilities (10 exports)
 
 1. `Logger` - Main logger class
-2. `LogLevel` - Log level enum
-3. `get_logger` - Get or create logger
-4. `StreamHandler` - Console output handler
-5. `FileHandler` - File output handler
-6. `LogRecord` - Log record structure
-7. `SimpleFormatter` - Simple message formatter
-8. `TimestampFormatter` - Formatter with timestamps
-9. `DetailedFormatter` - Detailed formatter with location
-10. `ColoredFormatter` - Formatter with ANSI colors
+1. `LogLevel` - Log level enum
+1. `get_logger` - Get or create logger
+1. `StreamHandler` - Console output handler
+1. `FileHandler` - File output handler
+1. `LogRecord` - Log record structure
+1. `SimpleFormatter` - Simple message formatter
+1. `TimestampFormatter` - Formatter with timestamps
+1. `DetailedFormatter` - Detailed formatter with location
+1. `ColoredFormatter` - Formatter with ANSI colors
 
 ### Configuration Utilities (5 exports)
 
 1. `Config` - Configuration container
-2. `load_config` - Load from file (YAML/JSON)
-3. `save_config` - Save to file
-4. `merge_configs` - Merge multiple configs
-5. `ConfigValidator` - Validate configuration
+1. `load_config` - Load from file (YAML/JSON)
+1. `save_config` - Save to file
+1. `merge_configs` - Merge multiple configs
+1. `ConfigValidator` - Validate configuration
 
 ### File I/O Utilities (11 exports)
 
 1. `Checkpoint` - Checkpoint container
-2. `save_checkpoint` - Save model checkpoint
-3. `load_checkpoint` - Load model checkpoint
-4. `serialize_tensor` - Serialize tensor
-5. `deserialize_tensor` - Deserialize tensor
-6. `safe_write_file` - Atomic file write
-7. `safe_read_file` - Safe file read
-8. `create_backup` - Backup creation
-9. `file_exists` - Check file existence
-10. `directory_exists` - Check directory existence
-11. `create_directory` - Create directory
+1. `save_checkpoint` - Save model checkpoint
+1. `load_checkpoint` - Load model checkpoint
+1. `serialize_tensor` - Serialize tensor
+1. `deserialize_tensor` - Deserialize tensor
+1. `safe_write_file` - Atomic file write
+1. `safe_read_file` - Safe file read
+1. `create_backup` - Backup creation
+1. `file_exists` - Check file existence
+1. `directory_exists` - Check directory existence
+1. `create_directory` - Create directory
 
 ### Visualization Utilities (8 exports)
 
 1. `plot_training_curves` - Plot loss/accuracy curves
-2. `plot_loss_only` - Plot single loss curve
-3. `plot_accuracy_only` - Plot single accuracy curve
-4. `plot_confusion_matrix` - Plot confusion matrix
-5. `visualize_model_architecture` - Model architecture diagram
-6. `show_images` - Display image grid
-7. `visualize_feature_maps` - Feature map visualization
-8. `save_figure` - Save matplotlib figure
+1. `plot_loss_only` - Plot single loss curve
+1. `plot_accuracy_only` - Plot single accuracy curve
+1. `plot_confusion_matrix` - Plot confusion matrix
+1. `visualize_model_architecture` - Model architecture diagram
+1. `show_images` - Display image grid
+1. `visualize_feature_maps` - Feature map visualization
+1. `save_figure` - Save matplotlib figure
 
 ### Random Seed Utilities (9 exports)
 
 1. `set_seed` - Set random seed globally
-2. `get_global_seed` - Get current seed
-3. `get_random_state` - Get current random state
-4. `set_random_state` - Restore random state
-5. `RandomState` - Random state container
-6. `random_uniform` - Generate uniform random
-7. `random_normal` - Generate normal random
-8. `random_int` - Generate random integer
-9. `shuffle` - Shuffle list in-place
+1. `get_global_seed` - Get current seed
+1. `get_random_state` - Get current random state
+1. `set_random_state` - Restore random state
+1. `RandomState` - Random state container
+1. `random_uniform` - Generate uniform random
+1. `random_normal` - Generate normal random
+1. `random_int` - Generate random integer
+1. `shuffle` - Shuffle list in-place
 
 ### Profiling Utilities (7 exports)
 
 1. `Timer` - Context manager for timing
-2. `memory_usage` - Get current memory usage
-3. `profile_function` - Profile function execution
-4. `benchmark_function` - Benchmark function
-5. `MemoryStats` - Memory statistics
-6. `TimingStats` - Timing statistics
-7. `ProfilingReport` - Profiling report
+1. `memory_usage` - Get current memory usage
+1. `profile_function` - Profile function execution
+1. `benchmark_function` - Benchmark function
+1. `MemoryStats` - Memory statistics
+1. `TimingStats` - Timing statistics
+1. `ProfilingReport` - Profiling report
 
 **Note**: The `__all__` list in `shared/utils/__init__.mojo` defines these 50 exports explicitly. All are tested in
 `scripts/install_verify_utils.sh` to ensure package integrity
@@ -290,49 +290,49 @@ The Utils package is used throughout ML Odyssey:
 
 **Issue**: `mojo package` command fails
 
-**Solutions**:
+### Solutions
 
 1. Verify all source files compile individually
-2. Check `__init__.mojo` has correct exports
-3. Ensure no syntax errors in any module
-4. Verify Mojo version compatibility
+1. Check `__init__.mojo` has correct exports
+1. Ensure no syntax errors in any module
+1. Verify Mojo version compatibility
 
 ### Installation Failures
 
 **Issue**: Package installs but imports fail
 
-**Solutions**:
+### Solutions
 
 1. Verify package structure matches source structure
-2. Check import paths are correct
-3. Test with: `mojo run -c "import utils"`
-4. Check for dependency issues
+1. Check import paths are correct
+1. Test with: `mojo run -c "import utils"`
+1. Check for dependency issues
 
 ### Script Permission Issues
 
 **Issue**: Scripts won't execute
 
-**Solution**:
+### Solution
 
 ```bash
 chmod +x scripts/*.sh
-```
+```text
 
 ## Implementation Notes
 
 ### Packaging Strategy
 
 1. **Single package** - All utilities in one `.mojopkg` file
-2. **Version 0.1.0** - Initial release following SemVer
-3. **No external dependencies** - Self-contained package
-4. **Comprehensive testing** - Verification script tests all major imports
+1. **Version 0.1.0** - Initial release following SemVer
+1. **No external dependencies** - Self-contained package
+1. **Comprehensive testing** - Verification script tests all major imports
 
 ### Design Decisions
 
 1. **Modular organization** - Each utility category in separate file
-2. **Comprehensive exports** - All 50 symbols explicitly listed in `__all__`
-3. **Clean environment testing** - Installation verification uses temporary directory
-4. **Build automation** - Multiple scripts for different use cases
+1. **Comprehensive exports** - All 50 symbols explicitly listed in `__all__`
+1. **Clean environment testing** - Installation verification uses temporary directory
+1. **Build automation** - Multiple scripts for different use cases
 
 ### File Organization
 
@@ -345,8 +345,8 @@ chmod +x scripts/*.sh
 After Package phase completion:
 
 1. **Cleanup phase** (Issue #46) - Final refactoring and optimization
-2. **Integration testing** - Test with Data and Training modules
-3. **CI/CD** - Add automated package building to GitHub Actions
+1. **Integration testing** - Test with Data and Training modules
+1. **CI/CD** - Add automated package building to GitHub Actions
 
 ## References
 
@@ -363,8 +363,8 @@ After Package phase completion:
 **Package phase complete with actual artifacts created:**
 
 1. ✓ Binary package: `dist/utils-0.1.0.mojopkg`
-2. ✓ Installation verification: `scripts/install_verify_utils.sh`
-3. ✓ Build automation: `scripts/build_utils_package.sh`, `scripts/package_utils.sh`
-4. ✓ Documentation: This README with build/install instructions
+1. ✓ Installation verification: `scripts/install_verify_utils.sh`
+1. ✓ Build automation: `scripts/build_utils_package.sh`, `scripts/package_utils.sh`
+1. ✓ Documentation: This README with build/install instructions
 
 **Next**: Execute build scripts to create the `.mojopkg` file, then commit and create PR.

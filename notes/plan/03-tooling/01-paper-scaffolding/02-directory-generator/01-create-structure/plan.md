@@ -27,9 +27,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Validate target directory path exists and is writable
-2. Create main paper directory with normalized name
-3. Create standard subdirectories (src, tests, docs, etc.)
-4. Set appropriate permissions on created directories
+1. Create main paper directory with normalized name
+1. Create standard subdirectories (src, tests, docs, etc.)
+1. Set appropriate permissions on created directories
 
 ## Success Criteria
 

@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Test conv layer independently
-2. Test pooling layer independently
-3. Test FC layer independently
+1. Test pooling layer independently
+1. Test FC layer independently
 
 ## Success Criteria
 

@@ -240,10 +240,10 @@ fn test_custom_layer_in_network():
 If your layer is reusable, contribute it to the shared library:
 
 1. **Implement in** `shared/core/layers/`
-2. **Add tests in** `tests/shared/core/`
-3. **Document in** layer docstring
-4. **Export from** `shared/core/__init__.mojo`
-5. **Update** `docs/core/shared-library.md`
+1. **Add tests in** `tests/shared/core/`
+1. **Document in** layer docstring
+1. **Export from** `shared/core/__init__.mojo`
+1. **Update** `docs/core/shared-library.md`
 
 ### Using Shared Components
 
@@ -352,8 +352,10 @@ struct MyLayer:
 
     Example:
         ```mojo
+
         var layer = MyLayer(input_size=128, output_size=64)
         var output = layer.forward(input_batch)
+
         ```
 
     References:
@@ -411,16 +413,16 @@ Include working examples in your layer's documentation showing common use cases.
 
 ## Summary
 
-**Key takeaways**:
+### Key takeaways
 
 1. Implement required interface: `__init__`, `forward`, `backward`, `parameters`
-2. Test thoroughly: unit tests, gradient checks, integration tests
-3. Start simple, optimize incrementally with profiling guidance
-4. Document clearly with examples and references
-5. Follow Mojo patterns for performance and safety
-6. Contribute reusable layers back to shared library
+1. Test thoroughly: unit tests, gradient checks, integration tests
+1. Start simple, optimize incrementally with profiling guidance
+1. Document clearly with examples and references
+1. Follow Mojo patterns for performance and safety
+1. Contribute reusable layers back to shared library
 
-**Next steps**:
+### Next steps
 
 - Review examples in `papers/` implementations
 - Study existing layers in `shared/core/layers/`

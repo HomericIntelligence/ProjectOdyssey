@@ -28,7 +28,7 @@ Define the comprehensive specifications and design architecture for creating a s
 
 **Decision**: Use a flat, well-organized structure with clear separation of concerns
 
-**Rationale**:
+### Rationale
 
 - `src/` - Core implementation code (models, layers, utilities)
 - `tests/` - Comprehensive test suite following TDD principles
@@ -38,7 +38,7 @@ Define the comprehensive specifications and design architecture for creating a s
 - `examples/` - Demonstration scripts showing common use cases
 - `scripts/` - Utility scripts for downloading papers, datasets, and reference implementations
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Nested structure (e.g., `src/models/`, `src/layers/`) - Decided to keep top-level flat for simplicity
 - Combined data/configs directory - Separated for clarity and to avoid confusion
@@ -47,13 +47,13 @@ Define the comprehensive specifications and design architecture for creating a s
 
 **Decision**: Include `.gitkeep` files for empty directories and `__init__.mojo` for package initialization
 
-**Rationale**:
+### Rationale
 
 - `.gitkeep` ensures empty directories are tracked in git
 - `__init__.mojo` demonstrates Mojo package structure
 - Example scripts (`train.mojo`) show common patterns and best practices
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - No placeholder files - Would lose directory structure in git
 - More example files - Decided to keep minimal to avoid clutter
@@ -62,7 +62,7 @@ Define the comprehensive specifications and design architecture for creating a s
 
 **Decision**: Comprehensive README with multiple sections: Quick Start, Directory Structure, Implementation Guide, Testing, Common Patterns
 
-**Rationale**:
+### Rationale
 
 - Quick Start section allows immediate usage
 - Directory Structure explains purpose of each directory
@@ -70,31 +70,31 @@ Define the comprehensive specifications and design architecture for creating a s
 - Testing section emphasizes TDD principles
 - Common Patterns show Mojo-specific code examples
 
-**Key Sections**:
+### Key Sections
 
 1. Overview - Brief introduction
-2. Quick Start - Copy command and basic setup
-3. Directory Structure - Visual tree and descriptions
-4. Directory Purposes - Detailed explanation of each directory
-5. Implementation Guide - 7-step process from README to documentation
-6. Testing - Test organization and principles
-7. Data Management - Download and preprocessing patterns
-8. Configuration - YAML structure and best practices
-9. Common Patterns - Code examples for models and training
-10. Paper-Specific Information - Template section to be replaced
+1. Quick Start - Copy command and basic setup
+1. Directory Structure - Visual tree and descriptions
+1. Directory Purposes - Detailed explanation of each directory
+1. Implementation Guide - 7-step process from README to documentation
+1. Testing - Test organization and principles
+1. Data Management - Download and preprocessing patterns
+1. Configuration - YAML structure and best practices
+1. Common Patterns - Code examples for models and training
+1. Paper-Specific Information - Template section to be replaced
 
 ### 4. Configuration Template
 
 **Decision**: Provide `config.yaml` with common sections: model, training, data, paths, experiment
 
-**Rationale**:
+### Rationale
 
 - YAML is human-readable and widely used in ML projects
 - Common sections cover typical paper implementation needs
 - Clear structure makes it easy to extend for specific papers
 - Sensible defaults reduce friction for new implementations
 
-**Sections**:
+### Sections
 
 - `model` - Model architecture configuration
 - `training` - Training hyperparameters (batch size, epochs, learning rate)
@@ -106,13 +106,13 @@ Define the comprehensive specifications and design architecture for creating a s
 
 **Decision**: Use `.mojo` extensions for all code files and demonstrate Mojo patterns
 
-**Rationale**:
+### Rationale
 
 - Project uses Mojo as primary language (see ADR-001)
 - Template should reflect project standards
 - Example scripts demonstrate Mojo idioms (structs, fn, error handling)
 
-**Patterns Demonstrated**:
+### Patterns Demonstrated
 
 - Package initialization with `__init__.mojo`
 - Struct-based models with `fn` methods
@@ -123,7 +123,7 @@ Define the comprehensive specifications and design architecture for creating a s
 
 **Decision**: Three-tier data organization: `raw/`, `processed/`, `cache/`
 
-**Rationale**:
+### Rationale
 
 - `raw/` - Immutable original datasets (never modified)
 - `processed/` - Cleaned and transformed datasets ready for training
@@ -135,7 +135,7 @@ Define the comprehensive specifications and design architecture for creating a s
 
 **Decision**: Mirror source structure in tests directory with `test_*.mojo` files
 
-**Rationale**:
+### Rationale
 
 - Easy to find tests corresponding to source files
 - Follows common testing conventions
@@ -146,7 +146,7 @@ Define the comprehensive specifications and design architecture for creating a s
 
 **Decision**: Separate `examples/` (demonstration) from `scripts/` (automation)
 
-**Rationale**:
+### Rationale
 
 - `examples/` - User-facing demonstration scripts (train, evaluate, inference)
 - `scripts/` - Automation scripts for downloading dependencies (paper, dataset, reference)
@@ -210,7 +210,7 @@ papers/_template/
 └── examples/                   # Demonstration scripts
     ├── train.mojo              # Example training script
     └── .gitkeep
-```
+```text
 
 ### Key Files
 
@@ -223,14 +223,14 @@ papers/_template/
    - Common patterns with Mojo code examples
    - Paper-specific information template
 
-2. **configs/config.yaml** (46 lines)
+1. **configs/config.yaml** (46 lines)
    - Model configuration section
    - Training hyperparameters
    - Data configuration and splits
    - Path configuration
    - Experiment tracking settings
 
-3. **examples/train.mojo**
+1. **examples/train.mojo**
    - Placeholder demonstration script
    - Shows expected pattern for training scripts
 
@@ -249,13 +249,13 @@ The template successfully meets all success criteria:
 ### Design Strengths
 
 1. **Comprehensive Documentation** - README covers all aspects from quick start to advanced patterns
-2. **Mojo-First** - All examples use `.mojo` extensions and demonstrate Mojo idioms
-3. **TDD Support** - Test directory structure and documentation emphasize test-driven development
-4. **Data Management** - Three-tier data organization (raw/processed/cache) prevents corruption
-5. **Configuration Separation** - YAML configs keep settings separate from code
-6. **Extensibility** - Clear structure makes it easy to add paper-specific components
-7. **Low Friction** - Single copy command and clear guide reduce setup time
-8. **Best Practices** - Embedded examples show recommended patterns
+1. **Mojo-First** - All examples use `.mojo` extensions and demonstrate Mojo idioms
+1. **TDD Support** - Test directory structure and documentation emphasize test-driven development
+1. **Data Management** - Three-tier data organization (raw/processed/cache) prevents corruption
+1. **Configuration Separation** - YAML configs keep settings separate from code
+1. **Extensibility** - Clear structure makes it easy to add paper-specific components
+1. **Low Friction** - Single copy command and clear guide reduce setup time
+1. **Best Practices** - Embedded examples show recommended patterns
 
 ### Notes for Subsequent Phases
 

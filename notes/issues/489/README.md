@@ -75,7 +75,7 @@ def test_workflow_with_failing_coverage():
     # Given: Tests with < 80% coverage
     # When: Run workflow
     # Then: Gate fails with clear message, reports still generated
-```
+```text
 
 **2. Component Integration**
 
@@ -99,7 +99,7 @@ def test_exceptions_apply_across_workflow():
     # Given: Excluded files in configuration
     # When: Run complete workflow
     # Then: Excluded files not in reports or gate checks
-```
+```text
 
 **3. CI Pipeline Integration**
 
@@ -123,7 +123,7 @@ def test_coverage_artifacts_uploaded():
     # Given: Completed coverage workflow
     # When: Check artifacts
     # Then: HTML reports and XML data available
-```
+```text
 
 **4. Error Handling and Edge Cases**
 
@@ -153,7 +153,7 @@ def test_handles_hundred_percent_coverage():
     # Given: Perfect coverage
     # When: Run workflow
     # Then: All gates pass, reports show 100%
-```
+```text
 
 **5. Configuration Validation**
 
@@ -177,11 +177,11 @@ def test_multiple_report_formats_generated():
     # Given: Configuration for HTML, XML, and term reports
     # When: Run coverage
     # Then: All three report types generated
-```
+```text
 
 ### Test Fixtures
 
-**System Fixtures**:
+### System Fixtures
 
 ```python
 @pytest.fixture
@@ -226,20 +226,20 @@ def ci_environment(monkeypatch):
     monkeypatch.setenv("GITHUB_ACTIONS", "true")
     monkeypatch.setenv("GITHUB_EVENT_NAME", "pull_request")
     return {"type": "github_actions"}
-```
+```text
 
 ### Integration Test Scenarios
 
-**Scenario 1: First-Time Setup**
+### Scenario 1: First-Time Setup
 
 ```python
 def test_first_time_coverage_setup(coverage_test_project):
     """Test coverage works on fresh project."""
     # Run tests with coverage for first time
     # Verify: Collection works, reports generated, no baseline comparison
-```
+```text
 
-**Scenario 2: Continuous Development**
+### Scenario 2: Continuous Development
 
 ```python
 def test_coverage_in_development_cycle(coverage_test_project):
@@ -248,9 +248,9 @@ def test_coverage_in_development_cycle(coverage_test_project):
     # Run 2: Add code and tests (coverage maintained)
     # Run 3: Add code without tests (regression detected)
     # Run 4: Add tests (coverage restored)
-```
+```text
 
-**Scenario 3: PR Review**
+### Scenario 3: PR Review
 
 ```python
 def test_coverage_in_pr_workflow(coverage_test_project, ci_environment):
@@ -261,31 +261,35 @@ def test_coverage_in_pr_workflow(coverage_test_project, ci_environment):
     # 3. Compare to main
     # 4. Generate reports
     # 5. Post results
-```
+```text
 
 ### Key Test Scenarios
 
-**System Integration**:
+### System Integration
+
 - [ ] Complete workflow executes end-to-end
 - [ ] All components use consistent configuration
 - [ ] Data flows correctly between components
 - [ ] Artifacts created in expected locations
 - [ ] Exit codes correct for pass/fail scenarios
 
-**CI Integration**:
+### CI Integration
+
 - [ ] Coverage runs in CI environment
 - [ ] Artifacts uploaded successfully
 - [ ] PR checks display coverage info
 - [ ] Regression detection works in CI
 - [ ] Gates block merges appropriately
 
-**Error Handling**:
+### Error Handling
+
 - [ ] Missing configuration handled gracefully
 - [ ] Corrupted data doesn't crash system
 - [ ] Missing baseline skips regression check
 - [ ] Clear error messages for common issues
 
-**Performance**:
+### Performance
+
 - [ ] Workflow completes in reasonable time
 - [ ] No unnecessary data regeneration
 - [ ] Parallel execution works if configured

@@ -29,14 +29,14 @@ Create the tools/ directory for development utilities and helper tools that supp
 
 **Decision**: Create a dedicated `tools/` directory separate from `scripts/` for development utilities.
 
-**Rationale**:
+### Rationale
 
 - **scripts/** - Automation scripts for repository management (e.g., `create_issues.py`, `regenerate_github_issues.py`)
 - **tools/** - Development utilities for ML paper implementation workflow (e.g., paper scaffolding, testing helpers, code generators)
 - **Separation of concerns** - Automation vs. development utilities
 - **Discoverability** - Developers can easily find workflow-specific tools
 
-**Impact**:
+### Impact
 
 - Clear distinction between infrastructure automation and development utilities
 - Better organization for future tooling expansion
@@ -47,16 +47,16 @@ Create the tools/ directory for development utilities and helper tools that supp
 **Decision**: Organize tools into three primary categories:
 
 1. **CLI tools** - Command-line utilities for common tasks
-2. **Code generators** - Templates and generators for paper implementations
-3. **Development helpers** - Workflow automation and productivity utilities
+1. **Code generators** - Templates and generators for paper implementations
+1. **Development helpers** - Workflow automation and productivity utilities
 
-**Rationale**:
+### Rationale
 
 - **Scalability** - Supports planned tooling from section 03-tooling
 - **Discoverability** - Developers can quickly locate relevant tools
 - **Extensibility** - Easy to add new tool types in the future
 
-**Impact**:
+### Impact
 
 - Structured foundation for section 03-tooling deliverables
 - Clear organization for future paper scaffolding, testing, and benchmarking tools
@@ -71,13 +71,13 @@ Create the tools/ directory for development utilities and helper tools that supp
 - Guidelines for adding new tools
 - Usage examples and setup instructions
 
-**Rationale**:
+### Rationale
 
 - **Onboarding** - New developers understand tool ecosystem quickly
 - **Consistency** - Guidelines ensure new tools follow established patterns
 - **Maintenance** - Documentation reduces support burden
 
-**Impact**:
+### Impact
 
 - Self-service documentation for tool usage
 - Consistent tool development across contributors
@@ -87,13 +87,13 @@ Create the tools/ directory for development utilities and helper tools that supp
 
 **Decision**: Create foundation now, implement specific tools in section 03-tooling.
 
-**Rationale**:
+### Rationale
 
 - **Phased approach** - Establish structure in foundation phase, implement functionality in tooling phase
 - **Dependencies** - Tools depend on shared library components (section 02)
 - **Planning alignment** - Section 03-tooling contains detailed tool specifications
 
-**Impact**:
+### Impact
 
 - tools/ directory ready when section 03-tooling begins
 - Clear separation between infrastructure and implementation
@@ -108,13 +108,13 @@ Create the tools/ directory for development utilities and helper tools that supp
 - Documentation standards (usage examples, API docs)
 - Code quality standards (type hints, error handling)
 
-**Rationale**:
+### Rationale
 
 - **Consistency** - All tools follow same quality standards
 - **Maintainability** - Well-tested and documented tools
 - **Alignment** - Follows repository coding standards from CLAUDE.md
 
-**Impact**:
+### Impact
 
 - High-quality tool ecosystem
 - Reduced maintenance burden

@@ -30,8 +30,8 @@ Create a GitHub Actions workflow that validates paper implementations for struct
 ## Steps
 
 1. Detect Paper Changes
-2. Validate Structure
-3. Run Reproduction
+1. Validate Structure
+1. Run Reproduction
 
 ## Success Criteria
 

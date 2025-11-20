@@ -30,8 +30,8 @@ Configure Git for proper handling of ML artifacts, large files, and generated co
 ## Steps
 
 1. Update .gitignore with ML-specific ignore patterns
-2. Configure .gitattributes for proper file handling
-3. Set up Git LFS for large files like models and datasets
+1. Configure .gitattributes for proper file handling
+1. Set up Git LFS for large files like models and datasets
 
 ## Success Criteria
 

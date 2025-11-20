@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Check if mojo command is available
-2. Run mojo --version to get version info
-3. Verify version meets requirements
-4. Report results and any issues
+1. Run mojo --version to get version info
+1. Verify version meets requirements
+1. Report results and any issues
 
 ## Success Criteria
 

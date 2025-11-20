@@ -82,13 +82,13 @@ This issue represents the **Test Phase** of the 5-phase development workflow for
 runner component. The testing phase focuses on:
 
 1. **Test-Driven Development (TDD)** - Writing comprehensive tests to drive the implementation
-2. **Test Infrastructure** - Creating reusable test fixtures and test framework
-3. **Test Coverage** - Ensuring all aspects of paper testing are validated
-4. **Fast Feedback** - Enabling developers to validate paper implementations quickly
+1. **Test Infrastructure** - Creating reusable test fixtures and test framework
+1. **Test Coverage** - Ensuring all aspects of paper testing are validated
+1. **Fast Feedback** - Enabling developers to validate paper implementations quickly
 
 ### Test Scope
 
-**In Scope**:
+### In Scope
 
 - Paper test discovery and execution
 - Test result reporting and formatting
@@ -97,7 +97,7 @@ runner component. The testing phase focuses on:
 - Performance baseline tracking
 - Edge case coverage
 
-**Out of Scope**:
+### Out of Scope
 
 - Individual paper implementation (Issue #821)
 - Packaging and distribution (Issue #822)
@@ -105,11 +105,11 @@ runner component. The testing phase focuses on:
 
 ### Dependencies
 
-**Prerequisites**:
+### Prerequisites
 
 - Issue #819 (Plan Phase) - Must complete first with detailed specifications
 
-**Enables**:
+### Enables
 
 - Issue #821 (Implementation Phase) - Tests drive implementation
 - Issue #822 (Packaging Phase) - Tests validate packaging
@@ -121,7 +121,7 @@ runner component. The testing phase focuses on:
 **Precedes**: Issue #821 [Impl] - Implementation of components
 **Can Run Parallel With**: Issue #822 if dependencies are met
 
-**Key Principles**:
+### Key Principles
 
 - Write tests first to define expected behavior
 - Use TDD to drive implementation in Issue #821
@@ -219,19 +219,19 @@ Skipped Tests:
     Requires GPU (skipped on CPU)
 
 Summary: MOSTLY PASSED - 1 failure requires attention
-```
+```text
 
 ### Parallel Execution Strategy
 
 The Test Phase can execute in parallel with Package Phase if test infrastructure is well-defined
 in the Plan Phase (Issue #819).
 
-**Parallel Execution Rules**:
+### Parallel Execution Rules
 
 1. Both phases must have independent, non-overlapping scope
-2. Plan Phase (Issue #819) must complete with clear boundaries between Test and Package scopes
-3. Both phases must have separate test fixtures and mock data
-4. Any shared dependencies must be tested in Plan Phase
+1. Plan Phase (Issue #819) must complete with clear boundaries between Test and Package scopes
+1. Both phases must have separate test fixtures and mock data
+1. Any shared dependencies must be tested in Plan Phase
 
 ## Implementation Timeline
 
@@ -273,24 +273,24 @@ in the Plan Phase (Issue #819).
 ## Success Metrics
 
 1. **Test Discovery**: 100% of paper tests discovered
-2. **Test Execution**: All tests execute successfully (with known skips)
-3. **Coverage**: Target 85%+ code coverage in paper implementation
-4. **Performance**: Full test suite runs in under 10 seconds
-5. **Documentation**: All tests documented with clear purpose
-6. **Maintainability**: Test code is clear and follows project standards
-7. **CI/CD**: Tests run automatically on all PRs
+1. **Test Execution**: All tests execute successfully (with known skips)
+1. **Coverage**: Target 85%+ code coverage in paper implementation
+1. **Performance**: Full test suite runs in under 10 seconds
+1. **Documentation**: All tests documented with clear purpose
+1. **Maintainability**: Test code is clear and follows project standards
+1. **CI/CD**: Tests run automatically on all PRs
 
 ## Next Steps
 
 1. Await completion of Issue #819 (Plan Phase)
-2. Review detailed test specifications from Issue #819
-3. Begin Test Phase implementation following specifications
-4. Create comprehensive test plan document
-5. Implement test infrastructure components
-6. Write test suite following TDD principles
-7. Document tests and fixtures
-8. Set up CI/CD integration
-9. Prepare for Issue #821 (Implementation Phase)
+1. Review detailed test specifications from Issue #819
+1. Begin Test Phase implementation following specifications
+1. Create comprehensive test plan document
+1. Implement test infrastructure components
+1. Write test suite following TDD principles
+1. Document tests and fixtures
+1. Set up CI/CD integration
+1. Prepare for Issue #821 (Implementation Phase)
 
 ## Notes
 

@@ -74,9 +74,9 @@ practices.
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -117,11 +117,11 @@ See [CLAUDE.md](../../CLAUDE.md#documentation-rules) for complete documentation 
 
 ```text
 
-6. Verify all hyperparameters are documented
-7. Check for missing implementation details
-8. Validate environment specifications exist
-9. Assess data availability and preprocessing docs
-10. Review whether results can be reproduced
+1. Verify all hyperparameters are documented
+1. Check for missing implementation details
+1. Validate environment specifications exist
+1. Assess data availability and preprocessing docs
+1. Review whether results can be reproduced
 
 ### Phase 3: Statistical Analysis
 
@@ -137,11 +137,11 @@ See [CLAUDE.md](../../CLAUDE.md#documentation-rules) for complete documentation 
 
 ```text
 
-16. Identify baselines used
-17. Verify baseline appropriateness
-18. Check baseline implementation fairness
-19. Assess comparison validity
-20. Review improvement significance
+1. Identify baselines used
+1. Verify baseline appropriateness
+1. Check baseline implementation fairness
+1. Assess comparison validity
+1. Review improvement significance
 
 ### Phase 5: Research Integrity Check
 
@@ -157,11 +157,11 @@ See [CLAUDE.md](../../CLAUDE.md#documentation-rules) for complete documentation 
 
 ```text
 
-26. Categorize findings (critical, major, minor)
-27. Reference NeurIPS checklist items
-28. Provide specific, actionable feedback
-29. Suggest improvements with examples
-30. Highlight exemplary methodology
+1. Categorize findings (critical, major, minor)
+1. Reference NeurIPS checklist items
+1. Provide specific, actionable feedback
+1. Suggest improvements with examples
+1. Highlight exemplary methodology
 
 ```text
 
@@ -318,22 +318,22 @@ dataset: MNIST
 
 🔴 CRITICAL: Severely incomplete hyperparameter documentation
 
-**Missing Critical Hyperparameters**:
+### Missing Critical Hyperparameters
 
 1. ❌ Learning rate not specified
-2. ❌ Batch size not specified
-3. ❌ Number of epochs not specified (variable 'epochs' undefined)
-4. ❌ Optimizer parameters (betas, weight_decay) not specified
-5. ❌ Random seed not specified or fixed
-6. ❌ Data augmentation not documented
-7. ❌ Model architecture details missing (layers, sizes, activations)
+1. ❌ Batch size not specified
+1. ❌ Number of epochs not specified (variable 'epochs' undefined)
+1. ❌ Optimizer parameters (betas, weight_decay) not specified
+1. ❌ Random seed not specified or fixed
+1. ❌ Data augmentation not documented
+1. ❌ Model architecture details missing (layers, sizes, activations)
 
 **Impact**: Results are completely irreproducible. Different learning rates alone can change accuracy by 10%+ on
 MNIST.
 
 **NeurIPS Checklist**: Violates items #4 (Experimental Reproducibility) and #6 (Experimental Settings/Details)
 
-**Required Fix**:
+### Required Fix
 
 ```yaml
 
@@ -372,7 +372,7 @@ data:
 
 ### Example 3: Inadequate Baselines - MAJOR
 
-**Experiment**:
+### Experiment
 
 ```python
 
@@ -385,7 +385,7 @@ results = {
 
 ```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 

@@ -34,17 +34,22 @@ As specified in the issue description.
 ## Implementation Notes
 
 ## Overview
+
 Create a prompt template for reviewing code implementations against paper specifications. The template helps identify correctness issues, missing components, and discrepancies between paper and code.
 
 ## Testing Objectives
+
 This phase focuses on:
+
 - Writing comprehensive test cases following TDD principles
 - Creating test fixtures and mock data
 - Defining test scenarios for edge cases
 - Setting up test infrastructure
 
 ## What to Test
+
 Based on the expected outputs:
+
 - Implementation reviewer prompt template
 - Review checklist with criteria
 - Few-shot examples of reviews
@@ -52,6 +57,7 @@ Based on the expected outputs:
 - Suggestion templates for improvements
 
 ## Test Success Criteria
+
 - [ ] Template covers all review criteria
 - [ ] Feedback format is clear and actionable
 - [ ] Checklist ensures comprehensive review
@@ -60,12 +66,14 @@ Based on the expected outputs:
 - [ ] Template identifies both issues and strengths
 
 ## Implementation Steps
+
 1. Define review criteria and checklist
-2. Create structured feedback format
-3. Add few-shot review examples
-4. Include improvement suggestion patterns
+1. Create structured feedback format
+1. Add few-shot review examples
+1. Include improvement suggestion patterns
 
 ## Notes
+
 Review criteria should include: correctness of algorithm implementation, completeness of required components, adherence to paper specifications, code quality, and potential bugs. Use XML tags like <correctness>, <completeness>, <issues>, <suggestions>.
 
 ## Status

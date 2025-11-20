@@ -30,8 +30,8 @@ Create a GitHub Actions workflow that scans for security vulnerabilities in depe
 ## Steps
 
 1. Dependency Scan
-2. Code Scan
-3. Report Vulnerabilities
+1. Code Scan
+1. Report Vulnerabilities
 
 ## Success Criteria
 

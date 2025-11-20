@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Design output format and message templates
-2. Implement progress indicators for long operations
-3. Create error message formatting with helpful details
-4. Build success summary with created files list
+1. Implement progress indicators for long operations
+1. Create error message formatting with helpful details
+1. Build success summary with created files list
 
 ## Success Criteria
 

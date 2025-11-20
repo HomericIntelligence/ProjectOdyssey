@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Check tests directory exists and has files
-2. Verify test files follow naming conventions
-3. Count tests and assess coverage
-4. Report on test adequacy
+1. Verify test files follow naming conventions
+1. Count tests and assess coverage
+1. Report on test adequacy
 
 ## Success Criteria
 

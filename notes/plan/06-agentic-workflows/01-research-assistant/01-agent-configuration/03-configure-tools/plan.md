@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Define available tools (file reading, code analysis, search)
-2. Configure permissions and access controls
-3. Add usage guidelines and examples
-4. Define tool chaining patterns
+1. Configure permissions and access controls
+1. Add usage guidelines and examples
+1. Define tool chaining patterns
 
 ## Success Criteria
 

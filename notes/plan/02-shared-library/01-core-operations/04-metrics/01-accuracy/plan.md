@@ -29,9 +29,9 @@ None (leaf node)
 ## Steps
 
 1. Implement top-1 accuracy for standard classification
-2. Create top-k accuracy for relaxed evaluation
-3. Build per-class accuracy for detailed analysis
-4. Support both batched and incremental computation
+1. Create top-k accuracy for relaxed evaluation
+1. Build per-class accuracy for detailed analysis
+1. Support both batched and incremental computation
 
 ## Success Criteria
 

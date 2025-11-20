@@ -20,7 +20,7 @@ narrative-driven blog content while maintaining technical accuracy and markdown 
 - **Tone**: Informal, conversational, personal - like talking to a colleague over coffee
 - **Boundaries**: This specialist does NOT review code, documentation, or tests - only writes blog posts about them
 
-**What This Specialist Creates**:
+### What This Specialist Creates
 
 - Daily development logs (what happened, what was learned, what's next)
 - Weekly/milestone retrospectives
@@ -98,9 +98,9 @@ narrative-driven blog content while maintaining technical accuracy and markdown 
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -271,7 +271,7 @@ This [work/experiment/day] taught me:
 
 ### Informal Voice Examples
 
-**Good**:
+### Good
 
 - "Spent the day fixing 1,100+ markdown errors. Fun times."
 - "Yeah, I know. That's a lot."
@@ -337,8 +337,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -385,8 +385,8 @@ Always include specific counts:
 Structure discoveries:
 
 1. **The Problem**: What went wrong or was discovered
-2. **The Solution**: How it was addressed
-3. **The Impact**: What this taught, how it changed approach
+1. **The Solution**: How it was addressed
+1. **The Impact**: What this taught, how it changed approach
 
 ### Closing with Momentum
 
@@ -408,7 +408,7 @@ End with energy pointing forward:
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -457,13 +457,13 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Writing about implementing LeNet-5 backpropagation in Mojo
 
-**Actions**:
+### Actions
 
 1. Structure post as "The Plan → What Happened → What I Learned"
-2. Include code snippets showing gradient computation bugs discovered
-3. Add conversational asides about confusion with tensor dimensions
-4. Reference specific commits and benchmark results
-5. Ensure markdown compliance (code blocks with language tags, proper headings)
+1. Include code snippets showing gradient computation bugs discovered
+1. Add conversational asides about confusion with tensor dimensions
+1. Reference specific commits and benchmark results
+1. Ensure markdown compliance (code blocks with language tags, proper headings)
 
 **Outcome**: Engaging blog post combining technical depth with personal narrative
 
@@ -471,13 +471,13 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Transforming agent architecture documentation into readable blog post
 
-**Actions**:
+### Actions
 
 1. Extract key decisions and challenges from technical specs
-2. Reorganize into narrative flow instead of reference format
-3. Add context about why decisions matter to readers
-4. Include examples and practical implications
-5. Hand off to Documentation Review Specialist for accuracy check
+1. Reorganize into narrative flow instead of reference format
+1. Add context about why decisions matter to readers
+1. Include examples and practical implications
+1. Hand off to Documentation Review Specialist for accuracy check
 
 **Outcome**: Technical content accessible to broader audience while maintaining accuracy
 

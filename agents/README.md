@@ -26,16 +26,16 @@ hierarchy. The actual operational agent configurations are in `.claude/agents/` 
 ### Understanding the System
 
 1. **Read the Hierarchy**: Start with [hierarchy.md](hierarchy.md) to understand the 6 levels
-2. **Learn Delegation**: Read [delegation-rules.md](delegation-rules.md) for coordination patterns
-3. **Review Templates**: Check [templates/](templates/) for agent configuration examples
+1. **Learn Delegation**: Read [delegation-rules.md](delegation-rules.md) for coordination patterns
+1. **Review Templates**: Check [templates/](templates/) for agent configuration examples
 
 ### Creating a New Agent
 
 1. **Identify the Level**: Determine which level (0-5) this agent belongs to
-2. **Choose a Template**: Use the appropriate template from `templates/`
-3. **Fill in Details**: Customize for your specific agent's role
-4. **Add to `.claude/agents/`**: Place the config file in `.claude/agents/`
-5. **Test**: Verify Claude Code can load and invoke the agent
+1. **Choose a Template**: Use the appropriate template from `templates/`
+1. **Fill in Details**: Customize for your specific agent's role
+1. **Add to `.claude/agents/`**: Place the config file in `.claude/agents/`
+1. **Test**: Verify Claude Code can load and invoke the agent
 
 ### Using Agents
 
@@ -47,14 +47,14 @@ Agents can be invoked in two ways:
 User: "Design the architecture for the authentication module"
 → Claude recognizes task matches Architecture Design Agent
 → Agent invokes automatically
-```
+```text
 
-**Explicit Invocation**:
+### Explicit Invocation
 
 ```text
 User: "Use the architecture design agent to plan the auth module"
 → Claude explicitly invokes Architecture Design Agent
-```
+```text
 
 ## Agent Hierarchy (6 Levels)
 
@@ -69,19 +69,19 @@ User: "Use the architecture design agent to plan the auth module"
 
 ### Level 2: Module Design Agents & Orchestrators
 
-**Design Agents**:
+### Design Agents
 
 - Architecture, Integration, Security Design Agents
 - Design module structure and interfaces
 
-**Review Orchestrators**:
+### Review Orchestrators
 
 - Code Review Orchestrator
 - Coordinates 13 specialized review agents
 
 ### Level 3: Component Specialists
 
-**Implementation Specialists**:
+### Implementation Specialists
 
 - Implementation, Test, Documentation, Performance, Security Specialists
 - Handle specific component aspects
@@ -111,12 +111,12 @@ User: "Use the architecture design agent to plan the auth module"
 
 Skills are reusable capabilities separate from agents. They're in `.claude/skills/`.
 
-**Key Distinction**:
+### Key Distinction
 
 - **Agents** = Decision-makers with separate contexts
 - **Skills** = Reusable capabilities invoked within agent context
 
-**Skills Taxonomy**:
+### Skills Taxonomy
 
 - **Tier 1**: Foundational (used by all agents) - code analysis, generation, testing
 - **Tier 2**: Domain-specific (specific agent types) - paper analysis, ML ops, documentation
@@ -132,7 +132,7 @@ Higher levels break tasks into smaller pieces and delegate down:
 
 ```text
 Chief Architect → Section Orchestrator → Module Agent → Component Specialist → Engineer
-```
+```text
 
 ### Specialization Delegation
 
@@ -143,7 +143,7 @@ Section Orchestrator
   ├─> Architecture Design (for architecture)
   ├─> Security Design (for security)
   └─> Integration Design (for integration)
-```
+```text
 
 ### Parallel Delegation
 
@@ -154,7 +154,7 @@ Component Specialist
   ├─> Test Engineer (parallel)
   ├─> Implementation Engineer (parallel)
   └─> Documentation Writer (parallel)
-```
+```text
 
 **See [delegation-rules.md](delegation-rules.md) for complete patterns**
 
@@ -250,7 +250,7 @@ Routes to specialists (parallel):
 Consolidates feedback
   ↓
 Comprehensive review report
-```
+```text
 
 **See individual agent docs in `.claude/agents/` for detailed checklists and examples**
 
@@ -288,7 +288,7 @@ model: sonnet
 ## Constraints
 
 [What NOT to do]
-```
+```text
 
 **See [templates/](templates/) for complete examples**
 
@@ -353,53 +353,53 @@ The operational agent configurations are in `.claude/agents/` (23 agents total):
 ### Creating Agents
 
 1. **Single Responsibility**: Each agent has one clear role
-2. **Clear Description**: Description should trigger appropriate auto-invocation
-3. **Tool Minimalism**: Only request tools actually needed
-4. **Rich Examples**: Show realistic usage scenarios
-5. **Clear Constraints**: Document what agent should NOT do
+1. **Clear Description**: Description should trigger appropriate auto-invocation
+1. **Tool Minimalism**: Only request tools actually needed
+1. **Rich Examples**: Show realistic usage scenarios
+1. **Clear Constraints**: Document what agent should NOT do
 
 ### Using Agents
 
 1. **Trust the Hierarchy**: Let orchestrators delegate, don't micromanage
-2. **Communicate Status**: Report progress clearly
-3. **Escalate Blockers**: Don't stay stuck, escalate when needed
-4. **Coordinate Horizontally**: Communicate with peer agents
-5. **Document Decisions**: Capture rationale for future reference
+1. **Communicate Status**: Report progress clearly
+1. **Escalate Blockers**: Don't stay stuck, escalate when needed
+1. **Coordinate Horizontally**: Communicate with peer agents
+1. **Document Decisions**: Capture rationale for future reference
 
 ### Maintenance
 
 1. **Update Templates**: Keep templates current with best practices
-2. **Share Learnings**: Document what works and what doesn't
-3. **Iterate Configs**: Improve agent configs based on usage
-4. **Version Control**: Commit all changes to agent configs
-5. **Team Review**: Review new agents with team
+1. **Share Learnings**: Document what works and what doesn't
+1. **Iterate Configs**: Improve agent configs based on usage
+1. **Version Control**: Commit all changes to agent configs
+1. **Team Review**: Review new agents with team
 
 ## Common Patterns
 
 ### Pattern: Implementing a New Feature
 
 1. **Chief Architect** analyzes requirements
-2. **Section Orchestrator** breaks into modules
-3. **Architecture Design Agent** designs module structure
-4. **Component Specialists** plan Test/Impl/Package in parallel
-5. **Engineers** execute in parallel worktrees
-6. **All Levels** participate in cleanup
+1. **Section Orchestrator** breaks into modules
+1. **Architecture Design Agent** designs module structure
+1. **Component Specialists** plan Test/Impl/Package in parallel
+1. **Engineers** execute in parallel worktrees
+1. **All Levels** participate in cleanup
 
 ### Pattern: Fixing a Bug
 
 1. **Test Engineer** writes failing test
-2. **Component Specialist** analyzes root cause
-3. **Implementation Engineer** fixes code
-4. **Test Engineer** verifies fix
-5. **Documentation Writer** updates docs if needed
+1. **Component Specialist** analyzes root cause
+1. **Implementation Engineer** fixes code
+1. **Test Engineer** verifies fix
+1. **Documentation Writer** updates docs if needed
 
 ### Pattern: Refactoring
 
 1. **Component Specialist** identifies refactoring need
-2. **Architecture Design Agent** reviews impact
-3. **Implementation Engineer** performs refactoring
-4. **Test Engineer** ensures tests still pass
-5. **Performance Engineer** verifies no performance regression
+1. **Architecture Design Agent** reviews impact
+1. **Implementation Engineer** performs refactoring
+1. **Test Engineer** ensures tests still pass
+1. **Performance Engineer** verifies no performance regression
 
 ## Troubleshooting
 
@@ -407,33 +407,33 @@ The operational agent configurations are in `.claude/agents/` (23 agents total):
 
 **Problem**: Claude doesn't automatically invoke your agent
 
-**Solutions**:
+### Solutions
 
 1. Check description - make it specific and clear
-2. Add trigger keywords user would naturally say
-3. Test with explicit invocation first
-4. Review Claude Code sub-agents documentation
+1. Add trigger keywords user would naturally say
+1. Test with explicit invocation first
+1. Review Claude Code sub-agents documentation
 
 ### Agent Scope Unclear
 
 **Problem**: Unclear which level agent belongs to
 
-**Solutions**:
+### Solutions
 
 1. Review [hierarchy.md](hierarchy.md) for level definitions
-2. Consider decision scope: System → Section → Module → Component → Function → Line
-3. Ask: What does this agent decide vs execute?
+1. Consider decision scope: System → Section → Module → Component → Function → Line
+1. Ask: What does this agent decide vs execute?
 
 ### Coordination Issues
 
 **Problem**: Agents aren't coordinating effectively
 
-**Solutions**:
+### Solutions
 
 1. Review [delegation-rules.md](delegation-rules.md)
-2. Use git worktrees for isolation
-3. Establish clear handoff protocols
-4. Document interfaces explicitly
+1. Use git worktrees for isolation
+1. Establish clear handoff protocols
+1. Document interfaces explicitly
 
 ## Documentation
 
@@ -477,27 +477,27 @@ The operational agent configurations are in `.claude/agents/` (23 agents total):
 ### Adding a New Agent Type
 
 1. Determine appropriate level (0-5)
-2. Create configuration from template
-3. Test with example tasks
-4. Document in this README
-5. Submit PR for team review
+1. Create configuration from template
+1. Test with example tasks
+1. Document in this README
+1. Submit PR for team review
 
 ### Improving Documentation
 
 1. Identify gaps or unclear areas
-2. Update relevant documentation
-3. Add examples if helpful
-4. Submit PR for review
+1. Update relevant documentation
+1. Add examples if helpful
+1. Submit PR for review
 
 ## Support
 
 For questions or issues:
 
 1. Review documentation in this directory
-2. Check `/notes/review/` for detailed specs and architectural reviews
-3. Check `/notes/issues/` for individual issue documentation
-4. Consult Claude Code documentation
-5. Ask in team channels
+1. Check `/notes/review/` for detailed specs and architectural reviews
+1. Check `/notes/issues/` for individual issue documentation
+1. Consult Claude Code documentation
+1. Ask in team channels
 
 ## Version History
 
@@ -509,7 +509,7 @@ For questions or issues:
 
 ---
 
-**Implementation Status**:
+### Implementation Status
 
 - Planning Complete: Issues #62, #67, #510 ✅
 - Ready for Implementation: Issues #63-66 (Agents), #511-514 (Skills)

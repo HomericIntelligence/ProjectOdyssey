@@ -80,24 +80,27 @@ Integrate the coverage tool implementation with the existing ML Odyssey codebase
 ### Package Phase Overview
 
 The Package phase focuses on:
+
 1. Integrating coverage tool components with test infrastructure
-2. Creating distributable artifacts (tarballs, installation scripts)
-3. Ensuring compatibility with existing project components
-4. Setting up CI/CD validation workflows
-5. Providing migration documentation for teams
+1. Creating distributable artifacts (tarballs, installation scripts)
+1. Ensuring compatibility with existing project components
+1. Setting up CI/CD validation workflows
+1. Providing migration documentation for teams
 
 ### Coverage Tool Integration Strategy
 
 #### 1. Test Runner Integration (`scripts/run_tests_with_coverage.mojo`)
 
-**Responsibilities**:
+### Responsibilities
+
 - Collect coverage data during test execution
 - Handle coverage initialization and finalization
 - Merge coverage data from parallel test runs
 - Report coverage collection status
 - Handle errors and edge cases gracefully
 
-**Integration Points**:
+### Integration Points
+
 - Hooks into test discovery and execution
 - Collects file-level and function-level coverage
 - Tracks coverage for Mojo code specifically
@@ -105,15 +108,17 @@ The Package phase focuses on:
 
 #### 2. Report Generation (`scripts/generate_coverage_reports.mojo`)
 
-**Capabilities**:
+### Capabilities
+
 - Generates HTML reports with visual coverage maps
 - Creates text reports for CI/CD consumption
 - Produces JSON reports for programmatic access
 - Generates coverage deltas (current vs. baseline)
 - Creates per-file coverage summaries
 
-**Report Types**:
-```
+### Report Types
+
+```text
 coverage-reports/
 ├── index.html           # HTML coverage overview
 ├── coverage.txt         # Text summary for CI/CD
@@ -123,18 +128,20 @@ coverage-reports/
     ├── file1.html
     ├── file2.html
     └── ...
-```
+```text
 
 #### 3. Threshold Validation (`scripts/check_coverage_thresholds.mojo`)
 
-**Features**:
+### Features
+
 - Configurable minimum coverage percentages
 - Per-module threshold settings
 - Threshold enforcement in CI/CD
 - Helpful failure messages with improvement suggestions
 - Support for gradual threshold increases
 
-**Default Thresholds**:
+### Default Thresholds
+
 ```yaml
 global:
   line_coverage: 80%      # Overall line coverage minimum
@@ -146,12 +153,13 @@ modules:
     line_coverage: 90%    # Stricter for core components
   utils:
     line_coverage: 75%    # Relaxed for utilities
-```
+```text
 
 ### Distribution Package Contents
 
-**Structure**:
-```
+### Structure
+
+```text
 coverage-tool-0.1.0/
 ├── README.md
 ├── INSTALL.md
@@ -178,33 +186,34 @@ coverage-tool-0.1.0/
 └── examples/
     ├── basic-coverage.yaml
     └── advanced-coverage.yaml
-```
+```text
 
 ### CI/CD Validation Workflow (`.github/workflows/validate-coverage.yml`)
 
-**Workflow Steps**:
+### Workflow Steps
 
 1. **Coverage Collection**
    - Run all tests with coverage enabled
    - Merge coverage data from parallel jobs
    - Generate coverage reports
 
-2. **Threshold Validation**
+1. **Threshold Validation**
    - Check overall project coverage
    - Validate per-module thresholds
    - Fail if thresholds not met
 
-3. **Report Generation**
+1. **Report Generation**
    - Generate HTML coverage reports
    - Create text summary for PR comments
    - Upload coverage artifacts
 
-4. **Historical Tracking**
+1. **Historical Tracking**
    - Store coverage metrics
    - Track coverage trends
    - Identify coverage regressions
 
-**Trigger Points**:
+### Trigger Points
+
 - On push to main branch
 - On all pull requests
 - On schedule (daily)
@@ -232,7 +241,7 @@ directory = coverage-reports/html
 [paths]
 source =
     src/
-```
+```text
 
 #### `coverage-config.yaml` (Project Configuration)
 
@@ -267,110 +276,112 @@ coverage:
   ci:
     fail_on_decrease: true
     fail_below_threshold: true
-```
+```text
 
 ### Integration with Existing Components
 
 #### Test Infrastructure Integration
 
-**How Coverage Hooks Into Tests**:
+### How Coverage Hooks Into Tests
 
 1. **Test Discovery Phase**
    - Coverage tool initializes before test discovery
    - Registers coverage collection handlers
    - Sets up output directories
 
-2. **Test Execution Phase**
+1. **Test Execution Phase**
    - Coverage collector tracks executed code paths
    - Data collected per test or per suite
    - Parallel test execution supported
 
-3. **Test Finalization Phase**
+1. **Test Finalization Phase**
    - Coverage data merged from all test processes
    - Reports generated
    - Thresholds validated
 
 #### CI/CD Pipeline Integration
 
-**Placement in Pipeline**:
-```
+### Placement in Pipeline
+
+```text
 Lint → Build → Unit Tests (with coverage) → Integration Tests
       → Coverage Report → Threshold Check → Artifact Upload
-```
+```text
 
-**PR Checks**:
+### PR Checks
+
 - Coverage report as PR comment
 - Threshold validation as required check
 - Coverage delta indicator (improved/regressed)
 
 ### Migration Documentation (`tools/coverage/MIGRATION.md`)
 
-**For Teams Adding Coverage**:
+### For Teams Adding Coverage
 
 1. **Initial Setup**
    - Add coverage configuration file
    - Install coverage dependencies
    - Configure thresholds for module
 
-2. **Adding to Existing Tests**
+1. **Adding to Existing Tests**
    - Use coverage-enabled test runner
    - Review coverage reports
    - Add tests for uncovered code
 
-3. **Common Patterns**
+1. **Common Patterns**
    - How to exclude specific code from coverage
    - How to adjust thresholds
    - How to debug low coverage
 
-4. **Troubleshooting**
+1. **Troubleshooting**
    - Missing coverage data
    - Threshold validation failures
    - Report generation issues
 
 ### Integration Guide (`tools/coverage/INTEGRATION.md`)
 
-**Key Sections**:
+### Key Sections
 
 1. **Quick Start** (5 minutes)
    - Install coverage tool
    - Run tests with coverage
    - View coverage report
 
-2. **Configuration** (details on all options)
+1. **Configuration** (details on all options)
    - Threshold settings
    - Report generation options
    - Exclusion patterns
 
-3. **CI/CD Setup** (GitHub Actions)
+1. **CI/CD Setup** (GitHub Actions)
    - Configure workflow
    - Set up PR comments
    - Archive reports
 
-4. **Troubleshooting**
+1. **Troubleshooting**
    - Common issues and solutions
    - Performance optimization
    - Debug mode options
 
 ### Configuration Guide (`tools/coverage/CONFIG.md`)
 
-**Topics Covered**:
+### Topics Covered
 
 1. **Basic Configuration**
    - Enabling/disabling coverage
    - Setting source directories
    - Configuring output format
 
-2. **Advanced Configuration**
+1. **Advanced Configuration**
    - Parallel test execution settings
    - Custom exclusion patterns
    - Per-module thresholds
 
-3. **Report Customization**
+1. **Report Customization**
    - HTML report styling
    - Text report format
    - JSON schema
 
-4. **Performance Tuning**
+1. **Performance Tuning**
    - Coverage collection overhead
    - Parallel execution optimization
    - Report generation speed
@@ -381,7 +392,8 @@ Lint → Build → Unit Tests (with coverage) → Integration Tests
 
 **Decision**: Modular design with separate components for collection, reporting, and validation.
 
-**Rationale**:
+### Rationale
+
 - Allows independent testing of each component
 - Enables future enhancements to individual parts
 - Supports different usage scenarios (CLI, library, CI/CD)
@@ -390,7 +402,8 @@ Lint → Build → Unit Tests (with coverage) → Integration Tests
 
 **Decision**: Use both `.coveragerc` (tool config) and `coverage-config.yaml` (project config).
 
-**Rationale**:
+### Rationale
+
 - `.coveragerc` is familiar to users of coverage tools
 - `coverage-config.yaml` integrates with project configuration system
 - Provides flexibility for different configuration needs
@@ -399,7 +412,8 @@ Lint → Build → Unit Tests (with coverage) → Integration Tests
 
 **Decision**: Provide HTML, text, and JSON formats.
 
-**Rationale**:
+### Rationale
+
 - HTML for human review and understanding
 - Text for CI/CD logs and quick checks
 - JSON for programmatic access and tool integration
@@ -408,7 +422,8 @@ Lint → Build → Unit Tests (with coverage) → Integration Tests
 
 **Decision**: Implement as separate validation step, not part of collection.
 
-**Rationale**:
+### Rationale
+
 - Allows collecting data without failing on low coverage
 - Enables gradual threshold increases
 - Supports multiple validation strategies
@@ -417,7 +432,8 @@ Lint → Build → Unit Tests (with coverage) → Integration Tests
 
 **Decision**: Provide GitHub Actions workflow as template.
 
-**Rationale**:
+### Rationale
+
 - Project uses GitHub Actions
 - Easy to customize for different needs
 - Can serve as template for other CI/CD systems
@@ -425,6 +441,7 @@ Lint → Build → Unit Tests (with coverage) → Integration Tests
 ### Testing Strategy
 
 Integration tested through:
+
 - Coverage collection with various test scenarios
 - Report generation with different configurations
 - Threshold validation with edge cases
@@ -455,36 +472,42 @@ Integration tested through:
 ## Implementation Phases
 
 ### Phase 1: Integration Layer Setup
+
 - Create integration utilities
 - Hook into test runner
 - Set up basic configuration
 - Verify collection works
 
 ### Phase 2: Report Generation
+
 - Implement HTML report generation
 - Implement text report generation
 - Implement JSON report generation
 - Test with sample coverage data
 
 ### Phase 3: Threshold Validation
+
 - Implement threshold checking
 - Configure default thresholds
 - Integrate with CI/CD
 - Test validation failures
 
 ### Phase 4: CI/CD Workflow
+
 - Create GitHub Actions workflow
 - Set up artifact storage
 - Configure PR comments
 - Test complete pipeline
 
 ### Phase 5: Distribution Package
+
 - Create distribution tarball
 - Implement build script
 - Implement verification script
 - Write installation documentation
 
 ### Phase 6: Documentation
+
 - Write migration guide
 - Write integration guide
 - Write configuration guide
@@ -496,6 +519,7 @@ Integration tested through:
 ### From Implementation (Issue #846)
 
 The Package phase depends on successful completion of:
+
 - Coverage data collector
 - Report generator
 - Threshold validator
@@ -504,6 +528,7 @@ The Package phase depends on successful completion of:
 ### From Testing (Issue #845)
 
 Package phase should coordinate with:
+
 - Unit tests for all components
 - Integration test scenarios
 - Performance benchmarks
@@ -512,6 +537,7 @@ Package phase should coordinate with:
 ### From Planning (Issue #844)
 
 Package phase implements the design from:
+
 - Architecture specifications
 - API design
 - Integration patterns
@@ -541,38 +567,43 @@ Before considering this issue complete:
 After successful completion of this Package phase:
 
 1. **Issue #848 (Cleanup)**: Polish code, optimize performance, complete documentation
-2. **Team Integration**: Deploy coverage tool across all modules
-3. **Monitoring**: Track coverage metrics over time
-4. **Improvements**: Add branch coverage, correlate with code metrics
+1. **Team Integration**: Deploy coverage tool across all modules
+1. **Monitoring**: Track coverage metrics over time
+1. **Improvements**: Add branch coverage, correlate with code metrics
 
 ## Timeline and Dependencies
 
-**Depends on**:
+### Depends on
+
 - Issue #844 (Plan) - ✅ Complete
 - Issue #845 (Test) - Status to be confirmed
 - Issue #846 (Impl) - Status to be confirmed
 
-**Coordinates with**:
+### Coordinates with
+
 - Issue #848 (Cleanup) - Will refactor and finalize after Package phase
 
 **Timeline**: Estimated 3-5 business days for complete implementation
 
 ## Notes
 
-**Key Principles**:
+### Key Principles
+
 - Make packaging easy and straightforward for other teams
 - Focus on line coverage initially - branch coverage can come later
 - Make reports easy to understand with clear visualization
 - Set reasonable default thresholds (80% is common industry standard)
 - Ensure compatibility with project's existing tooling
 
-**Common Patterns to Support**:
+### Common Patterns to Support
+
 - Gradual coverage increases as codebase matures
 - Different thresholds for different modules
 - Exclusion of generated or third-party code
 - Integration with GitHub PR workflow
 
 **Future Enhancements** (defer to later issues):
+
 - Branch coverage tracking
 - Coverage trend visualization
 - Historical coverage reports

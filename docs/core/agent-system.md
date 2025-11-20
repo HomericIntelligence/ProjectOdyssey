@@ -93,6 +93,7 @@ User: "Design the architecture for the neural network module"
 You can explicitly request an agent:
 
 ```text
+
 ```text
 
 User: "Use the Implementation Engineer to code the forward pass function"
@@ -105,9 +106,9 @@ User: "Use the Implementation Engineer to code the forward pass function"
 When working with agents:
 
 1. **Describe what you need** - "I need tests for the tensor operations module"
-2. **Agent takes action** - Reviews context, coordinates work, implements solution
-3. **Agent reports status** - Shows progress, asks clarifying questions
-4. **You review output** - Check documentation, tests, code in `/notes/issues/<issue-number>/`
+1. **Agent takes action** - Reviews context, coordinates work, implements solution
+1. **Agent reports status** - Shows progress, asks clarifying questions
+1. **You review output** - Check documentation, tests, code in `/notes/issues/<issue-number>/`
 
 ## Quick Reference: Which Agent to Use
 

@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Add black configuration for consistent formatting
-2. Configure ruff for linting and import sorting
-3. Set up pytest configuration for test discovery
-4. Configure mypy for type checking if used
+1. Configure ruff for linting and import sorting
+1. Set up pytest configuration for test discovery
+1. Configure mypy for type checking if used
 
 ## Success Criteria
 

@@ -9,10 +9,10 @@ All scripts and documentation are in place. The actual `.mojopkg` file needs to 
 ## What Was Created
 
 1. ✅ `scripts/build_utils_package.sh` - Build-only script
-2. ✅ `scripts/install_verify_utils.sh` - Installation verification script
-3. ✅ `scripts/package_utils.sh` - Complete workflow script
-4. ✅ `notes/issues/45/README.md` - Comprehensive documentation
-5. ✅ `BUILD_INSTRUCTIONS.md` - User-facing build guide
+1. ✅ `scripts/install_verify_utils.sh` - Installation verification script
+1. ✅ `scripts/package_utils.sh` - Complete workflow script
+1. ✅ `notes/issues/45/README.md` - Comprehensive documentation
+1. ✅ `BUILD_INSTRUCTIONS.md` - User-facing build guide
 
 ## What Needs to Be Done
 
@@ -27,7 +27,7 @@ chmod +x scripts/*.sh
 
 # Run the build
 ./scripts/package_utils.sh
-```
+```text
 
 This will create:
 
@@ -42,7 +42,7 @@ After running the build, verify:
 ls -lh dist/utils-0.1.0.mojopkg
 
 # Expected: File with size information (several KB to MB)
-```
+```text
 
 ## Commit and PR
 
@@ -87,14 +87,14 @@ gh pr create --issue 45 \
 - Clean environment testing via temporary directory
 
 Closes #45"
-```
+```text
 
 ## Important Notes
 
 1. **dist/ is in .gitignore** - The `.mojopkg` file should NOT be committed
-2. **Scripts should be committed** - They enable reproducible builds
-3. **Documentation should be committed** - Updated README and BUILD_INSTRUCTIONS
-4. **Test before committing** - Ensure `./scripts/package_utils.sh` runs successfully
+1. **Scripts should be committed** - They enable reproducible builds
+1. **Documentation should be committed** - Updated README and BUILD_INSTRUCTIONS
+1. **Test before committing** - Ensure `./scripts/package_utils.sh` runs successfully
 
 ## Expected File Changes
 
@@ -107,13 +107,13 @@ A  scripts/package_utils.sh
 M  notes/issues/45/README.md
 A  BUILD_INSTRUCTIONS.md
 A  EXECUTE_BUILD.md
-```
+```text
 
 Files created but NOT committed (in .gitignore):
 
 ```text
 ?? dist/utils-0.1.0.mojopkg
-```
+```text
 
 ## Next Issue
 

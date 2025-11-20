@@ -19,14 +19,14 @@ chmod +x scripts/*.sh
 
 # Run complete packaging workflow
 ./scripts/package_utils.sh
-```
+```text
 
 This will:
 
 1. Create the `dist/` directory
-2. Build `dist/utils-0.1.0.mojopkg`
-3. Make installation verification script executable
-4. Test package installation (optional)
+1. Build `dist/utils-0.1.0.mojopkg`
+1. Make installation verification script executable
+1. Test package installation (optional)
 
 ## Manual Build Steps
 
@@ -36,13 +36,13 @@ If you prefer step-by-step control:
 
 ```bash
 mkdir -p dist
-```
+```text
 
 ### Step 2: Build the Package
 
 ```bash
 mojo package shared/utils -o dist/utils-0.1.0.mojopkg
-```
+```text
 
 **Expected output**: "Package created successfully" (or similar)
 
@@ -50,7 +50,7 @@ mojo package shared/utils -o dist/utils-0.1.0.mojopkg
 
 ```bash
 ls -lh dist/utils-0.1.0.mojopkg
-```
+```text
 
 **Expected output**: File size information (typically several KB to MB)
 
@@ -58,13 +58,13 @@ ls -lh dist/utils-0.1.0.mojopkg
 
 ```bash
 chmod +x scripts/install_verify_utils.sh
-```
+```text
 
 ### Step 5: Test Installation (Optional)
 
 ```bash
 ./scripts/install_verify_utils.sh
-```
+```text
 
 **Note**: This creates a temporary directory, installs the package, tests imports, and cleans up.
 
@@ -76,7 +76,7 @@ chmod +x scripts/install_verify_utils.sh
 
 ```bash
 ./scripts/package_utils.sh
-```
+```text
 
 Options:
 
@@ -88,7 +88,7 @@ Options:
 
 ```bash
 ./scripts/build_utils_package.sh
-```
+```text
 
 Use this when you only need to rebuild the package without testing.
 
@@ -98,7 +98,7 @@ Use this when you only need to rebuild the package without testing.
 
 ```bash
 ./scripts/install_verify_utils.sh
-```
+```text
 
 Use this to test an existing package without rebuilding.
 
@@ -108,65 +108,65 @@ Use this to test an existing package without rebuilding.
 
 **Issue**: `mojo: command not found` or Mojo is not in PATH
 
-**Solution**:
+### Solution
 
 ```bash
 # Verify Mojo installation
 which mojo
 mojo --version
 
-# If not found, ensure Mojo is installed via Pixi:
+# If not found, ensure Mojo is installed via Pixi
 pixi run mojo --version
 
-# Or activate the Pixi environment:
+# Or activate the Pixi environment
 pixi shell
 mojo --version
-```
+```text
 
 ### Permission errors on dist/
 
 **Issue**: Cannot create dist/ directory or write to it
 
-**Solution**:
+### Solution
 
 ```bash
 mkdir -p dist
 chmod 755 dist
-```
+```text
 
 ### "Permission denied" when running scripts
 
 **Issue**: Scripts not executable
 
-**Solution**:
+### Solution
 
 ```bash
 chmod +x scripts/*.sh
-```
+```text
 
 ### Import errors after installation
 
 **Issue**: Package installs but imports fail
 
-**Solution**:
+### Solution
 
 ```bash
 # Verify package installation
 mojo list-packages
 
 # Check if utils package is listed
-# If not, reinstall:
+# If not, reinstall
 mojo install dist/utils-0.1.0.mojopkg
 
 # Test basic import
 mojo run -c "import utils; print('Success!')"
-```
+```text
 
 ### Package build fails with syntax errors
 
 **Issue**: Source code has compilation errors
 
-**Solution**:
+### Solution
 
 1. Test each module individually:
 
@@ -177,16 +177,16 @@ mojo shared/utils/io.mojo
 mojo shared/utils/visualization.mojo
 mojo shared/utils/random.mojo
 mojo shared/utils/profiling.mojo
-```
+```text
 
 1. Fix any syntax errors reported
-2. Retry the package build
+1. Retry the package build
 
 ### Installation test fails
 
 **Issue**: Package installs but imports fail
 
-**Solution**:
+### Solution
 
 1. Verify package structure:
 
@@ -199,10 +199,10 @@ mojo install dist/utils-0.1.0.mojopkg
 
 # Test basic import
 mojo run -c "import utils; print('Success!')"
-```
+```text
 
 1. Check for dependency issues
-2. Ensure `__init__.mojo` exports are correct
+1. Ensure `__init__.mojo` exports are correct
 
 ## Expected Artifacts
 
@@ -216,7 +216,7 @@ scripts/
 ├── build_utils_package.sh   # Build-only script
 ├── install_verify_utils.sh  # Installation verification
 └── package_utils.sh         # Complete workflow
-```
+```text
 
 **Note**: The `dist/` directory is in `.gitignore` and should NOT be committed to git.
 
@@ -225,10 +225,10 @@ scripts/
 After building the package:
 
 1. **Test installation**: Run `./scripts/install_verify_utils.sh`
-2. **Verify imports**: Test that all 49 exported symbols work
-3. **Document results**: Update `notes/issues/45/README.md` with build results
-4. **Commit changes**: Commit scripts and documentation (NOT the .mojopkg file)
-5. **Create PR**: Link to Issue #45
+1. **Verify imports**: Test that all 49 exported symbols work
+1. **Document results**: Update `notes/issues/45/README.md` with build results
+1. **Commit changes**: Commit scripts and documentation (NOT the .mojopkg file)
+1. **Create PR**: Link to Issue #45
 
 ## Reference
 

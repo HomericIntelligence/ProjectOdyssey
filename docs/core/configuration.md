@@ -38,6 +38,7 @@ The project requires:
 ### Using Pixi
 
 ```bash
+
 ```bash
 
 # Activate the environment
@@ -59,13 +60,13 @@ Pre-commit hooks automatically check code quality before commits. Configuration 
 
 ### Configured Hooks
 
-**Markdown Linting**
+### Markdown Linting
 
 - Lints markdown files for consistency
 - Excludes `notes/plan`, `notes/issues`, `notes/review`, `notes/blog`
 - Uses configuration from `.markdownlint.json`
 
-**File Checks**
+### File Checks
 
 - Trailing whitespace removal
 - End-of-file fixing
@@ -85,15 +86,19 @@ Pre-commit hooks automatically check code quality before commits. Configuration 
 ```bash
 
 # Install hooks (one-time setup)
+
 pre-commit install
 
 # Run on all files
+
 pre-commit run --all-files
 
 # Run on staged files only
+
 pre-commit run
 
 # Skip hooks (use sparingly)
+
 git commit --no-verify
 
 ```text
@@ -121,11 +126,13 @@ Write markdown following these rules:
 Example:
 
 ```markdown
+
 ```markdown
 
 Some text here.
 
 ```python
+
 ```python
 
 def hello():
@@ -181,6 +188,7 @@ Currently, no environment variables are required for basic setup. Build and depl
 ### Adding Dependencies
 
 ```bash
+
 ```bash
 
 pixi add package_name
@@ -192,8 +200,8 @@ This updates `pixi.toml` and locks dependencies in `pixi.lock`.
 ### Modifying Pre-commit Hooks
 
 1. Edit `.pre-commit-config.yaml`
-2. Reinstall hooks: `pre-commit install`
-3. Test: `pre-commit run --all-files`
+1. Reinstall hooks: `pre-commit install`
+1. Test: `pre-commit run --all-files`
 
 ### Customizing Markdown Rules
 

@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Load dependency requirements from project files
-2. Check each dependency is installed
-3. Verify versions meet requirements
-4. Report missing or incompatible dependencies
+1. Check each dependency is installed
+1. Verify versions meet requirements
+1. Report missing or incompatible dependencies
 
 ## Success Criteria
 

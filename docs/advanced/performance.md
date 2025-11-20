@@ -20,8 +20,8 @@ then profile to identify real bottlenecks.
 ### Three Levels of Optimization
 
 1. **Algorithm-Level** - Choose better algorithms (e.g., efficient attention mechanisms, sparse operations)
-2. **Implementation-Level** - Use language features effectively (Mojo's `fn`, ownership patterns, SIMD)
-3. **Hardware-Level** - Exploit CPU/GPU capabilities (cache-friendly layouts, memory bandwidth utilization)
+1. **Implementation-Level** - Use language features effectively (Mojo's `fn`, ownership patterns, SIMD)
+1. **Hardware-Level** - Exploit CPU/GPU capabilities (cache-friendly layouts, memory bandwidth utilization)
 
 **Priority**: Algorithm > Implementation > Hardware
 
@@ -71,6 +71,7 @@ Memory bandwidth is often the bottleneck in ML workloads. Every optimization sho
 ### Memory Hierarchy
 
 ```text
+
 ```text
 
 L1 Cache (32KB)   - 4 cycles, 64 GB/s
@@ -88,11 +89,13 @@ RAM (32GB)        - 200+ cycles, 8-16 GB/s
 ```mojo
 
 # BAD: Creates temporaries
+
 fn bad_layer(x: Tensor, w: Tensor) -> Tensor:
     var scaled = x * 2.0      # Allocation
     return scaled @ w          # Allocation
 
 # GOOD: Reuse buffers
+
 fn good_layer(borrowed x: Tensor, borrowed w: Tensor, inout buffer: Tensor) -> Tensor:
     buffer = x @ w
     return buffer * 2.0
@@ -102,6 +105,7 @@ fn good_layer(borrowed x: Tensor, borrowed w: Tensor, inout buffer: Tensor) -> T
 #### 2. In-Place Operations
 
 ```mojo
+
 ```mojo
 
 # Modify data without creating copies
@@ -116,6 +120,7 @@ fn inplace_update(inout weights: Tensor, borrowed grad: Tensor, lr: Float64):
 ```mojo
 
 # Row-major iteration for row-major matrices
+
 for i in range(rows):
     for j in range(cols):
         process(matrix[i][j])  # Sequential access
@@ -125,6 +130,7 @@ for i in range(rows):
 #### 4. Batch Processing
 
 ```mojo
+
 ```mojo
 
 # Process multiple examples together
@@ -156,6 +162,7 @@ fn benchmark_function():
 **CPU Profiling** (Linux/macOS):
 
 ```bash
+
 ```bash
 
 # Compile with debug symbols
@@ -167,12 +174,13 @@ perf report
 
 ```text
 
-**Memory Profiling**:
+### Memory Profiling
 
 ```bash
 ```bash
 
 # Use Mojo's memory tracking
+
 mojo --memory-check example.mojo
 
 ```text
@@ -186,6 +194,7 @@ mojo --memory-check example.mojo
 5. **Compare generations** - Track performance across versions
 
 ```mojo
+
 ```mojo
 
 fn benchmark_with_warmup(f: fn() -> None, iterations: Int = 10):
@@ -214,6 +223,7 @@ fn benchmark_with_warmup(f: fn() -> None, iterations: Int = 10):
 ```mojo
 
 # Let compiler unroll loop by using @parameter
+
 @parameter
 fn process_batch[batch_size: Int](data: Tensor):
     for i in range(batch_size):
@@ -224,6 +234,7 @@ fn process_batch[batch_size: Int](data: Tensor):
 ### 2. Constant Folding
 
 ```mojo
+
 ```mojo
 
 # Compute constants at compile-time
@@ -240,6 +251,7 @@ fn he_init(size: Int) -> Float32:
 ```mojo
 
 # Unused variables and functions are eliminated by compiler
+
 fn process_with_debug(debug: Bool, data: Tensor):
     if debug:
         # This branch is eliminated if debug is compile-time constant
@@ -250,6 +262,7 @@ fn process_with_debug(debug: Bool, data: Tensor):
 ### 4. Fusion
 
 ```mojo
+
 ```mojo
 
 # BAD: Three separate kernels
@@ -272,6 +285,7 @@ fn fused_forward(borrowed x: Tensor, borrowed w1: Tensor,
 ```mojo
 
 # Use lower precision when possible
+
 fn forward_int8(borrowed x: Tensor[DType.int8]) -> Tensor[DType.int8]:
     # int8 operations are faster and use less memory than float32
     return x @ weights_int8
@@ -283,6 +297,7 @@ fn forward_int8(borrowed x: Tensor[DType.int8]) -> Tensor[DType.int8]:
 ### 1. Premature Optimization
 
 ```mojo
+
 ```mojo
 
 # BAD: Optimizing unproven bottleneck
@@ -298,10 +313,12 @@ fn unclear_optimization(x: Tensor):
 ```mojo
 
 # BAD: Ambiguous ownership
+
 fn process(x: Tensor) -> Tensor:
     # Does this move, borrow, or copy?
 
 # GOOD: Explicit ownership
+
 fn process(borrowed x: Tensor) -> Tensor:
     # Clearly borrows (read-only)
 
@@ -310,6 +327,7 @@ fn process(borrowed x: Tensor) -> Tensor:
 ### 3. Allocating in Loops
 
 ```mojo
+
 ```mojo
 
 # BAD: Allocates each iteration
@@ -330,11 +348,13 @@ for i in range(1000):
 ```mojo
 
 # BAD: Transposed access
+
 for j in range(cols):
     for i in range(rows):
         process(matrix[i][j])  # Cache misses!
 
 # GOOD: Sequential access
+
 for i in range(rows):
     for j in range(cols):
         process(matrix[i][j])  # Cache hits!

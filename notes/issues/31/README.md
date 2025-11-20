@@ -21,7 +21,7 @@ The shared/core library packaging infrastructure has been verified and is comple
 
 ## Package Structure
 
-```
+```text
 shared/
 ├── __init__.mojo          # Package root
 ├── core/                  # Core module
@@ -32,7 +32,7 @@ shared/
 │   └── utils/
 ├── README.md
 └── mojo.toml             # Package configuration
-```
+```text
 
 ## Package Configuration
 

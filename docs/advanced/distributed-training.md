@@ -22,6 +22,7 @@ Replicate model across devices, split data batches:
 ```mojo
 
 # Planned API
+
 struct DataParallel:
     var devices: List[Device]
     var model_replicas: List[Model]
@@ -53,6 +54,7 @@ struct DataParallel:
 Split model layers across devices:
 
 ```mojo
+
 ```mojo
 
 # Planned API
@@ -83,6 +85,7 @@ struct ModelParallel:
 ```yaml
 
 # configs/distributed/config.yaml
+
 distributed:
   strategy: data_parallel  # or model_parallel
   devices:
@@ -101,6 +104,7 @@ distributed:
 ### Initialization
 
 ```mojo
+
 ```mojo
 
 # Planned usage
@@ -157,6 +161,7 @@ fn train_distributed(model: DataParallel, data: DataLoader, world: DistributedWo
 ### Communication Optimization
 
 ```mojo
+
 ```mojo
 
 # Planned: Gradient compression
@@ -182,6 +187,7 @@ struct CompressedDataParallel:
 ```mojo
 
 # Planned: Checkpointing for recovery
+
 fn train_with_checkpoints(model: DataParallel):
     """Training with periodic checkpointing."""
     for epoch in range(num_epochs):
@@ -237,6 +243,7 @@ Until distributed training is officially supported, consider:
 ### Manual Data Parallelism
 
 ```mojo
+
 ```mojo
 
 fn manual_data_parallel():

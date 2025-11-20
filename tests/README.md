@@ -14,7 +14,7 @@ tests/
 ├── papers/           # Paper implementation tests
 ├── agents/           # Agent configuration tests
 └── integration/      # End-to-end integration tests
-```
+```text
 
 ## Quick Start
 
@@ -22,19 +22,19 @@ Run all tests:
 
 ```bash
 python3 -m pytest tests/
-```
+```text
 
 Run specific test suite:
 
 ```bash
 python3 -m pytest tests/foundation/
-```
+```text
 
 Run with coverage:
 
 ```bash
 python3 -m pytest tests/ --cov=. --cov-report=html
-```
+```text
 
 ## Usage
 
@@ -95,7 +95,7 @@ python3 -m pytest -v
 
 # Run with warnings
 python3 -m pytest -W default
-```
+```text
 
 ### Coverage Reports
 
@@ -105,7 +105,7 @@ python3 -m pytest --cov=. --cov-report=html
 
 # View coverage
 open htmlcov/index.html
-```
+```text
 
 ### Test Selection
 
@@ -118,7 +118,7 @@ python3 -m pytest tests/foundation/test_supporting_directories.py::TestSupportin
 
 # Run tests matching pattern
 python3 -m pytest -k "supporting"
-```
+```text
 
 ## Test Standards
 
@@ -143,7 +143,7 @@ Use descriptive assertion messages:
 
 ```python
 assert result == expected, f"Expected {expected}, got {result}"
-```
+```text
 
 ## CI/CD Integration
 

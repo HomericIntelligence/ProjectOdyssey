@@ -7,18 +7,21 @@ Define the comprehensive design and architecture for implementing the core direc
 ## Deliverables
 
 ### Design Documentation
+
 - Architecture specification for directory creation system
 - API contract definitions and interface design
 - Error handling strategy and edge case analysis
 - Data flow and processing pipeline design
 
 ### Technical Specifications
+
 - Directory structure specification format
 - Paper name normalization rules
 - Permission setting requirements
 - Logging and reporting format
 
 ### Component Outputs (from implementation)
+
 - Created directory hierarchy following repository conventions
 - Directory creation log with detailed operation tracking
 - Error handling for existing directories and permission issues
@@ -41,13 +44,15 @@ Define the comprehensive design and architecture for implementing the core direc
 
 **Decision**: Use Python for directory creation automation
 
-**Rationale**:
+### Rationale
+
 - Subprocess output capture (Mojo v0.25.7 limitation - cannot capture stdout/stderr)
 - Robust os.makedirs() with exist_ok parameter for idempotent operations
 - Better exception handling for filesystem operations
 - Aligns with ADR-001 language selection strategy for tooling/automation
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Mojo: Not suitable due to subprocess limitations and immature filesystem API
 - Bash scripts: Less maintainable, harder to test, poor error handling
 
@@ -55,13 +60,15 @@ Define the comprehensive design and architecture for implementing the core direc
 
 **Decision**: Use `os.makedirs(path, exist_ok=True)` for all directory creation
 
-**Rationale**:
+### Rationale
+
 - Safe to run multiple times without errors
 - Handles existing directories gracefully
 - Simplifies error handling logic
 - Matches repository convention of idempotent operations
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Check-then-create: Race conditions possible
 - Fail on existing: Not user-friendly, breaks idempotency
 
@@ -69,18 +76,20 @@ Define the comprehensive design and architecture for implementing the core direc
 
 **Decision**: Convert paper names to lowercase with hyphens replacing spaces/special characters
 
-**Rationale**:
+### Rationale
+
 - Consistent naming across filesystem
 - Avoids shell escaping issues
 - Follows established repository conventions
 - Predictable and reversible transformation
 
-**Normalization Rules**:
+### Normalization Rules
+
 1. Convert to lowercase
-2. Replace spaces with hyphens
-3. Remove or replace special characters (keep only alphanumeric and hyphens)
-4. Remove consecutive hyphens
-5. Trim leading/trailing hyphens
+1. Replace spaces with hyphens
+1. Remove or replace special characters (keep only alphanumeric and hyphens)
+1. Remove consecutive hyphens
+1. Trim leading/trailing hyphens
 
 **Example**: "LeNet-5: First CNN" → "lenet-5-first-cnn"
 
@@ -88,13 +97,15 @@ Define the comprehensive design and architecture for implementing the core direc
 
 **Decision**: Use Python dictionary/JSON structure for directory hierarchy specification
 
-**Rationale**:
+### Rationale
+
 - Easy to parse and validate
 - Supports nested structures naturally
 - Can be extended with metadata (permissions, templates, etc.)
 - Human-readable and maintainable
 
-**Example Structure**:
+### Example Structure
+
 ```python
 {
     "name": "{paper_name}",
@@ -106,19 +117,21 @@ Define the comprehensive design and architecture for implementing the core direc
         "data"
     ]
 }
-```
+```text
 
 ### 5. Logging Strategy
 
 **Decision**: Structured logging with operation tracking and summary reporting
 
-**Rationale**:
+### Rationale
+
 - Clear feedback for users
 - Debugging support for failures
 - Audit trail for created directories
 - Supports both verbose and summary modes
 
-**Log Levels**:
+### Log Levels
+
 - INFO: Directory created successfully
 - WARNING: Directory already exists (skipped)
 - ERROR: Permission denied or other failures
@@ -127,23 +140,26 @@ Define the comprehensive design and architecture for implementing the core direc
 
 **Decision**: Continue-on-error with comprehensive reporting
 
-**Rationale**:
+### Rationale
+
 - Create as much as possible even if some operations fail
 - Provide complete error report at end
 - User can fix issues and re-run (idempotent)
 - Better UX than fail-fast approach
 
-**Error Categories**:
+### Error Categories
+
 1. Permission errors (report and continue)
-2. Invalid path errors (fail early)
-3. Disk space errors (fail early)
-4. Existing directory (log and continue)
+1. Invalid path errors (fail early)
+1. Disk space errors (fail early)
+1. Existing directory (log and continue)
 
 ### 7. Permission Settings
 
 **Decision**: Use default permissions (755 for directories) with option to customize
 
-**Rationale**:
+### Rationale
+
 - Follows standard Unix conventions
 - Secure by default (owner: rwx, group: rx, other: rx)
 - Can be overridden if needed
@@ -153,17 +169,19 @@ Define the comprehensive design and architecture for implementing the core direc
 
 **Decision**: Post-creation validation of directory structure
 
-**Rationale**:
+### Rationale
+
 - Confirms successful creation
 - Detects partial failures
 - Provides confidence in output
 - Supports automated testing
 
-**Validation Checks**:
+### Validation Checks
+
 1. All required directories exist
-2. Directories are writable
-3. Structure matches specification
-4. No unexpected directories created
+1. Directories are writable
+1. Structure matches specification
+1. No unexpected directories created
 
 ## Architecture
 
@@ -176,7 +194,7 @@ create_structure/
 ├── normalizer.py         # Paper name normalization
 ├── validator.py          # Structure validation
 └── logging_config.py     # Logging setup
-```
+```text
 
 ### API Contract
 
@@ -223,7 +241,7 @@ class DirectoryCreator:
             ValidationResult with validation details
         """
         pass
-```
+```text
 
 #### Helper Functions
 
@@ -251,7 +269,7 @@ def validate_base_path(path: str) -> bool:
         True if valid, False otherwise
     """
     pass
-```
+```text
 
 #### Result Classes
 
@@ -273,51 +291,56 @@ class ValidationResult:
     unexpected_dirs: List[str]
     permission_issues: List[str]
     summary: str
-```
+```text
 
 ### Data Flow
 
 1. **Input**: Base path, paper name, structure specification
-2. **Normalization**: Paper name → normalized directory name
-3. **Validation**: Validate base path exists and is writable
-4. **Creation**: Iterate through structure spec, create directories
-5. **Logging**: Record each operation (created, skipped, error)
-6. **Validation**: Verify created structure matches specification
-7. **Output**: CreationResult with summary and details
+1. **Normalization**: Paper name → normalized directory name
+1. **Validation**: Validate base path exists and is writable
+1. **Creation**: Iterate through structure spec, create directories
+1. **Logging**: Record each operation (created, skipped, error)
+1. **Validation**: Verify created structure matches specification
+1. **Output**: CreationResult with summary and details
 
 ### Error Handling Flow
 
 1. **Invalid base path** → Raise ValueError immediately
-2. **Permission denied on base** → Raise PermissionError immediately
-3. **Permission denied on subdir** → Log error, continue, report in result
-4. **Directory exists** → Log warning, continue
-5. **Disk full** → Log error, fail operation
-6. **Invalid directory name** → Log error, skip directory, continue
+1. **Permission denied on base** → Raise PermissionError immediately
+1. **Permission denied on subdir** → Log error, continue, report in result
+1. **Directory exists** → Log warning, continue
+1. **Disk full** → Log error, fail operation
+1. **Invalid directory name** → Log error, skip directory, continue
 
 ## References
 
 ### Source Plans
+
 - [Create Structure Plan](/home/mvillmow/ml-odyssey-manual/notes/plan/03-tooling/01-paper-scaffolding/02-directory-generator/01-create-structure/plan.md)
 - [Parent: Directory Generator Plan](/home/mvillmow/ml-odyssey-manual/notes/plan/03-tooling/01-paper-scaffolding/02-directory-generator/plan.md)
 
 ### Related Issues
+
 - #745 - [Test] Create Structure - Write Tests (depends on this plan)
 - #746 - [Implementation] Create Structure - Build Functionality (depends on this plan)
 - #747 - [Packaging] Create Structure - Integration and Packaging (depends on this plan)
 - #748 - [Cleanup] Create Structure - Refactor and Finalize (depends on parallel phases)
 
 ### Related Documentation
+
 - [ADR-001: Language Selection for Tooling](/home/mvillmow/ml-odyssey-manual/notes/review/adr/ADR-001-language-selection-tooling.md)
 - [5-Phase Development Workflow](/home/mvillmow/ml-odyssey-manual/notes/review/README.md)
 - [Repository Architecture](/home/mvillmow/ml-odyssey-manual/CLAUDE.md#repository-architecture)
 
 ### Team Resources
+
 - [Agent Hierarchy](/home/mvillmow/ml-odyssey-manual/agents/hierarchy.md)
 - [Delegation Rules](/home/mvillmow/ml-odyssey-manual/agents/delegation-rules.md)
 
 ## Implementation Notes
 
 This section will be populated during the implementation phase with:
+
 - Discoveries and insights from development
 - Deviations from original design (with justification)
 - Performance observations

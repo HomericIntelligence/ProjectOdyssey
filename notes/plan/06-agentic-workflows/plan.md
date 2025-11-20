@@ -32,8 +32,8 @@ None (top-level)
 ## Steps
 
 1. Build research assistant with agent configuration, prompt templates, workflows, and tests
-2. Build code review agent with review criteria, prompt templates, workflows, and tests
-3. Build documentation agent with documentation standards, prompt templates, workflows, and tests
+1. Build code review agent with review criteria, prompt templates, workflows, and tests
+1. Build documentation agent with documentation standards, prompt templates, workflows, and tests
 
 ## Success Criteria
 

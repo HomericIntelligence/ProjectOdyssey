@@ -7,13 +7,13 @@ for reproducing classic research papers.
 
 ### System Requirements
 
-**Operating System**:
+### Operating System
 
 - Linux (64-bit) - Primary supported platform
 - macOS (Intel/Apple Silicon) - Experimental support through Mojo
 - Windows - Via WSL2 (Windows Subsystem for Linux)
 
-**Hardware Requirements**:
+### Hardware Requirements
 
 - CPU: Modern 64-bit processor (x86_64 or ARM64)
 - RAM: Minimum 4GB, recommended 8GB+ for training models
@@ -28,11 +28,11 @@ Before installing ML Odyssey, ensure you have:
    - Check: `git --version`
    - Install: [https://git-scm.com/downloads](https://git-scm.com/downloads/)
 
-2. **Python 3.7+** - For automation scripts
+1. **Python 3.7+** - For automation scripts
    - Check: `python3 --version`
    - Install: [https://www.python.org/downloads/](https://www.python.org/downloads/)
 
-3. **Pixi** - Environment manager (we'll install this in the next section)
+1. **Pixi** - Environment manager (we'll install this in the next section)
    - Manages Mojo and all project dependencies automatically
 
 **Note**: You do NOT need to install Mojo separately - Pixi will handle this automatically.
@@ -43,7 +43,7 @@ Before installing ML Odyssey, ensure you have:
 
 Pixi is our environment manager that handles all dependencies including Mojo.
 
-**Linux/macOS**:
+### Linux/macOS
 
 ```bash
 
@@ -51,7 +51,7 @@ curl -fsSL <https://pixi.sh/install.sh> | bash
 
 ```text
 
-**Windows (PowerShell)**:
+### Windows (PowerShell)
 
 ```powershell
 
@@ -59,7 +59,7 @@ iwr -useb <https://pixi.sh/install.ps1> | iex
 
 ```text
 
-**Verify Installation**:
+### Verify Installation
 
 ```bash
 
@@ -109,7 +109,7 @@ pixi shell
 
 ```text
 
-**What happens during `pixi install`**:
+### What happens during `pixi install`
 
 - Downloads and installs Mojo compiler (v0.25.7+)
 - Installs pre-commit hooks framework
@@ -129,7 +129,7 @@ pre-commit install
 
 ```text
 
-**Configured hooks**:
+### Configured hooks
 
 - `markdownlint-cli2` - Lint markdown files
 - `trailing-whitespace` - Remove trailing whitespace
@@ -163,7 +163,7 @@ mojo --version
 
 Expected output: `mojo 0.25.7` or later
 
-**If Mojo is not found**:
+### If Mojo is not found
 
 ```bash
 
@@ -223,10 +223,10 @@ Expected output: `ML Odyssey is ready!`
 Now that you have ML Odyssey installed, you can:
 
 1. **Explore the repository structure**: Read [repository-structure.md](repository-structure.md)
-2. **Try the quick start guide**: Follow [quickstart.md](quickstart.md)
-3. **Run your first model**: See [first_model.md](first_model.md)
-4. **Read the documentation**: Browse `docs/` directory
-5. **Explore examples**: Check `examples/` directory
+1. **Try the quick start guide**: Follow [quickstart.md](quickstart.md)
+1. **Run your first model**: See [first_model.md](first_model.md)
+1. **Read the documentation**: Browse `docs/` directory
+1. **Explore examples**: Check `examples/` directory
 
 ## Troubleshooting
 
@@ -264,7 +264,7 @@ mojo --version
 
 **Solution**: Install dependencies for your distribution:
 
-**Ubuntu/Debian**:
+### Ubuntu/Debian
 
 ```bash
 
@@ -273,7 +273,7 @@ sudo apt-get install curl build-essential
 
 ```text
 
-**Fedora/RHEL**:
+### Fedora/RHEL
 
 ```bash
 
@@ -360,7 +360,7 @@ pixi install
 
 ML Odyssey is primarily developed and tested on Linux. Installation should be straightforward following the steps above.
 
-**Recommended distributions**:
+### Recommended distributions
 
 - Ubuntu 20.04+
 - Fedora 35+
@@ -373,7 +373,7 @@ Mojo support on macOS is improving but may have limitations:
 - Intel Macs: Generally well-supported
 - Apple Silicon (M1/M2): Experimental support
 
-**Known issues**:
+### Known issues
 
 - Some SIMD operations may have reduced performance
 - Hardware-specific optimizations may not be available
@@ -383,8 +383,8 @@ Mojo support on macOS is improving but may have limitations:
 Windows users should use WSL2 (Windows Subsystem for Linux):
 
 1. Install WSL2: [https://docs.microsoft.com/en-us/windows/wsl/install](https://docs.microsoft.com/en-us/windows/wsl/install)
-2. Install Ubuntu from Microsoft Store
-3. Follow the Linux installation instructions above inside WSL2
+1. Install Ubuntu from Microsoft Store
+1. Follow the Linux installation instructions above inside WSL2
 
 **Note**: Native Windows support is not currently available.
 
@@ -393,16 +393,16 @@ Windows users should use WSL2 (Windows Subsystem for Linux):
 If you encounter issues not covered in this guide:
 
 1. **Check existing documentation**: Browse `docs/` directory
-2. **Search GitHub Issues**: [https://github.com/your-org/ml-odyssey/issues](https://github.com/your-org/ml-odyssey/issues)
-3. **Create a new issue**: Report installation problems with:
+1. **Search GitHub Issues**: [https://github.com/your-org/ml-odyssey/issues](https://github.com/your-org/ml-odyssey/issues)
+1. **Create a new issue**: Report installation problems with:
    - Your operating system and version
    - Mojo version (`mojo --version`)
    - Python version (`python3 --version`)
    - Full error message and stack trace
    - Steps to reproduce
 
-4. **Read Mojo documentation**: [https://docs.modular.com/mojo/](https://docs.modular.com/mojo/)
-5. **Check Pixi documentation**: [https://pixi.sh/latest/](https://pixi.sh/latest/)
+1. **Read Mojo documentation**: [https://docs.modular.com/mojo/](https://docs.modular.com/mojo/)
+1. **Check Pixi documentation**: [https://pixi.sh/latest/](https://pixi.sh/latest/)
 
 ## Development Setup (For Contributors)
 

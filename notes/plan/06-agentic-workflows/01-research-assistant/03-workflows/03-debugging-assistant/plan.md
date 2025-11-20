@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Analyze error message and context
-2. Examine relevant code sections
-3. Compare with paper specifications
-4. Suggest fixes and tests
+1. Examine relevant code sections
+1. Compare with paper specifications
+1. Suggest fixes and tests
 
 ## Success Criteria
 

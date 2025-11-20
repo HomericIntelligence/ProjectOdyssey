@@ -20,24 +20,28 @@ The testing phase will create the following:
 ### 2. Test Suites
 
 #### Coverage Instrumentation Tests
+
 - Verify code instrumentation mechanisms
 - Test line-by-line coverage tracking
 - Validate instrumentation overhead
 - Test edge cases (empty lines, comments, docstrings)
 
 #### Data Collection Tests
+
 - Verify data collection during test execution
 - Test collection from all source files
 - Validate concurrent/parallel execution handling
 - Test collection interruption recovery
 
 #### Storage and Format Tests
+
 - Verify coverage data file creation
 - Validate data format compatibility (standard coverage formats)
 - Test data persistence and integrity
 - Verify storage location configuration
 
 #### Integration Tests
+
 - Coverage collection with real test suites
 - Verify line execution counts accuracy
 - Test file coverage mapping
@@ -53,6 +57,7 @@ The testing phase will create the following:
 ### 4. Test Plan Documentation
 
 Comprehensive test plan covering:
+
 - Test objectives and scope
 - Test coverage matrix (by component and scenario)
 - Test scenarios with expected results
@@ -62,6 +67,7 @@ Comprehensive test plan covering:
 ### 5. Test Results Documentation
 
 Template for recording:
+
 - Test execution summary
 - Individual test results
 - Coverage analysis
@@ -93,13 +99,13 @@ All tests must achieve the following:
    - Storage formatting functions
    - Configuration parsing
 
-2. **Integration Tests** - Component interaction validation
+1. **Integration Tests** - Component interaction validation
    - Full coverage collection pipeline
    - Multi-file coverage tracking
    - Concurrent execution scenarios
    - Data aggregation
 
-3. **System Tests** - End-to-end validation
+1. **System Tests** - End-to-end validation
    - Coverage collection with real test suites
    - Performance under load
    - Compatibility with standard tools
@@ -112,24 +118,24 @@ All tests must achieve the following:
    - Verify all executable lines tracked
    - Validate line counts
 
-2. **Multi-File Coverage**
+1. **Multi-File Coverage**
    - Multiple source files
    - Cross-file dependencies
    - Verify independent tracking per file
 
-3. **Edge Cases**
+1. **Edge Cases**
    - Empty files
    - Files with only comments/docstrings
    - Large files (performance)
    - Files with conditional imports
 
-4. **Error Scenarios**
+1. **Error Scenarios**
    - Collection interruption and recovery
    - Invalid file paths
    - Storage failures
    - Insufficient permissions
 
-5. **Performance Scenarios**
+1. **Performance Scenarios**
    - Large test suites
    - Parallel test execution
    - Memory usage under load
@@ -158,18 +164,21 @@ All tests must achieve the following:
 
 Based on the planning phase:
 
-**Inputs**:
+### Inputs
+
 - Source code files to instrument
 - Test execution environment
 - Coverage collection configuration
 
-**Expected Outputs**:
+### Expected Outputs
+
 - Coverage data files
 - Line execution counts
 - File coverage mapping
 - Raw coverage statistics
 
-**Key Constraints**:
+### Key Constraints
+
 - Use standard coverage tools when available (coverage.py for Python)
 - Store data in standard formats for tool compatibility
 - Exclude test files and generated code from coverage measurement
@@ -183,19 +192,19 @@ Based on the planning phase:
    - Create mock data generators
    - Document test plan
 
-2. **Phase 2: Component Tests** (Weeks 2-4)
+1. **Phase 2: Component Tests** (Weeks 2-4)
    - Test instrumentation mechanisms
    - Test data collection
    - Test storage and formatting
    - Test configuration handling
 
-3. **Phase 3: Integration Tests** (Weeks 3-5)
+1. **Phase 3: Integration Tests** (Weeks 3-5)
    - Test full collection pipeline
    - Test with real test suites
    - Test error scenarios
    - Test performance characteristics
 
-4. **Phase 4: Documentation and Finalization** (Week 5-6)
+1. **Phase 4: Documentation and Finalization** (Week 5-6)
    - Complete test results documentation
    - Performance analysis and reporting
    - Issue identification and logging
@@ -237,10 +246,10 @@ Based on the planning phase:
 ### Workflow Timeline
 
 1. **Plan** ✅ - Issue #829 (completed)
-2. **Test** ← **Current: Issue #830**
-3. **Implementation** - Issue #831 (parallel)
-4. **Package** - Issue #832 (follows after test/impl)
-5. **Cleanup** - Issue #833 (final phase)
+1. **Test** ← **Current: Issue #830**
+1. **Implementation** - Issue #831 (parallel)
+1. **Package** - Issue #832 (follows after test/impl)
+1. **Cleanup** - Issue #833 (final phase)
 
 ### Phase Dependencies
 
@@ -251,6 +260,7 @@ Based on the planning phase:
 ### Parallel Execution
 
 This testing phase can run in parallel with:
+
 - Issue #831 (Implementation) - tests drive implementation
 - Issue #845 (Coverage Tool Tests) - separate tool testing
 
@@ -271,17 +281,17 @@ This testing phase can run in parallel with:
    - Data formats must match standard `.coverage` output
    - Ensure tool interoperability
 
-2. **Performance Requirements**
+1. **Performance Requirements**
    - Coverage collection overhead should be minimal
    - Tests must measure and validate performance
    - Parallel execution should be supported
 
-3. **File Exclusion Strategy**
+1. **File Exclusion Strategy**
    - Test files must be excluded from coverage
    - Generated code must be excluded
    - Configuration must be testable
 
-4. **Data Format Validation**
+1. **Data Format Validation**
    - Coverage data files must be parseable
    - Line execution counts must be accurate
    - File mappings must be correct
@@ -291,10 +301,10 @@ This testing phase can run in parallel with:
 Tests will be executed in the following order:
 
 1. **Core infrastructure tests** - Basic collection mechanisms
-2. **Component tests** - Individual subsystem validation
-3. **Integration tests** - Full pipeline validation
-4. **System tests** - Real-world scenarios
-5. **Performance tests** - Load and overhead measurement
+1. **Component tests** - Individual subsystem validation
+1. **Integration tests** - Full pipeline validation
+1. **System tests** - Real-world scenarios
+1. **Performance tests** - Load and overhead measurement
 
 ### Documentation Artifacts
 
@@ -305,34 +315,36 @@ This testing phase will generate:
    - Expected results
    - Success criteria
 
-2. **Test Results** - `/notes/issues/830/test-results.md`
+1. **Test Results** - `/notes/issues/830/test-results.md`
    - Execution summary
    - Pass/fail results
    - Issues discovered
 
-3. **Test Code** - `/tests/coverage/`
+1. **Test Code** - `/tests/coverage/`
    - All test scripts
    - Fixtures and utilities
    - Mock data generators
 
 ## Next Steps
 
-**Ready for execution**:
+### Ready for execution
 
 1. Create test directory structure (`/tests/coverage/`)
-2. Implement test utilities and fixtures
-3. Create mock data generators
-4. Write component tests
-5. Write integration tests
-6. Document test results
-7. Identify issues for implementation phase
+1. Implement test utilities and fixtures
+1. Create mock data generators
+1. Write component tests
+1. Write integration tests
+1. Document test results
+1. Identify issues for implementation phase
 
-**Prerequisites met**:
+### Prerequisites met
+
 - Planning phase (Issue #829) completed
 - Coverage architecture designed and documented
 - Test objectives clearly defined
 
-**Success indicators**:
+### Success indicators
+
 - All test scripts pass
 - Coverage collection validated end-to-end
 - Performance requirements confirmed

@@ -5,17 +5,17 @@ This cookbook provides ready-to-use configuration recipes for common ML scenario
 ## Table of Contents
 
 1. [Multi-GPU Configuration](#1-multi-gpu-configuration)
-2. [Distributed Training Setup](#2-distributed-training-setup)
-3. [Hyperparameter Sweep](#3-hyperparameter-sweep)
-4. [A/B Testing Configuration](#4-ab-testing-configuration)
-5. [Custom Architecture](#5-custom-architecture)
-6. [Transfer Learning](#6-transfer-learning)
-7. [Mixed Precision Training](#7-mixed-precision-training)
-8. [Gradient Accumulation](#8-gradient-accumulation)
-9. [Early Stopping](#9-early-stopping)
-10. [Custom Logging](#10-custom-logging)
-11. [Data Augmentation](#11-data-augmentation)
-12. [Learning Rate Scheduling](#12-learning-rate-scheduling)
+1. [Distributed Training Setup](#2-distributed-training-setup)
+1. [Hyperparameter Sweep](#3-hyperparameter-sweep)
+1. [A/B Testing Configuration](#4-ab-testing-configuration)
+1. [Custom Architecture](#5-custom-architecture)
+1. [Transfer Learning](#6-transfer-learning)
+1. [Mixed Precision Training](#7-mixed-precision-training)
+1. [Gradient Accumulation](#8-gradient-accumulation)
+1. [Early Stopping](#9-early-stopping)
+1. [Custom Logging](#10-custom-logging)
+1. [Data Augmentation](#11-data-augmentation)
+1. [Learning Rate Scheduling](#12-learning-rate-scheduling)
 
 ## 1. Multi-GPU Configuration
 
@@ -47,7 +47,7 @@ parallel:
 # Adjust learning rate for larger batch
 optimizer:
   learning_rate: 0.004  # Base LR * num_gpus
-```
+```text
 
 ## 2. Distributed Training Setup
 
@@ -84,7 +84,7 @@ training:
 
   # Checkpoint only from rank 0
   save_checkpoints: "${RANK:-0} == 0"
-```
+```text
 
 ## 3. Hyperparameter Sweep
 
@@ -127,7 +127,7 @@ sweep:
 training:
   epochs: 100
   validation_split: 0.2
-```
+```text
 
 ## 4. A/B Testing Configuration
 
@@ -170,7 +170,7 @@ evaluation:
     - "loss"
     - "inference_time"
     - "memory_usage"
-```
+```text
 
 ## 5. Custom Architecture
 
@@ -214,7 +214,7 @@ model:
   init:
     method: "he_normal"  # For ReLU
     seed: 42
-```
+```text
 
 ## 6. Transfer Learning
 
@@ -252,7 +252,7 @@ training:
   discriminative_lr:
     enabled: true
     head_lr_multiplier: 10
-```
+```text
 
 ## 7. Mixed Precision Training
 
@@ -286,7 +286,7 @@ training:
 
   # Gradient clipping recommended
   gradient_clip_norm: 1.0
-```
+```text
 
 ## 8. Gradient Accumulation
 
@@ -316,7 +316,7 @@ memory_optimization:
   offload:
     optimizer_state: false
     gradients: false
-```
+```text
 
 ## 9. Early Stopping
 
@@ -348,7 +348,7 @@ checkpointing:
   save_best_only: true
   monitor: "validation_loss"
   mode: "min"
-```
+```text
 
 ## 10. Custom Logging
 
@@ -408,7 +408,7 @@ metrics:
     - "precision"
     - "recall"
     - "f1_score"
-```
+```text
 
 ## 11. Data Augmentation
 
@@ -461,7 +461,7 @@ tta:
   enabled: false
   num_augmentations: 5
   aggregation: "mean"  # mean, max, or voting
-```
+```text
 
 ## 12. Learning Rate Scheduling
 
@@ -514,7 +514,7 @@ lr_scheduler:
     enabled: false
     milestones: [30, 60, 90]
     values: [0.1, 0.01, 0.001, 0.0001]
-```
+```text
 
 ## Usage Tips
 
@@ -533,7 +533,7 @@ training:
 mixed_precision:
   enabled: true
   opt_level: "O1"
-```
+```text
 
 ### Environment Variables
 
@@ -547,15 +547,15 @@ export ML_ODYSSEY_BATCH_SIZE=64
 # Reference in config
 num_gpus: "${ML_ODYSSEY_GPUS:-1}"
 batch_size: "${ML_ODYSSEY_BATCH_SIZE:-32}"
-```
+```text
 
 ### Override Hierarchy
 
 Start with defaults, override for specific needs:
 
 1. Load `defaults/training.yaml`
-2. Override with `papers/lenet5/training.yaml`
-3. Override with `experiments/custom.yaml`
+1. Override with `papers/lenet5/training.yaml`
+1. Override with `experiments/custom.yaml`
 
 ### Validation
 
@@ -563,7 +563,7 @@ Always validate your configuration:
 
 ```bash
 python scripts/lint_configs.py configs/experiments/my_config.yaml
-```
+```text
 
 ## Summary
 

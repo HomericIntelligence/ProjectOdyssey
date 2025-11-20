@@ -30,8 +30,8 @@ Establish comprehensive continuous integration and continuous deployment pipelin
 ## Steps
 
 1. GitHub Actions
-2. Pre-commit Hooks
-3. Templates
+1. Pre-commit Hooks
+1. Templates
 
 ## Success Criteria
 

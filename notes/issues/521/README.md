@@ -95,7 +95,7 @@ papers/
     ├── tests/
     ├── data/
     └── configs/
-```
+```text
 
 **Rationale**: Providing a clear visual structure helps contributors understand organizational
 expectations and promotes consistency across implementations.
@@ -155,25 +155,25 @@ considerations that emerge during design review.
 ### Next Steps for Implementation Phase (Issue #523)
 
 1. Review this planning documentation
-2. Create papers/README.md following the documented structure
-3. Ensure all sections from Design Decision #1 are included
-4. Verify markdown standards compliance (Design Decision #4)
-5. Test template usage instructions for clarity
-6. Submit for review
+1. Create papers/README.md following the documented structure
+1. Ensure all sections from Design Decision #1 are included
+1. Verify markdown standards compliance (Design Decision #4)
+1. Test template usage instructions for clarity
+1. Submit for review
 
 ### Next Steps for Test Phase (Issue #522)
 
 1. Review planning documentation and design decisions
-2. Design tests to validate README content and structure
-3. Create markdown linting tests
-4. Verify all required sections are present
-5. Test link validity and references
-6. Ensure markdown standards compliance
+1. Design tests to validate README content and structure
+1. Create markdown linting tests
+1. Verify all required sections are present
+1. Test link validity and references
+1. Ensure markdown standards compliance
 
 ### Next Steps for Packaging Phase (Issue #524)
 
 1. Review planning documentation
-2. Verify README integrates with parent directory structure
-3. Ensure cross-references to template directory are correct
-4. Validate README accessibility and discoverability
-5. Confirm documentation is properly indexed
+1. Verify README integrates with parent directory structure
+1. Ensure cross-references to template directory are correct
+1. Validate README accessibility and discoverability
+1. Confirm documentation is properly indexed

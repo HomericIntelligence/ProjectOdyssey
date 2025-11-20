@@ -28,7 +28,8 @@ Set up the papers directory structure which will contain individual paper implem
 
 **Decision**: Create a three-tier structure with base directory, documentation, and reusable template.
 
-**Rationale**:
+### Rationale
+
 - Base directory (`papers/`) provides clear separation of paper implementations from shared libraries
 - Central README provides entry point for contributors to understand organization
 - Template directory (`_template/`) enables consistent structure across all paper implementations
@@ -38,7 +39,8 @@ Set up the papers directory structure which will contain individual paper implem
 
 **Decision**: Include standard subdirectories in template: `src/`, `tests/`, `data/`, `configs/`, `notebooks/`.
 
-**Rationale**:
+### Rationale
+
 - `src/` - Core implementation code (Mojo files for ML/AI components)
 - `tests/` - Unit and integration tests following TDD principles
 - `data/` - Training/validation datasets and preprocessing scripts
@@ -46,6 +48,7 @@ Set up the papers directory structure which will contain individual paper implem
 - `notebooks/` - Jupyter notebooks for exploration and visualization
 
 This structure:
+
 - Supports complete paper reproduction workflow
 - Encourages test-driven development
 - Separates concerns (code, tests, data, config, experiments)
@@ -55,7 +58,8 @@ This structure:
 
 **Decision**: Use `_template/` with underscore prefix for template directory.
 
-**Rationale**:
+### Rationale
+
 - Underscore prefix indicates special/meta directory (not an actual paper)
 - Sorts to top of directory listings for visibility
 - Common convention in project templates (e.g., `_config`, `_includes`)
@@ -64,10 +68,12 @@ This structure:
 ### Documentation Approach
 
 **Decision**: Provide two levels of README documentation:
-1. `papers/README.md` - Overview of papers directory purpose and usage
-2. `papers/_template/README.md` - How to use the template for new papers
 
-**Rationale**:
+1. `papers/README.md` - Overview of papers directory purpose and usage
+1. `papers/_template/README.md` - How to use the template for new papers
+
+### Rationale
+
 - Separation of concerns: overview vs. specific instructions
 - Entry point (papers/README.md) helps newcomers understand organization
 - Template README provides just-in-time guidance when starting new paper
@@ -104,10 +110,10 @@ _This section will be filled as work progresses during the planning phase._
 ### Key Considerations
 
 1. **Simplicity**: Keep structure simple but complete - include all directories a paper might need, even if some remain empty initially
-2. **Consistency**: Template ensures all paper implementations follow same structure
-3. **Self-containment**: Each paper should be self-contained but able to use shared components
-4. **Easy to use**: Template should be easy to copy and start using immediately
-5. **Documentation**: Clear, concise documentation focusing on practical information
+1. **Consistency**: Template ensures all paper implementations follow same structure
+1. **Self-containment**: Each paper should be self-contained but able to use shared components
+1. **Easy to use**: Template should be easy to copy and start using immediately
+1. **Documentation**: Clear, concise documentation focusing on practical information
 
 ### Open Questions
 
@@ -120,7 +126,8 @@ _To be resolved during planning discussions:_
 
 ### Dependencies
 
-**Required before implementation**:
+### Required before implementation
+
 - Repository root directory exists (`/home/mvillmow/ml-odyssey-manual/`)
 - Write permissions to repository
 - Understanding of paper implementation requirements

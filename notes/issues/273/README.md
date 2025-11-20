@@ -36,12 +36,12 @@ Implement weight initialization methods that are crucial for effective neural ne
 
 ### 2. Variance Scaling Approach
 
-**Xavier/Glorot Mathematical Formulas**:
+### Xavier/Glorot Mathematical Formulas
 
 - Uniform variant: U(-sqrt(6/(fan_in + fan_out)), sqrt(6/(fan_in + fan_out)))
 - Normal variant: N(0, sqrt(2/(fan_in + fan_out)))
 
-**Kaiming/He Mathematical Formulas**:
+### Kaiming/He Mathematical Formulas
 
 - Uniform variant: U(-sqrt(6/fan), sqrt(6/fan))
 - Normal variant: N(0, sqrt(2/fan))
@@ -110,18 +110,18 @@ Implement weight initialization methods that are crucial for effective neural ne
 
 ### 1. Xavier/Glorot Initialization (Issue #277)
 
-**Inputs**:
+### Inputs
 
 - Layer dimensions (fan_in, fan_out)
 - Distribution type (uniform or normal)
 - Random seed (optional)
 
-**Outputs**:
+### Outputs
 
 - Xavier uniform: U(-sqrt(6/(fan_in + fan_out)), sqrt(6/(fan_in + fan_out)))
 - Xavier normal: N(0, sqrt(2/(fan_in + fan_out)))
 
-**Key Requirements**:
+### Key Requirements
 
 - Correct variance scaling based on layer dimensions
 - Both uniform and normal variants
@@ -129,19 +129,19 @@ Implement weight initialization methods that are crucial for effective neural ne
 
 ### 2. Kaiming/He Initialization (Issue #278)
 
-**Inputs**:
+### Inputs
 
 - Layer dimensions (fan_in, fan_out)
 - Mode (fan_in or fan_out)
 - Distribution type (uniform or normal)
 - Random seed (optional)
 
-**Outputs**:
+### Outputs
 
 - Kaiming uniform: U(-sqrt(6/fan), sqrt(6/fan))
 - Kaiming normal: N(0, sqrt(2/fan))
 
-**Key Requirements**:
+### Key Requirements
 
 - Support both fan_in and fan_out modes
 - Correct variance for ReLU activations
@@ -149,14 +149,14 @@ Implement weight initialization methods that are crucial for effective neural ne
 
 ### 3. Basic Distribution Initializers (Issue #279)
 
-**Outputs**:
+### Outputs
 
 - Uniform distribution: U(low, high) with configurable bounds
 - Normal distribution: N(mean, std) with configurable parameters
 - Zero initialization helper
 - Constant initialization with specified value
 
-**Key Requirements**:
+### Key Requirements
 
 - Configurable distribution parameters
 - Sensible defaults
@@ -191,16 +191,16 @@ The testing phase (Issue #274) should verify:
    - Test mean values are approximately zero (for normal distributions)
    - Verify uniform distributions stay within bounds
 
-2. **Reproducibility**:
+1. **Reproducibility**:
    - Same seed produces identical initialization
    - Different seeds produce different initialization
 
-3. **Edge Cases**:
+1. **Edge Cases**:
    - Very small layer dimensions
    - Very large layer dimensions
    - Zero fan_in or fan_out (should handle gracefully)
 
-4. **Mathematical Accuracy**:
+1. **Mathematical Accuracy**:
    - Verify Xavier formulas are correct
    - Verify Kaiming formulas are correct
    - Test variance scaling for different layer sizes
@@ -227,13 +227,13 @@ The testing phase (Issue #274) should verify:
 
 ### Mathematical Background
 
-**Xavier/Glorot Initialization**:
+### Xavier/Glorot Initialization
 
 - Original Paper: "Understanding the difficulty of training deep feedforward neural networks" (Glorot & Bengio, 2010)
 - Key insight: Maintain variance across layers for sigmoid/tanh activations
 - Variance formula: Var(W) = 2/(fan_in + fan_out)
 
-**Kaiming/He Initialization**:
+### Kaiming/He Initialization
 
 - Original Paper: "Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification" (He et al., 2015)
 - Key insight: Account for ReLU zeroing half the activations

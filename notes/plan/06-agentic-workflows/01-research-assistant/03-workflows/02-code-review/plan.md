@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Analyze paper to extract specifications
-2. Review code implementation
-3. Compare implementation to specifications
-4. Generate structured feedback
+1. Review code implementation
+1. Compare implementation to specifications
+1. Generate structured feedback
 
 ## Success Criteria
 

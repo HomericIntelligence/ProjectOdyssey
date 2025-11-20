@@ -44,19 +44,19 @@ The core library is organized into four main subdirectories:
    - Normalization layers (BatchNorm, LayerNorm, etc.)
    - Pooling layers (MaxPool, AvgPool, etc.)
 
-2. __ops/__ - Mathematical operations
+1. __ops/__ - Mathematical operations
    - Matrix operations (matmul, transpose, etc.)
    - Element-wise operations (add, multiply, etc.)
    - Reduction operations (sum, mean, max, etc.)
    - Broadcasting utilities
 
-3. __types/__ - Custom types and data structures
+1. __types/__ - Custom types and data structures
    - Tensor types and utilities
    - Shape definitions
    - Data type definitions (DType extensions)
    - Container types
 
-4. __utils/__ - Utility functions
+1. __utils/__ - Utility functions
    - Initialization utilities (Xavier, He, etc.)
    - Memory management helpers
    - Debugging and logging utilities
@@ -67,13 +67,13 @@ The core library is organized into four main subdirectories:
 1. __Mojo-First Design__: All package markers use `__init__.mojo` instead of `__init__.py` to establish Mojo
    as the primary language for this codebase.
 
-2. __Separation of Concerns__: Clear separation between layers (high-level), ops (low-level), types (data
+1. __Separation of Concerns__: Clear separation between layers (high-level), ops (low-level), types (data
    structures), and utils (helpers) to maintain clean architecture.
 
-3. __FUNDAMENTAL Building Blocks Only__: This directory contains only code that is shared across ALL or MOST
+1. __FUNDAMENTAL Building Blocks Only__: This directory contains only code that is shared across ALL or MOST
    paper implementations. Paper-specific code belongs in the respective paper directories.
 
-4. __Performance-Critical__: All core components are implemented in Mojo for maximum performance, leveraging
+1. __Performance-Critical__: All core components are implemented in Mojo for maximum performance, leveraging
    SIMD, type safety, and memory management features.
 
 ### Next Steps
@@ -81,9 +81,9 @@ The core library is organized into four main subdirectories:
 After this planning phase is complete:
 
 1. Issue #20: [Test] Create Core - Write tests for core directory structure
-2. Issue #21: [Implementation] Create Core - Implement initial core components
-3. Issue #22: [Packaging] Create Core - Package and integrate core library
-4. Issue #23: [Cleanup] Create Core - Refactor and finalize
+1. Issue #21: [Implementation] Create Core - Implement initial core components
+1. Issue #22: [Packaging] Create Core - Package and integrate core library
+1. Issue #23: [Cleanup] Create Core - Refactor and finalize
 
 ### Related Components
 

@@ -56,9 +56,9 @@ Create initial repository structure.
 Foundation Orchestrator:
 
 1. Designs directory layout
-2. Delegates creation to Architecture Design Agent
-3. Reviews completed structure
-4. Reports to Chief Architect
+1. Delegates creation to Architecture Design Agent
+1. Reviews completed structure
+1. Reports to Chief Architect
 
 ### Example 2: Configuration Files
 
@@ -67,9 +67,9 @@ Set up pixi.toml and other config files.
 Foundation Orchestrator:
 
 1. Plans configuration approach
-2. Delegates to Integration Design Agent
-3. Coordinates with other orchestrators on shared configs
-4. Validates final configuration
+1. Delegates to Integration Design Agent
+1. Coordinates with other orchestrators on shared configs
+1. Validates final configuration
 
 ## Constraints
 

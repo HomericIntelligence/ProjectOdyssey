@@ -27,7 +27,7 @@ gh workflow list
 
 # Check workflow syntax (via API)
 gh api repos/{owner}/{repo}/actions/workflows
-```
+```text
 
 ### 2. actionlint
 
@@ -37,14 +37,14 @@ pip install actionlint
 
 # Validate workflows
 actionlint .github/workflows/*.yml
-```
+```text
 
 ### 3. yamllint
 
 ```bash
 # Validate YAML syntax
 yamllint .github/workflows/*.yml
-```
+```text
 
 ## Common Issues
 
@@ -56,7 +56,7 @@ on: [push pull_request]
 
 # ✅ Correct
 on: [push, pull_request]
-```
+```text
 
 ### 2. Invalid Actions
 
@@ -66,7 +66,7 @@ on: [push, pull_request]
 
 # ✅ Correct
 - uses: actions/checkout@v4
-```
+```text
 
 ### 3. Missing Required Fields
 
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "test"
-```
+```text
 
 ## Best Practices
 
@@ -106,6 +106,6 @@ jobs:
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-```
+```text
 
 See GitHub Actions documentation for complete reference.

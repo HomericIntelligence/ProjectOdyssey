@@ -52,7 +52,7 @@ Current test files:
 
 ## Test Organization
 
-```
+```text
 tests/shared/data/
 ├── datasets/
 │   ├── test_base_dataset.mojo      # Base interface tests
@@ -61,7 +61,7 @@ tests/shared/data/
 ├── loaders/
 │   └── test_data_loader.mojo       # Batching and shuffling tests
 └── test_data_integration.mojo      # End-to-end integration tests
-```
+```text
 
 ## Implementation Status
 
@@ -75,13 +75,13 @@ All test files need to be reviewed and extended to cover:
    - Test error handling for missing/corrupt files
    - Test format detection based on extension
 
-2. **Data Loader Tests**:
+1. **Data Loader Tests**:
    - Batching correctness
    - Shuffling reproducibility
    - Iterator protocol compliance
    - Edge case handling
 
-3. **Integration Tests**:
+1. **Integration Tests**:
    - Full data pipeline workflows
    - Memory efficiency under load
    - Multi-epoch scenarios
@@ -117,7 +117,7 @@ fn test_dataset_empty():
     """Test empty dataset handles correctly."""
     var dataset = TensorDataset(empty_data, empty_labels)
     assert_equal(len(dataset), 0)
-```
+```text
 
 ### 2. Data Loader Tests
 
@@ -179,7 +179,7 @@ fn test_loader_batch_size_larger_than_dataset():
     var batches = list(loader)
     assert_equal(len(batches), 1)
     assert_equal(batches[0].size, 10)
-```
+```text
 
 ### 3. File Loading Tests
 
@@ -239,7 +239,7 @@ fn test_file_loading_missing_file():
         assert_true(False, "Should raise error")
     except:
         pass  # Expected
-```
+```text
 
 ### 4. Integration Tests
 
@@ -276,7 +276,7 @@ fn test_data_pipeline_with_augmentation():
         var augmented = augmentations(batch.data)
         # Verify augmentation doesn't change shape
         assert_equal(augmented.shape, batch.data.shape)
-```
+```text
 
 ## References
 
@@ -303,6 +303,7 @@ fn test_data_pipeline_with_augmentation():
 ### Current Test State
 
 Existing test files need to be reviewed for:
+
 - Coverage of edge cases
 - File loading placeholder behavior
 - Integration with augmentation pipelines
@@ -310,28 +311,30 @@ Existing test files need to be reviewed for:
 ### Testing Strategy
 
 1. **Unit Tests First**: Test each component in isolation
-2. **Integration Tests**: Test component interactions
-3. **Property-Based Tests**: Verify invariants (e.g., shuffle preserves count)
-4. **Performance Tests**: Ensure acceptable loading/batching speed
+1. **Integration Tests**: Test component interactions
+1. **Property-Based Tests**: Verify invariants (e.g., shuffle preserves count)
+1. **Performance Tests**: Ensure acceptable loading/batching speed
 
 ### Key Testing Patterns
 
 1. **Deterministic Randomness**: Use seeds for reproducible tests
-2. **Edge Case Coverage**: Empty, single element, oversized batches
-3. **Error Validation**: Verify appropriate errors for invalid inputs
-4. **Round-Trip Testing**: Load → process → verify integrity
+1. **Edge Case Coverage**: Empty, single element, oversized batches
+1. **Error Validation**: Verify appropriate errors for invalid inputs
+1. **Round-Trip Testing**: Load → process → verify integrity
 
 ### File Loading Testing Notes
 
 **Current State**: FileDataset has TODO for proper file loading
 
-**Test Strategy**:
-1. Test current placeholder behavior
-2. Add tests for expected behavior (when implemented)
-3. Use test fixtures for file formats
-4. Mock file I/O for unit tests
+### Test Strategy
 
-**Implementation Priority**:
+1. Test current placeholder behavior
+1. Add tests for expected behavior (when implemented)
+1. Use test fixtures for file formats
+1. Mock file I/O for unit tests
+
+### Implementation Priority
+
 - High: Test placeholder doesn't crash
 - Medium: Test expected interface
 - Low: Test all file formats comprehensively

@@ -27,9 +27,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Locate baseline data file
-2. Load and parse baseline data
-3. Validate data format and completeness
-4. Return structured baseline data
+1. Load and parse baseline data
+1. Validate data format and completeness
+1. Return structured baseline data
 
 ## Success Criteria
 

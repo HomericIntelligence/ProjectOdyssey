@@ -10,7 +10,8 @@ This directory contains a comprehensive analysis of all backward pass implementa
 ## 📋 DOCUMENTS
 
 ### 1. [extensor-backward-pass-catalog.md](./extensor-backward-pass-catalog.md)
-**Complete Function-by-Function Reference**
+
+### Complete Function-by-Function Reference
 
 Detailed specifications for all 27 backward pass functions organized by module:
 
@@ -49,7 +50,8 @@ Detailed specifications for all 27 backward pass functions organized by module:
   - `gelu_backward` - Exact and approximate formulas
   - `softmax_backward` - Jacobian with normalization
 
-**Contains for each function:**
+### Contains for each function:
+
 - Function signature and location
 - Mathematical formula with derivation
 - Broadcasting handling (if applicable)
@@ -59,7 +61,8 @@ Detailed specifications for all 27 backward pass functions organized by module:
 - Supported dtypes and parameters
 
 ### 2. [extensor-backward-analysis-summary.md](./extensor-backward-analysis-summary.md)
-**Executive Summary with Analysis**
+
+### Executive Summary with Analysis
 
 High-level analysis and findings:
 
@@ -105,28 +108,32 @@ High-level analysis and findings:
 ## 🔍 HOW TO USE THIS DOCUMENTATION
 
 ### For Implementation Review
+
 1. Start with **Summary** for overview
-2. Check specific function in **Catalog** for details
-3. Verify mathematical formula correctness
-4. Review numerical stability measures
+1. Check specific function in **Catalog** for details
+1. Verify mathematical formula correctness
+1. Review numerical stability measures
 
 ### For Testing
+
 1. Review **Edge Case Handling** section
-2. Check **Dtype Support Matrix**
-3. Consult **Testing Recommendations**
-4. Implement gradient checks per function
+1. Check **Dtype Support Matrix**
+1. Consult **Testing Recommendations**
+1. Implement gradient checks per function
 
 ### For Optimization
+
 1. Review **Performance Considerations**
-2. Identify O(n²) operations (softmax_backward)
-3. Check **Optimization Opportunities**
-4. Benchmark before/after changes
+1. Identify O(n²) operations (softmax_backward)
+1. Check **Optimization Opportunities**
+1. Benchmark before/after changes
 
 ### For Integration
+
 1. Check **Broadcasting Support Analysis** for function compatibility
-2. Verify **Shape Reduction Logic** for multi-tensor operations
-3. Review **Learnable Parameters** support (PReLU)
-4. Test **Backward Chaining** for complex graphs
+1. Verify **Shape Reduction Logic** for multi-tensor operations
+1. Review **Learnable Parameters** support (PReLU)
+1. Test **Backward Chaining** for complex graphs
 
 ---
 
@@ -173,24 +180,24 @@ High-level analysis and findings:
 ### 🟢 Strengths
 
 1. **Complete coverage** of essential operations
-2. **Robust broadcasting** with dedicated `_reduce_broadcast_dims` helper
-3. **Numerical stability** with epsilon = 1e-10 in critical operations
-4. **Multiple dtypes** especially in activations (float16/32/64)
-5. **Edge case handling** for undefined points (e.g., abs at 0)
-6. **Learnable parameters** support (PReLU gradient accumulation)
-7. **Complex activations** (GELU exact/approximate, Softmax Jacobian)
+1. **Robust broadcasting** with dedicated `_reduce_broadcast_dims` helper
+1. **Numerical stability** with epsilon = 1e-10 in critical operations
+1. **Multiple dtypes** especially in activations (float16/32/64)
+1. **Edge case handling** for undefined points (e.g., abs at 0)
+1. **Learnable parameters** support (PReLU gradient accumulation)
+1. **Complex activations** (GELU exact/approximate, Softmax Jacobian)
 
 ### 🟡 Moderate Issues
 
 1. **Softmax O(n²)** algorithm could be optimized to O(n)
-2. **Max/min three-pass** could be fused into single pass
-3. **Broadcasting arithmetic** could fuse multiply+reduce operations
+1. **Max/min three-pass** could be fused into single pass
+1. **Broadcasting arithmetic** could fuse multiply+reduce operations
 
 ### 🔴 Missing Implementations
 
 1. **power_backward** - Not implemented (moderate impact)
-2. **floor_divide_backward** - Not implemented (low impact)
-3. **modulo_backward** - Not implemented (low impact)
+1. **floor_divide_backward** - Not implemented (low impact)
+1. **modulo_backward** - Not implemented (low impact)
 
 ---
 
@@ -206,7 +213,7 @@ High-level analysis and findings:
 
 ### Backward Pass Formulas (Quick Reference)
 
-```
+```text
 Addition:         ∂L/∂A = ∂L/∂C, ∂L/∂B = ∂L/∂C
 Subtraction:      ∂L/∂A = ∂L/∂C, ∂L/∂B = -∂L/∂C
 Multiplication:   ∂L/∂A = ∂L/∂C * B, ∂L/∂B = ∂L/∂C * A
@@ -229,7 +236,7 @@ Sigmoid:          ∂L/∂X = ∂L/∂Y * Y * (1 - Y)
 Tanh:             ∂L/∂X = ∂L/∂Y * (1 - Y²)
 GELU:             ∂L/∂X = ∂L/∂Y * [Φ(X) + X*φ(X)]  (exact) or tanh approx
 Softmax:          ∂L/∂X_i = Y_i * (∂L/∂Y_i - Σ_j(∂L/∂Y_j * Y_j))
-```
+```text
 
 ---
 
@@ -240,6 +247,7 @@ Softmax:          ∂L/∂X_i = Y_i * (∂L/∂Y_i - Σ_j(∂L/∂Y_j * Y_j))
 The ExTensor framework has **comprehensive and correct backward pass support** for training neural networks.
 
 All critical operations have been implemented with:
+
 - Correct mathematical formulas
 - Proper broadcasting and shape handling
 - Numerical stability measures

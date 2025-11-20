@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Set up test environment for each test
-2. Execute tests with proper isolation
-3. Capture output, errors, and results
-4. Clean up after test execution
+1. Execute tests with proper isolation
+1. Capture output, errors, and results
+1. Clean up after test execution
 
 ## Success Criteria
 

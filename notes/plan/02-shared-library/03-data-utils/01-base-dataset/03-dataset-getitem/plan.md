@@ -29,9 +29,9 @@ None (leaf node)
 ## Steps
 
 1. Implement integer indexing for single samples
-2. Add slice support for range access
-3. Apply transforms/preprocessing to retrieved data
-4. Handle edge cases (negative indices, out of bounds)
+1. Add slice support for range access
+1. Apply transforms/preprocessing to retrieved data
+1. Handle edge cases (negative indices, out of bounds)
 
 ## Success Criteria
 

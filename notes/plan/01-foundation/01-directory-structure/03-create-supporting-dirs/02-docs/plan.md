@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Create docs/ directory at repository root
-2. Write README explaining documentation organization
-3. Create subdirectories for guides, API docs, and architecture
-4. Provide templates or examples for documentation
+1. Write README explaining documentation organization
+1. Create subdirectories for guides, API docs, and architecture
+1. Provide templates or examples for documentation
 
 ## Success Criteria
 

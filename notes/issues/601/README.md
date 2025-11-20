@@ -37,7 +37,7 @@ This establishes the foundation for the Magic package manager configuration.
 
 **Decision**: Start with minimal valid configuration containing only project metadata.
 
-**Rationale**:
+### Rationale
 
 - Reduces complexity in the initial setup
 - Follows incremental development approach (dependencies and channels added in subsequent steps)
@@ -49,10 +49,10 @@ This establishes the foundation for the Magic package manager configuration.
 **Decision**: Create magic.toml at repository root with three main sections:
 
 1. Project metadata (name, version, description)
-2. Dependencies section (structure only, populated later)
-3. Channels section (structure only, configured later)
+1. Dependencies section (structure only, populated later)
+1. Channels section (structure only, configured later)
 
-**Rationale**:
+### Rationale
 
 - Follows Magic package manager conventions
 - Repository root is the standard location for package configuration
@@ -63,7 +63,7 @@ This establishes the foundation for the Magic package manager configuration.
 
 **Decision**: Include inline comments explaining each section.
 
-**Rationale**:
+### Rationale
 
 - Self-documenting configuration reduces learning curve
 - Helps future maintainers understand the purpose of each section
@@ -72,13 +72,13 @@ This establishes the foundation for the Magic package manager configuration.
 
 ### 5. Configuration Content
 
-**Project Metadata**:
+### Project Metadata
 
 - **Name**: `ml-odyssey` (aligned with repository name)
 - **Version**: `0.1.0` (semantic versioning, pre-release)
 - **Description**: "A Mojo-based AI research platform for reproducing classic research papers"
 
-**TOML Structure**:
+### TOML Structure
 
 ```toml
 # Project metadata
@@ -92,13 +92,13 @@ description = "A Mojo-based AI research platform for reproducing classic researc
 
 # Package channels (to be configured in step 03-configure-channels)
 [channels]
-```
+```text
 
 ### 6. Validation Strategy
 
 **Decision**: Ensure valid TOML syntax from the start.
 
-**Rationale**:
+### Rationale
 
 - Prevents syntax errors from propagating to future steps
 - Magic package manager requires valid TOML to parse configuration
@@ -107,20 +107,22 @@ description = "A Mojo-based AI research platform for reproducing classic researc
 
 ## References
 
-**Source Plan**:
+### Source Plan
+
 [notes/plan/01-foundation/02-configuration-files/01-magic-toml/01-create-base-config/plan.md](../../../plan/01-foundation/02-configuration-files/01-magic-toml/01-create-base-config/plan.md)
 
-**Parent Plan**:
+### Parent Plan
+
 [notes/plan/01-foundation/02-configuration-files/01-magic-toml/plan.md](../../../plan/01-foundation/02-configuration-files/01-magic-toml/plan.md)
 
-**Related Issues**:
+### Related Issues
 
 - Issue #602: [Test] Create Base Config - Test Implementation
 - Issue #603: [Impl] Create Base Config - Implementation
 - Issue #604: [Package] Create Base Config - Integration and Packaging
 - Issue #605: [Cleanup] Create Base Config - Cleanup and Finalization
 
-**Next Steps**:
+### Next Steps
 
 - [02-add-dependencies](../../../plan/01-foundation/02-configuration-files/01-magic-toml/02-add-dependencies/plan.md) -
   Add Mojo/MAX dependencies

@@ -30,13 +30,15 @@ This planning phase produces:
 
 **Decision**: Evaluate Mojo-native coverage tools first, with Python tools as fallback.
 
-**Rationale**:
+### Rationale
+
 - Mojo is the primary language for the shared library
 - Native tools provide better integration and accuracy
 - Python tools may not correctly instrument Mojo code
 - Need to ensure minimal performance impact on test execution
 
-**Trade-offs**:
+### Trade-offs
+
 - Mojo ecosystem may lack mature coverage tools (as of 2025)
 - Python tools offer proven reporting but may have gaps
 - May need custom instrumentation for Mojo-specific features
@@ -45,13 +47,15 @@ This planning phase produces:
 
 **Decision**: Provide both console and HTML reports with different detail levels.
 
-**Rationale**:
+### Rationale
+
 - Console reports enable quick feedback during development
 - HTML reports support detailed line-by-line analysis
 - Different audiences need different detail levels (developers vs. reviewers)
 - Historical tracking requires persistent data format
 
-**Formats**:
+### Formats
+
 - **Console**: Summary statistics (total %, file %, function %)
 - **HTML**: Line-by-line coverage with uncovered code highlighting
 - **File-level**: Per-file coverage breakdowns for large codebases
@@ -61,13 +65,15 @@ This planning phase produces:
 
 **Decision**: Start with reasonable thresholds (80%) and increase gradually.
 
-**Rationale**:
+### Rationale
+
 - Avoid blocking development with overly strict initial gates
 - Build coverage incrementally as codebase matures
 - Focus on meaningful coverage over arbitrary percentages
 - Allow project to establish realistic baselines
 
-**Gate Rules**:
+### Gate Rules
+
 - Fail on coverage decrease (delta-based)
 - Enforce absolute minimum threshold (80%)
 - Compare against main branch for PR checks
@@ -77,13 +83,15 @@ This planning phase produces:
 
 **Decision**: Support exceptions for generated code and external dependencies.
 
-**Rationale**:
+### Rationale
+
 - Generated code (e.g., from code generators) shouldn't count against coverage
 - External dependencies are tested in their own repositories
 - Test fixtures and mocks don't require coverage
 - Configuration files and build scripts have different quality standards
 
-**Exception Categories**:
+### Exception Categories
+
 - Generated files (marked with headers or patterns)
 - Third-party code in vendor directories
 - Test infrastructure code (fixtures, helpers)
@@ -93,13 +101,15 @@ This planning phase produces:
 
 **Decision**: Make coverage collection automatic in CI, opt-in for local development.
 
-**Rationale**:
+### Rationale
+
 - CI requires consistent coverage enforcement
 - Local development should be fast (coverage adds overhead)
 - Developers can run coverage manually when needed
 - Separates "must pass" (CI) from "nice to have" (local)
 
-**Implementation**:
+### Implementation
+
 - CI: Always collect coverage, fail on threshold violations
 - Local: Optional flag for coverage collection (`--coverage`)
 - Both: Use same collection and reporting mechanisms
@@ -109,13 +119,15 @@ This planning phase produces:
 
 **Decision**: Use standard coverage data formats (e.g., Cobertura XML, JSON).
 
-**Rationale**:
+### Rationale
+
 - Standard formats enable tool interoperability
 - CI platforms recognize common formats
 - Enables integration with coverage badges and dashboards
 - Simplifies historical tracking and comparison
 
-**Formats**:
+### Formats
+
 - **Collection**: Language-specific binary format (fast)
 - **Export**: Cobertura XML (CI integration)
 - **Display**: JSON (web dashboards, APIs)
@@ -125,13 +137,15 @@ This planning phase produces:
 
 **Decision**: Support both global and per-module thresholds.
 
-**Rationale**:
+### Rationale
+
 - Different modules have different complexity and test requirements
 - Critical modules (e.g., core operations) should have higher standards
 - Experimental or prototype code can have lower initial thresholds
 - Allows gradual improvement without blocking all development
 
-**Threshold Types**:
+### Threshold Types
+
 - **Global**: Minimum for entire codebase (80%)
 - **Module**: Per-directory or per-file overrides (80-95%)
 - **Function**: Critical functions can require 100%
@@ -157,7 +171,7 @@ Coverage System
     ├── Threshold enforcement
     ├── PR coverage checks
     └── Exception configuration
-```
+```text
 
 ### Data Flow
 
@@ -173,27 +187,28 @@ Coverage Data Storage (binary format)
       └─→ Coverage Gate Check (CI enforcement)
             ↓
       Pass/Fail + Artifacts
-```
+```text
 
 ### Integration Points
 
 1. **Test Framework**: Coverage hooks into test execution
-2. **CI Pipeline**: Automatic collection and gate enforcement
-3. **Repository**: Coverage badge in README
-4. **Dashboards**: Optional integration with coverage services
+1. **CI Pipeline**: Automatic collection and gate enforcement
+1. **Repository**: Coverage badge in README
+1. **Dashboards**: Optional integration with coverage services
 
 ## Technical Specifications
 
 ### Coverage Collection
 
-**Requirements**:
+### Requirements
+
 - Track line coverage (which lines executed)
 - Track branch coverage (which branches taken)
 - Minimal performance overhead (< 20% slowdown)
 - Works with Mojo's compilation model
 - Supports SIMD and vectorized code
 
-**Configuration**:
+### Configuration
 
 ```text
 [coverage]
@@ -204,11 +219,11 @@ omit =
     */__generated__/*
 parallel = true
 branch = true
-```
+```text
 
 ### Report Generation
 
-**Console Report Format**:
+### Console Report Format
 
 ```text
 Coverage Summary:
@@ -223,9 +238,10 @@ By Module:
 Files with < 80% coverage:
   data/augmentation.mojo  72.3%
   training/scheduler.mojo 75.8%
-```
+```text
 
-**HTML Report Features**:
+### HTML Report Features
+
 - Line-by-line coverage with color coding (green=covered, red=uncovered)
 - Branch coverage visualization
 - Sortable file and function lists
@@ -234,7 +250,7 @@ Files with < 80% coverage:
 
 ### Gate Configuration
 
-**Threshold Specification**:
+### Threshold Specification
 
 ```text
 [coverage.gates]
@@ -246,9 +262,9 @@ max_decrease = 2.0
 "src/shared/core" = 90.0
 "src/shared/training" = 85.0
 "src/shared/data" = 85.0
-```
+```text
 
-**CI Check Behavior**:
+### CI Check Behavior
 
 ```text
 1. Collect coverage from test run
@@ -258,7 +274,7 @@ max_decrease = 2.0
 5. Check delta threshold (<= 2% decrease)
 6. Generate pass/fail result
 7. Post comment on PR with results
-```
+```text
 
 ## References
 
@@ -296,9 +312,9 @@ max_decrease = 2.0
 ### Open Questions
 
 1. Which Mojo coverage tool should we use (if any exist)?
-2. How do we instrument SIMD and vectorized code?
-3. What's the performance overhead threshold for acceptance?
-4. Should we integrate with external coverage services (Codecov, Coveralls)?
+1. How do we instrument SIMD and vectorized code?
+1. What's the performance overhead threshold for acceptance?
+1. Should we integrate with external coverage services (Codecov, Coveralls)?
 
 ### Constraints
 

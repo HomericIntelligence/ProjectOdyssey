@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Analyze changed files in the PR
-2. Run correctness, performance, and style reviews
-3. Aggregate findings and prioritize issues
-4. Generate unified review report
+1. Run correctness, performance, and style reviews
+1. Aggregate findings and prioritize issues
+1. Generate unified review report
 
 ## Success Criteria
 

@@ -14,7 +14,7 @@ The skills-agents integration is now complete with a hybrid approach:
 - **Phase 2 (Complete)**: 3 additional critical agents updated (performance, implementation, chief-architect)
 - **Phases 2-4 (Template Approach)**: Standard skills template documented for all remaining agents
 
-**Total Impact**:
+### Total Impact
 
 - 8 agents with detailed skill integration
 - 30 agents follow standard template pattern
@@ -32,15 +32,15 @@ The skills-agents integration is now complete with a hybrid approach:
    - Added: mojo-simd-optimize, quality-complexity-check, mojo-format
    - Focus: SIMD optimization and complexity analysis
 
-2. **performance-specialist** ✅
+1. **performance-specialist** ✅
    - Added: mojo-simd-optimize, quality-complexity-check
    - Focus: Performance strategy and bottleneck identification
 
-3. **implementation-engineer** ✅
+1. **implementation-engineer** ✅
    - Added: mojo-format, mojo-build-package, mojo-test-runner, gh-create-pr-linked, gh-check-ci-status
    - Focus: Standard development workflow automation
 
-4. **chief-architect** ✅
+1. **chief-architect** ✅
    - Added: agent-run-orchestrator, agent-validate-config, agent-test-delegation, agent-coverage-check, agent-hierarchy-diagram
    - Focus: Agent system management and strategic orchestration
 
@@ -112,7 +112,7 @@ Use the `agent-run-orchestrator` skill to delegate to sub-orchestrators:
 - `plan-validate-structure` - Validate plan hierarchy structure
 - `agent-run-orchestrator` - Run sub-orchestrators
 - `agent-validate-config` - Validate agent configurations
-```
+```text
 
 ### For ALL Specialists (13 agents)
 
@@ -148,7 +148,7 @@ Use the `quality-complexity-check` skill for code analysis:
 - `quality-security-scan` - Security vulnerability scanning (for security specialists)
 - `mojo-memory-check` - Memory safety verification (for safety specialists)
 - `mojo-type-safety` - Type safety validation (for mojo specialists)
-```
+```text
 
 ### For ALL Engineers (9 agents)
 
@@ -187,7 +187,7 @@ Use the `gh-check-ci-status` skill to monitor CI:
 - `gh-create-pr-linked` - Create PRs with proper issue linking
 - `gh-check-ci-status` - Monitor CI status
 - `ci-run-precommit` - Run pre-commit hooks
-```
+```text
 
 ### For ALL Junior Engineers (3 agents)
 
@@ -220,7 +220,7 @@ Use the `quality-fix-formatting` skill to auto-fix formatting:
 - `quality-fix-formatting` - Auto-fix formatting issues
 - `gh-create-pr-linked` - Create PRs with proper issue linking
 - `gh-check-ci-status` - Monitor CI status
-```
+```text
 
 ---
 
@@ -321,7 +321,7 @@ Foreground tasks (invoke explicitly):
 - quality-complexity-check, quality-coverage-report
 
 See `.claude/skills/` for complete skill implementations.
-```
+```text
 
 ---
 
@@ -459,7 +459,7 @@ Five standard patterns documented and applied:
 5. If errors: **Use `quality-fix-formatting` skill** to auto-fix
 6. **Use `gh-create-pr-linked` skill** to create PR
 7. **Use `gh-check-ci-status` skill** to monitor CI
-```
+```text
 
 ### Example 2: Test Engineer Workflow
 
@@ -470,7 +470,7 @@ Five standard patterns documented and applied:
 4. **Use `mojo-test-runner` skill** to run tests
 5. **Use `quality-coverage-report` skill** for coverage
 6. **Use `ci-run-precommit` skill** before committing
-```
+```text
 
 ### Example 3: Orchestrator Workflow
 
@@ -481,7 +481,7 @@ Five standard patterns documented and applied:
 4. **Use `gh-implement-issue` skill** for implementation
 5. **Use `agent-run-orchestrator` skill** to delegate to specialists
 6. **Use `plan-regenerate-issues` skill** after plan updates
-```
+```text
 
 ---
 
@@ -492,29 +492,29 @@ Five standard patterns documented and applied:
 When adding new skills:
 
 1. Create skill in `.claude/skills/skill-name/SKILL.md`
-2. Document in skills-architecture-comprehensive.md
-3. Add to relevant agent "Using Skills" sections
-4. Update CLAUDE.md skill categories
-5. Test delegation pattern with agents
+1. Document in skills-architecture-comprehensive.md
+1. Add to relevant agent "Using Skills" sections
+1. Update CLAUDE.md skill categories
+1. Test delegation pattern with agents
 
 ### Updating Existing Skills
 
 When updating skills:
 
 1. Modify SKILL.md implementation
-2. Keep agent references unchanged (delegation pattern remains same)
-3. Update skill documentation if behavior changes
-4. No need to update agents unless skill interface changes
+1. Keep agent references unchanged (delegation pattern remains same)
+1. Update skill documentation if behavior changes
+1. No need to update agents unless skill interface changes
 
 ### Adding New Agents
 
 When adding new agents:
 
 1. Use standard template based on agent level
-2. Add specialized skills if needed (like Phase 1/2 agents)
-3. Follow "Using Skills" format consistently
-4. Include "Skills to Use" bullet list
-5. Test skill invocation patterns
+1. Add specialized skills if needed (like Phase 1/2 agents)
+1. Follow "Using Skills" format consistently
+1. Include "Skills to Use" bullet list
+1. Test skill invocation patterns
 
 ---
 

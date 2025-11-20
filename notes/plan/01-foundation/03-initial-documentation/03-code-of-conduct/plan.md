@@ -29,7 +29,7 @@ Create a CODE_OF_CONDUCT.md file that establishes community guidelines and expec
 ## Steps
 
 1. Choose appropriate code of conduct template
-2. Customize document for this repository's needs
+1. Customize document for this repository's needs
 
 ## Success Criteria
 

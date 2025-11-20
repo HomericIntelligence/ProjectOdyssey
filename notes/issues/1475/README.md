@@ -34,16 +34,20 @@ As specified in the issue description.
 ## Implementation Notes
 
 ## Overview
+
 Create structured prompt templates for the research assistant's main capabilities: analyzing papers, suggesting architectures, and reviewing implementations. Each template uses Claude best practices with XML tags, few-shot examples, and chain-of-thought reasoning.
 
 ## Packaging Objectives
+
 - Integrate the implementation with existing codebase
 - Ensure all dependencies are properly configured
 - Verify compatibility with other components
 - Package for deployment/distribution
 
 ## Integration Requirements
+
 Based on outputs:
+
 - Paper analyzer prompt template
 - Architecture suggester prompt template
 - Implementation reviewer prompt template
@@ -51,11 +55,13 @@ Based on outputs:
 - Documentation for using templates
 
 ## Integration Steps
+
 1. Create paper analyzer template with structured analysis format
-2. Create architecture suggester template with design patterns
-3. Create implementation reviewer template with code review guidelines
+1. Create architecture suggester template with design patterns
+1. Create implementation reviewer template with code review guidelines
 
 ## Success Criteria
+
 - [ ] All templates use XML tags for structure
 - [ ] Templates include few-shot examples
 - [ ] Chain-of-thought reasoning is incorporated
@@ -63,6 +69,7 @@ Based on outputs:
 - [ ] Documentation explains template usage
 
 ## Notes
+
 Use XML tags to structure inputs and outputs clearly. Include 2-3 few-shot examples per template to ensure consistency. Guide the agent through chain-of-thought reasoning for complex analysis tasks.
 
 ## Status

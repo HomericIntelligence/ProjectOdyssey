@@ -79,18 +79,21 @@
 
 **Status**: ❌ MISSING
 
-**Repository State**:
+### Repository State
+
 - `tools/paper-scaffold/scaffold.py` - CLI with argparse only
 - `tools/paper-scaffold/scaffold_enhanced.py` - CLI with argparse only
 - No interactive prompt functionality exists
 
 **Gap**: The paper scaffold tools accept arguments via CLI flags but do NOT prompt users interactively when arguments are missing. The issues require:
+
 - Interactive prompts for paper metadata (title, author, description)
 - Real-time input validation
 - Default values where appropriate
 - Helpful error messages
 
-**Current Behavior**:
+### Current Behavior
+
 ```bash
 # Works - all args provided
 python scaffold_enhanced.py --paper "LeNet-5" --title "..." --authors "..."
@@ -98,16 +101,17 @@ python scaffold_enhanced.py --paper "LeNet-5" --title "..." --authors "..."
 # Fails - missing args (should prompt instead)
 python scaffold_enhanced.py --paper "LeNet-5"
 # Error: argument --title is required
-```
+```text
 
-**Expected Behavior**:
+### Expected Behavior
+
 ```bash
 python scaffold_enhanced.py --paper "LeNet-5"
-# Prompts:
+# Prompts
 # > Paper title: [user types here]
 # > Authors: [user types here]
 # > Year [2025]: [user types or accepts default]
-```
+```text
 
 ### Component 2: Output Formatting (Issues #774-778)
 
@@ -115,7 +119,8 @@ python scaffold_enhanced.py --paper "LeNet-5"
 
 **Status**: ✅ COMPLETE (All closed)
 
-**Repository State**:
+### Repository State
+
 - Implemented in `tools/paper-scaffold/scaffold_enhanced.py:36-83` (CreationResult.summary())
 - Comprehensive output formatting with:
   - Progress messages during generation
@@ -123,7 +128,8 @@ python scaffold_enhanced.py --paper "LeNet-5"
   - Validation results
   - Error reporting
 
-**Evidence**:
+### Evidence
+
 ```python
 # tools/paper-scaffold/scaffold_enhanced.py
 def summary(self) -> str:
@@ -132,7 +138,7 @@ def summary(self) -> str:
     lines.append("=" * 60)
     lines.append("GENERATION SUMMARY")
     # ... formatted output ...
-```
+```text
 
 **Action**: None needed - functionality is complete.
 
@@ -142,18 +148,21 @@ def summary(self) -> str:
 
 **Status**: ⚠️ PARTIAL (Plan closed, others open)
 
-**Repository State**:
+### Repository State
+
 - Planning complete (#779 closed)
 - Implementation exists: `scaffold.py` and `scaffold_enhanced.py` both have argparse CLIs
 - Tests missing: No tests for CLI argument parsing in `tests/tooling/test_paper_scaffold.py`
 
 **Gap**: Tests for:
+
 - Argument parsing validation
 - Help text generation
 - Error handling for invalid arguments
 - Default value handling
 
 **Current Tests** (from tests/tooling/test_paper_scaffold.py):
+
 - ✓ Paper name normalization
 - ✓ Directory creation
 - ✓ Template rendering
@@ -168,7 +177,8 @@ def summary(self) -> str:
 
 **Status**: ⚠️ PARTIAL (Plan closed, others open)
 
-**Repository State**:
+### Repository State
+
 - Planning complete (#784 closed)
 - Implementation exists:
   - `tools/paper-scaffold/scaffold.py` (basic version)
@@ -178,11 +188,13 @@ def summary(self) -> str:
 - Templates exist: `tools/paper-scaffold/templates/` directory
 
 **Gap**: Verification needed:
+
 - Are tests comprehensive enough?
 - Is packaging/integration complete?
 - Should issues be closed?
 
 **Test Coverage** (from test_paper_scaffold.py):
+
 - ✓ Paper name normalization (Issue #744)
 - ✓ Directory creation idempotency (Issue #744)
 - ✓ Template rendering (Issue #749)
@@ -196,12 +208,14 @@ def summary(self) -> str:
 
 **Status**: 🔄 DUPLICATE (Plan closed, functionality exists as skill)
 
-**Repository State**:
+### Repository State
+
 - Planning complete (#789 closed)
 - Functionality exists in `.claude/skills/mojo-test-runner/`
 - `mojo test` command has built-in test discovery
 
-**Evidence from mojo-test-runner skill**:
+### Evidence from mojo-test-runner skill
+
 ```markdown
 ## Test Discovery
 
@@ -209,10 +223,12 @@ Mojo discovers tests by:
 - Files matching `test_*.mojo` or `*_test.mojo`
 - Functions starting with `test_`
 - In specified directory or file
-```
+```text
 
-**Rationale for DUPLICATE**:
+### Rationale for DUPLICATE
+
 The issues were created before the mojo-test-runner skill was implemented. The skill now provides:
+
 - Test discovery via `mojo test` built-in functionality
 - Test execution via run_tests.sh script
 - Integration with TDD workflow
@@ -225,20 +241,22 @@ The issues were created before the mojo-test-runner skill was implemented. The s
 
 **Status**: 🔄 DUPLICATE (Plan closed, functionality exists as skill)
 
-**Repository State**:
+### Repository State
+
 - Planning complete (#794 closed)
 - Implementation exists in `.claude/skills/mojo-test-runner/scripts/run_tests.sh`
 - Uses `mojo test` command for execution
 
-**Evidence**:
+### Evidence
+
 ```bash
 # From .claude/skills/mojo-test-runner/scripts/run_tests.sh
-# Provides:
+# Provides
 # - Test isolation via mojo test
 # - Output capture
 # - Error handling
 # - Execution statistics
-```
+```text
 
 **Recommendation**: Close issues #795-798 as duplicate/implemented by mojo-test-runner skill.
 
@@ -248,12 +266,14 @@ The issues were created before the mojo-test-runner skill was implemented. The s
 
 **Status**: 🔄 DUPLICATE (Plan closed, functionality exists)
 
-**Repository State**:
+### Repository State
+
 - Planning complete (#799 closed)
 - `mojo test` provides built-in reporting
 - mojo-test-runner skill documents reporting capabilities
 
-**Evidence**:
+### Evidence
+
 ```markdown
 ## Test Reporting
 
@@ -262,7 +282,7 @@ mojo test tests/  # Shows pass/fail summary
 
 ### Verbose Report
 mojo test -v tests/  # Shows detailed output for each test
-```
+```text
 
 **Recommendation**: Close issues #800-803 as duplicate/implemented by mojo test and skill.
 
@@ -272,19 +292,21 @@ mojo test -v tests/  # Shows detailed output for each test
 
 **Status**: 🔄 DUPLICATE (Plan closed, unified runner exists as skill)
 
-**Repository State**:
+### Repository State
+
 - Planning complete (#804 closed)
 - mojo-test-runner skill provides unified test runner combining:
   - Discovery (via `mojo test` built-in)
   - Execution (via run_tests.sh)
   - Reporting (via `mojo test` output)
 
-**Evidence**:
+### Evidence
+
 ```markdown
 # .claude/skills/mojo-test-runner/SKILL.md
 This skill runs Mojo tests using the `mojo test` command with various
 filtering and reporting options.
-```
+```text
 
 **Recommendation**: Close issues #805-808 as duplicate/implemented by mojo-test-runner skill.
 
@@ -294,18 +316,21 @@ filtering and reporting options.
 
 **Status**: ❌ MISSING (Plan closed, implementation needed)
 
-**Repository State**:
+### Repository State
+
 - Planning complete (#809 closed)
 - No implementation exists for filtering tests by specific paper
 - mojo-test-runner skill runs ALL tests or tests from a specific directory
 
 **Gap**: Functionality to:
+
 - Parse paper identifier from user input (name or path)
 - Locate paper directory in repository
 - Load paper metadata
 - Filter tests to run only tests for that specific paper
 
-**Current Limitation**:
+### Current Limitation
+
 ```bash
 # Can run all tests
 mojo test tests/
@@ -315,9 +340,10 @@ mojo test papers/lenet-5/tests/
 
 # CANNOT filter by paper name
 mojo test --paper lenet-5  # Does not exist
-```
+```text
 
-**Expected Behavior**:
+### Expected Behavior
+
 ```bash
 # Filter by paper name
 ./run_tests.sh --paper lenet-5
@@ -327,7 +353,7 @@ mojo test --paper lenet-5  # Does not exist
 
 # Filter by path
 ./run_tests.sh --paper papers/lenet-5/
-```
+```text
 
 ## Implementation Plan
 
@@ -337,17 +363,19 @@ mojo test --paper lenet-5  # Does not exist
 
 **Issues to Close**: #790-793, #795-798, #800-803, #805-808 (22 issues total)
 
-**Justification**:
+### Justification
+
 - All functionality implemented in `.claude/skills/mojo-test-runner/`
 - Planning phases (#789, #794, #799, #804) already closed
 - Implementation phases were superseded by skill-based approach
 - Keeping them open creates confusion and duplicate work
 
-**Actions**:
+### Actions
+
 1. Close #790-793 with comment: "Superseded by mojo-test-runner skill (Test Discovery)"
-2. Close #795-798 with comment: "Superseded by mojo-test-runner skill (Test Execution)"
-3. Close #800-803 with comment: "Superseded by mojo-test-runner skill (Test Reporting)"
-4. Close #805-808 with comment: "Superseded by mojo-test-runner skill (Unified Test Runner)"
+1. Close #795-798 with comment: "Superseded by mojo-test-runner skill (Test Execution)"
+1. Close #800-803 with comment: "Superseded by mojo-test-runner skill (Test Reporting)"
+1. Close #805-808 with comment: "Superseded by mojo-test-runner skill (Unified Test Runner)"
 
 **Success Criteria**: 22 issues closed with clear explanation of implementation location.
 
@@ -359,38 +387,42 @@ mojo test --paper lenet-5  # Does not exist
 
 **Issues**: #785-788 (Test, Impl, Package, Cleanup)
 
-**Current State**:
+### Current State
+
 - Implementation exists: scaffold_enhanced.py, validate.py
 - Tests exist: test_paper_scaffold.py
 - Templates exist: templates/ directory
 
-**Needed**:
+### Needed
+
 1. **Verify Test Coverage**
    - Run tests: `pytest tests/tooling/test_paper_scaffold.py -v`
    - Check coverage: Do tests cover all success criteria from #785?
    - Add missing tests if needed
 
-2. **Verify Implementation Completeness**
+1. **Verify Implementation Completeness**
    - Check against success criteria from #786
    - Verify all deliverables from #784 are implemented
    - Test end-to-end: Create a paper, verify structure
 
-3. **Verify Packaging**
+1. **Verify Packaging**
    - Check if tool is properly integrated in repository
    - Verify documentation exists (README.md in tools/paper-scaffold/)
    - Check if tool is referenced in main docs
 
-4. **Close Issues if Complete**
+1. **Close Issues if Complete**
    - If all criteria met, close #785-788
    - If gaps found, document them and implement
 
-**Files to Review**:
+### Files to Review
+
 - `tools/paper-scaffold/scaffold_enhanced.py` (489 lines)
 - `tools/paper-scaffold/validate.py` (9301 bytes)
 - `tests/tooling/test_paper_scaffold.py` (150+ lines)
 - `tools/paper-scaffold/README_ENHANCED.md` (7065 bytes)
 
-**Success Criteria**:
+### Success Criteria
+
 - All tests passing
 - Coverage > 80% for paper-scaffold code
 - Documentation complete
@@ -406,7 +438,7 @@ mojo test --paper lenet-5  # Does not exist
 
 **Current State**: CLI arguments only, no interactive prompts
 
-**Implementation Needed**:
+### Implementation Needed
 
 1. **[Test] User Prompts (#770)**
    - Tests: Create `tests/tooling/test_user_prompts.py`
@@ -415,7 +447,7 @@ mojo test --paper lenet-5  # Does not exist
    - Test default value handling
    - Test error message display
 
-2. **[Impl] User Prompts (#771)**
+1. **[Impl] User Prompts (#771)**
    - Files: Create `tools/paper-scaffold/prompts.py`
    - Implement:
      ```python
@@ -432,22 +464,24 @@ mojo test --paper lenet-5  # Does not exist
      ```
    - Integration: Modify scaffold_enhanced.py main() to use prompts when args missing
 
-3. **[Package] User Prompts (#772)**
+1. **[Package] User Prompts (#772)**
    - Verify: Interactive mode works end-to-end
    - Test: Both CLI and interactive modes work
    - Document: Update README with interactive mode examples
 
-4. **[Cleanup] User Prompts (#773)**
+1. **[Cleanup] User Prompts (#773)**
    - Refactor: Clean up prompt code
    - Document: Add docstrings and comments
    - Validate: Final testing
 
-**Dependencies**:
+### Dependencies
+
 - Python input() for prompts
 - Validation logic (reuse from existing code)
 - Default value handling
 
-**Test Cases**:
+### Test Cases
+
 ```python
 def test_prompt_with_defaults():
     """Test prompts accept default values."""
@@ -457,9 +491,10 @@ def test_prompt_validation():
 
 def test_prompt_required_fields():
     """Test required fields cannot be skipped."""
-```
+```text
 
-**Integration**:
+### Integration
+
 ```python
 # In scaffold_enhanced.py main()
 if not all([args.title, args.authors]):  # Some args missing
@@ -471,9 +506,10 @@ if not all([args.title, args.authors]):  # Some args missing
 else:
     # Use CLI args as before
     metadata = {...}
-```
+```text
 
-**Success Criteria**:
+### Success Criteria
+
 - User can create paper with no CLI args (fully interactive)
 - User can mix CLI args and prompts (partial interactive)
 - Validation prevents invalid inputs
@@ -492,7 +528,7 @@ else:
 
 **Current State**: Implementation exists, tests missing
 
-**Implementation Needed**:
+### Implementation Needed
 
 1. **[Test] CLI Interface (#780)**
    - File: Add to `tests/tooling/test_paper_scaffold.py`
@@ -501,7 +537,8 @@ else:
    - Test error handling for invalid args
    - Test default values
 
-**Test Cases**:
+### Test Cases
+
 ```python
 class TestCLIInterface:
     """Test CLI argument parsing (Issue #780)."""
@@ -525,20 +562,21 @@ class TestCLIInterface:
     def test_default_values(self):
         """Test default values are applied."""
         # Mock argparse to verify defaults
-```
+```text
 
-2. **[Impl] CLI Interface (#781)**
+1. **[Impl] CLI Interface (#781)**
    - Status: Already implemented
    - Action: Verify completeness against #779 specs
 
-3. **[Package] CLI Interface (#782)**
+1. **[Package] CLI Interface (#782)**
    - Verify: Tool can be installed/used
    - Document: Installation instructions
 
-4. **[Cleanup] CLI Interface (#783)**
+1. **[Cleanup] CLI Interface (#783)**
    - Final review and documentation
 
-**Success Criteria**:
+### Success Criteria
+
 - All CLI tests passing
 - Help text comprehensive
 - Error messages helpful
@@ -556,7 +594,7 @@ class TestCLIInterface:
 
 **Current State**: Planning complete, implementation missing
 
-**Implementation Needed**:
+### Implementation Needed
 
 1. **[Test] Test Specific Paper (#810)**
    - Tests: Create `tests/tooling/test_paper_filter.py`
@@ -565,13 +603,14 @@ class TestCLIInterface:
    - Test metadata loading
    - Test test filtering logic
 
-2. **[Impl] Test Specific Paper (#811)**
+1. **[Impl] Test Specific Paper (#811)**
    - File: Modify `.claude/skills/mojo-test-runner/scripts/run_tests.sh`
    - Add `--paper <name>` option
    - Implement paper directory lookup
    - Filter tests to paper directory
 
-**Implementation Approach**:
+### Implementation Approach
+
 ```bash
 # In run_tests.sh
 if [ "$PAPER_NAME" ]; then
@@ -589,16 +628,17 @@ else
     # Run all tests
     mojo test tests/
 fi
-```
+```text
 
-3. **[Package] Test Specific Paper (#812)**
+1. **[Package] Test Specific Paper (#812)**
    - Integration testing
    - Documentation
 
-4. **[Cleanup] Test Specific Paper (#813)**
+1. **[Cleanup] Test Specific Paper (#813)**
    - Final refinement
 
-**Success Criteria**:
+### Success Criteria
+
 - Can filter tests by paper name
 - Can filter by partial match
 - Can filter by directory path
@@ -612,13 +652,15 @@ fi
 
 ### Close Immediately (22 issues)
 
-**Duplicate/Superseded by Skills**:
+### Duplicate/Superseded by Skills
+
 - #790-793: Test Discovery → mojo-test-runner skill
 - #795-798: Test Execution → mojo-test-runner skill
 - #800-803: Test Reporting → mojo-test-runner skill
 - #805-808: Unified Test Runner → mojo-test-runner skill
 
-**Closure Comment Template**:
+### Closure Comment Template
+
 ```markdown
 Closing this issue as the functionality has been implemented in the
 `.claude/skills/mojo-test-runner/` skill.
@@ -633,7 +675,7 @@ The skill-based approach is more maintainable and better integrated
 with the project's automation system.
 
 See: `.claude/skills/mojo-test-runner/` for complete implementation.
-```
+```text
 
 ---
 
@@ -654,12 +696,12 @@ None - all issues should either be implemented or closed as duplicate.
 
 ### Short-term Actions (Priority 2-3)
 
-2. **Verify Paper Scaffolding** (#785-788)
+1. **Verify Paper Scaffolding** (#785-788)
    - Run existing tests
    - Check coverage
    - Close if complete, or document gaps
 
-3. **Implement User Prompts** (#770-773)
+1. **Implement User Prompts** (#770-773)
    - Create prompts.py module
    - Add tests
    - Integrate with scaffold_enhanced.py
@@ -667,12 +709,12 @@ None - all issues should either be implemented or closed as duplicate.
 
 ### Medium-term Actions (Priority 4-5)
 
-4. **Add CLI Tests** (#780-783)
+1. **Add CLI Tests** (#780-783)
    - Expand test_paper_scaffold.py
    - Verify CLI completeness
    - Close issues
 
-5. **Implement Paper Filtering** (#810-813)
+1. **Implement Paper Filtering** (#810-813)
    - Enhance run_tests.sh
    - Add paper lookup logic
    - Test filtering
@@ -685,6 +727,7 @@ None - all issues should either be implemented or closed as duplicate.
 ### What Exists
 
 **Paper Scaffolding** (mostly complete):
+
 - ✓ `tools/paper-scaffold/scaffold.py` - Basic scaffold
 - ✓ `tools/paper-scaffold/scaffold_enhanced.py` - Enhanced with validation (489 lines)
 - ✓ `tools/paper-scaffold/validate.py` - Structure validation (9301 bytes)
@@ -694,6 +737,7 @@ None - all issues should either be implemented or closed as duplicate.
 - ✗ Interactive prompts missing
 
 **Test Runner** (complete via skill):
+
 - ✓ `.claude/skills/mojo-test-runner/` - Complete skill
 - ✓ `.claude/skills/mojo-test-runner/scripts/run_tests.sh` - Test execution
 - ✓ Test discovery via `mojo test` built-in
@@ -708,12 +752,12 @@ None - all issues should either be implemented or closed as duplicate.
    - Need: Tests for prompting
    - Need: Integration with scaffold_enhanced.py
 
-2. **CLI Tests** (4 issues)
+1. **CLI Tests** (4 issues)
    - Implementation exists
    - Tests missing
    - Need: Expand test_paper_scaffold.py
 
-3. **Paper-Specific Test Filtering** (4 issues)
+1. **Paper-Specific Test Filtering** (4 issues)
    - Not implemented
    - Need: Enhance run_tests.sh
    - Need: Tests
@@ -728,16 +772,18 @@ None - all issues should either be implemented or closed as duplicate.
 ## Conclusion
 
 Out of 44 issues:
+
 - **10 already closed** (all planning phases)
 - **22 should be closed** (duplicate/superseded by skill)
 - **8 need verification** (paper scaffolding may be complete)
 - **4 need implementation** (user prompts)
 
-**Recommended Approach**:
+### Recommended Approach
+
 1. Close 22 duplicate issues immediately (reduce noise)
-2. Verify paper scaffolding completion (possibly close 4-8 more)
-3. Implement user prompts (4 issues, medium complexity)
-4. Add CLI tests (4 issues, simple)
-5. Implement paper filtering (4 issues, simple)
+1. Verify paper scaffolding completion (possibly close 4-8 more)
+1. Implement user prompts (4 issues, medium complexity)
+1. Add CLI tests (4 issues, simple)
+1. Implement paper filtering (4 issues, simple)
 
 This will clean up the issue tracker significantly and focus effort on the truly missing functionality.

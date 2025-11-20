@@ -56,16 +56,16 @@ Review all coverage documentation:
 # Find all coverage docs
 find docs/ -name "*coverage*"
 
-# Check for:
+# Check for
 # - Duplicate information
 # - Inconsistencies
 # - Broken links
 # - Outdated examples
-```
+```text
 
 Ensure clear hierarchy:
 
-```
+```text
 docs/testing/coverage-overview.md (start here)
 ├── coverage-setup.md (component 1)
 ├── coverage-reports.md (component 2)
@@ -75,7 +75,7 @@ docs/testing/coverage-overview.md (start here)
 ├── coverage-troubleshooting.md (common issues)
 ├── writing-tests-for-coverage.md (best practices)
 └── coverage-quick-ref.md (quick answers)
-```
+```text
 
 **2. System Validation**
 
@@ -108,7 +108,7 @@ python scripts/check_coverage_regression.py \
   --baseline coverage-main.xml \
   --max-decrease 2.0
 # Expected: Pass if within tolerance
-```
+```text
 
 **3. CI Validation**
 
@@ -118,13 +118,13 @@ Test coverage in CI:
 # Run CI locally
 act -j test-with-coverage
 
-# Verify:
+# Verify
 # 1. Coverage collected
 # 2. Reports generated
 # 3. Artifacts uploaded
 # 4. Gates enforced
 # 5. PR comments (if configured)
-```
+```text
 
 **4. Configuration Cleanup**
 
@@ -134,18 +134,18 @@ Ensure single source of truth:
 # Check for scattered config
 grep -r "coverage" pyproject.toml .coveragerc setup.cfg tox.ini
 
-# Should only be in pyproject.toml:
+# Should only be in pyproject.toml
 [tool.coverage.run]
 [tool.coverage.report]
 [tool.coverage.html]
-```
+```text
 
 Remove deprecated config:
 
 ```bash
-# Remove if exists:
+# Remove if exists
 rm .coveragerc setup.cfg.old
-```
+```text
 
 **5. Technical Debt Resolution**
 
@@ -159,11 +159,11 @@ grep -r "TODO\|FIXME" \
   scripts/check_coverage_regression.py \
   docs/testing/coverage-*
 
-# Categorize:
+# Categorize
 # - Critical (must fix now)
 # - Important (track as issue)
 # - Nice-to-have (document for future)
-```
+```text
 
 **6. Performance Validation**
 
@@ -178,29 +178,33 @@ time pytest --cov=scripts
 
 # Calculate overhead percentage
 # Target: < 20% slowdown
-```
+```text
 
 ### Refactoring Checklist
 
-**Configuration**:
+### Configuration
+
 - [ ] Single `pyproject.toml` for all settings
 - [ ] No duplicate configuration
 - [ ] All settings have explanatory comments
 - [ ] Tested and validated
 
-**Scripts**:
+### Scripts
+
 - [ ] `check_coverage_regression.py` clean and documented
 - [ ] No debugging code
 - [ ] Proper error handling
 - [ ] Clear help messages
 
-**CI Workflows**:
+### CI Workflows
+
 - [ ] Optimized coverage steps
 - [ ] No unnecessary duplication
 - [ ] Clear step names and outputs
 - [ ] Artifacts properly uploaded
 
-**Documentation**:
+### Documentation
+
 - [ ] All guides accurate and tested
 - [ ] Links validated and working
 - [ ] Examples tested
@@ -391,14 +395,15 @@ Implemented complete coverage system for ML Odyssey project across 20 issues (#4
 
 ### Pattern 1: Layered System
 
-```
+```text
+
 Data Collection (pytest-cov)
       ↓
 Reports (coverage.py)
       ↓
 Gates (CI checks)
-```
 
+```text
 **Benefit**: Each layer independent, composable
 
 ### Pattern 2: Configuration Over Code
@@ -527,11 +532,11 @@ The coverage system provides solid foundation for code quality:
 **Would Implement Again**: Yes (with noted improvements)
 
 **ROI**: High (low maintenance, high value)
-```
+```text
 
 ### Final Validation
 
-**Complete system check**:
+### Complete system check
 
 ```bash
 # 1. Documentation
@@ -557,7 +562,7 @@ pytest tests/ --collect-only | grep coverage
 # 6. End-to-end
 pytest --cov=scripts --cov-fail-under=80
 # Expected: Works correctly
-```
+```text
 
 ### Handoff Checklist
 

@@ -30,10 +30,10 @@ None (leaf node)
 ## Steps
 
 1. Select appropriate test framework for Mojo
-2. Create test directory structure
-3. Configure test discovery and collection
-4. Set up test running commands
-5. Integrate with CI/CD pipeline
+1. Create test directory structure
+1. Configure test discovery and collection
+1. Set up test running commands
+1. Integrate with CI/CD pipeline
 
 ## Success Criteria
 

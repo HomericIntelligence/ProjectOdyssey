@@ -67,9 +67,9 @@ behavior, and I/O optimization. Focuses exclusively on performance characteristi
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -241,7 +241,7 @@ See [code-review-orchestrator.md](./code-review-orchestrator.md#review-comment-p
 
 ### Example 1: Algorithmic Complexity - O(n²) to O(n)
 
-**Code**:
+### Code
 
 ```python
 def find_duplicates(items: List[str]) -> List[str]:
@@ -254,7 +254,7 @@ def find_duplicates(items: List[str]) -> List[str]:
     return duplicates
 ```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 🔴 CRITICAL: O(n²) complexity with O(n) solution available
@@ -300,7 +300,7 @@ the massive speed improvement.
 
 ### Example 3: Cache Inefficiency - Array-of-Structs vs Struct-of-Arrays
 
-**Code**:
+### Code
 
 ```mojo
 struct Point:
@@ -317,7 +317,7 @@ fn sum_x_coordinates(points: List[Point]) -> Float32:
     return total
 ```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 🟠 MAJOR: Cache-inefficient memory layout for hot path operation
@@ -530,14 +530,14 @@ fn scale_points(points: List[Point], factor: Float32) -> List[Point]:
 
 ### Profiling Tools by Language
 
-**Python**:
+### Python
 
 - `cProfile` - Function-level profiling
 - `line_profiler` - Line-by-line profiling
 - `memory_profiler` - Memory usage tracking
 - `py-spy` - Sampling profiler (production safe)
 
-**Mojo**:
+### Mojo
 
 - Built-in benchmark utilities
 - System profilers (perf, Instruments)
@@ -576,7 +576,7 @@ stats.print_stats(20)
 
 ```text
 
-**Decision criteria**:
+### Decision criteria
 
 - If sort > 50% time: Optimize sorting algorithm
 - If processing > 50% time: Optimize per-item processing

@@ -9,7 +9,7 @@
 Issues #261-322 represent the next major development phase for ML Odyssey, building upon the completed ExTensor training framework (issues #234-260). This phase implements **shared library infrastructure** across two major categories:
 
 1. **Core Operations** (Issues #261-302): Weight initializers and evaluation metrics
-2. **Training Infrastructure** (Issues #303-322): Base trainer with training/validation loops
+1. **Training Infrastructure** (Issues #303-322): Base trainer with training/validation loops
 
 ### Key Achievements from Previous Phase
 
@@ -26,11 +26,13 @@ The ExTensor framework (issues #234-260) achieved 100% training readiness:
 
 This phase completes the shared library foundation by adding:
 
-**Core Operations:**
+### Core Operations:
+
 - Additional weight initializers (Kaiming/He, uniform/normal distributions)
 - Comprehensive evaluation metrics (accuracy, loss tracking, confusion matrix)
 
-**Training Infrastructure:**
+### Training Infrastructure:
+
 - Base trainer interface defining training contracts
 - Training loop implementation with gradient management
 - Validation loop for model evaluation
@@ -39,6 +41,7 @@ This phase completes the shared library foundation by adding:
 ### Implementation Approach
 
 Following the **5-phase development workflow**:
+
 1. **Plan** → 2. **Test** (parallel) → 3. **Implementation** (parallel) → 4. **Package** (parallel) → 5. **Cleanup**
 
 Total timeline: 4 implementation phases after planning (Test/Impl/Package run in parallel, then Cleanup)
@@ -53,7 +56,7 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 #XYZ+2: [Impl] Component Name
 #XYZ+3: [Package] Component Name
 #XYZ+4: [Cleanup] Component Name
-```
+```text
 
 **Note**: Issues #261-262 do not exist (gap in numbering or reserved).
 
@@ -71,7 +74,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Weight initialization for ReLU networks with variance scaling Var(W) = 2/fan
 
-**Deliverables**:
+### Deliverables
+
 - Kaiming uniform: U(-sqrt(6/fan), sqrt(6/fan))
 - Kaiming normal: N(0, sqrt(2/fan))
 - Support for fan_in and fan_out modes
@@ -89,7 +93,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Basic distribution initializers for biases, embeddings, and custom schemes
 
-**Deliverables**:
+### Deliverables
+
 - Uniform distribution: U(low, high) with configurable bounds
 - Normal distribution: N(mean, std) with configurable parameters
 - Zero initialization helper
@@ -107,7 +112,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Coordinate and integrate all initialization methods
 
-**Deliverables**:
+### Deliverables
+
 - Unified initializer API
 - Statistical validation across all initializers
 - Complete API documentation
@@ -127,7 +133,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Classification accuracy metrics for model evaluation
 
-**Deliverables**:
+### Deliverables
+
 - Top-1 accuracy (exact match)
 - Top-k accuracy (k-best predictions)
 - Per-class accuracy (class-wise breakdown)
@@ -146,7 +153,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Track and aggregate loss values during training
 
-**Deliverables**:
+### Deliverables
+
 - Cumulative loss accumulation
 - Moving average computation (configurable window)
 - Statistical summaries (mean, std, min, max)
@@ -165,7 +173,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Detailed classification error analysis
 
-**Deliverables**:
+### Deliverables
+
 - NxN confusion matrix (true vs predicted labels)
 - Multiple normalization modes (row, column, total, none)
 - Derived metrics (per-class precision, recall, F1-score)
@@ -184,7 +193,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Coordinate all evaluation metrics with consistent API
 
-**Deliverables**:
+### Deliverables
+
 - Unified metric interface (update, compute, reset)
 - Common API patterns across all metrics
 - Integration with training pipeline
@@ -204,7 +214,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Top-level coordination of tensor ops, activations, initializers, and metrics
 
-**Deliverables**:
+### Deliverables
+
 - Unified core operations API
 - Hierarchical organization (4 layers: core ops, tensor ops, activations, init/metrics)
 - Comprehensive documentation
@@ -224,7 +235,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Define the contract for all training implementations
 
-**Deliverables**:
+### Deliverables
+
 - Abstract base interface/trait for trainers
 - Core methods: train(), validate(), test()
 - State properties: model state, optimizer state, metrics
@@ -243,7 +255,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Core iteration logic for model training
 
-**Deliverables**:
+### Deliverables
+
 - Batch iteration over training data
 - Forward pass (model prediction + loss computation)
 - Backward pass (gradient computation)
@@ -264,7 +277,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Evaluate model performance without weight updates
 
-**Deliverables**:
+### Deliverables
+
 - Gradient-free evaluation (no backward pass)
 - Model evaluation mode (disable dropout, use running batch norm stats)
 - Metric aggregation across validation set
@@ -284,7 +298,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Foundational training infrastructure integrating interface, training loop, and validation loop
 
-**Deliverables**:
+### Deliverables
+
 - Complete base trainer implementation
 - Composition-based design (not deep inheritance)
 - State management for checkpointing
@@ -332,11 +347,12 @@ Level 1 (Leaf Components):
   ├─ Accuracy Metrics (#278-282)
   ├─ Loss Tracking (#283-287)
   └─ Confusion Matrix (#288-292)
-```
+```text
 
 ### Implementation Order (Respecting Dependencies)
 
 **Phase 1: Leaf Components** (Can run in parallel)
+
 - Kaiming/He Initialization (#263-267)
 - Uniform/Normal Initialization (#268-272)
 - Accuracy Metrics (#278-282)
@@ -344,16 +360,19 @@ Level 1 (Leaf Components):
 - Confusion Matrix (#288-292)
 
 **Phase 2: Coordination Components** (Depends on Phase 1)
+
 - Initializers (#273-277) - after Kaiming/He and Uniform/Normal complete
 - Metrics (#293-297) - after Accuracy, Loss Tracking, Confusion Matrix complete
 - Core Operations (#298-302) - after Initializers and Metrics complete
 
 **Phase 3: Training Infrastructure** (Depends on Phase 2)
+
 - Trainer Interface (#303-307) - no dependencies, can start early
 - Training Loop (#308-312) - depends on Trainer Interface
 - Validation Loop (#313-317) - depends on Trainer Interface
 
 **Phase 4: Base Trainer** (Depends on Phase 3)
+
 - Base Trainer (#318-322) - depends on all Phase 3 components
 
 ## Current State Assessment
@@ -361,6 +380,7 @@ Level 1 (Leaf Components):
 ### What Exists
 
 **ExTensor Framework** (100% complete):
+
 - Tensor operations: arithmetic, matrix, reduction, broadcasting, shape manipulation
 - Activations: 14 functions with forward/backward passes
 - Losses: BCE, MSE, cross-entropy with gradients
@@ -368,12 +388,14 @@ Level 1 (Leaf Components):
 - Complete backward pass implementation (27 operations)
 
 **Shared Library Infrastructure** (partial):
+
 - Optimizers: SGD with momentum and weight decay
 - Training utilities: Stubs for callbacks, schedulers, metrics
 - Data loaders: Basic implementation exists
 - Utilities: Logging, config, random, profiling
 
-**Testing and Tooling**:
+### Testing and Tooling
+
 - Test utilities: Fixtures, data generators
 - Benchmarking framework
 - Pre-commit hooks (mojo format, markdownlint)
@@ -381,6 +403,7 @@ Level 1 (Leaf Components):
 ### What's Needed
 
 **Core Operations** (Issues #261-302):
+
 - ❌ Kaiming/He initialization (for ReLU networks)
 - ❌ Basic uniform/normal initializers
 - ❌ Accuracy metrics (top-1, top-k, per-class)
@@ -389,6 +412,7 @@ Level 1 (Leaf Components):
 - ❌ Unified core operations API
 
 **Training Infrastructure** (Issues #303-322):
+
 - ❌ Trainer interface (abstract base)
 - ❌ Training loop (forward/backward/update cycle)
 - ❌ Validation loop (gradient-free evaluation)
@@ -396,13 +420,14 @@ Level 1 (Leaf Components):
 
 ### Gaps and Risks
 
-**Gaps**:
-1. **No distributed training support**: Current scope is single-device only
-2. **Limited optimizer selection**: Only SGD exists, no Adam/AdamW yet
-3. **No checkpointing implementation**: State management designed but not implemented
-4. **No learning rate schedulers**: Stubs exist but no implementations
+### Gaps
 
-**Risks**:
+1. **No distributed training support**: Current scope is single-device only
+1. **Limited optimizer selection**: Only SGD exists, no Adam/AdamW yet
+1. **No checkpointing implementation**: State management designed but not implemented
+1. **No learning rate schedulers**: Stubs exist but no implementations
+
+### Risks
 
 | Risk | Impact | Likelihood | Mitigation |
 |------|--------|------------|------------|
@@ -429,27 +454,28 @@ Level 1 (Leaf Components):
    - Normal variant: N(0, sqrt(2/fan))
    - Support fan_in/fan_out modes
 
-2. **Uniform/Normal Initialization** (#268-272)
+1. **Uniform/Normal Initialization** (#268-272)
    - Uniform: U(low, high) with defaults
    - Normal: N(mean, std) with defaults
    - Zero and constant helpers
 
-3. **Accuracy Metrics** (#278-282)
+1. **Accuracy Metrics** (#278-282)
    - Top-1, top-k, per-class accuracy
    - Incremental accumulation
    - Weighted averaging for variable batch sizes
 
-4. **Loss Tracking** (#283-287)
+1. **Loss Tracking** (#283-287)
    - Moving average with circular buffer
    - Welford's algorithm for statistics
    - Multi-component tracking
 
-5. **Confusion Matrix** (#288-292)
+1. **Confusion Matrix** (#288-292)
    - NxN matrix accumulation
    - Normalization modes
    - Derived metrics (precision, recall, F1)
 
-**Success Criteria**:
+### Success Criteria
+
 - [ ] All statistical tests pass (variance, mean, distribution)
 - [ ] Reproducible with random seed
 - [ ] Edge cases handled (empty batches, single class)
@@ -467,17 +493,18 @@ Level 1 (Leaf Components):
    - Statistical validation framework
    - Integration with existing Xavier
 
-2. **Metrics** (#293-297) - AFTER Accuracy, Loss Tracking, Confusion Matrix
+1. **Metrics** (#293-297) - AFTER Accuracy, Loss Tracking, Confusion Matrix
    - Common interface (update, compute, reset)
    - Metric collection utilities
    - Integration with training pipeline
 
-3. **Core Operations** (#298-302) - AFTER Initializers and Metrics
+1. **Core Operations** (#298-302) - AFTER Initializers and Metrics
    - Top-level API coordination
    - Documentation integration
    - Numerical stability verification
 
-**Success Criteria**:
+### Success Criteria
+
 - [ ] All child components integrate cleanly
 - [ ] API is minimal but complete
 - [ ] Documentation is comprehensive
@@ -487,24 +514,25 @@ Level 1 (Leaf Components):
 
 **Duration**: Estimated 7-10 days per component (21-30 days total)
 
-**Execution Order**:
+### Execution Order
 
 1. **Trainer Interface** (#303-307) - START FIRST (no dependencies)
    - Define trait/abstract base
    - Specify method signatures
    - Document callback hooks
 
-2. **Training Loop** (#308-312) - AFTER Trainer Interface
+1. **Training Loop** (#308-312) - AFTER Trainer Interface
    - Implement forward/backward cycle
    - Gradient management (zeroing, clipping)
    - Metric tracking and callback invocation
 
-3. **Validation Loop** (#313-317) - AFTER Trainer Interface (parallel with Training Loop)
+1. **Validation Loop** (#313-317) - AFTER Trainer Interface (parallel with Training Loop)
    - Gradient-free evaluation
    - Metric aggregation
    - Support full/subset validation
 
-**Success Criteria**:
+### Success Criteria
+
 - [ ] Interface is extensible and minimal
 - [ ] Training loop updates weights correctly
 - [ ] Validation loop produces accurate metrics
@@ -518,14 +546,16 @@ Level 1 (Leaf Components):
 
 **Component**: Base Trainer (#318-322)
 
-**Integration Tasks**:
+### Integration Tasks
+
 - Combine Trainer Interface, Training Loop, Validation Loop
 - Implement state management for checkpointing
 - Add configuration management
 - Comprehensive error handling
 - Full integration testing
 
-**Success Criteria**:
+### Success Criteria
+
 - [ ] Trains a complete model successfully
 - [ ] Validation metrics are accurate
 - [ ] State can be saved and restored
@@ -535,7 +565,7 @@ Level 1 (Leaf Components):
 
 ### Parallel Work Opportunities
 
-**Maximum Parallelization**:
+### Maximum Parallelization
 
 ```text
 Week 1-5: Phase 1 - All 5 leaf components in parallel
@@ -556,7 +586,7 @@ Week 12-13: Phase 4 - Base Trainer integration
 
 Total: ~13 weeks with full parallelization
        ~20+ weeks if sequential
-```
+```text
 
 ## Technical Specifications
 
@@ -564,7 +594,7 @@ Total: ~13 weeks with full parallelization
 
 #### Kaiming/He Initialization
 
-**API Design**:
+### API Design
 
 ```mojo
 fn kaiming_uniform[fan_mode: String = "fan_in"](
@@ -596,21 +626,23 @@ fn kaiming_normal[fan_mode: String = "fan_in"](
     Returns:
         ExTensor with weights sampled from normal distribution
     """
-```
+```text
 
-**Mathematical Formulas**:
+### Mathematical Formulas
+
 - Uniform: `limit = sqrt(6/fan)`, sample from `U(-limit, limit)`
 - Normal: `std = sqrt(2/fan)`, sample from `N(0, std)`
 - Fan calculation: `fan_in = shape[1]`, `fan_out = shape[0]`
 
-**Testing Strategy**:
+### Testing Strategy
+
 - Statistical validation: mean ≈ 0, variance ≈ 2/fan
 - Reproducibility: same seed produces identical weights
 - Edge cases: very small/large fan values
 
 #### Uniform/Normal Initialization
 
-**API Design**:
+### API Design
 
 ```mojo
 fn uniform(
@@ -634,9 +666,10 @@ fn zeros(shape: TensorShape) -> ExTensor:
 
 fn constant(shape: TensorShape, value: Float64) -> ExTensor:
     """Constant initialization."""
-```
+```text
 
-**Performance Considerations**:
+### Performance Considerations
+
 - Use Mojo's random module for efficient sampling
 - SIMD operations for filling tensors with constants
 - Memory-efficient: avoid intermediate allocations
@@ -645,7 +678,7 @@ fn constant(shape: TensorShape, value: Float64) -> ExTensor:
 
 #### Accuracy Metrics
 
-**API Design**:
+### API Design
 
 ```mojo
 struct AccuracyMetric:
@@ -681,16 +714,17 @@ fn per_class_accuracy(
     num_classes: Int
 ) -> ExTensor:  # Shape: [num_classes]
     """Per-class accuracy breakdown."""
-```
+```text
 
-**Implementation Notes**:
+### Implementation Notes
+
 - Use argmax for top-1 predictions
 - Efficient k-largest selection (not full sort) for top-k
 - Weighted averaging for variable batch sizes
 
 #### Loss Tracking
 
-**API Design**:
+### API Design
 
 ```mojo
 struct LossTracker:
@@ -723,16 +757,17 @@ struct Statistics:
     var min: Float32
     var max: Float32
     var count: Int
-```
+```text
 
-**Implementation Notes**:
+### Implementation Notes
+
 - Circular buffer for moving average (O(1) updates)
 - Welford's algorithm for numerically stable variance
 - Multi-component tracking with dictionary
 
 #### Confusion Matrix
 
-**API Design**:
+### API Design
 
 ```mojo
 struct ConfusionMatrix:
@@ -761,9 +796,10 @@ struct ConfusionMatrix:
 
     fn get_f1_score(self) -> ExTensor:
         """Per-class F1-score."""
-```
+```text
 
-**Implementation Notes**:
+### Implementation Notes
+
 - Matrix[i, j] = count where true_label=i, predicted_label=j
 - Normalization modes: row (recall), column (precision), total (percentages), none (counts)
 - Handle zero division gracefully in derived metrics
@@ -772,7 +808,7 @@ struct ConfusionMatrix:
 
 #### Trainer Interface
 
-**API Design**:
+### API Design
 
 ```mojo
 trait Trainer:
@@ -811,11 +847,11 @@ trait Trainer:
 
     fn on_train_end(inout self, metrics: Dict[String, Float64]):
         """Called after training completes."""
-```
+```text
 
 #### Training Loop
 
-**Core Algorithm**:
+### Core Algorithm
 
 ```mojo
 fn train_epoch(
@@ -837,22 +873,24 @@ fn train_epoch(
             6. track metrics
             7. invoke callbacks
     """
-```
+```text
 
-**Gradient Management**:
+### Gradient Management
+
 - Zero gradients before each batch (prevent accumulation)
 - Optional gradient clipping (prevent exploding gradients)
 - Gradient accumulation support (for large models)
 - Validation: check for NaN/Inf gradients
 
-**Metric Tracking**:
+### Metric Tracking
+
 - Per-batch metrics: loss, batch time
 - Per-epoch metrics: average loss, epoch duration, learning rate
 - Accumulation: running sums, counts for weighted averaging
 
 #### Validation Loop
 
-**Core Algorithm**:
+### Core Algorithm
 
 ```mojo
 fn validate_epoch(
@@ -873,9 +911,10 @@ fn validate_epoch(
                 4. invoke callbacks
             aggregate metrics across all batches
     """
-```
+```text
 
-**Key Differences from Training**:
+### Key Differences from Training
+
 - No gradient computation (memory efficient)
 - Model in evaluation mode (disable dropout, use running batch norm)
 - No weight updates
@@ -893,7 +932,8 @@ fn validate_epoch(
 
 **Likelihood**: Medium
 
-**Mitigation**:
+### Mitigation
+
 - Use Mojo's `borrowed` for read-only access, `owned` for transfers
 - Explicitly document lifetime of all tensors
 - Memory profiling tests (track allocations per batch)
@@ -908,7 +948,8 @@ fn validate_epoch(
 
 **Likelihood**: Medium
 
-**Mitigation**:
+### Mitigation
+
 - Comprehensive gradient checking tests
 - Validate gradients against numerical approximations
 - Add assertions for NaN/Inf detection
@@ -923,7 +964,8 @@ fn validate_epoch(
 
 **Likelihood**: Medium
 
-**Mitigation**:
+### Mitigation
+
 - Define interfaces early in planning phase
 - Incremental integration testing (test pairs of components)
 - Clear interface contracts with preconditions/postconditions
@@ -940,7 +982,8 @@ fn validate_epoch(
 
 **Likelihood**: Medium
 
-**Mitigation**:
+### Mitigation
+
 - Use Welford's algorithm for variance (numerically stable)
 - Test with 10k+ batches to verify stability
 - Use Float64 for accumulation, return Float32
@@ -955,7 +998,8 @@ fn validate_epoch(
 
 **Likelihood**: Low
 
-**Mitigation**:
+### Mitigation
+
 - Profile early, optimize after correctness verified
 - Use SIMD for element-wise operations
 - Minimize allocations in hot paths
@@ -970,7 +1014,8 @@ fn validate_epoch(
 
 **Likelihood**: Low
 
-**Mitigation**:
+### Mitigation
+
 - Define common interface early (update, compute, reset)
 - Enforce interface in code reviews
 - Integration tests verify consistent usage
@@ -986,18 +1031,18 @@ fn validate_epoch(
    - Address any concerns or questions
    - Finalize component prioritization
 
-2. **Set Up Development Environment**
+1. **Set Up Development Environment**
    - Verify Mojo version compatibility
    - Install development dependencies
    - Configure CI for new components
 
-3. **Create Issue Templates**
+1. **Create Issue Templates**
    - Template for Plan issues (design docs)
    - Template for Test issues (TDD specs)
    - Template for Implementation issues
    - Template for Package/Cleanup issues
 
-4. **Begin Phase 1 (Leaf Components)**
+1. **Begin Phase 1 (Leaf Components)**
    - **Option A (Recommended)**: Start all 5 components in parallel
      - Assign teams to each component
      - Set up coordination meetings (weekly sync)
@@ -1013,12 +1058,12 @@ fn validate_epoch(
    - Continuous integration testing
    - Documentation as you go
 
-2. **Begin Phase 2 Coordination** (#273-302)
+1. **Begin Phase 2 Coordination** (#273-302)
    - Start Initializers coordination
    - Prepare for Metrics coordination
    - Draft Core Operations integration plan
 
-3. **Parallel: Design Phase 3** (#303-322)
+1. **Parallel: Design Phase 3** (#303-322)
    - Begin Trainer Interface design
    - Prototype Training Loop architecture
    - Review with stakeholders
@@ -1030,12 +1075,12 @@ fn validate_epoch(
    - Unified metrics API
    - Core operations documentation
 
-2. **Execute Phase 3 Training Infrastructure** (#303-317)
+1. **Execute Phase 3 Training Infrastructure** (#303-317)
    - Trainer Interface implementation
    - Training Loop development
    - Validation Loop development
 
-3. **Begin Phase 4 Base Trainer** (#318-322)
+1. **Begin Phase 4 Base Trainer** (#318-322)
    - Integration planning
    - State management design
    - Configuration system design
@@ -1047,13 +1092,13 @@ fn validate_epoch(
    - End-to-end testing
    - Performance optimization
 
-2. **Comprehensive Testing**
+1. **Comprehensive Testing**
    - Train a real model (e.g., MLP on MNIST)
    - Verify all metrics are accurate
    - Benchmark performance
    - Memory profiling
 
-3. **Documentation and Release**
+1. **Documentation and Release**
    - Complete API documentation
    - Usage examples and tutorials
    - Release notes
@@ -1097,11 +1142,12 @@ fn validate_epoch(
 Issues #261-322 represent a **critical foundation** for ML Odyssey, completing the shared library infrastructure needed for all future paper implementations. The work builds directly on the ExTensor framework's success (issues #234-260) and enables:
 
 1. **Complete weight initialization**: Xavier, Kaiming, and basic distributions
-2. **Comprehensive evaluation**: Accuracy, loss tracking, confusion matrix
-3. **Production-ready training**: Base trainer with training/validation loops
-4. **Extensible architecture**: Callback system, metrics integration, state management
+1. **Comprehensive evaluation**: Accuracy, loss tracking, confusion matrix
+1. **Production-ready training**: Base trainer with training/validation loops
+1. **Extensible architecture**: Callback system, metrics integration, state management
 
-**Estimated Timeline**:
+### Estimated Timeline
+
 - **With full parallelization**: 13-15 weeks
 - **Sequential implementation**: 20-25 weeks
 - **Hybrid approach** (recommended): 16-18 weeks

@@ -33,7 +33,7 @@ fn train_model() raises:
     var optimizer = "sgd"
 
     # Training logic...
-```
+```text
 
 **Action**: List all hardcoded values that should be configurable.
 
@@ -59,7 +59,7 @@ training:
   epochs: 10
   batch_size: 32
   validation_split: 0.1
-```
+```text
 
 ### Step 3: Load Configuration in Code
 
@@ -79,11 +79,11 @@ fn train_model() raises:
     var optimizer = config.get_string("optimizer.name")
 
     # Training logic...
-```
+```text
 
 ### Step 4: Update Model Creation
 
-**Before**:
+### Before
 
 ```mojo
 fn create_model() -> Model:
@@ -93,9 +93,9 @@ fn create_model() -> Model:
     model.add_layer(ConvLayer(filters=16, kernel_size=5))
     # ...
     return model
-```
+```text
 
-**After**:
+### After
 
 ```mojo
 from shared.utils.config_loader import load_experiment_config
@@ -115,7 +115,7 @@ fn create_model(config: Config) raises -> Model:
 fn main() raises:
     var config = load_experiment_config("lenet5", "baseline")
     var model = create_model(config)
-```
+```text
 
 ### Step 5: Validate Configuration
 
@@ -132,7 +132,7 @@ fn main() raises:
 
     # Proceed with training
     train_model(config)
-```
+```text
 
 ## Common Patterns
 
@@ -143,7 +143,7 @@ Use default values for optional parameters:
 ```mojo
 var dropout = config.get_float("model.dropout", default=0.0)
 var use_batch_norm = config.get_bool("model.batch_norm", default=False)
-```
+```text
 
 ### Pattern 2: Nested Configuration
 
@@ -153,7 +153,7 @@ Access nested values using dot notation:
 var lr = config.get_float("optimizer.learning_rate")
 var momentum = config.get_float("optimizer.momentum")
 var step_size = config.get_int("scheduler.step_size")
-```
+```text
 
 ### Pattern 3: Environment Variables
 
@@ -164,13 +164,13 @@ Use environment variables for deployment flexibility:
 paths:
   data_dir: "${DATA_DIR:-./data}"
   model_dir: "${MODEL_DIR:-./models}"
-```
+```text
 
 ```mojo
 var config = load_experiment_config("lenet5", "baseline")
 var config_with_env = config.substitute_env_vars()
 var data_dir = config_with_env.get_string("paths.data_dir")
-```
+```text
 
 ### Pattern 4: Configuration Inheritance
 
@@ -191,7 +191,7 @@ data:
   augmentation:
     enabled: true
     random_rotation: 10
-```
+```text
 
 ## Complete Example
 
@@ -211,7 +211,7 @@ fn main() raises:
     for epoch in range(epochs):
         # Training loop
         pass
-```
+```text
 
 ### After Migration
 
@@ -236,7 +236,7 @@ fn main() raises:
     for epoch in range(epochs):
         # Training loop using config parameters
         pass
-```
+```text
 
 ## Migration Checklist
 
@@ -258,17 +258,17 @@ Use this checklist to ensure complete migration:
 
 **Error**: `Failed to load YAML file: configs/experiments/lenet5/baseline.yaml`
 
-**Solution**:
+### Solution
 
 1. Verify file path is correct
-2. Check file exists: `ls -la configs/experiments/lenet5/`
-3. Ensure file extension is `.yaml` not `.yml`
+1. Check file exists: `ls -la configs/experiments/lenet5/`
+1. Ensure file extension is `.yaml` not `.yml`
 
 ### Issue: Type mismatch
 
 **Error**: `Type mismatch for key 'training.epochs': expected int but got string`
 
-**Solution**:
+### Solution
 
 Check YAML file - remove quotes from numbers:
 
@@ -280,13 +280,13 @@ training:
 # Correct
 training:
   epochs: 10
-```
+```text
 
 ### Issue: Missing required key
 
 **Error**: `Missing required configuration key: optimizer.learning_rate`
 
-**Solution**:
+### Solution
 
 Add missing key to configuration file:
 
@@ -294,7 +294,7 @@ Add missing key to configuration file:
 optimizer:
   name: "sgd"
   learning_rate: 0.001  # Add this line
-```
+```text
 
 ### Issue: Nested configuration not supported
 
@@ -303,14 +303,14 @@ optimizer:
 **Workaround**: Use flattened keys:
 
 ```yaml
-# Instead of nested:
-# optimizer:
+# Instead of nested
+# optimizer
 #   learning_rate: 0.001
 
-# Use flattened:
+# Use flattened
 optimizer.learning_rate: 0.001
 optimizer.momentum: 0.9
-```
+```text
 
 **Future**: Full nested object support planned for future release.
 
@@ -330,7 +330,7 @@ optimizer:
 training:
   epochs: 100
   batch_size: 32
-```
+```text
 
 ### 2. Document Configuration Options
 
@@ -344,7 +344,7 @@ optimizer.learning_rate: 0.001
 # Number of training epochs
 # Paper uses 10, but 50-100 often works better
 training.epochs: 10
-```
+```text
 
 ### 3. Version Control Configurations
 
@@ -369,7 +369,7 @@ fn main() raises:
     validate_experiment_config(config)  # Fail fast if invalid
 
     # Rest of the code...
-```
+```text
 
 ## Common Pitfalls
 
@@ -382,7 +382,7 @@ fn main() raises:
 ```mojo
 var config = load_experiment_config("lenet5", "baseline")
 config = config.substitute_env_vars()  # Don't forget this!
-```
+```text
 
 ### Pitfall 2: Modifying Loaded Config
 
@@ -394,7 +394,7 @@ config = config.substitute_env_vars()  # Don't forget this!
 var config = load_experiment_config("lenet5", "baseline")
 config.set("training.epochs", 20)
 config.to_yaml("configs/experiments/lenet5/modified.yaml")  # Save changes
-```
+```text
 
 ### Pitfall 3: Hardcoding File Paths
 
@@ -407,27 +407,27 @@ paths:
   data_dir: "${DATA_DIR:-./data}"
   model_dir: "${MODEL_DIR:-./models}"
   checkpoint_dir: "${MODEL_DIR:-./models}/checkpoints"
-```
+```text
 
 ## Getting Help
 
 If you encounter issues during migration:
 
 1. Check this migration guide
-2. Review `configs/README.md` for configuration system documentation
-3. Look at `configs/templates/` for example configurations
-4. Examine `papers/_template/examples/train.mojo` for code examples
-5. Check `notes/review/configs-architecture.md` for design details
+1. Review `configs/README.md` for configuration system documentation
+1. Look at `configs/templates/` for example configurations
+1. Examine `papers/_template/examples/train.mojo` for code examples
+1. Check `notes/review/configs-architecture.md` for design details
 
 ## Next Steps
 
 After successful migration:
 
 1. Run experiments with new configuration system
-2. Create configuration variations for different experiments
-3. Share configurations with team
-4. Document any paper-specific configuration requirements
-5. Consider contributing improvements to the configuration system
+1. Create configuration variations for different experiments
+1. Share configurations with team
+1. Document any paper-specific configuration requirements
+1. Consider contributing improvements to the configuration system
 
 ## Summary
 

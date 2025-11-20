@@ -29,8 +29,8 @@ Implement validation loop to evaluate model performance on held-out data, comput
 ## Steps
 
 1. Validation Loop
-2. Metrics Computation
-3. Checkpointing
+1. Metrics Computation
+1. Checkpointing
 
 ## Success Criteria
 

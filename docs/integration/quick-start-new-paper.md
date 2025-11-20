@@ -3,10 +3,10 @@
 ## Steps
 
 1. Copy template: `cp -r papers/_template papers/my-paper`
-2. Update README with paper details
-3. Implement model in `src/model.mojo`
-4. Use shared components from `shared/`
-5. Run tests: `mojo test papers/my-paper/tests/`
+1. Update README with paper details
+1. Implement model in `src/model.mojo`
+1. Use shared components from `shared/`
+1. Run tests: `mojo test papers/my-paper/tests/`
 
 ## Example
 

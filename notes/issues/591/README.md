@@ -33,7 +33,7 @@ Create additional supporting directories that provide infrastructure for the rep
 
 **Decision**: Create six supporting directories with distinct purposes, organized by location (repository root vs .claude/)
 
-**Rationale**:
+### Rationale
 
 - **Repository root directories** (benchmarks/, docs/, agents/, tools/, configs/) contain user-facing content
 - **.claude/ directories** (.claude/agents/, .claude/skills/) contain Claude Code operational configurations
@@ -44,12 +44,12 @@ Create additional supporting directories that provide infrastructure for the rep
 
 **Decision**: Use two separate directories for agent-related content
 
-**Structure**:
+### Structure
 
 - **agents/** (repository root): Documentation, templates, hierarchy diagrams, delegation rules
 - **.claude/agents/**: Operational agent configuration files for the 6-level hierarchy
 
-**Rationale**:
+### Rationale
 
 - Prevents confusion between documentation and operational configs
 - Keeps documentation version-controlled and easily accessible
@@ -69,13 +69,13 @@ Create additional supporting directories that provide infrastructure for the rep
 
 **Decision**: Organize skills into three tiers by scope and specialization
 
-**Taxonomy**:
+### Taxonomy
 
 - **Tier 1 (Foundational)**: Universal skills for all agents (code analysis, generation, testing patterns)
 - **Tier 2 (Domain-Specific)**: Specialized skills for specific agent types (paper analysis, ML operations, documentation generation)
 - **Tier 3 (Specialized)**: Narrow use-case skills for specific scenarios
 
-**Rationale**:
+### Rationale
 
 - Clear organization by scope and reusability
 - Easy for agents to discover relevant skills
@@ -86,12 +86,12 @@ Create additional supporting directories that provide infrastructure for the rep
 
 **Decision**: Document clear decision matrix for when to use skills vs sub-agents
 
-**Key Differences**:
+### Key Differences
 
 - **Skills**: Model-invoked computational/algorithmic operations running in current context
 - **Sub-Agents**: Separate conversation contexts making independent decisions
 
-**Use Skills For**:
+### Use Skills For
 
 - Code generation templates
 - Analysis patterns
@@ -99,7 +99,7 @@ Create additional supporting directories that provide infrastructure for the rep
 - Data extraction
 - Deterministic operations
 
-**Use Sub-Agents For**:
+### Use Sub-Agents For
 
 - Complex multi-step decisions
 - Research requiring judgment
@@ -110,12 +110,12 @@ Create additional supporting directories that provide infrastructure for the rep
 
 **Decision**: Create tools/ directory distinct from existing scripts/ directory
 
-**Distinction**:
+### Distinction
 
 - **scripts/**: Automation scripts (create_issues.py, regenerate_github_issues.py)
 - **tools/**: Development utilities (CLI tools, code generators, paper implementation helpers)
 
-**Rationale**:
+### Rationale
 
 - Scripts automate repository management
 - Tools assist in ML/AI development workflow
@@ -126,13 +126,13 @@ Create additional supporting directories that provide infrastructure for the rep
 
 **Decision**: Use configs/ directory for shared configurations across paper implementations
 
-**Structure**:
+### Structure
 
 - Subdirectories for different config types (training, models, experiments)
 - YAML or TOML format for human readability
 - Example configurations and templates
 
-**Rationale**:
+### Rationale
 
 - Promotes consistency across paper implementations
 - Enables configuration reuse
@@ -143,13 +143,13 @@ Create additional supporting directories that provide infrastructure for the rep
 
 **Decision**: Use docs/ directory for comprehensive project documentation, supplementing README
 
-**Structure**:
+### Structure
 
 - Subdirectories for guides, API docs, and architecture
 - Templates and examples
 - Clear organization by documentation type and audience
 
-**Rationale**:
+### Rationale
 
 - README provides quick overview
 - docs/ provides detailed information
@@ -160,14 +160,14 @@ Create additional supporting directories that provide infrastructure for the rep
 
 **Decision**: Create benchmarks/ directory with reproducible performance testing structure
 
-**Requirements**:
+### Requirements
 
 - Clear instructions for running benchmarks
 - Environment specifications
 - Organized structure for scripts and results
 - Guidelines for adding new benchmarks
 
-**Rationale**:
+### Rationale
 
 - Enables performance comparison across implementations
 - Tracks performance improvements over time
@@ -183,11 +183,11 @@ Create additional supporting directories that provide infrastructure for the rep
 ### Child Plans
 
 1. [Benchmarks Directory](../../../plan/01-foundation/01-directory-structure/03-create-supporting-dirs/01-benchmarks/plan.md)
-2. [Docs Directory](../../../plan/01-foundation/01-directory-structure/03-create-supporting-dirs/02-docs/plan.md)
-3. [Agents Directory](../../../plan/01-foundation/01-directory-structure/03-create-supporting-dirs/03-agents/plan.md)
-4. [Tools Directory](../../../plan/01-foundation/01-directory-structure/03-create-supporting-dirs/04-tools/plan.md)
-5. [Configs Directory](../../../plan/01-foundation/01-directory-structure/03-create-supporting-dirs/05-configs/plan.md)
-6. [Skills Directory](../../../plan/01-foundation/01-directory-structure/03-create-supporting-dirs/06-skills/plan.md)
+1. [Docs Directory](../../../plan/01-foundation/01-directory-structure/03-create-supporting-dirs/02-docs/plan.md)
+1. [Agents Directory](../../../plan/01-foundation/01-directory-structure/03-create-supporting-dirs/03-agents/plan.md)
+1. [Tools Directory](../../../plan/01-foundation/01-directory-structure/03-create-supporting-dirs/04-tools/plan.md)
+1. [Configs Directory](../../../plan/01-foundation/01-directory-structure/03-create-supporting-dirs/05-configs/plan.md)
+1. [Skills Directory](../../../plan/01-foundation/01-directory-structure/03-create-supporting-dirs/06-skills/plan.md)
 
 ### Related Issues
 

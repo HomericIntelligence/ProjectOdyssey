@@ -12,7 +12,7 @@ Evaluate whether to extract the automation framework (hierarchical planning + Gi
 
 A reviewer observed: *"There's really two projects going on here that could each stand on their own two feet. I wonder if it would be worthwhile to fork the automated GH interactions into their own GitHub template and focus on that as a repo of its own."*
 
-**Current state:**
+### Current state:
 
 - Unified repository mixing ML implementation goals with automation infrastructure
 - Automation framework has potential standalone value:
@@ -26,17 +26,17 @@ A reviewer observed: *"There's really two projects going on here that could each
 **Key tension:** The automation framework is both:
 
 1. **Infrastructure for ML implementation** (means to an end)
-2. **Potentially valuable standalone tool** (end in itself)
+1. **Potentially valuable standalone tool** (end in itself)
 
 ## Objective
 
 Make an informed strategic decision about repository architecture through:
 
 1. Analysis of extraction vs unified approaches
-2. Evaluation of trade-offs
-3. Community input (if relevant)
-4. Documentation of decision in ADR
-5. Implementation path (if extraction chosen)
+1. Evaluation of trade-offs
+1. Community input (if relevant)
+1. Documentation of decision in ADR
+1. Implementation path (if extraction chosen)
 
 ## Deliverables
 
@@ -82,7 +82,7 @@ Create `notes/review/adr/ADR-002-automation-framework-architecture.md` containin
 
 ## References
 [External feedback, similar projects, relevant research]
-```
+```text
 
 ### 2. Trade-off Analysis
 
@@ -90,7 +90,7 @@ Document analysis of each approach:
 
 #### Option 1: Extract Automation Framework
 
-**Structure:**
+### Structure:
 
 ```text
 Separate repositories:
@@ -103,9 +103,9 @@ Separate repositories:
 - ml-odyssey (ML implementations)
   - papers/ (paper implementations)
   - Uses ml-odyssey-automation as template
-```
+```text
 
-**Pros:**
+### Pros:
 
 - Clear separation of concerns
 - Automation framework reusable for other projects
@@ -113,7 +113,7 @@ Separate repositories:
 - Easier to maintain focused documentation
 - Can version automation independently
 
-**Cons:**
+### Cons:
 
 - Maintenance overhead for two repositories
 - Coordination complexity for changes affecting both
@@ -121,7 +121,7 @@ Separate repositories:
 - Lose dogfooding benefits (testing automation on ML work)
 - Migration effort required
 
-**Unknowns:**
+### Unknowns:
 
 - Is there actual community demand for standalone automation?
 - How much effort to maintain dual repos?
@@ -129,7 +129,7 @@ Separate repositories:
 
 #### Option 2: Keep Unified Repository
 
-**Structure:**
+### Structure:
 
 ```text
 ml-odyssey (current structure)
@@ -137,9 +137,9 @@ ml-odyssey (current structure)
 - scripts/ (automation)
 - .claude/agents/ (agent hierarchy)
 - notes/ (planning and documentation)
-```
+```text
 
-**Pros:**
+### Pros:
 
 - Simpler maintenance (single repository)
 - Dogfooding automation on ML implementation
@@ -147,14 +147,14 @@ ml-odyssey (current structure)
 - No migration effort needed
 - Single community
 
-**Cons:**
+### Cons:
 
 - Mixed audiences (confusing for some users)
 - Unclear primary purpose
 - Harder to extract automation for reuse
 - Documentation must serve dual purposes
 
-**Mitigation strategies:**
+### Mitigation strategies:
 
 - Better README explaining dual purpose
 - Clear documentation organization
@@ -163,20 +163,20 @@ ml-odyssey (current structure)
 
 #### Option 3: Hybrid Approach
 
-**Structure:**
+### Structure:
 
 - Keep unified for now
 - Design automation as extractable modules
 - Document extraction path for future
 - Publish automation guides that work standalone
 
-**Pros:**
+### Pros:
 
 - Preserves optionality
 - Allows validation of standalone value before committing
 - Lower immediate effort
 
-**Cons:**
+### Cons:
 
 - Requires careful architectural boundaries
 - May complicate current development
@@ -198,18 +198,18 @@ If extraction chosen, outline:
    - Configure as GitHub template
    - Set up CI/CD
 
-2. **Content migration:**
+1. **Content migration:**
    - Move scripts/ → ml-odyssey-automation/
    - Move .claude/agents/ → ml-odyssey-automation/.claude/agents/
    - Move relevant docs → ml-odyssey-automation/docs/
    - Create templates and examples
 
-3. **Integration:**
+1. **Integration:**
    - Update ml-odyssey to use automation as template
    - Document integration process
    - Maintain compatibility
 
-4. **Documentation updates:**
+1. **Documentation updates:**
    - Update both READMEs
    - Create migration guide
    - Update agent prompts
@@ -221,7 +221,7 @@ If unified chosen, outline:
    - Separate guides for automation vs ML concerns
    - Clear navigation for each audience
 
-2. **Architectural boundaries:**
+1. **Architectural boundaries:**
    - Keep automation modular and extractable
    - Document interfaces between concerns
    - Maintain separation where possible
@@ -232,23 +232,23 @@ If unified chosen, outline:
    - Who is the primary audience for each concern?
    - Do these audiences overlap or diverge?
 
-2. **Maintenance:**
+1. **Maintenance:**
    - What is the maintenance capacity for multiple repositories?
    - How often do automation changes affect ML implementation?
 
-3. **Demand:**
+1. **Demand:**
    - Is there evidence of community interest in standalone automation?
    - What are the use cases beyond ML paper implementation?
 
-4. **Timing:**
+1. **Timing:**
    - Is now the right time to extract, or wait until ML implementations exist?
    - Does extraction make more sense after dogfooding is complete?
 
-5. **Value:**
+1. **Value:**
    - What is the standalone value of the automation framework?
    - Does extraction increase or decrease total value?
 
-6. **Complexity:**
+1. **Complexity:**
    - How complex would dual-repo maintenance be?
    - What coordination overhead exists?
 
@@ -268,8 +268,8 @@ If unified chosen, outline:
 ### Research Required
 
 1. **Similar projects:** How do other automation-heavy projects organize?
-2. **GitHub template best practices:** What makes a good template repository?
-3. **Community demand:** Any evidence of interest in project automation tools?
+1. **GitHub template best practices:** What makes a good template repository?
+1. **Community demand:** Any evidence of interest in project automation tools?
 
 ### Decision Criteria
 
@@ -291,7 +291,7 @@ Follow blog post style for ADR:
 - Self-aware about uncertainties
 - Explain reasoning, not just conclusions
 
-**Example tone:**
+### Example tone:
 
 > "The automation framework emerged organically while building infrastructure for ML implementations.
 > The question is whether it has standalone value, or if extracting it would be premature optimization.
@@ -314,7 +314,7 @@ Follow blog post style for ADR:
 - Community input (if applicable): 1-2 hours
 - Implementation plan outline: 2-3 hours
 
-**Total: ~10-15 hours**
+### Total: ~10-15 hours
 
 If extraction chosen, implementation adds significant additional effort (~20-40 hours).
 
@@ -356,26 +356,26 @@ Regardless of decision:
 Recommended timeline:
 
 1. Complete Issues #1 and #2 first (improve current documentation)
-2. Gather community input if relevant
-3. Make decision when first ML implementation starts
-4. Allows validation of automation value through dogfooding before extracting
+1. Gather community input if relevant
+1. Make decision when first ML implementation starts
+1. Allows validation of automation value through dogfooding before extracting
 
 ## Risk Assessment
 
-**Risks of extraction:**
+### Risks of extraction:
 
 - Premature optimization (no ML implementations to validate automation yet)
 - Fragmentation of effort
 - Coordination overhead
 - Loss of dogfooding benefits
 
-**Risks of unified:**
+### Risks of unified:
 
 - Confusing dual purpose
 - Harder to extract later if demand materializes
 - Mixed audiences in single community
 
-**Mitigation:**
+### Mitigation:
 
 - Regardless of decision, maintain modular automation components
 - Keep extraction as future option

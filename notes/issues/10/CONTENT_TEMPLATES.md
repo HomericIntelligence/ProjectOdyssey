@@ -31,7 +31,7 @@ papers/
 ├── alexnet/               # Additional paper implementations
 │   └── ...
 └── .gitkeep              # Git placeholder for empty directory
-```
+```text
 
 ### Directory Breakdown
 
@@ -47,7 +47,7 @@ Paper-specific documentation should include:
 - Known limitations
 - Links to paper-specific docs
 
-**Example**:
+### Example
 
 ```markdown
 # LeNet-5: Gradient-based Learning for Document Recognition
@@ -58,7 +58,7 @@ document recognition"
 ## Overview
 
 This is a complete implementation of LeNet-5 in Mojo...
-```
+```text
 
 #### Source Code Organization
 
@@ -120,7 +120,7 @@ requires-mojo = ">=0.5.0"
 
 [tool.pytest]
 addopts = "--cov=src"
-```
+```text
 
 ---
 
@@ -140,7 +140,7 @@ Before you start coding, invest time in understanding the research:
    - Review key equations and mathematical concepts
    - Check existing implementations in PyTorch, TensorFlow, etc.
 
-2. **Plan your implementation**
+1. **Plan your implementation**
    - Create a document outlining:
      - Main components and modules
      - Public API (functions and classes)
@@ -148,7 +148,7 @@ Before you start coding, invest time in understanding the research:
      - Dependencies needed
      - Estimated scope and complexity
 
-3. **Create a GitHub issue** (Plan Phase)
+1. **Create a GitHub issue** (Plan Phase)
    - Title: `[Plan] Implement <PaperName>`
    - Include planning document
    - Identify 5-phase issues needed
@@ -172,13 +172,13 @@ touch tests/conftest.mojo
 touch tests/test_main.mojo
 touch README.md
 touch pyproject.toml
-```
+```text
 
 ### Phase 1: Plan (GitHub Issue #N-1)
 
 **Objective**: Design the implementation approach
 
-**Deliverables**:
+### Deliverables
 
 1. Implementation plan document
    - Module structure
@@ -186,13 +186,13 @@ touch pyproject.toml
    - Testing strategy
    - Documentation outline
 
-2. Setup PR with:
+1. Setup PR with:
    - Directory structure
    - Stub files (empty implementations)
    - Initial README.md template
    - Initial tests with fixtures
 
-**Success Criteria**:
+### Success Criteria
 
 - Implementation plan documented
 - Module structure defined
@@ -204,7 +204,7 @@ touch pyproject.toml
 
 **Objective**: Write comprehensive test suite before implementation
 
-**Deliverables**:
+### Deliverables
 
 1. Complete test suite
    - Unit tests for each module
@@ -212,17 +212,17 @@ touch pyproject.toml
    - Edge case handling
    - Error condition testing
 
-2. Test data and fixtures
+1. Test data and fixtures
    - Sample inputs
    - Expected outputs
    - Benchmark datasets
 
-3. Test documentation
+1. Test documentation
    - How to run tests
    - Coverage report
    - Performance baselines
 
-**Success Criteria**:
+### Success Criteria
 
 - All modules have test coverage
 - Tests cover edge cases
@@ -233,7 +233,7 @@ touch pyproject.toml
 
 **Objective**: Implement modules to pass tests
 
-**Deliverables**:
+### Deliverables
 
 1. Complete implementation
    - All modules coded in Mojo
@@ -241,18 +241,18 @@ touch pyproject.toml
    - Full docstrings
    - Type hints throughout
 
-2. Code quality
+1. Code quality
    - Passes `mojo format`
    - Passes linting checks
    - Performance optimized
    - Clear variable names
 
-3. Implementation notes
+1. Implementation notes
    - Document challenges overcome
    - Alternative approaches considered
    - Known limitations
 
-**Success Criteria**:
+### Success Criteria
 
 - All tests pass
 - Code formatted correctly
@@ -263,30 +263,30 @@ touch pyproject.toml
 
 **Objective**: Integrate, document, and optimize
 
-**Deliverables**:
+### Deliverables
 
 1. Integration
    - Works with build system
    - Dependencies resolved
    - CI/CD passes
 
-2. Comprehensive documentation
+1. Comprehensive documentation
    - IMPLEMENTATION.md - How it was built
    - RESEARCH_PAPER.md - Paper background
    - ARCHITECTURE.md - Design decisions
    - Usage examples
 
-3. Performance optimization
+1. Performance optimization
    - Benchmark results
    - Memory profiling
    - Optimization notes
 
-4. Examples and demos
+1. Examples and demos
    - Working examples
    - Training/inference scripts
    - Result demonstrations
 
-**Success Criteria**:
+### Success Criteria
 
 - All documentation written
 - Examples work correctly
@@ -297,24 +297,24 @@ touch pyproject.toml
 
 **Objective**: Finalize and prepare for release
 
-**Deliverables**:
+### Deliverables
 
 1. Address review feedback
    - Code improvements
    - Documentation updates
    - Performance adjustments
 
-2. Final refinements
+1. Final refinements
    - Markdown formatting validated
    - All links checked
    - Examples updated
 
-3. Prepare for release
+1. Prepare for release
    - Update main README
    - Add to examples section
    - Document lessons learned
 
-**Success Criteria**:
+### Success Criteria
 
 - All review comments addressed
 - Markdown validation passes
@@ -330,16 +330,16 @@ All five phases follow this structure:
    - Labels: planning, testing, implementation, packaging, cleanup
    - Reference parent issue
 
-2. **Work in dedicated branch**
+1. **Work in dedicated branch**
    - Branch name: `<issue-number>-<paper-name>`
    - Create PR referencing issue
 
-3. **Complete phase deliverables**
+1. **Complete phase deliverables**
    - Make commits following conventional format
    - Run pre-commit hooks: `pre-commit run --all-files`
    - Submit for review
 
-4. **Move to next phase**
+1. **Move to next phase**
    - Test, Implementation, and Packaging can run in parallel
    - Cleanup runs last, collecting feedback from all phases
 
@@ -383,7 +383,7 @@ fn create_layer(layer_type: String) -> Layer:
         Layer: A new layer of the specified type
     """
     ...
-```
+```text
 
 #### Naming Conventions
 
@@ -413,7 +413,7 @@ fn softmax(x: Tensor, axis: Int = -1) -> Tensor:
         ValueError: If axis is out of bounds
     """
     ...
-```
+```text
 
 #### Type Hints
 
@@ -427,7 +427,7 @@ fn multiply(a: Tensor, b: Tensor, factor: Float32) -> Tensor:
 # Bad
 fn multiply(a, b, factor):
     return a * b * factor
-```
+```text
 
 ### Testing Standards
 
@@ -452,7 +452,7 @@ fn test_dense_layer_forward():
 fn test_conv_layer_with_padding():
     """Test convolution with padding."""
     ...
-```
+```text
 
 #### Naming and Organization
 
@@ -475,29 +475,29 @@ fn test_conv_layer_with_padding():
 All `.md` files must follow these rules:
 
 1. **Line Length**: Maximum 120 characters
-2. **Code Blocks**: Always specify language
-3. **Blank Lines**: Around headings, lists, code blocks
-4. **Heading Hierarchy**: Use proper nesting (H1 → H2 → H3)
-5. **Lists**: Blank lines before and after
+1. **Code Blocks**: Always specify language
+1. **Blank Lines**: Around headings, lists, code blocks
+1. **Heading Hierarchy**: Use proper nesting (H1 → H2 → H3)
+1. **Lists**: Blank lines before and after
 
-**Valid Code Block**:
+### Valid Code Block
 
 Here is some implementation:
 
 ```mojo
 fn hello():
     print("world")
-```
+```text
 
 More text here.
 
-**Invalid Code Block**:
+### Invalid Code Block
 
 Here is some implementation:
 
 ```text
 fn hello():
-```
+```text
 
 More text here.
 
@@ -519,19 +519,19 @@ Each paper implementation must include:
    - Usage examples
    - Results and performance
 
-2. **IMPLEMENTATION.md**
+1. **IMPLEMENTATION.md**
    - Architecture overview
    - Module descriptions
    - Key algorithms explained
    - Known limitations
 
-3. **RESEARCH_PAPER.md**
+1. **RESEARCH_PAPER.md**
    - Paper abstract
    - Key contributions
    - Mathematical background
    - Links to resources
 
-4. **ARCHITECTURE.md**
+1. **ARCHITECTURE.md**
    - Design decisions
    - API documentation
    - Dependencies
@@ -632,7 +632,7 @@ mojo src/inference.mojo  # Run inference
 - [Implementation Details](lenet-5/docs/IMPLEMENTATION.md)
 - [Paper Summary](lenet-5/docs/RESEARCH_PAPER.md)
 - [Architecture Notes](lenet-5/docs/ARCHITECTURE.md)
-```
+```text
 
 ---
 
@@ -654,8 +654,8 @@ Use this checklist when writing content for papers/README.md:
 - All links are valid
 - No orphaned sections
 
-**Validation Command**:
+### Validation Command
 
 ```bash
 npx markdownlint-cli2 papers/README.md
-```
+```text

@@ -29,8 +29,8 @@ Implement data augmentation transforms to increase training data diversity and i
 ## Steps
 
 1. Implement image augmentations for vision tasks
-2. Create text augmentations for NLP tasks
-3. Build generic transforms applicable across modalities
+1. Create text augmentations for NLP tasks
+1. Build generic transforms applicable across modalities
 
 ## Success Criteria
 

@@ -29,9 +29,9 @@ None (leaf node)
 ## Steps
 
 1. Implement __iter__ to return iterator instance
-2. Create __next__ to yield batches sequentially
-3. Handle epoch boundaries with StopIteration
-4. Support infinite iteration mode for continuous training
+1. Create __next__ to yield batches sequentially
+1. Handle epoch boundaries with StopIteration
+1. Support infinite iteration mode for continuous training
 
 ## Success Criteria
 

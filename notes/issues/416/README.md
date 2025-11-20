@@ -33,7 +33,7 @@ shared/
     ├── text_transforms.mojo        # Text augmentation transforms (426 lines)
     ├── transforms.mojo             # Image/tensor transforms
     └── ...
-```
+```text
 
 ### Public API Surface
 
@@ -42,17 +42,17 @@ The `text_transforms` module exports:
 1. **Base Interface**:
    - `TextTransform` - Base trait for text transforms
 
-2. **Helper Functions**:
+1. **Helper Functions**:
    - `split_words(text: String) -> List[String]` - Split text into words
    - `join_words(words: List[String]) -> String` - Join words into text
 
-3. **Augmentation Transforms**:
+1. **Augmentation Transforms**:
    - `RandomSwap` - Randomly swap word positions
    - `RandomDeletion` - Randomly delete words
    - `RandomInsertion` - Insert random words from vocabulary
    - `RandomSynonymReplacement` - Replace words with synonyms
 
-4. **Composition**:
+1. **Composition**:
    - `TextCompose` - Compose multiple text transforms
    - `TextPipeline` - Alias for TextCompose
 
@@ -77,9 +77,9 @@ from shared.data.text_transforms import (
     TextCompose,
     TextPipeline,
 )
-```
+```text
 
-2. **Create transforms**:
+1. **Create transforms**:
 
 ```mojo
 # Single transform
@@ -98,14 +98,14 @@ transforms.append(RandomInsertion(0.1, 1, vocab))
 
 var pipeline = TextPipeline(transforms)
 var augmented = pipeline(text)
-```
+```text
 
-3. **Use in data loading pipelines**:
+1. **Use in data loading pipelines**:
 
 ```mojo
 # Integration with data loaders (future work)
 # var dataset = TextDataset(augmentations=pipeline)
-```
+```text
 
 ## API Reference
 
@@ -128,7 +128,7 @@ trait TextTransform:
             Error if transform cannot be applied.
         """
         ...
-```
+```text
 
 ### RandomSwap
 
@@ -152,17 +152,18 @@ struct RandomSwap(TextTransform):
     fn __call__(self, text: String) raises -> String:
         """Randomly swap word pairs in text."""
         ...
-```
+```text
 
-**Example**:
+### Example
 
 ```mojo
 var swap = RandomSwap(p=0.15, n=2)
 var text = "the quick brown fox"
 var result = swap(text)  # "quick the brown fox" (example)
-```
+```text
 
-**Use Cases**:
+### Use Cases
+
 - Data augmentation for text classification
 - Creating variations for robustness testing
 - Training models to handle word order variations
@@ -190,17 +191,18 @@ struct RandomDeletion(TextTransform):
         Ensures at least one word remains even if all would be deleted.
         """
         ...
-```
+```text
 
-**Example**:
+### Example
 
 ```mojo
 var delete = RandomDeletion(p=0.1)
 var text = "the quick brown fox"
 var result = delete(text)  # "quick brown fox" (example)
-```
+```text
 
-**Use Cases**:
+### Use Cases
+
 - Simulating missing words in text
 - Training models robust to incomplete input
 - Creating shorter text variations
@@ -229,9 +231,9 @@ struct RandomInsertion(TextTransform):
     fn __call__(self, text: String) raises -> String:
         """Insert random words from vocabulary into text."""
         ...
-```
+```text
 
-**Example**:
+### Example
 
 ```mojo
 var vocab = List[String]()
@@ -241,9 +243,10 @@ vocab.append("lazy")
 var insert = RandomInsertion(p=0.1, n=1, vocab)
 var text = "the brown fox"
 var result = insert(text)  # "the quick brown fox" (example)
-```
+```text
 
-**Use Cases**:
+### Use Cases
+
 - Increasing lexical diversity
 - Simulating noisy text input
 - Data augmentation for sequence models
@@ -270,9 +273,9 @@ struct RandomSynonymReplacement(TextTransform):
     fn __call__(self, text: String) raises -> String:
         """Replace random words with synonyms."""
         ...
-```
+```text
 
-**Example**:
+### Example
 
 ```mojo
 var synonyms = Dict[String, List[String]]()
@@ -284,9 +287,10 @@ synonyms["quick"] = quick_syns
 var replace = RandomSynonymReplacement(p=0.2, synonyms)
 var text = "the quick fox"
 var result = replace(text)  # "the fast fox" (example)
-```
+```text
 
-**Use Cases**:
+### Use Cases
+
 - Semantic variation while preserving meaning
 - Training models on paraphrased text
 - Improving model robustness to word choice
@@ -322,9 +326,9 @@ struct TextCompose(TextTransform):
 
 # Type alias for more intuitive naming
 alias TextPipeline = TextCompose
-```
+```text
 
-**Example**:
+### Example
 
 ```mojo
 var vocab = List[String]()
@@ -344,9 +348,10 @@ transforms.append(RandomDeletion(0.1))
 var pipeline = TextPipeline(transforms)
 var text = "the quick brown fox"
 var augmented = pipeline(text)
-```
+```text
 
-**Use Cases**:
+### Use Cases
+
 - Building complex augmentation pipelines
 - Applying multiple augmentations in sequence
 - Reusing augmentation configurations
@@ -373,7 +378,7 @@ fn main() raises:
     var augmented = augment_text(original)
     print("Original: " + original)
     print("Augmented: " + augmented)
-```
+```text
 
 ### Multi-Transform Pipeline
 
@@ -425,7 +430,7 @@ fn main() raises:
     for i in range(5):
         var augmented = pipeline(text)
         print("Version " + String(i) + ": " + augmented)
-```
+```text
 
 ### Batch Processing
 
@@ -458,7 +463,7 @@ fn main() raises:
         print("Original: " + texts[i])
         print("Augmented: " + augmented[i])
         print()
-```
+```text
 
 ## Integration with Existing Pipelines
 
@@ -491,7 +496,7 @@ fn augment_multimodal(sample: MultiModalSample) raises -> MultiModalSample:
     augmented_caption = text_delete(augmented_caption)
 
     return MultiModalSample(augmented_image, augmented_caption)
-```
+```text
 
 ## Best Practices
 
@@ -506,9 +511,9 @@ fn augment_multimodal(sample: MultiModalSample) raises -> MultiModalSample:
 Recommended order for combining augmentations:
 
 1. **Synonym replacement** - Preserves meaning best
-2. **Insertion** - Adds controlled variation
-3. **Swap** - Changes order but keeps all words
-4. **Deletion** - Most destructive, apply last
+1. **Insertion** - Adds controlled variation
+1. **Swap** - Changes order but keeps all words
+1. **Deletion** - Most destructive, apply last
 
 ### 3. Vocabulary Construction
 
@@ -543,12 +548,12 @@ For `RandomSynonymReplacement`:
    - No stemming or lemmatization
    - English-centric approach
 
-2. **No Semantic Understanding**: Augmentations are word-level only
+1. **No Semantic Understanding**: Augmentations are word-level only
    - May produce ungrammatical sentences
    - Doesn't consider context or syntax
    - Simple synonym dictionary (not embeddings-based)
 
-3. **No Advanced NLP Features**:
+1. **No Advanced NLP Features**:
    - No part-of-speech tagging
    - No named entity recognition
    - No dependency parsing
@@ -558,11 +563,11 @@ For `RandomSynonymReplacement`:
 Potential improvements for future versions:
 
 1. **Advanced Tokenization**: Integrate with NLP libraries for better word splitting
-2. **Contextual Synonyms**: Use word embeddings for context-aware replacements
-3. **Grammar Preservation**: Add syntax awareness to maintain grammaticality
-4. **Multi-Language Support**: Extend beyond English-centric approach
-5. **Character-Level Augmentations**: Add typos, spelling variations
-6. **Back-Translation**: Use translation for paraphrasing
+1. **Contextual Synonyms**: Use word embeddings for context-aware replacements
+1. **Grammar Preservation**: Add syntax awareness to maintain grammaticality
+1. **Multi-Language Support**: Extend beyond English-centric approach
+1. **Character-Level Augmentations**: Add typos, spelling variations
+1. **Back-Translation**: Use translation for paraphrasing
 
 ## Performance Characteristics
 
@@ -583,8 +588,8 @@ Potential improvements for future versions:
 ### Optimization Opportunities
 
 1. **In-Place Operations**: Current implementation creates new strings; could optimize for in-place modifications
-2. **SIMD Vectorization**: Not applicable to string operations, but could optimize probability sampling
-3. **Caching**: Reuse split word lists when applying multiple transforms
+1. **SIMD Vectorization**: Not applicable to string operations, but could optimize probability sampling
+1. **Caching**: Reuse split word lists when applying multiple transforms
 
 ## Testing
 
@@ -599,7 +604,7 @@ Run tests:
 
 ```bash
 mojo test tests/shared/data/transforms/test_text_augmentations.mojo
-```
+```text
 
 Expected output:
 
@@ -611,7 +616,7 @@ Running text augmentation tests...
   ✓ test_augmentation_preserves_word_count_without_insertion_deletion
 
 ✓ All 35 text augmentation tests passed!
-```
+```text
 
 ## References
 

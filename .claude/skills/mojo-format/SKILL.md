@@ -24,7 +24,7 @@ mojo format path/to/file.mojo
 
 # Format with check-only (no changes)
 mojo format --check path/to/file.mojo
-```
+```text
 
 ### Format Multiple Files
 
@@ -37,7 +37,7 @@ mojo format --check path/to/file.mojo
 
 # Check formatting without changes
 ./scripts/format_mojo.sh --check .
-```
+```text
 
 ### Pre-commit Integration
 
@@ -49,7 +49,7 @@ git commit -m "message"
 
 # Run pre-commit manually
 pre-commit run mojo-format --all-files
-```
+```text
 
 ## Mojo Format Behavior
 
@@ -79,7 +79,7 @@ fn add(x:Int,y:Int)->Int:
 # After formatting
 fn add(x: Int, y: Int) -> Int:
     return x + y
-```
+```text
 
 ### Struct Definitions
 
@@ -91,7 +91,7 @@ struct Tensor[dtype:DType,rank:Int]:
 # After formatting
 struct Tensor[dtype: DType, rank: Int]:
     var data: DTypePointer[dtype]
-```
+```text
 
 ## Scripted Formatting
 
@@ -101,7 +101,7 @@ struct Tensor[dtype: DType, rank: Int]:
 ./scripts/format_mojo.sh
 
 # This finds and formats all .mojo and .🔥 files
-```
+```text
 
 ### Check Formatting (CI)
 
@@ -110,7 +110,7 @@ struct Tensor[dtype: DType, rank: Int]:
 ./scripts/format_mojo.sh --check
 
 # Used in CI to verify formatting
-```
+```text
 
 ## Error Handling
 
@@ -129,7 +129,7 @@ git diff --name-only --cached | grep '\.mojo$' | xargs -r mojo format
 
 # Or let pre-commit handle it
 git commit -m "message"  # pre-commit auto-formats
-```
+```text
 
 ### CI Validation
 
@@ -143,33 +143,33 @@ Pre-commit CI workflow checks formatting:
       entry: mojo format
       language: system
       files: \.(mojo|🔥)$
-```
+```text
 
 ## Examples
 
-**Format single file:**
+### Format single file:
 
 ```bash
 mojo format src/tensor.mojo
-```
+```text
 
-**Format directory:**
+### Format directory:
 
 ```bash
 ./scripts/format_mojo.sh src/
-```
+```text
 
-**Check formatting:**
+### Check formatting:
 
 ```bash
 ./scripts/format_mojo.sh --check .
-```
+```text
 
-**Format changed files:**
+### Format changed files:
 
 ```bash
 git diff --name-only | grep '\.mojo$' | xargs -r mojo format
-```
+```text
 
 ## Scripts Available
 
@@ -179,9 +179,9 @@ git diff --name-only | grep '\.mojo$' | xargs -r mojo format
 ## Best Practices
 
 1. **Format before commit** - Run formatting before every commit
-2. **Use pre-commit** - Let hooks handle formatting automatically
-3. **Check in CI** - Verify formatting in CI pipeline
-4. **Consistent style** - Don't manually reformat after `mojo format`
-5. **Trust the formatter** - Accept formatter's decisions
+1. **Use pre-commit** - Let hooks handle formatting automatically
+1. **Check in CI** - Verify formatting in CI pipeline
+1. **Consistent style** - Don't manually reformat after `mojo format`
+1. **Trust the formatter** - Accept formatter's decisions
 
 See `.pre-commit-config.yaml` for pre-commit hook configuration.

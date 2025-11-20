@@ -34,26 +34,31 @@ Design and document the batching functionality to group individual dataset sampl
 
 **Decision**: Implement tensor stacking along a new batch dimension (dimension 0).
 
-**Rationale**:
+### Rationale
+
 - Standard practice in ML frameworks (PyTorch, TensorFlow)
 - Enables efficient SIMD operations on batched data
 - Compatible with Mojo's tensor operations
 
-**Example**:
+### Example
+
 - Input: N samples of shape `(C, H, W)` (e.g., images with channels, height, width)
 - Output: Batch of shape `(N, C, H, W)` where N is batch size
 
 ### 2. Final Batch Handling
 
 **Decision**: Support two modes via configuration:
-1. **Drop mode**: Discard final batch if smaller than batch_size
-2. **Keep mode**: Include final batch even if partial
 
-**Rationale**:
+1. **Drop mode**: Discard final batch if smaller than batch_size
+1. **Keep mode**: Include final batch even if partial
+
+### Rationale
+
 - Drop mode: Ensures all batches have consistent size (simplifies training code)
 - Keep mode: Ensures all data is used (important for validation/testing)
 
-**Trade-offs**:
+### Trade-offs
+
 - Drop mode may waste data (up to batch_size - 1 samples)
 - Keep mode requires handling variable batch sizes in training loop
 
@@ -61,12 +66,13 @@ Design and document the batching functionality to group individual dataset sampl
 
 **Decision**: Provide a default collate function with support for custom implementations.
 
-**Default Collate Behavior**:
+### Default Collate Behavior
+
 - Stack tensors along batch dimension
 - Handle tuples/lists by recursively applying collate
 - Preserve non-tensor types (labels, metadata)
 
-**Custom Collate Interface**:
+### Custom Collate Interface
 
 ```mojo
 fn collate_fn(samples: List[Sample]) -> Batch:
@@ -79,9 +85,10 @@ fn collate_fn(samples: List[Sample]) -> Batch:
         Batched data structure
     """
     pass
-```
+```text
 
-**Use Cases**:
+### Use Cases
+
 - Variable-length sequences (apply padding)
 - Complex nested data structures
 - Special preprocessing per batch
@@ -91,7 +98,8 @@ fn collate_fn(samples: List[Sample]) -> Batch:
 
 **Decision**: Require custom collate function for variable-length sequences.
 
-**Rationale**:
+### Rationale
+
 - Different applications need different padding strategies:
   - Zero padding
   - Mask-based padding
@@ -99,7 +107,7 @@ fn collate_fn(samples: List[Sample]) -> Batch:
 - Avoid imposing specific padding choice in core batching logic
 - Keeps batching code simple and flexible
 
-**Recommended Pattern**:
+### Recommended Pattern
 
 ```mojo
 fn pad_collate(samples: List[Sequence]) -> Batch:
@@ -113,18 +121,20 @@ fn pad_collate(samples: List[Sequence]) -> Batch:
     var padded_data = pad_sequences(samples, max_len)
     var mask = create_attention_mask(samples, max_len)
     return Batch(data=padded_data, mask=mask)
-```
+```text
 
 ### 5. Memory Efficiency Considerations
 
 **Decision**: Pre-allocate batch tensor when size is known.
 
-**Rationale**:
+### Rationale
+
 - Avoid repeated memory allocations
 - Reduce memory fragmentation
 - Improve performance for large batches
 
-**Implementation Strategy**:
+### Implementation Strategy
+
 - Calculate total batch size upfront
 - Allocate single contiguous tensor
 - Copy samples into pre-allocated space
@@ -133,13 +143,15 @@ fn pad_collate(samples: List[Sequence]) -> Batch:
 
 **Decision**: Fail fast on incompatible sample shapes.
 
-**Error Conditions**:
+### Error Conditions
+
 - Samples have different shapes (without custom collate)
 - Samples have different types
 - Batch size is invalid (≤ 0)
 - Dataset is empty
 
-**Rationale**:
+### Rationale
+
 - Early detection prevents silent failures
 - Clear error messages improve debugging
 - Prevents invalid data from reaching training loop

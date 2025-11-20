@@ -47,7 +47,7 @@ architecture and ensuring it can be properly deployed and distributed.
 
 The platform detection module integrates into the broader Mojo installer ecosystem:
 
-```
+```text
 mojo_installer/
 ├── __init__.py                          # Package initialization
 ├── platform_detector.py                 # This module (Issue #857)
@@ -57,9 +57,9 @@ mojo_installer/
 └── utils/
     ├── logging.py                       # Logging utilities
     └── errors.py                        # Custom exceptions
-```
+```text
 
-**Integration Points**:
+### Integration Points
 
 1. **Installer Main Script** (`installer.py`)
    - Import and call `platform_detector.detect_platform()`
@@ -67,13 +67,13 @@ mojo_installer/
    - Pass platform details to download manager
    - Log platform information for debugging
 
-2. **Download Manager** (Issues #860-863)
+1. **Download Manager** (Issues #860-863)
    - Receives platform identifier from platform detection
    - Uses architecture to determine correct binary URL
    - Validates supported platform/architecture combination
    - Falls back to user input if detection fails
 
-3. **Configuration Management** (`config.py`)
+1. **Configuration Management** (`config.py`)
    - Store detected platform in installation config
    - Cache platform info to avoid repeated detection
    - Allow user override if needed
@@ -92,9 +92,10 @@ import platform
 system = platform.system()      # Returns: 'Linux', 'Darwin', 'Windows', etc.
 version = platform.version()    # Full version string
 release = platform.release()    # Release information
-```
+```text
 
-**Expected Outputs**:
+### Expected Outputs
+
 - Linux → "linux"
 - Darwin → "macos"
 - Windows → "windows" (unsupported, should warn)
@@ -106,9 +107,10 @@ Using `platform.machine()`:
 
 ```python
 machine = platform.machine()    # Returns: 'x86_64', 'aarch64', 'arm64', etc.
-```
+```text
 
-**Expected Outputs**:
+### Expected Outputs
+
 - x86_64, AMD64 → "x86_64"
 - aarch64, arm64 → "arm64"
 - Other → handled as unsupported
@@ -129,7 +131,7 @@ if system == 'Darwin':
     # Use platform.mac_ver() for detailed macOS version
     # Check minimum macOS version (e.g., 10.13+)
     # Handle both Intel and Apple Silicon versions
-```
+```text
 
 #### Step 4: Return Structured Platform Details
 
@@ -144,13 +146,13 @@ The module returns a consistent data structure:
     "warnings": ["list", "of", "warnings"],  # Any compatibility concerns
     "supported": True | False           # Is this officially supported?
 }
-```
+```text
 
 ### 3. Dependency Configuration
 
 The platform detection module has **MINIMAL DEPENDENCIES**:
 
-```
+```text
 Runtime Dependencies:
 - Python >=3.7          # Core requirement
 - stdlib only           # No external packages
@@ -160,9 +162,10 @@ Development Dependencies (for testing/packaging):
 - pytest-cov            # Coverage reporting
 - build                 # Package building
 - twine                 # Package distribution
-```
+```text
 
-**Rationale**:
+### Rationale
+
 - Using only stdlib ensures the module can run in any Python environment
 - No version conflicts with other components
 - Reduces installation burden on users
@@ -177,13 +180,13 @@ version = "0.1.0"
 description = "Platform detection for Mojo installer"
 requires-python = ">=3.7"
 dependencies = []  # No external dependencies!
-```
+```text
 
 ### 4. Package Structure and Distribution
 
 #### Directory Layout
 
-```
+```text
 mojo-installer/
 ├── src/
 │   └── mojo_installer/
@@ -200,7 +203,7 @@ mojo-installer/
 ├── pyproject.toml
 ├── README.md
 └── LICENSE
-```
+```text
 
 #### Package Manifest
 
@@ -215,11 +218,11 @@ mojo_installer = ["py.typed"]  # Include type hints
 
 [project.scripts]
 mojo-install = "mojo_installer.installer:main"
-```
+```text
 
 #### Distribution Configuration
 
-**Python Packaging Standards**:
+### Python Packaging Standards
 
 1. **Setup file** (`setup.py`):
    - Define package metadata
@@ -227,13 +230,13 @@ mojo-install = "mojo_installer.installer:main"
    - Configure entry points
    - Allow installation via `pip install`
 
-2. **Configuration file** (`pyproject.toml`):
+1. **Configuration file** (`pyproject.toml`):
    - Modern Python packaging standard
    - Declares build requirements
    - Includes project metadata
    - Enables isolation during builds
 
-3. **Distribution artifacts**:
+1. **Distribution artifacts**:
    - Source distribution (`.tar.gz`)
    - Wheel distribution (`.whl`)
    - Upload to PyPI for distribution
@@ -249,27 +252,27 @@ Integration tests validate the platform detection module within the complete ins
    - Mock data for architecture variations
    - Unsupported platform handling
 
-2. **Integration Tests** (new for packaging phase)
+1. **Integration Tests** (new for packaging phase)
    - Complete installer workflow
    - Platform info passed correctly to download manager
    - Download URLs constructed correctly based on detected platform
    - User experience on each platform type
 
-3. **Cross-Platform Tests**
+1. **Cross-Platform Tests**
    - Linux x86_64 detection
    - Linux arm64 detection (test on hardware or skip gracefully)
    - macOS Intel detection
    - macOS ARM detection (test on hardware or skip gracefully)
    - Windows detection with graceful unsupported message
 
-4. **End-to-End Tests**
+1. **End-to-End Tests**
    - Full installation workflow simulation
    - Verify correct binaries would be downloaded
    - Test on all CI/CD platforms (Ubuntu, macOS runners)
 
 #### Test Execution Matrix
 
-```
+```text
 Platform      | Architecture | Test Strategy
 --- | --- | ---
 Linux         | x86_64       | Run in CI/CD (GitHub Actions Ubuntu runner)
@@ -277,7 +280,7 @@ Linux         | arm64        | Skip or use QEMU emulation
 macOS         | Intel        | Run in CI/CD (GitHub Actions macOS runner)
 macOS         | Apple Silicon| Run in CI/CD (GitHub Actions macOS ARM runner) or skip
 Windows       | x86_64       | Run in CI/CD (GitHub Actions Windows runner)
-```
+```text
 
 ### 6. Distribution and Installation Verification
 
@@ -297,7 +300,7 @@ pip install -e ./mojo-installer
 
 # With extras for development
 pip install -e ./mojo-installer[dev]
-```
+```text
 
 #### Verification Scripts
 
@@ -312,7 +315,7 @@ python -c "from mojo_installer import installer; print(installer.validate_enviro
 
 # Run full integration test
 pytest tests/test_integration.py -v
-```
+```text
 
 ### 7. CI/CD Integration
 
@@ -353,7 +356,7 @@ jobs:
         with:
           name: dist-${{ matrix.os }}-py${{ matrix.python-version }}
           path: dist/
-```
+```text
 
 ### 8. Package Metadata and Documentation
 
@@ -372,19 +375,21 @@ determine which Mojo binaries to download and install.
 ## Installation
 
 ```bash
-pip install mojo-installer
-```
 
+pip install mojo-installer
+
+```text
 ## Usage
 
 ```python
+
 from mojo_installer.platform_detector import detect_platform
 
 platform_info = detect_platform()
 print(f"Platform: {platform_info['platform']}")
 print(f"Architecture: {platform_info['architecture']}")
-```
 
+```text
 ## Supported Platforms
 
 - Linux (x86_64, ARM64)
@@ -400,16 +405,17 @@ print(f"Architecture: {platform_info['architecture']}")
 The module provides clear error messages for unsupported platforms:
 
 ```python
+
 try:
     info = detect_platform()
 except UnsupportedPlatformError as e:
     print(f"Installation not supported: {e}")
-```
 
+```text
 ## Contributing
 
 See main project README for contribution guidelines.
-```
+```text
 
 #### Version and Release Notes
 
@@ -420,7 +426,7 @@ Document the version:
 __version__ = "0.1.0"
 __author__ = "ML Odyssey Contributors"
 __license__ = "MIT"
-```
+```text
 
 ### 9. Common Packaging Issues and Solutions
 
@@ -490,10 +496,10 @@ As implementation proceeds, findings and decisions will be documented here:
 After packaging is complete, the cleanup phase will:
 
 1. Refactor for code quality and consistency
-2. Optimize for performance
-3. Enhance error messages based on real-world usage
-4. Improve test coverage to 95%+
-5. Create final documentation and usage guides
-6. Validate cross-platform deployment
+1. Optimize for performance
+1. Enhance error messages based on real-world usage
+1. Improve test coverage to 95%+
+1. Create final documentation and usage guides
+1. Validate cross-platform deployment
 
 See Issue #859 for detailed cleanup requirements.

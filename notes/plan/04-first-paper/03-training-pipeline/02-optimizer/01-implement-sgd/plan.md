@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Implement SGD class
-2. Implement parameter update method
-3. Apply learning rate correctly
+1. Implement parameter update method
+1. Apply learning rate correctly
 
 ## Success Criteria
 

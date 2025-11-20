@@ -31,8 +31,8 @@ Write a comprehensive README.md that serves as the main entry point for the repo
 ## Steps
 
 1. Write project overview explaining purpose and goals
-2. Create quickstart guide with setup and basic usage
-3. Document repository structure and organization
+1. Create quickstart guide with setup and basic usage
+1. Document repository structure and organization
 
 ## Success Criteria
 

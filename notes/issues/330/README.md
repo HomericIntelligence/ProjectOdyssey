@@ -22,28 +22,28 @@ Implement comprehensive test suite for CosineAnnealingLR scheduler following TDD
    - Smooth continuous decay
    - Boundary values (epoch=0, T_max)
 
-2. **Parameter Variation Tests**
+1. **Parameter Variation Tests**
    - Different T_max values
    - Different eta_min values
    - Edge case eta_min = base_lr
 
-3. **Mathematical Property Tests**
+1. **Mathematical Property Tests**
    - Cosine formula accuracy
    - Monotonic decrease property
    - Symmetry around midpoint
 
-4. **Edge Case Tests**
+1. **Edge Case Tests**
    - Zero/negative T_max
    - eta_min > base_lr (invalid)
    - epoch > T_max (beyond period)
    - Very small/large T_max
 
-5. **Integration Tests**
+1. **Integration Tests**
    - Optimizer LR updates
    - Training loop integration
    - Warmup combination
 
-6. **Numerical Stability Tests**
+1. **Numerical Stability Tests**
    - Very small eta_min (near 0)
    - Very large T_max
    - Precision at boundaries
@@ -53,6 +53,7 @@ Implement comprehensive test suite for CosineAnnealingLR scheduler following TDD
 ### 1. Core Functionality Tests
 
 #### test_cosine_scheduler_initialization()
+
 ```mojo
 """Test CosineAnnealingLR initializes with correct parameters."""
 
@@ -63,11 +64,12 @@ var scheduler = CosineAnnealingLR(base_lr=0.1, T_max=100, eta_min=0.0)
 assert_almost_equal(scheduler.base_lr, 0.1)
 assert_equal(scheduler.T_max, 100)
 assert_almost_equal(scheduler.eta_min, 0.0)
-```
+```text
 
 **Expected**: Scheduler stores parameters correctly
 
 #### test_cosine_scheduler_follows_cosine_curve()
+
 ```mojo
 """Test CosineAnnealingLR follows cosine annealing formula.
 
@@ -93,11 +95,12 @@ assert_almost_equal(lr100, 0.0, tolerance=1e-6)
 # Epoch 25: cos(π/2) = 0, lr = 0 + (1-0)*(1+0)/2 = 0.5
 var lr25 = scheduler.get_lr(epoch=25)
 assert_almost_equal(lr25, 0.5, tolerance=1e-6)
-```
+```text
 
 **Expected**: LR follows exact cosine formula at all test points
 
 #### test_cosine_scheduler_smooth_decay()
+
 ```mojo
 """Test CosineAnnealingLR provides smooth continuous decay."""
 
@@ -121,11 +124,12 @@ for epoch in range(100):
 
     # Change should be small and smooth
     assert_less(change, 0.1)  # No sudden jumps
-```
+```text
 
 **Expected**: LR changes smoothly without discrete jumps
 
 #### test_cosine_scheduler_boundary_values()
+
 ```mojo
 """Test CosineAnnealingLR at boundary epochs."""
 
@@ -143,13 +147,14 @@ assert_almost_equal(lr_end, 0.0)
 # Beyond T_max: Should stay at eta_min
 var lr_beyond = scheduler.get_lr(epoch=150)
 assert_almost_equal(lr_beyond, 0.0)
-```
+```text
 
 **Expected**: Correct LR at start, end, and beyond period
 
 ### 2. Parameter Variation Tests
 
 #### test_cosine_scheduler_different_T_max()
+
 ```mojo
 """Test CosineAnnealingLR with various T_max values."""
 
@@ -164,11 +169,12 @@ var sched2 = CosineAnnealingLR(base_lr=1.0, T_max=1000, eta_min=0.0)
 assert_almost_equal(sched2.get_lr(0), 1.0)
 assert_almost_equal(sched2.get_lr(500), 0.0, tolerance=1e-6)
 assert_almost_equal(sched2.get_lr(1000), 0.0)
-```
+```text
 
 **Expected**: T_max controls period length correctly
 
 #### test_cosine_scheduler_different_eta_min()
+
 ```mojo
 """Test CosineAnnealingLR with various eta_min values."""
 
@@ -185,11 +191,12 @@ assert_almost_equal(sched2.get_lr(100), 0.01)
 # Test eta_min = 0.1 (decay to 10%)
 var sched3 = CosineAnnealingLR(base_lr=1.0, T_max=100, eta_min=0.1)
 assert_almost_equal(sched3.get_lr(100), 0.1)
-```
+```text
 
 **Expected**: eta_min sets minimum LR correctly
 
 #### test_cosine_scheduler_eta_min_equals_base_lr()
+
 ```mojo
 """Test CosineAnnealingLR with eta_min = base_lr (no annealing)."""
 
@@ -200,13 +207,14 @@ var scheduler = CosineAnnealingLR(base_lr=0.1, T_max=100, eta_min=0.1)
 for epoch in range(150):
     var lr = scheduler.get_lr(epoch)
     assert_almost_equal(lr, 0.1, tolerance=1e-6)
-```
+```text
 
 **Expected**: Constant LR when eta_min = base_lr (degenerate case)
 
 ### 3. Mathematical Property Tests
 
 #### test_cosine_scheduler_formula_accuracy()
+
 ```mojo
 """Test CosineAnnealingLR matches exact cosine formula."""
 
@@ -229,11 +237,12 @@ for epoch in range(101):
         expected_lr = 0.0
 
     assert_almost_equal(actual_lr, expected_lr, tolerance=1e-6)
-```
+```text
 
 **Expected**: Exact match with mathematical formula
 
 #### test_cosine_scheduler_monotonic_decrease()
+
 ```mojo
 """Property: LR should monotonically decrease from 0 to T_max."""
 
@@ -248,11 +257,12 @@ for epoch in range(1, 101):
     # LR should decrease or stay same (at T_max)
     assert_less_or_equal(curr_lr, prev_lr)
     prev_lr = curr_lr
-```
+```text
 
 **Expected**: LR never increases from epoch 0 to T_max
 
 #### test_cosine_scheduler_symmetry()
+
 ```mojo
 """Test cosine annealing is symmetric around midpoint."""
 
@@ -269,13 +279,14 @@ var dist25 = lr25 - lr_mid  # ~0.85
 var dist75 = lr_mid - lr75  # Should also be ~0.85
 
 assert_almost_equal(dist25, -dist75, tolerance=1e-6)
-```
+```text
 
 **Expected**: Decay is symmetric around T_max/2
 
 ### 4. Edge Case Tests
 
 #### test_cosine_scheduler_zero_T_max()
+
 ```mojo
 """Test CosineAnnealingLR with T_max=0 raises error."""
 
@@ -285,11 +296,12 @@ try:
     assert_true(False, "Expected error for T_max=0")
 except Error:
     pass  # Expected
-```
+```text
 
 **Expected**: T_max=0 raises error (undefined period)
 
 #### test_cosine_scheduler_negative_T_max()
+
 ```mojo
 """Test CosineAnnealingLR with negative T_max raises error."""
 
@@ -299,11 +311,12 @@ try:
     assert_true(False, "Expected error for negative T_max")
 except Error:
     pass  # Expected
-```
+```text
 
 **Expected**: Negative T_max raises error
 
 #### test_cosine_scheduler_eta_min_greater_than_base_lr()
+
 ```mojo
 """Test CosineAnnealingLR with eta_min > base_lr raises error."""
 
@@ -313,11 +326,12 @@ try:
     assert_true(False, "Expected error for eta_min > base_lr")
 except Error:
     pass  # Expected
-```
+```text
 
 **Expected**: eta_min > base_lr raises error (invalid configuration)
 
 #### test_cosine_scheduler_beyond_T_max()
+
 ```mojo
 """Test CosineAnnealingLR behavior beyond T_max."""
 
@@ -328,11 +342,12 @@ var scheduler = CosineAnnealingLR(base_lr=1.0, T_max=100, eta_min=0.0)
 for epoch in range(100, 200):
     var lr = scheduler.get_lr(epoch)
     assert_almost_equal(lr, 0.0, tolerance=1e-6)
-```
+```text
 
 **Expected**: LR stays at eta_min for epochs > T_max
 
 #### test_cosine_scheduler_very_large_T_max()
+
 ```mojo
 """Test CosineAnnealingLR with very large T_max."""
 
@@ -347,13 +362,14 @@ var lr_end = scheduler.get_lr(1000000)
 assert_almost_equal(lr_start, 1.0)
 assert_almost_equal(lr_mid, 0.0, tolerance=1e-6)
 assert_almost_equal(lr_end, 0.0)
-```
+```text
 
 **Expected**: No numerical issues with large T_max
 
 ### 5. Integration Tests
 
 #### test_cosine_scheduler_updates_optimizer_lr()
+
 ```mojo
 """Test CosineAnnealingLR integrates with optimizer."""
 
@@ -369,11 +385,12 @@ for epoch in range(100):
 
     # Verify optimizer has new LR
     assert_almost_equal(optimizer.get_lr(), new_lr, tolerance=1e-6)
-```
+```text
 
 **Expected**: Scheduler correctly updates optimizer LR
 
 #### test_cosine_scheduler_with_warmup()
+
 ```mojo
 """Test CosineAnnealingLR combined with warmup."""
 
@@ -402,13 +419,14 @@ for epoch in range(total_epochs):
         if epoch > warmup_epochs:
             var prev_lr = cosine.get_lr(epoch - warmup_epochs - 1)
             assert_less_or_equal(lr, prev_lr)
-```
+```text
 
 **Expected**: Warmup + cosine annealing combination works correctly
 
 ### 6. Numerical Stability Tests
 
 #### test_cosine_scheduler_very_small_eta_min()
+
 ```mojo
 """Test CosineAnnealingLR with very small eta_min."""
 
@@ -418,11 +436,12 @@ var scheduler = CosineAnnealingLR(base_lr=1.0, T_max=100, eta_min=1e-10)
 # Should handle very small values without underflow
 var lr_end = scheduler.get_lr(100)
 assert_almost_equal(lr_end, 1e-10, tolerance=1e-15)
-```
+```text
 
 **Expected**: No numerical underflow with very small eta_min
 
 #### test_cosine_scheduler_precision_at_midpoint()
+
 ```mojo
 """Test CosineAnnealingLR precision at T_max/2."""
 
@@ -432,7 +451,7 @@ var scheduler = CosineAnnealingLR(base_lr=1.0, T_max=100, eta_min=0.0)
 # At exactly T_max/2, cos(π) = -1, so LR should be exactly eta_min
 var lr_mid = scheduler.get_lr(50)
 assert_almost_equal(lr_mid, 0.0, tolerance=1e-10)  # Very tight tolerance
-```
+```text
 
 **Expected**: High precision at critical points
 
@@ -446,7 +465,7 @@ assert_almost_equal(lr_mid, 0.0, tolerance=1e-10)  # Very tight tolerance
 
 ## Test File Structure
 
-```
+```text
 tests/shared/training/test_cosine_scheduler.mojo
 │
 ├── Core Functionality Tests (4 tests)
@@ -479,7 +498,7 @@ tests/shared/training/test_cosine_scheduler.mojo
 └── Numerical Stability Tests (2 tests)
     ├── test_cosine_scheduler_very_small_eta_min
     └── test_cosine_scheduler_precision_at_midpoint
-```
+```text
 
 **Total**: 19 test functions
 
@@ -498,7 +517,7 @@ Running Integration Tests... ✓
 Running Numerical Stability Tests... ✓
 
 All CosineAnnealingLR scheduler tests passed! ✓
-```
+```text
 
 ## Success Criteria
 
@@ -513,10 +532,12 @@ All CosineAnnealingLR scheduler tests passed! ✓
 
 ## Files
 
-**Test Implementation**:
+### Test Implementation
+
 - `tests/shared/training/test_cosine_scheduler.mojo` - 350 lines of comprehensive tests
 
-**Test Utilities**:
+### Test Utilities
+
 - `tests/shared/conftest.mojo` - Shared test fixtures and assertions
 
 ## Implementation Status

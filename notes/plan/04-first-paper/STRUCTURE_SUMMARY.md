@@ -20,11 +20,11 @@ This document summarizes the complete 4-level plan structure for the LeNet-5 (04
 ### Level 2: Main Sections (6)
 
 1. `01-paper-selection/` - Paper Selection and Resource Gathering
-2. `02-model-implementation/` - Model Architecture Implementation
-3. `03-training-pipeline/` - Training Infrastructure
-4. `04-data-pipeline/` - Data Loading and Preprocessing
-5. `05-testing/` - Comprehensive Testing
-6. `06-documentation/` - Documentation and Guides
+1. `02-model-implementation/` - Model Architecture Implementation
+1. `03-training-pipeline/` - Training Infrastructure
+1. `04-data-pipeline/` - Data Loading and Preprocessing
+1. `05-testing/` - Comprehensive Testing
+1. `06-documentation/` - Documentation and Guides
 
 ### Level 3: Components (18)
 
@@ -81,7 +81,7 @@ Each directory contains:
    - Notes
    - Links (Parent/Children)
 
-2. **github_issue.md** - GitHub issue template with:
+1. **github_issue.md** - GitHub issue template with:
    - Title
    - Description
    - Tasks (checkboxes)
@@ -118,18 +118,18 @@ Each directory contains:
 ## Usage
 
 1. Start at top level: `04-first-paper/plan.md`
-2. Navigate to relevant section
-3. Drill down to specific component
-4. Follow task-level plans for implementation
-5. Use github_issue.md files to create GitHub issues
+1. Navigate to relevant section
+1. Drill down to specific component
+1. Follow task-level plans for implementation
+1. Use github_issue.md files to create GitHub issues
 
 ## Implementation Order
 
 Recommended implementation order:
 
 1. **Paper Selection** - Understand and gather resources
-2. **Data Pipeline** - Get data ready
-3. **Model Implementation** - Build the architecture
-4. **Training Pipeline** - Enable training
-5. **Testing** - Verify correctness
-6. **Documentation** - Document results
+1. **Data Pipeline** - Get data ready
+1. **Model Implementation** - Build the architecture
+1. **Training Pipeline** - Enable training
+1. **Testing** - Verify correctness
+1. **Documentation** - Document results

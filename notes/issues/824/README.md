@@ -49,10 +49,10 @@ The Paper Test Script (PTS) is a specialized utility for developers working on i
 within the ML Odyssey project. Its primary purposes are:
 
 1. **Validation**: Verify paper directory structure matches repository standards
-2. **Testing**: Execute all tests associated with a specific paper
-3. **Reporting**: Generate clear pass/fail status and health metrics
-4. **Development**: Provide quick feedback during active development
-5. **Integration**: Work both standalone and as part of the main test suite
+1. **Testing**: Execute all tests associated with a specific paper
+1. **Reporting**: Generate clear pass/fail status and health metrics
+1. **Development**: Provide quick feedback during active development
+1. **Integration**: Work both standalone and as part of the main test suite
 
 ### 2. Core Functionality
 
@@ -72,9 +72,9 @@ python scripts/test_paper.py
 
 # Test multiple papers
 python scripts/test_paper.py lenet5 vgg16 resnet50
-```
+```text
 
-**Requirements**:
+### Requirements
 
 - Accept paper name and resolve to `papers/<name>` directory
 - Accept absolute or relative paths to paper directories
@@ -101,14 +101,14 @@ Validate that paper directory structure matches the template defined in `/papers
 - `tests/__init__.mojo` - Test package initialization
 - `configs/config.yaml` - Paper configuration
 
-**Validation Output**:
+### Validation Output
 
 - [PASS] if all required items exist
 - [WARN] if optional items are missing
 - [FAIL] if required items are missing
 - [ERROR] if directory is not a valid paper
 
-**Example Output**:
+### Example Output
 
 ```text
 Paper Structure Validation: lenet5
@@ -123,37 +123,37 @@ Paper Structure Validation: lenet5
 [!] examples/ directory not found (optional)
 
 Structure Status: PASS (7/8 items valid)
-```
+```text
 
 #### 2.3 Test Discovery and Execution
 
 Discover and execute all tests associated with a paper:
 
-**Test Types to Support**:
+### Test Types to Support
 
 1. **Mojo Tests** (`tests/test_*.mojo`)
    - Use Mojo's built-in testing framework
    - Execute with `mojo test <test_file.mojo>`
    - Parse results for pass/fail/error status
 
-2. **Python Tests** (`tests/test_*.py`)
+1. **Python Tests** (`tests/test_*.py`)
    - Use pytest framework
    - Execute with `pytest tests/test_*.py`
    - Collect coverage metrics if available
 
-3. **Integration Tests** (`tests/integration/`)
+1. **Integration Tests** (`tests/integration/`)
    - Execute training/model tests
    - Validate end-to-end workflows
    - Report execution time
 
-**Test Discovery Rules**:
+### Test Discovery Rules
 
 - All `test_*.mojo` files in `tests/` directory
 - All `test_*.py` files in `tests/` directory
 - All subdirectories in `tests/` are searched
 - Respect `.testignore` file if present (for skipped tests)
 
-**Execution Strategy**:
+### Execution Strategy
 
 - Run tests in dependency order (unit → integration)
 - Capture stdout/stderr for each test
@@ -165,40 +165,40 @@ Discover and execute all tests associated with a paper:
 
 Generate a comprehensive health report for the paper:
 
-**Report Sections**:
+### Report Sections
 
 1. **Summary** - Quick overview of paper health
    - Overall status (Green/Yellow/Red)
    - Key metrics (test count, pass rate, etc.)
    - Quick recommendations
 
-2. **Structure Validation** - Directory and file compliance
+1. **Structure Validation** - Directory and file compliance
    - Required/optional item status
    - Missing critical files
    - Structure recommendations
 
-3. **Test Results** - Test execution details
+1. **Test Results** - Test execution details
    - Pass/fail/error counts
    - Failed test names and error messages
    - Performance metrics (slowest tests)
 
-4. **Coverage Analysis** (if available)
+1. **Coverage Analysis** (if available)
    - Code coverage percentage
    - Uncovered critical paths
    - Coverage recommendations
 
-5. **Configuration Validation**
+1. **Configuration Validation**
    - Config file syntax validity
    - Required configuration keys present
    - Config merge validation
 
-6. **Recommendations** - Actionable suggestions
+1. **Recommendations** - Actionable suggestions
    - Missing tests to add
    - Structure improvements needed
    - Performance optimizations
    - Documentation gaps
 
-**Example Health Report**:
+### Example Health Report
 
 ```text
 ====================================================
@@ -270,7 +270,7 @@ Slowest Tests:
 
 Generated: 2025-11-16 10:30:45 UTC
 ====================================================
-```
+```text
 
 #### 2.5 Output Formats
 
@@ -301,7 +301,7 @@ Support multiple output formats for integration with different tools:
   },
   "coverage": { "percentage": 87 }
 }
-```
+```text
 
 **JUnit XML** (for CI integration):
 
@@ -326,7 +326,7 @@ test_paper.py
 │   ├── json_reporter.py
 │   └── junit_reporter.py
 └── utils.py            # Helper utilities
-```
+```text
 
 #### 3.2 Key Classes
 
@@ -341,7 +341,7 @@ class Paper:
     def get_tests(self) -> List[TestFile]
     def get_config(self) -> Dict[str, Any]
     def __str__(self) -> str
-```
+```text
 
 TestRunner:
 
@@ -352,7 +352,7 @@ class TestRunner:
     def run_all_tests(self) -> TestResults
     def run_specific_test(self, test_file: str) -> TestResult
     def get_test_files(self) -> List[TestFile]
-```
+```text
 
 HealthReporter:
 
@@ -362,7 +362,7 @@ class HealthReporter:
     def __init__(self, paper: Paper) -> None
     def generate_report(self) -> HealthReport
     def save_report(self, format: str, path: str) -> None
-```
+```text
 
 #### 3.3 Execution Flow
 
@@ -404,7 +404,7 @@ class HealthReporter:
    - 0: All tests passed
    - 1: Tests failed
    - 2: Validation failed
-```
+```text
 
 ### 4. Integration Points
 
@@ -412,7 +412,7 @@ class HealthReporter:
 
 The paper test script should integrate with the main CI/CD pipeline:
 
-**In `.github/workflows/test-papers.yml`**:
+### In `.github/workflows/test-papers.yml`
 
 ```yaml
 - name: Test Paper Implementations
@@ -430,7 +430,7 @@ The paper test script should integrate with the main CI/CD pipeline:
     python scripts/collect_paper_results.py results/ \
       --format junit \
       --output test-results.xml
-```
+```text
 
 #### 4.2 With Configuration System
 
@@ -442,7 +442,7 @@ config = paper.get_config()
 timeout = config.get('testing.timeout', 60)
 parallel = config.get('testing.parallel', False)
 skip_integration = config.get('testing.skip_integration', False)
-```
+```text
 
 #### 4.3 With Development Workflow
 
@@ -460,7 +460,7 @@ python scripts/test_paper.py lenet5 --watch
 
 # Run specific test
 python scripts/test_paper.py lenet5 tests/test_model.mojo
-```
+```text
 
 ### 5. Command-Line Interface
 
@@ -479,7 +479,7 @@ python scripts/test_paper.py
 
 # Test multiple papers
 python scripts/test_paper.py lenet5 vgg16 resnet50
-```
+```text
 
 #### 5.2 Options
 
@@ -507,11 +507,11 @@ python scripts/test_paper.py lenet5 vgg16 resnet50
 --watch                      # Watch mode (re-run on changes)
 --keep-going                 # Continue after first failure
 --only-failed                # Re-run only failed tests
-```
+```text
 
 ### 6. Error Handling
 
-**Exit Codes**:
+### Exit Codes
 
 - `0`: Success (all tests passed)
 - `1`: Test failures detected
@@ -520,7 +520,7 @@ python scripts/test_paper.py lenet5 vgg16 resnet50
 - `4`: Test execution error (timeout, crash)
 - `5`: Command-line argument error
 
-**Error Messages**:
+### Error Messages
 
 Example for invalid paper:
 
@@ -537,7 +537,7 @@ Available papers:
   - resnet50
 
 Usage: python scripts/test_paper.py <paper_name_or_path>
-```
+```text
 
 ### 7. Performance Considerations
 
@@ -552,56 +552,56 @@ Usage: python scripts/test_paper.py <paper_name_or_path>
 Design for future enhancements:
 
 1. **Custom validators** - Allow papers to define custom validation rules
-2. **Test hooks** - Before/after test execution hooks
-3. **Plugins** - Custom reporters and analyzers
-4. **Benchmarking** - Integration with performance tracking
-5. **Cloud testing** - Run tests on remote infrastructure
+1. **Test hooks** - Before/after test execution hooks
+1. **Plugins** - Custom reporters and analyzers
+1. **Benchmarking** - Integration with performance tracking
+1. **Cloud testing** - Run tests on remote infrastructure
 
 ## Implementation Strategy
 
 ### Phase 1: Core Infrastructure
 
 1. Implement Paper class for directory handling
-2. Implement structure validator
-3. Create basic test runner (Mojo support)
-4. Basic text reporting
+1. Implement structure validator
+1. Create basic test runner (Mojo support)
+1. Basic text reporting
 
 ### Phase 2: Full Test Support
 
 1. Add Python test support
-2. Implement parallel test execution
-3. Add coverage integration
-4. Enhance error handling
+1. Implement parallel test execution
+1. Add coverage integration
+1. Enhance error handling
 
 ### Phase 3: Advanced Reporting
 
 1. JSON and JUnit output formats
-2. Configuration validation
-3. Detailed health report generation
-4. Performance profiling
+1. Configuration validation
+1. Detailed health report generation
+1. Performance profiling
 
 ### Phase 4: Integration
 
 1. CI/CD pipeline integration
-2. Development workflow support
-3. Watch mode implementation
-4. Parallel paper testing
+1. Development workflow support
+1. Watch mode implementation
+1. Parallel paper testing
 
 ## Testing Approach
 
 The paper test script itself must be thoroughly tested:
 
 1. **Unit Tests**: Paper class, validators, runners
-2. **Integration Tests**: Full workflow with real papers
-3. **End-to-End Tests**: CLI and output validation
-4. **Performance Tests**: Execution time benchmarks
-5. **Error Tests**: Edge cases and error handling
+1. **Integration Tests**: Full workflow with real papers
+1. **End-to-End Tests**: CLI and output validation
+1. **Performance Tests**: Execution time benchmarks
+1. **Error Tests**: Edge cases and error handling
 
 ## Next Steps
 
 After this planning phase is complete:
 
 1. **Issue #825**: Create test suite to validate the script
-2. **Issue #826**: Implement the actual paper test script
-3. **Issue #827**: Integrate with CI/CD pipeline and packaging
-4. **Issue #828**: Cleanup and finalization
+1. **Issue #826**: Implement the actual paper test script
+1. **Issue #827**: Integrate with CI/CD pipeline and packaging
+1. **Issue #828**: Cleanup and finalization

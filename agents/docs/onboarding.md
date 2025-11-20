@@ -53,7 +53,7 @@ Level 2: Principal Engineers       → Module Design Agents
 Level 3: Senior Engineers          → Component Specialists
 Level 4: Engineers                 → Implementation Engineers
 Level 5: Junior Engineers/Interns  → Junior Engineers
-```
+```text
 
 ### Core Concepts
 
@@ -74,7 +74,7 @@ Level 2: Modules within sections
 Level 3: Components within modules
 Level 4: Functions and classes
 Level 5: Lines and boilerplate
-```
+```text
 
 #### 3. Specialization
 
@@ -92,10 +92,10 @@ Agents specialize in different domains:
 The system follows a **5-phase workflow**:
 
 1. **Plan** (Sequential): Levels 0-2 create specifications
-2. **Test** (Parallel): Levels 3-5 write tests
-3. **Implementation** (Parallel): Levels 3-5 write code
-4. **Packaging** (Parallel): Levels 3-5 integrate and document
-5. **Cleanup** (Sequential): All levels review and refactor
+1. **Test** (Parallel): Levels 3-5 write tests
+1. **Implementation** (Parallel): Levels 3-5 write code
+1. **Packaging** (Parallel): Levels 3-5 integrate and document
+1. **Cleanup** (Sequential): All levels review and refactor
 
 #### 5. Git Worktree Strategy
 
@@ -107,7 +107,7 @@ worktrees/issue-63-test-agents/          # Test phase (parallel)
 worktrees/issue-64-impl-agents/          # Implementation (parallel)
 worktrees/issue-65-pkg-agents/           # Packaging (parallel)
 worktrees/issue-66-cleanup-agents/       # Cleanup phase
-```
+```text
 
 ## 6-Level Hierarchy Explained
 
@@ -117,7 +117,7 @@ worktrees/issue-66-cleanup-agents/       # Cleanup phase
 
 **Agent**: Chief Architect (1 agent)
 
-**Responsibilities**:
+### Responsibilities
 
 - Select which AI research papers to implement
 - Define repository-wide architectural patterns
@@ -127,15 +127,15 @@ worktrees/issue-66-cleanup-agents/       # Cleanup phase
 - Make technology stack decisions (Mojo vs Python for different components)
 - Monitor overall project health
 
-**When to Invoke**:
+### When to Invoke
 
 ```text
 "Which paper should we implement next - ResNet or Transformer?"
 "What should our repository-wide testing strategy be?"
 "Should we use Mojo or Python for data preprocessing?"
-```
+```text
 
-**Example Interaction**:
+### Example Interaction
 
 ```text
 User: "We're ready to implement our second paper. Should we do ResNet-50 or VGG-16?"
@@ -148,7 +148,7 @@ Chief Architect:
 4. The residual patterns will be reusable for future papers
 
 I'll delegate to the Papers Orchestrator to create the implementation plan."
-```
+```text
 
 ### Level 1: Section Orchestrators
 
@@ -157,13 +157,13 @@ I'll delegate to the Papers Orchestrator to create the implementation plan."
 **Agents**: 6 orchestrators (one per section)
 
 1. **Foundation Orchestrator**: Directory structure, configuration
-2. **Shared Library Orchestrator**: Core reusable components
-3. **Tooling Orchestrator**: CLI tools, automation scripts
-4. **Papers Orchestrator**: Research paper implementations
-5. **CI/CD Orchestrator**: Testing and deployment pipelines
-6. **Agentic Workflows Orchestrator**: Claude-powered automation
+1. **Shared Library Orchestrator**: Core reusable components
+1. **Tooling Orchestrator**: CLI tools, automation scripts
+1. **Papers Orchestrator**: Research paper implementations
+1. **CI/CD Orchestrator**: Testing and deployment pipelines
+1. **Agentic Workflows Orchestrator**: Claude-powered automation
 
-**Responsibilities**:
+### Responsibilities
 
 - Break section into modules
 - Coordinate module dependencies
@@ -171,15 +171,15 @@ I'll delegate to the Papers Orchestrator to create the implementation plan."
 - Manage section-level resources
 - Report progress to Chief Architect
 
-**When to Invoke**:
+### When to Invoke
 
 ```text
 "Plan the shared library architecture for tensor operations"
 "Set up the CI/CD pipeline for our Mojo code"
 "Coordinate the LeNet-5 implementation across all modules"
-```
+```text
 
-**Example Interaction**:
+### Example Interaction
 
 ```text
 User: "We need to add batch normalization to our shared library"
@@ -194,7 +194,7 @@ training utilities. Here's my plan:
 
 After planning, we'll create issues for Test, Implementation, and Packaging phases.
 I'll ensure this integrates smoothly with existing Conv2D and Dense layers."
-```
+```text
 
 ### Level 2: Module Design Agents
 
@@ -203,10 +203,10 @@ I'll ensure this integrates smoothly with existing Conv2D and Dense layers."
 **Agents**: 3 core types
 
 1. **Architecture Design Agent**: Component breakdown, interface design, data flow
-2. **Integration Design Agent**: Cross-component APIs, integration testing
-3. **Security Design Agent**: Threat modeling, security requirements
+1. **Integration Design Agent**: Cross-component APIs, integration testing
+1. **Security Design Agent**: Threat modeling, security requirements
 
-**Responsibilities**:
+### Responsibilities
 
 - Break module into components
 - Define component interfaces and contracts
@@ -214,15 +214,15 @@ I'll ensure this integrates smoothly with existing Conv2D and Dense layers."
 - Identify reusable patterns
 - Create detailed component specifications
 
-**When to Invoke**:
+### When to Invoke
 
 ```text
 "Design the architecture for the optimizer module"
 "How should the data loader integrate with the training loop?"
 "What security considerations exist for model serialization?"
-```
+```text
 
-**Example Interaction**:
+### Example Interaction
 
 ```text
 User: "Design the architecture for SGD optimizer"
@@ -237,6 +237,7 @@ Components:
 
 Interface design:
 ```mojo
+
 trait Optimizer:
     fn step(inout self, parameters: List[Tensor], gradients: List[Tensor])
     fn zero_grad(inout self, parameters: List[Tensor])
@@ -246,8 +247,8 @@ struct SGD(Optimizer):
     var learning_rate: Float64
     var momentum: Float64
     var velocities: List[Tensor]
-```
 
+```text
 This design allows easy extension for Adam, RMSprop, etc. I'll delegate to the
 Implementation Specialist for detailed function specifications."
 
@@ -274,44 +275,47 @@ Implementation Specialist for detailed function specifications."
 **When to Invoke**:
 
 ```text
+
 "Create the implementation plan for the SGD optimizer"
 "Design comprehensive tests for the convolution layer"
 "Plan documentation for the tensor operations API"
-```
 
+```text
 **Example Interaction**:
 
 ```text
+
 User: "Create comprehensive tests for the SGD optimizer"
 
 Test Specialist:
 "I'll create a complete test plan for SGD:
 
 Test Categories:
+
 1. Unit Tests
    - Learning rate application
    - Momentum calculation
    - Parameter updates
    - Zero gradient functionality
 
-2. Integration Tests
+1. Integration Tests
    - SGD with Conv2D layers
    - SGD with Dense layers
    - Multi-parameter optimization
 
-3. Property Tests
+1. Property Tests
    - Convergence on simple functions
    - Gradient descent direction
    - Learning rate scaling
 
-4. Performance Tests
+1. Performance Tests
    - SIMD vectorization effectiveness
    - Memory allocation patterns
 
 I'll delegate to Test Engineers to implement these tests in parallel with the
 implementation work. We'll use TDD approach - tests first, then implementation."
-```
 
+```text
 ### Level 4: Implementation Engineers
 
 **Role**: Write production-quality code, tests, and documentation
@@ -335,14 +339,16 @@ implementation work. We'll use TDD approach - tests first, then implementation."
 **When to Invoke**:
 
 ```text
+
 "Implement the forward pass for the Conv2D layer with SIMD"
 "Write unit tests for the SGD parameter update logic"
 "Create API documentation with examples for tensor operations"
-```
 
+```text
 **Example Interaction**:
 
 ```text
+
 User: "Implement the SGD step function with SIMD optimization"
 
 Senior Implementation Engineer:
@@ -379,7 +385,7 @@ fn step(inout self, parameters: List[Tensor], gradients: List[Tensor]):
             param.store[width](offset, new_p)
 
         vectorize[update_param, simd_width](param.size())
-```
+```text
 
 This implementation leverages Mojo's SIMD capabilities for performance while
 maintaining clarity. I'll coordinate with the Test Engineer to verify correctness."
@@ -391,10 +397,10 @@ maintaining clarity. I'll coordinate with the Test Engineer to verify correctnes
 **Agents**: 3 junior types
 
 1. **Junior Implementation Engineer**: Simple functions, boilerplate
-2. **Junior Test Engineer**: Simple tests, test boilerplate
-3. **Junior Documentation Engineer**: Docstring templates, formatting
+1. **Junior Test Engineer**: Simple tests, test boilerplate
+1. **Junior Documentation Engineer**: Docstring templates, formatting
 
-**Responsibilities**:
+### Responsibilities
 
 - Write simple, well-specified functions
 - Generate boilerplate code from templates
@@ -402,15 +408,15 @@ maintaining clarity. I'll coordinate with the Test Engineer to verify correctnes
 - Run automated tools (linters, formatters)
 - Execute simple, repetitive tasks
 
-**When to Invoke**:
+### When to Invoke
 
 ```text
 "Create getter and setter functions for this struct"
 "Generate test boilerplate for these functions"
 "Format all docstrings in this module"
-```
+```text
 
-**Example Interaction**:
+### Example Interaction
 
 ```text
 User: "Create getter and setter methods for the SGD hyperparameters"
@@ -419,6 +425,7 @@ Junior Implementation Engineer:
 "I'll create the boilerplate getter and setter methods:
 
 ```mojo
+
 fn get_learning_rate(self) -> Float64:
     """Get the learning rate.
 
@@ -452,8 +459,8 @@ fn set_momentum(inout self, m: Float64):
     """
     debug_assert(0 <= m <= 1, "Momentum must be in [0, 1]")
     self.momentum = m
-```
 
+```text
 All methods follow Mojo conventions and include proper docstrings."
 
 ## Delegation Patterns Walkthrough
@@ -467,6 +474,7 @@ All methods follow Mojo conventions and include proper docstrings."
 ### Example: Implementing a New Layer Type
 
 ```text
+
 Chief Architect (Level 0):
 "We need to add dropout layers to our neural network library"
     ↓ Delegates to Section Orchestrator
@@ -489,8 +497,8 @@ Implementation Engineer (Level 4):
 
 Junior Engineer (Level 5):
 "Creating struct boilerplate and accessor methods"
-```
 
+```text
 **Key Insight**: Each level zooms in, transforming "add dropout" into specific code.
 
 ### Pattern 2: Specialization Delegation
@@ -502,6 +510,7 @@ Junior Engineer (Level 5):
 #### Example: Adding Authentication
 
 ```text
+
 User Request: "Add API authentication to the model server"
 
 Foundation Orchestrator:
@@ -510,6 +519,7 @@ Foundation Orchestrator:
 
 Security Design Agent:
 "I'll design the authentication mechanism:
+
  - JWT tokens for stateless auth
  - Role-based access control
  - Rate limiting for API endpoints"
@@ -517,12 +527,13 @@ Security Design Agent:
 
 Security Implementation Specialist:
 "Implementing with these security requirements:
+
  - bcrypt for password hashing
  - Secure random token generation
  - Token expiration and refresh"
     ↓ Delegates to Implementation Engineer
-```
 
+```text
 **Key Insight**: Domain experts handle their specialty, not generalists.
 
 ### Pattern 3: Parallel Delegation
@@ -534,6 +545,7 @@ Security Implementation Specialist:
 #### Example: Implementing a Component
 
 ```text
+
 Implementation Specialist (after planning):
 "The Conv2D layer is ready for parallel implementation"
 
@@ -547,11 +559,12 @@ Implementation Specialist (after planning):
          "Create API docs and usage examples"
 
 All three work independently in separate git worktrees:
+
 - worktrees/issue-63-test-conv2d/
 - worktrees/issue-64-impl-conv2d/
 - worktrees/issue-65-docs-conv2d/
-```
 
+```text
 **Key Insight**: Independent work happens simultaneously for faster delivery.
 
 ### Pattern 4: TDD Coordination
@@ -563,28 +576,33 @@ All three work independently in separate git worktrees:
 #### Example: Building a Function
 
 ```text
+
 Test Engineer:
    "I'll write failing tests first"
-```
 
+```text
 ```mojo
+
 fn test_sgd_updates_parameters():
     let optimizer = SGD(learning_rate=0.01)
     # Test implementation here
     assert_equal(...)  # Currently fails
-```
 
 ```text
+```text
+
 Implementation Engineer:
    "I see the test. Implementing to make it pass..."
-```
-
-```mojo
-fn step(inout self, ...):
-    # Implementation that satisfies the test
-```
 
 ```text
+```mojo
+
+fn step(inout self, ...):
+    # Implementation that satisfies the test
+
+```text
+```text
+
 Test Engineer:
    "Tests passing! Adding edge case tests..."
 
@@ -593,8 +611,8 @@ Implementation Engineer:
 
 Both:
    "All tests passing. Feature complete!"
-```
 
+```text
 **Key Insight**: Tests and implementation evolve together through coordination.
 
 ## Mojo-Specific Agent Capabilities
@@ -615,13 +633,15 @@ Both:
 **Example Decision**:
 
 ```text
+
 Chief Architect:
 "For LeNet-5 implementation:
+
  - Use Mojo for: model layers, forward/backward pass, training loop
  - Use Python for: data loading (MNIST), visualization, hyperparameter tuning
  - Interop via: Mojo functions called from Python with ctypes/FFI"
-```
 
+```text
 #### Levels 2-3: Mojo Architecture & Design
 
 **Module Design Agents & Specialists**:
@@ -639,8 +659,10 @@ Chief Architect:
 **Example Design**:
 
 ```text
+
 Architecture Design Agent:
 "The Tensor struct will use:
+
  - @value decorator for automatic copy/move
  - DType parameter for generic numeric types
  - SIMD-aligned memory layout
@@ -655,8 +677,8 @@ struct Tensor[dtype: DType](NumericTensor):
     var data: DTypePointer[dtype]
     var shape: List[Int]
     # ... methods with SIMD optimization
-```
 
+```text
 #### Levels 4-5: Mojo Implementation
 
 **Implementation Engineers**:
@@ -673,6 +695,7 @@ struct Tensor[dtype: DType](NumericTensor):
 **Example Implementation**:
 
 ```text
+
 Senior Implementation Engineer:
 "SIMD-optimized element-wise addition:
 
@@ -691,13 +714,14 @@ fn add[dtype: DType](
 
     vectorize[vectorized_add, simdwidthof[dtype]()](size)
 "
-```
 
+```text
 ### Mojo-Specific Delegation Patterns
 
 #### Pattern: SIMD Optimization
 
 ```text
+
 Performance Specialist (Level 3):
 "Profile shows convolution is bottleneck. Needs SIMD optimization."
     ↓ Delegates
@@ -708,11 +732,12 @@ Senior Implementation Engineer (Level 4):
 
 Performance Engineer (Level 4):
 "Benchmarking shows 4x speedup from SIMD. Profiling to verify."
-```
 
+```text
 #### Pattern: Type-Safe Generics
 
 ```text
+
 Architecture Design Agent (Level 2):
 "Tensor should work with Float32, Float64, Int32, etc. Use parametric types."
     ↓ Designs interface
@@ -726,11 +751,12 @@ Implementation Engineer (Level 4):
 struct Tensor[dtype: DType]:
     # Type-safe implementation
 "
-```
 
+```text
 #### Pattern: Memory Management
 
 ```text
+
 Security Design Agent (Level 2):
 "Ensure no memory leaks or buffer overflows in tensor operations"
     ↓ Specifies safety requirements
@@ -741,8 +767,8 @@ Implementation Specialist (Level 3):
 
 Senior Implementation Engineer (Level 4):
 "Using __moveinit__ and __del__ for RAII pattern. Memory safety guaranteed."
-```
 
+```text
 ### Mojo Best Practices by Agent Type
 
 **Orchestrators (Levels 0-1)**:
@@ -778,128 +804,142 @@ Senior Implementation Engineer (Level 4):
 **Do**: Let agents work at their appropriate level
 
 ```text
+
 ✓ Ask Chief Architect about paper selection
 ✓ Let Orchestrators break down the work
 ✓ Trust Engineers to choose implementation details
-```
 
+```text
 **Don't**: Micromanage or skip levels
 
 ```text
+
 ✗ Tell Junior Engineer which algorithm to use (that's Level 3-4)
 ✗ Skip from Level 0 to Level 5 directly
 ✗ Second-guess every delegation
-```
 
+```text
 ### 2. Communicate Clearly
 
 **Do**: Provide context and requirements
 
 ```text
+
 ✓ "Implement SGD optimizer with momentum support, performance is critical"
 ✓ "Write tests that cover edge cases, especially numerical stability"
 ✓ "Document this API for external users, include examples"
-```
 
+```text
 **Don't**: Be vague or assume context
 
 ```text
+
 ✗ "Make it faster"
 ✗ "Fix the tests"
 ✗ "Update the docs"
-```
 
+```text
 ### 3. Escalate Appropriately
 
 **Do**: Escalate blockers to immediate superior
 
 ```text
+
 ✓ "I need the database schema before I can implement this function" (Engineer → Specialist)
 ✓ "These two modules have conflicting APIs" (Specialist → Design Agent)
 ✓ "This section needs more resources" (Orchestrator → Chief Architect)
-```
 
+```text
 **Don't**: Stay blocked or escalate prematurely
 
 ```text
+
 ✗ Stay stuck for days without reporting
 ✗ Escalate every small decision
 ✗ Skip levels when escalating
-```
 
+```text
 ### 4. Coordinate Horizontally
 
 **Do**: Communicate with same-level peers
 
 ```text
+
 ✓ Test Engineer ↔ Implementation Engineer (TDD coordination)
 ✓ Architecture Agent ↔ Integration Agent (API negotiation)
 ✓ Performance Engineer ↔ Implementation Engineer (optimization)
-```
 
+```text
 **Don't**: Work in silos
 
 ```text
+
 ✗ Implement without checking tests
 ✗ Change interfaces without coordinating
 ✗ Optimize without benchmarking first
-```
 
+```text
 ### 5. Document Decisions
 
 **Do**: Capture rationale for future reference
 
 ```text
+
 ✓ "Chose SGD over Adam because our models are simple and SGD trains faster"
 ✓ "Using structs instead of classes for zero-copy performance"
 ✓ "Implemented custom SIMD loop because standard library lacks this operation"
-```
 
+```text
 **Don't**: Make undocumented decisions
 
 ```text
+
 ✗ Change architecture without explanation
 ✗ Pick approaches randomly
 ✗ Forget why decisions were made
-```
 
+```text
 ### 6. Use Git Worktrees Effectively
 
 **Do**: One worktree per issue, clear ownership
 
 ```text
+
 ✓ issue-63-test-conv2d → Test Engineer
 ✓ issue-64-impl-conv2d → Implementation Engineer
 ✓ issue-65-docs-conv2d → Documentation Writer
-```
 
+```text
 **Don't**: Mix concerns or share worktrees
 
 ```text
+
 ✗ Multiple agents editing same worktree simultaneously
 ✗ Mixing test and implementation in same branch
 ✗ Unclear ownership of worktrees
-```
 
+```text
 ### 7. Follow TDD Workflow
 
 **Do**: Tests before implementation
 
 ```text
+
 ✓ Test Engineer writes failing test
 ✓ Implementation Engineer makes it pass
 ✓ Both refactor together
 ✓ Repeat for next feature
-```
 
+```text
 **Don't**: Tests as afterthought
 
 ```text
+
 ✗ Write all code first, tests later
 ✗ Skip tests for "simple" code
 ✗ Ignore failing tests
-```
 
+```text
 ## Anti-Patterns to Avoid
 
 ### 1. Skipping Levels
@@ -907,118 +947,131 @@ Senior Implementation Engineer (Level 4):
 **Wrong**:
 
 ```text
+
 User → Junior Engineer (directly)
 "Implement the entire ResNet model"
-```
 
+```text
 **Why it's wrong**: Junior Engineer lacks context and authority for such decisions
 
 **Right**:
 
 ```text
+
 User → Chief Architect
 Chief Architect → Papers Orchestrator
 Papers Orchestrator → Architecture Design Agent
 Architecture Design Agent → Implementation Specialist
 Implementation Specialist → Senior Engineer → Junior Engineer
-```
 
+```text
 ### 2. Micro-Managing
 
 **Wrong**:
 
 ```text
-Orchestrator: "Use exactly this variable name: 'num_iterations_for_training_loop'"
-```
 
+Orchestrator: "Use exactly this variable name: 'num_iterations_for_training_loop'"
+
+```text
 **Why it's wrong**: Engineers should choose implementation details
 
 **Right**:
 
 ```text
+
 Orchestrator: "Implement a training loop that runs for a configurable number of iterations"
 Engineer: Chooses variable names, loop structure, etc.
-```
 
+```text
 ### 3. Working in Silos
 
 **Wrong**:
 
 ```text
+
 Test Engineer writes tests (doesn't share with Implementation Engineer)
 Implementation Engineer writes code (doesn't know tests exist)
 Integration fails due to mismatched expectations
-```
 
+```text
 **Why it's wrong**: Wastes time, creates conflicts
 
 **Right**:
 
 ```text
+
 Test Engineer: "I'm writing tests that expect this interface: train(model, data, epochs)"
 Implementation Engineer: "Perfect, I'll implement that interface. Let me know if you need changes."
 Both: Work together, coordinate in real-time
-```
 
+```text
 ### 4. Hoarding Information
 
 **Wrong**:
 
 ```text
+
 Agent completes work, doesn't document decisions or report status
 Superior doesn't know work is done or why decisions were made
-```
 
+```text
 **Why it's wrong**: Blocks downstream work, loses institutional knowledge
 
 **Right**:
 
 ```text
+
 Agent completes work, writes status report:
+
 - What was done
 - Why decisions were made
 - What artifacts were created
 - What's next
-```
 
+```text
 ### 5. Premature Optimization
 
 **Wrong**:
 
 ```text
-Junior Engineer: "I rewrote the entire training loop to be 2% faster using obscure SIMD tricks"
-```
 
+Junior Engineer: "I rewrote the entire training loop to be 2% faster using obscure SIMD tricks"
+
+```text
 **Why it's wrong**: Outside scope, lacks profiling data, may introduce bugs
 
 **Right**:
 
 ```text
+
 Junior Engineer: "Profiling shows training loop is slow. Escalating to Performance Specialist."
 Performance Specialist: Analyzes, creates optimization plan
 Senior Engineer: Implements optimizations with benchmarks
-```
 
+```text
 ### 6. Ignoring the 5-Phase Workflow
 
 **Wrong**:
 
 ```text
+
 Start implementing before planning phase completes
 Mix test, implementation, and packaging in one chaotic sprint
 Skip cleanup phase
-```
 
+```text
 **Why it's wrong**: Creates confusion, conflicts, technical debt
 
 **Right**:
 
 ```text
+
 Phase 1 (Plan): All specs created, reviewed, approved
 Phase 2-4 (Test/Impl/Pkg): Parallel execution in separate worktrees
 Phase 5 (Cleanup): Review, refactor, finalize
-```
 
+```text
 ## Step-by-Step Tutorial
 
 ### Tutorial: Implementing a Simple Mojo Function
@@ -1030,9 +1083,10 @@ Let's walk through implementing a simple `relu` activation function from start t
 **You say**:
 
 ```text
-"I need a ReLU activation function for our neural network library, with tests and documentation"
-```
 
+"I need a ReLU activation function for our neural network library, with tests and documentation"
+
+```text
 **What happens**: Chief Architect or Shared Library Orchestrator is invoked
 
 #### Step 2: Orchestrator Analyzes and Delegates
@@ -1040,16 +1094,19 @@ Let's walk through implementing a simple `relu` activation function from start t
 **Shared Library Orchestrator**:
 
 ```text
-"ReLU is a simple activation function. I'll coordinate:
-1. Architecture Design Agent: Design the interface
-2. After planning, we'll do Test/Impl/Docs in parallel"
-```
 
+"ReLU is a simple activation function. I'll coordinate:
+
+1. Architecture Design Agent: Design the interface
+1. After planning, we'll do Test/Impl/Docs in parallel"
+
+```text
 #### Step 3: Architecture Design
 
 **Architecture Design Agent**:
 
 ```text
+
 "ReLU interface design:
 
 ```mojo
@@ -1060,7 +1117,7 @@ fn relu[dtype: DType](
 ):
     \"\"\"Apply ReLU activation: max(0, x)\"\"\"
     # Implementation will be SIMD-optimized
-```
+```text
 
 Specs complete. Delegating to specialists for parallel execution."
 
@@ -1074,6 +1131,7 @@ Three agents work simultaneously in different worktrees:
 "Writing tests first (TDD):
 
 ```mojo
+
 fn test_relu_basic():
     let input = DTypePointer[DType.float64].alloc(4)
     let output = DTypePointer[DType.float64].alloc(4)
@@ -1096,13 +1154,14 @@ fn test_relu_simd_performance():
     # Benchmark test for SIMD effectiveness
     let size = 1000000
     # ... benchmark code
-```
 
+```text
 Tests written. Committing to branch 63-test-relu."
 
 **Senior Implementation Engineer** (in `worktrees/issue-64-impl-relu/`):
 
 ```text
+
 "Implementing with SIMD optimization:
 
 ```mojo
@@ -1129,7 +1188,7 @@ fn relu[dtype: DType](
         output.store[width=width](offset, out_vec)
 
     vectorize[vectorized_relu, simdwidthof[dtype]()](size)
-```
+```text
 
 Implementation complete. This will vectorize across SIMD lanes for performance."
 
@@ -1164,22 +1223,26 @@ Returns: None (output written to `output` pointer)
 ## Example Usage
 
 ```mojo
+
 from neural_net.activations import relu
 
 # Create input tensor
+
 let input = DTypePointer[DType.float64].alloc(4)
 let output = DTypePointer[DType.float64].alloc(4)
 
 # Fill input
+
 input.store(0, -2.0)
 input.store(1, 1.0)
 
 # Apply ReLU
+
 relu(input, output, 2)
 
 # output now contains [0.0, 1.0]
-```
 
+```text
 ## Performance Notes
 
 This implementation uses SIMD vectorization for optimal performance. On modern
@@ -1198,40 +1261,44 @@ Documentation complete."
 **Implementation Specialist**:
 
 ```text
+
 "All parallel work complete. Integrating in packaging worktree:
+
 1. Merging test branch → ✓ Tests present
-2. Merging implementation branch → ✓ Code present
-3. Merging docs branch → ✓ Documentation present
+1. Merging implementation branch → ✓ Code present
+1. Merging docs branch → ✓ Documentation present
 
 Running full test suite... All tests passing!
 
 ReLU function is complete and ready for use."
-```
 
+```text
 #### Step 6: Cleanup Phase
 
 **All Agents Review**:
 
 ```text
+
 Test Engineer: "Tests comprehensive, coverage 100%"
 Implementation Engineer: "Code follows Mojo best practices, SIMD optimized"
 Documentation Writer: "Documentation clear and complete"
 Implementation Specialist: "No issues found. Function ready for merge."
-```
 
+```text
 #### Step 7: Completion
 
 **Shared Library Orchestrator**:
 
 ```text
+
 "ReLU activation function complete:
 ✓ SIMD-optimized implementation
 ✓ Comprehensive tests (100% coverage)
 ✓ Complete documentation with examples
 
 Ready to merge to main branch. Function can now be used in neural network models."
-```
 
+```text
 ### What You Learned
 
 1. **Automatic delegation**: Request → Orchestrator → Specialists → Engineers
@@ -1257,6 +1324,7 @@ Want to create a specialized agent? Follow these steps:
 **Example**: Creating a "CUDA Interop Specialist" for GPU operations
 
 ```yaml
+
 ---
 name: cuda-interop-specialist
 description: Design and implement CUDA/GPU interop for Mojo neural network operations
@@ -1267,21 +1335,24 @@ model: sonnet
 # CUDA Interop Specialist
 
 ## Role
+
 Level 3 Component Specialist for GPU acceleration
 
 ## Responsibilities
+
 - Design CUDA kernel interfaces for Mojo
 - Plan GPU memory management
 - Coordinate CPU-GPU data transfers
 - Optimize kernel performance
 
 ## Delegation
+
 Delegates to: Implementation Engineers
 Coordinates with: Performance Specialist, Architecture Design Agent
 
 ...
-```
 
+```text
 ### Multi-Paper Coordination
 
 When implementing multiple papers simultaneously:
@@ -1294,14 +1365,16 @@ When implementing multiple papers simultaneously:
 **Example**:
 
 ```text
+
 Chief Architect:
 "We'll implement LeNet-5 and ResNet-50 in parallel:
+
 - LeNet-5 → Papers Orchestrator #1
 - ResNet-50 → Papers Orchestrator #2
 - Shared components (Conv, Pool, Dense) → Shared Library Orchestrator
 - CI/CD for both → CI/CD Orchestrator"
-```
 
+```text
 ### Cross-Language Coordination (Mojo + Python)
 
 For Mojo-Python hybrid systems:
@@ -1314,14 +1387,17 @@ For Mojo-Python hybrid systems:
 **Example**:
 
 ```text
+
 Architecture Design Agent:
 "For data loading:
+
 - Python: Use PyTorch DataLoader (mature, flexible)
 - Mojo: Expose FFI interface for receiving batches
 - Interface: Python calls Mojo train_step(batch) via ctypes
 
 Integration Design Agent:
 "Create Python wrapper:
+
 ```python
 from ctypes import cdll, POINTER, c_float
 
@@ -1330,7 +1406,7 @@ mojo_lib.train_step.argtypes = [POINTER(c_float), c_int]
 
 def train_step(batch):
     return mojo_lib.train_step(batch.ctypes.data, batch.size)
-```
+```text
 
 "
 
@@ -1339,11 +1415,11 @@ def train_step(batch):
 When performance is critical:
 
 1. **Performance Specialist creates profiling plan**
-2. **Performance Engineer profiles current implementation**
-3. **Senior Implementation Engineer optimizes hot paths**
-4. **Performance Engineer validates improvements**
+1. **Performance Engineer profiles current implementation**
+1. **Senior Implementation Engineer optimizes hot paths**
+1. **Performance Engineer validates improvements**
 
-**Tools**:
+### Tools
 
 - Mojo's built-in profiling
 - `perf` for CPU profiling
@@ -1355,11 +1431,11 @@ When performance is critical:
 For security-critical components:
 
 1. **Security Design Agent** performs threat modeling
-2. **Security Specialist** implements security requirements
-3. **Test Engineer** creates security-focused tests
-4. **Security Specialist** reviews final implementation
+1. **Security Specialist** implements security requirements
+1. **Test Engineer** creates security-focused tests
+1. **Security Specialist** reviews final implementation
 
-**Focus areas**:
+### Focus areas
 
 - Memory safety (buffer overflows)
 - Numerical stability (NaN/Inf handling)
@@ -1371,20 +1447,20 @@ For security-critical components:
 ### Immediate Actions
 
 1. **Try the tutorial**: Implement a simple function end-to-end
-2. **Browse agent catalog**: See all 23 agents in [agent-catalog.md](agent-catalog.md)
-3. **Study real examples**: Check `.claude/agents/` for actual configurations
+1. **Browse agent catalog**: See all 23 agents in [agent-catalog.md](agent-catalog.md)
+1. **Study real examples**: Check `.claude/agents/` for actual configurations
 
 ### Deepening Understanding
 
 1. **Read orchestration patterns**: [/notes/review/orchestration-patterns.md](../../notes/review/orchestration-patterns.md)
-2. **Study worktree strategy**: [/notes/review/worktree-strategy.md](../../notes/review/worktree-strategy.md)
-3. **Explore skills system**: [/notes/review/skills-design.md](../../notes/review/skills-design.md)
+1. **Study worktree strategy**: [/notes/review/worktree-strategy.md](../../notes/review/worktree-strategy.md)
+1. **Explore skills system**: [/notes/review/skills-design.md](../../notes/review/skills-design.md)
 
 ### Getting Help
 
 1. **Quick questions**: [troubleshooting.md](troubleshooting.md)
-2. **Visual reference**: [../hierarchy.md](../hierarchy.md)
-3. **Quick start**: [quick-start.md](quick-start.md)
+1. **Visual reference**: [../hierarchy.md](../hierarchy.md)
+1. **Quick start**: [quick-start.md](quick-start.md)
 
 ## Summary
 
@@ -1397,12 +1473,12 @@ You've learned:
 - ✓ How to avoid common pitfalls
 - ✓ How to implement a function end-to-end
 
-**Key takeaways**:
+### Key takeaways
 
 1. Trust the hierarchy - let agents work at their level
-2. Communicate clearly - provide context and requirements
-3. Use parallel execution - leverage git worktrees
-4. Follow TDD - tests and implementation together
-5. Leverage Mojo - use SIMD, structs, and zero-cost abstractions
+1. Communicate clearly - provide context and requirements
+1. Use parallel execution - leverage git worktrees
+1. Follow TDD - tests and implementation together
+1. Leverage Mojo - use SIMD, structs, and zero-cost abstractions
 
 **Ready to build?** Start with a simple request and watch the agents coordinate!

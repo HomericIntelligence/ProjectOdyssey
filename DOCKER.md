@@ -14,9 +14,9 @@ The Docker setup uses Pixi for environment management and supports Mojo developm
 The Dockerfile uses a multi-stage build approach:
 
 1. **base** - Ubuntu 22.04 with Pixi and system dependencies
-2. **development** - Full development environment with all tools
-3. **ci** - Optimized for automated testing
-4. **production** - Minimal production deployment
+1. **development** - Full development environment with all tools
+1. **ci** - Optimized for automated testing
+1. **production** - Minimal production deployment
 
 ### Docker Compose Services
 
@@ -49,7 +49,7 @@ docker-compose exec ml-odyssey-dev bash
 pixi shell                              # Activate Pixi environment
 pixi run pytest tests/                  # Run tests
 pixi run pre-commit run --all-files    # Run pre-commit hooks
-```
+```text
 
 ## Common Tasks
 
@@ -76,7 +76,7 @@ pixi run pytest tests/test_specific.py
 
 # Run pre-commit hooks
 pixi run pre-commit run --all-files
-```
+```text
 
 ### Running Tests
 
@@ -89,7 +89,7 @@ docker-compose run --rm ml-odyssey-ci pixi run pytest tests/agents/ -v
 
 # Run tests with coverage
 docker-compose run --rm ml-odyssey-ci pixi run pytest tests/ --cov=src --cov-report=html
-```
+```text
 
 ### Code Quality Checks
 
@@ -105,16 +105,16 @@ docker-compose exec ml-odyssey-dev pixi run ruff check src/
 
 # Run mypy type checking
 docker-compose exec ml-odyssey-dev pixi run mypy src/
-```
+```text
 
 ## Volume Mounts
 
 The development service mounts several volumes:
 
 1. **Source Code** - `.:/workspace` - Live sync with host
-2. **Pixi Cache** - `pixi-cache:/root/.pixi` - Persist Pixi packages
-3. **Pre-commit Cache** - `pre-commit-cache:/root/.cache/pre-commit` - Persist hook installations
-4. **Git Config** - `~/.gitconfig:/root/.gitconfig:ro` - Use host Git configuration (read-only)
+1. **Pixi Cache** - `pixi-cache:/root/.pixi` - Persist Pixi packages
+1. **Pre-commit Cache** - `pre-commit-cache:/root/.cache/pre-commit` - Persist hook installations
+1. **Git Config** - `~/.gitconfig:/root/.gitconfig:ro` - Use host Git configuration (read-only)
 
 ## Environment Variables
 
@@ -145,7 +145,7 @@ docker-compose build --no-cache ml-odyssey-dev
 
 # View build logs
 docker-compose build ml-odyssey-dev 2>&1 | tee build.log
-```
+```text
 
 ### Pixi Installation Issues
 
@@ -163,7 +163,7 @@ pixi --version
 
 # Update Pixi
 curl -fsSL https://pixi.sh/install.sh | bash
-```
+```text
 
 ### Permission Issues
 
@@ -175,7 +175,7 @@ docker-compose exec ml-odyssey-dev ls -la /workspace
 
 # Fix permissions on host (if needed)
 sudo chown -R $USER:$USER .
-```
+```text
 
 ### Container Not Starting
 
@@ -188,7 +188,7 @@ docker-compose ps
 
 # Restart services
 docker-compose restart ml-odyssey-dev
-```
+```text
 
 ## Advanced Usage
 
@@ -199,7 +199,7 @@ You can customize the build with build arguments:
 ```bash
 # Build with specific Python version
 docker-compose build --build-arg PYTHON_VERSION=3.11 ml-odyssey-dev
-```
+```text
 
 ### Using Different Stages
 
@@ -209,7 +209,7 @@ docker build --target ci -t ml-odyssey:ci .
 
 # Run specific stage
 docker run --rm -v $(pwd):/workspace ml-odyssey:ci
-```
+```text
 
 ### Cleaning Up
 
@@ -225,7 +225,7 @@ docker rmi ml-odyssey:dev ml-odyssey:ci ml-odyssey:prod
 
 # Full cleanup (containers, volumes, images)
 docker-compose down -v --rmi all
-```
+```text
 
 ## Testing the Docker Setup
 
@@ -247,7 +247,7 @@ docker-compose run --rm ml-odyssey-ci
 # 5. Start interactive development
 docker-compose up -d ml-odyssey-dev
 docker-compose exec ml-odyssey-dev bash
-```
+```text
 
 ## Integration with CI/CD
 
@@ -260,24 +260,24 @@ The Docker setup can be integrated with GitHub Actions or other CI systems:
 
 - name: Run tests
   run: docker-compose run --rm ml-odyssey-ci
-```
+```text
 
 ## Best Practices
 
 1. **Use named volumes** for caches to improve build times
-2. **Mount source code** as volumes for live development
-3. **Use .dockerignore** to exclude unnecessary files from build context
-4. **Use multi-stage builds** to optimize image size
-5. **Tag images properly** for version management
-6. **Keep containers running** with `stdin_open: true` and `tty: true` for development
+1. **Mount source code** as volumes for live development
+1. **Use .dockerignore** to exclude unnecessary files from build context
+1. **Use multi-stage builds** to optimize image size
+1. **Tag images properly** for version management
+1. **Keep containers running** with `stdin_open: true` and `tty: true` for development
 
 ## Security Considerations
 
 1. **Read-only mounts** in production (`/workspace:ro`)
-2. **No hardcoded secrets** in Dockerfile or docker-compose.yml
-3. **Regular base image updates** for security patches
-4. **Minimal attack surface** in production images
-5. **Non-root user** (future improvement)
+1. **No hardcoded secrets** in Dockerfile or docker-compose.yml
+1. **Regular base image updates** for security patches
+1. **Minimal attack surface** in production images
+1. **Non-root user** (future improvement)
 
 ## Future Enhancements
 

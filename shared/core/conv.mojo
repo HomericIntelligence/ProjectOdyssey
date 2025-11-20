@@ -344,4 +344,3 @@ fn conv2d_no_bias_backward(
     """
     var (grad_input, grad_kernel, _) = conv2d_backward(grad_output, x, kernel, stride, padding)
     return (grad_input, grad_kernel)
-

@@ -86,7 +86,7 @@ fn analyze(borrowed data: Tensor):
 fn modify(inout data: Tensor):
     # data can be modified
     pass
-```
+```text
 
 ### SIMD Optimization
 
@@ -102,7 +102,7 @@ fn vectorized_add[size: Int](a: Tensor, b: Tensor) -> Tensor:
 
     vectorize[add_simd, simd_width=16](size)
     return result
-```
+```text
 
 ### Type Safety
 
@@ -130,10 +130,10 @@ Test Engineer writes failing test.
 Implementation Engineer:
 
 1. Reads test specification
-2. Implements minimal code to pass
-3. Runs tests
-4. Refactors for quality
-5. Coordinates with Test Engineer on next test
+1. Implements minimal code to pass
+1. Runs tests
+1. Refactors for quality
+1. Coordinates with Test Engineer on next test
 
 ### Example 2: SIMD Vector Operations
 
@@ -142,10 +142,10 @@ Implement vectorized matrix multiplication.
 Implementation Engineer:
 
 1. Reviews performance requirements
-2. Implements using SIMD
-3. Uses `@parameter` for compile-time optimization
-4. Documents SIMD width choices
-5. Coordinates with Performance Engineer
+1. Implements using SIMD
+1. Uses `@parameter` for compile-time optimization
+1. Documents SIMD width choices
+1. Coordinates with Performance Engineer
 
 ## Constraints
 
@@ -179,13 +179,13 @@ Use git worktrees for parallel work:
 # This agent in: worktrees/issue-X-impl/
 # Test Engineer in: worktrees/issue-X-test/
 # Coordinate through specifications and status updates
-```
+```text
 
 ## Git Worktree Coordination
 
 When working in separate worktree from Test Engineer:
 
 1. Read specifications (from plan.md or tracked docs)
-2. Implement according to spec
-3. Coordinate on test fixtures if needed
-4. Merge during packaging phase
+1. Implement according to spec
+1. Coordinate on test fixtures if needed
+1. Merge during packaging phase

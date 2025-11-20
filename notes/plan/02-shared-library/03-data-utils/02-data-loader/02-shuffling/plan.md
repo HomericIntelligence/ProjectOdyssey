@@ -29,9 +29,9 @@ None (leaf node)
 ## Steps
 
 1. Implement index shuffling with random seed
-2. Support per-epoch shuffle variation
-3. Add shuffle enable/disable flag
-4. Ensure reproducibility with seed control
+1. Support per-epoch shuffle variation
+1. Add shuffle enable/disable flag
+1. Ensure reproducibility with seed control
 
 ## Success Criteria
 

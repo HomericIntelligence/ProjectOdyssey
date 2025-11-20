@@ -31,8 +31,8 @@ Create automated setup scripts for configuring development environments. These s
 ## Steps
 
 1. Install Mojo compiler with platform detection
-2. Set up development environment and dependencies
-3. Verify installation with automated checks
+1. Set up development environment and dependencies
+1. Verify installation with automated checks
 
 ## Success Criteria
 

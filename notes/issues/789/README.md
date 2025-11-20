@@ -33,19 +33,19 @@ traversing the directory structure and identifying Mojo and Python test files fo
 
 **Decision**: Support multiple test file naming patterns
 
-**Rationale**:
+### Rationale
 
 - Flexibility for different testing styles and preferences
 - Align with both Mojo and Python community conventions
 - Support legacy code that may use different patterns
 
-**Patterns Supported**:
+### Patterns Supported
 
 - `test_*.mojo` - Prefix pattern (standard Python/pytest style)
 - `*_test.mojo` - Suffix pattern (common in Go, C++)
 - `test_*.py` - Python test files
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Single pattern only (`test_*.mojo`) - Rejected due to lack of flexibility
 - Configuration-based patterns - Deferred to future enhancement
@@ -54,14 +54,14 @@ traversing the directory structure and identifying Mojo and Python test files fo
 
 **Decision**: Use standard filesystem walking with explicit exclusions
 
-**Rationale**:
+### Rationale
 
 - Simple, well-understood approach
 - Easy to debug and maintain
 - Predictable performance characteristics
 - Standard library support in both Mojo and Python
 
-**Exclusions**:
+### Exclusions
 
 - Hidden directories (`.git`, `.pixi`, etc.)
 - Build artifacts (`build/`, `dist/`, `__pycache__/`)
@@ -69,7 +69,7 @@ traversing the directory structure and identifying Mojo and Python test files fo
 - Documentation directories (`docs/` unless tests present)
 - Node modules (`node_modules/`)
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Glob-based discovery - Less flexible for complex exclusions
 - Git-based discovery - Unnecessary dependency on git
@@ -79,7 +79,7 @@ traversing the directory structure and identifying Mojo and Python test files fo
 
 **Decision**: Capture paper association, file type, and path information
 
-**Metadata Fields**:
+### Metadata Fields
 
 - `path`: Absolute path to test file
 - `relative_path`: Path relative to repository root
@@ -89,14 +89,14 @@ traversing the directory structure and identifying Mojo and Python test files fo
 - `file_size`: Size in bytes (for statistics)
 - `last_modified`: Timestamp (for cache invalidation)
 
-**Rationale**:
+### Rationale
 
 - Paper association enables filtering tests by implementation
 - File type allows appropriate test runner selection
 - Category information supports focused test execution
 - Timestamps enable smart cache invalidation
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Minimal metadata (path only) - Insufficient for filtering and reporting
 - Extended metadata (AST parsing for test names) - Over-engineered for discovery phase
@@ -107,7 +107,7 @@ traversing the directory structure and identifying Mojo and Python test files fo
 
 **Cache Location**: `.cache/test_discovery.json` in repository root
 
-**Cache Structure**:
+### Cache Structure
 
 ```json
 {
@@ -131,22 +131,22 @@ traversing the directory structure and identifying Mojo and Python test files fo
     "papers_covered": 3
   }
 }
-```
+```text
 
-**Cache Invalidation**:
+### Cache Invalidation
 
 - Directory structure changes detected via last_modified timestamps
 - Explicit cache clear option via CLI flag
 - Automatic invalidation after 24 hours
 
-**Rationale**:
+### Rationale
 
 - Speeds up repeated test runs
 - Simple JSON format is human-readable and debuggable
 - Timestamp validation ensures cache freshness
 - Statistics pre-computation improves reporting speed
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - No caching - Poor performance for large repositories
 - In-memory caching only - Lost between runs
@@ -156,33 +156,33 @@ traversing the directory structure and identifying Mojo and Python test files fo
 
 **Decision**: Implement parallel directory traversal with early termination
 
-**Techniques**:
+### Techniques
 
 - Parallel scanning of top-level paper directories
 - Early termination on excluded directories (don't recurse)
 - Lazy loading of metadata (only when requested)
 - Pre-compiled regex patterns for file matching
 
-**Expected Performance**:
+### Expected Performance
 
 - < 100ms for cached discovery
 - < 500ms for fresh discovery on typical repository (10-20 papers, 100-200 test files)
 - Linear scaling with number of test files
 
-**Rationale**:
+### Rationale
 
 - Fast discovery enables frequent test runs
 - Parallel scanning leverages multi-core processors
 - Early termination reduces unnecessary filesystem operations
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Sequential scanning - Slower but simpler (deferred for initial implementation)
 - Watchdog-based discovery - Complex, adds runtime dependency
 
 ### 6. API Design
 
-**Function Signature**:
+### Function Signature
 
 ```mojo
 fn discover_tests(
@@ -206,16 +206,16 @@ fn discover_tests(
             - cache_hit: Bool - Whether results came from cache
     """
     pass
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Clear, self-documenting function signature
 - Sensible defaults reduce boilerplate
 - Return type encapsulates all discovery information
 - Cache control gives users flexibility
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Class-based API - More complex for simple use case
 - Multiple functions (discover, discover_cached) - Less discoverable

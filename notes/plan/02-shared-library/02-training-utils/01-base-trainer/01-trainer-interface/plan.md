@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Define core training methods (train, validate, test)
-2. Specify state management properties
-3. Document configuration parameters
-4. Define callback hook points
+1. Specify state management properties
+1. Document configuration parameters
+1. Define callback hook points
 
 ## Success Criteria
 

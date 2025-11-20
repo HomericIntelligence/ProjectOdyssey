@@ -11,30 +11,30 @@ Design and document a command-line interface for the paper scaffolding tool that
    - Data flow between argument parser, prompts, and output formatter
    - Mode selection logic (interactive vs non-interactive)
 
-2. **Argument Parsing Design**
+1. **Argument Parsing Design**
    - Supported arguments and options specification
    - Validation rules and constraints
    - Help text and usage documentation format
    - Default values strategy
 
-3. **User Prompts Design**
+1. **User Prompts Design**
    - Interactive prompt workflow
    - Prompt text templates with examples
    - Input validation rules per field
    - Error handling and re-prompting logic
 
-4. **Output Formatting Design**
+1. **Output Formatting Design**
    - Message templates for status, progress, success, and errors
    - Color usage guidelines
    - Progress indicator patterns
    - Summary format for created files
 
-5. **API Contracts**
+1. **API Contracts**
    - Interface definitions for each component
    - Input/output specifications
    - Error handling contracts
 
-6. **Design Documentation**
+1. **Design Documentation**
    - `/notes/issues/779/README.md` (this file)
    - Design decisions and rationale
    - Usage examples and scenarios
@@ -58,18 +58,21 @@ Design and document a command-line interface for the paper scaffolding tool that
 
 **Decision**: Support both interactive mode (with prompts) and non-interactive mode (all arguments provided).
 
-**Rationale**:
+### Rationale
+
 - **Interactive mode**: Best for first-time users and exploratory use cases
 - **Non-interactive mode**: Essential for scripting, CI/CD integration, and automation
 - **Flexibility**: Users can choose the mode that fits their workflow
 
-**Implementation Approach**:
+### Implementation Approach
+
 - Detect mode based on whether all required arguments are provided
 - If any required argument is missing, enter interactive mode
 - Allow `--no-interactive` flag to force error on missing arguments
 - Interactive mode fills gaps in partially-provided arguments
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Interactive-only: Rejected - would prevent automation
 - Non-interactive-only: Rejected - poor user experience for new users
 - Explicit mode flag: Rejected - auto-detection is more intuitive
@@ -78,13 +81,15 @@ Design and document a command-line interface for the paper scaffolding tool that
 
 **Decision**: Use Python's `argparse` standard library module.
 
-**Rationale**:
+### Rationale
+
 - **Standard library**: No additional dependencies
 - **Well-documented**: Extensive Python documentation and examples
 - **Feature-complete**: Supports all required features (flags, options, help, validation)
 - **Familiar**: Most Python developers know argparse
 
-**API Design**:
+### API Design
+
 ```python
 # Core arguments
 --title, -t          Paper title (required if not interactive)
@@ -101,9 +106,10 @@ Design and document a command-line interface for the paper scaffolding tool that
 --no-interactive    Fail on missing arguments instead of prompting
 --verbose, -v       Show detailed progress
 --dry-run           Show what would be created without creating
-```
+```text
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - `click`: Rejected - adds dependency, more complex than needed
 - `typer`: Rejected - adds dependency, requires Python 3.6+
 - `getopt`: Rejected - lower-level, requires more boilerplate
@@ -112,12 +118,14 @@ Design and document a command-line interface for the paper scaffolding tool that
 
 **Decision**: Validate input at collection time (during parsing or prompting) with immediate feedback.
 
-**Rationale**:
+### Rationale
+
 - **Early detection**: Catch errors before any file operations
 - **Better UX**: Users get immediate feedback on invalid input
 - **Fail fast**: Prevent partial operations that need rollback
 
-**Validation Rules**:
+### Validation Rules
+
 - **Title**: 1-200 characters, no leading/trailing whitespace
 - **Author**: 1-100 characters, no leading/trailing whitespace
 - **Year**: 1900-2100, numeric
@@ -125,11 +133,13 @@ Design and document a command-line interface for the paper scaffolding tool that
 - **ArXiv ID**: Format `YYMM.NNNNN` or `arch-ive/YYMMNNN`
 - **DOI**: Format `10.NNNN/...`
 
-**Error Handling**:
+### Error Handling
+
 - Non-interactive mode: Print error and exit with code 1
 - Interactive mode: Show error, re-prompt with guidance
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Post-collection validation: Rejected - poor UX, harder to recover
 - Deferred validation: Rejected - could lead to partial operations
 
@@ -137,20 +147,23 @@ Design and document a command-line interface for the paper scaffolding tool that
 
 **Decision**: Use simple colored text output with clear sections and minimal decorations.
 
-**Rationale**:
+### Rationale
+
 - **Clarity**: Focus on information, not decoration
 - **Terminal compatibility**: Works on all standard terminals
 - **Accessibility**: Color used for emphasis, not critical information
 - **Maintainability**: Simple to implement and modify
 
-**Color Usage**:
+### Color Usage
+
 - **Green**: Success messages, checkmarks
 - **Red**: Error messages, failures
 - **Yellow**: Warnings, prompts
 - **Blue**: Informational messages, headers
 - **No color fallback**: All information available without color
 
-**Message Templates**:
+### Message Templates
+
 ```text
 # Progress
 Creating paper structure for "Paper Title"...
@@ -175,9 +188,10 @@ Next steps:
 # Error
 ✗ Error: Directory already exists: papers/paper-title/
   Use a different --output-dir or remove the existing directory.
-```
+```text
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Rich TUI library: Rejected - adds dependency, overkill for simple tool
 - ASCII art banners: Rejected - distracting, wastes screen space
 - JSON output mode: Deferred - can add later if needed for automation
@@ -186,7 +200,8 @@ Next steps:
 
 **Decision**: Provide comprehensive help with examples, grouped by category.
 
-**Format**:
+### Format
+
 ```text
 usage: scaffold-paper [OPTIONS]
 
@@ -221,9 +236,10 @@ Examples:
 
   # Dry run to preview without creating
   $ scaffold-paper -t "Test" -a "Author" -y 2024 --dry-run
-```
+```text
 
-**Rationale**:
+### Rationale
+
 - **Examples**: Show common usage patterns
 - **Grouped options**: Easier to scan and understand
 - **Clear defaults**: Users know what happens if they omit options
@@ -233,26 +249,28 @@ Examples:
 
 **Decision**: Three separate components with clear responsibilities.
 
-**Components**:
+### Components
+
 1. **Argument Parser** (`argument_parser.py`)
    - Parses command-line arguments using argparse
    - Returns dictionary of parsed values
    - Generates help text
    - Validates argument format (not business logic)
 
-2. **User Prompter** (`user_prompter.py`)
+1. **User Prompter** (`user_prompter.py`)
    - Prompts for missing required values
    - Validates input according to business rules
    - Re-prompts on invalid input with guidance
    - Returns completed metadata dictionary
 
-3. **Output Formatter** (`output_formatter.py`)
+1. **Output Formatter** (`output_formatter.py`)
    - Formats progress messages
    - Displays success summaries
    - Formats error messages
    - Handles colored output with fallback
 
-**Data Flow**:
+### Data Flow
+
 ```text
 main.py
   ↓
@@ -263,9 +281,10 @@ main.py
 [Execute Scaffolding] → results
   ↓
 [Format Output] → terminal display
-```
+```text
 
-**Interface Contracts**:
+### Interface Contracts
+
 ```python
 # Argument Parser
 def parse_arguments(argv: List[str]) -> Dict[str, Any]:
@@ -307,9 +326,10 @@ def format_summary(created_files: List[str], paper_dir: str) -> None:
         created_files: List of file paths that were created
         paper_dir: Root directory for the paper
     """
-```
+```text
 
-**Rationale**:
+### Rationale
+
 - **Separation of concerns**: Each component has single responsibility
 - **Testability**: Easy to unit test each component independently
 - **Reusability**: Components can be used by other tools
@@ -330,8 +350,8 @@ def format_summary(created_files: List[str], paper_dir: str) -> None:
 This planning issue covers design for three implementation components:
 
 1. **Argument Parsing** - [notes/plan/03-tooling/01-paper-scaffolding/03-cli-interface/01-argument-parsing/plan.md](/home/mvillmow/ml-odyssey-manual/notes/plan/03-tooling/01-paper-scaffolding/03-cli-interface/01-argument-parsing/plan.md)
-2. **User Prompts** - [notes/plan/03-tooling/01-paper-scaffolding/03-cli-interface/02-user-prompts/plan.md](/home/mvillmow/ml-odyssey-manual/notes/plan/03-tooling/01-paper-scaffolding/03-cli-interface/02-user-prompts/plan.md)
-3. **Output Formatting** - [notes/plan/03-tooling/01-paper-scaffolding/03-cli-interface/03-output-formatting/plan.md](/home/mvillmow/ml-odyssey-manual/notes/plan/03-tooling/01-paper-scaffolding/03-cli-interface/03-output-formatting/plan.md)
+1. **User Prompts** - [notes/plan/03-tooling/01-paper-scaffolding/03-cli-interface/02-user-prompts/plan.md](/home/mvillmow/ml-odyssey-manual/notes/plan/03-tooling/01-paper-scaffolding/03-cli-interface/02-user-prompts/plan.md)
+1. **Output Formatting** - [notes/plan/03-tooling/01-paper-scaffolding/03-cli-interface/03-output-formatting/plan.md](/home/mvillmow/ml-odyssey-manual/notes/plan/03-tooling/01-paper-scaffolding/03-cli-interface/03-output-formatting/plan.md)
 
 ### Related Issues
 

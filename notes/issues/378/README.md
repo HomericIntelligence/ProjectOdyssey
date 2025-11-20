@@ -28,14 +28,14 @@ Design and document the `__getitem__` method for datasets to retrieve individual
 
 **Decision**: Use consistent `(data, label)` tuple format for all retrievals
 
-**Rationale**:
+### Rationale
 
 - Follows PyTorch dataset conventions
 - Predictable interface for users
 - Easy to destructure: `data, label = dataset[i]`
 - Extensible to multi-label or multi-modal datasets
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Dictionary format `{"data": ..., "label": ...}` - more verbose, less Pythonic
 - Named tuple - adds complexity without clear benefit
@@ -45,14 +45,14 @@ Design and document the `__getitem__` method for datasets to retrieve individual
 
 **Decision**: Support both positive and negative indexing, following Python list semantics
 
-**Rationale**:
+### Rationale
 
 - Users expect Python-like behavior
 - Negative indexing is idiomatic (`dataset[-1]` for last sample)
 - Minimal implementation complexity
 - Enables reverse iteration patterns
 
-**Implementation Notes**:
+### Implementation Notes
 
 - Convert negative indices to positive: `index = index % len(self)`
 - Validate range: `0 <= index < len(self)`
@@ -62,14 +62,14 @@ Design and document the `__getitem__` method for datasets to retrieve individual
 
 **Decision**: Implement slice support for range access
 
-**Rationale**:
+### Rationale
 
 - Enables batch operations: `dataset[0:10]`
 - Supports sampling patterns: `dataset[::2]` (every other sample)
 - Consistent with Python sequence protocol
 - Required for efficient data loading
 
-**Implementation Notes**:
+### Implementation Notes
 
 - Return list of samples for slices
 - Apply same `(data, label)` format to each sample
@@ -80,14 +80,14 @@ Design and document the `__getitem__` method for datasets to retrieve individual
 
 **Decision**: Apply transforms AFTER data retrieval, not during storage
 
-**Rationale**:
+### Rationale
 
 - Separation of concerns (storage vs. preprocessing)
 - Enables dynamic transforms (e.g., random augmentation)
 - Reduces memory footprint (store raw data once)
 - Allows transform pipeline composition
 
-**Implementation Pattern**:
+### Implementation Pattern
 
 ```python
 def __getitem__(self, index):
@@ -100,19 +100,19 @@ def __getitem__(self, index):
 
     # 3. Return processed result
     return data, label
-```
+```text
 
 ### 5. Error Handling
 
 **Decision**: Use Python standard exceptions with clear messages
 
-**Exceptions**:
+### Exceptions
 
 - `IndexError` - Out-of-bounds access
 - `TypeError` - Invalid index type (e.g., float, string)
 - `ValueError` - Invalid slice parameters
 
-**Error Messages**:
+### Error Messages
 
 - Include index value and dataset size
 - Example: `"Index 150 out of range for dataset of size 100"`
@@ -122,14 +122,14 @@ def __getitem__(self, index):
 
 **Decision**: Design for thread-safe access, but don't enforce locking at this level
 
-**Rationale**:
+### Rationale
 
 - Data loaders may use multiple workers (multiprocessing)
 - File I/O should be stateless (open, read, close per access)
 - Caching should use thread-safe structures (if implemented)
 - Let higher-level components (DataLoader) manage concurrency
 
-**Implementation Notes**:
+### Implementation Notes
 
 - Avoid shared mutable state
 - Use local variables for all operations
@@ -140,14 +140,14 @@ def __getitem__(self, index):
 
 **Decision**: Optimize for single-sample access, not batch operations
 
-**Rationale**:
+### Rationale
 
 - `__getitem__` is called per sample by data loaders
 - Batch operations happen at DataLoader level
 - Keep implementation simple and fast
 - Avoid premature optimization
 
-**Best Practices**:
+### Best Practices
 
 - Lazy loading (load on access, not construction)
 - Minimize allocations in hot path
@@ -205,28 +205,28 @@ def __getitem__(self, index: int | slice) -> tuple[Any, Any] | list[tuple[Any, A
         If index is not int or slice
     """
     pass
-```
+```text
 
 ### Edge Cases to Handle
 
 1. **Empty Dataset**: `len(dataset) == 0`
    - Any access should raise `IndexError`
 
-2. **Single Sample Dataset**: `len(dataset) == 1`
+1. **Single Sample Dataset**: `len(dataset) == 1`
    - Valid indices: `0`, `-1`
    - Invalid: any other value
 
-3. **Negative Indexing**: `dataset[-5]`
+1. **Negative Indexing**: `dataset[-5]`
    - Convert to positive: `index = len(dataset) + index`
    - Validate range
 
-4. **Empty Slice**: `dataset[5:5]`
+1. **Empty Slice**: `dataset[5:5]`
    - Return empty list `[]`
 
-5. **Reverse Slice**: `dataset[10:0:-1]`
+1. **Reverse Slice**: `dataset[10:0:-1]`
    - Return samples in reverse order
 
-6. **Step Slice**: `dataset[0:10:2]`
+1. **Step Slice**: `dataset[0:10:2]`
    - Return every 2nd sample
 
 ### Testing Strategy
@@ -234,11 +234,11 @@ def __getitem__(self, index: int | slice) -> tuple[Any, Any] | list[tuple[Any, A
 See Issue #379 for detailed test plan. Key test categories:
 
 1. **Basic Access**: Single index retrieval
-2. **Negative Indexing**: `dataset[-1]`, `dataset[-5]`
-3. **Slice Access**: Range, step, reverse
-4. **Error Cases**: Out of bounds, invalid types
-5. **Transform Application**: Verify transforms applied
-6. **Edge Cases**: Empty dataset, single sample
+1. **Negative Indexing**: `dataset[-1]`, `dataset[-5]`
+1. **Slice Access**: Range, step, reverse
+1. **Error Cases**: Out of bounds, invalid types
+1. **Transform Application**: Verify transforms applied
+1. **Edge Cases**: Empty dataset, single sample
 
 ### Performance Requirements
 
@@ -249,9 +249,9 @@ See Issue #379 for detailed test plan. Key test categories:
 ### Documentation Requirements
 
 1. **Docstring**: Complete with examples
-2. **Usage Guide**: Common patterns
-3. **Error Reference**: All exceptions documented
-4. **Performance Notes**: Expected characteristics
+1. **Usage Guide**: Common patterns
+1. **Error Reference**: All exceptions documented
+1. **Performance Notes**: Expected characteristics
 
 ## Completion Checklist
 

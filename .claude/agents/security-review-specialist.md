@@ -73,9 +73,9 @@ authorization, cryptography, and common vulnerabilities.
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -256,7 +256,7 @@ See [code-review-orchestrator.md](./code-review-orchestrator.md#review-comment-p
 
 ### Example 1: SQL Injection Vulnerability
 
-**Code**:
+### Code
 
 ```python
 def get_user(username: str):
@@ -266,7 +266,7 @@ def get_user(username: str):
     return cursor.fetchone()
 ```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 🔴 CRITICAL: SQL Injection Vulnerability (CWE-89, OWASP A03)
@@ -289,7 +289,7 @@ get_user("' OR '1'='1")
 
 ```text
 
-**More Severe Attack**:
+### More Severe Attack
 
 ```python
 
@@ -350,14 +350,14 @@ class DatabaseConnection:
 
 🔴 CRITICAL: Hardcoded Credentials (CWE-798, OWASP A07)
 
-**Issues**:
+### Issues
 
 1. Database password hardcoded in source code
-2. Credentials exposed in version control history
-3. Same password used across all environments
-4. Password visible to anyone with code access
+1. Credentials exposed in version control history
+1. Same password used across all environments
+1. Password visible to anyone with code access
 
-**Security Implications**:
+### Security Implications
 
 - Anyone with repository access has production database access
 - Password rotations require code changes and deployments
@@ -622,8 +622,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -655,7 +655,7 @@ After creating PR:
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -708,13 +708,13 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Reviewing implementation with potential overflow issues
 
-**Actions**:
+### Actions
 
 1. Identify operations that could overflow (exp, large multiplications)
-2. Check for numerical stability patterns (log-sum-exp, epsilon values)
-3. Provide specific fixes with mathematical justification
-4. Reference best practices and paper specifications
-5. Categorize findings by severity
+1. Check for numerical stability patterns (log-sum-exp, epsilon values)
+1. Provide specific fixes with mathematical justification
+1. Reference best practices and paper specifications
+1. Categorize findings by severity
 
 **Outcome**: Numerically stable implementation preventing runtime errors
 
@@ -722,12 +722,12 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Implementation tightly coupling unrelated components
 
-**Actions**:
+### Actions
 
 1. Analyze component dependencies and coupling
-2. Identify violations of separation of concerns
-3. Suggest refactoring with interface-based design
-4. Provide concrete code examples of improvements
-5. Group similar issues into single review comment
+1. Identify violations of separation of concerns
+1. Suggest refactoring with interface-based design
+1. Provide concrete code examples of improvements
+1. Group similar issues into single review comment
 
 **Outcome**: Actionable feedback leading to better architecture

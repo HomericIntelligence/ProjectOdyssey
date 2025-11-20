@@ -4,7 +4,7 @@
 
 ### Code Quality Criteria
 
-**Mojo Code:**
+### Mojo Code:
 
 - Uses `fn` for performance-critical functions
 - Proper ownership and borrowing patterns
@@ -12,7 +12,7 @@
 - SIMD optimizations where appropriate
 - Memory safety verified
 
-**Python Code:**
+### Python Code:
 
 - Type hints on all functions
 - Clear docstrings
@@ -29,7 +29,7 @@ Follow conventional commits:
 <body>
 
 <footer>
-```
+```text
 
 Types: feat, fix, docs, refactor, test, chore
 
@@ -71,21 +71,21 @@ Types: feat, fix, docs, refactor, test, chore
 
 ## Review Severity Levels
 
-**Critical (Must Fix):**
+### Critical (Must Fix):
 
 - Security vulnerabilities
 - Breaking changes without migration
 - Tests failing
 - CI failures
 
-**Major (Should Fix):**
+### Major (Should Fix):
 
 - Code quality issues
 - Missing tests
 - Incomplete documentation
 - Performance regressions
 
-**Minor (Nice to Have):**
+### Minor (Nice to Have):
 
 - Code style improvements
 - Refactoring opportunities
@@ -97,24 +97,24 @@ Types: feat, fix, docs, refactor, test, chore
 ### Anti-Patterns to Watch For
 
 1. **Scope Creep**: Changes beyond issue scope
-2. **Missing Tests**: New code without tests
-3. **Broken Links**: Documentation with broken references
-4. **Duplicate Code**: Copy-paste instead of abstraction
-5. **Magic Numbers**: Unexplained constants
-6. **Poor Naming**: Unclear variable/function names
-7. **Long Functions**: Functions > 50 lines
-8. **Deep Nesting**: Nesting > 3 levels
+1. **Missing Tests**: New code without tests
+1. **Broken Links**: Documentation with broken references
+1. **Duplicate Code**: Copy-paste instead of abstraction
+1. **Magic Numbers**: Unexplained constants
+1. **Poor Naming**: Unclear variable/function names
+1. **Long Functions**: Functions > 50 lines
+1. **Deep Nesting**: Nesting > 3 levels
 
 ### Language-Specific Issues
 
-**Mojo:**
+### Mojo:
 
 - Using `def` instead of `fn` for performance code
 - Missing type annotations
 - Unsafe memory operations
 - No SIMD optimizations in hot paths
 
-**Python:**
+### Python:
 
 - Missing type hints
 - No docstrings
@@ -141,7 +141,7 @@ Great work! This PR:
 - [List strengths]
 
 Ready to merge.
-```
+```text
 
 ### Request Changes
 
@@ -152,7 +152,7 @@ Issues that need to be addressed:
 - [List critical/major issues]
 
 Please fix these issues and I'll review again.
-```
+```text
 
 ### Comments Only
 
@@ -163,4 +163,4 @@ Overall looks good. Some suggestions:
 - [List minor suggestions]
 
 These are optional improvements, not blockers.
-```
+```text

@@ -7,10 +7,10 @@ This document defines the comprehensive test plan for validating the 6-level age
 ## Test Objectives
 
 1. **Configuration Validation**: Ensure all agent configurations are syntactically correct and complete
-2. **Discovery & Loading**: Verify Claude Code can discover and load agents correctly
-3. **Delegation Patterns**: Validate delegation chains work across all 6 levels
-4. **Workflow Integration**: Test integration with 5-phase workflow and git worktrees
-5. **Mojo Patterns**: Ensure Mojo-specific guidance is present in implementation agents
+1. **Discovery & Loading**: Verify Claude Code can discover and load agents correctly
+1. **Delegation Patterns**: Validate delegation chains work across all 6 levels
+1. **Workflow Integration**: Test integration with 5-phase workflow and git worktrees
+1. **Mojo Patterns**: Ensure Mojo-specific guidance is present in implementation agents
 
 ## Test Coverage Matrix
 
@@ -28,7 +28,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 
 **Purpose**: Validate YAML frontmatter and configuration completeness
 
-**Tests**:
+### Tests
 
 - YAML frontmatter syntax is valid
 - Required fields present: name, description, tools, model
@@ -37,14 +37,14 @@ This document defines the comprehensive test plan for validating the 6-level age
 - File naming follows conventions
 - Content structure includes expected sections
 
-**Expected Results**:
+### Expected Results
 
 - All agent configs pass validation
 - No syntax errors
 - Clear descriptions that would trigger auto-invocation
 - Consistent file naming (matches frontmatter name)
 
-**Success Criteria**:
+### Success Criteria
 
 - 100% of agent configs pass validation
 - Zero critical errors
@@ -54,7 +54,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 
 **Purpose**: Test agent discovery and loading
 
-**Tests**:
+### Tests
 
 - Agent files discovered in `.claude/agents/`
 - Configurations load without errors
@@ -63,7 +63,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Tool usage analysis
 - Model distribution
 
-**Expected Results**:
+### Expected Results
 
 - All `.md` files in `.claude/agents/` discovered
 - Configurations parse successfully
@@ -72,7 +72,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Tool usage is appropriate for agent roles
 - Model selection is appropriate (sonnet for most, opus for complex)
 
-**Success Criteria**:
+### Success Criteria
 
 - All agent files discovered
 - Zero loading errors
@@ -83,7 +83,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 
 **Purpose**: Validate delegation patterns across hierarchy
 
-**Tests**:
+### Tests
 
 - Level 0 → Level 1 delegation defined
 - Level 1 → Level 2 delegation defined
@@ -94,7 +94,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Escalation triggers documented
 - Horizontal coordination patterns present
 
-**Expected Results**:
+### Expected Results
 
 - Clear delegation chains from top to bottom
 - Each level (except 5) delegates to level below
@@ -102,7 +102,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Escalation triggers defined for common scenarios
 - Coordination patterns for same-level agents
 
-**Success Criteria**:
+### Success Criteria
 
 - Complete delegation chains for all levels
 - Escalation paths defined for levels 1-5
@@ -113,7 +113,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 
 **Purpose**: Test workflow and worktree integration
 
-**Tests**:
+### Tests
 
 - All 5 phases covered by agents (Plan, Test, Implementation, Packaging, Cleanup)
 - Level-phase alignment (right levels in right phases)
@@ -121,7 +121,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Git worktree compatibility mentioned
 - Coordination scenarios defined
 
-**Expected Results**:
+### Expected Results
 
 - Plan phase: Levels 0-3 participate
 - Test/Impl/Package phases: Levels 3-5 participate (parallel)
@@ -129,7 +129,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Parallel execution guidance for levels 3-5
 - Worktree coordination patterns documented
 
-**Success Criteria**:
+### Success Criteria
 
 - All 5 phases have agent coverage
 - Level-phase alignment matches expected patterns
@@ -140,7 +140,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 
 **Purpose**: Validate Mojo-specific guidance
 
-**Tests**:
+### Tests
 
 - fn vs def guidance in implementation agents
 - struct vs class guidance in implementation agents
@@ -149,7 +149,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Performance optimization context
 - Type safety guidance
 
-**Expected Results**:
+### Expected Results
 
 - Implementation agents (levels 3-5) have comprehensive Mojo guidance
 - fn vs def: When to use each
@@ -158,7 +158,7 @@ This document defines the comprehensive test plan for validating the 6-level age
 - Memory: owned, borrowed, inout patterns
 - Performance: @parameter, compile-time optimization
 
-**Success Criteria**:
+### Success Criteria
 
 - 80%+ of implementation agents have fn vs def guidance
 - 80%+ of implementation agents have struct vs class guidance
@@ -171,13 +171,13 @@ This document defines the comprehensive test plan for validating the 6-level age
 
 **Setup**: Create a new agent configuration file
 
-**Steps**:
+### Steps
 
 1. Run `validate_configs.py` on new file
-2. Check for YAML syntax errors
-3. Check for required fields
-4. Check for clear description
-5. Verify file naming
+1. Check for YAML syntax errors
+1. Check for required fields
+1. Check for clear description
+1. Verify file naming
 
 **Expected**: Configuration validates without errors
 
@@ -185,15 +185,15 @@ This document defines the comprehensive test plan for validating the 6-level age
 
 **Setup**: Trace delegation from Level 0 to Level 5
 
-**Steps**:
+### Steps
 
 1. Run `test_delegation.py`
-2. Identify Chief Architect (Level 0)
-3. Trace delegation to Section Orchestrators (Level 1)
-4. Trace delegation to Module Design Agents (Level 2)
-5. Trace delegation to Component Specialists (Level 3)
-6. Trace delegation to Implementation Engineers (Level 4)
-7. Trace delegation to Junior Engineers (Level 5)
+1. Identify Chief Architect (Level 0)
+1. Trace delegation to Section Orchestrators (Level 1)
+1. Trace delegation to Module Design Agents (Level 2)
+1. Trace delegation to Component Specialists (Level 3)
+1. Trace delegation to Implementation Engineers (Level 4)
+1. Trace delegation to Junior Engineers (Level 5)
 
 **Expected**: Complete chain with clear handoff at each level
 
@@ -201,15 +201,15 @@ This document defines the comprehensive test plan for validating the 6-level age
 
 **Setup**: Simulate full workflow execution
 
-**Steps**:
+### Steps
 
 1. Run `test_integration.py`
-2. Identify Plan phase agents
-3. Identify parallel phase agents (Test/Impl/Package)
-4. Identify Cleanup phase agents
-5. Check coordination patterns
+1. Identify Plan phase agents
+1. Identify parallel phase agents (Test/Impl/Package)
+1. Identify Cleanup phase agents
+1. Check coordination patterns
 
-**Expected**:
+### Expected
 
 - Plan phase completes first
 - Parallel phases can run simultaneously
@@ -220,14 +220,14 @@ This document defines the comprehensive test plan for validating the 6-level age
 
 **Setup**: Check implementation agent for Mojo guidance
 
-**Steps**:
+### Steps
 
 1. Run `test_mojo_patterns.py`
-2. Identify implementation engineers
-3. Check for fn vs def guidance
-4. Check for struct vs class guidance
-5. Check for SIMD optimization guidance
-6. Check for memory management patterns
+1. Identify implementation engineers
+1. Check for fn vs def guidance
+1. Check for struct vs class guidance
+1. Check for SIMD optimization guidance
+1. Check for memory management patterns
 
 **Expected**: Comprehensive Mojo guidance for implementation
 
@@ -235,12 +235,12 @@ This document defines the comprehensive test plan for validating the 6-level age
 
 **Setup**: Simulate Test Engineer and Implementation Engineer coordination
 
-**Steps**:
+### Steps
 
 1. Check both agents have worktree guidance
-2. Check both agents mention TDD workflow
-3. Check coordination patterns documented
-4. Verify parallel execution support
+1. Check both agents mention TDD workflow
+1. Check coordination patterns documented
+1. Verify parallel execution support
 
 **Expected**: Clear guidance for working in separate worktrees with TDD coordination
 
@@ -251,11 +251,11 @@ This document defines the comprehensive test plan for validating the 6-level age
 For initial testing (before issue #64 completes), create mock agents:
 
 1. **chief-architect.md** (Level 0)
-2. **foundation-orchestrator.md** (Level 1)
-3. **architecture-design.md** (Level 2)
-4. **senior-implementation-specialist.md** (Level 3)
-5. **implementation-engineer.md** (Level 4)
-6. **junior-implementation-engineer.md** (Level 5)
+1. **foundation-orchestrator.md** (Level 1)
+1. **architecture-design.md** (Level 2)
+1. **senior-implementation-specialist.md** (Level 3)
+1. **implementation-engineer.md** (Level 4)
+1. **junior-implementation-engineer.md** (Level 5)
 
 Each mock should:
 
@@ -269,10 +269,10 @@ Each mock should:
 ### Critical Success Factors
 
 1. **All configurations valid**: 100% pass `validate_configs.py`
-2. **Complete hierarchy**: All levels 0-5 have agents
-3. **Clear delegation**: Complete delegation chains defined
-4. **Workflow coverage**: All 5 phases covered
-5. **Mojo guidance**: 80%+ implementation agents have comprehensive guidance
+1. **Complete hierarchy**: All levels 0-5 have agents
+1. **Clear delegation**: Complete delegation chains defined
+1. **Workflow coverage**: All 5 phases covered
+1. **Mojo guidance**: 80%+ implementation agents have comprehensive guidance
 
 ### Quality Metrics
 
@@ -287,25 +287,25 @@ Each mock should:
 ### Phase 1: Mock Agent Testing (Initial)
 
 1. Create mock agent configurations
-2. Run all validation scripts
-3. Identify any script issues
-4. Fix validation scripts
-5. Document baseline results
+1. Run all validation scripts
+1. Identify any script issues
+1. Fix validation scripts
+1. Document baseline results
 
 ### Phase 2: Real Agent Testing (After Issue #64)
 
 1. Point tests at `.claude/agents/` from issue #64
-2. Run all validation scripts
-3. Document actual results
-4. Identify gaps in agent configurations
-5. Create issues for any missing patterns
+1. Run all validation scripts
+1. Document actual results
+1. Identify gaps in agent configurations
+1. Create issues for any missing patterns
 
 ### Phase 3: Continuous Testing
 
 1. Run tests on each new agent added
-2. Run full suite periodically
-3. Update tests as patterns evolve
-4. Maintain test results documentation
+1. Run full suite periodically
+1. Update tests as patterns evolve
+1. Maintain test results documentation
 
 ## Test Environment
 
@@ -330,7 +330,7 @@ python3 tests/agents/test_mojo_patterns.py
 
 # Run with specific directory
 python3 tests/agents/validate_configs.py /path/to/.claude/agents
-```
+```text
 
 ## Test Results Documentation
 
@@ -357,7 +357,7 @@ Results will be documented in `/notes/issues/63/test-results.md`:
 After test execution:
 
 1. Document results in `test-results.md`
-2. Create GitHub issues for any gaps found
-3. Update agent configurations as needed
-4. Re-run tests to verify fixes
-5. Integrate into CI/CD (future)
+1. Create GitHub issues for any gaps found
+1. Update agent configurations as needed
+1. Re-run tests to verify fixes
+1. Integrate into CI/CD (future)

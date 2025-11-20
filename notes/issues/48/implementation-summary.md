@@ -32,20 +32,20 @@ implementation in Issue #49.
    - Test philosophy and patterns
    - Contributing guidelines
 
-2. **`tests/shared/conftest.mojo`** (333 lines)
+1. **`tests/shared/conftest.mojo`** (333 lines)
    - Assertion functions (assert_true, assert_equal, assert_almost_equal, etc.)
    - Test fixtures (TestFixtures struct)
    - Benchmark utilities (BenchmarkResult)
    - Test data generators
 
-3. **`tests/shared/core/test_layers.mojo`** (400 lines)
+1. **`tests/shared/core/test_layers.mojo`** (400 lines)
    - Linear layer tests (initialization, forward, backward)
    - Conv2D layer tests (shapes, stride, padding)
    - Activation tests (ReLU, Sigmoid, Tanh)
    - Pooling tests (MaxPool2D)
    - Property-based tests
 
-4. **`tests/shared/training/test_optimizers.mojo`** (472 lines)
+1. **`tests/shared/training/test_optimizers.mojo`** (472 lines)
    - SGD tests (basic update, momentum, weight decay)
    - Adam tests (parameter update, bias correction)
    - AdamW tests (decoupled weight decay)
@@ -53,14 +53,14 @@ implementation in Issue #49.
    - Property tests (convergence, gradient shapes)
    - Numerical accuracy tests (PyTorch comparison)
 
-5. **`tests/shared/integration/test_training_workflow.mojo`** (361 lines)
+1. **`tests/shared/integration/test_training_workflow.mojo`** (361 lines)
    - Basic training loop tests
    - Training with validation
    - Training with callbacks (early stopping, checkpointing)
    - Multi-epoch convergence tests
    - Gradient flow tests
 
-6. **`tests/shared/benchmarks/bench_optimizers.mojo`** (389 lines)
+1. **`tests/shared/benchmarks/bench_optimizers.mojo`** (389 lines)
    - SGD update speed benchmarks
    - Adam memory usage benchmarks
    - Optimizer comparison benchmarks
@@ -153,9 +153,9 @@ implementation in Issue #49.
 All tests written BEFORE implementation to:
 
 1. Define clear API contracts
-2. Validate expected behavior
-3. Guide implementation decisions
-4. Catch regressions early
+1. Validate expected behavior
+1. Guide implementation decisions
+1. Catch regressions early
 
 ### Real Implementations Over Mocks
 
@@ -172,7 +172,7 @@ All tests written BEFORE implementation to:
 SGD(learning_rate, momentum=0.0, weight_decay=0.0, nesterov=False)
 optimizer.step(inout params: Tensor, grads: Tensor)
 # Formula: params = params - lr * grads
-```
+```text
 
 ### Adam Optimizer
 
@@ -180,7 +180,7 @@ optimizer.step(inout params: Tensor, grads: Tensor)
 Adam(learning_rate=0.001, beta1=0.9, beta2=0.999, epsilon=1e-8)
 optimizer.step(inout params: Tensor, grads: Tensor)
 # Maintains m (momentum) and v (RMSprop) with bias correction
-```
+```text
 
 ### Linear Layer
 
@@ -188,7 +188,7 @@ optimizer.step(inout params: Tensor, grads: Tensor)
 Linear(in_features: Int, out_features: Int, bias: Bool = True)
 layer.forward(input: Tensor) -> Tensor
 # Output = input @ weights.T + bias
-```
+```text
 
 ### Conv2D Layer
 
@@ -196,7 +196,7 @@ layer.forward(input: Tensor) -> Tensor
 Conv2D(in_channels, out_channels, kernel_size, stride=1, padding=0)
 layer.forward(input: Tensor) -> Tensor
 # Output shape: (batch, out_channels, out_height, out_width)
-```
+```text
 
 ## Performance Targets
 
@@ -229,13 +229,13 @@ layer.forward(input: Tensor) -> Tensor
    - ✅ Create test files with assertions
    - ✅ Define expected API contracts
 
-2. **Issue #49** (Implementation Specialist):
+1. **Issue #49** (Implementation Specialist):
    - Read test specifications
    - Implement to make tests pass
    - Follow API contracts from tests
    - Add implementation details
 
-3. **Issue #48** (validation):
+1. **Issue #48** (validation):
    - Run tests against implementation
    - Verify coverage meets ≥90%
    - Add missing edge case tests
@@ -265,7 +265,7 @@ fn test_sgd_basic_update() raises:
     assert_almost_equal(params[0], 0.99, tolerance=1e-6)
     assert_almost_equal(params[1], 1.98, tolerance=1e-6)
     assert_almost_equal(params[2], 2.97, tolerance=1e-6)
-```
+```text
 
 ## File Statistics
 
@@ -308,19 +308,19 @@ fn test_sgd_basic_update() raises:
    - Make tests pass one by one
    - Follow TDD red-green-refactor cycle
 
-2. **Run tests**: Execute test suite against implementation
+1. **Run tests**: Execute test suite against implementation
    - `mojo test tests/shared/`
    - Verify all tests pass
 
-3. **Measure coverage**: Ensure ≥90% threshold
+1. **Measure coverage**: Ensure ≥90% threshold
    - `mojo test --coverage tests/shared/`
    - `python scripts/check_coverage.py --threshold 90`
 
-4. **Run benchmarks**: Validate performance targets
+1. **Run benchmarks**: Validate performance targets
    - `mojo test tests/shared/benchmarks/`
    - Compare to PyTorch performance
 
-5. **Issue #50**: Package and integrate
+1. **Issue #50**: Package and integrate
    - Use tests for validation
    - Ensure all tests remain passing
 
@@ -347,23 +347,23 @@ None. Test suite is complete and ready for implementation phase.
 ### What Worked Well
 
 1. **TDD approach**: Writing tests first clarified API contracts
-2. **Comprehensive documentation**: Clear specifications guide implementation
-3. **Real-world examples**: Tests show expected usage patterns
-4. **Property-based tests**: Validate mathematical invariants
-5. **Performance benchmarks**: Establish baseline metrics
+1. **Comprehensive documentation**: Clear specifications guide implementation
+1. **Real-world examples**: Tests show expected usage patterns
+1. **Property-based tests**: Validate mathematical invariants
+1. **Performance benchmarks**: Establish baseline metrics
 
 ### Challenges
 
 1. **Mojo limitations**: Some features may not exist yet (coverage, profiling)
-2. **Placeholder code**: Tests have TODOs until implementation exists
-3. **API uncertainty**: Mojo stdlib APIs may differ from assumptions
+1. **Placeholder code**: Tests have TODOs until implementation exists
+1. **API uncertainty**: Mojo stdlib APIs may differ from assumptions
 
 ### Recommendations
 
 1. **Iterate on tests**: Refine as implementation reveals edge cases
-2. **Add numerical tests**: Compare to PyTorch/NumPy for correctness
-3. **Profile performance**: Measure against targets in benchmarks
-4. **Document patterns**: Create test patterns guide for future work
+1. **Add numerical tests**: Compare to PyTorch/NumPy for correctness
+1. **Profile performance**: Measure against targets in benchmarks
+1. **Document patterns**: Create test patterns guide for future work
 
 ## References
 

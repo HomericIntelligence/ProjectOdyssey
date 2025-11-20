@@ -34,35 +34,43 @@ As specified in the issue description.
 ## Implementation Notes
 
 ## Overview
+
 Create the base configuration file for the research assistant agent with proper structure and format. The file defines the agent's settings, metadata, and initialization parameters.
 
 ## Testing Objectives
+
 This phase focuses on:
+
 - Writing comprehensive test cases following TDD principles
 - Creating test fixtures and mock data
 - Defining test scenarios for edge cases
 - Setting up test infrastructure
 
 ## What to Test
+
 Based on the expected outputs:
+
 - Configuration file with proper structure
 - Basic agent metadata (name, version, description)
 - Initialization settings
 - Schema validation for configuration
 
 ## Test Success Criteria
+
 - [ ] Configuration file has valid syntax
 - [ ] Metadata is complete and accurate
 - [ ] File follows standard configuration patterns
 - [ ] Schema validates configuration structure
 
 ## Implementation Steps
+
 1. Create configuration file with proper format (YAML or TOML)
-2. Add agent metadata and version information
-3. Define initialization settings and defaults
-4. Add schema validation
+1. Add agent metadata and version information
+1. Define initialization settings and defaults
+1. Add schema validation
 
 ## Notes
+
 Use a simple, readable format. Include comments to explain each configuration option. Keep defaults sensible and conservative.
 
 ## Status

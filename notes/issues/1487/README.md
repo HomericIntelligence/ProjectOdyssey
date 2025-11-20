@@ -34,22 +34,27 @@ As specified in the issue description.
 ## Implementation Notes
 
 ## Overview
+
 Create a workflow that helps debug implementation issues by analyzing error messages, examining code, comparing with paper specifications, and suggesting fixes.
 
 ## Objectives
+
 This planning phase will:
+
 - Define detailed specifications and requirements
 - Design the architecture and approach
 - Document API contracts and interfaces
 - Create comprehensive design documentation
 
 ## Inputs
+
 - Error messages or bug descriptions
 - Implementation code
 - Paper specifications
 - Debugging tools and utilities
 
 ## Expected Outputs
+
 - Diagnosis of the issue
 - Root cause analysis
 - Suggested fixes with code examples
@@ -57,6 +62,7 @@ This planning phase will:
 - Prevention recommendations
 
 ## Success Criteria
+
 - [ ] Workflow correctly diagnoses common issues
 - [ ] Root cause analysis is accurate
 - [ ] Suggested fixes are correct and complete
@@ -65,6 +71,7 @@ This planning phase will:
 - [ ] Workflow handles various error types
 
 ## Additional Notes
+
 Use tools to read code and stack traces. Apply chain-of-thought reasoning to diagnose issues. Compare implementation with paper to identify conceptual errors. Provide specific fix suggestions with code, not just explanations. Include test cases to verify fixes.
 
 ## Status

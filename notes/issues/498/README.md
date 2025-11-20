@@ -29,22 +29,22 @@ Build a comprehensive shared library of reusable components for machine learning
 **Modular Component Design**: The shared library is structured into four independent subsystems:
 
 1. **Core Operations** - Mathematical primitives and operations
-2. **Training Utilities** - Training workflow infrastructure
-3. **Data Utilities** - Data handling and preprocessing
-4. **Testing Framework** - Quality assurance infrastructure
+1. **Training Utilities** - Training workflow infrastructure
+1. **Data Utilities** - Data handling and preprocessing
+1. **Testing Framework** - Quality assurance infrastructure
 
 **Rationale**: This separation ensures each subsystem can be developed, tested, and maintained independently while providing clean interfaces between components.
 
 ### Core Operations Design
 
-**Components**:
+### Components
 
 - **Tensor Operations**: Element-wise arithmetic, matrix operations, reductions
 - **Activation Functions**: ReLU family, sigmoid/tanh, softmax/GELU
 - **Weight Initializers**: Xavier/Glorot, Kaiming/He, uniform/normal distributions
 - **Metrics**: Accuracy, loss tracking, confusion matrix
 
-**Key Decisions**:
+### Key Decisions
 
 - Prioritize correctness and numerical stability over performance optimization
 - Handle edge cases explicitly (zeros, infinities, NaN values)
@@ -55,13 +55,13 @@ Build a comprehensive shared library of reusable components for machine learning
 
 ### Training Utilities Design
 
-**Components**:
+### Components
 
 - **Base Trainer**: Training/validation loop infrastructure with interface definition
 - **Learning Rate Schedulers**: Step decay, cosine annealing, warmup strategies
 - **Callback System**: Checkpointing, early stopping, logging integration
 
-**Key Decisions**:
+### Key Decisions
 
 - Keep trainer simple and focused on core training loop logic
 - Use callback pattern for extensibility rather than monolithic trainer
@@ -72,13 +72,13 @@ Build a comprehensive shared library of reusable components for machine learning
 
 ### Data Utilities Design
 
-**Components**:
+### Components
 
 - **Base Dataset**: Interface with length, indexing (getitem), and iteration support
 - **Data Loader**: Batching, shuffling, and efficient iteration
 - **Augmentations**: Image transforms, text augmentations, generic transforms
 
-**Key Decisions**:
+### Key Decisions
 
 - Provide Pythonic API (len(), getitem, iteration)
 - Make augmentations optional and composable
@@ -89,13 +89,13 @@ Build a comprehensive shared library of reusable components for machine learning
 
 ### Testing Framework Design
 
-**Components**:
+### Components
 
 - **Test Framework**: Setup infrastructure, test utilities, fixtures
 - **Unit Tests**: Coverage for core operations, training utilities, data utilities
 - **Coverage Tracking**: Reporting, quality gates, regression prevention
 
-**Key Decisions**:
+### Key Decisions
 
 - Aim for high coverage with meaningful tests, not just percentage targets
 - Use fixtures to reduce duplication and improve clarity
@@ -106,19 +106,19 @@ Build a comprehensive shared library of reusable components for machine learning
 
 ### API Design Principles
 
-**Consistency**:
+### Consistency
 
 - All components follow consistent naming conventions
 - Similar operations have similar interfaces
 - Error handling is uniform across the library
 
-**Simplicity**:
+### Simplicity
 
 - Keep APIs simple and focused (KISS principle)
 - Avoid premature feature addition (YAGNI principle)
 - Prefer explicit over implicit behavior
 
-**Extensibility**:
+### Extensibility
 
 - Design for extension through subclassing and callbacks
 - Provide clear extension points
@@ -126,7 +126,7 @@ Build a comprehensive shared library of reusable components for machine learning
 
 ### Memory Management Strategy
 
-**Mojo-Specific Considerations**:
+### Mojo-Specific Considerations
 
 - Use `owned` for ownership transfer, `borrowed` for references
 - Leverage Mojo's memory safety features
@@ -135,14 +135,14 @@ Build a comprehensive shared library of reusable components for machine learning
 
 ### Numerical Stability Considerations
 
-**Critical Areas**:
+### Critical Areas
 
 - Activation functions (softmax overflow prevention)
 - Loss calculations (log-domain computations)
 - Gradient calculations (vanishing/exploding gradient handling)
 - Matrix operations (condition number considerations)
 
-**Approach**:
+### Approach
 
 - Implement numerically stable algorithms from literature
 - Include explicit overflow/underflow checks where needed
@@ -151,13 +151,13 @@ Build a comprehensive shared library of reusable components for machine learning
 
 ### Dependencies and Integration
 
-**Inputs Required**:
+### Inputs Required
 
 - Completed foundation setup with directory structure
 - Mojo/MAX environment configured and ready
 - Understanding of ML primitives needed for paper implementations
 
-**Integration Points**:
+### Integration Points
 
 - All paper implementations will depend on this library
 - Testing framework integrates with CI/CD pipeline
@@ -165,13 +165,13 @@ Build a comprehensive shared library of reusable components for machine learning
 
 ### Development Workflow
 
-**Phase Approach**:
+### Phase Approach
 
 1. **Plan** (Issue #498): Design and documentation
-2. **Test** (Issue #499): Write tests following TDD
-3. **Implementation** (Issue #500): Build functionality
-4. **Packaging** (Issue #501): Integration and packaging
-5. **Cleanup** (Issue #502): Refactor and finalize
+1. **Test** (Issue #499): Write tests following TDD
+1. **Implementation** (Issue #500): Build functionality
+1. **Packaging** (Issue #501): Integration and packaging
+1. **Cleanup** (Issue #502): Refactor and finalize
 
 **Parallel Execution**: Test, Implementation, and Packaging can proceed in parallel after Plan completes.
 

@@ -26,12 +26,14 @@ Define coding standards, style guidelines, and best practices for the repository
 
 **Decision**: Focus on practical standards that improve code quality without being overly restrictive.
 
-**Rationale**:
+### Rationale
+
 - Reduce friction for contributors while maintaining quality
 - Standards should serve the project's goals, not hinder development
 - Provide clear rationale for important standards to help contributors understand the "why"
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Extremely strict standards - rejected as potentially discouraging contributions
 - Minimal standards - rejected as insufficient for ensuring code quality at scale
 
@@ -39,13 +41,15 @@ Define coding standards, style guidelines, and best practices for the repository
 
 **Decision**: Use automated tooling (mojo format, black, pre-commit) to enforce style.
 
-**Rationale**:
+### Rationale
+
 - Automation eliminates bikeshedding over style choices
 - Pre-commit hooks catch issues before review
 - Contributors get immediate feedback
 - Maintainers focus on design, not formatting
 
-**Implementation Details**:
+### Implementation Details
+
 - `mojo format` for Mojo code (already configured)
 - `black` for Python code (already configured)
 - Pre-commit hooks enforce on commit (already in place)
@@ -55,12 +59,14 @@ Define coding standards, style guidelines, and best practices for the repository
 
 **Decision**: Markdown-based with automated linting via markdownlint-cli2.
 
-**Rationale**:
+### Rationale
+
 - Consistent formatting improves readability
 - Linting catches common issues (missing languages, line length)
 - Standards align with existing .markdownlint.yaml configuration
 
-**Key Rules**:
+### Key Rules
+
 - Code blocks must specify language
 - Proper spacing around blocks/lists/headings
 - 120-character line limit (with exceptions for URLs)
@@ -69,13 +75,15 @@ Define coding standards, style guidelines, and best practices for the repository
 
 **Decision**: Test-Driven Development (TDD) as the primary approach.
 
-**Rationale**:
+### Rationale
+
 - Tests guide implementation design
 - Higher confidence in changes
 - Better test coverage
 - Catches regressions early
 
-**Coverage Expectations**:
+### Coverage Expectations
+
 - Core functionality: >80% coverage
 - Test happy paths, error cases, and edge cases
 - Integration tests for critical workflows
@@ -84,13 +92,15 @@ Define coding standards, style guidelines, and best practices for the repository
 
 **Decision**: Use conventional commits format.
 
-**Rationale**:
+### Rationale
+
 - Clear categorization of changes (feat, fix, docs, etc.)
 - Enables automated changelog generation
 - Improves git log readability
 - Industry standard practice
 
-**Format**:
+### Format
+
 ```text
 <type>(<scope>): <description>
 
@@ -98,18 +108,20 @@ Examples:
 feat(tensor): Add matrix multiplication
 fix(scripts): Correct parsing issue
 docs(contributing): Update testing guidelines
-```
+```text
 
 ### 6. Mojo-Specific Guidelines
 
 **Decision**: Emphasize modern Mojo patterns (fn, owned/borrowed, SIMD, struct).
 
-**Rationale**:
+### Rationale
+
 - Mojo is the primary language for ML/AI implementations
 - Modern patterns provide better performance and type safety
 - Clear guidance helps contributors write idiomatic Mojo
 
-**Key Principles**:
+### Key Principles
+
 - Prefer `fn` over `def` for better performance
 - Use explicit memory management (`owned`, `borrowed`)
 - Leverage SIMD for performance-critical code
@@ -119,12 +131,14 @@ docs(contributing): Update testing guidelines
 
 **Decision**: Python for automation only, with documented justification (see ADR-001).
 
-**Rationale**:
+### Rationale
+
 - Mojo is the primary language target
 - Python acceptable for tooling with technical limitations
 - Must document why Python is required
 
-**Allowed Use Cases**:
+### Allowed Use Cases
+
 - Subprocess output capture (Mojo v0.25.7 limitation)
 - Regex-heavy processing (no Mojo regex support)
 - GitHub API interaction
@@ -141,12 +155,12 @@ The standards build upon existing tool configurations:
    - trailing-whitespace, end-of-file-fixer
    - check-yaml, check-added-large-files
 
-2. **Python tools** (pyproject.toml)
+1. **Python tools** (pyproject.toml)
    - black (code formatting)
    - ruff (linting)
    - pytest (testing)
 
-3. **CI/CD** (.github/workflows/)
+1. **CI/CD** (.github/workflows/)
    - pre-commit.yml enforces standards
    - test-agents.yml validates agent configs
 
@@ -155,19 +169,21 @@ The standards build upon existing tool configurations:
 Standards documentation follows the 3-location pattern:
 
 1. **CONTRIBUTING.md** - Primary standards reference for contributors
-2. **/notes/review/** - Architectural decisions (ADR-001 language selection)
-3. **/notes/issues/691/** - Planning documentation (this file)
+1. **/notes/review/** - Architectural decisions (ADR-001 language selection)
+1. **/notes/issues/691/** - Planning documentation (this file)
 
 ### Scope Boundaries
 
-**In Scope**:
+### In Scope
+
 - Code style for Mojo and Python
 - Documentation formatting standards
 - Testing requirements and TDD approach
 - Commit message conventions
 - Pre-commit hook usage
 
-**Out of Scope**:
+### Out of Scope
+
 - Architectural patterns (covered in /notes/review/)
 - Agent hierarchy and delegation (covered in /agents/)
 - Development workflow (covered in workflow section)
@@ -178,10 +194,10 @@ Standards documentation follows the 3-location pattern:
 The implementation phase (#693) will:
 
 1. Document code style guidelines (refer to black, ruff, mojo format configs)
-2. Define documentation standards for code and APIs
-3. Specify testing requirements and coverage expectations
-4. Establish commit message conventions
-5. Provide examples of good practices
+1. Define documentation standards for code and APIs
+1. Specify testing requirements and coverage expectations
+1. Establish commit message conventions
+1. Provide examples of good practices
 
 Each step includes practical examples and links to tool configurations.
 
@@ -215,10 +231,10 @@ Each step includes practical examples and links to tool configurations.
 The standards align with core development principles (from CLAUDE.md):
 
 1. **KISS** - Keep standards simple and practical
-2. **YAGNI** - Don't add unnecessary restrictions
-3. **TDD** - Test-driven development as primary approach
-4. **DRY** - Avoid duplicating standards across docs
-5. **POLA** - Standards should not surprise contributors
+1. **YAGNI** - Don't add unnecessary restrictions
+1. **TDD** - Test-driven development as primary approach
+1. **DRY** - Avoid duplicating standards across docs
+1. **POLA** - Standards should not surprise contributors
 
 ## Implementation Notes
 

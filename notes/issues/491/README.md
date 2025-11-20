@@ -85,6 +85,7 @@ Enforces minimum coverage standards:
 ## Complete Workflow
 
 ```text
+
 Write Code
     ↓
 Write Tests
@@ -95,21 +96,24 @@ Run Tests with Coverage
     └─→ Gates Checked
          ↓
     Pass/Fail
-```
 
+```text
 ## Quick Start
 
 ### Local Development
 
 ```bash
+
 # Run tests with coverage
+
 pytest --cov=scripts
 
 # View HTML report
+
 pytest --cov=scripts --cov-report=html
 open htmlcov/index.html
-```
 
+```text
 ### CI/CD
 
 Coverage runs automatically on all PRs:
@@ -171,7 +175,7 @@ New to coverage? Start here:
 2. Generate your first report
 3. Review [Coverage Gates](./coverage-gates.md) requirements
 4. See [Writing Tests](./writing-tests-for-coverage.md) for best practices
-```
+```text
 
 **2. Complete Workflow Guide** (`docs/testing/coverage-workflow.md`):
 
@@ -187,18 +191,22 @@ Complete walkthrough of the coverage workflow from writing code to meeting cover
 **1.1 Write Code**
 
 ```python
+
 # scripts/my_feature.py
+
 def process_data(data):
     """Process input data."""
     if not data:
         raise ValueError("Data cannot be empty")
     return [x * 2 for x in data]
-```
 
+```text
 **1.2 Write Tests**
 
 ```python
+
 # tests/test_my_feature.py
+
 import pytest
 from scripts.my_feature import process_data
 
@@ -209,50 +217,63 @@ def test_process_data():
 def test_process_empty_data():
     with pytest.raises(ValueError, match="cannot be empty"):
         process_data([])
-```
 
+```text
 **1.3 Run Tests with Coverage**
 
 ```bash
+
 # Quick check
+
 pytest tests/test_my_feature.py --cov=scripts.my_feature
 
-# Expected output:
-# ---------- coverage: ... ----------
-# Name                      Stmts   Miss  Cover
-# ---------------------------------------------
-# scripts/my_feature.py         4      0   100%
-# ---------------------------------------------
-# TOTAL                         4      0   100%
-```
+# Expected output
 
+# ---------- coverage: ... ----------
+
+# Name                      Stmts   Miss  Cover
+
+# ---------------------------------------------
+
+# scripts/my_feature.py         4      0   100%
+
+# ---------------------------------------------
+
+# TOTAL                         4      0   100%
+
+```text
 **1.4 View Detailed Report (if needed)**
 
 ```bash
+
 # Generate HTML report
+
 pytest --cov=scripts.my_feature --cov-report=html
 open htmlcov/index.html
 
 # Identify uncovered lines (if any)
-# Add tests for those lines
-```
 
+# Add tests for those lines
+
+```text
 ### Phase 2: Pull Request
 
 **2.1 Push Changes**
 
 ```bash
+
 git add scripts/my_feature.py tests/test_my_feature.py
 git commit -m "feat(scripts): add data processing feature"
 git push origin feature/data-processing
-```
 
+```text
 **2.2 Create PR**
 
 ```bash
-gh pr create --title "Add data processing feature"
-```
 
+gh pr create --title "Add data processing feature"
+
+```text
 **2.3 CI Runs Coverage Checks**
 
 GitHub Actions automatically:
@@ -273,18 +294,24 @@ Check PR for:
 If coverage fails:
 
 ```bash
+
 # Download coverage report from CI artifacts
-# Or generate locally:
+
+# Or generate locally
+
 pytest --cov=scripts --cov-report=html
 
 # Open report
+
 open htmlcov/index.html
 
 # Find uncovered lines (red highlighting)
-# Add missing tests
-# Push updates
-```
 
+# Add missing tests
+
+# Push updates
+
+```text
 ### Phase 3: Merge and Monitor
 
 **3.1 Merge PR**
@@ -292,9 +319,10 @@ open htmlcov/index.html
 After approval and passing checks:
 
 ```bash
-gh pr merge --squash
-```
 
+gh pr merge --squash
+
+```text
 **3.2 Update Baseline**
 
 CI automatically:
@@ -317,8 +345,10 @@ CI automatically:
 
 1. Generate HTML report:
    ```bash
+
    pytest --cov=scripts --cov-report=html
    open htmlcov/index.html
+
    ```
 
 2. Identify low-coverage files (red/orange in report)
@@ -330,7 +360,9 @@ CI automatically:
 
 4. Verify locally:
    ```bash
+
    pytest --cov=scripts --cov-fail-under=80
+
    ```
 
 5. Push updates
@@ -343,7 +375,9 @@ CI automatically:
 
 1. Check what code changed:
    ```bash
+
    git diff main..HEAD
+
    ```
 
 2. Identify if you:
@@ -364,13 +398,14 @@ CI automatically:
 Update exclusions in `pyproject.toml`:
 
 ```toml
+
 [tool.coverage.run]
 omit = [
     "**/*_generated.py",
     "**/*_pb2.py",
 ]
-```
 
+```text
 ## Best Practices
 
 ### During Development
@@ -384,7 +419,9 @@ omit = [
 
 1. **Run full coverage check**:
    ```bash
+
    pytest --cov=scripts --cov-fail-under=80
+
    ```
 
 2. **Review HTML report** (if time permits)
@@ -412,7 +449,7 @@ Quick reference:
 | HTML report | `--cov-report=html` |
 | Check threshold | `--cov-fail-under=80` |
 | Open HTML | `open htmlcov/index.html` |
-```
+```text
 
 **3. Developer Onboarding** (`docs/testing/coverage-onboarding.md`):
 
@@ -421,7 +458,7 @@ Quick reference:
 
 Welcome! This guide helps you get started with the coverage system.
 
-## What is Code Coverage?
+## What is Code Coverage
 
 Coverage measures which lines of code are executed during tests:
 - **Covered** = Executed during tests (green)
@@ -439,33 +476,47 @@ Coverage measures which lines of code are executed during tests:
 ### 1. First Coverage Run (5 minutes)
 
 ```bash
+
 # Run tests with coverage
+
 pytest --cov=scripts
 
-# You'll see:
-# ---------- coverage: ... ----------
-# Name               Stmts   Miss  Cover
-# --------------------------------------
-# scripts/utils.py      50      5    90%
-# --------------------------------------
-```
+# You'll see
 
+# ---------- coverage: ... ----------
+
+# Name               Stmts   Miss  Cover
+
+# --------------------------------------
+
+# scripts/utils.py      50      5    90%
+
+# --------------------------------------
+
+```text
 ### 2. View Detailed Report (10 minutes)
 
 ```bash
+
 # Generate HTML report
+
 pytest --cov=scripts --cov-report=html
 
 # Open in browser
+
 open htmlcov/index.html
 
-# Explore:
-# - File list (which files have coverage)
-# - Click file (see line-by-line coverage)
-# - Red lines (not covered)
-# - Green lines (covered)
-```
+# Explore
 
+# - File list (which files have coverage)
+
+# - Click file (see line-by-line coverage)
+
+# - Red lines (not covered)
+
+# - Green lines (covered)
+
+```text
 ### 3. Understand Requirements (5 minutes)
 
 Read [Coverage Gates](./coverage-gates.md) to understand:
@@ -484,20 +535,23 @@ Follow [Writing Tests for Coverage](./writing-tests-for-coverage.md):
 
 **Run coverage locally**:
 ```bash
-pytest --cov=scripts
-```
 
+pytest --cov=scripts
+
+```text
 **View HTML report**:
 ```bash
+
 pytest --cov=scripts --cov-report=html
 open htmlcov/index.html
-```
 
+```text
 **Check threshold**:
 ```bash
-pytest --cov=scripts --cov-fail-under=80
-```
 
+pytest --cov=scripts --cov-fail-under=80
+
+```text
 ## Common Questions
 
 **Q: Do I need 100% coverage?**
@@ -520,12 +574,12 @@ A: Mojo coverage tools aren't available yet. We track Python code only.
 4. ✅ Review [Writing Tests](./writing-tests-for-coverage.md)
 5. ✅ Create a PR and see CI coverage checks
 
-## Need Help?
+## Need Help
 
 - [Coverage Troubleshooting](./coverage-troubleshooting.md)
 - [Coverage Setup](./coverage-setup.md) - Configuration details
 - [Coverage Reports](./coverage-reports.md) - Report interpretation
-```
+```text
 
 **4. Quick Reference Card** (`docs/testing/coverage-quick-ref.md`):
 
@@ -561,14 +615,15 @@ A: Mojo coverage tools aren't available yet. We track Python code only.
 Edit `pyproject.toml`:
 
 ```toml
+
 [tool.coverage.report]
 fail_under = 80.0
 
 [tool.coverage.run]
 source = ["scripts"]
 omit = ["tests/*", "**/vendor/*"]
-```
 
+```text
 ## CI Workflow
 
 1. **PR created** → CI runs coverage
@@ -592,17 +647,19 @@ omit = ["tests/*", "**/vendor/*"]
 - [Reports Guide](./coverage-reports.md)
 - [Gates Guide](./coverage-gates.md)
 - [Troubleshooting](./coverage-troubleshooting.md)
-```
+```text
 
 ### Deliverable Checklist
 
 Documentation Files:
+
 - [ ] `docs/testing/coverage-overview.md` - System overview
 - [ ] `docs/testing/coverage-workflow.md` - Complete workflow guide
 - [ ] `docs/testing/coverage-onboarding.md` - New developer guide
 - [ ] `docs/testing/coverage-quick-ref.md` - Quick reference
 
 Updates:
+
 - [ ] `README.md` - Add coverage section with badge
 - [ ] `CONTRIBUTING.md` - Add coverage requirements
 - [ ] `docs/README.md` - Link to coverage documentation
@@ -617,7 +674,7 @@ Link component documentation:
 - [Setup Coverage](./coverage-setup.md) - From Issue #476
 - [Coverage Reports](./coverage-reports.md) - From Issue #481
 - [Coverage Gates](./coverage-gates.md) - From Issue #486
-```
+```text
 
 ### Status
 

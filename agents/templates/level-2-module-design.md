@@ -40,13 +40,17 @@ Level 2 Module Design Agent responsible for [design area description].
 ### [Pattern or Principle]
 
 ```mojo
+
 [Example showing pattern]
+
 ```text
 
 ## [Another Pattern Group]
 
 ```text
+
 [Example]
+
 ```text
 
 ## Workflow

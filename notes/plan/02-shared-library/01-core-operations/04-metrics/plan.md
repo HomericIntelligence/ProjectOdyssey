@@ -29,8 +29,8 @@ Implement evaluation metrics for assessing model performance. This includes accu
 ## Steps
 
 1. Implement accuracy metrics for classification evaluation
-2. Create loss tracking with statistical aggregation
-3. Build confusion matrix for detailed error analysis
+1. Create loss tracking with statistical aggregation
+1. Build confusion matrix for detailed error analysis
 
 ## Success Criteria
 

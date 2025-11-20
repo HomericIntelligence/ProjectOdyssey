@@ -63,7 +63,7 @@ from subprocess import run
 var output = run("false")  # Exit code 1 - NO ERROR RAISED!
 var output = run("exit 42")  # Exit code 42 - NO ERROR RAISED!
 var output = run("gh issue create ...")  # If this fails, no way to detect!
-```
+```text
 
 **Testing Evidence**: Created test scripts (`test_mojo_capabilities.mojo`, `test_exit_code.mojo`) that prove:
 
@@ -74,7 +74,7 @@ var output = run("gh issue create ...")  # If this fails, no way to detect!
 
 Without exit code access, scripts cannot detect command failures, making automation unreliable and unsafe.
 
-**HIGH RISK - Regex Not Production-Ready**:
+### HIGH RISK - Regex Not Production-Ready
 
 The scripts use 15+ regex patterns for markdown parsing. While a third-party `mojo-regex` library exists
 ([mojo-regex on GitHub](https://github.com/msaelices/mojo-regex)), it is explicitly **not production-ready**:
@@ -87,7 +87,7 @@ ISSUE_SECTION_PATTERN = re.compile(
 )
 title_match = re.search(r'\*\*Title\*\*:\s*`([^`]+)`', content)
 labels = re.findall(r'`([^`]+)`', labels_text)
-```
+```text
 
 **mojo-regex limitations**:
 
@@ -107,12 +107,12 @@ and production-ready regex support.
    - Usage: 20+ subprocess calls with output capture
    - Critical to project workflow
 
-2. **regenerate_github_issues.py** (446 LOC)
+1. **regenerate_github_issues.py** (446 LOC)
    - Generates github_issue.md from plan.md sources
    - Requires: 15+ regex patterns for markdown parsing
    - Critical for maintaining planning hierarchy
 
-3. **create_single_component_issues.py** (197 LOC)
+1. **create_single_component_issues.py** (197 LOC)
    - Testing utility for issue creation
    - Same requirements as create_issues.py
 
@@ -140,7 +140,7 @@ Issue #8's comprehensive testing revealed:
 
 **Estimated Conversion Effort**: 7-9 weeks with low confidence
 
-**ROI Analysis**:
+### ROI Analysis
 
 - Estimated Effort: 7-9 weeks
 - Estimated Benefit: Zero (current scripts work perfectly)
@@ -150,10 +150,10 @@ Issue #8's comprehensive testing revealed:
 ### Decision Drivers
 
 1. **Project Velocity**: Converting working scripts would delay ML implementation by 2-3 months
-2. **Risk Management**: High probability of introducing bugs into critical automation
-3. **Resource Efficiency**: 7-9 weeks of effort for zero functional benefit
-4. **Technical Maturity**: Mojo v0.25.7 is not ready for systems scripting
-5. **Pragmatic Engineering**: Use the right tool for each job
+1. **Risk Management**: High probability of introducing bugs into critical automation
+1. **Resource Efficiency**: 7-9 weeks of effort for zero functional benefit
+1. **Technical Maturity**: Mojo v0.25.7 is not ready for systems scripting
+1. **Pragmatic Engineering**: Use the right tool for each job
 
 ## Decision
 
@@ -174,7 +174,7 @@ We adopt a **Pragmatic Hybrid Approach** with clear boundaries for when to use e
 - ✅ Gradient computation
 - ✅ Model inference engines
 
-**New Code Default**:
+### New Code Default
 
 - ✅ Any new ML algorithm implementation
 - ✅ Any new performance-critical component
@@ -217,23 +217,23 @@ When creating a new component:
    - ML/AI implementation → Mojo (required)
    - Automation/tooling → Check requirements
 
-2. **Does it need subprocess output capture?**
+1. **Does it need subprocess output capture?**
    - Yes → Python (allowed, document why)
    - No → Continue to next check
 
-3. **Does it need regex parsing?**
+1. **Does it need regex parsing?**
    - Yes → Python (allowed, document why)
    - No → Continue to next check
 
-4. **Does it interface with Python-only libraries?**
+1. **Does it interface with Python-only libraries?**
    - Yes → Python (allowed, document why)
    - No → **Mojo (required)**
 
-5. **Document the decision** in code comments and issue notes
+1. **Document the decision** in code comments and issue notes
 
 ### Justification Requirements
 
-**For Python Usage in Automation**:
+### For Python Usage in Automation
 
 All Python automation scripts MUST include a header comment explaining the justification:
 
@@ -257,9 +257,9 @@ Conversion Plan:
 
 Reference: ADR-001, Issue #8
 """
-```
+```text
 
-**For New Python Code**:
+### For New Python Code
 
 Any new Python code MUST have an associated GitHub issue documenting:
 
@@ -300,7 +300,7 @@ The "Language Preference" section in CLAUDE.md will be updated to reflect this d
 - Everything else? → Mojo (default)
 
 **See**: ADR-001 for complete language selection strategy
-```
+```text
 
 ### Update to Chief Architect Guidelines
 
@@ -329,27 +329,27 @@ The "Language Selection Strategy" section in chief-architect.md will be updated:
 - Quarterly reviews of Python code for conversion opportunities
 
 **See**: ADR-001 for monitoring strategy and reassessment criteria
-```
+```text
 
 ## Rationale
 
 ### Why Hybrid Over Pure Mojo
 
-**Technical Feasibility**:
+### Technical Feasibility
 
 - Mojo v0.25.7 cannot capture subprocess output (confirmed by Issue #8 testing)
 - No Mojo stdlib regex support (confirmed by documentation review)
 - Workarounds (Python interop) defeat the purpose of conversion
 - Manual parsing alternatives are high-risk and time-consuming
 
-**Engineering Economics**:
+### Engineering Economics
 
 - 7-9 weeks conversion effort vs. 0 functional benefit
 - High risk of introducing bugs in critical automation
 - Delays ML implementation (the actual project goal)
 - Python scripts are battle-tested and reliable
 
-**Strategic Focus**:
+### Strategic Focus
 
 - Project goal is ML research implementation, not language purity
 - Mojo's value is in ML performance, not scripting convenience
@@ -361,10 +361,10 @@ The "Language Selection Strategy" section in chief-architect.md will be updated:
 This is an **architectural decision** affecting the entire project:
 
 1. **Defines Language Boundaries**: Clear rules for when to use each language
-2. **Establishes Patterns**: Template for future technology decisions
-3. **Prioritizes Project Goals**: ML implementation over tooling consistency
-4. **Plans for Future**: Monitoring and reassessment strategy
-5. **Balances Pragmatism with Vision**: Keeps Mojo focus where it matters
+1. **Establishes Patterns**: Template for future technology decisions
+1. **Prioritizes Project Goals**: ML implementation over tooling consistency
+1. **Plans for Future**: Monitoring and reassessment strategy
+1. **Balances Pragmatism with Vision**: Keeps Mojo focus where it matters
 
 This is not a one-off exception—it's a strategic framework for technology selection.
 
@@ -372,7 +372,7 @@ This is not a one-off exception—it's a strategic framework for technology sele
 
 ### Positive Consequences
 
-**Immediate Benefits**:
+### Immediate Benefits
 
 - ✅ Project can proceed without 2-3 month delay
 - ✅ Reliable automation scripts remain stable
@@ -380,7 +380,7 @@ This is not a one-off exception—it's a strategic framework for technology sele
 - ✅ Risk of bugs in critical tooling eliminated
 - ✅ Clear decision framework for future choices
 
-**Long-Term Benefits**:
+### Long-Term Benefits
 
 - ✅ Pragmatic approach attracts contributors
 - ✅ Flexibility to adapt as Mojo matures
@@ -388,7 +388,7 @@ This is not a one-off exception—it's a strategic framework for technology sele
 - ✅ Quarterly reviews ensure continuous improvement
 - ✅ Documented rationale for all decisions
 
-**Strategic Benefits**:
+### Strategic Benefits
 
 - ✅ Demonstrates mature engineering judgment
 - ✅ Prioritizes project outcomes over ideology
@@ -397,38 +397,38 @@ This is not a one-off exception—it's a strategic framework for technology sele
 
 ### Negative Consequences
 
-**Technical Debt**:
+### Technical Debt
 
 - ⚠️ Two languages to maintain (Python + Mojo)
 - ⚠️ Potential for inconsistent patterns across languages
 - ⚠️ Learning curve for contributors
 - ⚠️ Future conversion work when Mojo matures
 
-**Mitigation Strategy**:
+### Mitigation Strategy
 
 - Clear boundaries prevent confusion
 - Quarterly reviews minimize conversion effort
 - Documentation ensures consistency
 - Monitoring strategy tracks Mojo progress
 
-**Philosophical Inconsistency**:
+### Philosophical Inconsistency
 
 - ⚠️ Appears to violate "Mojo First" principle
 - ⚠️ May confuse contributors about language choice
 
-**Mitigation Strategy**:
+### Mitigation Strategy
 
 - Update documentation to clarify boundaries
 - ADR provides clear justification
 - Decision process guides contributors
 - "Mojo First for ML" is the actual principle
 
-**Monitoring Overhead**:
+### Monitoring Overhead
 
 - ⚠️ Quarterly reviews require time
 - ⚠️ Tracking Mojo releases for features
 
-**Mitigation Strategy**:
+### Mitigation Strategy
 
 - Lightweight monitoring (check changelog)
 - Only test when relevant features added
@@ -439,9 +439,9 @@ This is not a one-off exception—it's a strategic framework for technology sele
 We explicitly accept these trade-offs:
 
 1. **Two languages** instead of one → But each used appropriately
-2. **Future conversion work** → But only when Mojo is ready
-3. **Philosophical inconsistency** → But pragmatic and data-driven
-4. **Monitoring overhead** → But ensures timely conversion
+1. **Future conversion work** → But only when Mojo is ready
+1. **Philosophical inconsistency** → But pragmatic and data-driven
+1. **Monitoring overhead** → But ensures timely conversion
 
 These trade-offs are **preferable** to:
 
@@ -464,22 +464,22 @@ While Python is the right choice today, Mojo's subprocess and regex capabilities
    - Non-zero exits can be detected and handled
    - No silent failures on command errors
 
-2. **Reliable Error Handling**:
+1. **Reliable Error Handling**:
    - Exceptions raised on subprocess failures
    - stderr capture available independently
    - Timeout and error handling mechanisms
 
-3. **Production-Ready Regex**:
+1. **Production-Ready Regex**:
    - Native stdlib regex module, OR
    - Mature third-party library with compile(), findall(), sub()
    - Documented, stable, and widely adopted
 
-**Decision Process If Requirements Met**:
+### Decision Process If Requirements Met
 
 1. **Validate** with updated test suite (`test_mojo_capabilities.mojo`)
-2. **Assess** conversion effort for highest-impact scripts
-3. **Compare** effort vs. benefit (likely still minimal benefit)
-4. **Document** findings in new ADR if conversion is warranted
+1. **Assess** conversion effort for highest-impact scripts
+1. **Compare** effort vs. benefit (likely still minimal benefit)
+1. **Document** findings in new ADR if conversion is warranted
 
 **Current Stance**: Python automation is the permanent solution until Mojo fundamentally changes its subprocess
 and regex support. No active monitoring planned - reassessment only if Mojo announces major scripting improvements.
@@ -490,13 +490,13 @@ and regex support. No active monitoring planned - reassessment only if Mojo anno
 
 **Approach**: Write scripts in Mojo, call Python subprocess module via interop
 
-**Pros**:
+### Pros
 
 - Maintains "Mojo First" principle
 - Learning experience for team
 - Could work technically
 
-**Cons**:
+### Cons
 
 - Defeats the purpose (still dependent on Python)
 - Adds complexity (Mojo + Python interop layer)
@@ -510,13 +510,13 @@ and regex support. No active monitoring planned - reassessment only if Mojo anno
 
 **Approach**: Pause all automation work until Mojo supports required capabilities
 
-**Pros**:
+### Pros
 
 - Eventually achieves "Mojo First" goal
 - No technical debt
 - One language eventually
 
-**Cons**:
+### Cons
 
 - 6-12 month delay (unacceptable)
 - Project cannot proceed
@@ -530,13 +530,13 @@ and regex support. No active monitoring planned - reassessment only if Mojo anno
 
 **Approach**: Convert simple scripts, keep complex ones in Python
 
-**Pros**:
+### Pros
 
 - Learning experience
 - Some progress toward Mojo
 - Proves feasibility for simple cases
 
-**Cons**:
+### Cons
 
 - Doesn't solve the main problems
 - Wastes time on non-critical work
@@ -550,13 +550,13 @@ and regex support. No active monitoring planned - reassessment only if Mojo anno
 
 **Approach**: Design new workflow that works within Mojo limitations
 
-**Pros**:
+### Pros
 
 - Pure Mojo solution
 - Opportunity to redesign workflow
 - No Python dependency
 
-**Cons**:
+### Cons
 
 - Requires redesigning GitHub integration
 - No way to get issue URLs without subprocess output
@@ -570,7 +570,7 @@ and regex support. No active monitoring planned - reassessment only if Mojo anno
 
 **Approach**: Python for automation, Mojo for ML/AI implementation
 
-**Pros**:
+### Pros
 
 - No project delay
 - Uses each language appropriately
@@ -579,7 +579,7 @@ and regex support. No active monitoring planned - reassessment only if Mojo anno
 - Pragmatic and data-driven
 - Clear decision framework
 
-**Cons**:
+### Cons
 
 - Two languages to maintain
 - Future conversion work
@@ -592,28 +592,28 @@ while planning for future.
 
 ### Phase 1: Documentation Updates (Week 1)
 
-**Update CLAUDE.md**:
+### Update CLAUDE.md
 
 - [ ] Revise "Language Preference" section
 - [ ] Add link to ADR-001
 - [ ] Update examples to show both Mojo and Python cases
 - [ ] Clarify decision process
 
-**Update Chief Architect Guidelines**:
+### Update Chief Architect Guidelines
 
 - [ ] Revise "Language Selection Strategy" section
 - [ ] Add decision authority for Python usage
 - [ ] Link to ADR-001
 - [ ] Add quarterly review responsibility
 
-**Create Monitoring Document**:
+### Create Monitoring Document
 
 - [ ] Create `/notes/review/adr/ADR-001-monitoring.md`
 - [ ] Document quarterly review template
 - [ ] Set up tracking for Mojo releases
 - [ ] Define reassessment criteria
 
-**Update Issue #8**:
+### Update Issue #8
 
 - [ ] Link to ADR-001
 - [ ] Document decision accepted
@@ -621,14 +621,14 @@ while planning for future.
 
 ### Phase 2: Script Documentation (Week 1-2)
 
-**Add Justification Headers**:
+### Add Justification Headers
 
 - [ ] Update `create_issues.py` with header comment
 - [ ] Update `regenerate_github_issues.py` with header comment
 - [ ] Update `create_single_component_issues.py` with header comment
 - [ ] Reference ADR-001 in all headers
 
-**Document Current State**:
+### Document Current State
 
 - [ ] List all Python automation scripts
 - [ ] Document why each requires Python
@@ -637,19 +637,19 @@ while planning for future.
 
 ### Phase 3: Process Integration (Week 2)
 
-**Update Agent Guidelines**:
+### Update Agent Guidelines
 
 - [ ] Update all orchestrators with language selection guidance
 - [ ] Add ADR-001 reference to implementation specialists
 - [ ] Update review specialists with dual-language checks
 
-**Create Decision Template**:
+### Create Decision Template
 
 - [ ] Template for justifying Python usage
 - [ ] Checklist for language selection
 - [ ] Process for quarterly reviews
 
-**Team Communication**:
+### Team Communication
 
 - [ ] Update team documentation
 - [ ] Add FAQ about language selection
@@ -657,7 +657,7 @@ while planning for future.
 
 ### Phase 4: First Quarterly Review (Q1 2026)
 
-**Establish Monitoring Routine**:
+### Establish Monitoring Routine
 
 - [ ] Check Mojo v0.26+ changelog
 - [ ] Test subprocess improvements if any
@@ -681,7 +681,7 @@ This implementation is successful when:
 
 **Comprehensive Assessment**: [Issue #8: Mojo Script Conversion Feasibility Assessment](https://github.com/mvillmow/ml-odyssey/issues/8)
 
-**Key Findings**:
+### Key Findings
 
 - Subprocess stdout capture: AVAILABLE (returns String)
 - Exit code access: NOT AVAILABLE (silent failures - CRITICAL BLOCKER)
@@ -707,12 +707,12 @@ This implementation is successful when:
 
 ### Related Documentation
 
-**Project Guidelines**:
+### Project Guidelines
 
 - [CLAUDE.md](../../../CLAUDE.md) - Project-wide guidelines
 - [Chief Architect Guidelines](../../../.claude/agents/chief-architect.md) - Strategic decisions
 
-**Mojo Documentation**:
+### Mojo Documentation
 
 - [Mojo Changelog](https://docs.modular.com/mojo/changelog/) - Release notes
 - [Mojo Stdlib](https://docs.modular.com/mojo/stdlib/) - Standard library
@@ -725,7 +725,7 @@ This implementation is successful when:
 - `test_exit_code.mojo` - Exit code access testing (34 LOC)
 - `test_mojo_capabilities_results.md` - Detailed test results documentation
 
-**Scripts Affected**:
+### Scripts Affected
 
 - `scripts/create_issues.py` - GitHub issue creation (854 LOC)
 - `scripts/regenerate_github_issues.py` - Issue generation (446 LOC)
@@ -733,13 +733,13 @@ This implementation is successful when:
 
 ### Stakeholder Communication
 
-**Internal**:
+### Internal
 
 - All section orchestrators
 - Implementation specialists
 - Review specialists
 
-**External**:
+### External
 
 - Mojo team (monitoring for feature requests)
 - Contributors (via updated guidelines)
@@ -750,7 +750,7 @@ This implementation is successful when:
 
 Based on Issue #8 testing with Mojo v0.25.7:
 
-**Mature for Production**:
+### Mature for Production
 
 - File I/O (read/write)
 - Basic string operations
@@ -758,7 +758,7 @@ Based on Issue #8 testing with Mojo v0.25.7:
 - SIMD operations
 - Memory management
 
-**Not Ready for Production**:
+### Not Ready for Production
 
 - Subprocess output capture (missing)
 - Exit code access (missing)
@@ -801,7 +801,7 @@ Based on Issue #8 testing with Mojo v0.25.7:
                    (DEFAULT)
 
 Document all Python usage with justification!
-```
+```text
 
 ### Appendix C: Quarterly Review Template
 
@@ -847,7 +847,7 @@ Document all Python usage with justification!
 **Next Steps**: [Description]
 
 **Next Review**: [Quarter Year]
-```
+```text
 
 ### Appendix D: Justification Header Template
 
@@ -876,7 +876,7 @@ Conversion Plan:
 Reference: ADR-001, Issue #[number]
 Last Review: [YYYY-MM-DD]
 """
-```
+```text
 
 ## Revision History
 
@@ -886,7 +886,7 @@ Last Review: [YYYY-MM-DD]
 
 ---
 
-**Document Metadata**:
+### Document Metadata
 
 - Location: `/notes/review/adr/ADR-001-language-selection-tooling.md`
 - Status: Accepted

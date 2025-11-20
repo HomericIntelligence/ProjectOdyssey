@@ -25,7 +25,7 @@ paper-specific information like title, author, date, and other metadata.
 
 **Decision**: Use uppercase with underscores for template placeholders (e.g., `PAPER_TITLE`, `AUTHOR_NAME`)
 
-**Rationale**:
+### Rationale
 
 - Clear visual distinction from surrounding text in templates
 - Follows common convention for template variables (Jinja2, Mustache, etc.)
@@ -42,17 +42,17 @@ Based on the parent plan context, variables fall into these categories:
    - `PAPER_YEAR` - Publication year
    - `PAPER_VENUE` - Publication venue (journal/conference)
 
-2. **Optional Paper Information**
+1. **Optional Paper Information**
    - `PAPER_DOI` - Digital Object Identifier
    - `PAPER_ARXIV_ID` - arXiv identifier
    - `PAPER_URL` - Link to paper PDF or abstract
 
-3. **Implementation Metadata**
+1. **Implementation Metadata**
    - `IMPLEMENTATION_AUTHOR` - Name of person implementing the reproduction
    - `IMPLEMENTATION_DATE` - Date of implementation creation
    - `IMPLEMENTATION_STATUS` - Status (e.g., "In Progress", "Complete")
 
-4. **Project Structure**
+1. **Project Structure**
    - `PROJECT_NAME` - Name of the implementation project
    - `MODULE_NAME` - Python/Mojo module name (lowercase, underscores)
    - `CLASS_NAME` - Main model class name (PascalCase)
@@ -61,17 +61,17 @@ Based on the parent plan context, variables fall into these categories:
 
 **Decision**: Use type-based validation with format checks
 
-**Validation Rules**:
+### Validation Rules
 
 1. **Required vs Optional**: Distinguish between mandatory and optional variables
-2. **Format Validation**:
+1. **Format Validation**:
    - Dates: ISO 8601 format (YYYY-MM-DD)
    - Years: 4-digit integer (1900-2100)
    - DOI: Standard DOI format (10.xxxx/yyyy)
    - Module names: Valid Python/Mojo identifier (lowercase, underscores only)
    - Class names: Valid PascalCase identifier
 
-3. **Length Constraints**:
+1. **Length Constraints**:
    - Titles: 1-200 characters
    - Authors: 1-500 characters (to accommodate multiple authors)
    - URLs: Valid URL format
@@ -80,16 +80,16 @@ Based on the parent plan context, variables fall into these categories:
 
 **Decision**: Provide sensible defaults for optional variables
 
-**Default Strategy**:
+### Default Strategy
 
 1. **Date/Time Defaults**:
    - `IMPLEMENTATION_DATE`: Current date in ISO format
    - `PAPER_YEAR`: None (must be provided)
 
-2. **Status Defaults**:
+1. **Status Defaults**:
    - `IMPLEMENTATION_STATUS`: "In Progress"
 
-3. **Empty/None Defaults**:
+1. **Empty/None Defaults**:
    - Optional metadata (DOI, arXiv ID, URL): Empty string or None
    - Allow template to handle missing values gracefully
 
@@ -104,7 +104,7 @@ Based on the parent plan context, variables fall into these categories:
 - Easy to debug and understand
 - No additional dependencies required
 
-**Implementation Approach**:
+### Implementation Approach
 
 - Python's `str.replace()` or `str.format()` for basic substitution
 - Consider `string.Template` for safety (prevents code injection)
@@ -152,30 +152,30 @@ variables:
     validation:
       pattern: "^[a-z][a-z0-9_]*$"
     example: "lenet5"
-```
+```text
 
 ### Error Handling
 
 **Decision**: Fail fast with clear error messages
 
-**Error Scenarios**:
+### Error Scenarios
 
 1. **Missing Required Variable**: Raise error listing missing variable name
-2. **Invalid Format**: Show expected format and received value
-3. **Validation Failure**: Explain which constraint was violated
-4. **Unknown Variable**: Warn about undefined variables in templates (potential typo)
+1. **Invalid Format**: Show expected format and received value
+1. **Validation Failure**: Explain which constraint was violated
+1. **Unknown Variable**: Warn about undefined variables in templates (potential typo)
 
 ### Documentation Requirements
 
 **Decision**: Document each variable with examples and constraints
 
-**Documentation Sections**:
+### Documentation Sections
 
 1. **Variable Reference Table**: All variables with type, required/optional, description
-2. **Usage Examples**: Show common template usage patterns
-3. **Validation Rules**: Explain constraints and valid formats
-4. **Default Values**: List all defaults and how they are computed
-5. **Error Messages**: Common errors and how to fix them
+1. **Usage Examples**: Show common template usage patterns
+1. **Validation Rules**: Explain constraints and valid formats
+1. **Default Values**: List all defaults and how they are computed
+1. **Error Messages**: Common errors and how to fix them
 
 ## References
 

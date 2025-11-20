@@ -23,12 +23,12 @@ This skill automatically fixes code formatting issues across all file types.
 # Format all Mojo files
 mojo format src/**/*.mojo
 
-# Automatically fixes:
+# Automatically fixes
 # - Indentation
 # - Spacing around operators
 # - Line wrapping
 # - Blank lines
-```
+```text
 
 ### Markdown (Partial auto-fix)
 
@@ -36,14 +36,14 @@ mojo format src/**/*.mojo
 # Fix markdown issues
 npx markdownlint-cli2 --fix "**/*.md"
 
-# Auto-fixes:
+# Auto-fixes
 # - Some blank line issues
 # - Some spacing issues
 #
-# Manual fixes needed for:
+# Manual fixes needed for
 # - Missing language in code blocks
 # - Line length (need to reflow text)
-```
+```text
 
 ### Pre-commit Hooks (100% auto-fix)
 
@@ -51,12 +51,12 @@ npx markdownlint-cli2 --fix "**/*.md"
 # Run all pre-commit hooks
 pre-commit run --all-files
 
-# Auto-fixes:
+# Auto-fixes
 # - Trailing whitespace
 # - Missing final newline
 # - Mixed line endings
 # - YAML formatting
-```
+```text
 
 ## Usage
 
@@ -66,12 +66,12 @@ pre-commit run --all-files
 # Run all formatters
 ./scripts/fix_all_formatting.sh
 
-# This:
+# This
 # 1. Formats all Mojo files
 # 2. Fixes markdown issues
 # 3. Runs pre-commit hooks
 # 4. Reports what was fixed
-```
+```text
 
 ### Fix Specific File Type
 
@@ -84,7 +84,7 @@ pre-commit run --all-files
 
 # Pre-commit only
 ./scripts/fix_formatting.sh --precommit
-```
+```text
 
 ### Fix Specific File
 
@@ -97,7 +97,7 @@ npx markdownlint-cli2 --fix README.md
 
 # Fix by pre-commit
 pre-commit run --files src/tensor.mojo
-```
+```text
 
 ## Workflow
 
@@ -115,7 +115,7 @@ git add .
 
 # 4. Commit
 git commit -m "fix: apply code formatting"
-```
+```text
 
 ### Before Committing
 
@@ -128,7 +128,7 @@ git add .
 
 # 3. Commit (pre-commit will run)
 git commit -m "feat: new feature"
-```
+```text
 
 ### After CI Failure
 
@@ -143,65 +143,68 @@ git pull
 git add .
 git commit --amend --no-edit
 git push --force-with-lease
-```
+```text
 
 ## Common Fixes
 
 ### Mojo Formatting
 
-**Before:**
+### Before:
 
 ```mojo
 fn add(x:Int,y:Int)->Int:
     return x+y
-```
+```text
 
-**After:**
+### After:
 
 ```mojo
 fn add(x: Int, y: Int) -> Int:
     return x + y
-```
+```text
 
 ### Markdown Formatting
 
-**Before:**
+### Before:
 
 ````markdown
 Some text before.
 ```text
+
 code block
-```
+
+```text
 Some text after.
 ````
 
-**After:**
+### After:
 
 ````markdown
 Some text before.
 
 ```text
-code block
-```
 
+code block
+
+```text
 Some text after.
 ````
 
 ### Trailing Whitespace
 
-**Before:**
+### Before:
 
 ```text
 line with trailing spaces
 another line
-```
+```text
 
-**After:**
+### After:
 
 ```text
 line with trailing spaces
 another line
-```
+```text
 
 ## Manual Fixes Required
 
@@ -211,14 +214,17 @@ Some issues need manual intervention:
 
 ````markdown
 # Before (need to add manually)
-```
-code here
-```
+```text
 
+code here
+
+```text
 # After
 ```python
+
 code here
-```
+
+```text
 ````
 
 ### Line Length
@@ -230,7 +236,7 @@ This is a very long line that exceeds the 120 character limit and should be brok
 # After (manually break)
 This is a very long line that exceeds the 120 character limit and should be
 broken into multiple lines.
-```
+```text
 
 ## Error Handling
 
@@ -238,7 +244,7 @@ broken into multiple lines.
 
 ```text
 Error: Cannot format file.mojo due to syntax error
-```
+```text
 
 **Fix**: Correct syntax errors before formatting
 
@@ -246,7 +252,7 @@ Error: Cannot format file.mojo due to syntax error
 
 ```text
 Error: Permission denied: file.mojo
-```
+```text
 
 **Fix**: Check file permissions
 
@@ -254,37 +260,37 @@ Error: Permission denied: file.mojo
 
 ```text
 Error: File contains merge conflict markers
-```
+```text
 
 **Fix**: Resolve merge conflicts first
 
 ## Examples
 
-**Fix all formatting:**
+### Fix all formatting:
 
 ```bash
 ./scripts/fix_all_formatting.sh
-```
+```text
 
-**Fix only Mojo:**
+### Fix only Mojo:
 
 ```bash
 mojo format src/**/*.mojo
-```
+```text
 
-**Fix only markdown:**
+### Fix only markdown:
 
 ```bash
 npx markdownlint-cli2 --fix "**/*.md"
-```
+```text
 
-**Fix and commit:**
+### Fix and commit:
 
 ```bash
 ./scripts/fix_all_formatting.sh
 git add .
 git commit -m "fix: apply code formatting"
-```
+```text
 
 ## Scripts Available
 
@@ -301,17 +307,17 @@ CI checks formatting but doesn't fix:
   run: |
     mojo format --check src/**/*.mojo
     npx markdownlint-cli2 "**/*.md"
-```
+```text
 
 If CI fails, fix locally and push.
 
 ## Best Practices
 
 1. **Fix before commit** - Always format before committing
-2. **Use pre-commit** - Let hooks auto-fix on commit
-3. **Review changes** - Check what was formatted
-4. **Commit separately** - Formatting changes in separate commit
-5. **Don't bypass** - Don't use `--no-verify` to skip formatting
+1. **Use pre-commit** - Let hooks auto-fix on commit
+1. **Review changes** - Check what was formatted
+1. **Commit separately** - Formatting changes in separate commit
+1. **Don't bypass** - Don't use `--no-verify` to skip formatting
 
 ## Auto-Fix Summary
 

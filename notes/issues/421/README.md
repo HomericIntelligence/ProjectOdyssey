@@ -34,7 +34,7 @@ shared/
     ├── text_transforms.mojo       # Text augmentation transforms
     ├── generic_transforms.mojo    # Generic transforms (NEW)
     └── ...
-```
+```text
 
 ### Public API Surface
 
@@ -43,22 +43,22 @@ The `generic_transforms` module exports:
 1. **Base Interface**:
    - `Transform` - Base trait for generic transforms
 
-2. **Normalization**:
+1. **Normalization**:
    - `Normalize[dtype]` - Scale to configurable ranges
    - `Standardize[dtype]` - Zero mean, unit variance
 
-3. **Type Conversions**:
+1. **Type Conversions**:
    - `ToFloat32` - Convert to float32
    - `ToInt32` - Convert to int32
 
-4. **Shape Manipulation**:
+1. **Shape Manipulation**:
    - `Reshape` - Reshape tensors
 
-5. **Composition**:
+1. **Composition**:
    - `Sequential` - Apply transforms in sequence
    - `ConditionalTransform[T]` - Conditional application
 
-6. **Helper Functions**:
+1. **Helper Functions**:
    - `compute_mean[dtype]` - Compute tensor mean
    - `compute_std[dtype]` - Compute tensor standard deviation
 
@@ -85,15 +85,15 @@ from shared.data.generic_transforms import (
     Sequential,
     ConditionalTransform,
 )
-```
+```text
 
-2. **Create and use transforms**:
+1. **Create and use transforms**:
 
 ```mojo
 # Single transform
 var norm = Normalize[DType.float32](min_val=0.0, max_val=1.0)
 var data = Tensor[DType.float32](100)
-# ... fill data ...
+# ... fill data 
 var normalized = norm(data)
 
 # Composed pipeline
@@ -104,9 +104,9 @@ transforms.append(Standardize[DType.float32](0.5, 0.2))
 
 var pipeline = Sequential(transforms)
 var preprocessed = pipeline(data)
-```
+```text
 
-3. **Use with data loaders**:
+1. **Use with data loaders**:
 
 ```mojo
 # Integration with data loading pipelines
@@ -114,7 +114,7 @@ var dataset = Dataset(
     root="./data",
     transform=pipeline
 )
-```
+```text
 
 ## API Reference
 
@@ -153,7 +153,7 @@ trait Transform:
             Error if transform is not invertible.
         """
         raise Error("Transform is not invertible")
-```
+```text
 
 ### Normalize
 
@@ -194,13 +194,13 @@ struct Normalize[dtype: DType](Transform):
     fn inverse(self, data: Tensor[dtype]) raises -> Tensor[dtype]:
         """Denormalize data back to original range."""
         ...
-```
+```text
 
 **Time Complexity**: O(n) where n is number of elements.
 
 **Space Complexity**: O(n) for output tensor.
 
-**Example**:
+### Example
 
 ```mojo
 # Normalize to [0, 1]
@@ -217,9 +217,10 @@ var result = norm(data)
 # Denormalize back
 var original = norm.inverse(result)
 # original: [0.0, 50.0, 100.0]
-```
+```text
 
-**Use Cases**:
+### Use Cases
+
 - Preprocessing images (scale to [0, 1])
 - Scaling features to common range
 - Normalizing neural network inputs
@@ -256,13 +257,13 @@ struct Standardize[dtype: DType](Transform):
     fn inverse(self, data: Tensor[dtype]) raises -> Tensor[dtype]:
         """Destandardize: x * std + mean."""
         ...
-```
+```text
 
 **Time Complexity**: O(n) where n is number of elements.
 
 **Space Complexity**: O(n) for output tensor.
 
-**Example**:
+### Example
 
 ```mojo
 # Standardize to zero mean, unit variance
@@ -282,9 +283,10 @@ var result = std(data)
 # Destandardize back
 var original = std.inverse(result)
 # original: [10.0, 12.0, 14.0, 16.0, 18.0]
-```
+```text
 
-**Use Cases**:
+### Use Cases
+
 - Feature scaling for machine learning
 - Preprocessing for neural networks
 - Statistical analysis
@@ -330,13 +332,13 @@ struct ToInt32(Transform):
             Float values are truncated (not rounded) when converting to int.
         """
         ...
-```
+```text
 
 **Time Complexity**: O(n) where n is number of elements.
 
 **Space Complexity**: O(n) for output tensor.
 
-**Example**:
+### Example
 
 ```mojo
 # Convert int to float
@@ -360,9 +362,10 @@ float_vals[2] = 3.9
 
 var int_vals = to_int(float_vals)
 # int_vals: [1, 2, 3] (dtype: int32) - truncated
-```
+```text
 
-**Use Cases**:
+### Use Cases
+
 - Converting image data from int to float
 - Preparing data for specific model requirements
 - Type compatibility between modules
@@ -399,13 +402,13 @@ struct Reshape(Transform):
             Error if shapes are incompatible (different total elements).
         """
         ...
-```
+```text
 
 **Time Complexity**: O(n) where n is number of elements (memory copy).
 
 **Space Complexity**: O(n) for output tensor.
 
-**Example**:
+### Example
 
 ```mojo
 # Reshape from (4,) to (2, 2)
@@ -420,9 +423,10 @@ data[3] = 4.0
 var result = reshape(data)
 # result.shape: (2, 2)
 # result: [[1.0, 2.0], [3.0, 4.0]]
-```
+```text
 
-**Use Cases**:
+### Use Cases
+
 - Preparing data for specific layer inputs
 - Flattening multi-dimensional tensors
 - Adding/removing batch dimensions
@@ -472,13 +476,13 @@ struct Sequential(Transform):
             Error if any transform is not invertible.
         """
         ...
-```
+```text
 
 **Time Complexity**: O(sum of component complexities).
 
 **Space Complexity**: O(n) for each intermediate result.
 
-**Example**:
+### Example
 
 ```mojo
 # Create preprocessing pipeline
@@ -491,13 +495,14 @@ transforms.append(Standardize[DType.float32](0.5, 0.5))    # center at 0.5
 var pipeline = Sequential(transforms)
 
 var image = Tensor[DType.int32](28, 28)
-# ... load image ...
+# ... load image 
 
 var preprocessed = pipeline(image)
 # Result: float32 tensor, standardized for model input
-```
+```text
 
-**Use Cases**:
+### Use Cases
+
 - Building preprocessing pipelines
 - Chaining multiple transformations
 - Creating reusable transform configurations
@@ -537,13 +542,13 @@ struct ConditionalTransform[T: Transform](Transform):
             Transformed tensor if predicate true, otherwise original.
         """
         ...
-```
+```text
 
 **Time Complexity**: O(predicate) + O(transform) if applied.
 
 **Space Complexity**: O(n) if transform applied, O(1) otherwise.
 
-**Example**:
+### Example
 
 ```mojo
 fn is_normalized(tensor: Tensor) -> Bool:
@@ -563,9 +568,10 @@ data[2] = 1.0
 
 var result = conditional(data)
 # Data already normalized, so result == data
-```
+```text
 
-**Use Cases**:
+### Use Cases
+
 - Applying transforms only when needed
 - Optimizing preprocessing pipelines
 - Handling mixed data formats
@@ -614,7 +620,7 @@ fn main() raises:
 
     # Feed to model
     var prediction = model.predict(preprocessed)
-```
+```text
 
 ### Example 2: Feature Scaling for ML
 
@@ -660,7 +666,7 @@ fn main() raises:
 
     # Train model on scaled data
     model.fit(train_scaled, labels)
-```
+```text
 
 ### Example 3: Inverse Transform for Visualization
 
@@ -689,7 +695,7 @@ fn main() raises:
     # Inverse transform for visualization
     var denormalized = preprocessor.inverse(output)
     visualize(denormalized)
-```
+```text
 
 ### Example 4: Conditional Processing
 
@@ -731,7 +737,7 @@ fn main() raises:
     var img2 = Tensor[DType.int32](100, 100)
     # ... values in [0, 255] ...
     var result2 = preprocessor(img2)  # Normalization applied
-```
+```text
 
 ## Integration with Existing Transforms
 
@@ -755,7 +761,7 @@ fn create_training_pipeline() -> Sequential:
     transforms.append(Standardize[DType.float32](0.5, 0.5))
 
     return Sequential(transforms)
-```
+```text
 
 ### Combining Generic and Text Transforms
 
@@ -775,7 +781,7 @@ fn preprocess_text_embeddings() -> Sequential:
     transforms.append(Standardize[DType.float32](0.0, 1.0))
 
     return Sequential(transforms)
-```
+```text
 
 ## Best Practices
 
@@ -793,7 +799,7 @@ var test_scaled = scaler(test_data)  # Use same statistics
 # BAD: Computing statistics separately for test data
 var test_mean = compute_mean(test_data)  # ❌ Don't do this
 var test_std = compute_std(test_data, test_mean)  # ❌ Data leakage
-```
+```text
 
 ### 2. Store Input Ranges for Inverse Transforms
 
@@ -812,7 +818,7 @@ var denormalized = norm.inverse(normalized)  # ✓ Works
 var norm2 = Normalize[DType.float32](0.0, 1.0)
 var normalized2 = norm2(data)
 # var denormalized2 = norm2.inverse(normalized2)  # ❌ Error: no input range
-```
+```text
 
 ### 3. Order Transforms Appropriately
 
@@ -826,7 +832,7 @@ transforms.append(Standardize(...))     # 3. Standardize
 # BAD: Normalizing before type conversion
 transforms.append(Normalize(...))       # ❌ Won't work on int tensors
 transforms.append(ToFloat32())
-```
+```text
 
 ### 4. Use Conditional Transforms for Efficiency
 
@@ -836,7 +842,7 @@ var conditional_norm = ConditionalTransform(is_normalized, norm)
 
 # BAD: Always normalizing even if already normalized
 var always_norm = Normalize[DType.float32](0.0, 1.0)
-```
+```text
 
 ### 5. Reuse Transform Instances
 
@@ -851,7 +857,7 @@ for batch in dataloader:
 for batch in dataloader:
     var preprocessor = create_preprocessor()  # ❌ Wasteful
     var preprocessed = preprocessor(batch)
-```
+```text
 
 ## Performance Characteristics
 
@@ -890,7 +896,7 @@ Run tests:
 
 ```bash
 mojo test tests/shared/data/transforms/test_generic_transforms.mojo
-```
+```text
 
 ## References
 

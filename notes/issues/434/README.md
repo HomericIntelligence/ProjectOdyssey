@@ -26,7 +26,8 @@ Validate the testing framework setup through comprehensive test coverage of test
 
 The project has a functioning test infrastructure:
 
-**Test Directory Structure**:
+### Test Directory Structure
+
 ```text
 tests/
 ├── shared/
@@ -45,14 +46,16 @@ tests/
 ├── extensor/                  # ExTensor tests
 ├── configs/                   # Configuration tests
 └── tooling/                   # Tooling tests
-```
+```text
 
-**Test Execution**:
+### Test Execution
+
 - Tests run via `mojo test <file>.mojo` pattern
 - 91+ tests currently passing
 - Tests organized by component (mirrors source structure)
 
-**Test Discovery**:
+### Test Discovery
+
 - Follows `test_*.mojo` naming convention
 - Tests organized in directories matching source layout
 - Manual test execution (no automatic discovery tool identified yet)
@@ -64,18 +67,18 @@ tests/
    - Confirm naming conventions work correctly
    - Test that nested test directories are found
 
-2. **Test Runner Validation**:
+1. **Test Runner Validation**:
    - Verify tests execute correctly
    - Confirm pass/fail reporting works
    - Test error message clarity
    - Validate execution time tracking
 
-3. **CI Integration Testing**:
+1. **CI Integration Testing**:
    - Verify CI runs tests on commits
    - Confirm build fails on test failures
    - Test coverage reporting (if implemented)
 
-4. **Output Format Testing**:
+1. **Output Format Testing**:
    - Verify clear pass/fail indicators
    - Confirm detailed error messages on failures
    - Test summary statistics accuracy
@@ -85,6 +88,7 @@ tests/
 ### Test Categories
 
 **1. Discovery Tests** (`test_discovery.mojo`)
+
 ```mojo
 fn test_finds_all_test_files() raises:
     """Verify test discovery finds all test_*.mojo files."""
@@ -97,9 +101,10 @@ fn test_respects_naming_convention() raises:
     # Create non-test file
     # Run discovery
     # Assert non-test file excluded
-```
+```text
 
 **2. Execution Tests** (`test_execution.mojo`)
+
 ```mojo
 fn test_runs_passing_test() raises:
     """Verify passing tests are reported correctly."""
@@ -112,9 +117,10 @@ fn test_runs_failing_test() raises:
     # Create simple failing test
     # Execute test
     # Assert failure reported with details
-```
+```text
 
 **3. Integration Tests** (`test_ci_integration.mojo`)
+
 ```mojo
 fn test_ci_runs_on_commit() raises:
     """Verify CI executes tests on commits."""
@@ -127,7 +133,7 @@ fn test_build_fails_on_test_failure() raises:
     # Simulate test failure
     # Check CI response
     # Assert build marked as failed
-```
+```text
 
 ## References
 
@@ -145,18 +151,19 @@ fn test_build_fails_on_test_failure() raises:
 
 The testing infrastructure is functional with 91+ passing tests. This phase focuses on **validating** the infrastructure rather than building it from scratch.
 
-**Key Testing Areas**:
+### Key Testing Areas
+
 1. Document how tests are currently discovered and run
-2. Validate the test execution process works correctly
-3. Ensure CI integration is properly configured
-4. Test edge cases in test framework behavior
+1. Validate the test execution process works correctly
+1. Ensure CI integration is properly configured
+1. Test edge cases in test framework behavior
 
 **Minimal Changes Principle**: Since infrastructure exists and works, focus on validation and documentation rather than rebuilding.
 
 ### Next Steps
 
 1. Create test discovery validation suite
-2. Document current test running process
-3. Verify CI integration configuration
-4. Test edge cases (empty tests, malformed tests, etc.)
-5. Document findings for Implementation phase (#435)
+1. Document current test running process
+1. Verify CI integration configuration
+1. Test edge cases (empty tests, malformed tests, etc.)
+1. Document findings for Implementation phase (#435)

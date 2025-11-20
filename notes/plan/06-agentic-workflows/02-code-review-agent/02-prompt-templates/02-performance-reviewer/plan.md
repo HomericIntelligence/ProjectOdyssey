@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Design output format for performance findings
-2. Create complexity analysis checklist
-3. Add optimization pattern examples
-4. Define performance metrics to track
+1. Create complexity analysis checklist
+1. Add optimization pattern examples
+1. Define performance metrics to track
 
 ## Success Criteria
 

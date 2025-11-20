@@ -11,7 +11,8 @@ This skill provides the **correct** way to reply to PR review comments using the
 
 **NEVER use `gh pr comment`** - that creates a general PR comment, not a reply to review comments.
 
-**CORRECT approach:**
+### CORRECT approach:
+
 Use the GitHub API to reply directly to review comment threads.
 
 ## When to Use
@@ -36,19 +37,19 @@ gh api repos/{owner}/{repo}/pulls/{pr}/comments/{comment-id}/replies \
 
 # Step 3: Verify reply posted
 gh api repos/{owner}/{repo}/pulls/{pr}/comments --jq '.[] | select(.in_reply_to_id)'
-```
+```text
 
 ## Reply Format
 
 Keep responses **SHORT and CONCISE** (1 line preferred):
 
-**Good examples:**
+### Good examples:
 
 - `✅ Fixed - Updated conftest.py to use real repository root`
 - `✅ Fixed - Deleted test file as requested`
 - `✅ Fixed - Removed markdown linting section`
 
-**Bad examples:**
+### Bad examples:
 
 - Long explanations (unless specifically asked)
 - Defensive responses
@@ -57,10 +58,10 @@ Keep responses **SHORT and CONCISE** (1 line preferred):
 ## Workflow
 
 1. **Get review comment IDs** - Use script to list all comments
-2. **Apply fixes** - Make the requested changes
-3. **Reply to EACH comment** - Individually respond to each piece of feedback
-4. **Verify replies posted** - Check that all replies succeeded
-5. **Check CI status** - Ensure changes pass CI
+1. **Apply fixes** - Make the requested changes
+1. **Reply to EACH comment** - Individually respond to each piece of feedback
+1. **Verify replies posted** - Check that all replies succeeded
+1. **Check CI status** - Ensure changes pass CI
 
 ## Error Handling
 

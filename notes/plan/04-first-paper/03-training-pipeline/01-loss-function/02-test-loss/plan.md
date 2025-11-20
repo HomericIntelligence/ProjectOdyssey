@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Test loss with known input/output pairs
-2. Test edge cases
-3. Verify numerical stability
+1. Test edge cases
+1. Verify numerical stability
 
 ## Success Criteria
 

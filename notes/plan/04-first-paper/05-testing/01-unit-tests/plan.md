@@ -28,8 +28,8 @@ Write comprehensive unit tests for all individual components of the LeNet-5 impl
 ## Steps
 
 1. Test Model
-2. Test Training
-3. Test Data
+1. Test Training
+1. Test Data
 
 ## Success Criteria
 

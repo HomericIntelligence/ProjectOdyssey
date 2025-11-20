@@ -12,7 +12,7 @@ Enhance README.md to clearly communicate the project's current status (planning/
 
 A reviewer noted: *"the main README is missing an overview of what the outcome was of replacing Python with mojo for these old papers. Maybe some neat pictures or something are called for."*
 
-**Current state:**
+### Current state:
 
 - README describes repository structure and language selection
 - No clear statement that project is still in infrastructure phase
@@ -27,10 +27,10 @@ A reviewer noted: *"the main README is missing an overview of what the outcome w
 Transform README.md into a document that:
 
 1. Clearly states current project status
-2. Articulates the vision for eventual outcomes
-3. Explains expected benefits of Mojo implementations
-4. Makes blog posts discoverable
-5. Shows roadmap of planned work
+1. Articulates the vision for eventual outcomes
+1. Explains expected benefits of Mojo implementations
+1. Makes blog posts discoverable
+1. Shows roadmap of planned work
 
 ## Deliverables
 
@@ -54,7 +54,7 @@ ML Odyssey is currently in the infrastructure development phase. We're building:
 infrastructure that will accelerate the actual ML implementation work.
 
 **Progress tracking:** See [Development Blog](notes/blog/) for daily updates on infrastructure work.
-```
+```text
 
 ### 2. New "Vision & Expected Outcomes" Section
 
@@ -68,7 +68,7 @@ Add before or after "Current Status":
 Implement classic AI/ML research papers in Mojo to achieve significant performance improvements
 over traditional Python implementations.
 
-### Why Mojo?
+### Why Mojo
 
 Mojo combines Python's ease of use with C-level performance through:
 
@@ -95,7 +95,7 @@ When papers are implemented, we expect to see:
 4. **Transformer (2017)** - Attention mechanism implementation
 
 More papers will be added as the project matures.
-```
+```text
 
 ### 3. New "Development Blog" Section
 
@@ -114,7 +114,7 @@ See [notes/blog/](notes/blog/) for all entries.
 
 The blog documents the meta-work of building robust automation infrastructure using
 agentic workflows and LLM-assisted development.
-```
+```text
 
 ### 4. Enhanced "Quick Start" Section
 
@@ -135,7 +135,7 @@ This project is in infrastructure development phase. Current activities:
 ### Creating GitHub Issues
 
 [Existing content about create_issues.py]
-```
+```text
 
 ### 5. Optional: "Coming Soon" Section
 
@@ -162,7 +162,7 @@ Actual results will be measured and published.*
 [Placeholder for architecture diagrams, training curves, or performance graphs]
 
 Stay tuned for actual results as implementations complete!
-```
+```text
 
 ## Success Criteria
 
@@ -184,7 +184,7 @@ Follow the blog post style:
 - **Self-aware:** Acknowledge current limitations honestly
 - **Forward-looking:** Explain vision while being realistic about current state
 
-**Examples from blog posts:**
+### Examples from blog posts:
 
 - "This is a 'go big or go home' experiment, so naturally, I went big."
 - "30% budget consumed in one day is still aggressive, but the *ratio* has improved."
@@ -229,14 +229,14 @@ Implementation of classic AI/ML research papers in Mojo for modern performance.
 
 ## Coming Soon
 [Optional new section]
-```
+```text
 
 ### Key Messages
 
 1. **What it is:** Mojo implementations of classic ML papers
-2. **Where it is:** Infrastructure phase, no papers yet
-3. **Why it matters:** Expected 10-100x performance improvements
-4. **How to follow:** Development blog documents the journey
+1. **Where it is:** Infrastructure phase, no papers yet
+1. **Why it matters:** Expected 10-100x performance improvements
+1. **How to follow:** Development blog documents the journey
 
 ## References
 
@@ -254,17 +254,17 @@ Implementation of classic AI/ML research papers in Mojo for modern performance.
 - Creating performance projection table: 30 minutes
 - Review and refinement: 1 hour
 
-**Total: ~4-5 hours**
+### Total: ~4-5 hours
 
 ## Acceptance Testing
 
 1. Show README to someone unfamiliar with the project
-2. Ask them:
+1. Ask them:
    - "What is this project about?"
    - "Has anything been implemented yet?"
    - "What can I expect to see in the future?"
    - "Why should I care about this?"
-3. Verify they have correct understanding
+1. Verify they have correct understanding
 
 ## Dependencies
 

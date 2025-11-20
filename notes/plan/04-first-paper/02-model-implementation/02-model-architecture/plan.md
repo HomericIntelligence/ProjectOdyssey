@@ -29,8 +29,8 @@ Assemble the core layers into the complete LeNet-5 architecture according to the
 ## Steps
 
 1. Define Structure
-2. Forward Pass
-3. Parameter Init
+1. Forward Pass
+1. Parameter Init
 
 ## Success Criteria
 

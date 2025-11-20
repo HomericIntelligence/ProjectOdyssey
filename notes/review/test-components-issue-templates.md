@@ -94,7 +94,7 @@ Write comprehensive TDD tests for all core operations including tensor ops, acti
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -173,7 +173,7 @@ Use appropriate Mojo patterns:
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -237,7 +237,7 @@ Package core tests for distribution and CI/CD integration. Create test runner si
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -303,7 +303,7 @@ Refactor and finalize core tests. Clean up code, improve documentation, verify f
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -384,20 +384,23 @@ Write comprehensive tests for training utilities including schedulers, training 
 ## Mathematical Verification Approach
 
 **StepLR**:
-```
+```text
+
 lr(epoch) = lr_0 * gamma^(floor(epoch / step_size))
-```
 
+```text
 **CosineAnnealing**:
-```
+```text
+
 lr(epoch) = lr_min + 0.5 * (lr_max - lr_min) * (1 + cos(epoch / T_max * π))
-```
 
+```text
 **Exponential**:
-```
-lr(epoch) = lr_0 * gamma^epoch
-```
+```text
 
+lr(epoch) = lr_0 * gamma^epoch
+
+```text
 Pre-compute expected values for first 20 steps, verify within tolerance (1e-6).
 
 ## References
@@ -409,7 +412,7 @@ Pre-compute expected values for first 20 steps, verify within tolerance (1e-6).
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -467,7 +470,7 @@ Implement training utilities to make the tests pass. Implement schedulers, train
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -506,7 +509,7 @@ Similar to Issue #456 but for training tests.
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -539,7 +542,7 @@ Refactor and finalize training tests.
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -568,7 +571,7 @@ Complete remaining data utility tests. Data tests are already 80% complete with 
 - [ ] Edge cases covered
 - [ ] Test runner executes all tests
 
-## Current State - EXCELLENT!
+## Current State - EXCELLENT
 
 **Test Files** (`tests/shared/data/`):
 - `run_all_tests.mojo` - Working test runner ✅
@@ -617,7 +620,7 @@ Complete remaining data utility tests. Data tests are already 80% complete with 
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -656,7 +659,7 @@ Complete any missing data utility implementations. Most are likely complete, but
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -699,7 +702,7 @@ Finalize data test packaging. Enhance existing test runner, verify CI/CD integra
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -732,7 +735,7 @@ Finalize data tests with cleanup and documentation.
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -780,7 +783,7 @@ Coordinate all unit test implementation across components. Ensure integration be
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -818,7 +821,7 @@ Coordinate all implementation work across components. Verify cross-component fun
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -888,7 +891,7 @@ Create unified test infrastructure for all components. Create master test runner
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -955,7 +958,7 @@ Final cleanup and documentation for entire unit test suite. Create comprehensive
 ## Implementation Notes
 
 (To be filled during implementation)
-```
+```text
 
 ---
 
@@ -964,13 +967,14 @@ Final cleanup and documentation for entire unit test suite. Create comprehensive
 To create the individual issue README files:
 
 1. Create directory: `mkdir -p /home/user/ml-odyssey/notes/issues/<issue-number>/`
-2. Copy appropriate template from above
-3. Save as: `/home/user/ml-odyssey/notes/issues/<issue-number>/README.md`
-4. Update any placeholders or paths as needed
+1. Copy appropriate template from above
+1. Save as: `/home/user/ml-odyssey/notes/issues/<issue-number>/README.md`
+1. Update any placeholders or paths as needed
 
 ## Template Customization
 
 Each template can be customized with:
+
 - Specific technical details from the codebase
 - Updated file paths
 - Current implementation status

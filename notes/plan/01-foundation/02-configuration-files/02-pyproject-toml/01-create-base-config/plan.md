@@ -27,9 +27,9 @@ None (leaf node)
 ## Steps
 
 1. Create pyproject.toml file at repository root
-2. Add [build-system] section with build requirements
-3. Add [project] section with name, version, description, authors
-4. Specify minimum Python version requirement
+1. Add [build-system] section with build requirements
+1. Add [project] section with name, version, description, authors
+1. Specify minimum Python version requirement
 
 ## Success Criteria
 

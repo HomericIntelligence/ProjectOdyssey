@@ -44,9 +44,9 @@ core/
     ├── init.mojo           # Weight initialization (Xavier, He, etc.)
     ├── memory.mojo         # Memory management helpers
     └── debug.mojo          # Debugging and profiling tools
-```
+```text
 
-## What Belongs in Core?
+## What Belongs in Core
 
 ### DO Include
 
@@ -94,7 +94,7 @@ struct LeNet5:
         xavier_init(self.fc1.weights)
         xavier_init(self.fc2.weights)
         xavier_init(self.fc3.weights)
-```
+```text
 
 ## Mojo-Specific Guidelines
 
@@ -103,9 +103,9 @@ struct LeNet5:
 The core library leverages Mojo's performance features:
 
 1. **SIMD Vectorization**: Use `SIMD` types for parallel operations
-2. **Memory Safety**: Use ownership and borrowing for safe memory management
-3. **Type Safety**: Use strong typing with `struct` for data structures
-4. **Zero-Cost Abstractions**: Use `@always_inline` for performance-critical code
+1. **Memory Safety**: Use ownership and borrowing for safe memory management
+1. **Type Safety**: Use strong typing with `struct` for data structures
+1. **Zero-Cost Abstractions**: Use `@always_inline` for performance-critical code
 
 ### Code Style
 
@@ -131,15 +131,15 @@ struct Tensor:
 @always_inline
 fn relu(x: Float32) -> Float32:
     return max(x, 0.0)
-```
+```text
 
 ### Performance Considerations
 
 1. **Minimize Allocations**: Reuse buffers where possible
-2. **Leverage SIMD**: Vectorize operations for parallel execution
-3. **Use Stack Allocation**: Prefer stack over heap when feasible
-4. **Inline Critical Paths**: Use `@always_inline` for hot paths
-5. **Profile First**: Measure before optimizing
+1. **Leverage SIMD**: Vectorize operations for parallel execution
+1. **Use Stack Allocation**: Prefer stack over heap when feasible
+1. **Inline Critical Paths**: Use `@always_inline` for hot paths
+1. **Profile First**: Measure before optimizing
 
 ## Testing
 
@@ -157,10 +157,10 @@ See `tests/core/` for test organization and examples.
 When adding new components to core:
 
 1. **Verify Shared Need**: Ensure at least 2-3 papers will use it
-2. **Write Tests First**: Follow TDD principles
-3. **Document Thoroughly**: Include docstrings and examples
-4. **Optimize Later**: Correctness first, performance second
-5. **Review Carefully**: Core changes affect all papers
+1. **Write Tests First**: Follow TDD principles
+1. **Document Thoroughly**: Include docstrings and examples
+1. **Optimize Later**: Correctness first, performance second
+1. **Review Carefully**: Core changes affect all papers
 
 ## Performance Targets
 

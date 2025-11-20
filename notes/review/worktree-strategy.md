@@ -149,7 +149,8 @@ This document defines the git worktree strategy for implementing the multi-level
 
 **Active Worktrees**: 63-65, 69-71 (Test/Impl/Package)
 **Dependencies**: Requires respective Plan issues (62, 67, 68) complete
-**Coordination**:
+
+### Coordination
 
 - Test and Impl coordinate for TDD
 - Package integrates Test and Impl artifacts
@@ -212,7 +213,7 @@ git worktree add worktrees/issue-71-pkg-skills 71-pkg-skills
 
 git worktree add worktrees/issue-66-cleanup-agents 66-cleanup-agents
 git worktree add worktrees/issue-72-cleanup-skills 72-cleanup-skills
-```
+```text
 
 ---
 
@@ -249,7 +250,7 @@ git worktree remove worktrees/issue-63-test-agents
 
 # ... etc
 
-```
+```text
 
 ---
 

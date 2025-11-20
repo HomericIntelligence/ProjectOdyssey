@@ -67,9 +67,9 @@ preventing crashes, undefined behavior, and memory corruption bugs in both Pytho
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -243,7 +243,7 @@ complete protocol.
 
 ### Example 1: Memory Leak - Missing Deallocation
 
-**Code**:
+### Code
 
 ```mojo
 fn process_large_dataset(data_path: String) raises -> Tensor:
@@ -263,7 +263,7 @@ fn process_large_dataset(data_path: String) raises -> Tensor:
     # BUG: buffer never freed!
 ```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 🔴 CRITICAL: Memory leak - allocated buffer never freed
@@ -357,13 +357,13 @@ fn copy_string(dest: UnsafePointer[UInt8], src: String, max_len: Int):
 **Issue**: Function copies `src_len` bytes without verifying that
 `src_len ` max_len`, allowing buffer overflow.
 
-**Exploit Example**:
+### Exploit Example
 
 ```mojo
 let buffer = UnsafePointer[UInt8].alloc(10)
 copy_string(buffer, "This is a very long string", 10)
 
-# Writes 26 bytes to 10-byte buffer = 16-byte overflow!
+# Writes 26 bytes to 10-byte buffer = 16-byte overflow
 
 ```text
 
@@ -433,7 +433,7 @@ fn copy_string_safe(
     return src_len + 1
 ```text
 
-**Always validate buffer sizes before copying data.**
+### Always validate buffer sizes before copying data.
 
 ```text
 

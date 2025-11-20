@@ -22,77 +22,77 @@ Select an appropriate code of conduct template for the repository to establish c
 
 ### Template Selection Strategy
 
-**Primary Recommendation: Contributor Covenant**
+### Primary Recommendation: Contributor Covenant
 
 The Contributor Covenant is the industry-standard code of conduct template and is recommended for this project unless specific requirements dictate otherwise.
 
-**Rationale:**
+### Rationale:
 
 1. **Industry Adoption**: Most widely used code of conduct in open source (used by thousands of projects including Linux, Ruby, Swift, and GitLab)
-2. **Comprehensive Coverage**: Provides thorough guidelines for:
+1. **Comprehensive Coverage**: Provides thorough guidelines for:
    - Expected behaviors (inclusive language, welcoming environment, respect)
    - Unacceptable behaviors (harassment, trolling, discrimination)
    - Enforcement procedures and consequences
    - Reporting mechanisms and contact information
-3. **Well-Maintained**: Actively maintained with regular updates reflecting community best practices
-4. **Proven Track Record**: Battle-tested in diverse communities with various sizes and cultures
-5. **Localization**: Available in multiple languages for international projects
-6. **Clear Scope**: Defines where and how the code applies (project spaces, public spaces when representing project)
+1. **Well-Maintained**: Actively maintained with regular updates reflecting community best practices
+1. **Proven Track Record**: Battle-tested in diverse communities with various sizes and cultures
+1. **Localization**: Available in multiple languages for international projects
+1. **Clear Scope**: Defines where and how the code applies (project spaces, public spaces when representing project)
 
-**Architectural Choices:**
+### Architectural Choices:
 
 1. **Use Latest Version**: Adopt the most recent version of Contributor Covenant (currently 2.1) for modern best practices
-2. **Minimal Customization**: Keep customization minimal to maintain clarity and legal soundness
-3. **Clear Contact Method**: Ensure reporting mechanism is clear and accessible
-4. **Integration with CONTRIBUTING.md**: Reference code of conduct in contributing guidelines to ensure visibility
+1. **Minimal Customization**: Keep customization minimal to maintain clarity and legal soundness
+1. **Clear Contact Method**: Ensure reporting mechanism is clear and accessible
+1. **Integration with CONTRIBUTING.md**: Reference code of conduct in contributing guidelines to ensure visibility
 
-**Alternatives Considered:**
+### Alternatives Considered:
 
 1. **Custom Code of Conduct**
    - Pros: Tailored to specific project needs
    - Cons: Time-intensive, requires legal review, less community recognition, potential gaps
    - Decision: Not recommended for initial version
 
-2. **Citizen Code of Conduct**
+1. **Citizen Code of Conduct**
    - Pros: More detailed than Contributor Covenant, focuses on creating welcoming spaces
    - Cons: Less widely adopted, more prescriptive
    - Decision: Good alternative if more detailed guidance is needed later
 
-3. **No Code of Conduct**
+1. **No Code of Conduct**
    - Pros: Minimal overhead
    - Cons: No protection for community members, signals lack of commitment to inclusive environment
    - Decision: Not acceptable for professional open-source project
 
 ### Customization Planning
 
-**Required Customizations:**
+### Required Customizations:
 
 1. Contact email/method for reporting violations
-2. Project name references
-3. (Optional) Project-specific examples if needed
+1. Project name references
+1. (Optional) Project-specific examples if needed
 
-**Customizations to Avoid:**
+### Customizations to Avoid:
 
 1. Weakening enforcement language
-2. Removing protected classes or adding exclusions
-3. Changing core principles or values
-4. Adding overly specific rules that may not age well
+1. Removing protected classes or adding exclusions
+1. Changing core principles or values
+1. Adding overly specific rules that may not age well
 
 ### Integration Strategy
 
-**Documentation Cross-References:**
+### Documentation Cross-References:
 
 1. Link from README.md to CODE_OF_CONDUCT.md
-2. Reference in CONTRIBUTING.md with expectations for contributors
-3. Mention in PR/issue templates if applicable
-4. Include in project documentation index
+1. Reference in CONTRIBUTING.md with expectations for contributors
+1. Mention in PR/issue templates if applicable
+1. Include in project documentation index
 
-**Enforcement Planning:**
+### Enforcement Planning:
 
 1. Designate maintainer(s) responsible for code of conduct enforcement
-2. Establish private communication channel for reports
-3. Define escalation path for serious violations
-4. Document process for investigating and responding to reports
+1. Establish private communication channel for reports
+1. Define escalation path for serious violations
+1. Document process for investigating and responding to reports
 
 ## References
 

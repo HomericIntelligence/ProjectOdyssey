@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Implement loss accumulator for batching loss values
-2. Create moving average tracker with configurable window
-3. Build statistical tracker for min/max/mean/std
-4. Support multiple named loss components
+1. Create moving average tracker with configurable window
+1. Build statistical tracker for min/max/mean/std
+1. Support multiple named loss components
 
 ## Success Criteria
 

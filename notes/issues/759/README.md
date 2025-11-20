@@ -33,8 +33,8 @@ the output structure.
 The Directory Generator follows a three-stage pipeline architecture:
 
 1. **Create Structure** - Build directory hierarchy
-2. **Generate Files** - Populate directories with template-based files
-3. **Validate Output** - Verify completeness and correctness
+1. **Generate Files** - Populate directories with template-based files
+1. **Validate Output** - Verify completeness and correctness
 
 This separation of concerns allows each stage to be tested independently and enables partial recovery from failures.
 
@@ -42,13 +42,13 @@ This separation of concerns allows each stage to be tested independently and ena
 
 **Decision**: Generator must be safe to run multiple times on the same target.
 
-**Rationale**:
+### Rationale
 
 - Users may need to re-run after interruption
 - Partial failures should be recoverable
 - Updates to templates should be re-applicable
 
-**Implementation**:
+### Implementation
 
 - Check for existing directories before creation
 - Never overwrite existing files without explicit user consent
@@ -57,7 +57,7 @@ This separation of concerns allows each stage to be tested independently and ena
 
 ### 3. Directory Structure Specification
 
-**Standard Paper Layout**:
+### Standard Paper Layout
 
 ```text
 papers/<paper-name>/
@@ -67,9 +67,9 @@ papers/<paper-name>/
 ├── notebooks/              # Jupyter notebooks (if applicable)
 ├── data/                   # Sample data or datasets
 └── README.md               # Paper-specific documentation
-```
+```text
 
-**Naming Conventions**:
+### Naming Conventions
 
 - Paper names are normalized to lowercase with hyphens (e.g., "LeNet-5" → "lenet-5")
 - Source files use snake_case (e.g., "conv_layer.mojo")
@@ -79,13 +79,13 @@ papers/<paper-name>/
 
 **Decision**: Directory generator consumes output from Template System (#753).
 
-**Interface Contract**:
+### Interface Contract
 
 - Template system provides rendered file content
 - Directory generator handles file I/O and path resolution
 - Clear separation: templates handle "what", generator handles "where"
 
-**Rationale**:
+### Rationale
 
 - Single responsibility - templates focus on content, generator on structure
 - Allows independent evolution of each system
@@ -95,25 +95,25 @@ papers/<paper-name>/
 
 **Decision**: Validation runs as separate stage after generation, never modifies files.
 
-**Validation Checks**:
+### Validation Checks
 
 1. **Completeness** - All required directories exist
-2. **Structure** - Directories follow repository conventions
-3. **Files** - All expected files are present
-4. **Format** - Files are properly formatted (encoding, line endings)
-5. **Syntax** - Generated code has no obvious syntax errors
+1. **Structure** - Directories follow repository conventions
+1. **Files** - All expected files are present
+1. **Format** - Files are properly formatted (encoding, line endings)
+1. **Syntax** - Generated code has no obvious syntax errors
 
 **Output**: Structured validation report with clear pass/fail status and actionable error messages.
 
 ### 6. Error Handling Strategy
 
-**Graceful Degradation**:
+### Graceful Degradation
 
 - Continue processing remaining items after non-fatal errors
 - Collect all errors and report at end
 - Distinguish between fatal (stop immediately) and recoverable errors
 
-**Error Categories**:
+### Error Categories
 
 - **Fatal**: Target directory unwritable, invalid paper metadata
 - **Recoverable**: Individual file creation failure, validation warning
@@ -123,7 +123,7 @@ papers/<paper-name>/
 
 **Decision**: Provide real-time feedback during generation.
 
-**Output Format**:
+### Output Format
 
 ```text
 Creating directory structure...
@@ -143,11 +143,11 @@ Validating output...
   ✓ File format valid
 
 Summary: Created 5 directories, generated 8 files
-```
+```text
 
 ### 8. API Design
 
-**Primary Interface**:
+### Primary Interface
 
 ```python
 def generate_paper_structure(
@@ -170,9 +170,9 @@ def generate_paper_structure(
     Returns:
         GenerationReport with status, created items, errors
     """
-```
+```text
 
-**Supporting Types**:
+### Supporting Types
 
 ```python
 @dataclass
@@ -183,38 +183,38 @@ class GenerationReport:
     skipped_items: list[tuple[Path, str]]  # (path, reason)
     errors: list[tuple[Path, str]]  # (path, error_message)
     validation_report: ValidationReport
-```
+```text
 
 ### 9. Alternatives Considered
 
-**Alternative 1: Single-Pass Generation**
+### Alternative 1: Single-Pass Generation
 
 - Combine directory creation and file generation in one pass
 - **Rejected**: Harder to test, less flexible, couples structure to content
 
-**Alternative 2: Configuration-Driven Structure**
+### Alternative 2: Configuration-Driven Structure
 
 - Use YAML/JSON to define directory structure
 - **Rejected**: Over-engineering for current needs, harder to maintain
 
-**Alternative 3: File Overwrite by Default**
+### Alternative 3: File Overwrite by Default
 
 - Always overwrite existing files
 - **Rejected**: Dangerous, could lose user modifications
 
 ### 10. Dependencies and Integration
 
-**Depends On**:
+### Depends On
 
 - Template System (#753) - Provides rendered file content
 - Repository conventions (established in Foundation section)
 
-**Depended On By**:
+### Depended On By
 
 - CLI Interface (#783) - Consumes generator API
 - Integration tests (#762) - Validates end-to-end workflow
 
-**Integration Points**:
+### Integration Points
 
 - Template System: Receives rendered content via dict[str, str]
 - CLI: Invoked by CLI with user-provided parameters

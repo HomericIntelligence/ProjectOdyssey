@@ -29,8 +29,8 @@ Create utilities for handling datasets and data loading. This includes a base da
 ## Steps
 
 1. Define base dataset interface with length, getitem, and iteration support
-2. Implement data loader for efficient batching and shuffling
-3. Create augmentation transforms for images, text, and generic data
+1. Implement data loader for efficient batching and shuffling
+1. Create augmentation transforms for images, text, and generic data
 
 ## Success Criteria
 

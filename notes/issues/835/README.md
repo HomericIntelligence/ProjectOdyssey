@@ -42,13 +42,13 @@ consumption.
 
 **Status**: Ready to start (depends on Issue #834 complete)
 
-**Dependencies**:
+### Dependencies
 
 - Issue #834 (Plan) must be complete - defines specifications and requirements
 - Can proceed in parallel with Issue #836 (Implementation) following TDD workflow
 - Coordinates with Issue #836 for test-driven development cycle
 
-**Test Coverage Goals**:
+### Test Coverage Goals
 
 1. **HTML Report Generation** (20-25% of tests)
    - Basic HTML structure generation
@@ -59,7 +59,7 @@ consumption.
    - Links and navigation elements
    - CSS styling integration
 
-2. **Text Summary Generation** (15-20% of tests)
+1. **Text Summary Generation** (15-20% of tests)
    - Header formatting
    - File statistics table generation
    - Overall coverage summary
@@ -67,36 +67,36 @@ consumption.
    - Color codes in text output (if terminal-based)
    - Sorting by coverage percentage
 
-3. **Statistics Calculation** (20-25% of tests)
+1. **Statistics Calculation** (20-25% of tests)
    - Per-file coverage percentage calculation
    - Overall project coverage percentage
    - Line counting (covered/uncovered/total)
    - File grouping and categorization
    - Edge cases (empty files, single-line files, large files)
 
-4. **Formatting and Color Coding** (15-20% of tests)
+1. **Formatting and Color Coding** (15-20% of tests)
    - Color mapping for HTML (green=covered, red=uncovered)
    - Proper HTML escaping for source code
    - Line number alignment and padding
    - File path formatting
    - Unicode/special character handling
 
-5. **Integration Tests** (15-20% of tests)
+1. **Integration Tests** (15-20% of tests)
    - End-to-end report generation workflow
    - Multiple file handling
    - Report output file creation
    - File handling and I/O operations
    - Integration with coverage data sources
 
-**Key Test Files**:
+### Key Test Files
 
 1. `test_html_report.mojo` - HTML report structure, formatting, content
-2. `test_text_summary.mojo` - Text summary structure, statistics, formatting
-3. `test_statistics.mojo` - Coverage calculations, aggregations, percentages
-4. `test_formatting.mojo` - Color coding, HTML escaping, alignment
-5. `test_integration.mojo` - End-to-end report generation workflows
+1. `test_text_summary.mojo` - Text summary structure, statistics, formatting
+1. `test_statistics.mojo` - Coverage calculations, aggregations, percentages
+1. `test_formatting.mojo` - Color coding, HTML escaping, alignment
+1. `test_integration.mojo` - End-to-end report generation workflows
 
-**TDD Approach**:
+### TDD Approach
 
 - Write tests BEFORE implementation in Issue #836
 - Tests should initially fail (red phase)
@@ -104,7 +104,7 @@ consumption.
 - Refactor implementation while keeping tests green
 - Iterate on test refinement as needed
 
-**Test Data Strategy**:
+### Test Data Strategy
 
 Create comprehensive test fixtures covering:
 
@@ -117,7 +117,7 @@ Create comprehensive test fixtures covering:
    - Small files (1-5 lines)
    - Files with comments and docstrings
 
-2. **Edge Cases**:
+1. **Edge Cases**:
    - Empty source files
    - Files with only comments
    - Files with syntax that needs HTML escaping (`<`, `>`, `&`, quotes)
@@ -125,27 +125,27 @@ Create comprehensive test fixtures covering:
    - Unicode characters in code
    - Mixed line endings (CRLF vs LF)
 
-3. **Report Scenarios**:
+1. **Report Scenarios**:
    - Single file report
    - Multi-file report (5+ files)
    - Nested directory structure
    - Files with identical names in different directories
 
-**Test Infrastructure**:
+### Test Infrastructure
 
 - Create fixture factory for generating sample coverage data
 - Utility functions for comparing HTML/text output
 - Mock file system operations where needed
 - Validation utilities for report structure
 
-**Next Steps**:
+### Next Steps
 
 1. Review coverage report specifications from Issue #834
-2. Create test directory structure (`tests/coverage/`)
-3. Design test fixtures and sample data
-4. Implement test cases following Mojo testing conventions
-5. Coordinate with Issue #836 for TDD cycle
-6. Ensure all tests pass before moving to implementation
+1. Create test directory structure (`tests/coverage/`)
+1. Design test fixtures and sample data
+1. Implement test cases following Mojo testing conventions
+1. Coordinate with Issue #836 for TDD cycle
+1. Ensure all tests pass before moving to implementation
 
 ## Test File Templates
 
@@ -171,7 +171,7 @@ fn test_html_line_numbers() raises:
 fn test_html_summary_section() raises:
     """Test that summary statistics are included in report"""
     pass
-```
+```text
 
 ### test_text_summary.mojo
 
@@ -195,7 +195,7 @@ fn test_text_summary_alignment() raises:
 fn test_text_summary_totals() raises:
     """Test overall coverage totals in summary"""
     pass
-```
+```text
 
 ### test_statistics.mojo
 
@@ -215,7 +215,7 @@ fn test_line_counting() raises:
 fn test_statistics_with_edge_cases() raises:
     """Test statistics calculation with empty files and edge cases"""
     pass
-```
+```text
 
 ### test_formatting.mojo
 
@@ -235,7 +235,7 @@ fn test_line_number_padding() raises:
 fn test_special_character_handling() raises:
     """Test handling of special and unicode characters"""
     pass
-```
+```text
 
 ### test_integration.mojo
 
@@ -255,7 +255,7 @@ fn test_report_file_output() raises:
 fn test_coverage_data_parsing() raises:
     """Test parsing of coverage data from various sources"""
     pass
-```
+```text
 
 ## Test Fixtures Structure
 
@@ -279,7 +279,7 @@ tests/
 │           ├── partial_covered.mojo
 │           ├── uncovered.mojo
 │           └── edge_cases.mojo
-```
+```text
 
 ## Testing Checklist
 

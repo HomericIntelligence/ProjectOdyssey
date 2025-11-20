@@ -29,14 +29,16 @@ Implement all image augmentation transforms to match test expectations, resolvin
 
 ### Phase 1: Basic Transform Fixes (Engineer 1)
 
-**Task 1.1: Fix RandomHorizontalFlip**
+### Task 1.1: Fix RandomHorizontalFlip
+
 - Current: Reverses all elements (treats as 1D)
 - Required: Reverse only width dimension
 - Test expectations: test_random_flip_always, test_random_flip_never, test_random_horizontal_flip_probability
 - File: `/home/user/ml-odyssey/shared/data/transforms.mojo` lines 393-439
 - TODO: Line 437 - "TODO: For proper image flipping, need to reverse only width dimension"
 
-**Implementation approach:**
+### Implementation approach:
+
 ```mojo
 fn __call__(self, data: Tensor) raises -> Tensor:
     # Probability check
@@ -64,16 +66,18 @@ fn __call__(self, data: Tensor) raises -> Tensor:
             flipped.append(Float32(data[idx]))
 
     return Tensor(flipped^)
-```
+```text
 
-**Task 1.2: Implement RandomRotation**
+### Task 1.2: Implement RandomRotation
+
 - Current: Returns original data (no rotation)
 - Required: Actual rotation within degree range
 - Test expectations: test_random_rotation_range, test_random_rotation_no_change, test_random_rotation_fill_value
 - File: `/home/user/ml-odyssey/shared/data/transforms.mojo` lines 442-494
 - TODO: Line 484 - "TODO: Implement proper image rotation"
 
-**Implementation approach:**
+### Implementation approach:
+
 ```mojo
 fn __call__(self, data: Tensor) raises -> Tensor:
     # Generate random angle
@@ -96,20 +100,22 @@ fn __call__(self, data: Tensor) raises -> Tensor:
     # This is simplified - proper implementation needs interpolation
 
     return Tensor(rotated^)
-```
+```text
 
-**Task 1.3: Add Pipeline Type**
+### Task 1.3: Add Pipeline Type
+
 - Current: Only `Compose` exists
 - Required: `Pipeline` as alias or separate type
 - Test expectations: test_compose_random_augmentations, test_augmentation_determinism_in_pipeline
 - File: `/home/user/ml-odyssey/shared/data/transforms.mojo` after line 87
 
-**Implementation approach:**
+### Implementation approach:
+
 ```mojo
 # Simple alias
 alias Pipeline = Compose
 
-# OR if we want a separate type for clarity:
+# OR if we want a separate type for clarity
 @value
 struct Pipeline(Transform):
     """Pipeline of transforms (alias for Compose).
@@ -123,18 +129,20 @@ struct Pipeline(Transform):
 
     fn __call__(self, data: Tensor) raises -> Tensor:
         return self.compose(data)
-```
+```text
 
 ### Phase 2: Cropping Transforms (Engineer 2)
 
-**Task 2.1: Fix RandomCrop**
+### Task 2.1: Fix RandomCrop
+
 - Current: 1D cropping, ignores padding
 - Required: 2D cropping with padding support
 - Test expectations: test_random_crop_varies_location, test_random_crop_with_padding
 - File: `/home/user/ml-odyssey/shared/data/transforms.mojo` lines 338-390
 - TODO: Line 387 - "TODO: Implement proper 2D random cropping for image tensors"
 
-**Implementation approach:**
+### Implementation approach:
+
 ```mojo
 fn __call__(self, data: Tensor) raises -> Tensor:
     var num_elements = data.num_elements()
@@ -165,16 +173,18 @@ fn __call__(self, data: Tensor) raises -> Tensor:
             cropped.append(Float32(data[idx]))
 
     return Tensor(cropped^)
-```
+```text
 
-**Task 2.2: Fix CenterCrop**
+### Task 2.2: Fix CenterCrop
+
 - Current: 1D center cropping
 - Required: 2D center cropping
 - Test expectations: General crop behavior
 - File: `/home/user/ml-odyssey/shared/data/transforms.mojo` lines 287-335
 - TODO: Line 332 - "TODO: Implement proper 2D center cropping for image tensors"
 
-**Implementation approach:**
+### Implementation approach:
+
 ```mojo
 fn __call__(self, data: Tensor) raises -> Tensor:
     var num_elements = data.num_elements()
@@ -197,17 +207,19 @@ fn __call__(self, data: Tensor) raises -> Tensor:
             cropped.append(Float32(data[idx]))
 
     return Tensor(cropped^)
-```
+```text
 
 ### Phase 3: New Transforms (Engineer 3)
 
-**Task 3.1: Implement RandomErasing**
+### Task 3.1: Implement RandomErasing
+
 - Current: Missing entirely
 - Required: Cutout augmentation (erase rectangular region)
 - Test expectations: test_random_erasing_basic, test_random_erasing_scale
 - File: `/home/user/ml-odyssey/shared/data/transforms.mojo` (add new struct)
 
-**Implementation approach:**
+### Implementation approach:
+
 ```mojo
 @value
 struct RandomErasing(Transform):
@@ -279,15 +291,17 @@ struct RandomErasing(Transform):
                     result.append(Float32(data[idx]))
 
         return Tensor(result^)
-```
+```text
 
-**Task 3.2: Implement RandomVerticalFlip**
+### Task 3.2: Implement RandomVerticalFlip
+
 - Current: Missing entirely
 - Required: Vertical image flipping (mirror top-bottom)
 - Test expectations: None currently, but should be consistent with HorizontalFlip
 - File: `/home/user/ml-odyssey/shared/data/transforms.mojo` (add new struct)
 
-**Implementation approach:**
+### Implementation approach:
+
 ```mojo
 @value
 struct RandomVerticalFlip(Transform):
@@ -331,22 +345,25 @@ struct RandomVerticalFlip(Transform):
                 flipped.append(Float32(data[idx]))
 
         return Tensor(flipped^)
-```
+```text
 
 ### Phase 4: Test Integration (Engineer 4)
 
-**Task 4.1: Uncomment Tests**
+### Task 4.1: Uncomment Tests
+
 - File: `/home/user/ml-odyssey/tests/shared/data/transforms/test_augmentations.mojo`
 - Uncomment all 14 test functions
 - Ensure each test can compile
 
-**Task 4.2: Fix Test Failures**
+### Task 4.2: Fix Test Failures
+
 - Run test suite: `mojo test tests/shared/data/transforms/test_augmentations.mojo`
 - Fix any compilation errors
 - Fix any assertion failures
 - Verify all 14 tests pass
 
-**Task 4.3: Verify No Regressions**
+### Task 4.3: Verify No Regressions
+
 - Run full test suite to ensure no regressions in other modules
 - Verify all existing transforms still work
 - Check for memory leaks or performance issues
@@ -354,24 +371,28 @@ struct RandomVerticalFlip(Transform):
 ## Technical Challenges
 
 ### Challenge 1: Tensor Shape Metadata
+
 **Problem**: Mojo's Tensor API doesn't expose shape information
 **Impact**: Can't easily determine H, W, C dimensions
 **Workaround**: Assume square tensors for tests, infer dimensions from num_elements()
 **Long-term**: Wait for Tensor API improvements or create wrapper type
 
 ### Challenge 2: Image Rotation
+
 **Problem**: Proper rotation requires affine transformations and interpolation
 **Impact**: Can't implement perfect rotation without significant complexity
 **Workaround**: Implement simplified rotation (nearest neighbor, limited angles)
 **Long-term**: Use external library or implement full affine transform module
 
 ### Challenge 3: Random Number Generation
+
 **Problem**: Need consistent RNG with seed control
 **Impact**: Reproducibility tests require predictable randomness
 **Workaround**: Use Mojo's random_si64 with fixed seeds where possible
 **Long-term**: Implement proper RNG module with state management
 
 ### Challenge 4: Memory Management
+
 **Problem**: Creating new tensors for each transform may be inefficient
 **Impact**: Performance degradation for large pipelines
 **Workaround**: Accept memory overhead for correctness first
@@ -380,39 +401,51 @@ struct RandomVerticalFlip(Transform):
 ## Delegation Strategy
 
 ### Engineer 1: Basic Transform Fixes
+
 **Complexity**: Medium
 **Skills Required**: Mojo basics, understanding of 2D indexing, probability logic
 **Estimated Effort**: 4-6 hours
 **Dependencies**: None
-**Deliverables**:
+
+### Deliverables
+
 - Enhanced RandomHorizontalFlip
 - Enhanced RandomRotation (simplified version)
 - Pipeline type added
 
 ### Engineer 2: Cropping Transforms
+
 **Complexity**: Medium
 **Skills Required**: 2D tensor manipulation, random positioning, padding logic
 **Estimated Effort**: 3-4 hours
 **Dependencies**: None (parallel with Engineer 1)
-**Deliverables**:
+
+### Deliverables
+
 - Enhanced RandomCrop with padding
 - Enhanced CenterCrop for 2D
 
 ### Engineer 3: New Transforms
+
 **Complexity**: Medium-High
 **Skills Required**: Algorithm implementation, rectangular region handling
 **Estimated Effort**: 4-5 hours
 **Dependencies**: None (parallel with Engineers 1, 2)
-**Deliverables**:
+
+### Deliverables
+
 - RandomErasing implementation
 - RandomVerticalFlip implementation
 
 ### Engineer 4: Test Integration
+
 **Complexity**: Low-Medium
 **Skills Required**: Debugging, test execution, fixing edge cases
 **Estimated Effort**: 2-3 hours
 **Dependencies**: Engineers 1, 2, 3 complete (sequential after others)
-**Deliverables**:
+
+### Deliverables
+
 - All tests uncommented
 - All tests passing
 - Verification report
@@ -420,21 +453,24 @@ struct RandomVerticalFlip(Transform):
 ## Coordination Points
 
 1. **Before starting**: All engineers review test expectations in #409
-2. **During implementation**: Engineers communicate any API changes needed
-3. **Integration point**: Engineer 4 waits for Engineers 1-3 to complete
-4. **Final review**: Implementation Specialist reviews all code before PR
+1. **During implementation**: Engineers communicate any API changes needed
+1. **Integration point**: Engineer 4 waits for Engineers 1-3 to complete
+1. **Final review**: Implementation Specialist reviews all code before PR
 
 ## References
 
 ### Parent Issue
+
 - Issue #408: [Plan] Image Augmentations - Design and Documentation
 
 ### Related Issues
+
 - Issue #409: [Test] Image Augmentations - Test Suite (coordinated effort)
 - Issue #411: [Package] Image Augmentations - Integration and Packaging
 - Issue #412: [Cleanup] Image Augmentations - Refactoring and Finalization
 
 ### Implementation Files
+
 - Implementation: `/home/user/ml-odyssey/shared/data/transforms.mojo`
 - Test file: `/home/user/ml-odyssey/tests/shared/data/transforms/test_augmentations.mojo`
 
@@ -451,14 +487,15 @@ struct RandomVerticalFlip(Transform):
 **Status**: Completed
 
 **Task 2.1: Fix CenterCrop** (Completed)
+
 - Implemented proper 2D center cropping for RGB images
 - Location: `/home/user/ml-odyssey/shared/data/transforms.mojo` lines 308-354
 - Pattern: Extract center rectangle (H, W, C) from input image
 - Algorithm:
   1. Infer image dimensions - assumes square RGB images (H x W x 3)
-  2. Calculate center position offsets: `offset_h = (height - crop_h) // 2`
-  3. Extract center rectangle with nested loops (h, w, c)
-  4. Use index calculation: `src_idx = ((offset_h + h) * width + (offset_w + w)) * channels + c`
+  1. Calculate center position offsets: `offset_h = (height - crop_h) // 2`
+  1. Extract center rectangle with nested loops (h, w, c)
+  1. Use index calculation: `src_idx = ((offset_h + h) * width + (offset_w + w)) * channels + c`
 - Edge Cases Handled:
   - Validates crop size doesn't exceed image size
   - Raises clear error message if crop too large
@@ -467,16 +504,17 @@ struct RandomVerticalFlip(Transform):
   - Efficient indexed access for rectangle extraction
 
 **Task 2.2: Fix RandomCrop** (Completed)
+
 - Implemented proper 2D random cropping with optional padding support
 - Location: `/home/user/ml-odyssey/shared/data/transforms.mojo` lines 377-453
 - Pattern: Extract random rectangle (H, W, C) from input image
 - Algorithm:
   1. Infer image dimensions - assumes square RGB images (H x W x 3)
-  2. Apply padding if specified (conceptually increases valid crop region)
-  3. Random top-left position: `top = random_si64(0, max_h + 1)`, `left = random_si64(0, max_w + 1)`
-  4. Adjust for padding offset to get actual source position
-  5. Extract rectangle with boundary checking
-  6. Fill out-of-bounds pixels (padding region) with 0.0
+  1. Apply padding if specified (conceptually increases valid crop region)
+  1. Random top-left position: `top = random_si64(0, max_h + 1)`, `left = random_si64(0, max_w + 1)`
+  1. Adjust for padding offset to get actual source position
+  1. Extract rectangle with boundary checking
+  1. Fill out-of-bounds pixels (padding region) with 0.0
 - Padding Implementation:
   - Conceptual padding: increases valid crop area without actually padding tensor
   - Allows crops that extend beyond original image bounds
@@ -489,7 +527,8 @@ struct RandomVerticalFlip(Transform):
   - Pre-allocates result buffer with exact capacity
   - Efficient indexed access with bounds checking
 
-**Key Observations**:
+### Key Observations
+
 - Both transforms follow the same pattern as RandomHorizontalFlip, RandomVerticalFlip, and RandomRotation
 - Assumes square RGB images (H = W, C = 3) for dimension inference
 - Uses flattened tensor layout: index = (h * width + w) * channels + c
@@ -500,33 +539,38 @@ struct RandomVerticalFlip(Transform):
 **Status**: Completed
 
 **Task 3.1: Implement RandomErasing** (Completed)
+
 - Added `RandomErasing` struct at line 630 in `/home/user/ml-odyssey/shared/data/transforms.mojo`
 - Implements cutout augmentation (Random Erasing Data Augmentation - Zhong et al., 2017)
 - Algorithm:
   1. Probability check (p parameter) - decides whether to apply erasing
-  2. Image dimension inference - assumes square RGB images (H x W x 3)
-  3. Random region size calculation based on scale (area fraction) and ratio (aspect ratio)
-  4. Random position selection within image bounds
-  5. Rectangle erasing by setting all pixels to fill value (default 0.0)
+  1. Image dimension inference - assumes square RGB images (H x W x 3)
+  1. Random region size calculation based on scale (area fraction) and ratio (aspect ratio)
+  1. Random position selection within image bounds
+  1. Rectangle erasing by setting all pixels to fill value (default 0.0)
 
-**Parameters**:
+### Parameters
+
 - `p: Float64` - Probability of applying erasing (default: 0.5)
 - `scale: Tuple[Float64, Float64]` - Range of erased area fraction (default: 0.02 to 0.33)
 - `ratio: Tuple[Float64, Float64]` - Range of aspect ratio for erased region (default: 0.3 to 3.3)
 - `value: Float64` - Fill value for erased pixels (default: 0.0 for black)
 
-**Edge Cases Handled**:
+### Edge Cases Handled
+
 - Skip erasing if random probability check fails
 - Skip if calculated region dimensions are too small (≤ 0)
 - Skip if calculated region exceeds image bounds
 - Clamp region dimensions to image size
 
-**Memory Pattern**:
+### Memory Pattern
+
 - Uses `owned` parameters for ownership transfer (move semantics)
 - Pre-allocates result buffer with capacity
 - Efficient indexed access for rectangle erasing
 
-**Follows Mojo Best Practices**:
+### Follows Mojo Best Practices
+
 - Uses `fn` for performance-critical code
 - `@value` decorator for value semantics
 - Clear type annotations (Float64, Tuple)
@@ -535,6 +579,7 @@ struct RandomVerticalFlip(Transform):
 - Consistent with existing transform patterns in the file
 
 **Task 3.2: Implement RandomVerticalFlip** (Not Started)
+
 - Note: RandomVerticalFlip already exists in transforms.mojo (lines 464-527)
 - This task was completed in a previous phase
 
@@ -544,29 +589,34 @@ struct RandomVerticalFlip(Transform):
 
 ### Key Findings
 
-**Image Dimension Inference Pattern**:
+### Image Dimension Inference Pattern
+
 - All image transforms assume square RGB images (H = W, C = 3)
 - Dimension calculation: `pixels = total_elements // channels`, `width = int(sqrt(float(pixels)))`
 - This pattern is consistent across all image transforms (flips, rotation, crops)
 - Limitation: Requires square images; non-square images would need explicit shape metadata
 
-**Tensor Layout Assumptions**:
+### Tensor Layout Assumptions
+
 - Flattened (H, W, C) layout: `index = (h * width + w) * channels + c`
 - Channel-last format (consistent with typical image processing libraries)
 - Direct indexed access to specific pixels and channels
 
-**Padding Implementation Strategy (RandomCrop)**:
+### Padding Implementation Strategy (RandomCrop)
+
 - Conceptual padding: increases valid crop region without allocating extra memory
 - Allows crops that extend beyond image bounds (useful for data augmentation)
 - Out-of-bounds pixels filled with 0.0 (black padding)
 - More efficient than actually padding the tensor first
 
-**Memory Management**:
+### Memory Management
+
 - Pre-allocate result buffers with exact capacity to avoid reallocation
 - Use `List[Float32]` for building result, then convert to `Tensor`
 - Ownership transfer with move semantics (`^`) when returning tensors
 
-**Error Handling**:
+### Error Handling
+
 - Validate crop sizes before extraction to avoid out-of-bounds access
 - Clear error messages indicating the specific problem (e.g., "Crop size exceeds image size")
 - No silent failures or undefined behavior

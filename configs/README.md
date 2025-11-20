@@ -24,7 +24,7 @@ configs/
 └── templates/          # Templates for new papers/experiments
     ├── paper.yaml
     └── experiment.yaml
-```
+```text
 
 ## Quick Start
 
@@ -41,7 +41,7 @@ fn main() raises:
     var lr = config.get_float("optimizer.learning_rate")
     var batch_size = config.get_int("training.batch_size")
     var epochs = config.get_int("training.epochs")
-```
+```text
 
 ### Load paper configuration
 
@@ -52,7 +52,7 @@ fn main() raises:
     # Load paper config with defaults merged
     var config = load_paper_config("lenet5", "training")
     var lr = config.get_float("optimizer.learning_rate")
-```
+```text
 
 ### Load defaults only
 
@@ -62,15 +62,15 @@ from shared.utils.config_loader import load_default_config
 fn main() raises:
     var training_defaults = load_default_config("training")
     var default_lr = training_defaults.get_float("optimizer.learning_rate")
-```
+```text
 
 ## Configuration Hierarchy
 
 Configurations use a **3-level merge pattern**:
 
 1. **Defaults** (`configs/defaults/*.yaml`) - Base settings for all experiments
-2. **Paper** (`configs/papers/<paper>/*.yaml`) - Paper-specific overrides
-3. **Experiment** (`configs/experiments/<paper>/<experiment>.yaml`) - Experiment variations
+1. **Paper** (`configs/papers/<paper>/*.yaml`) - Paper-specific overrides
+1. **Experiment** (`configs/experiments/<paper>/<experiment>.yaml`) - Experiment variations
 
 Later levels override earlier levels, allowing fine-grained control.
 
@@ -82,7 +82,7 @@ Use environment variables for path configuration:
 paths:
   data_dir: "${ML_ODYSSEY_DATA:-./data}"
   checkpoint_dir: "${ML_ODYSSEY_CHECKPOINTS:-./checkpoints}"
-```
+```text
 
 Format: `${VAR_NAME:-default_value}`
 
@@ -95,16 +95,16 @@ Format: `${VAR_NAME:-default_value}`
    mkdir -p configs/experiments/my_paper
    ```
 
-2. Copy templates
+1. Copy templates
 
    ```bash
    cp configs/templates/paper.yaml configs/papers/my_paper/model.yaml
    cp configs/templates/experiment.yaml configs/experiments/my_paper/baseline.yaml
    ```
 
-3. Edit configurations with paper-specific values
+1. Edit configurations with paper-specific values
 
-4. Load in code
+1. Load in code
 
    ```mojo
    var config = load_experiment_config("my_paper", "baseline")
@@ -133,7 +133,7 @@ extends:
   - "papers/lenet5/model.yaml"
   - "papers/lenet5/training.yaml"
   - "papers/lenet5/data.yaml"
-```
+```text
 
 ## Migration Guide
 
@@ -149,7 +149,7 @@ yamllint configs/
 
 # Run config loading tests
 mojo test tests/configs/
-```
+```text
 
 ## Schema Validation (Future)
 
@@ -177,7 +177,7 @@ Configuration files support environment variables with defaults:
 checkpoint_dir: "${ML_ODYSSEY_CHECKPOINTS:-./checkpoints}"
 log_dir: "${ML_ODYSSEY_LOGS:-./logs}"
 data_dir: "${ML_ODYSSEY_DATA:-./data}"
-```
+```text
 
 ### Configuration Validation
 
@@ -192,7 +192,7 @@ python scripts/lint_configs.py configs/experiments/lenet5/baseline.yaml
 
 # Verbose output for debugging
 python scripts/lint_configs.py -v configs/
-```
+```text
 
 ### Creating New Configurations
 
@@ -210,7 +210,7 @@ python scripts/lint_configs.py -v configs/
    vim configs/papers/resnet/model.yaml
    ```
 
-2. **For a new experiment:**
+1. **For a new experiment:**
 
    ```bash
    # Copy template
@@ -223,9 +223,9 @@ python scripts/lint_configs.py -v configs/
 ### Performance Tips
 
 1. **Use flat configurations** - The current parser is optimized for flat key-value pairs
-2. **Leverage defaults** - Only override what's different from defaults
-3. **Cache loaded configs** - Reuse parsed configurations when possible
-4. **Validate early** - Run linting before training to catch issues
+1. **Leverage defaults** - Only override what's different from defaults
+1. **Cache loaded configs** - Reuse parsed configurations when possible
+1. **Validate early** - Run linting before training to catch issues
 
 ### Troubleshooting
 

@@ -27,14 +27,14 @@ open htmlcov/index.html
 
 # Terminal report
 pytest --cov=src --cov-report=term-missing tests/
-```
+```text
 
 ### Mojo Coverage (Future)
 
 ```bash
 # When Mojo coverage tools available
 mojo test --coverage tests/
-```
+```text
 
 ## Coverage Metrics
 
@@ -46,7 +46,7 @@ Percentage of lines executed:
 src/module.mojo
   Lines: 45/50 (90%)
   Missing: 12, 18, 23, 35, 41
-```
+```text
 
 ### Branch Coverage
 
@@ -55,7 +55,7 @@ Percentage of decision branches taken:
 ```text
 Branches: 8/10 (80%)
 Missing branches: 12->15, 18->20
-```
+```text
 
 ## Coverage Goals
 
@@ -81,14 +81,14 @@ TOTAL                400        45      88.8%
 Critical paths: 100% ✅
 Minimum coverage: 80% ✅
 Target coverage: 90% ❌
-```
+```text
 
 ## Improving Coverage
 
 1. **Identify gaps**: Find uncovered lines
-2. **Add tests**: Write tests for gaps
-3. **Re-run**: Verify coverage improved
-4. **Repeat**: Until targets met
+1. **Add tests**: Write tests for gaps
+1. **Re-run**: Verify coverage improved
+1. **Repeat**: Until targets met
 
 ## CI Integration
 
@@ -97,6 +97,6 @@ Target coverage: 90% ❌
   run: |
     pytest --cov=src --cov-report=xml
     codecov -f coverage.xml
-```
+```text
 
 See `phase-test-tdd` for test generation.

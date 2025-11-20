@@ -32,16 +32,16 @@ tools: ["Read", "Write", "Bash"]
 delegates_to: ["other-agent"]
 escalates_to: ["parent-agent"]
 ---
-```
+```text
 
 ### Configuration Checks
 
 1. **Syntax** - Valid YAML format
-2. **Required fields** - All mandatory fields present
-3. **Field values** - Correct types and values
-4. **Tool specs** - Valid tool names
-5. **Delegation** - Valid agent references
-6. **File location** - Correct directory structure
+1. **Required fields** - All mandatory fields present
+1. **Field values** - Correct types and values
+1. **Tool specs** - Valid tool names
+1. **Delegation** - Valid agent references
+1. **File location** - Correct directory structure
 
 ## Usage
 
@@ -51,12 +51,12 @@ escalates_to: ["parent-agent"]
 # Validate specific agent
 ./scripts/validate_agent.sh .claude/agents/implementation-specialist.md
 
-# Example output:
+# Example output
 # ✅ Valid YAML frontmatter
 # ✅ All required fields present
 # ✅ Tools are valid
 # ✅ Delegation targets exist
-```
+```text
 
 ### Validate All Agents
 
@@ -64,9 +64,9 @@ escalates_to: ["parent-agent"]
 # Validate all agent configs
 python3 tests/agents/validate_configs.py .claude/agents/
 
-# Or use script:
+# Or use script
 ./scripts/validate_all_agents.sh
-```
+```text
 
 ### CI Validation
 
@@ -75,7 +75,7 @@ Runs automatically in CI:
 ```bash
 # .github/workflows/test-agents.yml
 python3 tests/agents/validate_configs.py .claude/agents/
-```
+```text
 
 ## Required Fields
 
@@ -105,7 +105,7 @@ name: implementation-specialist
 # ❌ Wrong
 name: Implementation Specialist  # No spaces
 name: impl_specialist           # No underscores
-```
+```text
 
 ### Level Range
 
@@ -116,7 +116,7 @@ level: 3  # 0-5 only
 # ❌ Wrong
 level: 10  # Out of range
 level: "3"  # Must be integer
-```
+```text
 
 ### Phase Values
 
@@ -128,7 +128,7 @@ phase: Test
 
 # ❌ Wrong
 phase: Development  # Not a valid phase
-```
+```text
 
 ### Tool Names
 
@@ -139,7 +139,7 @@ tools: ["Read", "Write", "Bash", "Grep", "Glob"]
 # ❌ Wrong
 tools: ["FileRead"]  # Invalid tool name
 tools: "Read"        # Must be array
-```
+```text
 
 ## Error Messages
 
@@ -148,7 +148,7 @@ tools: "Read"        # Must be array
 ```text
 ❌ Validation failed: .claude/agents/agent.md
   Missing required field: 'level'
-```
+```text
 
 **Fix:** Add missing field to YAML frontmatter
 
@@ -157,7 +157,7 @@ tools: "Read"        # Must be array
 ```text
 ❌ Invalid tool: 'InvalidTool'
   Valid tools: Read, Write, Bash, Grep, Glob
-```
+```text
 
 **Fix:** Use correct tool name from valid set
 
@@ -165,25 +165,25 @@ tools: "Read"        # Must be array
 
 ```text
 ❌ Delegation target not found: 'nonexistent-agent'
-```
+```text
 
 **Fix:** Verify agent name is correct or create referenced agent
 
 ## Examples
 
-**Validate specific agent:**
+### Validate specific agent:
 
 ```bash
 ./scripts/validate_agent.sh .claude/agents/implementation-specialist.md
-```
+```text
 
-**Validate all agents:**
+### Validate all agents:
 
 ```bash
 python3 tests/agents/validate_configs.py .claude/agents/
-```
+```text
 
-**Fix validation errors:**
+### Fix validation errors:
 
 ```bash
 # Run validation
@@ -193,7 +193,7 @@ python3 tests/agents/validate_configs.py .claude/agents/
 # Fix frontmatter
 # Re-validate
 ./scripts/validate_agent.sh .claude/agents/my-agent.md
-```
+```text
 
 ## Scripts Available
 
@@ -213,14 +213,14 @@ python3 tests/agents/validate_configs.py .claude/agents/
       entry: python3 tests/agents/validate_configs.py
       language: system
       files: ^\.claude/agents/.*\.md$
-```
+```text
 
 ### CI Pipeline
 
 ```yaml
 - name: Validate Agent Configurations
   run: python3 tests/agents/validate_configs.py .claude/agents/
-```
+```text
 
 ## Common Errors
 
@@ -228,7 +228,7 @@ python3 tests/agents/validate_configs.py .claude/agents/
 
 ```text
 Error parsing YAML: mapping values are not allowed here
-```
+```text
 
 **Fix:** Check for proper YAML indentation and syntax
 
@@ -236,7 +236,7 @@ Error parsing YAML: mapping values are not allowed here
 
 ```text
 Error: No YAML frontmatter found
-```
+```text
 
 **Fix:** Ensure file starts with `---` and ends frontmatter with `---`
 
@@ -244,16 +244,16 @@ Error: No YAML frontmatter found
 
 ```text
 Error: Duplicate key: 'name'
-```
+```text
 
 **Fix:** Remove duplicate keys in frontmatter
 
 ## Best Practices
 
 1. **Validate before commit** - Always validate after changes
-2. **Use templates** - Start from agent templates
-3. **Check references** - Ensure delegated agents exist
-4. **Valid tools only** - Use documented tool names
-5. **Correct levels** - Verify level matches hierarchy
+1. **Use templates** - Start from agent templates
+1. **Check references** - Ensure delegated agents exist
+1. **Valid tools only** - Use documented tool names
+1. **Correct levels** - Verify level matches hierarchy
 
 See `/agents/templates/` for agent configuration templates.

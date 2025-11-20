@@ -50,9 +50,9 @@ Level 0 Meta-Orchestrator responsible for strategic decisions across the entire 
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -72,20 +72,20 @@ See [CLAUDE.md](../../CLAUDE.md#documentation-rules) for complete documentation 
 **Core Principle**: Use the right tool for the job - Mojo for ML/AI implementations, Python for automation when
 technically necessary.
 
-**Mojo REQUIRED**:
+### Mojo REQUIRED
 
 - ✅ ALL ML/AI implementations (neural networks, training loops, inference)
 - ✅ ALL performance-critical code (SIMD kernels, tensor operations)
 - ✅ ALL new code unless technical limitation documented
 
-**Python ALLOWED**:
+### Python ALLOWED
 
 - ✅ Automation requiring subprocess output capture (Mojo v0.25.7 limitation)
 - ✅ Text processing requiring regex (no Mojo stdlib support)
 - ✅ GitHub API interaction via Python libraries
 - ⚠️ **MUST document justification per ADR-001**
 
-**Decision Authority**:
+### Decision Authority
 
 - Chief Architect approves new Python automation
 - All Python usage must link to ADR-001 or have issue documenting justification
@@ -94,12 +94,12 @@ technically necessary.
 **Decision Process** (when creating new components):
 
 1. **ML/AI implementation?** → Mojo (required)
-2. **Need subprocess output capture?** → Python (allowed, document why)
-3. **Need regex parsing?** → Python (allowed, document why)
-4. **Interface with Python-only libraries?** → Python (allowed, document why)
-5. **Everything else?** → Mojo (default)
+1. **Need subprocess output capture?** → Python (allowed, document why)
+1. **Need regex parsing?** → Python (allowed, document why)
+1. **Interface with Python-only libraries?** → Python (allowed, document why)
+1. **Everything else?** → Mojo (default)
 
-**Justification Requirements**:
+### Justification Requirements
 
 All Python automation must include header comment with:
 
@@ -202,26 +202,31 @@ Primarily **Plan** phase, with oversight in all phases.
 ### Agent System Management
 
 Use the `agent-run-orchestrator` skill to delegate to section orchestrators:
+
 - **Invoke when**: Need to run a specific section orchestrator
 - **The skill handles**: Orchestrator invocation and coordination
 - **See**: [agent-run-orchestrator skill](../.claude/skills/agent-run-orchestrator/SKILL.md)
 
 Use the `agent-validate-config` skill to validate agent configurations:
+
 - **Invoke when**: Creating or modifying agent configurations
 - **The skill handles**: YAML frontmatter and configuration validation
 - **See**: [agent-validate-config skill](../.claude/skills/agent-validate-config/SKILL.md)
 
 Use the `agent-test-delegation` skill to test agent delegation patterns:
+
 - **Invoke when**: Validating agent system before deployment
 - **The skill handles**: Delegation chain testing and escalation path verification
 - **See**: [agent-test-delegation skill](../.claude/skills/agent-test-delegation/SKILL.md)
 
 Use the `agent-coverage-check` skill to ensure complete agent coverage:
+
 - **Invoke when**: Checking that all workflow phases have agent support
 - **The skill handles**: Coverage analysis across hierarchy levels
 - **See**: [agent-coverage-check skill](../.claude/skills/agent-coverage-check/SKILL.md)
 
 Use the `agent-hierarchy-diagram` skill to visualize agent relationships:
+
 - **Invoke when**: Creating or updating agent documentation
 - **The skill handles**: Hierarchy diagram generation
 - **See**: [agent-hierarchy-diagram skill](../.claude/skills/agent-hierarchy-diagram/SKILL.md)
@@ -285,7 +290,7 @@ Escalate errors when
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -403,8 +408,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -503,13 +508,13 @@ Success when
 
 **Scenario**: Breaking down backpropagation algorithm into implementable functions
 
-**Actions**:
+### Actions
 
 1. Analyze algorithm requirements from design spec
-2. Break down into functions: forward pass, backward pass, parameter update
-3. Define function signatures and data structures
-4. Create implementation plan with dependencies
-5. Delegate functions to engineers
+1. Break down into functions: forward pass, backward pass, parameter update
+1. Define function signatures and data structures
+1. Create implementation plan with dependencies
+1. Delegate functions to engineers
 
 **Outcome**: Clear implementation plan with well-defined function boundaries
 
@@ -517,13 +522,13 @@ Success when
 
 **Scenario**: Refactoring complex function with multiple responsibilities
 
-**Actions**:
+### Actions
 
 1. Analyze function complexity and identify separate concerns
-2. Extract sub-functions with single responsibilities
-3. Improve naming and add type hints
-4. Add documentation and usage examples
-5. Coordinate with test engineer for test updates
+1. Extract sub-functions with single responsibilities
+1. Improve naming and add type hints
+1. Add documentation and usage examples
+1. Coordinate with test engineer for test updates
 
 **Outcome**: Maintainable code following single responsibility principle
 

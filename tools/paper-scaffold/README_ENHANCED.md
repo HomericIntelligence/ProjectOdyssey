@@ -13,17 +13,20 @@ The enhanced scaffolding tool generates complete paper implementation directory 
 ## Features
 
 ### ✓ Idempotent Operations
+
 - Safe to re-run without errors
 - Skips existing files/directories
 - Clear reporting of what was created vs. skipped
 
 ### ✓ Validation
+
 - Checks required directories exist
 - Verifies required files are present
 - Validates file content and format
 - Provides actionable fix suggestions
 
 ### ✓ Comprehensive Reporting
+
 - Detailed progress output
 - Summary of created/skipped items
 - Validation report with specific errors
@@ -40,7 +43,7 @@ python tools/paper-scaffold/scaffold_enhanced.py \
     --authors "LeCun et al." \
     --year 1998 \
     --url "http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf"
-```
+```text
 
 ### Dry Run
 
@@ -50,7 +53,7 @@ Preview what would be created without actually creating anything:
 python tools/paper-scaffold/scaffold_enhanced.py \
     --paper "BERT" \
     --dry-run
-```
+```text
 
 ### Skip Validation
 
@@ -60,7 +63,7 @@ Skip validation step (faster, useful if you'll validate separately):
 python tools/paper-scaffold/scaffold_enhanced.py \
     --paper "GPT-2" \
     --no-validate
-```
+```text
 
 ### Quiet Mode
 
@@ -70,7 +73,7 @@ Suppress progress output (useful for scripts):
 python tools/paper-scaffold/scaffold_enhanced.py \
     --paper "ResNet" \
     --quiet
-```
+```text
 
 ## Generated Structure
 
@@ -90,7 +93,7 @@ papers/<paper-name>/
 │   └── cache/               # Cached computations
 ├── notebooks/               # Jupyter notebooks (empty)
 └── examples/                # Usage examples (empty)
-```
+```text
 
 ## Paper Name Normalization
 
@@ -103,11 +106,12 @@ Paper names are automatically normalized to valid directory names:
 | `GPT--2` | `gpt-2` |
 | `-AlexNet-` | `alexnet` |
 
-**Rules**:
+### Rules
+
 1. Convert to lowercase
-2. Replace spaces/special chars with hyphens
-3. Remove consecutive hyphens
-4. Trim leading/trailing hyphens
+1. Replace spaces/special chars with hyphens
+1. Remove consecutive hyphens
+1. Trim leading/trailing hyphens
 
 ## Exit Codes
 
@@ -121,17 +125,20 @@ Paper names are automatically normalized to valid directory names:
 The validator checks:
 
 ### Required Structure
+
 - `src/` - Source code directory
 - `tests/` - Test files directory
 - `README.md` - Paper documentation
 
 ### Recommended Structure (warnings only)
+
 - `docs/` - Additional documentation
 - `data/` - Data management
 - `configs/` - Configuration files
 - `notebooks/` - Jupyter notebooks
 
 ### Content Validation
+
 - README.md is not empty and has key sections
 - Mojo files have basic structure (functions/structs)
 - Files are valid UTF-8
@@ -150,7 +157,7 @@ Missing Files (1):
 Suggestions:
   - Create missing directories: mkdir -p papers/lenet-5/tests
   - Create README.md from template: cp papers/_template/README.md .
-```
+```text
 
 ## Template Variables
 
@@ -192,7 +199,7 @@ if result.success:
     print(result.summary())
 else:
     print("Generation failed:", result.errors)
-```
+```text
 
 ## Testing
 
@@ -207,9 +214,10 @@ pytest tests/tooling/test_paper_scaffold.py::TestValidation -v
 
 # Run with coverage
 pytest tests/tooling/test_paper_scaffold.py --cov=tools/paper-scaffold
-```
+```text
 
 Test coverage includes:
+
 - Paper name normalization
 - Directory creation (idempotent, error handling)
 - File generation (template rendering, overwrite protection)
@@ -221,6 +229,7 @@ Test coverage includes:
 ### Language: Python
 
 Per [ADR-001](../../notes/review/adr/ADR-001-language-selection-tooling.md):
+
 - **Justification**: Template processing, file I/O, subprocess limitations in Mojo
 - **Alternatives Considered**: Mojo (lacks subprocess output capture), Bash (harder to test)
 
@@ -228,7 +237,8 @@ Per [ADR-001](../../notes/review/adr/ADR-001-language-selection-tooling.md):
 
 Uses `Path.mkdir(parents=True, exist_ok=True)` for safe re-runs.
 
-**Rationale**:
+### Rationale
+
 - Users can recover from interruptions
 - Safe to apply template updates
 - No race conditions
@@ -237,7 +247,8 @@ Uses `Path.mkdir(parents=True, exist_ok=True)` for safe re-runs.
 
 Never overwrites existing files without explicit user confirmation.
 
-**Rationale**:
+### Rationale
+
 - Prevents accidental data loss
 - Follows principle of least surprise (POLA)
 - Supports incremental workflows
@@ -246,7 +257,8 @@ Never overwrites existing files without explicit user confirmation.
 
 Validation runs after generation, never modifies files.
 
-**Rationale**:
+### Rationale
+
 - Clear separation of concerns
 - Can be skipped for performance
 - Provides actionable error reports

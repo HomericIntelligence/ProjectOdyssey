@@ -31,7 +31,7 @@ components to improve model performance.
 
 ### 1. Training Loop Architecture
 
-**Core Responsibilities:**
+### Core Responsibilities:
 
 - Iterate over training data batches
 - Coordinate forward pass (model inference)
@@ -42,7 +42,7 @@ components to improve model performance.
 - Invoke callbacks at defined points
 - Manage training state for resumption
 
-**Key Design Principles:**
+### Key Design Principles:
 
 - **Simplicity**: Keep the loop straightforward and readable
 - **Coordination**: Act as orchestrator, delegating to specialized components
@@ -62,9 +62,9 @@ Training Loop
 ├── Data Loader (batch iteration)
 ├── Metrics Tracker (collect statistics)
 └── Callbacks (extensibility points)
-```
+```text
 
-**Integration Points:**
+### Integration Points:
 
 - **Model**: Call `forward()` for predictions, access `parameters()` for optimization
 - **Loss Function**: Pass predictions and targets to compute loss value
@@ -74,14 +74,14 @@ Training Loop
 
 ### 3. Gradient Management
 
-**Critical Operations:**
+### Critical Operations:
 
 1. **Gradient Zeroing**: Clear gradients before each batch to prevent accumulation
-2. **Backward Pass**: Compute gradients via automatic differentiation
-3. **Gradient Clipping** (optional): Prevent exploding gradients
-4. **Optimizer Step**: Update weights based on computed gradients
+1. **Backward Pass**: Compute gradients via automatic differentiation
+1. **Gradient Clipping** (optional): Prevent exploding gradients
+1. **Optimizer Step**: Update weights based on computed gradients
 
-**Best Practice Sequence:**
+### Best Practice Sequence:
 
 ```text
 for batch in data_loader:
@@ -90,23 +90,23 @@ for batch in data_loader:
     loss = loss_fn(predictions, targets)
     loss.backward()            # Compute gradients
     optimizer.step()           # Update weights
-```
+```text
 
 ### 4. Metrics Tracking
 
-**Per-Batch Metrics:**
+### Per-Batch Metrics:
 
 - Loss value
 - Batch processing time
 - Optional: batch-level accuracy
 
-**Per-Epoch Metrics:**
+### Per-Epoch Metrics:
 
 - Average loss across all batches
 - Epoch duration
 - Optional: learning rate, gradient norms
 
-**Aggregation Strategy:**
+### Aggregation Strategy:
 
 - Accumulate batch metrics during epoch
 - Compute statistics at epoch end
@@ -115,7 +115,7 @@ for batch in data_loader:
 
 ### 5. Callback System
 
-**Callback Invocation Points:**
+### Callback Invocation Points:
 
 - `on_train_begin()` - Before training starts
 - `on_epoch_begin(epoch)` - Before each epoch
@@ -124,7 +124,7 @@ for batch in data_loader:
 - `on_epoch_end(epoch, metrics)` - After each epoch
 - `on_train_end(metrics)` - After training completes
 
-**Use Cases:**
+### Use Cases:
 
 - Logging progress to console/file
 - Saving checkpoints periodically
@@ -134,7 +134,7 @@ for batch in data_loader:
 
 ### 6. Training State Management
 
-**State Components:**
+### State Components:
 
 - Current epoch number
 - Current batch index
@@ -143,7 +143,7 @@ for batch in data_loader:
 - Metric history
 - Random number generator state (for reproducibility)
 
-**Resumption Requirements:**
+### Resumption Requirements:
 
 - Save state at configurable intervals (per epoch/batch)
 - Support loading state to resume training
@@ -152,18 +152,18 @@ for batch in data_loader:
 
 ### 7. Edge Case Handling
 
-**Empty Batches:**
+### Empty Batches:
 
 - Skip batch if empty, log warning
 - Continue to next batch without error
 
-**Gradient Issues:**
+### Gradient Issues:
 
 - Check for NaN/Inf gradients
 - Option to skip batch or halt training
 - Log gradient statistics for debugging
 
-**Memory Management:**
+### Memory Management:
 
 - Clear intermediate tensors when possible
 - Support gradient accumulation for large models
@@ -171,19 +171,19 @@ for batch in data_loader:
 
 ### 8. Logging and Progress
 
-**Logging Levels:**
+### Logging Levels:
 
 - **Minimal**: Epoch-level metrics only
 - **Standard**: Batch-level metrics with configurable frequency
 - **Verbose**: Detailed statistics, gradient norms, timing
 
-**Progress Display:**
+### Progress Display:
 
 - Progress bar showing batch/epoch completion
 - ETA estimation based on batch processing time
 - Real-time metric updates (loss, accuracy)
 
-**Configurability:**
+### Configurability:
 
 - Log frequency (every N batches/epochs)
 - Metrics to track

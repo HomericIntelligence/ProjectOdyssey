@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Design README structure with required sections
-2. Create prompt for each section
-3. Add few-shot examples
-4. Define project analysis rules
+1. Create prompt for each section
+1. Add few-shot examples
+1. Define project analysis rules
 
 ## Success Criteria
 

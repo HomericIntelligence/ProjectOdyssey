@@ -22,13 +22,15 @@ The Base Trainer infrastructure (issues #303-322) achieved 100% training capabil
 
 This phase completes the training utilities by adding:
 
-**Learning Rate Schedulers:**
+### Learning Rate Schedulers:
+
 - Step decay scheduler for periodic rate reduction
 - Cosine annealing scheduler for smooth decay
 - Warmup scheduler for stable training initialization
 - Unified scheduler API and composition support
 
-**Training Callbacks:**
+### Training Callbacks:
+
 - Checkpointing callback for model persistence
 - Early stopping callback to prevent overfitting
 - Logging callback for progress tracking (partial - 4/5 phases)
@@ -36,6 +38,7 @@ This phase completes the training utilities by adding:
 ### Implementation Approach
 
 Following the **5-phase development workflow**:
+
 1. **Plan** → 2. **Test** (parallel) → 3. **Implementation** (parallel) → 4. **Package** (parallel) → 5. **Cleanup**
 
 **Note**: Early Stopping component is incomplete (issues #349-352 cover only 4 of 5 phases).
@@ -52,7 +55,7 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 #XYZ+2: [Impl] Component Name
 #XYZ+3: [Package] Component Name
 #XYZ+4: [Cleanup] Component Name
-```
+```text
 
 **Note**: Issue #349-352 (Early Stopping) only covers 4 phases (Plan, Test, Impl, Package - missing Cleanup).
 
@@ -70,7 +73,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Learning rate scheduler that reduces rate by fixed factor at specified intervals
 
-**Deliverables**:
+### Deliverables
+
 - Step decay: `lr = initial_lr * gamma^(epoch // step_size)`
 - Support for both step-based and epoch-based scheduling
 - Configurable step size and decay factor (gamma)
@@ -89,7 +93,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Smooth learning rate decay following cosine curve
 
-**Deliverables**:
+### Deliverables
+
 - Cosine annealing: `lr = min_lr + (max_lr - min_lr) * (1 + cos(π * t / T)) / 2`
 - Configurable minimum learning rate
 - Support for both step-based and epoch-based scheduling
@@ -108,7 +113,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Gradual learning rate increase from small value to target
 
-**Deliverables**:
+### Deliverables
+
 - Linear warmup: `lr = target_lr * (current_step / warmup_steps)`
 - Exponential warmup option
 - Support for both step-based and epoch-based warmup
@@ -127,7 +133,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Coordinate all learning rate schedulers with unified API
 
-**Deliverables**:
+### Deliverables
+
 - Unified scheduler interface (step, get_lr, state_dict)
 - Scheduler composition utilities (warmup + decay)
 - Integration with training loop and optimizer
@@ -148,7 +155,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Save and restore complete training state
 
-**Deliverables**:
+### Deliverables
+
 - State collection from model, optimizer, scheduler, RNG
 - Checkpoint saving with metadata (epoch, step, metrics, timestamp)
 - Checkpoint loading and state restoration
@@ -168,7 +176,8 @@ Issues follow a **5-phase pattern** where every 5 consecutive issues represent o
 
 **Purpose**: Terminate training when validation performance plateaus
 
-**Deliverables**:
+### Deliverables
+
 - Metric monitoring and comparison
 - Patience counter for tracking improvement
 - Support for minimize and maximize modes
@@ -205,23 +214,27 @@ Level 1 (Leaf Components - Callbacks):
   │
   └─ Early Stopping (#349-352, incomplete)
       └─ depends on: Trainer, Validation Loop, Metrics
-```
+```text
 
 ### Implementation Order (Respecting Dependencies)
 
 **Phase 1: Leaf Scheduler Components** (Can run in parallel)
+
 - Step Scheduler (#324-328)
 - Cosine Scheduler (#329-333)
 - Warmup Scheduler (#334-338)
 
 **Phase 2: Scheduler Coordination** (Depends on Phase 1)
+
 - LR Schedulers Parent (#339-343) - after all 3 schedulers complete
 
 **Phase 3: Callback Components** (Can run in parallel with Phase 1-2)
+
 - Checkpointing (#344-348) - can start immediately, no dependencies on schedulers
 - Early Stopping (#349-352) - can start immediately, no dependencies on schedulers
 
-**Optimal Parallelization**:
+### Optimal Parallelization
+
 - Start ALL 5 components in parallel (Step, Cosine, Warmup, Checkpointing, Early Stopping)
 - After Step/Cosine/Warmup complete → start LR Schedulers Parent
 - Total: 2 waves (5 parallel, then 1 sequential)
@@ -231,17 +244,20 @@ Level 1 (Leaf Components - Callbacks):
 ### What Exists
 
 **Training Infrastructure** (100% complete from issues #303-322):
+
 - Base trainer with training/validation loops
 - Trainer interface and lifecycle hooks
 - Gradient management and metric tracking
 - Callback hook points (on_train_begin, on_epoch_end, etc.)
 
 **Core Operations** (100% complete from issues #261-302):
+
 - Weight initializers: Xavier, Kaiming, Uniform, Normal
 - Evaluation metrics: Accuracy, Loss Tracking, Confusion Matrix
 - Complete API documentation
 
 **ExTensor Framework** (100% complete from issues #234-260):
+
 - Tensor operations: arithmetic, matrix, reduction
 - Activations: 14 functions with forward/backward
 - Losses: BCE, MSE, cross-entropy
@@ -250,6 +266,7 @@ Level 1 (Leaf Components - Callbacks):
 ### What's Needed
 
 **Learning Rate Schedulers** (Issues #324-343):
+
 - ❌ Step decay scheduler
 - ❌ Cosine annealing scheduler
 - ❌ Warmup scheduler
@@ -257,20 +274,22 @@ Level 1 (Leaf Components - Callbacks):
 - ❌ Scheduler composition utilities
 
 **Training Callbacks** (Issues #344-352):
+
 - ❌ Checkpointing callback
 - ❌ Early stopping callback
 - ❌ Logging callback (NOT in this batch)
 
 ### Gaps and Risks
 
-**Gaps**:
-1. **No logging callback**: Issue #352 ends before logging is complete
-2. **Incomplete early stopping**: Missing Cleanup phase for issue #349-352
-3. **No multi-scheduler support**: Need composition for warmup + decay
-4. **No checkpoint versioning**: Compatibility across Mojo versions not addressed
-5. **Limited scheduler types**: No exponential, polynomial, or cyclic schedulers yet
+### Gaps
 
-**Risks**:
+1. **No logging callback**: Issue #352 ends before logging is complete
+1. **Incomplete early stopping**: Missing Cleanup phase for issue #349-352
+1. **No multi-scheduler support**: Need composition for warmup + decay
+1. **No checkpoint versioning**: Compatibility across Mojo versions not addressed
+1. **Limited scheduler types**: No exponential, polynomial, or cyclic schedulers yet
+
+### Risks
 
 | Risk | Impact | Likelihood | Mitigation |
 |------|--------|------------|------------|
@@ -296,27 +315,28 @@ Level 1 (Leaf Components - Callbacks):
    - Simple state: current_step, last_epoch
    - Common values: step_size=30, gamma=0.1
 
-2. **Cosine Scheduler** (#329-333)
+1. **Cosine Scheduler** (#329-333)
    - Formula: `lr = eta_min + (eta_max - eta_min) * (1 + cos(π * T_cur / T_max)) / 2`
    - State: current_step, total_steps, eta_min
    - Smooth decay, better final performance
 
-3. **Warmup Scheduler** (#334-338)
+1. **Warmup Scheduler** (#334-338)
    - Linear: `lr = target_lr * (current_step / warmup_steps)`
    - Exponential: `lr = target_lr * (current_step / warmup_steps)^2`
    - Chaining support for warmup → decay
 
-4. **Checkpointing** (#344-348)
+1. **Checkpointing** (#344-348)
    - Save: model, optimizer, scheduler, epoch, metrics, RNG state
    - Load: restore all components to exact state
    - Best model tracking, automatic cleanup
 
-5. **Early Stopping** (#349-352, incomplete)
+1. **Early Stopping** (#349-352, incomplete)
    - Monitor validation metric
    - Patience counter, min_delta tolerance
    - Best model restoration
 
-**Success Criteria**:
+### Success Criteria
+
 - [ ] All schedulers produce correct learning rate curves
 - [ ] Schedulers integrate with optimizer correctly
 - [ ] Checkpointing saves and restores complete state
@@ -329,14 +349,16 @@ Level 1 (Leaf Components - Callbacks):
 
 **Component**: LR Schedulers Parent (#339-343)
 
-**Integration Tasks**:
+### Integration Tasks
+
 - Unified scheduler interface (step, get_lr, state_dict, load_state_dict)
 - Scheduler composition utilities (SequentialLR for warmup + decay)
 - Integration with training loop
 - Comprehensive scheduler documentation
 - Validation tests for all schedulers
 
-**Success Criteria**:
+### Success Criteria
+
 - [ ] All schedulers implement common interface
 - [ ] Warmup + decay composition works correctly
 - [ ] Integration with training loop is seamless
@@ -347,7 +369,8 @@ Level 1 (Leaf Components - Callbacks):
 
 **Duration**: Estimated 3-5 days
 
-**Integration Tasks**:
+### Integration Tasks
+
 - End-to-end training with all components
 - Train MLP with step decay + checkpointing + early stopping
 - Train MLP with cosine + warmup + checkpointing
@@ -355,7 +378,8 @@ Level 1 (Leaf Components - Callbacks):
 - Validate early stopping prevents overfitting
 - Performance profiling (scheduler overhead should be <1% of training time)
 
-**Success Criteria**:
+### Success Criteria
+
 - [ ] Complete training workflows with all combinations
 - [ ] Checkpoint resume produces identical results
 - [ ] Early stopping saves training time
@@ -364,7 +388,7 @@ Level 1 (Leaf Components - Callbacks):
 
 ### Parallel Work Opportunities
 
-**Maximum Parallelization**:
+### Maximum Parallelization
 
 ```text
 Week 1-5: Phase 1 - All 5 leaf components in parallel
@@ -383,7 +407,7 @@ Week 7-8: Phase 3 - Integration testing
 
 Total: ~8 weeks with full parallelization
        ~15+ weeks if sequential
-```
+```text
 
 ## Technical Specifications
 
@@ -391,7 +415,7 @@ Total: ~8 weeks with full parallelization
 
 #### Step Scheduler
 
-**API Design**:
+### API Design
 
 ```mojo
 struct StepLRScheduler:
@@ -439,9 +463,10 @@ struct StepLRScheduler:
     fn load_state_dict(inout self, state: Dict[String, Variant]):
         """Load scheduler state from checkpoint."""
         self.last_epoch = state["last_epoch"].get[Int]()
-```
+```text
 
-**Testing Strategy**:
+### Testing Strategy
+
 - Verify learning rate decreases at correct epochs
 - Test with different step_size and gamma values
 - Validate state save/load roundtrip
@@ -449,7 +474,7 @@ struct StepLRScheduler:
 
 #### Cosine Scheduler
 
-**API Design**:
+### API Design
 
 ```mojo
 struct CosineAnnealingLRScheduler:
@@ -499,9 +524,10 @@ struct CosineAnnealingLRScheduler:
     fn load_state_dict(inout self, state: Dict[String, Variant]):
         """Load scheduler state from checkpoint."""
         self.last_epoch = state["last_epoch"].get[Int]()
-```
+```text
 
-**Testing Strategy**:
+### Testing Strategy
+
 - Verify smooth cosine decay curve
 - Test minimum learning rate is respected
 - Validate T_max boundary (epoch == T_max)
@@ -509,7 +535,7 @@ struct CosineAnnealingLRScheduler:
 
 #### Warmup Scheduler
 
-**API Design**:
+### API Design
 
 ```mojo
 struct WarmupLRScheduler:
@@ -581,9 +607,10 @@ struct WarmupLRScheduler:
         self.current_step = state["current_step"].get[Int]()
         if "after_scheduler" in state and self.after_scheduler:
             self.after_scheduler.load_state_dict(state["after_scheduler"])
-```
+```text
 
-**Testing Strategy**:
+### Testing Strategy
+
 - Verify linear warmup increases correctly
 - Test exponential warmup curve
 - Validate chaining with step/cosine schedulers
@@ -593,7 +620,7 @@ struct WarmupLRScheduler:
 
 #### Checkpointing Callback
 
-**API Design**:
+### API Design
 
 ```mojo
 struct CheckpointCallback:
@@ -701,9 +728,10 @@ struct CheckpointCallback:
                 if old_path.exists() and "best" not in str(old_path):
                     old_path.unlink()
             self.checkpoint_list = self.checkpoint_list[to_remove:]
-```
+```text
 
-**Testing Strategy**:
+### Testing Strategy
+
 - Verify complete state save/load roundtrip
 - Test best model tracking with min and max modes
 - Validate checkpoint cleanup (old files removed)
@@ -712,7 +740,7 @@ struct CheckpointCallback:
 
 #### Early Stopping Callback
 
-**API Design**:
+### API Design
 
 ```mojo
 struct EarlyStoppingCallback:
@@ -802,9 +830,10 @@ struct EarlyStoppingCallback:
             return current < (self.best_metric - self.min_delta)
         else:
             return current > (self.best_metric + self.min_delta)
-```
+```text
 
-**Testing Strategy**:
+### Testing Strategy
+
 - Verify patience counter increments correctly
 - Test early stopping triggers at correct epoch
 - Validate best weights restoration
@@ -824,7 +853,8 @@ struct EarlyStoppingCallback:
 
 **Likelihood**: Medium
 
-**Mitigation**:
+### Mitigation
+
 - Add version field to checkpoint metadata
 - Validate checkpoint version before loading
 - Test loading checkpoints from previous versions
@@ -839,7 +869,8 @@ struct EarlyStoppingCallback:
 
 **Likelihood**: Medium
 
-**Mitigation**:
+### Mitigation
+
 - Extensive testing of all composition combinations
 - Visualize learning rate curves for validation
 - Compare against PyTorch reference implementations
@@ -854,7 +885,8 @@ struct EarlyStoppingCallback:
 
 **Likelihood**: Medium
 
-**Mitigation**:
+### Mitigation
+
 - Test save/load roundtrip for all components
 - Verify training produces identical results after resume
 - Include RNG state in checkpoints
@@ -871,7 +903,8 @@ struct EarlyStoppingCallback:
 
 **Likelihood**: Medium
 
-**Mitigation**:
+### Mitigation
+
 - Tunable patience parameter (default 10-20 epochs)
 - Tunable min_delta for noise tolerance
 - Test with noisy metric trajectories
@@ -886,7 +919,8 @@ struct EarlyStoppingCallback:
 
 **Likelihood**: Low
 
-**Mitigation**:
+### Mitigation
+
 - Use Mojo ownership patterns (borrowed/owned)
 - Memory profiling tests (track allocations)
 - Clear state in reset methods
@@ -901,7 +935,8 @@ struct EarlyStoppingCallback:
 
 **Likelihood**: Low
 
-**Mitigation**:
+### Mitigation
+
 - Clear API contract between scheduler and optimizer
 - Integration tests with all optimizers (SGD, future Adam)
 - Verify learning rate changes in optimizer
@@ -917,12 +952,12 @@ struct EarlyStoppingCallback:
    - Address concerns about incomplete Early Stopping
    - Finalize component prioritization
 
-2. **Set Up Development Environment**
+1. **Set Up Development Environment**
    - Verify Mojo version compatibility
    - Set up testing infrastructure for schedulers
    - Configure CI for new components
 
-3. **Begin Phase 1 (Leaf Components)**
+1. **Begin Phase 1 (Leaf Components)**
    - **Recommended**: Start all 5 components in parallel
      - Team 1: Step + Cosine schedulers
      - Team 2: Warmup scheduler
@@ -937,12 +972,12 @@ struct EarlyStoppingCallback:
    - Continuous integration testing
    - Documentation as you go
 
-2. **Begin Phase 2 Coordination** (#339-343)
+1. **Begin Phase 2 Coordination** (#339-343)
    - Start LR Schedulers Parent after 3 schedulers complete
    - Test scheduler composition (warmup + decay)
    - Integration with training loop
 
-3. **Parallel: Integration Testing**
+1. **Parallel: Integration Testing**
    - End-to-end training workflows
    - Checkpoint save/load validation
    - Early stopping effectiveness testing
@@ -954,13 +989,13 @@ struct EarlyStoppingCallback:
    - Composition utilities
    - Comprehensive documentation
 
-2. **Final Integration Testing**
+1. **Final Integration Testing**
    - Train MLP with all combinations
    - Validate scheduler overhead < 1%
    - Performance profiling
    - Memory leak testing
 
-3. **Address Incomplete Components**
+1. **Address Incomplete Components**
    - Document Early Stopping missing Cleanup phase
    - Plan for Logging Callback (issue #353+)
    - Identify any gaps for future work
@@ -1006,18 +1041,20 @@ struct EarlyStoppingCallback:
 Issues #324-352 represent **critical production infrastructure** for ML Odyssey, completing the training utilities needed for all future paper implementations. The work builds directly on the Base Trainer's success (issues #303-322) and enables:
 
 1. **Adaptive learning rates**: Step, cosine, and warmup schedulers for better convergence
-2. **Training resilience**: Checkpointing for fault tolerance and experiment resumption
-3. **Automatic regularization**: Early stopping to prevent overfitting
-4. **Production workflows**: All components needed for long-running training jobs
+1. **Training resilience**: Checkpointing for fault tolerance and experiment resumption
+1. **Automatic regularization**: Early stopping to prevent overfitting
+1. **Production workflows**: All components needed for long-running training jobs
 
-**Estimated Timeline**:
+### Estimated Timeline
+
 - **With full parallelization**: 7-8 weeks
 - **Sequential implementation**: 15-20 weeks
 - **Hybrid approach** (recommended): 10-12 weeks
 
 **Recommended Approach**: Start with Phase 1 parallelization (5 leaf components), then proceed with Phase 2 coordination and integration testing.
 
-**Note on Incomplete Components**:
+### Note on Incomplete Components
+
 - **Early Stopping** is missing Cleanup phase (issue #353+)
 - **Logging Callback** not included in this batch (issue #353+)
 - These gaps should be addressed in the next batch of issues

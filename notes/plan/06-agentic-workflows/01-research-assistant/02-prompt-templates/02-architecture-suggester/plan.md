@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Create prompt with chain-of-thought structure
-2. Define architecture reasoning steps
-3. Add few-shot examples with rationale
-4. Include Mojo-specific considerations
+1. Define architecture reasoning steps
+1. Add few-shot examples with rationale
+1. Include Mojo-specific considerations
 
 ## Success Criteria
 

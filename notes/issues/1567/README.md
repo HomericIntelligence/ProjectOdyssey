@@ -21,7 +21,7 @@ Format test fixture files to comply with `mojo format` standards, fixing pre-com
 
 Test fixture files in `tests/shared/fixtures/` were not formatted according to `mojo format` standards, causing pre-commit hook failures in CI:
 
-```
+```text
 Mojo Format..............................................................Failed
 - hook id: mojo-format
 - files were modified by this hook
@@ -31,7 +31,7 @@ reformatted tests/shared/fixtures/mock_data.mojo
 reformatted tests/shared/fixtures/mock_models.mojo
 
 1 file reformatted, 14 files left unchanged.
-```
+```text
 
 ## Formatting Issues
 
@@ -41,35 +41,35 @@ The mojo formatter makes these stylistic changes:
 
 Removes space between `inout` and `self`:
 
-**Before:**
+### Before:
 
 ```mojo
 fn __init__(inout self, num_samples: Int = 100):
-```
+```text
 
-**After:**
+### After:
 
 ```mojo
 fn __init__(inoutself, num_samples: Int = 100):
-```
+```text
 
 ### 2. Long Function Calls
 
 Breaks into multiple lines for readability:
 
-**Before:**
+### Before:
 
 ```mojo
 var input = create_random_tensor([self.input_dim], random_seed=item_seed)
-```
+```text
 
-**After:**
+### After:
 
 ```mojo
 var input = create_random_tensor(
     [self.input_dim], random_seed=item_seed
 )
-```
+```text
 
 ## Solution
 
@@ -77,25 +77,25 @@ Run `mojo format` on all test fixture files:
 
 ```bash
 pixi run mojo format tests/shared/fixtures/*.mojo
-```
+```text
 
 ## Implementation Notes
 
 ### Changes Made
 
-**File: tests/shared/fixtures/mock_data.mojo**
+### File: tests/shared/fixtures/mock_data.mojo
 
 - 24 formatting changes
 - Reformatted 4 `__init__` signatures (removed `inout self` space)
 - Reformatted 6 long function calls (multi-line)
 
-**File: tests/shared/fixtures/mock_models.mojo**
+### File: tests/shared/fixtures/mock_models.mojo
 
 - 8 formatting changes
 - Reformatted 2 `__init__` signatures
 - Reformatted 3 long function calls
 
-**File: tests/shared/fixtures/mock_tensors.mojo**
+### File: tests/shared/fixtures/mock_tensors.mojo
 
 - 9 formatting changes
 - Reformatted 3 `__init__` signatures
@@ -108,7 +108,7 @@ Before formatting:
 ```bash
 $ pre-commit run --all-files
 Mojo Format..............................................................Failed
-```
+```text
 
 After formatting:
 
@@ -121,7 +121,7 @@ Fix End of Files.........................................................Passed
 Check YAML...............................................................Passed
 Check for Large Files....................................................Passed
 Fix Mixed Line Endings...................................................Passed
-```
+```text
 
 ## Note on Formatter Behavior
 

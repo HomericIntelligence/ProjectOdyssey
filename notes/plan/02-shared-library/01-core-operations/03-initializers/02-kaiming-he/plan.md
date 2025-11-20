@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Implement Kaiming uniform variant with correct scaling
-2. Create Kaiming normal variant with proper variance
-3. Support both fan_in and fan_out modes
-4. Ensure random seed produces reproducible results
+1. Create Kaiming normal variant with proper variance
+1. Support both fan_in and fan_out modes
+1. Ensure random seed produces reproducible results
 
 ## Success Criteria
 

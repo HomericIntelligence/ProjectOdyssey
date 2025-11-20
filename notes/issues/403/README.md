@@ -30,8 +30,8 @@ providing batching, shuffling, and iteration support for accessing batches seque
 The Data Loader component consists of three core subsystems:
 
 1. **Batching** (`01-batching/`) - Groups individual dataset samples into mini-batches
-2. **Shuffling** (`02-shuffling/`) - Randomizes sample order for better generalization
-3. **Iteration** (`03-iteration/`) - Provides Python iterator protocol for batch traversal
+1. **Shuffling** (`02-shuffling/`) - Randomizes sample order for better generalization
+1. **Iteration** (`03-iteration/`) - Provides Python iterator protocol for batch traversal
 
 ### Key Design Principles
 
@@ -41,7 +41,7 @@ The Data Loader component consists of three core subsystems:
 
 **Rationale**: Following KISS principle - establish correct basic behavior before optimization.
 
-**Implementation Strategy**:
+### Implementation Strategy
 
 - Begin with fixed-size batches in dataset order
 - Add shuffling as second layer
@@ -56,11 +56,11 @@ The Data Loader component consists of three core subsystems:
 - Drop mode: Ensures consistent batch size (important for some architectures)
 - Include mode: Uses all data (important for small datasets)
 
-**API Design**:
+### API Design
 
 ```python
 DataLoader(dataset, batch_size=32, drop_last=False)
-```
+```text
 
 #### 3. Reproducible Shuffling
 
@@ -68,7 +68,7 @@ DataLoader(dataset, batch_size=32, drop_last=False)
 
 **Rationale**: Enables reproducibility while providing different orders each epoch.
 
-**Implementation Strategy**:
+### Implementation Strategy
 
 - Accept base random seed in constructor
 - Derive epoch-specific seed: `epoch_seed = base_seed + epoch_number`
@@ -81,7 +81,7 @@ DataLoader(dataset, batch_size=32, drop_last=False)
 
 **Rationale**: Validation and test sets should maintain consistent order for reproducibility.
 
-**API Design**:
+### API Design
 
 ```python
 # Training loader - shuffled
@@ -89,7 +89,7 @@ train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, seed=42)
 
 # Validation loader - sequential
 val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
-```
+```text
 
 #### 5. Collate Function for Custom Batching
 
@@ -101,15 +101,15 @@ val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 - Variable-length sequences: Pad to max length in batch
 - Complex structures: Custom combination logic
 
-**Default Behavior**:
+### Default Behavior
 
 ```python
 def default_collate(batch):
     """Stack tensors along new batch dimension"""
     return stack(batch, axis=0)
-```
+```text
 
-**Custom Collate Example**:
+### Custom Collate Example
 
 ```python
 def pad_collate(batch):
@@ -118,7 +118,7 @@ def pad_collate(batch):
     return [pad(item, max_len) for item in batch]
 
 loader = DataLoader(dataset, batch_size=32, collate_fn=pad_collate)
-```
+```text
 
 #### 6. Python Iterator Protocol
 
@@ -126,7 +126,7 @@ loader = DataLoader(dataset, batch_size=32, collate_fn=pad_collate)
 
 **Rationale**: Enables natural Python for-loop syntax and compatibility with existing tools.
 
-**Protocol Implementation**:
+### Protocol Implementation
 
 ```python
 class DataLoader:
@@ -141,9 +141,9 @@ class DataLoader:
             return self.get_next_batch()
         else:
             raise StopIteration
-```
+```text
 
-**Usage**:
+### Usage
 
 ```python
 # Natural for-loop syntax
@@ -154,7 +154,7 @@ for batch in data_loader:
 for epoch in range(num_epochs):
     for batch in data_loader:  # Automatically resets
         train_on_batch(batch)
-```
+```text
 
 #### 7. State Management for Resumption
 
@@ -162,13 +162,13 @@ for epoch in range(num_epochs):
 
 **Rationale**: Long training runs may need checkpointing and resumption.
 
-**State to Track**:
+### State to Track
 
 - Current batch index
 - Current epoch number
 - RNG state for shuffle reproducibility
 
-**API Design**:
+### API Design
 
 ```python
 # Save state
@@ -176,7 +176,7 @@ state = loader.state_dict()
 
 # Resume from state
 loader.load_state_dict(state)
-```
+```text
 
 ### Component Specifications
 
@@ -184,14 +184,14 @@ loader.load_state_dict(state)
 
 **Purpose**: Group individual samples into mini-batches for efficient training.
 
-**Key Features**:
+### Key Features
 
 - Fixed batch size with optional variable final batch
 - Custom collate functions for flexible batch assembly
 - Support for variable-length sequences
 - Proper handling of different data types
 
-**Edge Cases**:
+### Edge Cases
 
 - Dataset size not divisible by batch size → Handle with drop_last flag
 - Single sample in final batch → Include or drop based on configuration
@@ -202,14 +202,14 @@ loader.load_state_dict(state)
 
 **Purpose**: Randomize sample order to prevent learning spurious patterns.
 
-**Key Features**:
+### Key Features
 
 - Reproducible shuffling with seed control
 - Per-epoch variation with automatic seed derivation
 - Enable/disable flag for validation sets
 - Compatible with distributed training
 
-**Edge Cases**:
+### Edge Cases
 
 - Same seed across epochs → Use epoch-based seed derivation
 - Validation/test sets → Disable shuffling with flag
@@ -220,14 +220,14 @@ loader.load_state_dict(state)
 
 **Purpose**: Provide standard Python iterator interface for batch traversal.
 
-**Key Features**:
+### Key Features
 
 - Python iterator protocol (`__iter__`, `__next__`)
 - Automatic reset for multiple epochs
 - StopIteration at epoch boundaries
 - State tracking for resumption
 
-**Edge Cases**:
+### Edge Cases
 
 - Empty dataset → Immediate StopIteration
 - Single batch → One iteration then StopIteration
@@ -247,7 +247,7 @@ DataLoader(
     drop_last: bool = False,    # Drop final partial batch
     collate_fn: Optional[Callable] = None  # Custom batch assembly
 )
-```
+```text
 
 #### Methods
 
@@ -269,7 +269,7 @@ def state_dict(self) -> dict:
 
 def load_state_dict(self, state: dict) -> None:
     """Restore state from checkpoint"""
-```
+```text
 
 #### Properties
 
@@ -285,28 +285,28 @@ def batch_size(self) -> int:
 @property
 def num_batches(self) -> int:
     """Total batches per epoch"""
-```
+```text
 
 ### Implementation Phases
 
 This planning phase (#403) produces specifications for:
 
 1. **Test Phase** (#404) - Test suite covering all edge cases
-2. **Implementation Phase** (#405) - Core data loader implementation
-3. **Packaging Phase** (#406) - Integration with data utils module
-4. **Cleanup Phase** (#407) - Refactoring and optimization
+1. **Implementation Phase** (#405) - Core data loader implementation
+1. **Packaging Phase** (#406) - Integration with data utils module
+1. **Cleanup Phase** (#407) - Refactoring and optimization
 
 ### Integration with Data Utils
 
 The Data Loader integrates with the broader Data Utils module:
 
-**Dependencies**:
+### Dependencies
 
 - **Base Dataset** (#372-383) - Required interface with `__len__` and `__getitem__`
 - **Tensor Operations** - For stacking and batching tensors
 - **RNG Utilities** - For reproducible shuffling
 
-**Provides to Downstream**:
+### Provides to Downstream
 
 - **Training Loops** - Efficient batch iteration
 - **Augmentations** (#420-439) - Batched augmentation support
@@ -314,19 +314,19 @@ The Data Loader integrates with the broader Data Utils module:
 
 ### Performance Considerations
 
-**Memory Efficiency**:
+### Memory Efficiency
 
 - Use index-based shuffling (shuffle indices, not data)
 - Lazy batch assembly (create batches on-demand)
 - Avoid copying dataset into loader
 
-**Computational Efficiency**:
+### Computational Efficiency
 
 - Cache shuffled indices per epoch
 - Minimize allocations in hot paths
 - Consider prefetching for I/O-bound datasets (future enhancement)
 
-**Design Trade-offs**:
+### Design Trade-offs
 
 - Simplicity vs. features: Start simple, add features incrementally
 - Memory vs. speed: Prefer memory efficiency for initial implementation
@@ -334,13 +334,13 @@ The Data Loader integrates with the broader Data Utils module:
 
 ### Error Handling
 
-**Validation at Construction**:
+### Validation at Construction
 
 - `batch_size > 0`: Raise ValueError if non-positive
 - `dataset` implements required interface: Raise TypeError if missing `__len__` or `__getitem__`
 - `seed` is valid: Raise ValueError if negative
 
-**Runtime Errors**:
+### Runtime Errors
 
 - Empty dataset: Raise ValueError with clear message
 - Corrupted data: Propagate exception from dataset
@@ -360,7 +360,7 @@ The Data Loader integrates with the broader Data Utils module:
 - Iteration + State: Proper resumption behavior
 - Full DataLoader: End-to-end workflows
 
-**Edge Case Tests**:
+### Edge Case Tests
 
 - Empty datasets
 - Single-sample datasets

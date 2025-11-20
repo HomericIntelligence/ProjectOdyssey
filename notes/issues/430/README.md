@@ -55,7 +55,7 @@ trait Dataset:
     fn __getitem__(self, index: Int) raises -> Tensor:
         """Retrieve sample by index."""
         ...
-```
+```text
 
 ✅ **Status**: Implemented and working
 
@@ -79,7 +79,7 @@ struct TensorDataset(Dataset):
     fn __getitem__(self, index: Int) raises -> Tensor:
         # Return row at index
         return self.data[index]
-```
+```text
 
 ✅ **Status**: Implemented and working
 
@@ -107,7 +107,7 @@ struct FileDataset(Dataset):
         # TODO: Implement proper file loading
         # Currently returns placeholder tensor
         ...
-```
+```text
 
 ⏳ **Status**: Implemented with placeholder (TODO at line 216)
 
@@ -115,7 +115,8 @@ struct FileDataset(Dataset):
 
 **Location**: `/home/user/ml-odyssey/shared/data/datasets.mojo`, line 216
 
-**Current State**:
+### Current State
+
 ```mojo
 fn _load_file(self, path: String) raises -> Tensor:
     """Load data from file.
@@ -159,35 +160,35 @@ fn _load_file(self, path: String) raises -> Tensor:
     dummy_data.append(Float32(0.0))
 
     return Tensor(dummy_data^)
-```
+```text
 
 ### File Loading Implementation Decision
 
 **Decision**: **Defer full file loading implementation** to future work
 
-**Rationale**:
+### Rationale
 
 1. **Mojo Ecosystem Limitations**: No stable image/numpy libraries available yet
    - Mojo standard library doesn't include image decoders
    - NumPy binary format requires complex parsing
    - CSV parsing available but limited
 
-2. **External Dependencies Required**:
+1. **External Dependencies Required**:
    - Image loading needs: libjpeg, libpng bindings
    - NumPy loading needs: binary format parser
    - Significant external dependency overhead
 
-3. **Workaround Available**:
+1. **Workaround Available**:
    - Users can preprocess files externally
    - Use TensorDataset for preprocessed data
    - FileDataset API is defined and testable
 
-4. **Focus on Core ML**:
+1. **Focus on Core ML**:
    - Data loading is infrastructure, not core ML
    - Augmentations and training loops are higher priority
    - File I/O can be added incrementally
 
-**Recommended Approach**:
+### Recommended Approach
 
 ```mojo
 fn _load_file(self, path: String) raises -> Tensor:
@@ -248,9 +249,9 @@ fn _load_file(self, path: String) raises -> Tensor:
             "Use TensorDataset for preprocessed data. "
             "File: " + path
         )
-```
+```text
 
-**Alternative: Minimal CSV Support**
+### Alternative: Minimal CSV Support
 
 If CSV loading is critical, implement basic version:
 
@@ -296,7 +297,7 @@ fn _load_csv_file(self, path: String) raises -> Tensor:
             flat_data.append(val)
 
     return Tensor(flat_data^)  # Reshape as needed
-```
+```text
 
 ### Completed: Data Loader Implementation
 
@@ -336,7 +337,7 @@ struct DataLoader:
         """Return number of batches."""
         var total = len(self.dataset)
         return (total + self.batch_size - 1) // self.batch_size
-```
+```text
 
 ✅ **Status**: Implemented and working
 
@@ -366,7 +367,7 @@ struct RandomSampler(Sampler):
     """Random sampling with optional seed."""
     var num_samples: Int
     var seed: Int
-```
+```text
 
 ✅ **Status**: Implemented and working
 
@@ -376,7 +377,8 @@ struct RandomSampler(Sampler):
 
 **Decision**: Keep placeholder implementation with clear error messages
 
-**Rationale**:
+### Rationale
+
 - API is defined and testable
 - External dependencies not available yet
 - Users can preprocess data externally
@@ -386,7 +388,8 @@ struct RandomSampler(Sampler):
 
 **Decision**: Recommend TensorDataset for most use cases
 
-**Rationale**:
+### Rationale
+
 - Works with current ecosystem
 - No external dependencies
 - Simple and reliable
@@ -396,7 +399,8 @@ struct RandomSampler(Sampler):
 
 **Decision**: Implement Python-style iterator protocol
 
-**Rationale**:
+### Rationale
+
 - Familiar to Python users
 - Clean syntax in training loops
 - Easy to test and debug
@@ -461,13 +465,13 @@ fn _get_file_extension(self, path: String) -> String:
     if len(parts) < 2:
         return ""
     return parts[len(parts) - 1].lower()
-```
+```text
 
 ### Add Documentation
 
 **File**: `/home/user/ml-odyssey/shared/data/datasets.mojo`
 
-**Add at top**:
+### Add at top
 
 ```mojo
 """Dataset interfaces and implementations.
@@ -494,7 +498,7 @@ See Also:
     - loaders.mojo: DataLoader for batching and shuffling
     - transforms.mojo: Data augmentation utilities
 """
-```
+```text
 
 ## References
 
@@ -527,6 +531,7 @@ See Also:
 **Workaround**: Use TensorDataset with Python preprocessing
 
 **Future Work**: Implement when Mojo ecosystem provides:
+
 - Image decoding libraries
 - NumPy binary format parser
 - Robust CSV parsing utilities
@@ -534,6 +539,7 @@ See Also:
 ### Current Functionality
 
 ✅ **Working**:
+
 - Dataset trait and interface
 - TensorDataset (in-memory)
 - DataLoader (batching, shuffling)
@@ -541,6 +547,7 @@ See Also:
 - Iterator protocol
 
 ⏳ **Deferred**:
+
 - FileDataset file loading
 - Image format decoders
 - NumPy binary parsing
@@ -549,9 +556,9 @@ See Also:
 ### Testing Recommendations
 
 1. **Test Placeholder Behavior**: Verify errors are clear
-2. **Test TensorDataset**: Comprehensive coverage
-3. **Test DataLoader**: All batching/shuffling scenarios
-4. **Document Workaround**: Show preprocessing workflow
+1. **Test TensorDataset**: Comprehensive coverage
+1. **Test DataLoader**: All batching/shuffling scenarios
+1. **Document Workaround**: Show preprocessing workflow
 
 ---
 

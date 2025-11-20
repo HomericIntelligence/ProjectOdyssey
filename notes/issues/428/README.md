@@ -28,19 +28,19 @@ transforms. These tools enable efficient data preparation for model training.
 
 **Decision**: Follow Python sequence protocols for familiarity and interoperability.
 
-**Rationale**:
+### Rationale
 
 - Pythonic API reduces learning curve for users familiar with Python collections
 - Standard `__len__()` and `__getitem__()` methods enable iteration and indexing
 - Minimal interface keeps implementation simple and flexible
 
-**Key Features**:
+### Key Features
 
 - `__len__()`: Returns total number of samples in the dataset
 - `__getitem__(index)`: Retrieves a single sample by index
 - Support for various data types: images, text, tabular data
 
-**Design Constraints**:
+### Design Constraints
 
 - Keep interface minimal - only essential methods
 - Ensure compatibility across different data modalities
@@ -50,13 +50,13 @@ transforms. These tools enable efficient data preparation for model training.
 
 **Decision**: Implement batching and shuffling as composable operations.
 
-**Rationale**:
+### Rationale
 
 - Separation of concerns: batching and shuffling are independent operations
 - Flexibility: users can enable/disable shuffling as needed
 - Simplicity: start with sequential batching, add complexity incrementally
 
-**Key Features**:
+### Key Features
 
 - **Batching**: Group samples into fixed-size batches
   - Handle partial batches at dataset end correctly
@@ -68,43 +68,43 @@ transforms. These tools enable efficient data preparation for model training.
   - Sequential traversal through all batches
   - Reset capability for multiple epochs
 
-**Implementation Strategy**:
+### Implementation Strategy
 
 1. Start with simple sequential batching
-2. Add shuffling with seed control
-3. Ensure edge cases (empty datasets, batch size > dataset size) are handled
+1. Add shuffling with seed control
+1. Ensure edge cases (empty datasets, batch size > dataset size) are handled
 
 ### 3. Data Augmentation Strategy
 
 **Decision**: Implement modality-specific augmentations with composable transforms.
 
-**Rationale**:
+### Rationale
 
 - Different data types require different augmentation techniques
 - Composability allows combining multiple transforms
 - Optional configuration provides flexibility for different use cases
 
-**Augmentation Categories**:
+### Augmentation Categories
 
-**Image Augmentations**:
+### Image Augmentations
 
 - Geometric: flips, crops, rotations
 - Color: brightness, contrast, saturation adjustments
 - Requirement: Preserve label semantics (e.g., horizontal flip shouldn't change object identity)
 
-**Text Augmentations**:
+### Text Augmentations
 
 - Synonym replacement: swap words with synonyms
 - Random insertion: add words to increase diversity
 - Requirement: Maintain semantic meaning of text
 
-**Generic Transforms**:
+### Generic Transforms
 
 - Normalization: standardize data ranges
 - Noise injection: add controlled noise for robustness
 - Composable: can be applied to any data type
 
-**Design Principles**:
+### Design Principles
 
 - Augmentations are **optional** - can be disabled completely
 - **Composable** - multiple transforms can be chained
@@ -114,14 +114,14 @@ transforms. These tools enable efficient data preparation for model training.
 
 ### 4. API Design Philosophy
 
-**Principles**:
+### Principles
 
 1. **Simplicity First**: Keep APIs simple and Pythonic
-2. **Correctness Before Optimization**: Focus on correct behavior first, optimize later
-3. **Flexibility**: Support various data types and use cases
-4. **Composability**: Allow combining components in different ways
+1. **Correctness Before Optimization**: Focus on correct behavior first, optimize later
+1. **Flexibility**: Support various data types and use cases
+1. **Composability**: Allow combining components in different ways
 
-**API Contract Example**:
+### API Contract Example
 
 ```python
 # Base Dataset Interface
@@ -149,7 +149,7 @@ class Transform:
     def __call__(self, data: Any) -> Any:
         """Apply transform to data."""
         pass
-```
+```text
 
 ### 5. Component Hierarchy
 
@@ -169,9 +169,9 @@ data-utils/
     ├── image-augmentations # Vision transforms
     ├── text-augmentations  # NLP transforms
     └── generic-transforms  # Universal transforms
-```
+```text
 
-**Dependencies**:
+### Dependencies
 
 - Data loader depends on base dataset interface
 - Augmentations are independent and can be used with any dataset
@@ -181,14 +181,14 @@ data-utils/
 
 **Design Decision**: Fail fast with clear error messages.
 
-**Key Error Scenarios**:
+### Key Error Scenarios
 
 - **Invalid index**: Raise `IndexError` for out-of-bounds access
 - **Empty dataset**: Allow but document behavior
 - **Invalid batch size**: Raise `ValueError` for batch_size < 1
 - **Malformed data**: Raise appropriate exception with context
 
-**Error Message Guidelines**:
+### Error Message Guidelines
 
 - Be specific about what went wrong
 - Include relevant values (e.g., invalid index, dataset size)
@@ -198,7 +198,7 @@ data-utils/
 
 **Approach**: Test-Driven Development (TDD) with comprehensive coverage.
 
-**Test Categories**:
+### Test Categories
 
 1. **Unit Tests**: Test each component in isolation
    - Dataset interface methods
@@ -206,12 +206,12 @@ data-utils/
    - Shuffling reproducibility
    - Individual augmentations
 
-2. **Integration Tests**: Test component interactions
+1. **Integration Tests**: Test component interactions
    - Dataset + DataLoader integration
    - DataLoader + Augmentations pipeline
    - End-to-end data flow
 
-3. **Edge Cases**:
+1. **Edge Cases**:
    - Empty datasets
    - Single-sample datasets
    - Batch size larger than dataset
@@ -278,6 +278,6 @@ data-utils/
 After planning phase completion:
 
 1. **Test Phase** (Issue #429): Implement comprehensive test suite following TDD principles
-2. **Implementation Phase** (Issue #430): Build the actual data utils components
-3. **Packaging Phase** (Issue #431): Integrate components and create package structure
-4. **Cleanup Phase** (Issue #432): Refactor and finalize based on learnings from parallel phases
+1. **Implementation Phase** (Issue #430): Build the actual data utils components
+1. **Packaging Phase** (Issue #431): Integrate components and create package structure
+1. **Cleanup Phase** (Issue #432): Refactor and finalize based on learnings from parallel phases

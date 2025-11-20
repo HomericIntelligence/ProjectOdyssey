@@ -31,8 +31,8 @@ Set up all necessary configuration files for the Mojo/MAX development environmen
 ## Steps
 
 1. Create and configure magic.toml for Magic package manager
-2. Create and configure pyproject.toml for Python tooling
-3. Set up Git configuration including ignore patterns and LFS
+1. Create and configure pyproject.toml for Python tooling
+1. Set up Git configuration including ignore patterns and LFS
 
 ## Success Criteria
 

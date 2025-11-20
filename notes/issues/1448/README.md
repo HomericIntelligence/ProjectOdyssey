@@ -34,17 +34,22 @@ As specified in the issue description.
 ## Implementation Notes
 
 ## Overview
+
 Configure the tools available to the research assistant agent for code analysis, file operations, and information retrieval. Define tool permissions, usage patterns, and integration points.
 
 ## Testing Objectives
+
 This phase focuses on:
+
 - Writing comprehensive test cases following TDD principles
 - Creating test fixtures and mock data
 - Defining test scenarios for edge cases
 - Setting up test infrastructure
 
 ## What to Test
+
 Based on the expected outputs:
+
 - Tool configuration with permissions
 - Usage guidelines for each tool
 - Integration patterns for tool chaining
@@ -52,6 +57,7 @@ Based on the expected outputs:
 - Documentation for tool usage
 
 ## Test Success Criteria
+
 - [ ] All necessary tools are configured
 - [ ] Permissions are appropriate and secure
 - [ ] Usage guidelines are clear
@@ -59,12 +65,14 @@ Based on the expected outputs:
 - [ ] Error handling is defined
 
 ## Implementation Steps
+
 1. Define available tools (file reading, code analysis, search)
-2. Configure permissions and access controls
-3. Add usage guidelines and examples
-4. Define tool chaining patterns
+1. Configure permissions and access controls
+1. Add usage guidelines and examples
+1. Define tool chaining patterns
 
 ## Notes
+
 Focus on tools needed for research: reading papers/code, analyzing implementations, searching codebases. Keep permissions minimal but sufficient. Document how tools should be chained for complex tasks.
 
 ## Status

@@ -31,8 +31,8 @@ Configure the code review agent with clear review criteria, evaluation standards
 ## Steps
 
 1. Create configuration file with basic structure
-2. Define review criteria and evaluation standards
-3. Configure available tools for code analysis
+1. Define review criteria and evaluation standards
+1. Configure available tools for code analysis
 
 ## Success Criteria
 

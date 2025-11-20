@@ -78,13 +78,13 @@ Create the integration layer that connects the configs/ system with the existing
    - Installation script with automatic setup
    - 31 files, ~16KB compressed
 
-2. **Build Script** (`scripts/build_configs_distribution.sh`)
+1. **Build Script** (`scripts/build_configs_distribution.sh`)
    - Creates versioned tarball with all components
    - Generates checksums (SHA256)
    - Includes installation instructions
    - Validates package contents
 
-3. **Verification Script** (`scripts/verify_configs_install.sh`)
+1. **Verification Script** (`scripts/verify_configs_install.sh`)
    - Checks directory structure
    - Validates required files
    - Tests YAML syntax (if yamllint available)
@@ -112,26 +112,26 @@ Added complete structure to make integration code functional:
    - Handles environment variable substitution
    - Provides validation and error handling
 
-2. **Paper Template Example** (`papers/_template/examples/train.mojo`)
+1. **Paper Template Example** (`papers/_template/examples/train.mojo`)
    - Demonstrates config loading in training script
    - Shows how to use config values for model creation
    - Illustrates config-driven training setup
    - Provides working example for new paper implementations
 
-3. **CI/CD Validation** (`.github/workflows/validate-configs.yml`)
+1. **CI/CD Validation** (`.github/workflows/validate-configs.yml`)
    - Validates YAML syntax for all config files
    - Runs config loading tests
    - Checks schema compliance
    - Runs on push and pull requests targeting main
 
-4. **Migration Guide** (`configs/MIGRATION.md`)
+1. **Migration Guide** (`configs/MIGRATION.md`)
    - Step-by-step migration process
    - Before/after code examples
    - Common patterns and pitfalls
    - Checklist for complete migration
    - Troubleshooting section
 
-5. **Main README Update**
+1. **Main README Update**
    - Added Configuration Management section
    - Included quick start guide
    - Provided code examples
@@ -146,19 +146,19 @@ Added complete structure to make integration code functional:
    - Validation occurs after complete merge
    - Clear error messages for missing/invalid configs
 
-2. **Template Integration**
+1. **Template Integration**
    - Created example in `examples/` directory (not `src/`)
    - Demonstrates real-world usage pattern
    - Self-contained and runnable
    - Includes helpful comments and documentation
 
-3. **CI/CD Strategy**
+1. **CI/CD Strategy**
    - YAML syntax validation using yamllint
    - Mojo-based config loading tests
    - Schema validation using existing Config utilities
    - Fast feedback on configuration errors
 
-4. **Migration Approach**
+1. **Migration Approach**
    - Gradual migration supported (not all-or-nothing)
    - Backward compatibility maintained
    - Clear examples for each pattern

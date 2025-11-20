@@ -33,9 +33,9 @@ Set up the shared directory structure which contains reusable components that ca
 ## Steps
 
 1. Create core subdirectory for fundamental components
-2. Create training subdirectory for training-related utilities
-3. Create data subdirectory for data processing code
-4. Create utils subdirectory for general helper functions
+1. Create training subdirectory for training-related utilities
+1. Create data subdirectory for data processing code
+1. Create utils subdirectory for general helper functions
 
 ## Success Criteria
 

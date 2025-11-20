@@ -22,22 +22,22 @@ Implement comprehensive test suite for StepLR scheduler following TDD principles
    - Multiple decay steps over training
    - Formula correctness
 
-2. **Parameter Variation Tests**
+1. **Parameter Variation Tests**
    - Different gamma values (0.1, 0.5, 0.9)
    - Different step sizes (1, 10, 100)
    - Edge case gamma=1.0 (no decay)
 
-3. **Edge Case Tests**
+1. **Edge Case Tests**
    - Zero step size (should error)
    - Negative gamma (should error)
    - Very small LR (numerical precision)
 
-4. **Integration Tests**
+1. **Integration Tests**
    - Optimizer LR updates
    - Training loop integration
    - State save/load
 
-5. **Property-Based Tests**
+1. **Property-Based Tests**
    - Monotonic decrease property
    - Reproducibility
 
@@ -46,6 +46,7 @@ Implement comprehensive test suite for StepLR scheduler following TDD principles
 ### 1. Core Functionality Tests
 
 #### test_step_scheduler_initialization()
+
 ```mojo
 """Test StepLR initializes with correct parameters."""
 
@@ -56,11 +57,12 @@ var scheduler = StepLR(base_lr=0.1, step_size=10, gamma=0.1)
 assert_equal(scheduler.base_lr, 0.1)
 assert_equal(scheduler.step_size, 10)
 assert_almost_equal(scheduler.gamma, 0.1)
-```
+```text
 
 **Expected**: Scheduler stores parameters correctly
 
 #### test_step_scheduler_reduces_lr_at_step()
+
 ```mojo
 """Test StepLR reduces LR at step boundary."""
 
@@ -75,11 +77,12 @@ for epoch in range(5):
 # Test epoch 5 (at step)
 var lr5 = scheduler.get_lr(epoch=5)
 assert_almost_equal(lr5, 0.1)
-```
+```text
 
 **Expected**: LR unchanged until step_size, then reduced by gamma
 
 #### test_step_scheduler_multiple_steps()
+
 ```mojo
 """Test StepLR continues reducing at each step."""
 
@@ -91,13 +94,14 @@ assert_almost_equal(scheduler.get_lr(epoch=0), 1.0)
 assert_almost_equal(scheduler.get_lr(epoch=5), 0.1)
 assert_almost_equal(scheduler.get_lr(epoch=10), 0.01)
 assert_almost_equal(scheduler.get_lr(epoch=15), 0.001)
-```
+```text
 
 **Expected**: LR = base_lr × gamma^⌊epoch/step_size⌋
 
 ### 2. Parameter Variation Tests
 
 #### test_step_scheduler_different_gamma_values()
+
 ```mojo
 """Test StepLR with various gamma values."""
 
@@ -110,11 +114,12 @@ assert_almost_equal(sched1.get_lr(2), 0.25)
 var sched2 = StepLR(base_lr=1.0, step_size=1, gamma=0.9)
 assert_almost_equal(sched2.get_lr(1), 0.9)
 assert_almost_equal(sched2.get_lr(2), 0.81)
-```
+```text
 
 **Expected**: Different gamma produces different decay rates
 
 #### test_step_scheduler_gamma_one()
+
 ```mojo
 """Test StepLR with gamma=1.0 (no decay)."""
 
@@ -124,11 +129,12 @@ var scheduler = StepLR(base_lr=1.0, step_size=1, gamma=1.0)
 # Test - LR should stay constant
 for epoch in range(10):
     assert_almost_equal(scheduler.get_lr(epoch), 1.0)
-```
+```text
 
 **Expected**: gamma=1.0 results in constant LR (no decay)
 
 #### test_step_scheduler_different_step_sizes()
+
 ```mojo
 """Test StepLR with various step_size values."""
 
@@ -143,13 +149,14 @@ var sched2 = StepLR(base_lr=1.0, step_size=10, gamma=0.5)
 for epoch in range(10):
     assert_almost_equal(sched2.get_lr(epoch), 1.0)
 assert_almost_equal(sched2.get_lr(10), 0.5)
-```
+```text
 
 **Expected**: step_size controls decay frequency
 
 ### 3. Edge Case Tests
 
 #### test_step_scheduler_zero_step_size()
+
 ```mojo
 """Test StepLR with step_size=0 raises error."""
 
@@ -159,11 +166,12 @@ try:
     assert_true(False, "Expected error for step_size=0")
 except Error:
     pass  # Expected
-```
+```text
 
 **Expected**: step_size=0 raises error (division by zero)
 
 #### test_step_scheduler_negative_gamma()
+
 ```mojo
 """Test StepLR with negative gamma raises error."""
 
@@ -173,11 +181,12 @@ try:
     assert_true(False, "Expected error for negative gamma")
 except Error:
     pass  # Expected
-```
+```text
 
 **Expected**: Negative gamma raises error (invalid parameter)
 
 #### test_step_scheduler_very_small_lr()
+
 ```mojo
 """Test StepLR with very small LR values."""
 
@@ -191,13 +200,14 @@ for epoch in range(10):
 # After 10 steps: LR = 1.0 × 0.1^10 = 1e-10
 var final_lr = scheduler.get_lr(10)
 assert_almost_equal(final_lr, 1e-10, tolerance=1e-15)
-```
+```text
 
 **Expected**: LR can become very small without numerical issues
 
 ### 4. Integration Tests
 
 #### test_step_scheduler_updates_optimizer_lr()
+
 ```mojo
 """Test StepLR integrates with optimizer."""
 
@@ -215,13 +225,14 @@ for epoch in range(10):
     # Verify LR
     var expected_lr = 1.0 if epoch < 5 else 0.1
     assert_almost_equal(optimizer.get_lr(), expected_lr)
-```
+```text
 
 **Expected**: Scheduler correctly updates optimizer LR
 
 ### 5. Property-Based Tests
 
 #### test_step_scheduler_property_monotonic_decrease()
+
 ```mojo
 """Property: LR should never increase."""
 
@@ -234,7 +245,7 @@ for epoch in range(1, 51):
     var curr_lr = scheduler.get_lr(epoch)
     assert_less_or_equal(curr_lr, prev_lr)
     prev_lr = curr_lr
-```
+```text
 
 **Expected**: LR monotonically decreases (or stays constant)
 
@@ -247,7 +258,7 @@ for epoch in range(1, 51):
 
 ## Test File Structure
 
-```
+```text
 tests/shared/training/test_step_scheduler.mojo
 │
 ├── Core Functionality Tests (3 tests)
@@ -271,7 +282,7 @@ tests/shared/training/test_step_scheduler.mojo
 │
 └── Property-Based Tests (1 test)
     └── test_step_scheduler_property_monotonic_decrease
-```
+```text
 
 ## Test Execution
 
@@ -288,7 +299,7 @@ Running edge cases and error handling... ✓
 Running property-based tests... ✓
 
 All StepLR scheduler tests passed! ✓
-```
+```text
 
 ## Success Criteria
 
@@ -301,10 +312,12 @@ All StepLR scheduler tests passed! ✓
 
 ## Files
 
-**Test Implementation**:
+### Test Implementation
+
 - `tests/shared/training/test_step_scheduler.mojo` - 354 lines of comprehensive tests
 
-**Test Utilities**:
+### Test Utilities
+
 - `tests/shared/conftest.mojo` - Shared test fixtures and assertions
 
 ## Implementation Status

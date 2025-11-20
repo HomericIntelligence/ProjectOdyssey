@@ -30,8 +30,8 @@ Create a pull request template that guides contributors through describing their
 ## Steps
 
 1. Create Template
-2. Checklist Items
-3. Sections
+1. Checklist Items
+1. Sections
 
 ## Success Criteria
 

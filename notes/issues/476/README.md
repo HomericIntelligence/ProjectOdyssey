@@ -42,7 +42,7 @@ Package the coverage setup implementation into a reusable, well-documented compo
 
 ### Documentation Structure
 
-**Primary Documentation**:
+### Primary Documentation
 
 1. **Coverage Setup Guide** (`docs/testing/coverage-setup.md`):
    - Quick start (3-5 steps to get coverage working)
@@ -51,19 +51,19 @@ Package the coverage setup implementation into a reusable, well-documented compo
    - Configuration options
    - Performance considerations
 
-2. **Configuration Reference** (`docs/testing/coverage-config.md`):
+1. **Configuration Reference** (`docs/testing/coverage-config.md`):
    - Coverage tool settings explained
    - Exclusion patterns
    - Threshold configuration
    - Output formats
 
-3. **CI Integration Guide** (`docs/ci/coverage-integration.md`):
+1. **CI Integration Guide** (`docs/ci/coverage-integration.md`):
    - GitHub Actions workflow examples
    - Artifact storage configuration
    - Coverage badge setup
    - Environment variables
 
-4. **Troubleshooting Guide** (`docs/testing/coverage-troubleshooting.md`):
+1. **Troubleshooting Guide** (`docs/testing/coverage-troubleshooting.md`):
    - Common issues and solutions
    - Performance problems
    - Data collection failures
@@ -71,16 +71,16 @@ Package the coverage setup implementation into a reusable, well-documented compo
 
 ### Configuration Templates
 
-**Template 1: Local Development**
+### Template 1: Local Development
 
 ```toml
 # pyproject.toml - Local development settings
 [tool.coverage.run]
 source = ["scripts"]  # Python scripts only for now
 omit = ["tests/*"]
-```
+```text
 
-**Template 2: CI Environment**
+### Template 2: CI Environment
 
 ```yaml
 # .github/workflows/coverage-template.yml
@@ -98,7 +98,7 @@ jobs:
         run: pytest --cov=scripts --cov-report=xml
       - name: Upload coverage
         uses: codecov/codecov-action@v3
-```
+```text
 
 ### Key Documentation Points
 
@@ -120,7 +120,7 @@ test coverage manually through test counts and validation.
 
 **Future**: Monitor Mojo ecosystem for native coverage tools. When available,
 update configuration following ADR-XXX.
-```
+```text
 
 **2. Quick Start**
 
@@ -131,18 +131,24 @@ update configuration following ADR-XXX.
 
 1. Install dependencies:
    ```bash
+
    pip install -r requirements-dev.txt
+
    ```
 
 2. Run tests with coverage:
    ```bash
+
    pytest --cov=scripts
+
    ```
 
 3. View HTML report:
    ```bash
+
    pytest --cov=scripts --cov-report=html
    open htmlcov/index.html
+
    ```
 
 ### CI Environment
@@ -150,7 +156,7 @@ update configuration following ADR-XXX.
 Coverage is collected automatically on all PRs. View reports in:
 - GitHub Actions artifacts
 - PR comments (after Issue #478-482 implemented)
-```
+```text
 
 **3. Performance Notes**
 
@@ -163,23 +169,28 @@ Coverage is collected automatically on all PRs. View reports in:
 
 To skip coverage locally:
 ```bash
+
 pytest  # No coverage collection
-```
-```
+
+```text
+```text
 
 ### Deliverable Checklist
 
 Documentation Files:
+
 - [ ] `docs/testing/coverage-setup.md` - Setup guide
 - [ ] `docs/testing/coverage-config.md` - Configuration reference
 - [ ] `docs/ci/coverage-integration.md` - CI guide
 - [ ] `docs/testing/coverage-troubleshooting.md` - Troubleshooting
 
 Templates:
+
 - [ ] `.coveragerc.template` or `pyproject.toml` examples
 - [ ] `.github/workflows/coverage-template.yml`
 
 Updates:
+
 - [ ] Main `README.md` - Add coverage badge placeholder
 - [ ] `CONTRIBUTING.md` - Add coverage requirements
 - [ ] `docs/README.md` - Link to coverage documentation

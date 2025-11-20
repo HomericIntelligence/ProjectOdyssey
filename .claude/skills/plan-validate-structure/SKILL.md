@@ -48,7 +48,7 @@ Validate plan structure follows Template 1 format.
 
 # Validate single plan
 ./scripts/validate_plan.sh notes/plan/01-foundation/plan.md
-```
+```text
 
 ## Common Issues
 
@@ -56,7 +56,7 @@ Validate plan structure follows Template 1 format.
 
 ```text
 ❌ Missing section: ## Success Criteria
-```
+```text
 
 **Fix:** Add missing section to plan.md
 
@@ -64,7 +64,7 @@ Validate plan structure follows Template 1 format.
 
 ```text
 ❌ Broken link: [../nonexistent.md](../nonexistent.md)
-```
+```text
 
 **Fix:** Correct link path or create referenced file
 
@@ -72,29 +72,29 @@ Validate plan structure follows Template 1 format.
 
 ```text
 ❌ Success criteria must use checkboxes (- [ ])
-```
+```text
 
-**Fix:**
+### Fix:
 
 ```markdown
 ## Success Criteria
 
 - [ ] Criterion 1
 - [ ] Criterion 2
-```
+```text
 
 ## Template 1 Format
 
 Required sections:
 
 1. Title (# heading)
-2. Overview
-3. Parent Plan
-4. Child Plans
-5. Inputs
-6. Outputs
-7. Steps
-8. Success Criteria
-9. Notes
+1. Overview
+1. Parent Plan
+1. Child Plans
+1. Inputs
+1. Outputs
+1. Steps
+1. Success Criteria
+1. Notes
 
 See `phase-plan-generate` skill for complete template.

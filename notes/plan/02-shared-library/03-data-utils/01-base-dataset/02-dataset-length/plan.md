@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Implement __len__ for static datasets
-2. Handle dynamic datasets with lazy computation
-3. Define behavior for infinite/streaming datasets
-4. Ensure consistency with __getitem__ indexing
+1. Handle dynamic datasets with lazy computation
+1. Define behavior for infinite/streaming datasets
+1. Ensure consistency with __getitem__ indexing
 
 ## Success Criteria
 

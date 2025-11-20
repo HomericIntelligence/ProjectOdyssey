@@ -31,9 +31,9 @@ Implement fundamental mathematical operations needed for machine learning. This 
 ## Steps
 
 1. Implement tensor operations for element-wise arithmetic, matrix operations, and reductions
-2. Build activation functions with proper gradient handling
-3. Create weight initializers following standard distributions
-4. Implement metrics for tracking model performance
+1. Build activation functions with proper gradient handling
+1. Create weight initializers following standard distributions
+1. Implement metrics for tracking model performance
 
 ## Success Criteria
 

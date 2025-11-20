@@ -20,65 +20,65 @@ All 14 test functions have been uncommented and are now functional:
    - Tests that RandomRotation with fixed seed produces consistent results
    - Verifies both results have same number of elements
 
-2. **test_random_augmentation_varies()** - ✓ Uncommented
+1. **test_random_augmentation_varies()** - ✓ Uncommented
    - Tests that multiple augmentations preserve data structure
    - Verifies all results maintain consistent element count
 
 #### RandomRotation Tests (3)
 
-3. **test_random_rotation_range()** - ✓ Uncommented
+1. **test_random_rotation_range()** - ✓ Uncommented
    - Tests rotation within ±30 degree range
    - Verifies shape preservation
 
-4. **test_random_rotation_no_change()** - ✓ Uncommented
+1. **test_random_rotation_no_change()** - ✓ Uncommented
    - Tests edge case with degrees=0
    - Verifies all pixels remain 1.0
 
-5. **test_random_rotation_fill_value()** - ✓ Uncommented
+1. **test_random_rotation_fill_value()** - ✓ Uncommented
    - Tests rotation with fill value parameter
    - Verifies output shape matches input
 
 #### RandomCrop Tests (2)
 
-6. **test_random_crop_varies_location()** - ✓ Uncommented
+1. **test_random_crop_varies_location()** - ✓ Uncommented
    - Tests that RandomCrop produces consistent output size
    - Verifies 50x50 crops from 100x100 image
 
-7. **test_random_crop_with_padding()** - ✓ Uncommented
+1. **test_random_crop_with_padding()** - ✓ Uncommented
    - Tests padding for edge handling
    - Verifies 32x32 output with 4-pixel padding on 28x28 input
 
 #### RandomHorizontalFlip Tests (3)
 
-8. **test_random_horizontal_flip_probability()** - ✓ Uncommented
+1. **test_random_horizontal_flip_probability()** - ✓ Uncommented
    - Tests p=0.5 flips approximately 50% of time
    - Uses 1000 iterations for statistical validation
 
-9. **test_random_flip_always()** - ✓ Uncommented
+1. **test_random_flip_always()** - ✓ Uncommented
    - Tests p=1.0 always flips
    - Verifies flip occurred via element value check
 
-10. **test_random_flip_never()** - ✓ Uncommented
+1. **test_random_flip_never()** - ✓ Uncommented
     - Tests p=0.0 never flips
     - Verifies first element stays unchanged at 1.0
 
 #### RandomErasing Tests (2)
 
-11. **test_random_erasing_basic()** - ✓ Uncommented
+1. **test_random_erasing_basic()** - ✓ Uncommented
     - Tests RandomErasing with p=1.0, scale=(0.02, 0.33)
     - Verifies some pixels are erased (not all 1.0)
 
-12. **test_random_erasing_scale()** - ✓ Uncommented
+1. **test_random_erasing_scale()** - ✓ Uncommented
     - Tests scale parameter controls erased region size
     - Verifies 10-20% of pixels erased in 100x100 image
 
 #### Pipeline/Composition Tests (2)
 
-13. **test_compose_random_augmentations()** - ✓ Uncommented
+1. **test_compose_random_augmentations()** - ✓ Uncommented
     - Tests Pipeline with RandomRotation, RandomHorizontalFlip, RandomCrop
     - Verifies output is 24x24x3 after cropping
 
-14. **test_augmentation_determinism_in_pipeline()** - ✓ Uncommented
+1. **test_augmentation_determinism_in_pipeline()** - ✓ Uncommented
     - Tests entire pipeline is deterministic with seed
     - Verifies both runs produce same output size
 
@@ -93,37 +93,45 @@ All 14 test functions have been uncommented and are now functional:
 ### 3. Key Adaptations to Tensor API
 
 #### Challenge 1: Tensor Creation
+
 **Original**: `Tensor([[1.0, 2.0], [3.0, 4.0]])`
 **Adapted**: Create from List[Float32]
+
 ```mojo
 var data_list = List[Float32](capacity=size)
 for i in range(size):
     data_list.append(value)
 var data = Tensor(data_list^)
-```
+```text
 
 #### Challenge 2: Shape Checking
+
 **Original**: `result.shape`, `result.shape[0]`
 **Adapted**: `result.num_elements()`
+
 ```mojo
 # Instead of checking shape, verify element count
 assert_equal(result.num_elements(), expected_size)
-```
+```text
 
 #### Challenge 3: Element Access
+
 **Original**: `tensor[row, col, channel]`
 **Adapted**: Direct linear indexing
+
 ```mojo
 # Mojo Tensor uses linear indexing
 tensor[index]
-```
+```text
 
 #### Challenge 4: Transform Type in Pipelines
+
 **Added**: Import Transform trait
+
 ```mojo
 from shared.data.transforms import Transform
 var transforms = List[Transform](capacity=3)
-```
+```text
 
 ## Implementation Status
 
@@ -162,13 +170,13 @@ var transforms = List[Transform](capacity=3)
 1. **No 2D creation syntax** - Mojo Tensor doesn't support `Tensor([[...], [...]])`
    - Solution: Create from List[Float32]
 
-2. **Linear element access only** - No multi-dimensional indexing like `tensor[row, col]`
+1. **Linear element access only** - No multi-dimensional indexing like `tensor[row, col]`
    - Solution: Use linear indexing with manual calculation
 
-3. **No shape attribute** - Cannot access `.shape` property
+1. **No shape attribute** - Cannot access `.shape` property
    - Solution: Use `.num_elements()` for size checks
 
-4. **List types must match** - Cannot create `List[Transform]` if transforms are different types
+1. **List types must match** - Cannot create `List[Transform]` if transforms are different types
    - Solution: Explicitly import and use Transform trait
 
 ### Test Structure
@@ -176,10 +184,11 @@ var transforms = List[Transform](capacity=3)
 Each test follows this pattern:
 
 1. **Setup**: Create test data (List[Float32] → Tensor)
-2. **Action**: Apply augmentation transform
-3. **Verify**: Check results using assertions
+1. **Action**: Apply augmentation transform
+1. **Verify**: Check results using assertions
 
 Example test structure:
+
 ```mojo
 fn test_example() raises:
     # Create test tensor
@@ -194,14 +203,14 @@ fn test_example() raises:
 
     # Verify result
     assert_equal(result.num_elements(), expected_size)
-```
+```text
 
 ## Next Steps
 
 1. **Run tests locally** - Use pixi environment to execute tests
-2. **Verify CI integration** - Ensure tests run in GitHub Actions
-3. **Address any failures** - Fix implementation issues discovered
-4. **Measure coverage** - Verify test coverage of all augmentation functions
+1. **Verify CI integration** - Ensure tests run in GitHub Actions
+1. **Address any failures** - Fix implementation issues discovered
+1. **Measure coverage** - Verify test coverage of all augmentation functions
 
 ## References
 

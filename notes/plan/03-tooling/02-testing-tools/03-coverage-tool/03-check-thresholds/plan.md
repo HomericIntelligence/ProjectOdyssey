@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Load threshold configuration
-2. Compare actual coverage to thresholds
-3. Identify files and areas below threshold
-4. Generate validation report with pass/fail
+1. Compare actual coverage to thresholds
+1. Identify files and areas below threshold
+1. Generate validation report with pass/fail
 
 ## Success Criteria
 

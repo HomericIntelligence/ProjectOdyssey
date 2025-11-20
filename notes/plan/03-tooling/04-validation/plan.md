@@ -32,8 +32,8 @@ Build validation tools to ensure code quality, completeness, and correctness acr
 ## Steps
 
 1. Validate individual paper implementations
-2. Check benchmark results against baselines
-3. Verify overall project completeness
+1. Check benchmark results against baselines
+1. Verify overall project completeness
 
 ## Success Criteria
 

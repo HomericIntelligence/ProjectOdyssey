@@ -74,15 +74,17 @@ The validation system is designed as a **modular, extensible validation framewor
 
 **Responsibility**: Orchestrate validation checks and aggregate results
 
-**Interface**:
+### Interface
+
 ```mojo
 fn validate_paper_structure(
     paper_path: String,
     config: ValidationConfig
 ) -> ValidationReport
-```
+```text
 
 **Output**: `ValidationReport` containing:
+
 - Overall pass/fail status
 - List of validation checks with results
 - List of missing items with locations
@@ -93,26 +95,31 @@ fn validate_paper_structure(
 Organized by category with clear responsibility separation:
 
 **Directory Checks** (`validate_directories()`):
+
 - Check for required directories (src/, tests/, docs/)
 - Check for proper nesting and organization
 - Identify unexpected directories at root level
 
 **File Checks** (`validate_files()`):
+
 - Verify required files exist (README.md, etc.)
 - Check file accessibility and readability
 - Validate file completeness (non-empty core files)
 
 **Naming Convention Checks** (`validate_naming()`):
+
 - Verify test file naming patterns (`test_*.mojo`, `*_test.mojo`)
 - Check source file naming conventions
 - Validate documentation file naming
 
 **Structure Integrity Checks** (`validate_structure_integrity()`):
+
 - Verify proper file organization within directories
 - Check for orphaned or misplaced files
 - Validate cross-directory references
 
 **Metadata Checks** (`validate_metadata()`):
+
 - Verify paper name consistency (directory name vs metadata)
 - Check for required metadata in README.md
 - Validate author and date information
@@ -121,13 +128,15 @@ Organized by category with clear responsibility separation:
 
 **Design**: Pluggable rule system allowing configuration-driven validation
 
-**Components**:
+### Components
+
 - Rule definitions (name, description, severity, check function)
 - Rule groupings (directory, file, naming, metadata, structure)
 - Severity levels (ERROR, WARNING, INFO)
 - Customization per paper type
 
-**Example Rule Definition**:
+### Example Rule Definition
+
 ```yaml
 - rule_id: REQUIRED_DIR_SRC
   name: "Required source directory exists"
@@ -135,13 +144,14 @@ Organized by category with clear responsibility separation:
   severity: ERROR
   description: "Paper must have src/ directory for implementation"
   fix_suggestion: "Create src/ directory at paper root"
-```
+```text
 
 #### 4. Report Generator
 
 **Responsibility**: Format validation results for various audiences
 
-**Report Styles**:
+### Report Styles
+
 - **Summary Report** - Quick pass/fail with critical items only
 - **Detailed Report** - Full results with all details and suggestions
 - **JSON Report** - Machine-readable format for CI/CD integration
@@ -151,7 +161,7 @@ Organized by category with clear responsibility separation:
 
 #### Standard Paper Structure (Full Requirements)
 
-```
+```text
 papers/<paper-name>/
 ├── README.md                    # Paper overview and setup instructions
 ├── src/                         # Implementation source code
@@ -184,18 +194,18 @@ papers/<paper-name>/
 │   ├── training.yaml
 │   └── data.yaml
 └── .gitignore                 # Git ignore rules for paper-specific artifacts
-```
+```text
 
 #### Minimal Paper Structure (Minimum Valid)
 
-```
+```text
 papers/<paper-name>/
 ├── README.md                    # Must exist, must not be empty
 ├── src/
 │   └── model.mojo              # Must exist, must not be empty
 └── tests/
     └── test_model.mojo         # Must exist, must not be empty
-```
+```text
 
 ### Validation Rules Specification
 
@@ -208,109 +218,109 @@ papers/<paper-name>/
    - Message: "Paper must have `src/` directory containing implementation"
    - Fix: Create `src/` directory at paper root
 
-2. **REQUIRED_DIR_TESTS**
+1. **REQUIRED_DIR_TESTS**
    - Check: `tests/` directory exists
    - Message: "Paper must have `tests/` directory containing test suite"
    - Fix: Create `tests/` directory at paper root
 
-3. **REQUIRED_DIR_DOCS**
+1. **REQUIRED_DIR_DOCS**
    - Check: `docs/` directory exists
    - Message: "Paper should have `docs/` directory for documentation"
    - Fix: Create `docs/` directory at paper root
 
 **Category: Required Files** (Severity: ERROR/WARNING)
 
-4. **REQUIRED_FILE_README**
+1. **REQUIRED_FILE_README**
    - Check: `README.md` exists at paper root
    - Message: "Paper must have README.md at root level"
    - Fix: Create README.md with paper overview and setup instructions
 
-5. **REQUIRED_FILE_MODEL**
+1. **REQUIRED_FILE_MODEL**
    - Check: `src/model.mojo` exists and is not empty
    - Message: "Paper must have model implementation in src/model.mojo"
    - Fix: Create model.mojo with model class implementation
 
-6. **REQUIRED_FILE_TEST_MODEL**
+1. **REQUIRED_FILE_TEST_MODEL**
    - Check: `tests/test_model.mojo` exists and is not empty
    - Message: "Paper must have test_model.mojo with model tests"
    - Fix: Create test_model.mojo with test functions
 
 **Category: File Naming Conventions** (Severity: WARNING)
 
-7. **TEST_FILE_PREFIX_NAMING**
+1. **TEST_FILE_PREFIX_NAMING**
    - Check: All test files in `tests/` start with `test_` or end with `_test.mojo`
    - Message: "Test file '{filename}' doesn't follow naming convention (should be test_*.mojo or *_test.mojo)"
    - Fix: Rename file to match convention
 
-8. **SOURCE_FILE_NAMING**
+1. **SOURCE_FILE_NAMING**
    - Check: Source files in `src/` follow snake_case naming
    - Message: "Source file '{filename}' should use snake_case naming (e.g., model_utils.mojo not modelUtils.mojo)"
    - Fix: Rename file to snake_case
 
-9. **DOC_FILE_NAMING**
+1. **DOC_FILE_NAMING**
    - Check: Documentation files in `docs/` follow snake_case naming
    - Message: "Documentation file '{filename}' should use snake_case naming"
    - Fix: Rename file to snake_case
 
 **Category: Directory Organization** (Severity: WARNING)
 
-10. **NO_MOJO_IN_ROOT**
+1. **NO_MOJO_IN_ROOT**
     - Check: No `.mojo` files exist at paper root level
     - Message: "Mojo files should be in src/ directory, not at paper root: {filenames}"
     - Fix: Move files to appropriate subdirectories (src/, tests/, etc.)
 
-11. **TEST_FILES_IN_TEST_DIR**
+1. **TEST_FILES_IN_TEST_DIR**
     - Check: All test files are in `tests/` directory
     - Message: "Test files found outside tests/ directory: {paths}"
     - Fix: Move test files to tests/ directory
 
-12. **README_IN_SUBDIRS**
+1. **README_IN_SUBDIRS**
     - Check: README.md files exist in src/, tests/, docs/ if those dirs have significant content
     - Message: "Directory {dirname}/ should have README.md documenting its contents"
     - Fix: Create README.md in subdirectory
 
 **Category: File Content Validation** (Severity: ERROR)
 
-13. **README_NOT_EMPTY**
+1. **README_NOT_EMPTY**
     - Check: README.md is not empty
     - Message: "README.md exists but is empty or contains only whitespace"
     - Fix: Add content describing paper, setup instructions, and usage
 
-14. **SOURCE_NOT_EMPTY**
+1. **SOURCE_NOT_EMPTY**
     - Check: Core source files (model.mojo) are not empty
     - Message: "Source file {filename} is empty or contains only whitespace"
     - Fix: Implement the module or remove the empty file
 
-15. **TESTS_NOT_EMPTY**
+1. **TESTS_NOT_EMPTY**
     - Check: Test files are not empty
     - Message: "Test file {filename} is empty or contains only whitespace"
     - Fix: Add test cases or remove the empty test file
 
 **Category: Metadata Validation** (Severity: WARNING)
 
-16. **README_HAS_TITLE**
+1. **README_HAS_TITLE**
     - Check: README.md starts with a heading (# Title)
     - Message: "README.md should start with paper title (# Paper Name)"
     - Fix: Add heading at beginning of README.md
 
-17. **README_HAS_SETUP_SECTION**
+1. **README_HAS_SETUP_SECTION**
     - Check: README.md contains setup/installation instructions
     - Message: "README.md should have Setup or Installation section"
     - Fix: Add section documenting how to set up and run the paper
 
-18. **README_HAS_USAGE_SECTION**
+1. **README_HAS_USAGE_SECTION**
     - Check: README.md contains usage examples or instructions
     - Message: "README.md should have Usage or Examples section"
     - Fix: Add section showing how to use the implementation
 
 **Category: Structure Integrity** (Severity: INFO/WARNING)
 
-19. **CONSISTENT_MODULE_NAMES**
+1. **CONSISTENT_MODULE_NAMES**
     - Check: Test files match their corresponding source modules
     - Message: "Found test file test_foo.mojo but no src/foo.mojo"
     - Fix: Create matching source module or rename test file
 
-20. **NO_CIRCULAR_IMPORTS**
+1. **NO_CIRCULAR_IMPORTS**
     - Check: Source files don't create circular import dependencies
     - Message: "Circular import detected: {cycle}"
     - Fix: Restructure imports to remove cycles
@@ -342,13 +352,13 @@ validation:
     readme: 100
     source: 50
     test: 100
-```
+```text
 
 ### Error Reporting Format
 
 #### Validation Report Structure
 
-```
+```text
 ValidationReport {
   overall_status: PASS | FAIL | WARNING
   paper_path: String
@@ -367,11 +377,11 @@ ValidationReport {
     config_file_used: String
   }
 }
-```
+```text
 
 #### Validation Check Result
 
-```
+```text
 ValidationCheck {
   rule_id: String
   rule_name: String
@@ -380,11 +390,11 @@ ValidationCheck {
   description: String
   affected_items: [String]
 }
-```
+```text
 
 #### Missing Item Description
 
-```
+```text
 MissingItem {
   type: DIRECTORY | FILE | METADATA
   name: String
@@ -392,11 +402,11 @@ MissingItem {
   required: bool
   suggestion: String
 }
-```
+```text
 
 #### Human-Readable Report Example
 
-```
+```text
 Paper Structure Validation Report
 ===================================
 Paper: papers/lenet5
@@ -427,7 +437,7 @@ Recommendations:
 - Consider adding docs/training.md documenting training procedure
 
 Validation completed at: 2025-11-16T10:30:00Z
-```
+```text
 
 ### Integration Points
 
@@ -440,17 +450,17 @@ The validation system integrates with CI/CD at multiple points:
    - Check only modified papers
    - Fail on ERROR severity, warn on WARNING
 
-2. **Pull Request Checks**
+1. **Pull Request Checks**
    - Run on all papers modified in PR
    - Generate detailed HTML report as PR comment
    - Block merge if validation fails
 
-3. **Paper Creation Workflow**
+1. **Paper Creation Workflow**
    - Run validation when new paper directory is created
    - Generate checklist for paper creator
    - Provide setup script to initialize structure
 
-4. **Continuous Integration**
+1. **Continuous Integration**
    - Run full validation on main branch after each merge
    - Generate validation report for all papers
    - Track validation metrics over time
@@ -464,17 +474,17 @@ The validation system guides the paper implementation process:
    - Generate README.md template
    - Provide validation checklist
 
-2. **Development Phase**
+1. **Development Phase**
    - Run validation after each significant change
    - Guide developers toward completing requirements
    - Provide helpful suggestions for missing pieces
 
-3. **Submission Phase**
+1. **Submission Phase**
    - Final validation before paper is merged
    - Ensure all requirements met
    - Block merge if validation fails
 
-4. **Maintenance Phase**
+1. **Maintenance Phase**
    - Periodic validation to catch regressions
    - Alert maintainers if structure degrades
    - Track paper health over time
@@ -485,14 +495,16 @@ The validation system guides the paper implementation process:
 
 **Pattern**: `snake_case.mojo`
 
-**Examples**:
+### Examples
+
 - `model.mojo` - Main model implementation
 - `data_loader.mojo` - Data loading utilities
 - `training_loop.mojo` - Training logic
 - `metrics.mojo` - Evaluation metrics
 - `utils.mojo` - General utilities
 
-**Anti-patterns to avoid**:
+### Anti-patterns to avoid
+
 - `ModelClass.mojo` - Don't use PascalCase
 - `model-file.mojo` - Don't use hyphens
 - `model utils.mojo` - Don't use spaces
@@ -501,21 +513,24 @@ The validation system guides the paper implementation process:
 #### Test Files (`tests/` directory)
 
 **Patterns** (either acceptable):
+
 1. `test_*.mojo` (preferred)
    - `test_model.mojo`
    - `test_data_loader.mojo`
    - `test_training.mojo`
 
-2. `*_test.mojo` (also acceptable)
+1. `*_test.mojo` (also acceptable)
    - `model_test.mojo`
    - `data_loader_test.mojo`
    - `training_test.mojo`
 
-**Special files**:
+### Special files
+
 - `conftest.mojo` - Pytest configuration and shared fixtures
 - `fixtures/` - Directory for test data
 
-**Anti-patterns**:
+### Anti-patterns
+
 - `tests.mojo` - Should specify what's being tested
 - `test.mojo` - Should be test_something.mojo
 - `TestModel.mojo` - Should be test_model.mojo
@@ -524,13 +539,15 @@ The validation system guides the paper implementation process:
 
 **Pattern**: `snake_case.md` or descriptive names
 
-**Standard files**:
+### Standard files
+
 - `architecture.md` - Model architecture and design
 - `training.md` - Training procedure and hyperparameters
 - `results.md` - Experimental results and analysis
 - `references.md` - Paper references and sources
 
-**Examples**:
+### Examples
+
 - `layer_definitions.md`
 - `custom_loss_functions.md`
 - `data_preprocessing.md`
@@ -539,7 +556,8 @@ The validation system guides the paper implementation process:
 
 **Pattern**: `snake_case.yaml` or `.toml`
 
-**Standard files**:
+### Standard files
+
 - `model.yaml` - Model configuration
 - `training.yaml` - Training configuration
 - `data.yaml` - Data configuration
@@ -568,24 +586,28 @@ The validation system uses three severity levels:
 This planning phase enables the following downstream work:
 
 #### Issue #815 (Test) - Validation Testing
+
 - Unit tests for each validation rule
 - Integration tests for validation engine
 - Test fixtures with various paper structures
 - Edge case testing
 
 #### Issue #816 (Implementation) - Validation System Implementation
+
 - Core validation engine implementation
 - Validation rule modules
 - Report generator
 - Error handling and messaging
 
 #### Issue #817 (Integration) - CI/CD Integration
+
 - Pre-commit hook integration
 - GitHub Actions workflow integration
 - Paper creation workflow integration
 - Report generation and storage
 
 #### Issue #818 (Cleanup) - Documentation and Polish
+
 - Comprehensive validation guide
 - Troubleshooting documentation
 - Integration examples
@@ -594,6 +616,7 @@ This planning phase enables the following downstream work:
 ## Status
 
 ✅ **COMPLETE** - Design and documentation phase completed. All specifications documented:
+
 - Validation system architecture designed (5 core components identified)
 - Required directory structure specified (full and minimal variants)
 - 20+ validation rules formally documented with examples

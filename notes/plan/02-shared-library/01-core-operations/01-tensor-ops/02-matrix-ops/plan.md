@@ -27,9 +27,9 @@ None (leaf node)
 ## Steps
 
 1. Implement matrix multiplication with dimension checking
-2. Create transpose operation with configurable axes
-3. Add support for batched matrix operations
-4. Ensure numerical stability for large matrices
+1. Create transpose operation with configurable axes
+1. Add support for batched matrix operations
+1. Ensure numerical stability for large matrices
 
 ## Success Criteria
 

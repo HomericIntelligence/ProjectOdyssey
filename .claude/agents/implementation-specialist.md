@@ -49,9 +49,9 @@ Level 3 Component Specialist responsible for breaking down complex components in
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -92,18 +92,18 @@ Use Python ONLY for:
 When creating a new script:
 
 1. **Default choice**: Mojo
-2. **Check requirement**: Does issue specify Python? If no → Mojo
-3. **Check dependencies**: Any Python-only libraries? If no → Mojo
-4. **Check justification**: Is there a strong reason for Python? If no → Mojo
-5. **Document decision**: If using Python, document why in code comments
+1. **Check requirement**: Does issue specify Python? If no → Mojo
+1. **Check dependencies**: Any Python-only libraries? If no → Mojo
+1. **Check justification**: Is there a strong reason for Python? If no → Mojo
+1. **Document decision**: If using Python, document why in code comments
 
 ### Conversion Priority
 
 When encountering existing Python scripts:
 
 1. **High priority** - Frequently-used scripts, performance-critical
-2. **Medium priority** - Occasionally-used scripts, moderate performance impact
-3. **Low priority** - Rarely-used scripts, no performance requirements
+1. **Medium priority** - Occasionally-used scripts, moderate performance impact
+1. **Low priority** - Rarely-used scripts, no performance requirements
 
 **Rule of Thumb**: New scripts are always Mojo. Existing Python scripts should be converted when touched or when time
 permits.
@@ -139,7 +139,7 @@ See [mojo-language-review-specialist.md](./mojo-language-review-specialist.md) f
 
 #### Function Definitions (fn vs def)
 
-**Use `fn` for**:
+### Use `fn` for
 
 - Performance-critical functions (compile-time optimization)
 - Functions with explicit type annotations
@@ -150,9 +150,9 @@ See [mojo-language-review-specialist.md](./mojo-language-review-specialist.md) f
 fn matrix_multiply[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]) -> Tensor[dtype]:
     # Optimized, type-safe implementation
     ...
-```
+```text
 
-**Use `def` for**:
+### Use `def` for
 
 - Python-compatible functions
 - Dynamic typing needed
@@ -163,11 +163,11 @@ fn matrix_multiply[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]) -> Tensor[d
 def load_dataset(path: String) -> PythonObject:
     # Flexible, Python-compatible implementation
     ...
-```
+```text
 
 #### Type Definitions (struct vs class)
 
-**Use `struct` for**:
+### Use `struct` for
 
 - Value types with stack allocation
 - Performance-critical data structures
@@ -182,9 +182,9 @@ struct Layer:
 
     fn forward(self, input: Tensor) -> Tensor:
         ...
-```
+```text
 
-**Use `class` for**:
+### Use `class` for
 
 - Reference types with heap allocation
 - Object-oriented inheritance
@@ -197,11 +197,11 @@ class Model:
 
     def add_layer(self, layer: Layer):
         self.layers.append(layer)
-```
+```text
 
 #### Memory Management Patterns
 
-**Ownership Patterns**:
+### Ownership Patterns
 
 - `owned`: Transfer ownership (move semantics)
 - `borrowed`: Read-only access without ownership
@@ -219,11 +219,11 @@ fn analyze_tensor(borrowed tensor: Tensor) -> Float32:
 fn update_tensor(inout tensor: Tensor):
     # Mutate in place, no ownership transfer
     tensor.normalize_()
-```
+```text
 
 #### SIMD and Vectorization
 
-**Use SIMD for**:
+### Use SIMD for
 
 - Element-wise tensor operations
 - Matrix/vector computations
@@ -238,37 +238,37 @@ fn vectorized_add[simd_width: Int](a: Tensor, b: Tensor) -> Tensor:
 
     vectorize[add_simd, simd_width](a.num_elements())
     return result
-```
+```text
 
 ## Workflow
 
 ### Phase 1: Component Analysis
 
 1. Receive component spec from Architecture Design Agent
-2. Analyze complexity and requirements
-3. Break into functions/classes
-4. Coordinate with Test Specialist on test plan
+1. Analyze complexity and requirements
+1. Break into functions/classes
+1. Coordinate with Test Specialist on test plan
 
 ### Phase 2: Design
 
 1. Design class structures and traits
-2. Define function signatures
-3. Plan implementation approach
-4. Create detailed specifications
+1. Define function signatures
+1. Plan implementation approach
+1. Create detailed specifications
 
 ### Phase 3: Delegation
 
 1. Delegate implementation to Engineers
-2. Coordinate TDD approach
-3. Monitor progress
-4. Review code
+1. Coordinate TDD approach
+1. Monitor progress
+1. Review code
 
 ### Phase 4: Integration
 
 1. Integrate implemented functions
-2. Verify against specs
-3. Performance validation
-4. Hand off to next phase
+1. Verify against specs
+1. Performance validation
+1. Hand off to next phase
 
 ## Delegation
 
@@ -352,7 +352,7 @@ Use the `gh-check-ci-status` skill to monitor PR checks:
 
 **Component Spec**: Implement tensor operations
 
-**Breakdown**:
+### Breakdown
 
 ```markdown
 
@@ -397,7 +397,7 @@ Use the `gh-check-ci-status` skill to monitor PR checks:
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -447,8 +447,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -471,13 +471,13 @@ After creating PR:
 
 **Scenario**: Breaking down backpropagation algorithm into implementable functions
 
-**Actions**:
+### Actions
 
 1. Analyze algorithm requirements from design spec
-2. Break down into functions: forward pass, backward pass, parameter update
-3. Define function signatures and data structures
-4. Create implementation plan with dependencies
-5. Delegate functions to engineers
+1. Break down into functions: forward pass, backward pass, parameter update
+1. Define function signatures and data structures
+1. Create implementation plan with dependencies
+1. Delegate functions to engineers
 
 **Outcome**: Clear implementation plan with well-defined function boundaries
 
@@ -485,13 +485,13 @@ After creating PR:
 
 **Scenario**: Refactoring complex function with multiple responsibilities
 
-**Actions**:
+### Actions
 
 1. Analyze function complexity and identify separate concerns
-2. Extract sub-functions with single responsibilities
-3. Improve naming and add type hints
-4. Add documentation and usage examples
-5. Coordinate with test engineer for test updates
+1. Extract sub-functions with single responsibilities
+1. Improve naming and add type hints
+1. Add documentation and usage examples
+1. Coordinate with test engineer for test updates
 
 **Outcome**: Maintainable code following single responsibility principle
 

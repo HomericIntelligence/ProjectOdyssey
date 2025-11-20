@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Design structured output format for issues
-2. Create checklist for systematic review
-3. Add bug pattern examples
-4. Define severity rating criteria
+1. Create checklist for systematic review
+1. Add bug pattern examples
+1. Define severity rating criteria
 
 ## Success Criteria
 

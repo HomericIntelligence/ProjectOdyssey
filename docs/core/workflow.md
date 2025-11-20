@@ -14,7 +14,7 @@ cleanup of issues discovered during execution.
 
 **Goal**: Design specifications before any implementation begins
 
-**Activities**:
+### Activities
 
 - Analyze requirements and objectives
 - Design component architecture and interfaces
@@ -22,14 +22,14 @@ cleanup of issues discovered during execution.
 - Document decisions and rationale
 - Identify dependencies and integration points
 
-**Outputs**:
+### Outputs
 
 - `plan.md` file with 9-section format (task-relative in `notes/plan/`)
 - Component specifications
 - API contracts and interfaces
 - Acceptance criteria
 
-**Success Criteria**:
+### Success Criteria
 
 - All specifications clear and complete
 - No ambiguity for implementation teams
@@ -46,14 +46,14 @@ After Plan completes, three teams work simultaneously in separate git worktrees:
 
 **Goal**: Write comprehensive tests before implementation
 
-**Activities**:
+### Activities
 
 - Write unit tests for all specifications
 - Design test fixtures and mocks
 - Create integration test scenarios
 - Document test coverage and edge cases
 
-**Outputs**:
+### Outputs
 
 - Test files (`test_*.py`, `test_*.mojo`)
 - Test fixtures and utilities
@@ -65,14 +65,14 @@ After Plan completes, three teams work simultaneously in separate git worktrees:
 
 **Goal**: Build functionality to pass tests
 
-**Activities**:
+### Activities
 
 - Implement functions and classes
 - Write docstrings and inline comments
 - Follow specifications exactly
 - Integrate with passing tests
 
-**Outputs**:
+### Outputs
 
 - Source code files (`.py`, `.mojo`)
 - Module organization and structure
@@ -84,7 +84,7 @@ After Plan completes, three teams work simultaneously in separate git worktrees:
 
 **Goal**: Create distributable artifacts
 
-**Activities**:
+### Activities
 
 - Build binary packages (`.mojopkg` for Mojo modules)
 - Create distribution archives (`.tar.gz`, `.zip`)
@@ -93,7 +93,7 @@ After Plan completes, three teams work simultaneously in separate git worktrees:
 - Add to existing packages
 - Create CI/CD workflows
 
-**Outputs**:
+### Outputs
 
 - Package files (`.mojopkg`, `.tar.gz`, etc.)
 - Installation instructions
@@ -106,7 +106,7 @@ After Plan completes, three teams work simultaneously in separate git worktrees:
 
 **Goal**: Fix issues discovered during parallel phases
 
-**Activities**:
+### Activities
 
 - Collect issues from all teams
 - Prioritize cleanup work
@@ -115,14 +115,14 @@ After Plan completes, three teams work simultaneously in separate git worktrees:
 - Consolidate documentation
 - Optimize performance
 
-**Outputs**:
+### Outputs
 
 - Refactored code
 - Final documentation
 - Performance improvements
 - Bug fixes
 
-**Success Criteria**:
+### Success Criteria
 
 - No outstanding technical debt
 - Code meets quality standards
@@ -223,6 +223,7 @@ Tests and implementation coordinate through specification:
 Each team works in separate git worktree:
 
 ```text
+
 ```text
 
 worktrees/
@@ -238,18 +239,18 @@ worktrees/
 Package team integrates work from all teams:
 
 1. Cherry-pick test commits into packaging worktree
-2. Cherry-pick implementation commits
-3. Verify tests pass with implementation
-4. Create packages with all components
-5. Test installation and usage
+1. Cherry-pick implementation commits
+1. Verify tests pass with implementation
+1. Create packages with all components
+1. Test installation and usage
 
 ## Key Principles
 
 1. **Specification First**: Plan phase provides specs for all other phases
-2. **Parallel Execution**: Test/Impl/Package maximize productivity
-3. **TDD Integration**: Tests drive implementation quality
-4. **Clear Handoffs**: Each phase completes cleanly before next
-5. **Minimal Delays**: Cleanup phase collects issues, not discovers them
+1. **Parallel Execution**: Test/Impl/Package maximize productivity
+1. **TDD Integration**: Tests drive implementation quality
+1. **Clear Handoffs**: Each phase completes cleanly before next
+1. **Minimal Delays**: Cleanup phase collects issues, not discovers them
 
 ## Getting Started
 

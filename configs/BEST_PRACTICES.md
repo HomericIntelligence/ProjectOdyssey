@@ -19,14 +19,14 @@ This guide outlines best practices for working with configurations in ML Odyssey
 database:
   password: "my-secret-password"
   api_key: "sk-1234567890abcdef"
-```
+```text
 
 ```yaml
 # Good - Use environment variables
 database:
   password: "${DB_PASSWORD}"
   api_key: "${API_KEY}"
-```
+```text
 
 ### ❌ DON'T: Use Deeply Nested Structures
 
@@ -38,14 +38,14 @@ model:
       layer1:
         filters:
           size: 32
-```
+```text
 
 ```yaml
 # Good - Flatter structure
 model:
   conv1_filters: 32
   conv1_kernel: 3
-```
+```text
 
 ### ❌ DON'T: Mix Configuration and Code
 
@@ -53,14 +53,14 @@ model:
 # Bad - Logic in config
 training:
   lr: "0.001 * epoch / 10"  # Don't embed code
-```
+```text
 
 ```yaml
 # Good - Pure values
 training:
   base_lr: 0.001
   lr_schedule: "linear"  # Let code handle logic
-```
+```text
 
 ### ❌ DON'T: Use Ambiguous Names
 
@@ -68,14 +68,14 @@ training:
 # Bad - Unclear units
 timeout: 30  # Seconds? Minutes? Iterations?
 size: 1024   # Bytes? KB? Elements?
-```
+```text
 
 ```yaml
 # Good - Clear units
 timeout_seconds: 30
 batch_size: 1024
 buffer_size_mb: 256
-```
+```text
 
 ## Performance Optimization
 
@@ -86,7 +86,7 @@ buffer_size_mb: 256
 config = Config.from_yaml("config.yaml")
 if config.has("advanced_settings"):
     advanced = Config.from_yaml("advanced.yaml")
-```
+```text
 
 ### 2. Cache Parsed Configurations
 
@@ -98,7 +98,7 @@ def get_config(path):
     if path not in _config_cache:
         _config_cache[path] = Config.from_yaml(path)
     return _config_cache[path]
-```
+```text
 
 ### 3. Minimize File I/O
 
@@ -109,7 +109,7 @@ training:
   batch_size: 32
 model:
   layers: [64, 32, 10]
-```
+```text
 
 ### 4. Use Simple Data Types
 
@@ -117,7 +117,7 @@ model:
 # Prefer simple types that parse quickly
 layers: [64, 32, 10]  # Simple list
 activation: "relu"     # Simple string
-```
+```text
 
 ## Security Guidelines
 
@@ -129,7 +129,7 @@ database:
   host: "${DB_HOST:-localhost}"  # With default
   port: "${DB_PORT:-5432}"
   password: "${DB_PASSWORD}"     # Required
-```
+```text
 
 ### 2. Separate Sensitive Configs
 
@@ -138,7 +138,7 @@ database:
 configs/
   public.yaml       # Safe to commit
   secrets.yaml      # In .gitignore
-```
+```text
 
 ### 3. Validate Input Ranges
 
@@ -147,7 +147,7 @@ configs/
 training:
   learning_rate: 0.001  # Schema: min: 0.0, max: 1.0
   epochs: 100          # Schema: min: 1, max: 10000
-```
+```text
 
 ### 4. Avoid Command Injection
 
@@ -155,7 +155,7 @@ training:
 # Never execute config values as commands
 output_dir: "./results"  # Good
 cleanup_cmd: "rm -rf *"  # Bad - Never execute
-```
+```text
 
 ## Versioning Strategies
 
@@ -167,7 +167,7 @@ version: "1.2.0"  # major.minor.patch
 # major: Breaking changes
 # minor: New features, backward compatible
 # patch: Bug fixes
-```
+```text
 
 ### 2. Migration Paths
 
@@ -177,7 +177,7 @@ version: "2.0.0"
 deprecated:
   - "model.num_layers"  # Use model.layers instead
   - "optimizer.type"    # Use optimizer.name instead
-```
+```text
 
 ### 3. Backward Compatibility
 
@@ -187,7 +187,7 @@ def get_optimizer_name(config):
     # Try new key first, fall back to old
     return config.get("optimizer.name",
                       config.get("optimizer.type", "sgd"))
-```
+```text
 
 ### 4. Config Change Logs
 
@@ -197,7 +197,7 @@ def get_optimizer_name(config):
 # - Renamed optimizer.type to optimizer.name
 # - Added support for learning rate schedules
 # - Deprecated model.num_layers
-```
+```text
 
 ## Maintenance Recommendations
 
@@ -207,7 +207,7 @@ def get_optimizer_name(config):
 # Run validation as part of CI/CD
 python scripts/lint_configs.py configs/
 python scripts/validate_schemas.py configs/
-```
+```text
 
 ### 2. Documentation Standards
 
@@ -216,7 +216,7 @@ python scripts/validate_schemas.py configs/
 model:
   dropout: 0.5  # Applied after each dense layer
   init_method: "he_normal"  # For ReLU activations
-```
+```text
 
 ### 3. Consistent Formatting
 
@@ -226,7 +226,7 @@ optimizer:  # 2-space indent
   name: "adam"
   learning_rate: 0.001
   betas: [0.9, 0.999]  # Inline lists for simple values
-```
+```text
 
 ### 4. Modular Organization
 
@@ -236,7 +236,7 @@ configs/
   papers/         # Paper-specific
   experiments/    # Experiment variations
   templates/      # Starting points
-```
+```text
 
 ### 5. Testing Configurations
 
@@ -246,21 +246,21 @@ def test_config_loading():
     config = Config.from_yaml("test_config.yaml")
     assert config.get_float("learning_rate") == 0.001
     assert config.get_int("batch_size") == 32
-```
+```text
 
 ### 6. Config Diffing
 
 ```bash
 # Track config changes
 diff configs/defaults/training.yaml configs/experiments/custom.yaml
-```
+```text
 
 ### 7. Automated Cleanup
 
 ```python
 # Remove unused parameters
 python scripts/lint_configs.py --remove-unused configs/
-```
+```text
 
 ## Common Patterns
 
@@ -276,7 +276,7 @@ epochs: 50  # Override default
 
 # experiments/lenet5/quick.yaml
 epochs: 10  # Override paper default
-```
+```text
 
 ### 2. Environment-Specific Configs
 
@@ -290,7 +290,7 @@ checkpoint_interval: 100
 debug: false
 log_level: "INFO"
 checkpoint_interval: 1000
-```
+```text
 
 ### 3. Feature Flags
 
@@ -300,7 +300,7 @@ features:
   mixed_precision: false
   gradient_checkpointing: false
   data_parallel: true
-```
+```text
 
 ## Summary
 

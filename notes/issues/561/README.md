@@ -41,7 +41,7 @@ benchmarks/
 │   └── compare_results.mojo
 └── results/               # Timestamped results from benchmark runs
     └── {timestamp}_results.json
-```
+```text
 
 **Rationale**: Clear separation between baseline data (stable reference points), execution scripts (reproducible tests), and timestamped results (historical tracking). This structure supports both manual and automated workflows.
 
@@ -141,16 +141,16 @@ benchmarks/
 ├── baselines/
 ├── results/
 └── scripts/
-```
+```text
 
 ### Next Steps
 
 Ready to proceed to subsequent phases:
 
 1. **Testing (Issue #562)**: Write tests for benchmark execution, result validation, and baseline comparison
-2. **Implementation (Issue #563)**: Implement benchmark scripts in Mojo (run_benchmarks.mojo, compare_results.mojo)
-3. **Packaging (Issue #564)**: Integrate with CI/CD workflows and documentation
-4. **Cleanup (Issue #565)**: Refactor and finalize based on lessons learned
+1. **Implementation (Issue #563)**: Implement benchmark scripts in Mojo (run_benchmarks.mojo, compare_results.mojo)
+1. **Packaging (Issue #564)**: Integrate with CI/CD workflows and documentation
+1. **Cleanup (Issue #565)**: Refactor and finalize based on lessons learned
 
 ### Open Questions
 

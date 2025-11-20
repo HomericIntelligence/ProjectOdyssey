@@ -29,8 +29,8 @@ Select LeNet-5 as the first paper to implement, document the rationale for this 
 ## Steps
 
 1. Document Rationale
-2. Gather Resources
-3. Create Structure
+1. Gather Resources
+1. Create Structure
 
 ## Success Criteria
 

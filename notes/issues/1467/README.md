@@ -34,22 +34,27 @@ As specified in the issue description.
 ## Implementation Notes
 
 ## Overview
+
 Create a prompt template for reviewing code implementations against paper specifications. The template helps identify correctness issues, missing components, and discrepancies between paper and code.
 
 ## Objectives
+
 This planning phase will:
+
 - Define detailed specifications and requirements
 - Design the architecture and approach
 - Document API contracts and interfaces
 - Create comprehensive design documentation
 
 ## Inputs
+
 - Paper specifications
 - Implementation code
 - Understanding of review criteria
 - Examples of good code reviews
 
 ## Expected Outputs
+
 - Implementation reviewer prompt template
 - Review checklist with criteria
 - Few-shot examples of reviews
@@ -57,6 +62,7 @@ This planning phase will:
 - Suggestion templates for improvements
 
 ## Success Criteria
+
 - [ ] Template covers all review criteria
 - [ ] Feedback format is clear and actionable
 - [ ] Checklist ensures comprehensive review
@@ -65,6 +71,7 @@ This planning phase will:
 - [ ] Template identifies both issues and strengths
 
 ## Additional Notes
+
 Review criteria should include: correctness of algorithm implementation, completeness of required components, adherence to paper specifications, code quality, and potential bugs. Use XML tags like <correctness>, <completeness>, <issues>, <suggestions>.
 
 ## Status

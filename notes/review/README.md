@@ -7,8 +7,8 @@ This directory contains documentation templates and guidelines for reviewing pul
 This document provides:
 
 1. A template for documenting PR review comments
-2. Explanation of the 5-phase development hierarchy
-3. Guidelines for resolving review feedback
+1. Explanation of the 5-phase development hierarchy
+1. Guidelines for resolving review feedback
 
 ## PR Review Comment Template
 
@@ -31,7 +31,7 @@ When documenting PR review comments, use this format:
 **Description**: [Description of the issue or requested change]
 **Resolution**: [How it was resolved]
 **Status**: [Pending/In Progress/Resolved]
-```
+```text
 
 ## 5-Phase Development Hierarchy
 
@@ -57,7 +57,7 @@ All components in the ML Odyssey repository follow a structured 5-phase developm
             ┌──────────┐
             │ Cleanup  │
             └──────────┘
-```
+```text
 
 ### Phase Details
 
@@ -65,7 +65,7 @@ All components in the ML Odyssey repository follow a structured 5-phase developm
 
 **Purpose**: Create the detailed plan for the component
 
-**Responsibilities**:
+### Responsibilities
 
 - Analyze current repository state
 - Define requirements and specifications
@@ -75,7 +75,7 @@ All components in the ML Odyssey repository follow a structured 5-phase developm
 
 **Dependencies**: None (starts the workflow)
 
-**Outputs**:
+### Outputs
 
 - Detailed component plan (plan.md)
 - Specifications for Test, Implementation, and Packaging issues (tracked in notes/issues/)
@@ -92,7 +92,7 @@ notes/issues/ or notes/review/.
 
 **Purpose**: Document and implement test cases
 
-**Responsibilities**:
+### Responsibilities
 
 - Define test cases based on Plan specifications
 - Implement unit tests, integration tests, and system tests
@@ -100,12 +100,12 @@ notes/issues/ or notes/review/.
 - Document test coverage requirements
 - Set up test automation
 
-**Dependencies**:
+### Dependencies
 
 - Requires Plan phase to be completed
 - Can run in parallel with Implementation and Packaging
 
-**Outputs**:
+### Outputs
 
 - Test specifications
 - Test implementation code
@@ -120,7 +120,7 @@ notes/issues/ or notes/review/.
 
 **Purpose**: Build the main functionality
 
-**Responsibilities**:
+### Responsibilities
 
 - Implement core functionality based on Plan specifications
 - Write clean, maintainable code following project conventions
@@ -128,13 +128,13 @@ notes/issues/ or notes/review/.
 - Document code with comments and docstrings
 - Implement error handling and validation
 
-**Dependencies**:
+### Dependencies
 
 - Requires Plan phase to be completed
 - Can run in parallel with Test and Packaging
 - Should integrate with Test phase for TDD approach
 
-**Outputs**:
+### Outputs
 
 - Implementation code
 - Code documentation
@@ -149,7 +149,7 @@ notes/issues/ or notes/review/.
 
 **Purpose**: Integrate and package the component
 
-**Responsibilities**:
+### Responsibilities
 
 - Integrate Test and Implementation artifacts
 - Create self-contained installer/package
@@ -158,13 +158,13 @@ notes/issues/ or notes/review/.
 - Create deployment scripts and configuration
 - Validate end-to-end functionality
 
-**Dependencies**:
+### Dependencies
 
 - Requires Plan phase to be completed
 - Can run in parallel with Test and Implementation
 - Should integrate artifacts from both phases when available
 
-**Outputs**:
+### Outputs
 
 - Package/installer
 - Installation documentation
@@ -180,7 +180,7 @@ notes/issues/ or notes/review/.
 
 **Purpose**: Refactor, finalize, and address accumulated issues
 
-**Responsibilities**:
+### Responsibilities
 
 - Collect issues discovered during Test, Implementation, and Packaging phases
 - Refactor code for better maintainability
@@ -190,12 +190,12 @@ notes/issues/ or notes/review/.
 - Final code review and quality assurance
 - Performance optimization if needed
 
-**Dependencies**:
+### Dependencies
 
 - Requires Test, Implementation, and Packaging phases to be substantially complete
 - Final phase in the workflow
 
-**Outputs**:
+### Outputs
 
 - Refactored, production-ready code
 - Updated documentation
@@ -212,7 +212,7 @@ notes/issues/ or notes/review/.
 
    phases.
 
-2. **Parallel Execution**: Test, Implementation, and Packaging phases can run in parallel once Plan is complete, allowing
+1. **Parallel Execution**: Test, Implementation, and Packaging phases can run in parallel once Plan is complete, allowing
 
    for:
 
@@ -220,13 +220,13 @@ notes/issues/ or notes/review/.
    - Early packaging preparation
    - More efficient development workflow
 
-3. **Cleanup is Continuous**: While Cleanup is the final phase, the Cleanup issue should be updated throughout Test,
+1. **Cleanup is Continuous**: While Cleanup is the final phase, the Cleanup issue should be updated throughout Test,
 
    Implementation, and Packaging phases as issues are discovered. This ensures nothing is forgotten.
 
-4. **Iterative Nature**: If major issues are discovered during Cleanup, it may be necessary to revisit earlier phases.
+1. **Iterative Nature**: If major issues are discovered during Cleanup, it may be necessary to revisit earlier phases.
 
-5. **Issue Relationships**: All GitHub issues should reference their related issues:
+1. **Issue Relationships**: All GitHub issues should reference their related issues:
    - Test/Implementation/Packaging issues reference the Plan issue
    - Cleanup issue references all other issues
    - Cross-references help track dependencies
@@ -236,19 +236,19 @@ notes/issues/ or notes/review/.
 When addressing PR review comments:
 
 1. **Document**: Add the comment to this directory using the template above
-2. **Analyze**: Understand the full scope of changes needed
-3. **Plan**: Create a detailed plan for addressing the comment (use Claude Code's plan mode)
-4. **Execute**: Implement the changes systematically
-5. **Verify**: Test that changes resolve the comment without introducing new issues
-6. **Update**: Mark the comment as resolved and document the resolution
+1. **Analyze**: Understand the full scope of changes needed
+1. **Plan**: Create a detailed plan for addressing the comment (use Claude Code's plan mode)
+1. **Execute**: Implement the changes systematically
+1. **Verify**: Test that changes resolve the comment without introducing new issues
+1. **Update**: Mark the comment as resolved and document the resolution
 
 ## Best Practices
 
 1. **Be Thorough**: Review comments often reveal broader issues - address the root cause, not just the symptom
-2. **Test Changes**: Always test that review fixes don't break existing functionality
-3. **Document Decisions**: If you deviate from a review comment, document why
-4. **Communicate**: Keep the reviewer informed of progress and any blockers
-5. **Learn**: Use review feedback to improve future work
+1. **Test Changes**: Always test that review fixes don't break existing functionality
+1. **Document Decisions**: If you deviate from a review comment, document why
+1. **Communicate**: Keep the reviewer informed of progress and any blockers
+1. **Learn**: Use review feedback to improve future work
 
 ## Related Documentation
 

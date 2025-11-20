@@ -31,8 +31,8 @@ Create a comprehensive validator for paper implementations that checks structure
 ## Steps
 
 1. Check paper directory structure
-2. Validate documentation completeness and quality
-3. Verify tests exist and are adequate
+1. Validate documentation completeness and quality
+1. Verify tests exist and are adequate
 
 ## Success Criteria
 

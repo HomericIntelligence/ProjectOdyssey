@@ -37,6 +37,7 @@ cd examples/first_model
 Create `prepare_data.mojo` to load and preprocess the MNIST dataset:
 
 ```mojo
+
 ```mojo
 
 from shared.data import TensorDataset, BatchLoader
@@ -81,6 +82,7 @@ Key architecture:
 ```mojo
 
 # 3-layer network: 784 -> 128 -> 64 -> 10
+
 self.model = Sequential([
     Layer("linear", input_size=784, output_size=128),
     ReLU(),
@@ -103,6 +105,7 @@ See `examples/getting-started/first_model_train.mojo`
 Key training steps:
 
 ```mojo
+
 ```mojo
 
 # Configure training
@@ -135,6 +138,7 @@ pixi run mojo run train.mojo
 You should see output like:
 
 ```text
+
 ```text
 
 ==================================================
@@ -215,6 +219,7 @@ fn main() raises:
 Run evaluation:
 
 ```bash
+
 ```bash
 
 pixi run mojo run evaluate.mojo
@@ -243,6 +248,7 @@ Confusion matrix saved to confusion_matrix.png
 Create `predict.mojo` to classify individual images:
 
 ```mojo
+
 ```mojo
 
 from shared.utils import load_model, load_image, plot_image
@@ -325,6 +331,7 @@ Softmax (Output Probabilities)
 **Solutions**:
 
 ```mojo
+
 ```mojo
 
 # Try adjusting learning rate
@@ -341,12 +348,13 @@ print("Data range: ", train_images.min(), " to ", train_images.max())
 
 ### Training Too Slow
 
-**Solutions**:
+### Solutions
 
 ```mojo
 ```mojo
 
 # Increase batch size
+
 var train_loader = BatchLoader(train_data, batch_size=128)
 
 # Use release build for better performance
@@ -354,6 +362,7 @@ var train_loader = BatchLoader(train_data, batch_size=128)
 ```text
 
 ```bash
+
 ```bash
 
 pixi run mojo build --release train.mojo
@@ -363,15 +372,17 @@ pixi run mojo build --release train.mojo
 
 ### Out of Memory
 
-**Solutions**:
+### Solutions
 
 ```mojo
 ```mojo
 
 # Reduce batch size
+
 var train_loader = BatchLoader(train_data, batch_size=16)
 
 # Use smaller model
+
 self.model = Sequential([
     Layer("linear", input_size=784, output_size=64),  # Smaller
     ReLU(),
@@ -383,6 +394,7 @@ self.model = Sequential([
 ### Import Errors
 
 ```bash
+
 ```bash
 
 # Ensure you're in the right directory
@@ -420,6 +432,7 @@ self.model = Sequential([
 ### 2. Different Optimizer
 
 ```mojo
+
 ```mojo
 
 from shared.training import Adam
@@ -443,6 +456,7 @@ trainer.add_scheduler(scheduler)
 ### 4. Data Augmentation
 
 ```mojo
+
 ```mojo
 
 from shared.data.transforms import RandomRotation, RandomShift

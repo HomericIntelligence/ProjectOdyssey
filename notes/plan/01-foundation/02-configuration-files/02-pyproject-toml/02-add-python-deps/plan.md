@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Add runtime dependencies to [project.dependencies]
-2. Create [project.optional-dependencies] for dev tools
-3. Specify test dependencies in test group
-4. Add documentation dependencies if needed
+1. Create [project.optional-dependencies] for dev tools
+1. Specify test dependencies in test group
+1. Add documentation dependencies if needed
 
 ## Success Criteria
 

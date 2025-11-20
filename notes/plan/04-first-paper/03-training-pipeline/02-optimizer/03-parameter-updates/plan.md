@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Test updates on model parameters
-2. Verify loss reduction
-3. Check all layers updated
+1. Verify loss reduction
+1. Check all layers updated
 
 ## Success Criteria
 

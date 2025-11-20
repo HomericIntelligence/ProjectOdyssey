@@ -31,28 +31,28 @@ fn simd_add(a: Tensor[DType.float32], b: Tensor[DType.float32]):
         let vec_b = b.load[simd_width](i)
         let result = vec_a + vec_b
         a.store(i, result)
-```
+```text
 
 ## Optimization Patterns
 
 ### 1. Vectorize Loops
 
-**Before:**
+### Before:
 
 ```mojo
 fn add_scalar(a: Tensor, b: Tensor):
     for i in range(a.size):
         a[i] = a[i] + b[i]
-```
+```text
 
-**After:**
+### After:
 
 ```mojo
 fn add_simd(a: Tensor, b: Tensor):
     alias width = simdwidthof[DType.float32]()
     for i in range(0, a.size, width):
         a.store(i, a.load[width](i) + b.load[width](i))
-```
+```text
 
 ### 2. Handle Remainder
 
@@ -70,7 +70,7 @@ fn process_with_remainder(data: Tensor):
     for i in range(vector_end, data.size):
         # Scalar processing
         pass
-```
+```text
 
 ### 3. Alignment
 
@@ -80,7 +80,7 @@ fn process_with_remainder(data: Tensor):
 fn aligned_load[width: Int](ptr: DTypePointer, offset: Int):
     # Use aligned load for better performance
     pass
-```
+```text
 
 ## Performance Guidelines
 
@@ -91,7 +91,7 @@ fn aligned_load[width: Int](ptr: DTypePointer, offset: Int):
 
 ## Examples
 
-**Vector addition:**
+### Vector addition:
 
 ```mojo
 fn add[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]) -> Tensor[dtype]:
@@ -99,9 +99,9 @@ fn add[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]) -> Tensor[dtype]:
     for i in range(0, a.size, width):
         a.store(i, a.load[width](i) + b.load[width](i))
     return a
-```
+```text
 
-**Matrix multiplication (tiled):**
+### Matrix multiplication (tiled):
 
 ```mojo
 fn matmul_simd[dtype: DType](A: Matrix[dtype], B: Matrix[dtype]):
@@ -109,6 +109,6 @@ fn matmul_simd[dtype: DType](A: Matrix[dtype], B: Matrix[dtype]):
     alias tile = 32
     alias width = simdwidthof[dtype]()
     # Implementation with tiling and SIMD
-```
+```text
 
 See Mojo documentation for complete SIMD API.

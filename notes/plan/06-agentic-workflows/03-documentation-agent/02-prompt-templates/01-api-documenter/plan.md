@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Design structured output format for docstrings
-2. Create prompt with documentation guidelines
-3. Add few-shot examples of good docstrings
-4. Define extraction rules for signatures
+1. Create prompt with documentation guidelines
+1. Add few-shot examples of good docstrings
+1. Define extraction rules for signatures
 
 ## Success Criteria
 

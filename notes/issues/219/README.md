@@ -7,6 +7,7 @@ Develop a comprehensive test suite for ExTensor following Test-Driven Developmen
 ## Deliverables
 
 ### Test Files
+
 - `test_creation.mojo` - Creation operations (zeros, ones, full, arange, etc.)
 - `test_arithmetic.mojo` - Arithmetic operations with broadcasting
 - `test_bitwise.mojo` - Bitwise operations for integer/bool tensors
@@ -24,6 +25,7 @@ Develop a comprehensive test suite for ExTensor following Test-Driven Developmen
 - `benchmark_simd.mojo` - SIMD performance benchmarks
 
 ### Documentation
+
 - Test specification document (this file)
 - Test coverage report
 - Performance benchmark results
@@ -32,7 +34,7 @@ Develop a comprehensive test suite for ExTensor following Test-Driven Developmen
 
 ### Directory Structure
 
-```
+```text
 tests/
 ├── extensor/
 │   ├── test_creation.mojo
@@ -55,7 +57,7 @@ tests/
 │   ├── fixtures.mojo
 │   └── utils.mojo
 └── conftest.mojo
-```
+```text
 
 ### Test Naming Convention
 
@@ -68,7 +70,8 @@ tests/
 
 **Operations to test**: zeros, ones, full, arange, from_array, eye, linspace, empty
 
-**Test cases per operation**:
+### Test cases per operation
+
 - ✅ Create with various shapes (0D, 1D, 2D, 3D, ND)
 - ✅ Create with various dtypes (float16/32/64, int8/16/32/64, uint8/16/32/64, bool)
 - ✅ Verify correct values
@@ -76,8 +79,9 @@ tests/
 - ✅ Verify correct dtype
 - ✅ Edge cases (empty shape, very large shapes)
 
-**Specific tests**:
-```
+### Specific tests
+
+```text
 test_zeros_1d_float32()
 test_zeros_2d_int64()
 test_zeros_empty_shape()
@@ -89,7 +93,7 @@ test_from_array_nested_list()
 test_eye_rectangular()
 test_linspace_inclusive()
 test_empty_uninitialized()
-```
+```text
 
 ### 2. Arithmetic Operations (test_arithmetic.mojo)
 
@@ -97,7 +101,8 @@ test_empty_uninitialized()
 
 **Dunder methods to test**: `__add__`, `__radd__`, `__iadd__` (and equivalents for all ops)
 
-**Test cases per operation**:
+### Test cases per operation
+
 - ✅ Same-shape tensors
 - ✅ Broadcasting with scalar
 - ✅ Broadcasting with different shapes
@@ -106,8 +111,9 @@ test_empty_uninitialized()
 - ✅ Edge cases (division by zero, overflow)
 - ✅ Multiple dtypes
 
-**Specific tests**:
-```
+### Specific tests
+
+```text
 test_add_same_shape()
 test_add_broadcast_scalar()
 test_add_broadcast_vector_to_matrix()
@@ -118,7 +124,7 @@ test_divide_by_zero_int()
 test_power_negative_exponent()
 test_modulo_negative()
 test_floor_divide_rounding()
-```
+```text
 
 ### 3. Bitwise Operations (test_bitwise.mojo)
 
@@ -126,22 +132,24 @@ test_floor_divide_rounding()
 
 **Dunder methods to test**: `__and__`, `__rand__`, `__iand__` (and equivalents)
 
-**Test cases**:
+### Test cases
+
 - ✅ Integer tensors (int8/16/32/64, uint8/16/32/64)
 - ✅ Boolean tensors
 - ✅ Broadcasting
 - ✅ Reflected and in-place variants
 - ✅ Shift overflow behavior
 
-**Specific tests**:
-```
+### Specific tests
+
+```text
 test_bitwise_and_int32()
 test_bitwise_or_bool()
 test_bitwise_xor_broadcast()
 test_left_shift_overflow()
 test_right_shift_signed()
 test_right_shift_unsigned()
-```
+```text
 
 ### 4. Comparison Operations (test_comparison.mojo)
 
@@ -149,26 +157,29 @@ test_right_shift_unsigned()
 
 **Dunder methods to test**: `__eq__`, `__ne__`, `__lt__`, `__le__`, `__gt__`, `__ge__`
 
-**Test cases**:
+### Test cases
+
 - ✅ Same-shape tensors
 - ✅ Broadcasting
 - ✅ All dtypes
 - ✅ Special values (NaN, inf, -inf)
 - ✅ Return type is bool tensor
 
-**Specific tests**:
-```
+### Specific tests
+
+```text
 test_equal_same_values()
 test_equal_different_values()
 test_equal_nan_behavior()
 test_less_broadcast()
 test_greater_equal_inf()
 test_comparison_returns_bool()
-```
+```text
 
 ### 5. Pointwise Math Operations (test_pointwise_math.mojo)
 
-**Categories**:
+### Categories
+
 - Trigonometric: sin, cos, tan, asin, acos, atan, atan2
 - Hyperbolic: sinh, cosh, tanh, asinh, acosh, atanh
 - Exponential/Logarithmic: exp, exp2, expm1, log, log2, log10, log1p
@@ -176,15 +187,17 @@ test_comparison_returns_bool()
 - Rounding: ceil, floor, trunc, round
 - Other: sign, copysign, fma, clip, reciprocal
 
-**Test cases per operation**:
+### Test cases per operation
+
 - ✅ Various input ranges
 - ✅ Edge values (0, 1, -1, very small, very large)
 - ✅ Special values (NaN, inf, -inf)
 - ✅ Numerical accuracy
 - ✅ Multiple dtypes
 
-**Specific tests**:
-```
+### Specific tests
+
+```text
 test_sin_range_negative_pi_to_pi()
 test_cos_accuracy()
 test_tan_discontinuities()
@@ -196,13 +209,14 @@ test_rsqrt_accuracy()
 test_clip_min_max()
 test_fma_accuracy()
 test_round_ties_to_even()
-```
+```text
 
 ### 6. Matrix Operations (test_matrix.mojo)
 
 **Operations to test**: matmul, transpose, dot, outer, inner, tensordot
 
-**Test cases**:
+### Test cases
+
 - ✅ 2D matrix multiplication
 - ✅ Batched matrix multiplication (3D+)
 - ✅ Dimension compatibility checking
@@ -211,8 +225,9 @@ test_round_ties_to_even()
 - ✅ Outer product of vectors
 - ✅ Tensor contraction
 
-**Specific tests**:
-```
+### Specific tests
+
+```text
 test_matmul_2d()
 test_matmul_batched()
 test_matmul_incompatible_shapes()
@@ -222,13 +237,14 @@ test_dot_1d()
 test_dot_2d()
 test_outer_vectors()
 test_tensordot_contraction()
-```
+```text
 
 ### 7. Reduction Operations (test_reduction.mojo)
 
 **Operations to test**: sum, prod, mean, var, std, max, min, argmax, argmin, count_nonzero, cumulative_sum, cumulative_prod, all, any
 
-**Test cases per operation**:
+### Test cases per operation
+
 - ✅ Reduce all elements (axis=None)
 - ✅ Reduce along specific axis
 - ✅ Reduce along multiple axes
@@ -236,8 +252,9 @@ test_tensordot_contraction()
 - ✅ Empty tensors
 - ✅ Single element tensors
 
-**Specific tests**:
-```
+### Specific tests
+
+```text
 test_sum_all_elements()
 test_sum_along_axis_0()
 test_sum_keepdims()
@@ -249,13 +266,14 @@ test_argmax_ties()
 test_cumulative_sum_axis()
 test_all_short_circuit()
 test_any_empty_tensor()
-```
+```text
 
 ### 8. Shape Manipulation (test_shape.mojo)
 
 **Operations to test**: reshape, squeeze, unsqueeze, expand_dims, flatten, ravel, concatenate, stack, split, tile, repeat, broadcast_to, permute
 
-**Test cases**:
+### Test cases
+
 - ✅ Valid reshapes
 - ✅ Invalid reshapes (incompatible sizes)
 - ✅ Zero-copy operations (ravel, reshape views)
@@ -263,8 +281,9 @@ test_any_empty_tensor()
 - ✅ Stack along new dimensions
 - ✅ Split into equal/unequal parts
 
-**Specific tests**:
-```
+### Specific tests
+
+```text
 test_reshape_valid()
 test_reshape_invalid_size()
 test_reshape_infer_dimension()
@@ -276,13 +295,14 @@ test_stack_new_axis()
 test_split_equal()
 test_tile_multidim()
 test_broadcast_to_compatible()
-```
+```text
 
 ### 9. Indexing and Slicing (test_indexing.mojo)
 
 **Operations to test**: `__getitem__`, `__setitem__`, take, take_along_axis, put, gather, scatter, where, masked_select
 
-**Test cases**:
+### Test cases
+
 - ✅ Integer indexing
 - ✅ Slice indexing
 - ✅ Multi-dimensional indexing
@@ -290,8 +310,9 @@ test_broadcast_to_compatible()
 - ✅ Advanced indexing with arrays
 - ✅ Assignment via indexing
 
-**Specific tests**:
-```
+### Specific tests
+
+```text
 test_getitem_single_int()
 test_getitem_slice()
 test_getitem_multidim()
@@ -302,13 +323,14 @@ test_gather_dim()
 test_scatter_values()
 test_where_condition()
 test_masked_select()
-```
+```text
 
 ### 10. Utility Operations (test_utility.mojo)
 
 **Operations to test**: copy, clone, diff, `__len__`, `__bool__`, `__int__`, `__float__`, `__str__`, `__repr__`, `__hash__`, `__contains__`, `__divmod__`, item, tolist, numel, dim, size, stride, is_contiguous, contiguous
 
-**Test cases**:
+### Test cases
+
 - ✅ Deep copy independence
 - ✅ Type conversions
 - ✅ String representations
@@ -316,8 +338,9 @@ test_masked_select()
 - ✅ Stride calculations
 - ✅ Contiguity checking
 
-**Specific tests**:
-```
+### Specific tests
+
+```text
 test_copy_independence()
 test_clone_identical()
 test_item_single_element()
@@ -328,13 +351,14 @@ test_str_readable()
 test_numel_total_elements()
 test_stride_row_major()
 test_is_contiguous_after_transpose()
-```
+```text
 
 ### 11. Broadcasting Tests (test_broadcasting.mojo)
 
 **Focus**: Comprehensive broadcasting rule validation
 
-**Test cases**:
+### Test cases
+
 - ✅ Scalar to any shape
 - ✅ Vector to matrix
 - ✅ Missing dimensions
@@ -342,8 +366,9 @@ test_is_contiguous_after_transpose()
 - ✅ Incompatible shapes (should error)
 - ✅ Complex multi-dimensional broadcasting
 
-**Specific tests**:
-```
+### Specific tests
+
+```text
 test_broadcast_scalar_to_matrix()
 test_broadcast_vector_to_matrix()
 test_broadcast_missing_dims()
@@ -351,11 +376,12 @@ test_broadcast_size_one_dim()
 test_broadcast_incompatible_shapes()
 test_broadcast_3d_complex()
 test_broadcast_output_shape()
-```
+```text
 
 ### 12. Edge Cases (test_edge_cases.mojo)
 
-**Test cases**:
+### Test cases
+
 - ✅ Empty tensors (0 elements)
 - ✅ Scalar tensors (0D)
 - ✅ Very large tensors
@@ -365,8 +391,9 @@ test_broadcast_output_shape()
 - ✅ Infinity handling
 - ✅ Division by zero
 
-**Specific tests**:
-```
+### Specific tests
+
+```text
 test_empty_tensor_operations()
 test_scalar_tensor_0d()
 test_overflow_float32()
@@ -375,24 +402,27 @@ test_nan_propagation()
 test_inf_arithmetic()
 test_divide_by_zero_ieee754()
 test_large_dimension_count()
-```
+```text
 
 ### 13. DType Tests (test_dtype.mojo)
 
-**Test all operations with all dtypes**:
+### Test all operations with all dtypes
+
 - Float: float16, float32, float64
 - Integer: int8, int16, int32, int64
 - Unsigned: uint8, uint16, uint32, uint64
 - Boolean: bool
 
-**Test cases**:
+### Test cases
+
 - ✅ Creation with each dtype
 - ✅ Operations preserve dtype
 - ✅ Type-specific behavior (e.g., integer division)
 - ✅ No implicit type coercion
 
-**Specific tests**:
-```
+### Specific tests
+
+```text
 test_dtype_float16()
 test_dtype_float32()
 test_dtype_float64()
@@ -401,11 +431,12 @@ test_dtype_uint8()
 test_dtype_bool()
 test_no_implicit_coercion()
 test_division_int_vs_float()
-```
+```text
 
 ### 14. Memory Safety (test_memory.mojo)
 
-**Test cases**:
+### Test cases
+
 - ✅ Ownership transfers
 - ✅ Borrowed references
 - ✅ In-place mutations (inout)
@@ -413,34 +444,37 @@ test_division_int_vs_float()
 - ✅ No use-after-free
 - ✅ Views vs copies
 
-**Specific tests**:
-```
+### Specific tests
+
+```text
 test_ownership_move()
 test_borrow_no_mutation()
 test_inout_mutation()
 test_view_shares_memory()
 test_copy_independent_memory()
 test_no_dangling_references()
-```
+```text
 
 ### 15. Performance Benchmarks (benchmark_simd.mojo)
 
-**Benchmark categories**:
+### Benchmark categories
+
 - ✅ Element-wise operations (add, mul, div) - measure SIMD speedup
 - ✅ Reduction operations (sum, mean, max) - measure SIMD speedup
 - ✅ Matrix multiplication - measure performance vs naive
 - ✅ Broadcasting overhead
 - ✅ Memory access patterns (contiguous vs strided)
 
-**Benchmarks**:
-```
+### Benchmarks
+
+```text
 benchmark_add_simd()
 benchmark_multiply_simd()
 benchmark_sum_reduction()
 benchmark_matmul_sizes()
 benchmark_broadcast_overhead()
 benchmark_memory_access_pattern()
-```
+```text
 
 ## Test Implementation Guidelines
 
@@ -461,7 +495,7 @@ fn test_operation_scenario() raises:
     assert_equal(result.shape(), (3, 4))
     assert_dtype(result, DType.float32)
     assert_all_close(result, ExTensor.ones((3, 4), DType.float32))
-```
+```text
 
 ### Assertion Helpers
 
@@ -473,7 +507,7 @@ fn assert_all_close(a: ExTensor, b: ExTensor, rtol: Float64 = 1e-5, atol: Float6
 fn assert_shape(tensor: ExTensor, expected_shape: Tuple) raises
 fn assert_dtype(tensor: ExTensor, expected_dtype: DType) raises
 fn assert_raises(fn: fn() raises -> None, error_type: String) raises
-```
+```text
 
 ### Fixtures
 
@@ -484,7 +518,7 @@ fn random_tensor(shape: Tuple, dtype: DType) -> ExTensor
 fn sequential_tensor(shape: Tuple, dtype: DType) -> ExTensor
 fn nan_tensor(shape: Tuple) -> ExTensor
 fn inf_tensor(shape: Tuple) -> ExTensor
-```
+```text
 
 ## Success Criteria
 
@@ -515,7 +549,7 @@ mojo test tests/extensor/ -v
 
 # Run benchmarks
 mojo test tests/extensor/benchmark_simd.mojo
-```
+```text
 
 ### Expected Test Counts
 
@@ -550,18 +584,19 @@ mojo test tests/extensor/benchmark_simd.mojo
 - **Next**: Implement test files following TDD approach
 - **Priority order**:
   1. Creation operations (foundation)
-  2. Arithmetic operations (core functionality)
-  3. Broadcasting (critical feature)
-  4. Shape manipulation
-  5. All remaining categories
+  1. Arithmetic operations (core functionality)
+  1. Broadcasting (critical feature)
+  1. Shape manipulation
+  1. All remaining categories
 
 ---
 
 **Status**: Test specification complete, ready for implementation
 
-**Next Steps**:
+### Next Steps
+
 1. Set up test infrastructure (assertions, fixtures, conftest)
-2. Implement creation operation tests
-3. Implement arithmetic operation tests
-4. Continue with remaining test categories
-5. Implement performance benchmarks
+1. Implement creation operation tests
+1. Implement arithmetic operation tests
+1. Continue with remaining test categories
+1. Implement performance benchmarks

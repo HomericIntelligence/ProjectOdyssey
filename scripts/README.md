@@ -52,7 +52,7 @@ scripts/
         ├── fix_agent_markdown.py              # Agent refactoring (historical)
         ├── condense_pr_sections.py            # Agent refactoring (historical)
         └── condense_mojo_guidelines.py        # Agent refactoring (historical)
-```
+```text
 
 ## Scripts
 
@@ -62,7 +62,7 @@ scripts/
 
 **Purpose**: Shared utilities and constants used across multiple scripts.
 
-**Provides**:
+### Provides
 
 - `LABEL_COLORS` - Standard GitHub label colors for 5-phase workflow
 - `get_repo_root()` - Portable repository root detection
@@ -77,7 +77,7 @@ scripts/
 
 **Purpose**: Shared validation framework for consistency across validation scripts.
 
-**Provides**:
+### Provides
 
 - `find_markdown_files()` - Find markdown files with exclusions
 - `validate_file_exists()` - Check file existence
@@ -98,7 +98,7 @@ scripts/
 
 **Purpose**: Regenerate all github_issue.md files dynamically from their corresponding plan.md files.
 
-**Features**:
+### Features
 
 - Generates github_issue.md files from plan.md sources (task-relative, local only)
 - Supports dry-run mode for testing
@@ -106,7 +106,7 @@ scripts/
 - Resume capability with timestamped state files
 - Progress tracking and error handling
 
-**Usage**:
+### Usage
 
 ```bash
 
@@ -125,16 +125,16 @@ python3 scripts/regenerate_github_issues.py
 # Resume from previous run
 
 python3 scripts/regenerate_github_issues.py --resume
-```
+```text
 
-**Command-line Options**:
+### Command-line Options
 
 - `--dry-run`: Show what would be done without making changes
 - `--section SECTION`: Process only one section (e.g., 01-foundation)
 - `--resume`: Resume from last saved state
 - `--plan-dir PATH`: Specify plan directory (default: auto-detected from repository root)
 
-**Output**:
+### Output
 
 - Logs to stderr with progress updates
 - Saves state to `logs/.issue_creation_state_<timestamp>.json`
@@ -149,7 +149,7 @@ Always regenerate them using this script. These files are local (in `notes/plan/
 
 **Purpose**: Create GitHub issues from all github_issue.md files in the notes/plan directory
 
-**Features**:
+### Features
 
 - Creates GitHub issues using the gh CLI
 - Supports dry-run mode for testing
@@ -159,7 +159,7 @@ Always regenerate them using this script. These files are local (in `notes/plan/
 - Updates github_issue.md files with created issue URLs
 - Automatic label creation
 
-**Usage**:
+### Usage
 
 ```bash
 # Dry-run mode (recommended first - shows what would be created)
@@ -182,9 +182,9 @@ python3 scripts/create_issues.py --no-color
 
 # Specify repository explicitly
 python3 scripts/create_issues.py --repo username/repo
-```
+```text
 
-**Command-line Options**:
+### Command-line Options
 
 - `--dry-run`: Show what would be done without creating issues
 - `--section SECTION`: Process only one section (e.g., 01-foundation)
@@ -192,13 +192,13 @@ python3 scripts/create_issues.py --repo username/repo
 - `--no-color`: Disable ANSI color output
 - `--repo REPO`: Override repository (default: auto-detected from git)
 
-**Output**:
+### Output
 
 - Logs to `logs/create_issues_<timestamp>.log`
 - Saves state to `logs/.issue_creation_state_<timestamp>.json`
 - Updates github_issue.md files with issue URLs
 
-**Prerequisites**:
+### Prerequisites
 
 - GitHub CLI (`gh`) must be installed and authenticated
 - Run `gh auth login` if not already authenticated
@@ -209,7 +209,7 @@ python3 scripts/create_issues.py --repo username/repo
 
 **Purpose**: Unified markdown linting fixer that automatically fixes common markdownlint-cli2 errors.
 
-**Features**:
+### Features
 
 - Fixes 8 common markdown linting rules (MD012, MD022, MD026, MD029, MD031, MD032, MD036, MD040)
 - Supports single files or entire directories
@@ -217,7 +217,7 @@ python3 scripts/create_issues.py --repo username/repo
 - Verbose output option
 - Excludes common directories (node_modules, .git, venv, etc.)
 
-**Usage**:
+### Usage
 
 ```bash
 # Fix a single file
@@ -234,9 +234,9 @@ python3 scripts/fix_markdown.py . --dry-run
 
 # Verbose output
 python3 scripts/fix_markdown.py . --verbose
-```
+```text
 
-**Fixes Applied**:
+### Fixes Applied
 
 - **MD012**: Remove multiple consecutive blank lines
 - **MD022**: Add blank lines around headings
@@ -247,13 +247,13 @@ python3 scripts/fix_markdown.py . --verbose
 - **MD036**: Convert bold text used as headings to actual headings
 - **MD040**: Add language tags to code blocks (defaults to `text`)
 
-**Command-line Options**:
+### Command-line Options
 
 - `path`: Path to markdown file or directory (required)
 - `-v, --verbose`: Enable verbose output
 - `-n, --dry-run`: Show what would be fixed without making changes
 
-**Example Output**:
+### Example Output
 
 ```text
 Found 42 markdown file(s)
@@ -263,7 +263,7 @@ Fixed scripts/README.md: 3 issues
 Summary:
   Files modified: 2
   Total fixes: 8
-```
+```text
 
 ---
 
@@ -271,7 +271,7 @@ Summary:
 
 **Purpose**: Validate all markdown links in the repository.
 
-**Features**:
+### Features
 
 - Checks relative file links and anchors
 - Validates internal markdown links
@@ -279,7 +279,7 @@ Summary:
 - Supports dry-run mode
 - Exit code indicates validation status
 
-**Usage**:
+### Usage
 
 ```bash
 # Validate links in all markdown files
@@ -287,9 +287,9 @@ python3 scripts/validate_links.py
 
 # Validate links in specific directory
 python3 scripts/validate_links.py notes/
-```
+```text
 
-**Exit Codes**:
+### Exit Codes
 
 - 0 = All links valid
 - 1 = Broken links found
@@ -300,14 +300,14 @@ python3 scripts/validate_links.py notes/
 
 **Purpose**: Validate repository directory structure and required files.
 
-**Features**:
+### Features
 
 - Checks for required directories
 - Validates presence of key files
 - Section-by-section validation
 - Clear error reporting
 
-**Usage**:
+### Usage
 
 ```bash
 # Validate repository structure
@@ -315,9 +315,9 @@ python3 scripts/validate_structure.py
 
 # Validate specific section
 python3 scripts/validate_structure.py --section 01-foundation
-```
+```text
 
-**Exit Codes**:
+### Exit Codes
 
 - 0 = Structure valid
 - 1 = Validation errors found
@@ -328,14 +328,14 @@ python3 scripts/validate_structure.py --section 01-foundation
 
 **Purpose**: Validate README.md files for completeness and consistency.
 
-**Features**:
+### Features
 
 - Checks required sections in README files
 - Validates markdown formatting
 - Reports missing sections
 - Comprehensive validation
 
-**Usage**:
+### Usage
 
 ```bash
 # Check all README files
@@ -343,9 +343,9 @@ python3 scripts/check_readmes.py
 
 # Check specific directory
 python3 scripts/check_readmes.py notes/
-```
+```text
 
-**Exit Codes**:
+### Exit Codes
 
 - 0 = All README files valid
 - 1 = Issues found
@@ -356,7 +356,7 @@ python3 scripts/check_readmes.py notes/
 
 **Purpose**: Lint YAML configuration files for syntax and formatting.
 
-**Features**:
+### Features
 
 - YAML syntax validation
 - Indentation checking
@@ -364,7 +364,7 @@ python3 scripts/check_readmes.py notes/
 - Can remove unused sections
 - Verbose output mode
 
-**Usage**:
+### Usage
 
 ```bash
 # Lint all YAML files
@@ -375,9 +375,9 @@ python3 scripts/lint_configs.py --verbose
 
 # Remove unused sections
 python3 scripts/lint_configs.py --remove-unused
-```
+```text
 
-**Exit Codes**:
+### Exit Codes
 
 - 0 = All configs valid
 - 1 = Linting errors found
@@ -388,7 +388,7 @@ python3 scripts/lint_configs.py --remove-unused
 
 **Purpose**: Collect system information for bug reports and debugging.
 
-**Features**:
+### Features
 
 - Gathers git information
 - Collects Mojo version details
@@ -396,7 +396,7 @@ python3 scripts/lint_configs.py --remove-unused
 - System details (OS, CPU, etc.)
 - Graceful handling of missing tools
 
-**Usage**:
+### Usage
 
 ```bash
 # Collect system information
@@ -404,7 +404,7 @@ python3 scripts/get_system_info.py
 
 # Output in JSON format
 python3 scripts/get_system_info.py --json
-```
+```text
 
 ---
 
@@ -412,14 +412,14 @@ python3 scripts/get_system_info.py --json
 
 **Purpose**: Merge pull requests using GitHub API.
 
-**Features**:
+### Features
 
 - Uses PyGithub library
 - Configurable merge method
 - Delete branch after merge option
 - Requires GITHUB_TOKEN
 
-**Usage**:
+### Usage
 
 ```bash
 # Merge PR by number
@@ -430,9 +430,9 @@ python3 scripts/merge_prs.py <pr-number> --squash
 
 # Delete branch after merge
 python3 scripts/merge_prs.py <pr-number> --delete-branch
-```
+```text
 
-**Requirements**:
+### Requirements
 
 - PyGithub library: `pip install PyGithub`
 - GITHUB_TOKEN environment variable
@@ -443,14 +443,14 @@ python3 scripts/merge_prs.py <pr-number> --delete-branch
 
 **Purpose**: Create tarball distribution of papers directory.
 
-**Features**:
+### Features
 
 - Creates compressed archive
 - Validates directory structure
 - Timestamped output files
 - Error handling
 
-**Usage**:
+### Usage
 
 ```bash
 # Create papers package
@@ -458,7 +458,7 @@ python3 scripts/package_papers.py
 
 # Specify output directory
 python3 scripts/package_papers.py --output dist/
-```
+```text
 
 ---
 
@@ -469,7 +469,7 @@ python3 scripts/package_papers.py --output dist/
 Historical and experimental scripts have been moved to `scripts/agents/playground/`.
 See [scripts/agents/playground/README.md](agents/playground/README.md) for details.
 
-**Recommended alternatives:**
+### Recommended alternatives:
 
 - Instead of `create_single_component_issues.py`, use `create_issues.py --file <path>`
 - Agent modification scripts are historical; see playground README for context
@@ -483,9 +483,9 @@ See [scripts/agents/playground/README.md](agents/playground/README.md) for detai
 **Note**: Plan files are local (in `notes/plan/`) and NOT tracked in git.
 
 1. **Edit plan.md files** - Make changes to local planning documents
-2. **Regenerate github_issue.md** - Run `regenerate_github_issues.py` to update local issue files
-3. **Test with dry-run** - Run `create_issues.py --dry-run` to preview
-4. **Create issues** - Run `create_issues.py` to create GitHub issues from local plans
+1. **Regenerate github_issue.md** - Run `regenerate_github_issues.py` to update local issue files
+1. **Test with dry-run** - Run `create_issues.py --dry-run` to preview
+1. **Create issues** - Run `create_issues.py` to create GitHub issues from local plans
 
 ### Creating All Issues
 
@@ -511,7 +511,7 @@ python3 scripts/create_issues.py --section 06-agentic-workflows
 # OR: Create all at once
 
 python3 scripts/create_issues.py
-```
+```text
 
 ---
 
@@ -556,22 +556,22 @@ Each component generates 5 GitHub issues following the 5-phase development workf
    - Purpose: Create detailed specifications and design
    - Must complete before other phases
 
-2. **Test Issue** - `[Test] Component Name - Write Tests`
+1. **Test Issue** - `[Test] Component Name - Write Tests`
    - Labels: `testing`, `tdd`
    - Purpose: Document and implement test cases
    - Can run in parallel with Implementation and Packaging
 
-3. **Implementation Issue** - `[Impl] Component Name - Implementation`
+1. **Implementation Issue** - `[Impl] Component Name - Implementation`
    - Labels: `implementation`
    - Purpose: Build the main functionality
    - Can run in parallel with Test and Packaging
 
-4. **Packaging Issue** - `[Package] Component Name - Integration and Packaging`
+1. **Packaging Issue** - `[Package] Component Name - Integration and Packaging`
    - Labels: `packaging`, `integration`
    - Purpose: Integrate artifacts and create installer
    - Can run in parallel with Test and Implementation
 
-5. **Cleanup Issue** - `[Cleanup] Component Name - Refactor and Finalize`
+1. **Cleanup Issue** - `[Cleanup] Component Name - Refactor and Finalize`
    - Labels: `cleanup`, `documentation`
    - Purpose: Collect issues, refactor, and finalize
    - Runs after parallel phases complete
@@ -592,7 +592,7 @@ See [notes/review/README.md](../notes/review/README.md) for detailed workflow do
 # Authenticate
 
 gh auth login
-```
+```text
 
 ### State File Issues
 
@@ -604,7 +604,7 @@ If you need to start fresh:
 # Remove specific state file or let script create new one
 
 rm logs/.issue_creation_state_*.json
-```
+```text
 
 ### Permission Errors
 
@@ -633,7 +633,7 @@ If github_issue.md files are missing:
 # Regenerate all files
 
 python3 scripts/regenerate_github_issues.py
-```
+```text
 
 ---
 
@@ -650,7 +650,7 @@ python3 tests/test_validation.py
 
 # Run all tests (requires pytest)
 pytest tests/
-```
+```text
 
 ---
 
@@ -692,7 +692,7 @@ ml-odyssey/
 └── logs/                    # Not tracked
     ├── .issue_creation_state_*.json
     └── create_issues_*.log
-```
+```text
 
 ---
 
@@ -702,23 +702,23 @@ ml-odyssey/
    - Use `--dry-run` to preview changes before executing
    - Verify output looks correct
 
-2. **Test with one component**
+1. **Test with one component**
    - Use `create_single_component_issues.py` to test with one component
    - Verify issues are created correctly
 
-3. **Process section-by-section**
+1. **Process section-by-section**
    - Use `--section` flag for better control
    - Easier to handle errors and rate limits
 
-4. **Check logs**
+1. **Check logs**
    - Review log files in `logs/` directory
    - Contains detailed error messages and progress
 
-5. **Use resume capability**
+1. **Use resume capability**
    - If interrupted, use `--resume` to continue
    - State is saved every 50 files
 
-6. **Keep github_issue.md files in sync**
+1. **Keep github_issue.md files in sync**
    - Regenerate after editing plan.md files
    - Don't edit github_issue.md manually
    - Remember: These are local files (not tracked in git)
@@ -740,7 +740,7 @@ ml-odyssey/
   - Parses multiple github_issue.md format variations
   - Updates markdown files with created issue URLs
 
-**Label Colors**:
+### Label Colors
 
 ```python
 'planning': 'd4c5f9'       # Light purple
@@ -751,7 +751,7 @@ ml-odyssey/
 'packaging': 'c2e0c6'      # Light green
 'integration': 'c2e0c6'    # Light green
 'cleanup': 'd93f0b'        # Red
-```
+```text
 
 ### create_single_component_issues.py
 
@@ -776,7 +776,7 @@ ml-odyssey/
   - Timestamped state files for tracking multiple runs
   - Replaces 4 legacy update scripts with single consolidated tool
 
-**Body Generation**:
+### Body Generation
 
 - **Plan**: Objectives, inputs, outputs, success criteria, notes
 - **Test**: Testing objectives, what to test, test success criteria, implementation steps

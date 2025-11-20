@@ -46,7 +46,7 @@ description: [One-line description: coordinates X specialists to accomplish Y by
 tools: Read,Grep,Glob  # Adjust based on needs
 model: sonnet
 ---
-```
+```text
 
 ---
 
@@ -112,7 +112,7 @@ and routes different aspects to specialized [type] agents, ensuring thorough cov
    - Use Grep to [search for patterns/references]
 3. Categorize [work items] by [type/impact/domain]
 4. Determine required specialist [involvement/reviews/assignments]
-```
+```text
 
 #### Phase 2: Routing
 
@@ -127,7 +127,7 @@ and routes different aspects to specialized [type] agents, ensuring thorough cov
    - Core [tasks]: [Specialist D], [Specialist E], [Specialist F]
    - Specialized [tasks]: [Specialist G], [Specialist H]
    - Domain [tasks]: [Specialist I], [Specialist J]
-```
+```text
 
 #### Phase 3: Consolidation
 
@@ -136,7 +136,7 @@ and routes different aspects to specialized [type] agents, ensuring thorough cov
 8. Identify contradictions or conflicts
 9. Consolidate into coherent [report/plan/deliverable]
 10. Escalate unresolved conflicts if needed
-```
+```text
 
 #### Phase 4: Reporting
 
@@ -145,7 +145,7 @@ and routes different aspects to specialized [type] agents, ensuring thorough cov
 12. Categorize findings by [severity/priority/type] (critical, major, minor)
 13. Provide actionable recommendations
 14. Track [completion/sign-off] status
-```
+```text
 
 ### Routing Rules (Prevents Overlap)
 
@@ -236,20 +236,20 @@ and routes different aspects to specialized [type] agents, ensuring thorough cov
 
 #### Example 1: [Scenario Title - Primary Use Case]
 
-**Input**:
+### Input
 
 ```text
 [Describe the incoming work item]
 [List relevant files/changes/context]
-```
+```text
 
-**Analysis**:
+### Analysis
 
 - [What you observe about this work]
 - [Key characteristics that drive routing]
 - [Impact assessment]
 
-**Routing**:
+### Routing
 
 ```text
 ✅ [Specialist A] → [What they handle and why]
@@ -259,9 +259,9 @@ and routes different aspects to specialized [type] agents, ensuring thorough cov
 ❌ NOT [Specialist X] ([reason for exclusion])
 ❌ NOT [Specialist Y] ([reason for exclusion])
 ❌ NOT [Specialist Z] ([reason for exclusion])
-```
+```text
 
-**Consolidation**:
+### Consolidation
 
 - [How you combine specialist outputs]
 - [How you handle conflicts]
@@ -269,20 +269,20 @@ and routes different aspects to specialized [type] agents, ensuring thorough cov
 
 #### Example 2: [Scenario Title - Edge Case or Complex Scenario]
 
-**Input**:
+### Input
 
 ```text
 [Describe a more complex scenario]
 [Show overlap potential or conflict]
-```
+```text
 
-**Analysis**:
+### Analysis
 
 - [Multi-dimensional analysis]
 - [Competing concerns]
 - [Trade-offs to consider]
 
-**Routing**:
+### Routing
 
 ```text
 ✅ [Specialist A] → [Specific dimension they cover]
@@ -291,9 +291,9 @@ and routes different aspects to specialized [type] agents, ensuring thorough cov
 ✅ [Specialist D] → [Cross-cutting concern with clear scope]
 
 ❌ NOT [Specialist X] ([why not needed])
-```
+```text
 
-**Special Handling**:
+### Special Handling
 
 - [Any special coordination needed]
 - [Conflict resolution approach]
@@ -301,25 +301,25 @@ and routes different aspects to specialized [type] agents, ensuring thorough cov
 
 #### Example 3: [Scenario Title - Minimal Involvement Case]
 
-**Input**:
+### Input
 
 ```text
 [Simple, focused work item]
-```
+```text
 
-**Analysis**:
+### Analysis
 
 - [Why this is straightforward]
 - [Limited scope assessment]
 
-**Routing**:
+### Routing
 
 ```text
 ✅ [Specialist A] → [Primary handler]
 ✅ [Specialist B] → [Only if this specific condition]
 
 ❌ NOT [Specialist C-Z] ([why extensive coordination not needed])
-```
+```text
 
 ### Overlap Prevention Strategy
 
@@ -344,9 +344,9 @@ Each aspect of [work] is [handled/reviewed] along independent dimensions:
 When specialists disagree:
 
 1. **[Conflict Type A]**: [How to resolve - priority rule or escalation]
-2. **[Conflict Type B]**: [Resolution approach]
-3. **[Conflict Type C]**: [When to escalate vs resolve]
-4. **[Conflict Type D]**: [Default behavior or guiding principle]
+1. **[Conflict Type B]**: [Resolution approach]
+1. **[Conflict Type C]**: [When to escalate vs resolve]
+1. **[Conflict Type D]**: [Default behavior or guiding principle]
 
 Escalate to [Higher Authority] if [escalation criteria].
 
@@ -394,10 +394,10 @@ Escalate to [Higher Authority] if [escalation criteria].
 Answer these questions to customize this template:
 
 1. **What does this orchestrator coordinate?** (e.g., code reviews, testing, deployments)
-2. **How many specialists does it coordinate?** (typically 5-15 for Level 2)
-3. **What are the main categorization dimensions?** (e.g., file type, domain area, complexity)
-4. **What triggers this orchestrator?** (e.g., PR creation, issue assignment, schedule)
-5. **What does it produce?** (e.g., consolidated report, deployment plan, test strategy)
+1. **How many specialists does it coordinate?** (typically 5-15 for Level 2)
+1. **What are the main categorization dimensions?** (e.g., file type, domain area, complexity)
+1. **What triggers this orchestrator?** (e.g., PR creation, issue assignment, schedule)
+1. **What does it produce?** (e.g., consolidated report, deployment plan, test strategy)
 
 ### Step 2: Identify Your Specialists
 
@@ -416,8 +416,8 @@ Group specialists into 3-5 logical categories.
 Create routing tables for:
 
 1. **Primary dimension** (e.g., file extension, task type, domain)
-2. **Secondary dimension** (e.g., change type, complexity, impact)
-3. **Tertiary dimension** (e.g., risk level, priority, dependencies)
+1. **Secondary dimension** (e.g., change type, complexity, impact)
+1. **Tertiary dimension** (e.g., risk level, priority, dependencies)
 
 Ensure rules prevent overlap by assigning clear, non-overlapping scopes.
 
@@ -426,10 +426,10 @@ Ensure rules prevent overlap by assigning clear, non-overlapping scopes.
 For each scenario, show:
 
 1. **Input**: What triggers the orchestrator
-2. **Analysis**: How you assess the situation
-3. **Routing**: Which specialists get involved (and which don't)
-4. **Rationale**: Why each routing decision was made
-5. **Consolidation**: How specialist outputs combine
+1. **Analysis**: How you assess the situation
+1. **Routing**: Which specialists get involved (and which don't)
+1. **Rationale**: Why each routing decision was made
+1. **Consolidation**: How specialist outputs combine
 
 Include:
 
@@ -456,26 +456,26 @@ cp agents/templates/level-2-orchestrator.md .claude/agents/[your-orchestrator].m
 # 3. Remove template instructions and comments
 # 4. Test invocation in Claude Code
 
-# 5. Verify behavior:
+# 5. Verify behavior
 # - Orchestrator analyzes work correctly
 # - Routing decisions are logical and non-overlapping
 # - Specialists receive clear, scoped assignments
 # - Consolidation produces useful output
-```
+```text
 
 ---
 
 ## Example: How Code Review Orchestrator Uses This Template
 
-**Answers to Step 1 questions**:
+### Answers to Step 1 questions
 
 1. **What does it coordinate?** Code reviews across 13 specialist dimensions
-2. **How many specialists?** 13 review specialists
-3. **Main dimensions?** File extension, change type, impact level
-4. **Trigger?** PR creation or cleanup phase
-5. **Produces?** Consolidated review report with severity-categorized findings
+1. **How many specialists?** 13 review specialists
+1. **Main dimensions?** File extension, change type, impact level
+1. **Trigger?** PR creation or cleanup phase
+1. **Produces?** Consolidated review report with severity-categorized findings
 
-**Routing dimensions**:
+### Routing dimensions
 
 - **Primary**: File extension (.mojo → Mojo Language Specialist, .md → Documentation Specialist)
 - **Secondary**: Change type (ML algorithm → Algorithm Specialist, security → Security Specialist)

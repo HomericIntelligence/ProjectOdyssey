@@ -25,7 +25,7 @@ mojo package shared/data -o dist/data-0.1.0.mojopkg
 # Verify package was created
 ls -lh dist/data-0.1.0.mojopkg
 file dist/data-0.1.0.mojopkg
-```
+```text
 
 ### 2. Create installation verification script
 
@@ -79,7 +79,7 @@ mojo run -c "from data import Compose; print('Compose import OK')"
 echo ""
 echo "✅ Data package verification complete!"
 echo "All imports successful"
-```
+```text
 
 ### 3. Update issue documentation
 
@@ -104,20 +104,20 @@ git commit -m "feat(data): create distributable package with installation testin
 - Updated documentation to reflect actual artifacts
 
 Closes #40"
-```
+```text
 
 ## Execution Steps
 
 1. Create `dist/` directory
-2. Build `.mojopkg` file using `mojo package` command
-3. Verify package file exists and is non-empty
-4. Create `scripts/` directory if it doesn't exist
-5. Create installation verification script
-6. Make script executable (`chmod +x`)
-7. Test the verification script
-8. Update `notes/issues/40/README.md`
-9. Stage and commit changes
-10. Report results
+1. Build `.mojopkg` file using `mojo package` command
+1. Verify package file exists and is non-empty
+1. Create `scripts/` directory if it doesn't exist
+1. Create installation verification script
+1. Make script executable (`chmod +x`)
+1. Test the verification script
+1. Update `notes/issues/40/README.md`
+1. Stage and commit changes
+1. Report results
 
 ## Success Criteria
 

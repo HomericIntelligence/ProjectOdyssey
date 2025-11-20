@@ -40,27 +40,27 @@ Create comprehensive shared test utilities and fixtures for the ML Odyssey test 
    - Floating-point comparison with epsilon tolerance
    - Shape validation utilities
 
-2. **Mock Data Loaders** - Simple dataset and loader implementations:
+1. **Mock Data Loaders** - Simple dataset and loader implementations:
    - Configurable mock dataset with batch support
    - Classification and regression sample generators
    - Basic data loader with batching
 
-3. **Mock Model Architectures** - Minimal models for testing:
+1. **Mock Model Architectures** - Minimal models for testing:
    - Simple linear model (single layer)
    - Small MLP (2-3 layers)
    - Mock layer implementations for unit tests
 
-4. **File I/O Test Helpers** - Temporary file management:
+1. **File I/O Test Helpers** - Temporary file management:
    - Temporary directory creation and cleanup
    - Mock configuration file generators
    - Path utilities for test resources
 
-5. **Configuration Fixtures** - Sample configurations:
+1. **Configuration Fixtures** - Sample configurations:
    - Valid YAML/JSON configuration examples
    - Invalid configurations for error testing
    - Configuration validation helpers
 
-6. **Python Test Utilities** - pytest integration:
+1. **Python Test Utilities** - pytest integration:
    - Common pytest fixtures
    - Markdown validation utilities
    - Link checking helpers
@@ -159,7 +159,7 @@ fn test_layer_forward():
     # Compare with expected output
     var expected = create_random_tensor([2, 5], seed=123)
     assert_tensors_equal(output, expected, epsilon=1e-6)
-```
+```text
 
 #### Mock Data
 
@@ -180,7 +180,7 @@ fn test_training_loop():
     # Test batching
     for batch in loader:
         assert batch.size() <= 32
-```
+```text
 
 #### Mock Models
 
@@ -195,7 +195,7 @@ fn test_training_workflow():
     var input = create_random_tensor([2, 10])
     var output = model.forward(input)
     assert output.shape() == [2, 5]
-```
+```text
 
 #### Test I/O Helpers
 
@@ -214,7 +214,7 @@ fn test_checkpoint_saving():
     finally:
         # Clean up
         cleanup_temp_dir(temp_dir)
-```
+```text
 
 #### Configuration Fixtures
 
@@ -229,25 +229,25 @@ fn test_config_validation():
     # Test invalid config
     var invalid_cfg = invalid_config_missing_fields()
     assert validate_config(invalid_cfg) == False
-```
+```text
 
 ### Key Design Principles Applied
 
 1. **KISS** - Simple, straightforward implementations without unnecessary complexity
-2. **YAGNI** - Only implemented what's needed for current testing requirements
-3. **DRY** - Reusable fixtures prevent duplication across tests
-4. **TDD** - Fixtures designed to support test-first development
-5. **POLA** - Intuitive APIs that match common testing patterns
+1. **YAGNI** - Only implemented what's needed for current testing requirements
+1. **DRY** - Reusable fixtures prevent duplication across tests
+1. **TDD** - Fixtures designed to support test-first development
+1. **POLA** - Intuitive APIs that match common testing patterns
 
 ### Next Steps
 
 After completing this issue:
 
 1. Use fixtures in existing test files to validate functionality
-2. Gather feedback on fixture usability
-3. Extend fixtures as new testing needs arise
-4. Document common testing patterns using these fixtures
-5. Create integration tests using multiple fixtures together
+1. Gather feedback on fixture usability
+1. Extend fixtures as new testing needs arise
+1. Document common testing patterns using these fixtures
+1. Create integration tests using multiple fixtures together
 
 ### Related Issues
 
@@ -267,7 +267,7 @@ All files successfully created in `/tests/shared/fixtures/`:
 
 ### 2. `mock_tensors.mojo` (318 lines)
 
-**Tensor Creation Functions**:
+### Tensor Creation Functions
 
 - `create_random_tensor()` - Random tensors with deterministic seeds
 - `create_zeros_tensor()` - Zero-filled tensors
@@ -275,13 +275,13 @@ All files successfully created in `/tests/shared/fixtures/`:
 - `create_sequential_tensor()` - Sequential values for testing indexing
 - `create_constant_tensor()` - Constant-filled tensors
 
-**Comparison Functions**:
+### Comparison Functions
 
 - `assert_tensors_equal()` - Element-wise comparison with epsilon tolerance
 - `assert_shape_equal()` - Shape validation
 - `calculate_tensor_size()` - Size calculation helper
 
-**Statistics Functions**:
+### Statistics Functions
 
 - `tensor_mean()` - Calculate mean for validation
 - `tensor_min()` - Find minimum value
@@ -289,31 +289,31 @@ All files successfully created in `/tests/shared/fixtures/`:
 
 ### 3. `mock_data.mojo` (418 lines)
 
-**Dataset Implementations**:
+### Dataset Implementations
 
 - `struct MockDataset` - Basic dataset with configurable dimensions
 - `struct MockClassificationDataset` - Classification data with class labels
 - `struct MockRegressionDataset` - Regression data with correlated outputs
 
-**Data Loader**:
+### Data Loader
 
 - `struct MockDataLoader` - Batching support with size calculations
 - `get_batch_size()` - Determine batch sizes (including partial last batch)
 - `get_batch_indices()` - Get sample indices for batch
 
-**Helper Functions**:
+### Helper Functions
 
 - `create_mock_batch()` - Quick batch creation without full setup
 - `create_mock_classification_batch()` - Classification batches
 
 ### 4. `mock_models.mojo` (453 lines)
 
-**Layer Implementations**:
+### Layer Implementations
 
 - `struct MockLayer` - Minimal layer for testing (scaled transformation)
 - `forward()` - Simple forward pass with scaling
 
-**Model Implementations**:
+### Model Implementations
 
 - `struct SimpleLinearModel` - Single linear layer model
   - Matrix-vector multiplication: y = Wx + b
@@ -326,19 +326,19 @@ All files successfully created in `/tests/shared/fixtures/`:
 
 ### 5. `test_io_helpers.mojo` (320 lines)
 
-**Directory Management**:
+### Directory Management
 
 - `create_temp_dir()` - Create unique temporary directories
 - `cleanup_temp_dir()` - Safe removal with /tmp validation
 - `temp_file_path()` - Path construction helper
 
-**File Creation**:
+### File Creation
 
 - `create_mock_config()` - Write configuration files
 - `create_mock_checkpoint()` - Create checkpoint files
 - `create_mock_text_file()` - Generate text files
 
-**Path Utilities**:
+### Path Utilities
 
 - `get_test_data_path()` - Resolve test data paths
 - `file_exists()` / `dir_exists()` - Existence checking
@@ -346,7 +346,7 @@ All files successfully created in `/tests/shared/fixtures/`:
 - `get_filename()` - Extract filename from path
 - `get_extension()` - Extract file extension
 
-**Test Data Organization**:
+### Test Data Organization
 
 - `get_fixtures_dir()` - Base fixtures directory
 - `get_images_dir()` - Images subdirectory
@@ -356,13 +356,13 @@ All files successfully created in `/tests/shared/fixtures/`:
 
 ### 6. `config_fixtures.mojo` (427 lines)
 
-**Valid Configurations**:
+### Valid Configurations
 
 - `valid_yaml_config()` - Complete valid YAML configuration
 - `valid_json_config()` - Complete valid JSON configuration
 - `minimal_valid_config()` - Minimal required fields
 
-**Invalid Configurations (for error testing)**:
+### Invalid Configurations (for error testing)
 
 - `invalid_config_missing_fields()` - Missing required fields
 - `invalid_config_wrong_types()` - Type errors
@@ -371,12 +371,12 @@ All files successfully created in `/tests/shared/fixtures/`:
 - `invalid_yaml_syntax()` - YAML syntax errors
 - `invalid_json_syntax()` - JSON syntax errors
 
-**Configuration Templates**:
+### Configuration Templates
 
 - `config_template_classification()` - Classification task template
 - `config_template_regression()` - Regression task template
 
-**Validation Helpers**:
+### Validation Helpers
 
 - `has_required_fields()` - Check for required fields
 - `is_valid_yaml_syntax()` - Basic YAML syntax check
@@ -384,36 +384,36 @@ All files successfully created in `/tests/shared/fixtures/`:
 
 ### 7. `__init__.py` (Python Pytest Fixtures, 397 lines)
 
-**Pytest Fixtures**:
+### Pytest Fixtures
 
 - `@pytest.fixture temp_dir()` - Auto-cleanup temporary directories
 - `@pytest.fixture mock_config_file()` - Factory for config files
 - `@pytest.fixture mock_text_file()` - Factory for text files
 
-**Markdown Validation**:
+### Markdown Validation
 
 - `validate_markdown_links()` - Check for broken links
 - `validate_markdown_code_blocks()` - Validate code block formatting
 - `find_repo_root()` - Locate repository root
 
-**File Structure Validation**:
+### File Structure Validation
 
 - `validate_directory_structure()` - Check expected layout
 - `find_files_by_pattern()` - Glob-based file search
 
-**Configuration Validation**:
+### Configuration Validation
 
 - `validate_yaml_file()` - YAML syntax validation
 - `validate_json_file()` - JSON syntax validation
 
-**Test Data Helpers**:
+### Test Data Helpers
 
 - `get_fixtures_dir()` - Python fixtures directory path
 - `get_test_data_path()` - Test data file paths
 - `create_sample_yaml_config()` - Sample config dict
 - `create_sample_json_config()` - Sample config dict
 
-**Assertion Helpers**:
+### Assertion Helpers
 
 - `assert_files_equal()` - Compare file contents
 - `assert_file_contains()` - Check file contains string
@@ -429,11 +429,11 @@ All files successfully created in `/tests/shared/fixtures/`:
 ## Key Features
 
 1. **Comprehensive Coverage**: Fixtures for tensors, data, models, I/O, and configs
-2. **Well Documented**: Every function has docstrings with examples
-3. **Deterministic**: All random operations use fixed seeds for reproducibility
-4. **Simple & Concrete**: No complex mocking - straightforward implementations
-5. **Type Safe**: Uses Mojo's type system (fn functions, typed parameters)
-6. **TDD Ready**: Designed to support test-driven development workflows
+1. **Well Documented**: Every function has docstrings with examples
+1. **Deterministic**: All random operations use fixed seeds for reproducibility
+1. **Simple & Concrete**: No complex mocking - straightforward implementations
+1. **Type Safe**: Uses Mojo's type system (fn functions, typed parameters)
+1. **TDD Ready**: Designed to support test-driven development workflows
 
 ## Files Modified
 
@@ -444,9 +444,9 @@ All files created (no existing files modified to maintain minimal changes princi
 These fixtures will be validated by:
 
 1. Using them in existing test files
-2. Verifying they produce expected test data
-3. Confirming they integrate with Mojo test framework
-4. Ensuring documentation examples work correctly
+1. Verifying they produce expected test data
+1. Confirming they integrate with Mojo test framework
+1. Ensuring documentation examples work correctly
 
 ## Usage Patterns
 
@@ -459,7 +459,7 @@ fn test_layer_identity():
     var input = create_ones_tensor([10])
     var output = identity_layer.forward(input)
     assert_tensors_equal(input, output, epsilon=1e-6)
-```
+```text
 
 ### Pattern 2: Data Loading Testing
 
@@ -470,7 +470,7 @@ fn test_batch_sizes():
     var loader = MockDataLoader(num_samples=100, batch_size=32)
     assert loader.__len__() == 4  # 3 full + 1 partial
     assert loader.get_batch_size(3) == 4  # Last batch
-```
+```text
 
 ### Pattern 3: Training Loop Testing
 
@@ -485,7 +485,7 @@ fn test_training_step():
     for i in range(len(inputs)):
         var output = model.forward(inputs[i])
         # Test forward pass completes
-```
+```text
 
 ### Pattern 4: Configuration Testing
 
@@ -500,7 +500,7 @@ fn test_config_validation():
     # Test invalid config
     var invalid = invalid_config_missing_fields()
     # Should raise error
-```
+```text
 
 ### Pattern 5: Python Pytest Integration
 
@@ -514,7 +514,7 @@ def test_markdown_validation(temp_dir):
     from tests.shared.fixtures import validate_markdown_links
     broken = validate_markdown_links(readme)
     assert len(broken) > 0  # Should find broken link
-```
+```text
 
 ---
 

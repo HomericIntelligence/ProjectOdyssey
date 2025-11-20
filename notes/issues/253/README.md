@@ -30,8 +30,8 @@ non-linearity essential for deep learning models.
 The activation functions module is organized into three logical groups based on functionality and use cases:
 
 1. **ReLU Family** - Sparse activation functions with different negative slope behaviors
-2. **Sigmoid/Tanh** - Bounded output functions for gates and normalization
-3. **Softmax/GELU** - Modern functions for classification and smooth non-linearity
+1. **Sigmoid/Tanh** - Bounded output functions for gates and normalization
+1. **Softmax/GELU** - Modern functions for classification and smooth non-linearity
 
 ### Component Design
 
@@ -39,7 +39,7 @@ The activation functions module is organized into three logical groups based on 
 
 **Purpose**: Provide sparse activation with variants for different gradient preservation needs.
 
-**Components**:
+### Components
 
 - **ReLU**: Standard rectified linear unit (`max(0, x)`)
   - Simplest implementation
@@ -56,7 +56,7 @@ The activation functions module is organized into three logical groups based on 
   - Requires parameter storage and updates
   - Most flexible but more complex
 
-**Key Design Considerations**:
+### Key Design Considerations
 
 - All variants share similar structure (element-wise operations)
 - Gradient computation differs for each variant
@@ -67,7 +67,7 @@ The activation functions module is organized into three logical groups based on 
 
 **Purpose**: Provide bounded activation functions for gates, normalization, and RNN architectures.
 
-**Components**:
+### Components
 
 - **Sigmoid**: Maps inputs to (0, 1) range
   - Formula: `1 / (1 + exp(-x))`
@@ -79,7 +79,7 @@ The activation functions module is organized into three logical groups based on 
   - Used in RNNs and architectures requiring centered outputs
   - Related to sigmoid: `tanh(x) = 2*sigmoid(2*x) - 1`
 
-**Key Design Considerations**:
+### Key Design Considerations
 
 - **Numerical Stability is Critical**:
   - Large positive inputs cause overflow in `exp(x)`
@@ -100,7 +100,7 @@ The activation functions module is organized into three logical groups based on 
 
 **Purpose**: Provide modern activation functions for classification and smooth non-linearity.
 
-**Components**:
+### Components
 
 - **Softmax**: Converts logits to probability distribution
   - Formula: `exp(x) / sum(exp(x))`
@@ -113,7 +113,7 @@ The activation functions module is organized into three logical groups based on 
   - Used in transformers (BERT, GPT)
   - Can use exact formula (with erf function) or approximation
 
-**Key Design Considerations**:
+### Key Design Considerations
 
 - **Softmax Numerical Stability**:
   - Subtract max value before exponential: `exp(x - max(x))`
@@ -142,7 +142,7 @@ All activation functions must handle:
 - **Zero values**: Ensure defined behavior
 - **NaN/Inf propagation**: Either handle gracefully or fail fast
 
-**Testing Strategy**:
+### Testing Strategy
 
 - Test with values in normal range: [-10, 10]
 - Test with extreme values: [-1000, 1000]
@@ -157,7 +157,7 @@ All functions need backward pass support:
 - **Backward pass**: Compute gradients efficiently
 - **Gradient checks**: Numerical gradient verification in tests
 
-**Implementation Pattern**:
+### Implementation Pattern
 
 ```mojo
 fn forward(x: Tensor) -> Tensor:
@@ -168,11 +168,11 @@ fn forward(x: Tensor) -> Tensor:
 fn backward(grad_output: Tensor) -> Tensor:
     # Use stored values to compute gradient
     return grad_input
-```
+```text
 
 #### API Design
 
-**Consistent Interface**:
+### Consistent Interface
 
 All activation functions should follow a uniform API pattern:
 
@@ -186,27 +186,27 @@ struct ActivationFunction:
 
     # Backward pass
     fn backward(self, grad_output: Tensor) -> Tensor: pass
-```
+```text
 
 **Functional Interface** (for stateless activations):
 
 ```mojo
 fn relu(x: Tensor) -> Tensor: pass
 fn sigmoid(x: Tensor) -> Tensor: pass
-# etc.
-```
+# etc
+```text
 
-**Design Questions to Resolve**:
+### Design Questions to Resolve
 
 1. Should we use struct-based (OOP) or functional API?
    - Recommendation: Both - structs for stateful (PReLU), functions for stateless
 
-2. How to handle gradient storage?
+1. How to handle gradient storage?
    - Option A: Store in activation struct (memory overhead)
    - Option B: Return tuple (activation, cache) for backward pass
    - Recommendation: Start with Option B for explicit control
 
-3. Should activations be in-place or allocate new tensors?
+1. Should activations be in-place or allocate new tensors?
    - Trade-off: Memory efficiency vs safety
    - Recommendation: Start with allocation, add in-place variants later
 
@@ -230,17 +230,17 @@ Each activation function requires:
    - Mathematical properties (e.g., softmax sums to 1)
    - Boundary conditions
 
-2. **Numerical Stability Tests**:
+1. **Numerical Stability Tests**:
    - Extreme values (±1000)
    - Special values (0, NaN, Inf)
    - Verify no overflow/underflow
 
-3. **Gradient Tests**:
+1. **Gradient Tests**:
    - Numerical gradient checking
    - Gradient flow verification
    - Edge case gradients
 
-4. **Performance Tests** (optional in initial implementation):
+1. **Performance Tests** (optional in initial implementation):
    - Benchmark against reference implementations
    - Verify SIMD utilization
 
@@ -304,9 +304,9 @@ This section will be populated during subsequent phases with:
 
 **Status**: Planning phase complete - ready for parallel test, implementation, and packaging phases.
 
-**Next Steps**:
+### Next Steps
 
 1. Test Phase (#254): Develop comprehensive test suite following TDD principles
-2. Implementation Phase (#255): Implement activation functions with numerical stability
-3. Packaging Phase (#256): Integrate into shared library and document APIs
-4. Cleanup Phase (#257): Refactor based on findings from parallel phases
+1. Implementation Phase (#255): Implement activation functions with numerical stability
+1. Packaging Phase (#256): Integrate into shared library and document APIs
+1. Cleanup Phase (#257): Refactor based on findings from parallel phases

@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Run scaffolding tool
-2. Generate base project structure
-3. Verify structure is correct
+1. Generate base project structure
+1. Verify structure is correct
 
 ## Success Criteria
 

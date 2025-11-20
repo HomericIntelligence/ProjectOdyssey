@@ -34,9 +34,9 @@ Level 3 Component Specialist responsible for implementing security requirements 
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -58,12 +58,12 @@ When working with Mojo code, follow patterns in
 ## Workflow
 
 1. Receive security requirements from Security Design Agent
-2. Review component implementation for security issues
-3. Implement security controls
-4. Perform security testing
-5. Fix vulnerabilities
-6. Delegate security tasks to Implementation Engineers
-7. Validate security measures
+1. Review component implementation for security issues
+1. Implement security controls
+1. Perform security testing
+1. Fix vulnerabilities
+1. Delegate security tasks to Implementation Engineers
+1. Validate security measures
 
 ## Delegation
 
@@ -143,7 +143,7 @@ Use the `gh-create-pr-linked` skill to create PRs:
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -241,8 +241,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -265,13 +265,13 @@ After creating PR:
 
 **Scenario**: Breaking down backpropagation algorithm into implementable functions
 
-**Actions**:
+### Actions
 
 1. Analyze algorithm requirements from design spec
-2. Break down into functions: forward pass, backward pass, parameter update
-3. Define function signatures and data structures
-4. Create implementation plan with dependencies
-5. Delegate functions to engineers
+1. Break down into functions: forward pass, backward pass, parameter update
+1. Define function signatures and data structures
+1. Create implementation plan with dependencies
+1. Delegate functions to engineers
 
 **Outcome**: Clear implementation plan with well-defined function boundaries
 
@@ -279,13 +279,13 @@ After creating PR:
 
 **Scenario**: Refactoring complex function with multiple responsibilities
 
-**Actions**:
+### Actions
 
 1. Analyze function complexity and identify separate concerns
-2. Extract sub-functions with single responsibilities
-3. Improve naming and add type hints
-4. Add documentation and usage examples
-5. Coordinate with test engineer for test updates
+1. Extract sub-functions with single responsibilities
+1. Improve naming and add type hints
+1. Add documentation and usage examples
+1. Coordinate with test engineer for test updates
 
 **Outcome**: Maintainable code following single responsibility principle
 

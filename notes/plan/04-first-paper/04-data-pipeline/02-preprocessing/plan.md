@@ -28,8 +28,8 @@ Preprocess the MNIST images by normalizing pixel values to [0, 1] range, create 
 ## Steps
 
 1. Normalize Images
-2. Create Batches
-3. Cache Processed
+1. Create Batches
+1. Cache Processed
 
 ## Success Criteria
 

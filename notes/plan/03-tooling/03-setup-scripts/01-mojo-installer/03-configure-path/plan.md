@@ -27,9 +27,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Detect user's shell type
-2. Locate appropriate shell configuration file
-3. Add Mojo to PATH in configuration
-4. Provide instructions for activating changes
+1. Locate appropriate shell configuration file
+1. Add Mojo to PATH in configuration
+1. Provide instructions for activating changes
 
 ## Success Criteria
 

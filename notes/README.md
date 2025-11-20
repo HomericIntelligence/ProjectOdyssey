@@ -29,7 +29,7 @@ ml-odyssey/
 │   ├── create_single_component_issues.py  # Test script
 │   └── README.md                # Scripts documentation
 └── logs/                        # Execution logs (not tracked)
-```
+```text
 
 ## Structure
 
@@ -55,10 +55,10 @@ Each component generates 5 issues following a hierarchical workflow:
 **Workflow**: Plan → [Test | Implementation | Packaging] → Cleanup
 
 1. **Plan** - Design and documentation (must complete first)
-2. **Test** - Write tests following TDD (parallel after Plan)
-3. **Implementation** - Build the functionality (parallel after Plan)
-4. **Packaging** - Integration and packaging (parallel after Plan)
-5. **Cleanup** - Refactor and finalize (runs after parallel phases complete)
+1. **Test** - Write tests following TDD (parallel after Plan)
+1. **Implementation** - Build the functionality (parallel after Plan)
+1. **Packaging** - Integration and packaging (parallel after Plan)
+1. **Cleanup** - Refactor and finalize (runs after parallel phases complete)
 
 ## Quick Start
 
@@ -73,7 +73,7 @@ We've verified issue creation works:
 
 python3 scripts/create_single_component_issues.py \
   notes/plan/01-foundation/01-directory-structure/01-create-papers-dir/01-create-base-dir/github_issue.md
-```
+```text
 
 Results: <https://github.com/mvillmow/ml-odyssey/issues/2-6>
 
@@ -90,7 +90,7 @@ python3 scripts/create_issues.py --section 03-tooling
 python3 scripts/create_issues.py --section 04-first-paper
 python3 scripts/create_issues.py --section 05-ci-cd
 python3 scripts/create_issues.py --section 06-agentic-workflows
-```
+```text
 
 ### Option B: All at Once
 
@@ -98,7 +98,7 @@ python3 scripts/create_issues.py --section 06-agentic-workflows
 # Create all issues
 
 python3 scripts/create_issues.py
-```
+```text
 
 ### Option C: Dry-Run First
 
@@ -106,7 +106,7 @@ python3 scripts/create_issues.py
 # See what will be created without actually creating
 
 python3 scripts/create_issues.py --dry-run
-```
+```text
 
 ### Step 3: Resume if Interrupted
 
@@ -114,7 +114,7 @@ If the process is interrupted:
 
 ```bash
 python3 scripts/create_issues.py --resume
-```
+```text
 
 ## Features
 
@@ -149,17 +149,17 @@ The scripts automatically create necessary labels:
 
 After issue creation, all github_issue.md files are automatically updated:
 
-**Before:**
+### Before:
 
 ```markdown
 **GitHub Issue URL**: [To be created]
-```
+```text
 
-**After:**
+### After:
 
 ```markdown
 **GitHub Issue URL**: https://github.com/mvillmow/ml-odyssey/issues/123
-```
+```text
 
 ## Documentation
 
@@ -178,19 +178,19 @@ Reference the tracked documentation above for team collaboration.
 Each component follows a 5-phase workflow:
 
 1. **Plan** → Design and document the approach
-2. **Test** → Write tests following TDD
-3. **Implementation** → Build the functionality
-4. **Packaging** → Integrate with existing code
-5. **Cleanup** → Refactor and finalize
+1. **Test** → Write tests following TDD
+1. **Implementation** → Build the functionality
+1. **Packaging** → Integrate with existing code
+1. **Cleanup** → Refactor and finalize
 
 Each phase has its own GitHub issue with detailed instructions.
 
 ## Next Steps After Issue Creation
 
 1. **Organize in GitHub Projects** - Group issues by section/milestone
-2. **Create Milestones** - One per top-level section
-3. **Begin Implementation** - Start with 01-foundation
-4. **Create PRs** - One PR per component linking to its 5 issues
+1. **Create Milestones** - One per top-level section
+1. **Begin Implementation** - Start with 01-foundation
+1. **Create PRs** - One PR per component linking to its 5 issues
 
 ## Support
 

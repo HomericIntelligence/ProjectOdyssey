@@ -30,10 +30,10 @@ None (leaf node)
 ## Steps
 
 1. Create sample tensor fixtures of various sizes
-2. Build model fixtures for testing training
-3. Implement dataset fixtures with known properties
-4. Add configuration fixtures for common setups
-5. Configure fixture scopes appropriately
+1. Build model fixtures for testing training
+1. Implement dataset fixtures with known properties
+1. Add configuration fixtures for common setups
+1. Configure fixture scopes appropriately
 
 ## Success Criteria
 

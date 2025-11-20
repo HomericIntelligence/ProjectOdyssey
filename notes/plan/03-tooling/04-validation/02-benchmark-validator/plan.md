@@ -31,8 +31,8 @@ Create a validator that compares benchmark results against baselines to detect p
 ## Steps
 
 1. Load baseline benchmark data
-2. Compare current results to baseline
-3. Detect and report regressions
+1. Compare current results to baseline
+1. Detect and report regressions
 
 ## Success Criteria
 

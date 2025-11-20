@@ -28,8 +28,8 @@ Implement the cross-entropy loss function for multi-class classification, test i
 ## Steps
 
 1. Implement Cross-Entropy
-2. Test Loss
-3. Gradient Computation
+1. Test Loss
+1. Gradient Computation
 
 ## Success Criteria
 

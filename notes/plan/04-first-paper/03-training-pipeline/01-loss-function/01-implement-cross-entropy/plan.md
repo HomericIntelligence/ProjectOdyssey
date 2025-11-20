@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Implement loss formula
-2. Add numerical stability
-3. Handle batched inputs
+1. Add numerical stability
+1. Handle batched inputs
 
 ## Success Criteria
 
