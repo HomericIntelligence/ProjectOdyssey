@@ -1,5 +1,7 @@
 # Mojo Patterns for ML Development
 
+<!-- markdownlint-disable MD051 -->
+
 A comprehensive guide to Mojo language patterns optimized for machine learning workloads.
 
 ## Table of Contents

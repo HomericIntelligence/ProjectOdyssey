@@ -1,5 +1,7 @@
 # Quick Start Guide - Agent System
 
+<!-- markdownlint-disable MD051 -->
+
 ## 5-Minute Introduction
 
 Welcome to the ML Odyssey agent system! This guide will get you started with using our 6-level hierarchical agent

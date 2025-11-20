@@ -1,5 +1,7 @@
 # Configuration Cookbook
 
+<!-- markdownlint-disable MD051 -->
+
 This cookbook provides ready-to-use configuration recipes for common ML scenarios.
 
 ## Table of Contents

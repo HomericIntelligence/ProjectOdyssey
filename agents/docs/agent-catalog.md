@@ -1,5 +1,7 @@
 # Agent Catalog - Complete Reference
 
+<!-- markdownlint-disable MD051 -->
+
 ## Table of Contents
 
 - [Overview](#overview)

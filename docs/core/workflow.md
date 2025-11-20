@@ -1,5 +1,7 @@
 # 5-Phase Development Workflow
 
+<!-- markdownlint-disable MD024 -->
+
 ## Overview
 
 ML Odyssey uses a hierarchical 5-phase workflow to develop features, papers, and tooling. Each component progresses

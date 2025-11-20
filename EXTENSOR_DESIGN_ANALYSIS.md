@@ -1,5 +1,7 @@
 # ExTensor Design Analysis: Issues #218-260 (UPDATED)
 
+<!-- markdownlint-disable MD013 MD031 -->
+
 **Analysis Date**: 2025-11-18 (Updated after rebase against main)
 **Scope**: Comprehensive review of ExTensor training framework readiness
 **Analyst**: Claude Code
@@ -96,7 +98,7 @@ The plan structure findings remain the same as the previous analysis:
 | broadcasting.mojo | 226 | 3 utilities | 0 | No |
 | **activations.mojo** | **1,100** | **7** | **7** | **✅ NEW MODULE** |
 | **initializers.mojo** | **320** | **2** | **0** | **✅ NEW MODULE** |
-| __init__.mojo | 113 | Public API | N/A | Expanded exports |
+| \_\_init\_\_.mojo | 113 | Public API | N/A | Expanded exports |
 
 **NEW: Total forward operations**: 64 (was 57)
 **NEW: Total backward operations**: 27 (was 0) ← **MASSIVE CHANGE**

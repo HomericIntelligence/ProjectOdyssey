@@ -1,5 +1,7 @@
 # Issues #1255-1356 - Repository State Analysis
 
+<!-- markdownlint-disable MD024 MD013 -->
+
 **Analysis Date**: 2025-11-19
 **Repository**: mvillmow/ml-odyssey
 **Branch**: claude/analyze-github-issues-015tGYGVL5wfw1697fDgCFtM

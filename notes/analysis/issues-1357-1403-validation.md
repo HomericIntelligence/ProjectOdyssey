@@ -1,5 +1,7 @@
 # Issues #1357-1403 Validation Report
 
+<!-- markdownlint-disable MD024 MD013 MD031 MD032 MD022 -->
+
 **Validation Date**: 2025-11-19
 **Scope**: 47 issues (1357-1403)
 **Purpose**: Validate all issues against repository implementation

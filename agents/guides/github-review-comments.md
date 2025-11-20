@@ -16,19 +16,19 @@ When addressing PR review feedback, there are two types of comments:
 
 ### PR-Level Comments
 
-### What they are:
+### What they are
 
 - General comments on the entire PR
 - Visible in the PR conversation/timeline tab
 - Posted using `gh pr comment`
 
-### When to use:
+### When to use
 
 - Providing general updates about the PR
 - Asking questions about the PR as a whole
 - Posting summary information
 
-### Command:
+### Command
 
 ```bash
 gh pr comment <pr-number> --body "Your comment here"
@@ -42,20 +42,20 @@ gh pr comment 1559 --body "All review comments have been addressed"
 
 ### Review Comment Replies
 
-### What they are:
+### What they are
 
 - Specific replies to inline code review comments
 - Visible in the "Files changed" tab under the specific line of code
 - Nested under the original review comment
 - Marked as "in reply to" the original comment
 
-### When to use:
+### When to use
 
 - Responding to specific code review feedback
 - Confirming fixes to specific issues
 - THIS IS WHAT YOU NEED when a reviewer leaves comments on specific lines of code
 
-### Command:
+### Command
 
 ```bash
 gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments/COMMENT_ID/replies \

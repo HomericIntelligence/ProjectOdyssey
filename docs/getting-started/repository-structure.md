@@ -1,5 +1,7 @@
 # Repository Structure Guide - Team Onboarding
 
+<!-- markdownlint-disable MD024 -->
+
 ## Welcome to ML Odyssey
 
 This guide helps you quickly navigate the ML Odyssey repository and understand where to find what you need.

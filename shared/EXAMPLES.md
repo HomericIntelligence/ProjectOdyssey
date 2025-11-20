@@ -1,5 +1,7 @@
 # Usage Examples - ML Odyssey Shared Library(WIP)
 
+<!-- markdownlint-disable MD051 -->
+
 This document provides comprehensive usage examples for the ML Odyssey shared library, from quick start to advanced patterns.
 
 **Note**: Examples use commented imports for components not yet implemented. Uncomment imports as Issue #49 completes implementation.

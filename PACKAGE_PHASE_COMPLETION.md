@@ -1,5 +1,7 @@
 # Package Phase Completion - Training Module
 
+<!-- markdownlint-disable MD024 -->
+
 **Issue**: #35 - [Package] Create Training - Integration and Packaging
 
 **Date**: 2025-11-14

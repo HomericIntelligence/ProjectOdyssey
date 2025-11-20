@@ -1,5 +1,7 @@
 # ExTensor Backward Pass Fix Plan
 
+<!-- markdownlint-disable MD013 -->
+
 **Date**: 2025-11-18
 **Status**: Review Complete - Ready for Implementation
 **Completion**: ~40% → Target: 95%

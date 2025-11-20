@@ -4,7 +4,7 @@
 
 ### Code Quality Criteria
 
-### Mojo Code:
+### Mojo Code
 
 - Uses `fn` for performance-critical functions
 - Proper ownership and borrowing patterns
@@ -12,7 +12,7 @@
 - SIMD optimizations where appropriate
 - Memory safety verified
 
-### Python Code:
+### Python Code
 
 - Type hints on all functions
 - Clear docstrings

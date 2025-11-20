@@ -149,14 +149,14 @@ git push --force-with-lease
 
 ### Mojo Formatting
 
-### Before:
+### Before
 
 ```mojo
 fn add(x:Int,y:Int)->Int:
     return x+y
 ```text
 
-### After:
+### After
 
 ```mojo
 fn add(x: Int, y: Int) -> Int:
@@ -165,7 +165,7 @@ fn add(x: Int, y: Int) -> Int:
 
 ### Markdown Formatting
 
-### Before:
+### Before
 
 ````markdown
 Some text before.
@@ -177,7 +177,7 @@ code block
 Some text after.
 ````
 
-### After:
+### After
 
 ````markdown
 Some text before.
@@ -192,14 +192,14 @@ Some text after.
 
 ### Trailing Whitespace
 
-### Before:
+### Before
 
 ```text
 line with trailing spaces
 another line
 ```text
 
-### After:
+### After
 
 ```text
 line with trailing spaces

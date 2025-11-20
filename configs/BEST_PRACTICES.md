@@ -1,5 +1,7 @@
 # Configuration Best Practices
 
+<!-- markdownlint-disable MD051 -->
+
 This guide outlines best practices for working with configurations in ML Odyssey.
 
 ## Table of Contents

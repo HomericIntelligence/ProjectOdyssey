@@ -1,5 +1,7 @@
 # Foundation Tests
 
+<!-- markdownlint-disable MD024 -->
+
 This directory contains tests for foundational repository components.
 
 ## Test Files
