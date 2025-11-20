@@ -1,5 +1,7 @@
 # Verification Report: Issues #780-788 (CLI & Paper Scaffolding)
 
+<!-- markdownlint-disable MD024 MD013 -->
+
 **Date**: 2025-11-19
 **Verified By**: Claude Code Analysis
 **Scope**: CLI Interface (#780-783) and Paper Scaffolding (#785-788)

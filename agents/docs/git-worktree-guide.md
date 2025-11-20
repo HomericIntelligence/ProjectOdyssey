@@ -1,5 +1,7 @@
 # Git Worktree Guide for Agent Coordination
 
+<!-- markdownlint-disable MD051 -->
+
 ## Table of Contents
 
 - [Overview](#overview)

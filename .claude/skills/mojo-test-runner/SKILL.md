@@ -261,7 +261,7 @@ Tests run automatically in CI:
 
 ## Examples
 
-### Run all tests:
+### Run all tests
 
 ```bash
 ./scripts/run_tests.sh

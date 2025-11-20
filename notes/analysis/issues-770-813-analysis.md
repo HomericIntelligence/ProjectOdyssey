@@ -1,5 +1,7 @@
 # Issues #770-813 Analysis & Implementation Plan
 
+<!-- markdownlint-disable MD013 -->
+
 **Analysis Date**: 2025-11-19
 **Repository**: mvillmow/ml-odyssey
 **Branch**: claude/analyze-github-issues-015tGYGVL5wfw1697fDgCFtM

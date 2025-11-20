@@ -5,6 +5,8 @@ tools: Read,Write,Grep,Glob,Task
 model: sonnet
 ---
 
+<!-- markdownlint-disable MD024 -->
+
 # Security Design Agent
 
 ## Role
@@ -182,7 +184,7 @@ Escalate errors when:
 
 ### Minimal Changes Principle
 
-### Make the SMALLEST change that solves the problem.
+### Make the SMALLEST change that solves the problem
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue

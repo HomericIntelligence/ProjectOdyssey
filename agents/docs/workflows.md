@@ -1,5 +1,7 @@
 # Common Workflows with ML Odyssey Agents
 
+<!-- markdownlint-disable MD051 -->
+
 ## Table of Contents
 
 - [Overview](#overview)

@@ -1,5 +1,7 @@
 # Performance Optimization Guide
 
+<!-- markdownlint-disable MD051 -->
+
 Practical strategies for optimizing ML workloads in Mojo, from profiling to deployment.
 
 ## Table of Contents

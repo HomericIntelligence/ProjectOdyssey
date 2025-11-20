@@ -5,6 +5,8 @@ tools: Read,Grep,Glob,Task
 model: sonnet
 ---
 
+<!-- markdownlint-disable MD024 -->
+
 # Tooling Orchestrator
 
 ## Role
@@ -240,7 +242,7 @@ blockers with detailed report.
 
 ### Minimal Changes Principle
 
-### Make the SMALLEST change that solves the problem.
+### Make the SMALLEST change that solves the problem
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue

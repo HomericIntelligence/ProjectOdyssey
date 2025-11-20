@@ -1,5 +1,7 @@
 # Comprehensive Validation Report: Issues #1255-1356
 
+<!-- markdownlint-disable MD024 MD013 -->
+
 **Date**: November 19, 2025
 **Total Issues**: 102
 **Range**: #1255 - #1356

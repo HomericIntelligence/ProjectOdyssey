@@ -1,5 +1,7 @@
 # Complete Onboarding Guide - Agent System
 
+<!-- markdownlint-disable MD051 -->
+
 ## Table of Contents
 
 - [Introduction](#introduction)

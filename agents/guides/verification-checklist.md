@@ -5,7 +5,7 @@ false positive reporting and ensures tasks are actually complete.
 
 ## Core Principle
 
-### Report actual results, not attempted actions.
+### Report actual results, not attempted actions
 
 - ❌ Bad: "I pushed the changes"
 - ✅ Good: "I pushed the changes and verified CI is passing"

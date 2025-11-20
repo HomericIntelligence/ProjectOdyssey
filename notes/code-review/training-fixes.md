@@ -1,5 +1,7 @@
 # Training Module Critical Fixes
 
+<!-- markdownlint-disable MD024 -->
+
 **Date**: 2025-01-13
 **Status**: IN PROGRESS
 

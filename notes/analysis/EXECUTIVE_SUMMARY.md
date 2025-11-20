@@ -1,5 +1,7 @@
 # Executive Summary: Issues #1255-1356 Validation
 
+<!-- markdownlint-disable MD024 MD013 -->
+
 **Date**: November 19, 2025
 **Analyst**: Claude Code
 **Total Issues Validated**: 102

@@ -1,5 +1,7 @@
 # 5-Phase Workflow Integration with Agents
 
+<!-- markdownlint-disable MD051 -->
+
 ## Table of Contents
 
 - [Overview](#overview)

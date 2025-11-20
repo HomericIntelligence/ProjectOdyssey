@@ -18,7 +18,7 @@ This skill creates and manages git worktrees for parallel development on multipl
 
 Git worktrees allow multiple working directories from the same repository, each on a different branch.
 
-### Benefits:
+### Benefits
 
 - Work on multiple branches simultaneously
 - No need to stash/commit when switching contexts

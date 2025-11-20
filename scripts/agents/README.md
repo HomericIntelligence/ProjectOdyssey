@@ -11,7 +11,7 @@ See [playground/README.md](playground/README.md) for details on deprecated scrip
 
 Comprehensive validation of all agent configuration files.
 
-### Checks:
+### Checks
 
 - YAML frontmatter syntax and required fields
 - Tool names are valid
@@ -21,7 +21,7 @@ Comprehensive validation of all agent configuration files.
 - Workflow phases specified
 - Links to other agents are valid
 
-### Usage:
+### Usage
 
 ```bash
 # Validate all agents
@@ -43,7 +43,7 @@ python scripts/agents/validate_agents.py --agents-dir /path/to/agents
 
 Verify YAML frontmatter in agent configuration files.
 
-### Checks:
+### Checks
 
 - YAML syntax validity
 - Required fields present (name, description, tools, model)
@@ -52,7 +52,7 @@ Verify YAML frontmatter in agent configuration files.
 - Name format follows conventions (lowercase-with-hyphens)
 - Tools field is not empty
 
-### Usage:
+### Usage
 
 ```bash
 # Check all agent frontmatter
@@ -74,7 +74,7 @@ python scripts/agents/check_frontmatter.py --agents-dir /path/to/agents
 
 Test agent discovery and loading.
 
-### Checks:
+### Checks
 
 - All markdown files can be read
 - YAML frontmatter can be parsed
@@ -82,7 +82,7 @@ Test agent discovery and loading.
 - No duplicate agent names
 - Files are accessible
 
-### Usage:
+### Usage
 
 ```bash
 # Test agent loading
@@ -120,7 +120,7 @@ Display all available agents organized by level.
 - 4 - Senior Engineers
 - 5 - Junior Engineers
 
-### Usage:
+### Usage
 
 ```bash
 # List all agents

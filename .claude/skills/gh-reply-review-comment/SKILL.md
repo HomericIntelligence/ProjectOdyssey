@@ -11,7 +11,7 @@ This skill provides the **correct** way to reply to PR review comments using the
 
 **NEVER use `gh pr comment`** - that creates a general PR comment, not a reply to review comments.
 
-### CORRECT approach:
+### CORRECT approach
 
 Use the GitHub API to reply directly to review comment threads.
 

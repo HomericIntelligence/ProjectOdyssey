@@ -1,5 +1,7 @@
 # ExTensor Backward Pass Review
 
+<!-- markdownlint-disable MD013 -->
+
 **Date**: 2025-11-18
 **Reviewer**: Code Analysis
 **Scope**: Gradient computation (backward passes) for neural network training

@@ -5,6 +5,8 @@ tools: Read,Write,Edit,Grep,Glob
 model: haiku
 ---
 
+<!-- markdownlint-disable MD024 -->
+
 # Junior Documentation Engineer
 
 ## Role
@@ -141,7 +143,7 @@ Use the `gh-create-pr-linked` skill to create PRs:
 
 ### Minimal Changes Principle
 
-### Make the SMALLEST change that solves the problem.
+### Make the SMALLEST change that solves the problem
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
