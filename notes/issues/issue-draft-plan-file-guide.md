@@ -12,7 +12,7 @@ Create comprehensive documentation that explains how to generate plan files for 
 
 A reviewer noted: *"it's not super clear how to generate a plan file. Some documentation on what is required in order for create_issues.py to parse it would be super helpful."*
 
-**Current state:**
+### Current state:
 
 - Plan file format exists (Template 1: 9 sections)
 - Format is documented in CLAUDE.md but scattered
@@ -27,10 +27,10 @@ A reviewer noted: *"it's not super clear how to generate a plan file. Some docum
 Make plan file creation accessible to anyone unfamiliar with the project by providing:
 
 1. Step-by-step tutorial
-2. Copyable template
-3. Annotated examples (simple and complex)
-4. Clear requirements documentation
-5. Troubleshooting guide
+1. Copyable template
+1. Annotated examples (simple and complex)
+1. Clear requirements documentation
+1. Troubleshooting guide
 
 ## Deliverables
 
@@ -41,21 +41,21 @@ Make plan file creation accessible to anyone unfamiliar with the project by prov
    - Step-by-step instructions for creating a new plan
    - Common pitfalls and how to avoid them
 
-2. **Template file** at `.templates/plan-template.md`:
+1. **Template file** at `.templates/plan-template.md`:
    - All 9 sections with placeholder content
    - Inline comments explaining each section
    - Examples of valid values
 
-3. **Example plan files** at `examples/plan-files/`:
+1. **Example plan files** at `examples/plan-files/`:
    - `simple-component.md` - Minimal valid plan (leaf node)
    - `complex-component.md` - Plan with child plans
    - `section-plan.md` - Top-level section plan
 
-4. **README update**:
+1. **README update**:
    - Add "Creating Plan Files" section linking to the guide
    - Add quick-start example
 
-5. **scripts/README.md update**:
+1. **scripts/README.md update**:
    - Document plan file requirements for `create_issues.py`
    - Link to comprehensive guide
 
@@ -70,19 +70,19 @@ Make plan file creation accessible to anyone unfamiliar with the project by prov
 
 ## Technical Requirements
 
-**Plan file structure (Template 1):**
+### Plan file structure (Template 1):
 
 1. Component Name (heading)
-2. Overview (2-3 sentences)
-3. Parent Plan (relative link or "None")
-4. Child Plans (list with relative links or "None")
-5. Inputs (prerequisites)
-6. Outputs (deliverables)
-7. Steps (numbered list)
-8. Success Criteria (checklist)
-9. Notes (additional context)
+1. Overview (2-3 sentences)
+1. Parent Plan (relative link or "None")
+1. Child Plans (list with relative links or "None")
+1. Inputs (prerequisites)
+1. Outputs (deliverables)
+1. Steps (numbered list)
+1. Success Criteria (checklist)
+1. Notes (additional context)
 
-**What create_issues.py expects:**
+### What create_issues.py expects:
 
 - Valid markdown structure
 - All 9 sections present
@@ -93,19 +93,19 @@ Make plan file creation accessible to anyone unfamiliar with the project by prov
 
 ## Implementation Notes
 
-**Style guidance:**
+### Style guidance:
 
 - Follow blog post style: conversational but precise
 - Include "Why" explanations, not just "How"
 - Use real examples from the project where possible
 - Anticipate user questions and address proactively
 
-**Structure:**
+### Structure:
 
 ```markdown
 # Plan File Generation Guide
 
-## What Are Plan Files?
+## What Are Plan Files
 [Brief explanation of purpose and role in the system]
 
 ## The Template 1 Format
@@ -128,7 +128,7 @@ Make plan file creation accessible to anyone unfamiliar with the project by prov
 
 ## FAQ
 [Anticipated questions]
-```
+```text
 
 ## References
 
@@ -146,14 +146,14 @@ Make plan file creation accessible to anyone unfamiliar with the project by prov
 - README updates: 30 minutes
 - Review and refinement: 1 hour
 
-**Total: ~5-7 hours**
+### Total: ~5-7 hours
 
 ## Acceptance Testing
 
 1. Hand guide to someone unfamiliar with the project
-2. Ask them to create a valid plan file without additional help
-3. Run their plan file through `create_issues.py --dry-run`
-4. Verify successful parsing and issue generation
+1. Ask them to create a valid plan file without additional help
+1. Run their plan file through `create_issues.py --dry-run`
+1. Verify successful parsing and issue generation
 
 ## Dependencies
 

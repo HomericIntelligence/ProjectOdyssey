@@ -31,8 +31,8 @@ Build the directory generation system that creates the complete folder structure
 ## Steps
 
 1. Create the directory structure following repository conventions
-2. Generate files from templates in appropriate locations
-3. Validate the output structure and files
+1. Generate files from templates in appropriate locations
+1. Validate the output structure and files
 
 ## Success Criteria
 

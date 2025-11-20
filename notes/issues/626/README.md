@@ -32,21 +32,23 @@ Define comprehensive specifications for Python dependency management in pyprojec
    - Rationale: These are automation/testing tools used by the Python scripts
    - Note: Primary ML/AI implementation will use Mojo, not Python libraries
 
-2. **Development Dependencies** ([project.optional-dependencies.dev])
+1. **Development Dependencies** ([project.optional-dependencies.dev])
    - Already configured: pre-commit, safety, bandit, mkdocs, mkdocs-material, pytest-benchmark, ruff, mypy
    - Rationale: Tools needed for development workflow but not runtime execution
 
-3. **Feature-Specific Groups** (future expansion)
+1. **Feature-Specific Groups** (future expansion)
    - Potential groups: docs, lint, security, benchmarking
    - Allows selective installation based on use case
 
 **Rationale**: This separation provides:
+
 - Minimal production dependencies
 - Flexible development environment setup
 - Clear distinction between required and optional tools
 - Compatibility with CI/CD workflows (install only what's needed)
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Single dependency list: Rejected - would bloat production installations
 - More granular groups (lint, test, security separate): Deferred - current scale doesn't justify additional complexity (YAGNI principle)
 
@@ -58,13 +60,15 @@ Define comprehensive specifications for Python dependency management in pyprojec
 - **Development Tools**: Use `>=` for tools where latest features are beneficial (e.g., `ruff>=0.1.0`)
 - **Avoid Upper Bounds**: Do not pin maximum versions unless known incompatibilities exist
 
-**Rationale**:
+### Rationale
+
 - Allows benefiting from bug fixes and security patches
 - Prevents dependency conflicts in larger projects
 - Follows Python packaging best practices
 - Upper bounds create maintenance burden and dependency hell
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Exact pinning (==): Rejected - creates brittle dependency chains
 - Pessimistic versioning (~=): Considered overkill for current project maturity
 
@@ -72,17 +76,20 @@ Define comprehensive specifications for Python dependency management in pyprojec
 
 **Decision**: Limit Python dependencies to automation and tooling only
 
-**Current State Analysis**:
+### Current State Analysis
+
 - Project is Mojo-first for ML/AI implementation (per ADR-001)
 - Python used for: automation scripts, GitHub integration, testing infrastructure
 - Existing dependencies align with this: pytest for testing, ruff/mypy for linting, mkdocs for docs
 
-**Implications**:
+### Implications
+
 - No NumPy, PyTorch, TensorFlow, or ML libraries in dependencies
 - Python dependencies support the development workflow, not the ML implementation
 - Keep dependency list lean to avoid conflicts with Mojo ecosystem
 
-**Rationale**:
+### Rationale
+
 - Aligns with ADR-001 language selection strategy
 - Reduces maintenance burden
 - Avoids version conflicts between Python ML libs and Mojo
@@ -92,14 +99,16 @@ Define comprehensive specifications for Python dependency management in pyprojec
 
 **Decision**: pyproject.toml manages Python-specific dependencies; pixi.toml manages environment
 
-**Coordination Strategy**:
+### Coordination Strategy
+
 - pixi.toml: Defines the complete development environment (Mojo, Python, system tools)
 - pyproject.toml: Defines Python package dependencies and tool configurations
 - Installation workflow: `pixi install` → sets up environment including Python packages
 
 **Current State**: pyproject.toml already exists with dependencies; pixi.toml manages environment
 
-**Rationale**:
+### Rationale
+
 - Follows standard Python project structure
 - Pixi respects pyproject.toml dependency specifications
 - Allows standard Python tooling to work (pip install -e .[dev])
@@ -136,7 +145,7 @@ dev = [
     "ruff>=0.1.0",
     "mypy>=1.0.0",
 ]
-```
+```text
 
 ### Version Constraint Guidelines
 
@@ -145,10 +154,10 @@ dev = [
    - ruff 0.1.0: First stable release with comprehensive linting rules
    - mypy 1.0.0: Stable API with modern type checking features
 
-2. **No Maximum Versions**: Trust semantic versioning for compatibility
+1. **No Maximum Versions**: Trust semantic versioning for compatibility
    - Exception: Document known incompatibilities if discovered
 
-3. **Python Version Requirement**: Already set to `>=3.11`
+1. **Python Version Requirement**: Already set to `>=3.11`
    - Aligns with modern Python features
    - Compatible with pixi environment
 
@@ -157,10 +166,10 @@ dev = [
 When adding new dependencies:
 
 1. **Justify the Need**: Document why the dependency is required (avoid YAGNI violations)
-2. **Choose Appropriate Group**: runtime vs dev vs optional feature group
-3. **Specify Minimum Version**: Based on required features, not latest version
-4. **Document in Comments**: Explain non-obvious choices in pyproject.toml
-5. **Test Integration**: Verify compatibility with existing dependencies and pixi environment
+1. **Choose Appropriate Group**: runtime vs dev vs optional feature group
+1. **Specify Minimum Version**: Based on required features, not latest version
+1. **Document in Comments**: Explain non-obvious choices in pyproject.toml
+1. **Test Integration**: Verify compatibility with existing dependencies and pixi environment
 
 ## References
 

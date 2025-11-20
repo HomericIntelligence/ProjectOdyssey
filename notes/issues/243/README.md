@@ -45,7 +45,7 @@ implementations are essential for reliable training of neural networks.
 
 **Decision**: Both functions should accept input tensors and produce output tensors of the same shape.
 
-**Key Interface Requirements**:
+### Key Interface Requirements
 
 - Element-wise operations on input tensors
 - Support for backpropagation through gradient computation
@@ -126,15 +126,15 @@ The sigmoid function is defined as:
 
 ```text
 sigmoid(x) = 1 / (1 + exp(-x))
-```
+```text
 
-**Properties**:
+### Properties
 
 - Range: (0, 1)
 - Derivative: sigmoid'(x) = sigmoid(x) * (1 - sigmoid(x))
 - Limits: lim(x→∞) sigmoid(x) = 1, lim(x→-∞) sigmoid(x) = 0
 
-**Use Cases**:
+### Use Cases
 
 - Binary classification (output layer)
 - Gate mechanisms (LSTM, GRU)
@@ -146,16 +146,16 @@ The hyperbolic tangent function is defined as:
 
 ```text
 tanh(x) = (exp(x) - exp(-x)) / (exp(x) + exp(-x))
-```
+```text
 
-**Properties**:
+### Properties
 
 - Range: (-1, 1)
 - Derivative: tanh'(x) = 1 - tanh(x)^2
 - Limits: lim(x→∞) tanh(x) = 1, lim(x→-∞) tanh(x) = -1
 - Relationship to sigmoid: tanh(x) = 2 * sigmoid(2x) - 1
 
-**Use Cases**:
+### Use Cases
 
 - RNN hidden states
 - Activation in hidden layers
@@ -169,21 +169,21 @@ Reference for Issue #244 (Test Phase):
    - Verify sigmoid outputs ∈ (0, 1)
    - Verify tanh outputs ∈ (-1, 1)
 
-2. **Numerical Stability**:
+1. **Numerical Stability**:
    - Test with extreme positive values (x > 100)
    - Test with extreme negative values (x < -100)
    - Verify no overflow/underflow errors
 
-3. **Gradient Correctness**:
+1. **Gradient Correctness**:
    - Validate gradient computation using numerical differentiation
    - Test gradient flow for backpropagation
 
-4. **Edge Cases**:
+1. **Edge Cases**:
    - Zero input
    - Very small values near zero
    - Boundary region values
 
-5. **Performance Benchmarks**:
+1. **Performance Benchmarks**:
    - Compare with reference implementations
    - Measure SIMD optimization gains
 
@@ -196,12 +196,12 @@ Reference for Issue #246 (Packaging Phase):
    - Files: `sigmoid.mojo`, `tanh.mojo`
    - Public API export through `__init__.mojo`
 
-2. **Dependencies**:
+1. **Dependencies**:
    - Tensor operations module
    - Math utilities (exponential functions)
    - Memory management (for SIMD operations)
 
-3. **Compatibility**:
+1. **Compatibility**:
    - Consistent interface with ReLU family
    - Compatible with automatic differentiation framework
    - Support for both training and inference modes
@@ -215,15 +215,15 @@ Reference for Issue #247 (Cleanup Phase):
    - Optimize for readability and maintainability
    - Ensure consistent code style with `mojo format`
 
-2. **Documentation**:
+1. **Documentation**:
    - Finalize docstrings
    - Update API reference
    - Add usage examples
 
-3. **Testing**:
+1. **Testing**:
    - Achieve comprehensive test coverage
    - Document test results and benchmarks
 
-4. **Integration**:
+1. **Integration**:
    - Verify integration with other activation functions
    - Confirm backpropagation compatibility

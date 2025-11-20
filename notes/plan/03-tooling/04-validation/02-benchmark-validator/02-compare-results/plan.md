@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Align current and baseline metrics
-2. Calculate performance deltas
-3. Assess statistical significance
-4. Generate comparison report
+1. Calculate performance deltas
+1. Assess statistical significance
+1. Generate comparison report
 
 ## Success Criteria
 

@@ -8,21 +8,22 @@ This guide helps you quickly navigate the ML Odyssey repository and understand w
 
 ### "I'm New - Where Do I Start?"
 
-**First Steps**:
+### First Steps
 
 1. **Read**: README.md (in repository root) - Project overview
-2. **Install**: [installation.md](installation.md) - Set up environment
-3. **Explore**: STRUCTURE.md (in repository root) - Repository organization
-4. **Try**: examples/ directory (in repository root) - Working examples
+1. **Install**: [installation.md](installation.md) - Set up environment
+1. **Explore**: STRUCTURE.md (in repository root) - Repository organization
+1. **Try**: examples/ directory (in repository root) - Working examples
 
 ### "I Want to Implement a Paper"
 
-**Workflow**:
+### Workflow
 
 ```bash
 ```bash
 
 # 1. Generate structure
+
 python tools/paper-scaffold/scaffold.py \
     --paper {name} \
     --title "{Title}" \
@@ -30,16 +31,21 @@ python tools/paper-scaffold/scaffold.py \
     --year {year}
 
 # 2. Configure experiment
+
 cp configs/templates/experiment.yaml configs/experiments/{name}/baseline.yaml
 
 # 3. Implement
+
 cd papers/{name}/
+
 # Edit model.mojo, train.mojo
 
 # 4. Test
+
 mojo test tests/papers/{name}/
 
 # 5. Benchmark
+
 mojo benchmarks/scripts/run_benchmarks.mojo --paper {name}
 
 ```text
@@ -70,6 +76,7 @@ mojo benchmarks/scripts/run_benchmarks.mojo --paper {name}
 **Test Locations**:
 
 ```bash
+
 ```bash
 
 # All tests
@@ -89,18 +96,21 @@ python tools/testing/coverage.py
 
 ### "I Want to Measure Performance"
 
-**Benchmarking**:
+### Benchmarking
 
 ```bash
 ```bash
 
 # Run all benchmarks
+
 mojo benchmarks/scripts/run_benchmarks.mojo
 
 # Run specific benchmark
+
 mojo benchmarks/scripts/lenet5_benchmark.mojo
 
 # Compare with baseline
+
 mojo benchmarks/scripts/compare_results.mojo \
     --baseline benchmarks/baselines/baseline_results.json \
     --current benchmarks/results/latest_results.json
@@ -114,6 +124,7 @@ mojo benchmarks/scripts/compare_results.mojo \
 ### Top-Level Directories
 
 ```text
+
 ```text
 
 ml-odyssey/
@@ -139,12 +150,12 @@ ml-odyssey/
 
 **What**: ML research paper implementations
 
-**Structure**:
+### Structure
 
 - Each paper in its own directory
 - `_template/` for starting new papers
 
-**Example**:
+### Example
 
 ```text
 ```text
@@ -189,6 +200,7 @@ papers/
 **Common Tasks**:
 
 ```bash
+
 ```bash
 
 # Run benchmarks
@@ -203,14 +215,14 @@ mojo benchmarks/scripts/compare_results.mojo
 
 **Purpose**: Comprehensive documentation for all users
 
-**Key Sections**:
+### Key Sections
 
 - `getting-started/` - Onboarding
 - `core/` - Core concepts
 - `advanced/` - Advanced topics
 - `dev/` - Developer docs
 
-**Common Tasks**:
+### Common Tasks
 
 - Read guides: Browse `docs/`
 - Add docs: Create in appropriate section
@@ -220,13 +232,13 @@ mojo benchmarks/scripts/compare_results.mojo
 
 **Purpose**: Agent hierarchy documentation
 
-**Key Files**:
+### Key Files
 
 - `hierarchy.md` - Agent levels
 - `delegation-rules.md` - Coordination
 - `templates/` - Agent templates
 
-**Common Tasks**:
+### Common Tasks
 
 - Understand agents: Read `hierarchy.md`
 - Create agent: Use `templates/`
@@ -236,22 +248,24 @@ mojo benchmarks/scripts/compare_results.mojo
 
 **Purpose**: Developer productivity tools
 
-**Key Tools**:
+### Key Tools
 
 - `paper-scaffold/` - Generate paper structure
 - `test-utils/` - Testing utilities
 - `benchmarking/` - Benchmark framework
 - `codegen/` - Code generation
 
-**Common Tasks**:
+### Common Tasks
 
 ```bash
 ```bash
 
 # Scaffold paper
+
 python tools/paper-scaffold/scaffold.py --paper {name}
 
 # Generate boilerplate
+
 python tools/codegen/mojo_boilerplate.py --layer Conv2D
 
 ```text
@@ -270,6 +284,7 @@ python tools/codegen/mojo_boilerplate.py --layer Conv2D
 **Common Tasks**:
 
 ```bash
+
 ```bash
 
 # Create experiment
@@ -284,7 +299,7 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
 
 ### Workflow 1: I Want to Start a New Paper
 
-**Steps**:
+### Steps
 
 1. **Scaffold**:
 
@@ -326,7 +341,7 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
 
 ### Workflow 2: I Want to Add a Reusable Component
 
-**Steps**:
+### Steps
 
 1. **Implement**:
 
@@ -335,7 +350,7 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
    vim shared/core/layers/attention.mojo
    ```
 
-2. **Test**:
+1. **Test**:
 
    ```bash
    # Add tests
@@ -343,14 +358,14 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
    mojo test tests/shared/core/layers/
    ```
 
-3. **Document**:
+1. **Document**:
 
    ```bash
    # Update API docs
    vim docs/api/shared/layers.md
    ```
 
-4. **Example**:
+1. **Example**:
 
    ```bash
    # Add usage example
@@ -359,7 +374,7 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
 
 ### Workflow 3: I Want to Run an Experiment
 
-**Steps**:
+### Steps
 
 1. **Create Config**:
 
@@ -369,20 +384,20 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
    # Edit augmented.yaml with changes
    ```
 
-2. **Run Training**:
+1. **Run Training**:
 
    ```bash
    mojo papers/lenet5/train.mojo --config experiments/lenet5/augmented
    ```
 
-3. **Benchmark**:
+1. **Benchmark**:
 
    ```bash
    mojo benchmarks/scripts/run_benchmarks.mojo \
        --experiment lenet5/augmented
    ```
 
-4. **Document**:
+1. **Document**:
 
    ```bash
    # Record results
@@ -391,7 +406,7 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
 
 ### Workflow 4: I Want to Optimize Performance
 
-**Steps**:
+### Steps
 
 1. **Measure**:
 
@@ -399,26 +414,26 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
    mojo benchmarks/scripts/run_benchmarks.mojo --paper lenet5
    ```
 
-2. **Profile**:
+1. **Profile**:
 
    ```bash
    mojo tools/benchmarking/runner.mojo --target lenet5 --profile
    ```
 
-3. **Optimize**:
+1. **Optimize**:
 
    ```bash
    # Edit code based on profiling
    vim papers/lenet5/model.mojo
    ```
 
-4. **Verify**:
+1. **Verify**:
 
    ```bash
    mojo benchmarks/scripts/run_benchmarks.mojo --paper lenet5 --compare
    ```
 
-5. **Document**:
+1. **Document**:
 
    ```bash
    vim docs/advanced/optimization_techniques.md
@@ -428,7 +443,7 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
 
 ### Content Type Decision Tree
 
-**Q: What type of content are you adding?**
+### Q: What type of content are you adding?
 
 ```text
 ```text
@@ -544,6 +559,7 @@ Architectural Decision?
 **Example**:
 
 ```bash
+
 ```bash
 
 # For baseline reproduction
@@ -562,9 +578,11 @@ mojo papers/lenet5/train.mojo --config experiments/lenet5/my_experiment
 ```bash
 
 # Check all docs
+
 python scripts/validate_links.py docs/
 
 # Check specific file
+
 python scripts/validate_links.py docs/path/to/file.md
 
 ```text
@@ -580,6 +598,7 @@ python scripts/validate_links.py docs/path/to/file.md
 **Solution**: Run structure validator
 
 ```bash
+
 ```bash
 
 # Check entire repository
@@ -598,22 +617,28 @@ python scripts/validate_structure.py --verbose
 ```bash
 
 # Setup environment
+
 python scripts/setup.py
 
 # Validate structure
+
 python scripts/validate_structure.py
 
 # Validate documentation
+
 python scripts/check_readmes.py
 python scripts/validate_links.py
 
 # Run tests
+
 mojo test tests/
 
 # Run benchmarks
+
 mojo benchmarks/scripts/run_benchmarks.mojo
 
 # Format code
+
 pre-commit run --all-files
 
 ```text

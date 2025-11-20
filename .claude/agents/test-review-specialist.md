@@ -74,9 +74,9 @@ organization, and edge case handling. Focuses exclusively on testing practices a
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -271,7 +271,7 @@ See [code-review-orchestrator.md](./code-review-orchestrator.md#review-comment-p
 
 ### Example 1: Missing Edge Cases
 
-**Code Under Test**:
+### Code Under Test
 
 ```mojo
 fn normalize(values: List[Float32]) -> List[Float32]:
@@ -286,7 +286,7 @@ fn normalize(values: List[Float32]) -> List[Float32]:
     return normalized
 ```text
 
-**Test Code**:
+### Test Code
 
 ```mojo
 fn test_normalize():
@@ -297,7 +297,7 @@ fn test_normalize():
     assert result[4] == 1.0
 ```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 🔴 CRITICAL: Insufficient edge case coverage
@@ -410,16 +410,16 @@ fn test_model():
 
 🟠 MAJOR: Poor test organization - multiple concerns in one test
 
-**Issues**:
+### Issues
 
 1. ❌ Tests multiple unrelated functionalities (forward, train, eval, save/load)
-2. ❌ Test name is too generic ("test_model")
-3. ❌ Tests depend on each other (training must complete before eval)
-4. ❌ Hard to debug failures (which part failed?)
-5. ❌ Violates single responsibility principle for tests
-6. ❌ Side effects (creates files, modifies model state)
+1. ❌ Test name is too generic ("test_model")
+1. ❌ Tests depend on each other (training must complete before eval)
+1. ❌ Hard to debug failures (which part failed?)
+1. ❌ Violates single responsibility principle for tests
+1. ❌ Side effects (creates files, modifies model state)
 
-**Recommended Refactoring**:
+### Recommended Refactoring
 
 ```mojo
 
@@ -536,7 +536,7 @@ fn test_save_creates_file():
 
 ```text
 
-**Benefits**:
+### Benefits
 
 - Each test has single, clear purpose
 - Tests are independent (can run in any order)
@@ -604,8 +604,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -635,7 +635,7 @@ After creating PR:
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -687,13 +687,13 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Reviewing implementation with potential overflow issues
 
-**Actions**:
+### Actions
 
 1. Identify operations that could overflow (exp, large multiplications)
-2. Check for numerical stability patterns (log-sum-exp, epsilon values)
-3. Provide specific fixes with mathematical justification
-4. Reference best practices and paper specifications
-5. Categorize findings by severity
+1. Check for numerical stability patterns (log-sum-exp, epsilon values)
+1. Provide specific fixes with mathematical justification
+1. Reference best practices and paper specifications
+1. Categorize findings by severity
 
 **Outcome**: Numerically stable implementation preventing runtime errors
 
@@ -701,12 +701,12 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Implementation tightly coupling unrelated components
 
-**Actions**:
+### Actions
 
 1. Analyze component dependencies and coupling
-2. Identify violations of separation of concerns
-3. Suggest refactoring with interface-based design
-4. Provide concrete code examples of improvements
-5. Group similar issues into single review comment
+1. Identify violations of separation of concerns
+1. Suggest refactoring with interface-based design
+1. Provide concrete code examples of improvements
+1. Group similar issues into single review comment
 
 **Outcome**: Actionable feedback leading to better architecture

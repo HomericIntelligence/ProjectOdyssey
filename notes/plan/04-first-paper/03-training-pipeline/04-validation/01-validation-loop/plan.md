@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Iterate over validation data
-2. Compute validation loss
-3. No parameter updates
+1. Compute validation loss
+1. No parameter updates
 
 ## Success Criteria
 

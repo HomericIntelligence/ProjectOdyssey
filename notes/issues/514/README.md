@@ -42,7 +42,7 @@ address discovered issues, and deliver a polished, team-ready skills system.
 
 (Add notes here during implementation)
 
-**Workflow**:
+### Workflow
 
 - Requires: #511, #512, #513 substantially complete
 - Final phase in skills system implementation

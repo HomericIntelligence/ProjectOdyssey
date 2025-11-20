@@ -53,28 +53,28 @@ Create the `papers/` directory at the repository root to serve as the container 
 
 ### Design Rationale
 
-**Why a Dedicated Papers Directory?**
+### Why a Dedicated Papers Directory?
 
 1. **Organizational Clarity**: Separates paper implementations from shared library code
-2. **Scalability**: Easy to add new papers without cluttering the repository root
-3. **Self-Containment**: Each paper can have its own structure, dependencies, and documentation
-4. **Template Support**: Provides a location for the `_template/` subdirectory (created in issue #522)
+1. **Scalability**: Easy to add new papers without cluttering the repository root
+1. **Self-Containment**: Each paper can have its own structure, dependencies, and documentation
+1. **Template Support**: Provides a location for the `_template/` subdirectory (created in issue #522)
 
-**Why Repository Root?**
+### Why Repository Root?
 
 1. **Discoverability**: Easier for developers to find paper implementations
-2. **Import Paths**: Simpler Python/Mojo import paths from papers to shared library
-3. **Convention**: Follows common repository organization patterns
-4. **Simplicity**: Avoids unnecessary nesting levels
+1. **Import Paths**: Simpler Python/Mojo import paths from papers to shared library
+1. **Convention**: Follows common repository organization patterns
+1. **Simplicity**: Avoids unnecessary nesting levels
 
 ### Dependencies
 
-**Inputs Required**:
+### Inputs Required
 
 - Repository root directory exists (already satisfied)
 - Write permissions to repository (already satisfied)
 
-**Outputs for Downstream Issues**:
+### Outputs for Downstream Issues
 
 - Issue #521 (Test): Requires `papers/` directory to exist for testing
 - Issue #522 (Implementation): Will create README in the `papers/` directory
@@ -90,7 +90,7 @@ Create the `papers/` directory at the repository root to serve as the container 
 - Easy to verify success/failure
 - Simple to delete if needed (empty directory)
 
-**Potential Issues**:
+### Potential Issues
 
 - Permission errors (mitigated by checking write access)
 - Path already exists (can be handled gracefully)

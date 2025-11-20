@@ -27,9 +27,9 @@ None (leaf node)
 ## Steps
 
 1. Create magic.toml file at repository root
-2. Add project section with name, version, and description
-3. Set up basic structure for dependencies and channels sections
-4. Add comments explaining each section
+1. Add project section with name, version, and description
+1. Set up basic structure for dependencies and channels sections
+1. Add comments explaining each section
 
 ## Success Criteria
 

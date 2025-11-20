@@ -16,17 +16,17 @@ The following planning documentation and design specifications:
    - Integration with existing tooling infrastructure
    - Data flow and dependencies
 
-2. **API Contracts and Interfaces**
+1. **API Contracts and Interfaces**
    - Template system API
    - Directory generator interface
    - CLI interface specification
 
-3. **Design Documentation**
+1. **Design Documentation**
    - Template system design (variable substitution, file generation)
    - Directory structure conventions and validation
    - User interaction patterns and CLI design
 
-4. **Implementation Strategy**
+1. **Implementation Strategy**
    - Module breakdown and dependencies
    - Language selection (Mojo vs Python) with justification
    - Error handling and validation approach
@@ -51,17 +51,17 @@ The following planning documentation and design specifications:
 **Decision**: Split scaffolding tool into three independent, composable components:
 
 1. **Template System** - File generation with variable substitution
-2. **Directory Generator** - Structure creation and validation
-3. **CLI Interface** - User interaction and orchestration
+1. **Directory Generator** - Structure creation and validation
+1. **CLI Interface** - User interaction and orchestration
 
-**Rationale**:
+### Rationale
 
 - **Modularity**: Each component can be developed, tested, and maintained independently
 - **Reusability**: Template system and directory generator can be used programmatically without CLI
 - **Testability**: Clear boundaries enable focused unit testing
 - **Extensibility**: New template types or directory structures can be added without CLI changes
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Monolithic Design**: Single script handling all functionality - Rejected due to complexity and testability concerns
 - **Two-Component Split**: Combined template and directory generation - Rejected to maintain clear separation of
@@ -72,7 +72,7 @@ The following planning documentation and design specifications:
 **Decision**: Use simple variable substitution (e.g., `{{paper_title}}`, `{{author}}`) instead of complex templating
 engines like Jinja2.
 
-**Rationale**:
+### Rationale
 
 - **Simplicity (KISS)**: Paper templates have straightforward variable needs
 - **No External Dependencies**: Avoid adding templating engine dependencies
@@ -80,7 +80,7 @@ engines like Jinja2.
 - **Performance**: String substitution is faster than template parsing
 - **Sufficient**: Project needs only basic variable replacement, not complex logic
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Jinja2 Templates**: Full-featured templating - Rejected as over-engineering for current needs
 - **Python f-strings**: Inline formatting - Rejected because templates need to be separate files
@@ -98,7 +98,7 @@ engines like Jinja2.
 - **Python Strengths**: Excellent file I/O, mature libraries (pathlib, argparse), subprocess handling
 - **Mojo Limitations**: Mojo v0.25.7 cannot capture subprocess output (documented limitation)
 
-**Technical Justification**:
+### Technical Justification
 
 ```python
 # Example: Why Python is the right tool for this use case
@@ -115,7 +115,7 @@ result = subprocess.run(["mojo", "format", "--check", "src/"],
                        capture_output=True, text=True)
 if result.returncode != 0:
     print(f"Validation failed: {result.stderr}")
-```
+```text
 
 **Note**: This is documented per ADR-001 Section 4.3 requirements for Python usage in automation.
 
@@ -123,14 +123,14 @@ if result.returncode != 0:
 
 **Decision**: Generator should be safe to run multiple times on the same target directory.
 
-**Rationale**:
+### Rationale
 
 - **Safety**: Prevents accidental data loss if tool is run twice
 - **Partial Recovery**: Can recover from interrupted executions
 - **User-Friendly**: No catastrophic failures if user makes a mistake
 - **Testing**: Simplifies test cleanup and validation
 
-**Implementation Strategy**:
+### Implementation Strategy
 
 - Check if directories exist before creating
 - Skip file generation if target file already exists
@@ -141,13 +141,13 @@ if result.returncode != 0:
 
 **Decision**: CLI supports both interactive prompts and command-line argument modes.
 
-**Rationale**:
+### Rationale
 
 - **Interactive Mode**: Better UX for manual paper creation, guides users through process
 - **Non-Interactive Mode**: Required for scripting and automation
 - **Flexibility**: Users can choose workflow that fits their context
 
-**Implementation**:
+### Implementation
 
 ```bash
 # Interactive mode (prompts for all info)
@@ -155,13 +155,13 @@ python scripts/scaffold_paper.py
 
 # Non-interactive mode (all args provided)
 python scripts/scaffold_paper.py --title "LeNet-5" --author "LeCun et al." --year 1998 --output papers/lenet5
-```
+```text
 
 ### 6. Repository Structure Conventions
 
 **Decision**: Scaffolding follows established repository structure exactly.
 
-**Structure**:
+### Structure
 
 ```text
 papers/<paper-name>/
@@ -177,9 +177,9 @@ papers/<paper-name>/
 └── docs/
     ├── architecture.md   # Detailed architecture documentation
     └── training.md       # Training approach and hyperparameters
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - **Consistency**: All papers have identical structure
 - **Discoverability**: Developers know where to find components
@@ -190,7 +190,7 @@ papers/<paper-name>/
 
 **Decision**: Define standard variable set for all templates.
 
-**Core Variables**:
+### Core Variables
 
 - `{{paper_title}}` - Full paper title
 - `{{paper_name}}` - Filesystem-safe name (lowercase, hyphens)
@@ -199,7 +199,7 @@ papers/<paper-name>/
 - `{{date}}` - Current date (ISO 8601 format)
 - `{{description}}` - Brief paper description
 
-**Rationale**:
+### Rationale
 
 - **Standardization**: Consistent variable naming across templates
 - **Completeness**: Covers all common paper metadata needs
@@ -209,13 +209,13 @@ papers/<paper-name>/
 
 **Decision**: Validate inputs and outputs with clear error messages.
 
-**Validation Points**:
+### Validation Points
 
 1. **Input Validation**: Paper name is filesystem-safe, target directory is writable
-2. **Template Validation**: All required variables are provided, templates exist
-3. **Output Validation**: All expected files were created, structure matches specification
+1. **Template Validation**: All required variables are provided, templates exist
+1. **Output Validation**: All expected files were created, structure matches specification
 
-**Error Handling Strategy**:
+### Error Handling Strategy
 
 - Fail early with clear error messages
 - Provide actionable guidance for fixing issues
@@ -226,7 +226,7 @@ papers/<paper-name>/
 
 **Decision**: Follow test-driven development for all components.
 
-**Test Coverage Requirements**:
+### Test Coverage Requirements
 
 - **Template System Tests**:
   - Variable substitution correctness
@@ -269,7 +269,7 @@ papers/<paper-name>/
 │  - Substitute vars│  │  - Generate files   │
 │  - Render output│  │  - Validate output  │
 └─────────────────┘  └──────────────────────┘
-```
+```text
 
 ### Data Flow
 
@@ -291,7 +291,7 @@ Template Loading   Directory Creation   Validation
                        │
                        ▼
             Report Results to User
-```
+```text
 
 ### Module Breakdown
 
@@ -301,20 +301,20 @@ Template Loading   Directory Creation   Validation
    - Orchestration of template and directory components
    - Progress reporting and error handling
 
-2. **scripts/templates/** (Template files directory)
+1. **scripts/templates/** (Template files directory)
    - README.md.template
    - model.mojo.template
    - test_model.mojo.template
    - __init__.mojo.template
    - architecture.md.template
 
-3. **scripts/lib/template_system.py** (Template rendering)
+1. **scripts/lib/template_system.py** (Template rendering)
    - load_template(template_path: Path) -> str
    - substitute_variables(template: str, variables: dict) -> str
    - render_template(template_path: Path, variables: dict) -> str
    - validate_variables(required: set, provided: dict) -> bool
 
-4. **scripts/lib/directory_generator.py** (Structure creation)
+1. **scripts/lib/directory_generator.py** (Structure creation)
    - create_directory_structure(target: Path, paper_name: str) -> bool
    - generate_files(target: Path, templates: dict, variables: dict) -> list
    - validate_structure(target: Path) -> bool
@@ -375,7 +375,7 @@ class TemplateSystem:
             Tuple of (is_valid: bool, missing_variables: list)
         """
         pass
-```
+```text
 
 ### Directory Generator API
 
@@ -430,7 +430,7 @@ class DirectoryGenerator:
             Tuple of (is_valid: bool, issues: list)
         """
         pass
-```
+```text
 
 ### CLI Interface API
 
@@ -474,7 +474,7 @@ class PaperScaffoldCLI:
             Exit code (0 for success, non-zero for failure)
         """
         pass
-```
+```text
 
 ## Integration Points
 
@@ -484,15 +484,15 @@ class PaperScaffoldCLI:
    - Uses established directory conventions
    - Follows repository structure patterns
 
-2. **Testing Tools** (Section 03-02)
+1. **Testing Tools** (Section 03-02)
    - Generated tests integrate with test runners
    - Test file naming follows conventions
 
-3. **Validation Tools** (Section 03-04)
+1. **Validation Tools** (Section 03-04)
    - Generated code passes validation checks
    - Structure validation uses same rules
 
-4. **CI/CD Pipelines** (Section 05)
+1. **CI/CD Pipelines** (Section 05)
    - Generated papers can be tested in CI
    - Follows same quality standards
 
@@ -502,11 +502,11 @@ class PaperScaffoldCLI:
    - Generated Mojo code passes `mojo format`
    - Generated markdown passes `markdownlint-cli2`
 
-2. **GitHub Issues**
+1. **GitHub Issues**
    - Can generate issue templates for new papers
    - Links to planning workflow
 
-3. **Documentation**
+1. **Documentation**
    - Generated docs follow markdown standards
    - README templates link to project docs
 
@@ -523,15 +523,15 @@ class PaperScaffoldCLI:
 
 **Dependencies**: Requires Plan (#784) completion
 
-**Approach**:
+### Approach
 
 1. Write template system tests (variable substitution, file loading)
-2. Write directory generator tests (structure creation, validation)
-3. Write CLI tests (argument parsing, prompts, output)
-4. All tests should fail initially (no implementation yet)
-5. Document test coverage expectations (>80%)
+1. Write directory generator tests (structure creation, validation)
+1. Write CLI tests (argument parsing, prompts, output)
+1. All tests should fail initially (no implementation yet)
+1. Document test coverage expectations (>80%)
 
-**Deliverables**:
+### Deliverables
 
 - `tests/test_template_system.py`
 - `tests/test_directory_generator.py`
@@ -542,15 +542,15 @@ class PaperScaffoldCLI:
 
 **Dependencies**: Requires Test (#785) completion
 
-**Approach**:
+### Approach
 
 1. Implement template system to pass tests
-2. Implement directory generator to pass tests
-3. Implement CLI interface to pass tests
-4. Iterate until all tests pass
-5. Ensure >80% test coverage
+1. Implement directory generator to pass tests
+1. Implement CLI interface to pass tests
+1. Iterate until all tests pass
+1. Ensure >80% test coverage
 
-**Deliverables**:
+### Deliverables
 
 - `scripts/scaffold_paper.py` (main CLI)
 - `scripts/lib/template_system.py`
@@ -561,15 +561,15 @@ class PaperScaffoldCLI:
 
 **Dependencies**: Requires Implementation (#786) completion
 
-**Approach**:
+### Approach
 
 1. Create sample paper using tool (end-to-end validation)
-2. Document CLI usage in README
-3. Add scaffolding tool to project documentation
-4. Verify integration with existing tooling
-5. Create user guide with examples
+1. Document CLI usage in README
+1. Add scaffolding tool to project documentation
+1. Verify integration with existing tooling
+1. Create user guide with examples
 
-**Deliverables**:
+### Deliverables
 
 - Updated `scripts/README.md` with scaffolding documentation
 - Example usage guide
@@ -579,15 +579,15 @@ class PaperScaffoldCLI:
 
 **Dependencies**: Requires Packaging (#787) completion
 
-**Approach**:
+### Approach
 
 1. Refactor based on lessons learned
-2. Improve error messages based on testing
-3. Optimize performance if needed
-4. Final documentation review
-5. Code review and quality check
+1. Improve error messages based on testing
+1. Optimize performance if needed
+1. Final documentation review
+1. Code review and quality check
 
-**Deliverables**:
+### Deliverables
 
 - Refactored, production-ready code
 - Comprehensive documentation

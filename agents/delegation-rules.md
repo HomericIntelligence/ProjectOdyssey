@@ -8,7 +8,7 @@ Each delegation reduces scope by one level:
 
 ```text
 System → Section → Module → Component → Function → Line
-```
+```text
 
 ### Rule 2: Specification Detail
 
@@ -16,7 +16,7 @@ Each level adds more detail:
 
 ```text
 Strategic goals → Tactical plans → Component specs → Implementation details → Code
-```
+```text
 
 ### Rule 3: Autonomy Increase
 
@@ -69,7 +69,7 @@ Agent B
   ↓ completes work
   ↓ delegates to C
 Agent C
-```
+```text
 
 **Use When**: Tasks have strict dependencies
 
@@ -80,7 +80,7 @@ Orchestrator
   ├─> Agent A (parallel)
   ├─> Agent B (parallel)
   └─> Agent C (parallel)
-```
+```text
 
 **Use When**: Tasks are independent
 
@@ -91,7 +91,7 @@ Orchestrator
   ├─> Agent A ─┐
   ├─> Agent B ─┼─> Integration Agent
   └─> Agent C ─┘
-```
+```text
 
 **Use When**: Parallel work needs final integration
 
@@ -111,13 +111,13 @@ Orchestrator
 **Process**: Higher-level agent can delegate directly to implementation level when:
 
 1. No design decisions needed
-2. No architectural impact
-3. Fix is obvious and unambiguous
-4. < 20 lines of code changes
+1. No architectural impact
+1. Fix is obvious and unambiguous
+1. < 20 lines of code changes
 
 ### When Skip-Level Is NOT Acceptable
 
-**Never skip levels for**:
+### Never skip levels for
 
 - New features (any size)
 - Refactoring (any scope)
@@ -137,19 +137,19 @@ the GitHub issue exists before starting work.
 
 ### Language Choice Decisions
 
-**Level 0-1 Decides**:
+### Level 0-1 Decides
 
 - Which components use Mojo vs Python
 - Overall language strategy
 - Interop patterns
 
-**Level 2-3 Implements**:
+### Level 2-3 Implements
 
 - Designs Mojo-specific interfaces
 - Plans performance-critical paths
 - Structures Mojo modules
 
-**Level 4-5 Executes**:
+### Level 4-5 Executes
 
 - Writes Mojo code
 - Implements Mojo patterns
@@ -212,17 +212,17 @@ the GitHub issue exists before starting work.
 
 - [Step 1]
 
-```
+```text
 
 ## Handoff Protocol
 
 ### When Completing Work
 
 1. **Document What Was Done**
-2. **List Artifacts Produced** (files, configs, docs)
-3. **Specify Next Steps** for receiving agent
-4. **Note Any Gotchas** or important context
-5. **Request Confirmation** from receiving agent
+1. **List Artifacts Produced** (files, configs, docs)
+1. **Specify Next Steps** for receiving agent
+1. **Note Any Gotchas** or important context
+1. **Request Confirmation** from receiving agent
 
 ### Handoff Template
 
@@ -249,7 +249,7 @@ the GitHub issue exists before starting work.
 
 - [Important context]
 
-```
+```text
 
 ## Escalation Protocol
 
@@ -264,7 +264,7 @@ the GitHub issue exists before starting work.
 3. Escalate to immediate superior
 4. Superior resolves or escalates further
 
-```
+```text
 
 ### Conflict Escalation
 
@@ -274,7 +274,7 @@ the GitHub issue exists before starting work.
 3. Superior reviews, decides, provides rationale
 4. Both agents implement decision
 
-```
+```text
 
 ## Decision Authority
 
@@ -301,13 +301,13 @@ the GitHub issue exists before starting work.
 
 ```bash
 git cherry-pick <commit-hash>
-```
+```text
 
 **Option 2**: Temporary merge
 
 ```bash
 git merge --no-commit <branch>
-```
+```text
 
 **Option 3**: Coordinate via specs
 
@@ -319,14 +319,14 @@ git merge --no-commit <branch>
 
 ### When Writing Mojo
 
-**Coordinate on**:
+### Coordinate on
 
 - Struct definitions (shared types)
 - Trait implementations (interfaces)
 - Memory management patterns
 - SIMD vector widths
 
-**Document in specifications**:
+### Document in specifications
 
 - Type signatures
 - Performance requirements
@@ -338,14 +338,14 @@ git merge --no-commit <branch>
 
 ### Mojo Style Consistency
 
-**Level 2-3 Establishes**:
+### Level 2-3 Establishes
 
 - Naming conventions
 - File organization
 - Import patterns
 - Documentation style
 
-**Level 4-5 Follows**:
+### Level 4-5 Follows
 
 - Applies style guide
 - Uses consistent patterns
@@ -355,7 +355,7 @@ git merge --no-commit <branch>
 
 ### What Defines Package Phase Completion
 
-**Package phase is complete ONLY when**:
+### Package phase is complete ONLY when
 
 ✅ **For Mojo Library Modules**:
 
@@ -378,7 +378,7 @@ git merge --no-commit <branch>
 - All links in built site are valid
 - Offline archive available for distribution
 
-**Package phase is NOT complete if**:
+### Package phase is NOT complete if
 
 ❌ Only documentation files created (README.md, notes/issues/XX/README.md)
 ❌ Only `__init__.mojo` files exist without binary package
@@ -419,28 +419,28 @@ Should I delegate this?
   ├─ Requires specific expertise? → Delegate to specialist
   ├─ Can run in parallel? → Delegate to multiple agents
   └─ Within my scope? → Handle myself
-```
+```text
 
 ## Anti-Patterns
 
 ### Don't Do This
 
-**Skipping Levels**:
+### Skipping Levels
 
 - ❌ Junior Engineer → Chief Architect
 - ✅ Junior Engineer → Implementation Engineer → Component Specialist → ...
 
-**Micro-Managing**:
+### Micro-Managing
 
 - ❌ Orchestrator specifying variable names
 - ✅ Orchestrator specifying requirements
 
-**Working in Silos**:
+### Working in Silos
 
 - ❌ No communication, surprise conflicts
 - ✅ Regular status updates, coordinate interfaces
 
-**Hoarding Decisions**:
+### Hoarding Decisions
 
 - ❌ Make all decisions yourself
 - ✅ Delegate appropriately, trust hierarchy

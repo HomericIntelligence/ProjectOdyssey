@@ -92,13 +92,13 @@ Primarily **Plan** phase, oversight in all phases
 ---
 
 **Configuration File**: `.claude/agents/chief-architect.md`
-```
+```text
 
 ## Customization
 
 1. Adapt to specific repository structure
-2. Add domain-specific architectural patterns
-3. Customize to team's tech stack
+1. Add domain-specific architectural patterns
+1. Customize to team's tech stack
 
 ## See Also
 

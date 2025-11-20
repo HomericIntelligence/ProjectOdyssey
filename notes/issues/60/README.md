@@ -21,7 +21,7 @@ comprehensive content, and ready for publishing.
 
 ## Package Structure
 
-```
+```text
 docs/
 ├── index.md                      # Main hub (75 lines)
 ├── getting-started/              # 3 files (quickstart, installation, first_model)
@@ -34,7 +34,7 @@ examples/
 ├── mojo-patterns/                # 3 example files
 ├── custom-layers/                # 3 example files
 └── performance/                  # 2 example files
-```
+```text
 
 ## Verification Status
 
@@ -56,17 +56,17 @@ Package phase completed with the following artifacts created:
    - Advanced: 6 specialized topics
    - Development: 4 contributor guides
 
-2. **GitHub Pages Workflow** (.github/workflows/docs.yml):
+1. **GitHub Pages Workflow** (.github/workflows/docs.yml):
    - Automated deployment on main branch pushes
    - Build validation on pull requests
    - Offline archive generation (zip format)
    - Strict build mode for error detection
 
-3. **Build Configuration** (.gitignore):
+1. **Build Configuration** (.gitignore):
    - MkDocs build artifacts (site/, .cache/)
    - Prevents committing generated content
 
-4. **Publishing Strategy**:
+1. **Publishing Strategy**:
    - Live documentation: GitHub Pages (auto-deployed)
    - Offline access: Downloadable archive (dist/docs-offline-0.1.0.zip)
    - Version control: Documentation source in docs/

@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Implement average pooling operation
-2. Support configurable pool size
-3. Test pooling correctness
+1. Support configurable pool size
+1. Test pooling correctness
 
 ## Success Criteria
 

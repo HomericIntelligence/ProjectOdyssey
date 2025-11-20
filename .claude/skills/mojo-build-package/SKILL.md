@@ -15,7 +15,7 @@ This skill builds Mojo packages (`.mojopkg` files) for distribution and modular 
 - Preparing for package installation
 - Building modular components
 
-## What is a Mojo Package?
+## What is a Mojo Package
 
 A `.mojopkg` file is Mojo's compiled package format:
 
@@ -34,14 +34,14 @@ mojo package src/tensor -o packages/tensor.mojopkg
 
 # Build with specific name
 ./scripts/build_package.sh tensor
-```
+```text
 
 ### Build All Packages
 
 ```bash
 # Build all packages in src/
 ./scripts/build_all_packages.sh
-```
+```text
 
 ### Package Structure
 
@@ -52,9 +52,9 @@ src/tensor/
 ├── types.mojo             # Module
 └── utils.mojo             # Module
 
-# Builds to:
+# Builds to
 packages/tensor.mojopkg    # Compiled package
-```
+```text
 
 ## Package Organization
 
@@ -72,7 +72,7 @@ src/
 └── utils/                 # Package: utils
     ├── __init__.mojo
     └── helpers.mojo
-```
+```text
 
 ### Built Packages
 
@@ -81,7 +81,7 @@ packages/
 ├── tensor.mojopkg
 ├── nn.mojopkg
 └── utils.mojopkg
-```
+```text
 
 ## Package Entry Point
 
@@ -96,7 +96,7 @@ from .types import Tensor
 
 # Re-export for package API
 __all__ = ["Tensor", "add", "multiply", "matmul"]
-```
+```text
 
 ## Build Configuration
 
@@ -113,19 +113,19 @@ authors = ["ML Odyssey Team"]
 
 [dependencies]
 # Package dependencies
-```
+```text
 
 ### Build Script
 
 ```bash
 ./scripts/build_package.sh <package-name>
 
-# This:
+# This
 # 1. Validates source structure
 # 2. Runs mojo package command
 # 3. Verifies output
 # 4. Optionally runs tests
-```
+```text
 
 ## Using Built Packages
 
@@ -137,14 +137,14 @@ from tensor import Tensor, add
 fn main():
     let t = Tensor[DType.float32, 2](10, 10)
     let result = add(t, t)
-```
+```text
 
 ### Install Package (Future)
 
 ```bash
 # When package manager available
 mojo install packages/tensor.mojopkg
-```
+```text
 
 ## Error Handling
 
@@ -153,7 +153,7 @@ mojo install packages/tensor.mojopkg
 ```text
 Error: Cannot build package 'tensor'
   Missing __init__.mojo
-```
+```text
 
 **Fix:** Add `__init__.mojo` to package directory
 
@@ -162,7 +162,7 @@ Error: Cannot build package 'tensor'
 ```text
 Error: Circular dependency detected
   tensor -> nn -> tensor
-```
+```text
 
 **Fix:** Refactor to break circular dependency
 
@@ -170,7 +170,7 @@ Error: Circular dependency detected
 
 ```text
 Error: Name 'Tensor' not exported
-```
+```text
 
 **Fix:** Add to `__all__` in `__init__.mojo`
 
@@ -182,11 +182,11 @@ After building, verify package works:
 # Test package imports
 ./scripts/test_package.sh tensor
 
-# This creates temporary test file:
+# This creates temporary test file
 from tensor import Tensor
 fn test():
     let t = Tensor()  # Verify can import and use
-```
+```text
 
 ## CI Integration
 
@@ -196,7 +196,7 @@ fn test():
 
 - name: Test Packages
   run: ./scripts/test_all_packages.sh
-```
+```text
 
 ## Distribution
 
@@ -206,7 +206,7 @@ fn test():
 # Create distributable archive
 ./scripts/create_package_archive.sh
 
-# Creates:
+# Creates
 # ml-odyssey-packages-v0.1.0.tar.gz
 #   ├── packages/
 #   │   ├── tensor.mojopkg
@@ -214,33 +214,33 @@ fn test():
 #   │   └── utils.mojopkg
 #   ├── README.md
 #   └── LICENSE
-```
+```text
 
 ## Examples
 
-**Build single package:**
+### Build single package:
 
 ```bash
 ./scripts/build_package.sh tensor
-```
+```text
 
-**Build all packages:**
+### Build all packages:
 
 ```bash
 ./scripts/build_all_packages.sh
-```
+```text
 
-**Build and test:**
+### Build and test:
 
 ```bash
 ./scripts/build_package.sh tensor --test
-```
+```text
 
-**Create distribution:**
+### Create distribution:
 
 ```bash
 ./scripts/create_package_archive.sh v0.1.0
-```
+```text
 
 ## Scripts Available
 
@@ -258,10 +258,10 @@ fn test():
 ## Best Practices
 
 1. **Clear API** - Export only public interface in `__init__.mojo`
-2. **Version packages** - Use semantic versioning
-3. **Test imports** - Verify package can be imported after build
-4. **Documentation** - Document package API
-5. **Minimal dependencies** - Keep dependencies minimal
-6. **Stable interface** - Avoid breaking changes
+1. **Version packages** - Use semantic versioning
+1. **Test imports** - Verify package can be imported after build
+1. **Documentation** - Document package API
+1. **Minimal dependencies** - Keep dependencies minimal
+1. **Stable interface** - Avoid breaking changes
 
 See CLAUDE.md for package phase workflow and requirements.

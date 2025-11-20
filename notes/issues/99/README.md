@@ -13,9 +13,9 @@ Validate channel configuration structure in magic.toml.
 Testing deferred because:
 
 1. Channels section is currently a commented placeholder (`magic.toml:22-24`)
-2. No active channel configuration exists to test
-3. Testing will be added when channels are activated in Section 04 (First Paper)
-4. Similar to dependencies - placeholder doesn't need test coverage yet
+1. No active channel configuration exists to test
+1. Testing will be added when channels are activated in Section 04 (First Paper)
+1. Similar to dependencies - placeholder doesn't need test coverage yet
 
 ## Future Testing Approach
 
@@ -32,7 +32,7 @@ When channels are activated, tests should validate:
 - ✅ Testing strategy aligned with placeholder approach
 - ✅ No tests needed for commented placeholder
 
-**References:**
+### References:
 
 - Config file: `/magic.toml:22-24` (commented placeholder - nothing to test yet)
 - Related: See `/tests/dependencies/test_dependencies.py` for similar pattern when activated

@@ -30,10 +30,10 @@ None (leaf node)
 ## Steps
 
 1. Define minimum coverage thresholds
-2. Configure CI to check coverage levels
-3. Implement comparison against main branch
-4. Set up clear failure messages
-5. Add coverage badge to README
+1. Configure CI to check coverage levels
+1. Implement comparison against main branch
+1. Set up clear failure messages
+1. Add coverage badge to README
 
 ## Success Criteria
 

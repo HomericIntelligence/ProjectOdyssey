@@ -39,27 +39,27 @@ Design comprehensive unit tests for data utilities including base dataset, data 
    - Test boundary conditions (index 0, last index)
    - Test invalid indices raise appropriate errors
 
-2. **Data Loader Operations**
+1. **Data Loader Operations**
    - Verify batching creates correct batch sizes
    - Verify last batch handling (drop_last vs. partial batch)
    - Verify shuffling produces different orders across epochs
    - Test worker processes (if applicable)
    - Verify collation functions work correctly
 
-3. **Augmentation Testing**
+1. **Augmentation Testing**
    - Test each augmentation type independently
    - Verify augmentations preserve tensor shapes
    - Verify augmentations preserve data types
    - Test composition of multiple augmentations
    - Verify random augmentations with controlled seeds
 
-4. **Edge Cases**
+1. **Edge Cases**
    - Empty dataset (length 0)
    - Single-item dataset (length 1)
    - Batch size larger than dataset size
    - Invalid augmentation parameters
 
-5. **Integration Tests**
+1. **Integration Tests**
    - Complete pipeline: dataset → loader → augmentation → batch
    - Verify data flows correctly through entire pipeline
    - Test realistic usage patterns
@@ -97,9 +97,10 @@ Design comprehensive unit tests for data utilities including base dataset, data 
 
 ## Implementation Notes
 
-### Current Test Coverage - EXCELLENT FOUNDATION!
+### Current Test Coverage - EXCELLENT FOUNDATION
 
 **Existing Test Files** (in `/home/user/ml-odyssey/tests/shared/data/`):
+
 - **Comprehensive test runner**: `run_all_tests.mojo` - 91+ test orchestrator
 - **Dataset tests**: `test_datasets.mojo` + subdirectory with granular tests
 - **Loader tests**: `test_loaders.mojo` + subdirectory with parallel/batch tests
@@ -107,13 +108,15 @@ Design comprehensive unit tests for data utilities including base dataset, data 
 - **Sampler tests**: Full suite (sequential, random, weighted samplers)
 - **Augmentation tests**: **FULLY IMPLEMENTED** - test_augmentations.mojo has working tests!
 
-**Test Status Analysis**:
+### Test Status Analysis
+
 - **Total test count**: 91+ tests across all data components
 - **Implementation status**: **MOSTLY COMPLETE** - many tests fully implemented
 - **Test runner**: **EXISTS** - comprehensive `run_all_tests.mojo`
 - **Working tests**: Augmentations, samplers, datasets, loaders, transforms
 
-**Outstanding Work**:
+### Outstanding Work
+
 - Verify all 91+ tests pass
 - Check for any remaining TODOs
 - Ensure test runner covers all test files
@@ -121,14 +124,16 @@ Design comprehensive unit tests for data utilities including base dataset, data 
 
 ### What Makes Data Tests Excellent
 
-**Strengths**:
-1. **Complete test runner** - Orchestrates all tests with clear output
-2. **Real working tests** - Not just stubs, actual implementations
-3. **Good organization** - Subdirectories for granular component testing
-4. **TDD approach** - Tests define clear API contracts
-5. **Comprehensive coverage** - Datasets, loaders, samplers, transforms, augmentations
+### Strengths
 
-**Example - Well-Implemented Test**:
+1. **Complete test runner** - Orchestrates all tests with clear output
+1. **Real working tests** - Not just stubs, actual implementations
+1. **Good organization** - Subdirectories for granular component testing
+1. **TDD approach** - Tests define clear API contracts
+1. **Comprehensive coverage** - Datasets, loaders, samplers, transforms, augmentations
+
+### Example - Well-Implemented Test
+
 ```mojo
 fn test_random_augmentation_deterministic() raises:
     """Test that augmentations are deterministic with fixed seed."""
@@ -145,21 +150,23 @@ fn test_random_augmentation_deterministic() raises:
     var result2 = aug2(data)
 
     assert_equal(result1.num_elements(), result2.num_elements())
-```
+```text
 
 ### Gaps to Address
 
-**Minor Gaps**:
-1. Some test files may still have TODOs
-2. Edge case coverage may need expansion
-3. Performance benchmarks not yet established
-4. CI/CD integration verification needed
+### Minor Gaps
 
-**Recommendations**:
+1. Some test files may still have TODOs
+1. Edge case coverage may need expansion
+1. Performance benchmarks not yet established
+1. CI/CD integration verification needed
+
+### Recommendations
+
 1. **Audit existing tests** - Run test suite and identify failures
-2. **Fill remaining TODOs** - Complete any stub implementations
-3. **Add benchmark baseline** - Record performance of test suite
-4. **Document test coverage** - Generate coverage report
+1. **Fill remaining TODOs** - Complete any stub implementations
+1. **Add benchmark baseline** - Record performance of test suite
+1. **Document test coverage** - Generate coverage report
 
 ## Test Implementation Strategy
 
@@ -179,7 +186,7 @@ def test_dataset_getitem():
     item = dataset[0]
     assert isinstance(item, tuple)  # (data, label)
     assert item[0].shape == expected_shape
-```
+```text
 
 ### Phase 2: Data Loader Tests
 
@@ -200,7 +207,7 @@ def test_loader_shuffling():
     epoch1_indices = extract_indices(loader)
     epoch2_indices = extract_indices(loader)
     assert epoch1_indices != epoch2_indices
-```
+```text
 
 ### Phase 3: Augmentation Tests
 
@@ -215,7 +222,7 @@ def test_flip_augmentation():
     assert augmented.dtype == image.dtype
     # Verify flip actually occurred
     assert not torch.equal(augmented, image)
-```
+```text
 
 ### Phase 4: Edge Case Tests
 
@@ -236,7 +243,7 @@ def test_batch_size_larger_than_dataset():
     batches = list(loader)
     assert len(batches) == 1
     assert batches[0][0].shape[0] == 10
-```
+```text
 
 ### Phase 5: Integration Tests
 
@@ -255,7 +262,7 @@ def test_complete_data_pipeline():
         assert data.shape[0] == min(4, 100 - batch_idx * 4)
         assert augmented_data.shape == data.shape
         assert labels.shape[0] == data.shape[0]
-```
+```text
 
 ## Key Considerations
 

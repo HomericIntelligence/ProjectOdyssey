@@ -57,37 +57,37 @@ training/
     ├── basic.mojo          # Basic training loop
     ├── validation.mojo     # Training loop with validation
     └── distributed.mojo    # Distributed training loop
-```
+```text
 
-## What Belongs in Training?
+## What Belongs in Training
 
 ### DO Include
 
-**Optimizers**:
+### Optimizers
 
 - Standard optimizers used across multiple papers (SGD, Adam, RMSprop, etc.)
 - Generic optimizer utilities (gradient clipping, weight decay, etc.)
 - Optimizer state management (momentum, running averages, etc.)
 
-**Schedulers**:
+### Schedulers
 
 - Common learning rate schedules (step decay, cosine annealing, etc.)
 - Generic scheduler utilities (warmup, cooldown, etc.)
 - Schedule composition and chaining
 
-**Metrics**:
+### Metrics
 
 - Standard evaluation metrics (accuracy, precision, recall, F1, etc.)
 - Loss tracking and aggregation
 - Metrics that multiple papers need
 
-**Callbacks**:
+### Callbacks
 
 - Common training callbacks (early stopping, checkpointing, logging)
 - Reusable callback interfaces
 - Callback composition and orchestration
 
-**Training Loops**:
+### Training Loops
 
 - Generic training loop patterns (basic loop, validation loop, etc.)
 - Training utilities (batch iteration, gradient accumulation, etc.)
@@ -95,20 +95,20 @@ training/
 
 ### DON'T Include
 
-**Paper-Specific Code**:
+### Paper-Specific Code
 
 - Custom optimizers designed for one paper only
 - Paper-specific hyperparameters or configurations
 - Domain-specific metrics (e.g., custom metrics for one experiment)
 - Experiment-specific callbacks
 
-**Configuration**:
+### Configuration
 
 - Training hyperparameters (learning rate values, batch sizes, etc.)
 - Model architecture definitions (these belong in shared/models or papers/)
 - Dataset-specific preprocessing (belongs in paper directory)
 
-**One-Off Utilities**:
+### One-Off Utilities
 
 - Helper functions used by only one paper
 - Experimental training techniques not yet validated across papers
@@ -176,7 +176,7 @@ loop.fit(
     val_data=val_loader,
     epochs=100
 )
-```
+```text
 
 ### Custom Training Loop Example
 
@@ -214,7 +214,7 @@ fn custom_training_loop(
         # Paper-specific logging or validation
         print("Epoch:", epoch, "Loss:", total_loss / len(train_data))
         print("Accuracy:", accuracy.compute())
-```
+```text
 
 ## Mojo-Specific Guidelines
 
@@ -223,9 +223,9 @@ fn custom_training_loop(
 The training library leverages Mojo's performance features:
 
 1. **SIMD Vectorization**: Use `SIMD` types for vectorized optimizer updates
-2. **Memory Safety**: Use ownership and borrowing for parameter updates
-3. **Type Safety**: Use strong typing with `struct` for optimizers and metrics
-4. **Zero-Cost Abstractions**: Use `@always_inline` for hot paths in training loops
+1. **Memory Safety**: Use ownership and borrowing for parameter updates
+1. **Type Safety**: Use strong typing with `struct` for optimizers and metrics
+1. **Zero-Cost Abstractions**: Use `@always_inline` for hot paths in training loops
 
 ### Code Style
 
@@ -276,19 +276,19 @@ trait Optimizer:
     fn zero_grad(self)
     fn get_lr(self) -> Float32
     fn set_lr(inout self, lr: Float32)
-```
+```text
 
 ### Performance Considerations
 
 1. **Minimize Allocations**: Reuse buffers for gradient updates and metric computation
-2. **Vectorize Updates**: Use SIMD for element-wise optimizer updates
-3. **Inline Hot Paths**: Use `@always_inline` for optimizer steps and metric updates
-4. **Avoid Copies**: Use borrowing for read-only access to parameters and gradients
-5. **Profile First**: Measure training loop performance before optimizing
+1. **Vectorize Updates**: Use SIMD for element-wise optimizer updates
+1. **Inline Hot Paths**: Use `@always_inline` for optimizer steps and metric updates
+1. **Avoid Copies**: Use borrowing for read-only access to parameters and gradients
+1. **Profile First**: Measure training loop performance before optimizing
 
 ### Training-Specific Performance Patterns
 
-**Optimizer Updates**:
+### Optimizer Updates
 
 ```mojo
 # GOOD: Vectorized, in-place update
@@ -308,9 +308,9 @@ fn sgd_update_scalar(params: Tensor, grads: Tensor, lr: Float32) -> Tensor:
     for i in range(params.size()):
         new_params[i] = params[i] - lr * grads[i]  # Scalar operations
     return new_params
-```
+```text
 
-**Metric Accumulation**:
+### Metric Accumulation
 
 ```mojo
 # GOOD: In-place accumulation with minimal allocations
@@ -338,7 +338,7 @@ def compute_accuracy(predictions: Tensor, targets: Tensor) -> Float32:
     """Non-optimal accuracy computation."""
     matches = predictions == targets  # Creates new tensor
     return matches.sum() / matches.size()  # More allocations
-```
+```text
 
 ## Testing
 
@@ -357,28 +357,28 @@ See `tests/training/` for test organization and examples.
 When adding new components to training:
 
 1. **Verify Shared Need**: Ensure at least 2-3 papers will use it
-2. **Write Tests First**: Follow TDD principles
-3. **Document Thoroughly**: Include docstrings, usage examples, and hyperparameter descriptions
-4. **Benchmark Performance**: Verify optimizer/metric performance is competitive
-5. **Review Carefully**: Training changes affect all papers
+1. **Write Tests First**: Follow TDD principles
+1. **Document Thoroughly**: Include docstrings, usage examples, and hyperparameter descriptions
+1. **Benchmark Performance**: Verify optimizer/metric performance is competitive
+1. **Review Carefully**: Training changes affect all papers
 
 ### Adding a New Optimizer
 
 1. Create `shared/training/optimizers/my_optimizer.mojo`
-2. Implement the `Optimizer` trait
-3. Write comprehensive tests in `tests/training/optimizers/test_my_optimizer.mojo`
-4. Benchmark against reference implementation (PyTorch, TensorFlow, etc.)
-5. Add usage example to this README
-6. Export from `shared/training/optimizers/__init__.mojo`
+1. Implement the `Optimizer` trait
+1. Write comprehensive tests in `tests/training/optimizers/test_my_optimizer.mojo`
+1. Benchmark against reference implementation (PyTorch, TensorFlow, etc.)
+1. Add usage example to this README
+1. Export from `shared/training/optimizers/__init__.mojo`
 
 ### Adding a New Metric
 
 1. Create `shared/training/metrics/my_metric.mojo`
-2. Implement the `Metric` trait
-3. Write tests with known ground truth values
-4. Verify numerical accuracy
-5. Add usage example to this README
-6. Export from `shared/training/metrics/__init__.mojo`
+1. Implement the `Metric` trait
+1. Write tests with known ground truth values
+1. Verify numerical accuracy
+1. Add usage example to this README
+1. Export from `shared/training/metrics/__init__.mojo`
 
 ## Performance Targets
 
@@ -401,7 +401,7 @@ var loop = BasicTrainingLoop(model, optimizer)
 loop.add_callback(EarlyStopping(patience=10))
 loop.add_callback(ModelCheckpoint("best_model.mojo"))
 loop.fit(train_data, val_data, epochs=100)
-```
+```text
 
 ### Pattern 2: Custom Training Loop with Standard Components
 
@@ -423,7 +423,7 @@ for epoch in range(epochs):
         # Standard optimizer step
         optimizer.step(model.parameters(), grads)
         scheduler.step()
-```
+```text
 
 ### Pattern 3: Composing Callbacks
 
@@ -442,7 +442,7 @@ for epoch in range(epochs):
     callbacks.on_epoch_begin(epoch)
     # Training logic...
     callbacks.on_epoch_end(epoch, logs)
-```
+```text
 
 ## Paper-Specific vs Shared Training Code
 
@@ -450,7 +450,7 @@ for epoch in range(epochs):
 
 **Located**: `shared/training/`
 
-**Contains**:
+### Contains
 
 - Generic optimizer implementations (SGD, Adam, etc.)
 - Standard learning rate schedulers
@@ -463,7 +463,7 @@ for epoch in range(epochs):
 
 **Located**: `papers/lenet5/training/` (or similar)
 
-**Contains**:
+### Contains
 
 - Paper-specific hyperparameters
 - Custom training configurations
@@ -482,7 +482,7 @@ Is this training code needed by multiple papers?
 │       └── NO: Consider if it's truly reusable
 └── NO: Put in papers/<paper-name>/training/
     └── Can be refactored to shared/ later if other papers need it
-```
+```text
 
 ## Related Documentation
 
@@ -494,7 +494,7 @@ Is this training code needed by multiple papers?
 
 ## Future Enhancements
 
-**Planned for Implementation Phase**:
+### Planned for Implementation Phase
 
 - Distributed training support (data parallel, model parallel)
 - Mixed precision training utilities (FP16, BF16)
@@ -505,7 +505,7 @@ Is this training code needed by multiple papers?
 - More comprehensive metrics (ROC-AUC, mAP, etc.)
 - Profiling and debugging callbacks
 
-**Long-term Goals**:
+### Long-term Goals
 
 - Automatic mixed precision (AMP) support
 - Distributed training across multiple machines

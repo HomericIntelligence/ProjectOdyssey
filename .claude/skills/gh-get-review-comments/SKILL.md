@@ -25,7 +25,7 @@ gh api repos/{owner}/{repo}/pulls/{pr-number}/comments --jq '.[] | select(.user.
 
 # Get only unresolved comments
 gh api repos/{owner}/{repo}/pulls/{pr-number}/comments --jq '.[] | select(.in_reply_to_id == null)'
-```
+```text
 
 ## Output Format
 
@@ -46,23 +46,23 @@ Comments are returned with:
 
 ## Examples
 
-**Get all comments:**
+### Get all comments:
 
 ```bash
 ./scripts/fetch_comments.sh 42
-```
+```text
 
-**Filter by reviewer:**
+### Filter by reviewer:
 
 ```bash
 ./scripts/fetch_comments.sh 42 reviewer-username
-```
+```text
 
-**Get unresolved only:**
+### Get unresolved only:
 
 ```bash
 ./scripts/fetch_comments.sh 42 --unresolved
-```
+```text
 
 ## Script
 

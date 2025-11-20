@@ -28,7 +28,7 @@ Create a CODE_OF_CONDUCT.md file that establishes community guidelines and expec
 
 **Decision**: Use the Contributor Covenant as the Code of Conduct template.
 
-**Rationale**:
+### Rationale
 
 - Industry standard: Most widely adopted code of conduct in open source
 - Comprehensive: Covers all essential community guidelines
@@ -36,7 +36,7 @@ Create a CODE_OF_CONDUCT.md file that establishes community guidelines and expec
 - Community accepted: Respected and recognized across the ecosystem
 - Battle-tested: Used by thousands of projects successfully
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Custom code of conduct: Rejected due to risk of missing important protections and lack of community familiarity
 - Other templates (e.g., Django, Citizen Code of Conduct): Rejected as they offer similar content but lack the widespread recognition of Contributor Covenant
@@ -45,20 +45,20 @@ Create a CODE_OF_CONDUCT.md file that establishes community guidelines and expec
 
 **Decision**: Minimal customization, focusing only on required project-specific information.
 
-**Rationale**:
+### Rationale
 
 - Maintains template integrity: Preserves the legal and ethical strength of the original
 - Reduces maintenance burden: Template updates can be more easily integrated
 - Clarity for contributors: Familiar structure for those who have seen it in other projects
 - Professional appearance: Well-crafted language that has been reviewed by experts
 
-**Required Customizations**:
+### Required Customizations
 
 - Contact information: Add project maintainer email(s) for reporting issues
 - Enforcement contacts: Specify who reviews and enforces the code
 - Project name: Replace placeholders with "ML Odyssey"
 
-**Customizations to Avoid**:
+### Customizations to Avoid
 
 - Modifying core behavioral standards
 - Changing enforcement process structure
@@ -68,7 +68,7 @@ Create a CODE_OF_CONDUCT.md file that establishes community guidelines and expec
 
 **Decision**: Place CODE_OF_CONDUCT.md at repository root.
 
-**Rationale**:
+### Rationale
 
 - GitHub convention: Standard location for code of conduct files
 - High visibility: Easy for contributors to find
@@ -79,7 +79,7 @@ Create a CODE_OF_CONDUCT.md file that establishes community guidelines and expec
 
 **Decision**: Use project maintainer as initial point of contact, with option to escalate externally if needed.
 
-**Rationale**:
+### Rationale
 
 - Small project size: Currently a solo/small team project, maintainer review is appropriate
 - Flexibility: Can adapt enforcement as project grows
@@ -91,12 +91,12 @@ Create a CODE_OF_CONDUCT.md file that establishes community guidelines and expec
 The Code of Conduct will include these standard sections:
 
 1. **Our Pledge**: Commitment to inclusive, harassment-free environment
-2. **Our Standards**: Examples of positive and negative behaviors
-3. **Enforcement Responsibilities**: Who enforces and how
-4. **Scope**: Where the code applies (project spaces, public spaces when representing)
-5. **Enforcement**: Process for reporting and consequences
-6. **Enforcement Guidelines**: Clear levels of violations and responses
-7. **Attribution**: Credit to Contributor Covenant
+1. **Our Standards**: Examples of positive and negative behaviors
+1. **Enforcement Responsibilities**: Who enforces and how
+1. **Scope**: Where the code applies (project spaces, public spaces when representing)
+1. **Enforcement**: Process for reporting and consequences
+1. **Enforcement Guidelines**: Clear levels of violations and responses
+1. **Attribution**: Credit to Contributor Covenant
 
 **Rationale**: This structure is comprehensive, clear, and familiar to open source contributors.
 
@@ -120,7 +120,7 @@ The Code of Conduct will include these standard sections:
    - Check all placeholders replaced
    - Validate contact information
    - Ensure enforcement procedures are clear
-```
+```text
 
 ### Integration Points
 
@@ -190,9 +190,9 @@ This section will be populated during the implementation phase (Issues #717-#720
 
 **Planning Status**: Complete
 
-**Next Steps**:
+### Next Steps
 
 1. Issue #717 (Test): Define validation tests for CODE_OF_CONDUCT.md
-2. Issue #718 (Implementation): Create and customize CODE_OF_CONDUCT.md
-3. Issue #719 (Packaging): Integrate with repository documentation
-4. Issue #720 (Cleanup): Final review and refinements
+1. Issue #718 (Implementation): Create and customize CODE_OF_CONDUCT.md
+1. Issue #719 (Packaging): Integrate with repository documentation
+1. Issue #720 (Cleanup): Final review and refinements

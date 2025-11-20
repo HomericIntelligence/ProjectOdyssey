@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Define learning objectives and prerequisites
-2. Create step-by-step tutorial structure
-3. Generate explanations and examples
-4. Validate all code examples work
+1. Create step-by-step tutorial structure
+1. Generate explanations and examples
+1. Validate all code examples work
 
 ## Success Criteria
 

@@ -64,9 +64,9 @@ without overlap.
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -161,14 +161,14 @@ Fix: [2-3 line solution or link to documentation]
 See: [link to comprehensive doc if needed]
 ```text
 
-**Severity Emojis**:
+### Severity Emojis
 
 - 🔴 CRITICAL - Must fix before merge (security, safety, correctness)
 - 🟠 MAJOR - Should fix before merge (performance, maintainability)
 - 🟡 MINOR - Nice to have (style, clarity)
 - 🔵 INFO - Informational (suggestions, alternatives)
 
-**Guidelines**:
+### Guidelines
 
 - Keep each comment under 15 lines
 - Be specific about file:line locations
@@ -182,23 +182,23 @@ See: [link to comprehensive doc if needed]
 When you receive review feedback:
 
 1. **Read ALL review comments** thoroughly
-2. **Make the requested changes** for each issue
-3. **Reply to EACH comment** individually with a brief update
+1. **Make the requested changes** for each issue
+1. **Reply to EACH comment** individually with a brief update
 
-**Reply Format**:
+### Reply Format
 
 ```bash
 gh pr comment `pr-number` --body "✅ Fixed - [brief description of what was done]"
 ```text
 
-**Example Responses**:
+### Example Responses
 
 - `✅ Fixed - Removed unused imports from all 3 files`
 - `✅ Fixed - Added error handling for division by zero`
 - `✅ Fixed - Updated documentation to match new API`
 - `✅ Fixed - Refactored to use list comprehension`
 
-**Guidelines**:
+### Guidelines
 
 - Keep replies SHORT (1 line preferred, 2-3 lines max)
 - Start with ✅ to indicate resolution
@@ -211,9 +211,9 @@ gh pr comment `pr-number` --body "✅ Fixed - [brief description of what was don
 As the Code Review Orchestrator:
 
 1. **Ensure specialists follow batching guidelines** - Remind them to group similar issues
-2. **Monitor response completeness** - Verify developers reply to all comments
-3. **Track unresolved comments** - Follow up on comments without replies
-4. **Consolidate feedback** - If multiple specialists flag the same issue, consolidate into one comment
+1. **Monitor response completeness** - Verify developers reply to all comments
+1. **Track unresolved comments** - Follow up on comments without replies
+1. **Consolidate feedback** - If multiple specialists flag the same issue, consolidate into one comment
 
 See [CLAUDE.md](../../CLAUDE.md#handling-pr-review-comments) for complete review comment guidelines.
 
@@ -308,7 +308,7 @@ See [CLAUDE.md](../../CLAUDE.md#handling-pr-review-comments) for complete review
 
 ### Example 1: New ML Algorithm Implementation
 
-**Changed Files**:
+### Changed Files
 
 ```text
 src/algorithms/lenet5.mojo
@@ -316,13 +316,13 @@ tests/test_lenet5.mojo
 docs/algorithms/lenet5.md
 ```text
 
-**Analysis**:
+### Analysis
 
 - New ML algorithm in Mojo
 - Includes tests and documentation
 - Performance-critical code path
 
-**Routing**:
+### Routing
 
 ```text
 ✅ Algorithm Review Specialist → Verify mathematical correctness vs paper
@@ -338,7 +338,7 @@ docs/algorithms/lenet5.md
 ❌ NOT Data Engineering (algorithm only, not data pipeline)
 ```text
 
-**Consolidation**:
+### Consolidation
 
 - Collect all specialist feedback
 - Ensure no conflicts (e.g., performance vs safety trade-offs)
@@ -346,7 +346,7 @@ docs/algorithms/lenet5.md
 
 ### Example 2: Data Pipeline Refactor
 
-**Changed Files**:
+### Changed Files
 
 ```text
 src/data/loader.mojo
@@ -355,14 +355,14 @@ tests/test_data_pipeline.py
 requirements.txt (added Pillow)
 ```text
 
-**Analysis**:
+### Analysis
 
 - Data loading and augmentation changes
 - Mixed Mojo/Python code
 - New Python dependency
 - Performance-sensitive
 
-**Routing**:
+### Routing
 
 ```text
 ✅ Data Engineering Review Specialist → Data pipeline correctness
@@ -380,7 +380,7 @@ requirements.txt (added Pillow)
 
 ### Example 3: Research Paper Draft
 
-**Changed Files**:
+### Changed Files
 
 ```text
 papers/lenet5/paper.md
@@ -388,13 +388,13 @@ papers/lenet5/figures/
 papers/lenet5/references.bib
 ```text
 
-**Analysis**:
+### Analysis
 
 - Academic paper for LeNet-5 reproduction
 - Includes figures and citations
 - No code changes
 
-**Routing**:
+### Routing
 
 ```text
 ✅ Paper Review Specialist → Academic writing quality, citations
@@ -408,7 +408,7 @@ papers/lenet5/references.bib
 
 ### Example 4: Security-Sensitive Feature
 
-**Changed Files**:
+### Changed Files
 
 ```text
 src/auth/authentication.mojo
@@ -416,13 +416,13 @@ src/auth/session.mojo
 tests/test_auth.mojo
 ```text
 
-**Analysis**:
+### Analysis
 
 - Authentication and session management
 - Security-critical code
 - Memory-sensitive (session storage)
 
-**Routing**:
+### Routing
 
 ```text
 ✅ Security Review Specialist → Authentication logic, session management
@@ -439,7 +439,7 @@ tests/test_auth.mojo
 
 ### Example 5: Dependency Update
 
-**Changed Files**:
+### Changed Files
 
 ```text
 requirements.txt
@@ -447,13 +447,13 @@ pixi.toml
 pixi.lock
 ```text
 
-**Analysis**:
+### Analysis
 
 - Python and Mojo dependency updates
 - Potential breaking changes
 - Security implications
 
-**Routing**:
+### Routing
 
 ```text
 ✅ Dependency Review Specialist → Version compatibility, conflicts
@@ -494,9 +494,9 @@ Each aspect of code is reviewed along independent dimensions:
 When specialists disagree:
 
 1. **Performance vs Safety**: Safety wins (secure first, optimize later)
-2. **Simplicity vs Performance**: Depends on critical path (document decision)
-3. **Purity vs Practicality**: Pragmatic approach (documented exceptions)
-4. **Architecture vs Implementation**: Architecture wins (specialists implement architecture decisions)
+1. **Simplicity vs Performance**: Depends on critical path (document decision)
+1. **Purity vs Practicality**: Pragmatic approach (documented exceptions)
+1. **Architecture vs Implementation**: Architecture wins (specialists implement architecture decisions)
 
 Escalate to Chief Architect if architectural philosophy conflict.
 
@@ -513,8 +513,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -545,7 +545,7 @@ After creating PR:
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -568,6 +568,7 @@ After creating PR:
 ### PR Review Automation
 
 Use the `gh-review-pr` skill for comprehensive PR reviews:
+
 - **Invoke when**: Initial PR review, evaluating pull request quality
 - **The skill handles**: Code changes check, CI status, test coverage, standards adherence
 - **See**: [gh-review-pr skill](../.claude/skills/gh-review-pr/SKILL.md)
@@ -575,6 +576,7 @@ Use the `gh-review-pr` skill for comprehensive PR reviews:
 ### Review Comment Management
 
 Use the `gh-get-review-comments` skill to retrieve review feedback:
+
 - **Invoke when**: Collecting reviewer feedback, analyzing review status
 - **The skill handles**: Fetches all review comments using correct GitHub API
 - **See**: [gh-get-review-comments skill](../.claude/skills/gh-get-review-comments/SKILL.md)
@@ -582,6 +584,7 @@ Use the `gh-get-review-comments` skill to retrieve review feedback:
 ### Feedback Coordination
 
 Use the `gh-fix-pr-feedback` skill to coordinate feedback resolution:
+
 - **Invoke when**: PR has review comments to address
 - **The skill handles**: Coordinates changes across specialists and replies to comments
 - **See**: [gh-fix-pr-feedback skill](../.claude/skills/gh-fix-pr-feedback/SKILL.md)
@@ -589,6 +592,7 @@ Use the `gh-fix-pr-feedback` skill to coordinate feedback resolution:
 ### Reply Automation
 
 Use the `gh-reply-review-comment` skill to reply to review comments:
+
 - **Invoke when**: Responding to inline code review feedback
 - **The skill handles**: Uses correct API for review comment replies
 - **See**: [gh-reply-review-comment skill](../.claude/skills/gh-reply-review-comment/SKILL.md)
@@ -596,6 +600,7 @@ Use the `gh-reply-review-comment` skill to reply to review comments:
 ### CI Monitoring
 
 Use the `gh-check-ci-status` skill to monitor CI during review:
+
 - **Invoke when**: Checking if CI passes, monitoring build status
 - **The skill handles**: Retrieves CI status and failure details
 - **See**: [gh-check-ci-status skill](../.claude/skills/gh-check-ci-status/SKILL.md)
@@ -644,13 +649,13 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Implementing a new component across multiple subsections
 
-**Actions**:
+### Actions
 
 1. Break down component into design, implementation, and testing phases
-2. Delegate design work to design agents
-3. Delegate implementation to implementation specialists
-4. Coordinate parallel work streams
-5. Monitor progress and resolve blockers
+1. Delegate design work to design agents
+1. Delegate implementation to implementation specialists
+1. Coordinate parallel work streams
+1. Monitor progress and resolve blockers
 
 **Outcome**: Component delivered with all phases complete and integrated
 
@@ -658,11 +663,11 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Two subsections have conflicting approaches to shared interface
 
-**Actions**:
+### Actions
 
 1. Identify dependency conflict between subsections
-2. Escalate to design agents for interface specification
-3. Coordinate implementation updates across both subsections
-4. Validate integration through testing phase
+1. Escalate to design agents for interface specification
+1. Coordinate implementation updates across both subsections
+1. Validate integration through testing phase
 
 **Outcome**: Unified interface with both components working correctly

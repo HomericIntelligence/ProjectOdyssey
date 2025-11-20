@@ -31,9 +31,9 @@ None (top-level)
 ## Steps
 
 1. Implement core mathematical operations including tensor ops, activations, initializers, and metrics
-2. Build training utilities with base trainer, learning rate schedulers, and callback system
-3. Create data utilities for dataset handling, data loading, and augmentations
-4. Establish testing framework with unit tests and coverage reporting
+1. Build training utilities with base trainer, learning rate schedulers, and callback system
+1. Create data utilities for dataset handling, data loading, and augmentations
+1. Establish testing framework with unit tests and coverage reporting
 
 ## Success Criteria
 

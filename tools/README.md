@@ -12,7 +12,7 @@ common development tasks.
 
 **Development Support**: Tools that developers use directly during implementation work.
 
-**Key Distinctions**:
+### Key Distinctions
 
 - **`tools/`**: Development utilities used by developers during implementation
 - **`scripts/`**: Automation scripts for repository management and CI/CD
@@ -24,14 +24,14 @@ common development tasks.
 
 Generate complete directory structures and boilerplate for new paper implementations.
 
-**Available Now**:
+### Available Now
 
 - `scaffold.py` - CLI tool for generating paper structure
 - Template system with variable substitution
 - Model, training, and test file stubs
 - Documentation scaffolding (README, notes)
 
-**Usage**:
+### Usage
 
 ```bash
 python tools/paper-scaffold/scaffold.py \
@@ -41,20 +41,20 @@ python tools/paper-scaffold/scaffold.py \
     --year 1998 \
     --url "http://..." \
     --output papers/
-```
+```text
 
 ### 2. Testing Utilities (`test-utils/`)
 
 Reusable testing components for ML implementations.
 
-**Available Now**:
+### Available Now
 
 - `data_generators.mojo` - Tensor generation utilities (Mojo)
 - `fixtures.mojo` - Test model fixtures (Mojo)
 - Random, zero, and one-filled tensor generation
 - SimpleCNN and LinearModel test fixtures
 
-**Future**:
+### Future
 
 - Coverage analysis tools
 - More sophisticated data distributions
@@ -63,7 +63,7 @@ Reusable testing components for ML implementations.
 
 Performance measurement and tracking tools.
 
-**Available Now**:
+### Available Now
 
 - `benchmark.mojo` - Core benchmarking framework (Mojo)
 - `runner.mojo` - Benchmark suite runner (Mojo)
@@ -71,7 +71,7 @@ Performance measurement and tracking tools.
 - Throughput calculation
 - Warmup iteration support
 
-**Future**:
+### Future
 
 - Memory usage tracking
 - Performance report generation (JSON/visualization)
@@ -80,14 +80,14 @@ Performance measurement and tracking tools.
 
 Boilerplate and pattern generators for common ML code.
 
-**Available Now**:
+### Available Now
 
 - `mojo_boilerplate.py` - Struct and layer generators (Python)
 - `training_template.py` - Training loop generator (Python)
 - Linear and Conv2D layer templates
 - Customizable optimizer and loss function
 
-**Future**:
+### Future
 
 - Data pipeline generators
 - Metrics calculation code
@@ -116,8 +116,8 @@ Tools will be added incrementally as needed. Each tool will include:
 ### Adding a New Tool
 
 1. **Identify Need**: Document the problem being solved
-2. **Choose Language**: Follow ADR-001 decision tree
-3. **Create Structure**:
+1. **Choose Language**: Follow ADR-001 decision tree
+1. **Create Structure**:
 
    ```text
    tools/<category>/<tool_name>/
@@ -127,8 +127,8 @@ Tools will be added incrementally as needed. Each tool will include:
    └── examples/
    ```
 
-4. **Document**: Write clear usage documentation
-5. **Test**: Add comprehensive test coverage
+1. **Document**: Write clear usage documentation
+1. **Test**: Add comprehensive test coverage
 
 ### Design Principles
 
@@ -147,7 +147,7 @@ tools/
 ├── test-utils/          # Testing utilities
 ├── benchmarking/        # Performance benchmarking
 └── codegen/             # Code generation utilities
-```
+```text
 
 ## Comparison with scripts/
 

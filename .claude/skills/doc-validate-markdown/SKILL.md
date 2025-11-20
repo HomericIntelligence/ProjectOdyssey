@@ -25,7 +25,7 @@ npx markdownlint-cli2 README.md
 
 # Fix auto-fixable issues
 npx markdownlint-cli2 --fix "**/*.md"
-```
+```text
 
 ## Common Issues
 
@@ -33,14 +33,17 @@ npx markdownlint-cli2 --fix "**/*.md"
 
 ````markdown
 # ❌ Wrong
-```
-code here
-```
+```text
 
+code here
+
+```text
 # ✅ Correct
 ```python
+
 code here
-```
+
+```text
 ````
 
 ### MD031: Blank lines around code blocks
@@ -49,8 +52,10 @@ code here
 # ❌ Wrong
 Text before
 ```python
+
 code
-```
+
+```text
 Text after
 
 # ✅ Correct
@@ -58,9 +63,10 @@ Text after
 Text before
 
 ```python
-code
-```
 
+code
+
+```text
 Text after
 ````
 
@@ -77,6 +83,6 @@ line-length:
   line_length: 120
   code_blocks: false
   tables: false
-```
+```text
 
 See `quality-run-linters` for complete linting workflow.

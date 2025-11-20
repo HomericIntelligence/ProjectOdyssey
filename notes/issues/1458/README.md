@@ -34,23 +34,29 @@ As specified in the issue description.
 ## Implementation Notes
 
 ## Overview
+
 Create a prompt template for analyzing research papers and extracting key information like problem statement, methodology, architecture, results, and implementation details. The template uses structured XML tags and few-shot examples.
 
 ## Testing Objectives
+
 This phase focuses on:
+
 - Writing comprehensive test cases following TDD principles
 - Creating test fixtures and mock data
 - Defining test scenarios for edge cases
 - Setting up test infrastructure
 
 ## What to Test
+
 Based on the expected outputs:
+
 - Paper analyzer prompt template
 - Few-shot examples of paper analysis
 - Structured output format with XML tags
 - Guidelines for extracting key information
 
 ## Test Success Criteria
+
 - [ ] Template extracts all key paper sections
 - [ ] Output uses consistent XML structure
 - [ ] Few-shot examples demonstrate expected quality
@@ -58,12 +64,14 @@ Based on the expected outputs:
 - [ ] Analysis includes implementation-relevant details
 
 ## Implementation Steps
+
 1. Design structured output format with XML tags
-2. Create prompt with clear analysis instructions
-3. Add 2-3 few-shot examples
-4. Define extraction guidelines for each section
+1. Create prompt with clear analysis instructions
+1. Add 2-3 few-shot examples
+1. Define extraction guidelines for each section
 
 ## Notes
+
 Focus on extracting information useful for implementation: problem formulation, mathematical foundations, architecture details, hyperparameters, and training procedures. Use XML tags like <problem>, <method>, <architecture>, <results>.
 
 ## Status

@@ -32,8 +32,8 @@ Create end-to-end workflows that chain together review templates and tools to pe
 ## Steps
 
 1. Create PR review workflow combining all review types
-2. Create code quality check workflow with automated tools
-3. Create improvement suggestion workflow with prioritization
+1. Create code quality check workflow with automated tools
+1. Create improvement suggestion workflow with prioritization
 
 ## Success Criteria
 

@@ -28,8 +28,8 @@ Create a step-by-step guide that enables anyone to reproduce the LeNet-5 results
 ## Steps
 
 1. Setup Instructions
-2. Training Commands
-3. Expected Results
+1. Training Commands
+1. Expected Results
 
 ## Success Criteria
 

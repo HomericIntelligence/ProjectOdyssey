@@ -32,8 +32,8 @@ Create structured prompt templates for the research assistant's main capabilitie
 ## Steps
 
 1. Create paper analyzer template with structured analysis format
-2. Create architecture suggester template with design patterns
-3. Create implementation reviewer template with code review guidelines
+1. Create architecture suggester template with design patterns
+1. Create implementation reviewer template with code review guidelines
 
 ## Success Criteria
 

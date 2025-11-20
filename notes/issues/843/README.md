@@ -130,11 +130,11 @@ Comprehensive validation before release:
 All refactored code must meet these standards:
 
 1. **Type Safety**: Full type hints on all functions
-2. **Error Handling**: Comprehensive try-catch blocks with meaningful error messages
-3. **Documentation**: Docstrings on all public functions
-4. **Testing**: 100% test coverage for threshold validation logic
-5. **Performance**: Threshold checking should complete in < 1 second for typical codebases
-6. **Maintainability**: Clear, readable code with meaningful variable names
+1. **Error Handling**: Comprehensive try-catch blocks with meaningful error messages
+1. **Documentation**: Docstrings on all public functions
+1. **Testing**: 100% test coverage for threshold validation logic
+1. **Performance**: Threshold checking should complete in < 1 second for typical codebases
+1. **Maintainability**: Clear, readable code with meaningful variable names
 
 ### Configuration Management
 
@@ -149,7 +149,7 @@ coverage:
     new_files: 90.0  # New files must be at least 90%
   grace_period: 7  # Days for new files to meet thresholds
   block_ci: true  # Block CI/CD on threshold violations
-```
+```text
 
 ### Exit Code Behavior
 
@@ -261,21 +261,21 @@ Violations should be reported clearly with:
 After completing this cleanup phase, the Check Thresholds feature will be:
 
 1. **Production-Ready**: Code meets all quality standards with comprehensive testing
-2. **Well-Documented**: Complete documentation for users, developers, and operators
-3. **Easy to Integrate**: Clear integration guide for CI/CD pipelines
-4. **Maintainable**: Code structure supports future enhancements
-5. **Performant**: Optimized for real-world usage patterns
-6. **Reliable**: Comprehensive error handling and edge case coverage
+1. **Well-Documented**: Complete documentation for users, developers, and operators
+1. **Easy to Integrate**: Clear integration guide for CI/CD pipelines
+1. **Maintainable**: Code structure supports future enhancements
+1. **Performant**: Optimized for real-world usage patterns
+1. **Reliable**: Comprehensive error handling and edge case coverage
 
 ## Notes and Assumptions
 
 ### Implementation Assumptions
 
 1. Coverage metrics are obtained from standard coverage tools (coverage.py, pytest-cov, etc.)
-2. Configuration files follow YAML or JSON format
-3. Project structure follows standard conventions
-4. CI/CD system supports exit code validation
-5. Multiple threshold levels (overall, per-file, per-type) may be needed
+1. Configuration files follow YAML or JSON format
+1. Project structure follows standard conventions
+1. CI/CD system supports exit code validation
+1. Multiple threshold levels (overall, per-file, per-type) may be needed
 
 ### Known Limitations
 
@@ -299,13 +299,13 @@ These items are for future releases, not this cleanup phase:
 ### For Architecture Review
 
 1. Should threshold validation be a separate tool or integrated into test runner?
-2. What configuration format should be used (YAML, TOML, JSON)?
-3. Should there be different thresholds for different file types (tests vs source)?
-4. How should the grace period for new files be determined?
+1. What configuration format should be used (YAML, TOML, JSON)?
+1. Should there be different thresholds for different file types (tests vs source)?
+1. How should the grace period for new files be determined?
 
 ### For Implementation Team
 
 1. Which coverage tools should be supported initially?
-2. Should per-file thresholds be optional or required?
-3. How detailed should violation reports be?
-4. What's the performance target for large codebases?
+1. Should per-file thresholds be optional or required?
+1. How detailed should violation reports be?
+1. What's the performance target for large codebases?

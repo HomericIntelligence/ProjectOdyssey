@@ -14,11 +14,11 @@ This skill creates and manages git worktrees for parallel development on multipl
 - Want to isolate development environments
 - Testing changes across different branches
 
-## What are Worktrees?
+## What are Worktrees
 
 Git worktrees allow multiple working directories from the same repository, each on a different branch.
 
-**Benefits:**
+### Benefits:
 
 - Work on multiple branches simultaneously
 - No need to stash/commit when switching contexts
@@ -35,7 +35,7 @@ Git worktrees allow multiple working directories from the same repository, each 
 
 # Example: Create worktree for issue #42
 ./scripts/create_worktree.sh 42 "implement-tensor-ops"
-```
+```text
 
 This creates:
 
@@ -48,17 +48,17 @@ This creates:
 # List all worktrees
 git worktree list
 
-# Example output:
+# Example output
 # /home/user/ml-odyssey        abc1234 [main]
 # /home/user/ml-odyssey-42     def5678 [42-implement-tensor-ops]
-```
+```text
 
 ### Switch Between Worktrees
 
 ```bash
 # Just cd to different worktree
 cd ../ml-odyssey-42-implement-tensor-ops
-```
+```text
 
 ### Remove Worktree
 
@@ -66,9 +66,9 @@ cd ../ml-odyssey-42-implement-tensor-ops
 # Remove worktree when done
 ./scripts/remove_worktree.sh <issue-number>
 
-# Or manually:
+# Or manually
 git worktree remove ../ml-odyssey-42-implement-tensor-ops
-```
+```text
 
 ## Directory Structure
 
@@ -78,15 +78,15 @@ parent-directory/
 ├── ml-odyssey-42-feature/         # Worktree for issue #42
 ├── ml-odyssey-73-bugfix/          # Worktree for issue #73
 └── ml-odyssey-dev-experiment/     # Worktree for experimentation
-```
+```text
 
 ## Best Practices
 
 1. **One worktree per issue** - Keep work isolated
-2. **Descriptive names** - Use issue number + description
-3. **Clean up when done** - Remove merged worktrees
-4. **Shared git directory** - All worktrees share same .git
-5. **Independent branches** - Each worktree on different branch
+1. **Descriptive names** - Use issue number + description
+1. **Clean up when done** - Remove merged worktrees
+1. **Shared git directory** - All worktrees share same .git
+1. **Independent branches** - Each worktree on different branch
 
 ## Workflow Example
 
@@ -104,7 +104,7 @@ cd ../ml-odyssey-73-fix-bug
 
 # Return to original worktree
 cd ../ml-odyssey
-```
+```text
 
 ## Error Handling
 
@@ -121,31 +121,31 @@ cd ../ml-odyssey
 
 ## Examples
 
-**Create worktree for new feature:**
+### Create worktree for new feature:
 
 ```bash
 ./scripts/create_worktree.sh 42 "tensor-operations"
 # Creates: ../ml-odyssey-42-tensor-operations/
-```
+```text
 
-**Create worktree with custom location:**
+### Create worktree with custom location:
 
 ```bash
 ./scripts/create_worktree.sh 42 "bugfix" "/tmp/worktrees"
 # Creates: /tmp/worktrees/ml-odyssey-42-bugfix/
-```
+```text
 
-**List all worktrees:**
+### List all worktrees:
 
 ```bash
 git worktree list
-```
+```text
 
-**Clean up merged worktrees:**
+### Clean up merged worktrees:
 
 ```bash
 ./scripts/cleanup_worktrees.sh
-```
+```text
 
 ## Scripts Available
 

@@ -22,8 +22,9 @@
 
 **Evidence**: `scripts/lint_configs.py` (537 lines)
 
-**Closure Message Template**:
-```
+### Closure Message Template
+
+```text
 Closing: Linting infrastructure fully implemented.
 
 Evidence:
@@ -41,7 +42,7 @@ Evidence:
 Implementation complete ✅
 
 Note: Test coverage tracked in #1358 (kept open)
-```
+```text
 
 ---
 
@@ -51,8 +52,9 @@ Note: Test coverage tracked in #1358 (kept open)
 
 **Evidence**: `.pre-commit-config.yaml` (46 lines, 7 hooks)
 
-**Closure Message Template**:
-```
+### Closure Message Template
+
+```text
 Closing: Pre-commit hooks system fully implemented.
 
 Evidence:
@@ -69,7 +71,7 @@ Evidence:
 - All success criteria met
 
 Implementation complete ✅
-```
+```text
 
 ---
 
@@ -79,8 +81,9 @@ Implementation complete ✅
 
 **Evidence**: `.github/ISSUE_TEMPLATE/01-bug-report.yml` (1,287 bytes)
 
-**Closure Message Template**:
-```
+### Closure Message Template
+
+```text
 Closing: Bug report issue template fully implemented.
 
 Evidence:
@@ -95,7 +98,7 @@ Evidence:
 Implementation complete ✅
 
 Note: Test coverage tracked in #1368 (kept open)
-```
+```text
 
 ---
 
@@ -105,8 +108,9 @@ Note: Test coverage tracked in #1368 (kept open)
 
 **Evidence**: `.github/ISSUE_TEMPLATE/02-feature-request.yml` (1,266 bytes)
 
-**Closure Message Template**:
-```
+### Closure Message Template
+
+```text
 Closing: Feature request issue template fully implemented.
 
 Evidence:
@@ -121,7 +125,7 @@ Evidence:
 Implementation complete ✅
 
 Note: Test coverage tracked in #1373 (kept open)
-```
+```text
 
 ---
 
@@ -131,8 +135,9 @@ Note: Test coverage tracked in #1373 (kept open)
 
 **Evidence**: `.github/ISSUE_TEMPLATE/03-paper-implementation.yml` (1,801 bytes)
 
-**Closure Message Template**:
-```
+### Closure Message Template
+
+```text
 Closing: Paper implementation issue template fully implemented.
 
 Evidence:
@@ -148,7 +153,7 @@ Evidence:
 Implementation complete ✅
 
 Note: Test coverage tracked in #1383 (kept open)
-```
+```text
 
 ---
 
@@ -158,8 +163,9 @@ Note: Test coverage tracked in #1383 (kept open)
 
 **Evidence**: `.github/ISSUE_TEMPLATE/04-documentation.yml` (1,573 bytes)
 
-**Closure Message Template**:
-```
+### Closure Message Template
+
+```text
 Closing: Documentation issue template fully implemented.
 
 Evidence:
@@ -174,7 +180,7 @@ Evidence:
 Implementation complete ✅
 
 Note: Test coverage tracked in #1388 (kept open)
-```
+```text
 
 ---
 
@@ -182,8 +188,9 @@ Note: Test coverage tracked in #1388 (kept open)
 
 **Evidence**: `.github/ISSUE_TEMPLATE/05-infrastructure.yml` (1,611 bytes)
 
-**Closure Message Template**:
-```
+### Closure Message Template
+
+```text
 Closing: Infrastructure issue template fully implemented.
 
 Evidence:
@@ -195,7 +202,7 @@ Evidence:
 - All success criteria met
 
 Implementation complete ✅
-```
+```text
 
 ---
 
@@ -203,8 +210,9 @@ Implementation complete ✅
 
 **Evidence**: `.github/ISSUE_TEMPLATE/06-question.yml` (1,198 bytes)
 
-**Closure Message Template**:
-```
+### Closure Message Template
+
+```text
 Closing: Question/support issue template fully implemented.
 
 Evidence:
@@ -216,7 +224,7 @@ Evidence:
 - All success criteria met
 
 Implementation complete ✅
-```
+```text
 
 ---
 
@@ -226,8 +234,9 @@ Implementation complete ✅
 
 **Evidence**: `.github/PULL_REQUEST_TEMPLATE/pull_request_template.md` (137 bytes)
 
-**Closure Message Template**:
-```
+### Closure Message Template
+
+```text
 Closing: Basic PR template structure implemented.
 
 Evidence:
@@ -241,7 +250,7 @@ Evidence:
 Implementation complete ✅
 
 Note: Enhancements (comprehensive checklist, additional sections) tracked in separate issues
-```
+```text
 
 ---
 
@@ -255,7 +264,8 @@ Note: Enhancements (comprehensive checklist, additional sections) tracked in sep
 
 **Status**: ❌ NOT IMPLEMENTED
 
-**Required Work**:
+### Required Work
+
 Create `.github/ISSUE_TEMPLATE/07-performance-issue.yml` with:
 
 ```yaml
@@ -328,16 +338,17 @@ body:
       label: Profiling Data
       description: Include profiling results if available
       placeholder: "Paste profiling output or attach file..."
-```
+```text
 
 **Estimated Time**: 1-2 hours
 
-**Action Items**:
+### Action Items
+
 1. Create template file
-2. Test template appears in GitHub UI
-3. Verify auto-labels work
-4. Update `.github/ISSUE_TEMPLATE/config.yml` if needed
-5. Close all 5 issues after implementation
+1. Test template appears in GitHub UI
+1. Verify auto-labels work
+1. Update `.github/ISSUE_TEMPLATE/config.yml` if needed
+1. Close all 5 issues after implementation
 
 ---
 
@@ -347,7 +358,8 @@ body:
 
 **Status**: ⚠️ PARTIAL (implementation exists, tests missing)
 
-**Required Work**:
+### Required Work
+
 Create `tests/scripts/test_lint_configs.py`:
 
 ```python
@@ -386,7 +398,7 @@ def test_performance_threshold_checks():
 def test_error_message_formatting():
     """Test error messages include file:line"""
     pass
-```
+```text
 
 **Estimated Time**: 2-3 hours
 
@@ -396,7 +408,8 @@ def test_error_message_formatting():
 
 **Status**: ⚠️ PARTIAL (templates exist, validation tests missing)
 
-**Required Work**:
+### Required Work
+
 Create `tests/github/test_issue_templates.py`:
 
 ```python
@@ -435,7 +448,7 @@ def test_all_templates_have_labels():
 def test_template_yaml_syntax():
     """Test all templates are valid YAML"""
     pass
-```
+```text
 
 **Estimated Time**: 2-3 hours
 
@@ -445,7 +458,8 @@ def test_template_yaml_syntax():
 
 **Status**: ⚠️ PARTIAL (basic template exists, validation tests missing)
 
-**Required Work**:
+### Required Work
+
 Create `tests/github/test_pr_template.py`:
 
 ```python
@@ -471,14 +485,14 @@ def test_pr_template_markdown_valid():
     """Test PR template is valid markdown"""
     pass
 
-# After checklist/sections enhancements:
+# After checklist/sections enhancements
 def test_pr_template_has_checklist():
     """Test PR template has comprehensive checklist"""
     content = PR_TEMPLATE.read_text()
     assert "- [ ] Tests added/updated" in content
     assert "- [ ] Documentation updated" in content
     # etc.
-```
+```text
 
 **Estimated Time**: 1-2 hours
 
@@ -492,7 +506,8 @@ def test_pr_template_has_checklist():
 
 **Status**: ⚠️ PARTIAL (basic template exists, checklist missing)
 
-**Required Work**:
+### Required Work
+
 Enhance `.github/PULL_REQUEST_TEMPLATE/pull_request_template.md`:
 
 ```markdown
@@ -548,7 +563,7 @@ Enhance `.github/PULL_REQUEST_TEMPLATE/pull_request_template.md`:
 
 ## Reviewer Notes
 <!-- Anything reviewers should know or pay special attention to -->
-```
+```text
 
 **Estimated Time**: 1 hour
 
@@ -607,14 +622,14 @@ done
 for i in 1392 1397; do
   gh issue close $i --comment "[Paste PR Template closure template]"
 done
-```
+```text
 
 ### Option B: Complete Remaining Work First
 
 1. Create performance issue template (5 issues)
-2. Add test coverage (10 issues)
-3. Enhance PR template (8 issues)
-4. Then close all 47 issues together
+1. Add test coverage (10 issues)
+1. Enhance PR template (8 issues)
+1. Then close all 47 issues together
 
 ---
 
@@ -649,24 +664,29 @@ done
 ## Next Steps
 
 ### Immediate (Today)
+
 1. ✅ Review validation reports
-2. ✅ Approve closure plan
-3. **Close 35 complete issues** using templates above
+1. ✅ Approve closure plan
+1. **Close 35 complete issues** using templates above
 
 ### Short-term (This Week)
+
 1. Create performance issue template
-2. Enhance PR template with checklist and sections
-3. Close 8 PR template enhancement issues
+1. Enhance PR template with checklist and sections
+1. Close 8 PR template enhancement issues
 
 ### Medium-term (Next Sprint)
+
 1. Add comprehensive test coverage
-2. Close remaining 10 test-related issues
-3. Achieve 100% completion (47/47 issues)
+1. Close remaining 10 test-related issues
+1. Achieve 100% completion (47/47 issues)
 
 ---
 
 **Generated**: 2025-11-19
-**Validation Reports**:
+
+### Validation Reports
+
 - Executive Summary: `notes/analysis/issues-1357-1403-executive-summary.md`
 - Detailed Validation: `notes/analysis/issues-1357-1403-validation.md` (1,216 lines)
 - Closure Plan: `notes/analysis/issues-1357-1403-closure-plan.md` (this document)

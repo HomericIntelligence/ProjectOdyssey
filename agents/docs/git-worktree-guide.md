@@ -37,11 +37,11 @@ git checkout -b 64-impl-agents
 # Need to switch to tests
 git stash
 git checkout 63-test-agents
-# Work on tests...
+# Work on tests
 git checkout 64-impl-agents
 git stash pop
 # CONFLICTS, lost context, inefficient
-```
+```text
 
 ### Worktree Approach Solution
 
@@ -54,15 +54,15 @@ worktrees/issue-65-pkg-agents/       # Documentation Engineer works here
 # Each agent has dedicated workspace
 # No context switching, no conflicts
 # Parallel work possible
-```
+```text
 
 ### Benefits for Agents
 
 1. **Parallel Execution**: Test, Impl, Package phases run simultaneously
-2. **No Context Loss**: Each agent maintains state in their worktree
-3. **Clear Ownership**: One worktree = one team = clear responsibility
-4. **Easy Integration**: Merge branches when phases complete
-5. **Isolation**: Changes don't interfere until intentionally merged
+1. **No Context Loss**: Each agent maintains state in their worktree
+1. **Clear Ownership**: One worktree = one team = clear responsibility
+1. **Easy Integration**: Merge branches when phases complete
+1. **Isolation**: Changes don't interfere until intentionally merged
 
 ## Basic Worktree Operations
 
@@ -77,7 +77,7 @@ git worktree add worktrees/issue-63-test-agents 63-test-agents
 
 # Create worktree at specific commit
 git worktree add worktrees/issue-64-impl-agents abc123 -b 64-impl-agents
-```
+```text
 
 ### Listing Worktrees
 
@@ -85,11 +85,11 @@ git worktree add worktrees/issue-64-impl-agents abc123 -b 64-impl-agents
 # List all worktrees
 git worktree list
 
-# Output:
+# Output
 # /home/user/ml-odyssey          abc123 [main]
 # /home/user/ml-odyssey/worktrees/issue-62-plan-agents  def456 [62-plan-agents]
 # /home/user/ml-odyssey/worktrees/issue-63-test-agents  ghi789 [63-test-agents]
-```
+```text
 
 ### Removing Worktrees
 
@@ -102,7 +102,7 @@ git worktree remove --force worktrees/issue-62-plan-agents
 
 # Prune deleted worktrees
 git worktree prune
-```
+```text
 
 ### Working in Worktrees
 
@@ -118,7 +118,7 @@ git push -u origin 64-impl-agents
 
 # Return to main repo
 cd ../..
-```
+```text
 
 ## Worktree Strategy for 5-Phase Workflow
 
@@ -132,7 +132,7 @@ Issue #63 (Test) → worktrees/issue-63-test-agents/ → 63-test-agents → Test
 Issue #64 (Impl) → worktrees/issue-64-impl-agents/ → 64-impl-agents → Impl Engineers
 Issue #65 (Pkg)  → worktrees/issue-65-pkg-agents/  → 65-pkg-agents → Doc Engineers
 Issue #66 (Clean)→ worktrees/issue-66-cleanup-agents/ → 66-cleanup-agents → All Agents
-```
+```text
 
 ### Worktree Creation Sequence
 
@@ -146,7 +146,7 @@ git worktree add worktrees/issue-62-plan-agents -b 62-plan-agents
 cd worktrees/issue-62-plan-agents
 
 # Architecture Design Agent creates specifications
-# ... create component specs, interface definitions, etc.
+# ... create component specs, interface definitions, etc
 
 # Commit and push
 git add agents/ notes/issues/62/
@@ -155,7 +155,7 @@ git push -u origin 62-plan-agents
 
 # Create PR, get approval, merge to main
 # Plan phase complete ✓
-```
+```text
 
 #### Step 2: Parallel Phases (Test/Impl/Package)
 
@@ -174,7 +174,7 @@ git worktree add worktrees/issue-64-impl-agents -b 64-impl-agents
 git worktree add worktrees/issue-65-pkg-agents -b 65-pkg-agents
 
 # Now three teams can work in parallel
-```
+```text
 
 #### Step 3: Cleanup Phase (Sequential)
 
@@ -183,7 +183,7 @@ git worktree add worktrees/issue-65-pkg-agents -b 65-pkg-agents
 git worktree add worktrees/issue-66-cleanup-agents -b 66-cleanup-agents
 
 # Cleanup integrates learnings from all parallel phases
-```
+```text
 
 ### Directory Structure
 
@@ -211,7 +211,7 @@ ml-odyssey/                          # Main repository
 │   └── issue-66-cleanup-agents/     # Cleanup (sequential)
 │       └── ...
 └── ... (main branch files)
-```
+```text
 
 ## Agent Coordination Across Worktrees
 
@@ -230,9 +230,9 @@ Parallel Phases (issue-63, 64, 65):
   - All branch from main (includes Plan specs)
   - Work independently using specs
   - Don't need to access each other's worktrees
-```
+```text
 
-**Example**:
+### Example
 
 ```bash
 # In issue-64-impl-agents worktree
@@ -243,7 +243,7 @@ cat notes/issues/62/README.md
 
 # Implement based on spec
 # No need to access issue-63 or issue-65 worktrees
-```
+```text
 
 #### Pattern 2: Cherry-Pick Coordination
 
@@ -262,15 +262,15 @@ cd ../issue-64-impl-agents
 git cherry-pick abc123
 
 # Now fixture available in impl worktree
-```
+```text
 
-**When to Use**:
+### When to Use
 
 - Need specific file from parallel worktree
 - Small, self-contained commits
 - No merge conflicts expected
 
-**When NOT to Use**:
+### When NOT to Use
 
 - Large, interdependent changes
 - Better to wait and merge in Packaging phase
@@ -297,9 +297,9 @@ git commit -m "Integrate test and implementation for agents"
 
 # If tests fail, abort and file cleanup issues
 git merge --abort
-```
+```text
 
-**Benefits**:
+### Benefits
 
 - Validate integration before final merge
 - Catch compatibility issues early
@@ -342,7 +342,7 @@ git push
 cd ../issue-64-impl-agents
 git fetch origin
 git show origin/63-test-agents:notes/issues/63/STATUS.md
-```
+```text
 
 ### Cross-Worktree Communication Protocol
 
@@ -369,7 +369,7 @@ Each agent posts status to their issue notes:
 
 ### Messages for Other Teams
 - [Coordination notes]
-```
+```text
 
 #### Handoff Protocol
 
@@ -396,7 +396,7 @@ When one phase depends on another:
 - Tests will fail until forward() implemented
 - SIMD test compares with naive implementation
 - See tests/test_conv2d.mojo for all requirements
-```
+```text
 
 ## Status Reporting Patterns
 
@@ -435,7 +435,7 @@ EOF
 git add notes/issues/64/PROGRESS.md
 git commit -m "Update progress: 75% complete"
 git push
-```
+```text
 
 ### Aggregate Status (Section Orchestrator)
 
@@ -485,7 +485,7 @@ cat > notes/issues/62/AGGREGATE_STATUS.md << 'EOF'
 - Test: Add validation tests for agent configs
 - Packaging: Finalize integration documentation
 EOF
-```
+```text
 
 ## Common Workflows
 
@@ -497,7 +497,7 @@ git worktree add worktrees/issue-62-plan-agents -b 62-plan-agents
 cd worktrees/issue-62-plan-agents
 
 # Architecture Design Agent creates specs
-# ... design work ...
+# ... design work
 git add notes/issues/62/
 git commit -m "feat(agents): design agent architecture"
 git push -u origin 62-plan-agents
@@ -516,19 +516,19 @@ git worktree add worktrees/issue-65-pkg-agents -b 65-pkg-agents
 
 # Test Engineer works in issue-63
 cd worktrees/issue-63-test-agents
-# ... write tests ...
+# ... write tests
 git commit -am "test(agents): add validation tests"
 git push -u origin 63-test-agents
 
 # Implementation Engineer works in issue-64
 cd ../issue-64-impl-agents
-# ... implement agents ...
+# ... implement agents
 git commit -am "feat(agents): implement agent configs"
 git push -u origin 64-impl-agents
 
 # Documentation Engineer works in issue-65
 cd ../issue-65-pkg-agents
-# ... write docs ...
+# ... write docs
 git commit -am "docs(agents): add integration guide"
 git push -u origin 65-pkg-agents
 
@@ -544,12 +544,12 @@ git worktree add worktrees/issue-66-cleanup-agents -b 66-cleanup-agents
 cd worktrees/issue-66-cleanup-agents
 
 # All agents review and refactor
-# ... cleanup work ...
+# ... cleanup work
 git commit -am "refactor(agents): cleanup and finalize"
 git push -u origin 66-cleanup-agents
 
-# Final PR, merge, done!
-```
+# Final PR, merge, done
+```text
 
 ### Workflow 2: Bug Fix (Simplified)
 
@@ -566,13 +566,13 @@ git worktree add worktrees/issue-101-impl-bugfix -b 101-impl-bugfix
 
 # Test: Reproduce bug
 cd worktrees/issue-100-test-bugfix
-# ... write failing test ...
+# ... write failing test
 git commit -am "test: reproduce agent invocation bug"
 git push -u origin 100-test-bugfix
 
 # Implementation: Fix bug
 cd ../issue-101-impl-bugfix
-# ... update agent description ...
+# ... update agent description
 git commit -am "fix(agents): correct auto-invocation description"
 git push -u origin 101-impl-bugfix
 
@@ -581,7 +581,7 @@ git push -u origin 101-impl-bugfix
 # === CLEANUP (Quick review) ===
 # No separate worktree needed for simple bug fix
 # Final validation in main branch
-```
+```text
 
 ### Workflow 3: Refactoring (Cleanup-Heavy)
 
@@ -591,7 +591,7 @@ git push -u origin 101-impl-bugfix
 # === PLAN ===
 git worktree add worktrees/issue-200-plan-refactor -b 200-plan-refactor
 cd worktrees/issue-200-plan-refactor
-# ... create refactoring plan ...
+# ... create refactoring plan
 git commit -am "docs: plan agent config standardization"
 git push -u origin 200-plan-refactor
 # Merge to main
@@ -604,7 +604,7 @@ git worktree add worktrees/issue-201-impl-refactor -b 201-impl-refactor
 cd worktrees/issue-201-impl-refactor
 
 # Refactor all agent configs
-# ... refactoring work ...
+# ... refactoring work
 git commit -am "refactor(agents): standardize all configs"
 git push -u origin 201-impl-refactor
 # Merge to main
@@ -616,10 +616,10 @@ git worktree add worktrees/issue-202-cleanup-refactor -b 202-cleanup-refactor
 cd worktrees/issue-202-cleanup-refactor
 
 # Validate refactoring, fix issues
-# ... validation and fixes ...
+# ... validation and fixes
 git commit -am "refactor(agents): final cleanup and validation"
 git push -u origin 202-cleanup-refactor
-```
+```text
 
 ## Best Practices
 
@@ -629,12 +629,12 @@ git push -u origin 202-cleanup-refactor
    - `worktrees/issue-63-test-agents`
    - `worktrees/issue-64-impl-agents`
 
-2. **Centralized Location**: Keep all worktrees in `worktrees/` directory
+1. **Centralized Location**: Keep all worktrees in `worktrees/` directory
    - Easier to find
    - Gitignore can exclude if needed
    - Clear separation from main repo
 
-3. **One Issue = One Worktree**: Don't reuse worktrees for multiple issues
+1. **One Issue = One Worktree**: Don't reuse worktrees for multiple issues
    - Prevents confusion
    - Clean history per issue
    - Easier to track
@@ -649,7 +649,7 @@ git push -u origin 202-cleanup-refactor
    git worktree add worktrees/issue-64-impl-agents -b 64-impl-agents
    ```
 
-2. **Descriptive Branch Names**: Match issue number and purpose
+1. **Descriptive Branch Names**: Match issue number and purpose
 
    ```bash
    62-plan-agents
@@ -657,7 +657,7 @@ git push -u origin 202-cleanup-refactor
    64-impl-agents
    ```
 
-3. **Push Immediately**: Set upstream on first push
+1. **Push Immediately**: Set upstream on first push
 
    ```bash
    git push -u origin 64-impl-agents
@@ -667,11 +667,11 @@ git push -u origin 202-cleanup-refactor
 
 1. **Specification-First**: Prefer coordination through specs over file sharing
 
-2. **Status Updates**: Regular status reports in issue notes
+1. **Status Updates**: Regular status reports in issue notes
 
-3. **Minimal Cherry-Picking**: Only when absolutely necessary
+1. **Minimal Cherry-Picking**: Only when absolutely necessary
 
-4. **Integration Testing**: Test merges before final PR
+1. **Integration Testing**: Test merges before final PR
 
 ### Cleanup
 
@@ -681,13 +681,13 @@ git push -u origin 202-cleanup-refactor
    git worktree remove worktrees/issue-63-test-agents
    ```
 
-2. **Prune Regularly**: Remove stale worktree references
+1. **Prune Regularly**: Remove stale worktree references
 
    ```bash
    git worktree prune
    ```
 
-3. **Document Removal**: Note in issue when worktree removed
+1. **Document Removal**: Note in issue when worktree removed
 
 ## Troubleshooting
 
@@ -696,9 +696,9 @@ git push -u origin 202-cleanup-refactor
 ```bash
 $ git worktree add worktrees/issue-64-impl-agents -b 64-impl-agents
 fatal: 'worktrees/issue-64-impl-agents' already exists
-```
+```text
 
-**Solution**:
+### Solution
 
 ```bash
 # Remove existing worktree
@@ -706,16 +706,16 @@ git worktree remove worktrees/issue-64-impl-agents
 
 # Or use different path
 git worktree add worktrees/issue-64-impl-agents-v2 -b 64-impl-agents
-```
+```text
 
 ### Problem: Branch Already Checked Out
 
 ```bash
 $ git worktree add worktrees/issue-64-impl-agents -b 64-impl-agents
 fatal: '64-impl-agents' is already checked out at '/home/user/ml-odyssey/worktrees/issue-64-impl-agents'
-```
+```text
 
-**Solution**:
+### Solution
 
 ```bash
 # Remove the worktree first
@@ -723,7 +723,7 @@ git worktree remove worktrees/issue-64-impl-agents
 
 # Or check if you already have this worktree
 git worktree list
-```
+```text
 
 ### Problem: Merge Conflicts During Integration
 
@@ -731,14 +731,14 @@ git worktree list
 cd worktrees/issue-65-pkg-agents
 git merge 63-test-agents
 # CONFLICT in .claude/agents/test-engineer.md
-```
+```text
 
-**Solution**:
+### Solution
 
 ```bash
 # Resolve conflict manually
 vim .claude/agents/test-engineer.md
-# ... fix conflict ...
+# ... fix conflict
 
 git add .claude/agents/test-engineer.md
 git commit -m "Merge test branch, resolve conflicts"
@@ -746,16 +746,16 @@ git commit -m "Merge test branch, resolve conflicts"
 # Or abort and escalate
 git merge --abort
 # Document conflict in cleanup issue
-```
+```text
 
 ### Problem: Lost Worktree Reference
 
 ```bash
 $ git worktree list
 # Worktree missing from list but directory exists
-```
+```text
 
-**Solution**:
+### Solution
 
 ```bash
 # Prune invalid references
@@ -763,16 +763,16 @@ git worktree prune
 
 # Re-add if needed
 git worktree add worktrees/issue-64-impl-agents 64-impl-agents
-```
+```text
 
 ### Problem: Can't Remove Worktree (Uncommitted Changes)
 
 ```bash
 $ git worktree remove worktrees/issue-64-impl-agents
 fatal: 'worktrees/issue-64-impl-agents' contains modified or untracked files, use --force to delete it
-```
+```text
 
-**Solution**:
+### Solution
 
 ```bash
 # Option 1: Commit changes
@@ -784,7 +784,7 @@ git worktree remove worktrees/issue-64-impl-agents
 
 # Option 2: Force remove (lose changes!)
 git worktree remove --force worktrees/issue-64-impl-agents
-```
+```text
 
 ### Problem: Worktree on Different Branch Than Expected
 
@@ -792,9 +792,9 @@ git worktree remove --force worktrees/issue-64-impl-agents
 cd worktrees/issue-64-impl-agents
 git branch
 # * main  (expected: 64-impl-agents)
-```
+```text
 
-**Solution**:
+### Solution
 
 ```bash
 # Switch to correct branch
@@ -802,7 +802,7 @@ git checkout 64-impl-agents
 
 # If branch doesn't exist
 git checkout -b 64-impl-agents
-```
+```text
 
 ## Advanced Patterns
 
@@ -822,9 +822,9 @@ git worktree add worktrees/issue-64-impl-agents -b 64-impl-agents
 # Coordinate via git
 cd worktrees/issue-64-impl-agents
 git pull  # Get teammate's changes
-# ... do work ...
+# ... do work
 git push  # Share your changes
-```
+```text
 
 ### Pattern: Worktree Snapshots for Experimentation
 
@@ -836,7 +836,7 @@ git worktree add worktrees/issue-64-impl-agents-experiment 64-impl-agents
 
 cd worktrees/issue-64-impl-agents-experiment
 # Try experimental approach
-# ... make changes ...
+# ... make changes
 
 # If successful, merge back to main worktree
 cd ../issue-64-impl-agents
@@ -845,7 +845,7 @@ git merge --no-ff issue-64-impl-agents-experiment
 # If failed, just remove experimental worktree
 cd ../..
 git worktree remove worktrees/issue-64-impl-agents-experiment
-```
+```text
 
 ## See Also
 

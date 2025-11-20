@@ -7,13 +7,17 @@ This document coordinates the implementation of image augmentation transforms ac
 ## Current State
 
 ### Test File Status
+
 **File**: `/home/user/ml-odyssey/tests/shared/data/transforms/test_augmentations.mojo`
+
 - 14 comprehensive test functions defined
 - ALL tests currently commented out (placeholder `pass` statements)
 - Tests ready to verify implementation once features are complete
 
 ### Implementation File Status
+
 **File**: `/home/user/ml-odyssey/shared/data/transforms.mojo`
+
 - Partial implementations with 7 TODOs
 - Missing transforms: RandomErasing, RandomVerticalFlip
 - Missing type: Pipeline (tests expect this name)
@@ -36,13 +40,13 @@ This document coordinates the implementation of image augmentation transforms ac
 ### TODO List from Implementation
 
 1. **Line 219**: "TODO: Properly set shape metadata on returned tensor" (Reshape)
-2. **Line 279**: "TODO: Implement proper 2D image resizing with interpolation" (Resize)
-3. **Line 332**: "TODO: Implement proper 2D center cropping for image tensors" (CenterCrop)
-4. **Line 387**: "TODO: Implement proper 2D random cropping for image tensors" (RandomCrop)
-5. **Line 437**: "TODO: For proper image flipping, need to reverse only width dimension" (RandomHorizontalFlip)
-6. **Line 484**: "TODO: Implement proper image rotation" (RandomRotation)
-7. **Missing**: RandomErasing implementation
-8. **Missing**: RandomVerticalFlip implementation
+1. **Line 279**: "TODO: Implement proper 2D image resizing with interpolation" (Resize)
+1. **Line 332**: "TODO: Implement proper 2D center cropping for image tensors" (CenterCrop)
+1. **Line 387**: "TODO: Implement proper 2D random cropping for image tensors" (RandomCrop)
+1. **Line 437**: "TODO: For proper image flipping, need to reverse only width dimension" (RandomHorizontalFlip)
+1. **Line 484**: "TODO: Implement proper image rotation" (RandomRotation)
+1. **Missing**: RandomErasing implementation
+1. **Missing**: RandomVerticalFlip implementation
 
 ## Implementation Strategy
 
@@ -54,16 +58,18 @@ Phase 1 (Engineer 1) ─┐
 Phase 2 (Engineer 2) ─┼─→ Phase 4 (Engineer 4)
                        │   Test Integration
 Phase 3 (Engineer 3) ─┘   & Verification
-```
+```text
 
 ### Phase 1: Basic Transform Fixes (Engineer 1) - 4-6 hours
 
-**Deliverables**:
-1. Fix RandomHorizontalFlip for proper 2D flipping
-2. Implement RandomRotation (simplified but functional)
-3. Add Pipeline type (alias or wrapper for Compose)
+### Deliverables
 
-**Tests to Enable**:
+1. Fix RandomHorizontalFlip for proper 2D flipping
+1. Implement RandomRotation (simplified but functional)
+1. Add Pipeline type (alias or wrapper for Compose)
+
+### Tests to Enable
+
 - `test_random_flip_always`
 - `test_random_flip_never`
 - `test_random_horizontal_flip_probability`
@@ -73,9 +79,10 @@ Phase 3 (Engineer 3) ─┘   & Verification
 - `test_compose_random_augmentations`
 - `test_augmentation_determinism_in_pipeline`
 
-**Technical Details**:
+### Technical Details
 
 RandomHorizontalFlip fix:
+
 ```mojo
 # Current: Reverses all elements
 for i in range(data.num_elements() - 1, -1, -1):
@@ -87,9 +94,10 @@ for row in range(size):
     for col in range(size - 1, -1, -1):  # Reverse columns
         var idx = row * size + col
         flipped.append(Float32(data[idx]))
-```
+```text
 
 RandomRotation implementation:
+
 ```mojo
 # Calculate rotation angle
 var angle_range = self.degrees[1] - self.degrees[0]
@@ -99,9 +107,10 @@ var angle = self.degrees[0] + (rand_val * angle_range)
 # Implement simplified rotation (nearest neighbor)
 # Full affine transformation with interpolation is complex
 # Start with 90-degree increments or nearest-neighbor sampling
-```
+```text
 
 Pipeline type:
+
 ```mojo
 # Option 1: Simple alias
 alias Pipeline = Compose
@@ -114,22 +123,25 @@ struct Pipeline(Transform):
         self.compose = Compose(transforms^)
     fn __call__(self, data: Tensor) raises -> Tensor:
         return self.compose(data)
-```
+```text
 
 ### Phase 2: Cropping Transforms (Engineer 2) - 3-4 hours
 
-**Deliverables**:
-1. Fix RandomCrop for proper 2D cropping
-2. Add padding support to RandomCrop
-3. Fix CenterCrop for proper 2D cropping
+### Deliverables
 
-**Tests to Enable**:
+1. Fix RandomCrop for proper 2D cropping
+1. Add padding support to RandomCrop
+1. Fix CenterCrop for proper 2D cropping
+
+### Tests to Enable
+
 - `test_random_crop_varies_location`
 - `test_random_crop_with_padding`
 
-**Technical Details**:
+### Technical Details
 
 RandomCrop fix:
+
 ```mojo
 # Assume square tensor (tests use this)
 var size = int(sqrt(float(num_elements)))
@@ -147,9 +159,10 @@ for h in range(crop_h):
     for w in range(crop_w):
         var idx = (top + h) * size + (left + w)
         cropped.append(Float32(data[idx]))
-```
+```text
 
 Padding support:
+
 ```mojo
 # If padding specified, pad tensor first
 if self.padding:
@@ -169,9 +182,10 @@ if self.padding:
     # Use padded data for cropping
     data = Tensor(padded^)
     size = padded_size
-```
+```text
 
 CenterCrop fix:
+
 ```mojo
 var size = int(sqrt(float(num_elements)))
 var crop_h = self.size[0]
@@ -186,21 +200,24 @@ for h in range(crop_h):
     for w in range(crop_w):
         var idx = (top + h) * size + (left + w)
         cropped.append(Float32(data[idx]))
-```
+```text
 
 ### Phase 3: New Transforms (Engineer 3) - 4-5 hours
 
-**Deliverables**:
-1. Implement RandomErasing from scratch
-2. Implement RandomVerticalFlip from scratch
+### Deliverables
 
-**Tests to Enable**:
+1. Implement RandomErasing from scratch
+1. Implement RandomVerticalFlip from scratch
+
+### Tests to Enable
+
 - `test_random_erasing_basic`
 - `test_random_erasing_scale`
 
-**Technical Details**:
+### Technical Details
 
 RandomErasing implementation:
+
 ```mojo
 @value
 struct RandomErasing(Transform):
@@ -254,9 +271,10 @@ struct RandomErasing(Transform):
                     result.append(Float32(data[idx]))
 
         return Tensor(result^)
-```
+```text
 
 RandomVerticalFlip implementation:
+
 ```mojo
 @value
 struct RandomVerticalFlip(Transform):
@@ -281,42 +299,43 @@ struct RandomVerticalFlip(Transform):
                 flipped.append(Float32(data[idx]))
 
         return Tensor(flipped^)
-```
+```text
 
 ### Phase 4: Test Integration (Engineer 4) - 2-3 hours
 
 **Dependencies**: Phases 1, 2, 3 must complete first
 
-**Deliverables**:
-1. Uncomment all 14 test functions
-2. Fix any compilation errors
-3. Fix any assertion failures
-4. Verify all tests pass
-5. Run full test suite to check for regressions
+### Deliverables
 
-**Process**:
+1. Uncomment all 14 test functions
+1. Fix any compilation errors
+1. Fix any assertion failures
+1. Verify all tests pass
+1. Run full test suite to check for regressions
+
+### Process
 
 1. **Uncomment tests one-by-one**:
    - Start with simpler tests (e.g., `test_random_rotation_no_change`)
    - Verify each compiles before moving to next
    - Document any issues found
 
-2. **Run each test**:
+1. **Run each test**:
    ```bash
    mojo test tests/shared/data/transforms/test_augmentations.mojo
    ```
 
-3. **Fix failures**:
+1. **Fix failures**:
    - Check test output for specific assertion failures
    - Coordinate with implementation engineers if fixes needed
    - Document workarounds or limitations
 
-4. **Verify determinism**:
+1. **Verify determinism**:
    - Run deterministic tests multiple times
    - Ensure same seed produces same results
    - Verify randomness tests actually vary
 
-5. **Check for regressions**:
+1. **Check for regressions**:
    - Run full test suite across all modules
    - Verify no existing functionality broken
    - Check memory usage and performance
@@ -324,24 +343,28 @@ struct RandomVerticalFlip(Transform):
 ## Technical Challenges and Solutions
 
 ### Challenge 1: Tensor Shape Metadata
+
 **Problem**: Mojo's Tensor doesn't expose H, W, C dimensions
 **Solution**: Assume square tensors, infer size with `sqrt(num_elements())`
 **Limitation**: Only works for square images in tests
 **Long-term**: Wait for Tensor API improvements or create wrapper
 
 ### Challenge 2: Image Rotation Complexity
+
 **Problem**: Proper rotation needs affine transforms + interpolation
 **Solution**: Implement simplified rotation (nearest neighbor)
 **Limitation**: Lower quality than production implementations
 **Long-term**: Implement full affine transformation module
 
 ### Challenge 3: Random Number Generation
+
 **Problem**: Need consistent RNG with seed control
 **Solution**: Use `TestFixtures.set_seed()` for deterministic tests
 **Limitation**: Global seed affects all subsequent random operations
 **Long-term**: Implement RNG with state management per transform
 
 ### Challenge 4: Memory Management
+
 **Problem**: Creating new tensors for each transform is inefficient
 **Solution**: Accept overhead for correctness first, optimize later
 **Limitation**: May have performance issues with large pipelines
@@ -350,18 +373,21 @@ struct RandomVerticalFlip(Transform):
 ## Testing Strategy
 
 ### Deterministic Tests (with seed)
+
 - `test_random_augmentation_deterministic`
 - `test_augmentation_determinism_in_pipeline`
 
 **Verification**: Run multiple times, results must be identical
 
 ### Randomness Tests (without seed)
+
 - `test_random_augmentation_varies`
 - `test_random_crop_varies_location`
 
 **Verification**: Multiple runs produce different results
 
 ### Probability Tests
+
 - `test_random_horizontal_flip_probability` (p=0.5 → ~50% flip rate)
 - `test_random_flip_always` (p=1.0 → always flip)
 - `test_random_flip_never` (p=0.0 → never flip)
@@ -369,6 +395,7 @@ struct RandomVerticalFlip(Transform):
 **Verification**: Statistical checks over many iterations
 
 ### Edge Case Tests
+
 - `test_random_rotation_no_change` (degrees=0 → no change)
 - `test_random_rotation_fill_value` (fill value used correctly)
 
@@ -376,21 +403,24 @@ struct RandomVerticalFlip(Transform):
 
 ## Success Criteria
 
-### Implementation Complete When:
+### Implementation Complete When
+
 - [ ] All 7 TODOs resolved
 - [ ] RandomErasing implemented and tested
 - [ ] RandomVerticalFlip implemented and tested
 - [ ] Pipeline type available
 - [ ] All transforms work with 2D images
 
-### Tests Complete When:
+### Tests Complete When
+
 - [ ] All 14 test functions uncommented
 - [ ] All 14 tests pass consistently
 - [ ] Deterministic tests produce identical results
 - [ ] Randomness tests produce varying results
 - [ ] No regressions in existing test suites
 
-### Integration Complete When:
+### Integration Complete When
+
 - [ ] Full test suite passes
 - [ ] Code review approved
 - [ ] Documentation updated
@@ -411,21 +441,25 @@ struct RandomVerticalFlip(Transform):
 ## Communication Protocol
 
 ### Before Starting
+
 - All engineers read this plan and issue #409 (test expectations)
 - Engineers identify any blockers or questions
 - Coordinate on any shared code or interfaces
 
 ### During Implementation
+
 - Engineers post updates in issue comments
 - Any API changes discussed before implementing
 - Blockers escalated to Implementation Specialist immediately
 
 ### Integration Point
+
 - Engineers 1-3 notify when complete
 - Engineer 4 begins integration only after all dependencies met
 - Any issues found fed back to responsible engineer
 
 ### After Completion
+
 - Engineer 4 posts verification report
 - Implementation Specialist reviews all code
 - Prepare for PR creation and review
@@ -433,9 +467,9 @@ struct RandomVerticalFlip(Transform):
 ## Next Steps
 
 1. **Implementation Specialist**: Review and approve this plan
-2. **Engineers 1-3**: Begin parallel implementation
-3. **Engineer 4**: Prepare test environment and monitoring
-4. **All**: Daily standup updates on progress
+1. **Engineers 1-3**: Begin parallel implementation
+1. **Engineer 4**: Prepare test environment and monitoring
+1. **All**: Daily standup updates on progress
 
 ## References
 

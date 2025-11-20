@@ -1,6 +1,7 @@
 # ExTensor Session Summary - November 17, 2025
 
 ## Overview
+
 Comprehensive session implementing operations, tests, and planning for ExTensor following the Python Array API Standard 2023.12.
 
 **Branch**: `claude/extensor-test-specification-01UBGH2iQS4sgfQrXUE5j2BB`
@@ -12,12 +13,14 @@ Comprehensive session implementing operations, tests, and planning for ExTensor 
 ### 1. Operations Implemented (14 new operations)
 
 #### Getter Methods (2 internal)
+
 - **`_get_float64()`**: Read tensor values as Float64 from any dtype
 - **`_get_int64()`**: Read tensor values as Int64 from any dtype
 - **Location**: `src/extensor/extensor.mojo:163-229`
 - **Purpose**: Enable generic value access across all 13 dtypes
 
 #### Arithmetic Operations (4 new)
+
 - **`divide()`**: Element-wise division with IEEE 754 semantics for div-by-zero
 - **`floor_divide()`**: Floor division (a // b) with proper negative handling
 - **`modulo()`**: Modulo operation following Python semantics (-7 % 3 = 2)
@@ -26,6 +29,7 @@ Comprehensive session implementing operations, tests, and planning for ExTensor 
 - **Status**: Same-shape only, broadcasting TODO
 
 #### Comparison Operations (6 new + 6 dunder methods)
+
 - **`equal()`, `not_equal()`**: Equality comparisons returning bool tensors
 - **`less()`, `less_equal()`**: Less-than comparisons
 - **`greater()`, `greater_equal()`**: Greater-than comparisons
@@ -35,6 +39,7 @@ Comprehensive session implementing operations, tests, and planning for ExTensor 
 - **Status**: Same-shape only, broadcasting TODO
 
 #### Reduction Operations (4 enhanced)
+
 - **`sum()`**: Sum all elements (axis=-1 only)
 - **`mean()`**: Mean of all elements (axis=-1 only)
 - **`max_reduce()`**: Find maximum element
@@ -44,6 +49,7 @@ Comprehensive session implementing operations, tests, and planning for ExTensor 
 - **Status**: Axis-specific reduction TODO
 
 **Total Operations**: 21 fully functional operations
+
 - 7 Creation operations ✅
 - 7 Arithmetic operations ✅
 - 6 Comparison operations ✅
@@ -54,6 +60,7 @@ Comprehensive session implementing operations, tests, and planning for ExTensor 
 #### Test Files Created/Enhanced
 
 **New Test Files** (2 files, 40 tests):
+
 1. **`test_comparison_ops.mojo`** - 19 tests
    - equal/not_equal: 6 tests
    - less/less_equal: 6 tests
@@ -61,7 +68,7 @@ Comprehensive session implementing operations, tests, and planning for ExTensor 
    - Negative values: 1 test
    - All verify boolean dtype and operator overloading
 
-2. **`test_reductions.mojo`** - 21 tests
+1. **`test_reductions.mojo`** - 21 tests
    - sum(): 5 tests (ones, 2D, arange, keepdims, dtype)
    - mean(): 5 tests
    - max_reduce(): 5 tests
@@ -69,23 +76,26 @@ Comprehensive session implementing operations, tests, and planning for ExTensor 
    - Consistency: 1 test
 
 **Enhanced Test Files** (2 files, 50 tests):
-3. **`test_arithmetic.mojo`** - 16 new tests added
+
+1. **`test_arithmetic.mojo`** - 16 new tests added
    - divide(): 4 tests (basic, by one, by two, negatives)
    - floor_divide(): 3 tests (positive, negative)
    - modulo(): 3 tests (positive, negative dividend, fractional)
    - power(): 4 tests (integer exponents, zero/one, negative base)
    - Plus: 2 operator overload tests
 
-4. **`test_creation.mojo`** - Enhanced (no new tests, verified complete)
+1. **`test_creation.mojo`** - Enhanced (no new tests, verified complete)
    - All 40 tests fully implemented
    - Covers all 7 creation operations
 
-**Test Cleanup**:
+### Test Cleanup
+
 - ❌ Deleted `test_comparison.mojo` (24 placeholder tests)
 - ❌ Deleted `test_reduction.mojo` (33 placeholder tests)
 - Reason: Replaced by better `test_comparison_ops.mojo` and `test_reductions.mojo`
 
 **Total Test Count**: 289 tests
+
 - **Implemented**: 210 tests (73%)
 - **Placeholders**: 79 tests (27%)
 - **Deleted duplicates**: 57 tests
@@ -93,6 +103,7 @@ Comprehensive session implementing operations, tests, and planning for ExTensor 
 ### 3. Documentation Updates
 
 #### Array API Standard Compliance Documentation
+
 Updated 3 files to reference Python Array API Standard 2023.12:
 
 1. **`src/extensor/__init__.mojo`** (lines 1-42)
@@ -101,13 +112,13 @@ Updated 3 files to reference Python Array API Standard 2023.12:
    - Listed implemented operations by category
    - Provided usage examples with operator overloading
 
-2. **`src/extensor/extensor.mojo`** (lines 1-31)
+1. **`src/extensor/extensor.mojo`** (lines 1-31)
    - Comprehensive Array API categories overview
    - Progress indicators (✓/TODO) for all operation categories
    - Architecture and design decisions
    - Memory safety and dtype flexibility documentation
 
-3. **`src/extensor/arithmetic.mojo`**, **`comparison.mojo`**, **`reduction.mojo`**
+1. **`src/extensor/arithmetic.mojo`**, **`comparison.mojo`**, **`reduction.mojo`**
    - All docstrings reference Array API semantics
    - Examples show Array API Standard compliance
    - IEEE 754 and Python semantics documented
@@ -115,8 +126,11 @@ Updated 3 files to reference Python Array API Standard 2023.12:
 ### 4. Strategic Planning Documents (2 comprehensive plans)
 
 #### Implementation Plan (`notes/issues/219/IMPLEMENTATION_PLAN.md`)
+
 **Length**: 429 lines
-**Content**:
+
+### Content
+
 - 6 priority levels for implementing 150+ operations
 - Detailed task breakdowns with time estimates
 - **Priority 1** (Critical - 8-12 weeks): Broadcasting, matrix ops, element-wise math
@@ -127,8 +141,11 @@ Updated 3 files to reference Python Array API Standard 2023.12:
 - Realistic timeline: 12-16 weeks MVP, 28-36 weeks full
 
 #### Testing Plan (`notes/issues/219/TESTING_PLAN.md`)
+
 **Length**: 765 lines
-**Content**:
+
+### Content
+
 - Complete analysis of current 289 tests
 - Coverage by operation category (with percentages)
 - 6 testing priorities aligned with implementation plan
@@ -155,6 +172,7 @@ Updated 3 files to reference Python Array API Standard 2023.12:
 ## Current Status
 
 ### Operations Implemented: 21/150+ (14%)
+
 - ✅ Creation: 7/7 operations (100%)
 - ✅ Arithmetic: 7/7 operations (100%)
 - ✅ Comparison: 6/6 operations (100%)
@@ -166,11 +184,13 @@ Updated 3 files to reference Python Array API Standard 2023.12:
 - ❌ Indexing: 0/~10 operations (0%)
 
 ### Test Coverage: 289 tests (73% implemented)
+
 - ✅ **Fully tested**: Creation (40), Arithmetic (40), Comparison (19), Reduction (21), Properties (36), Integration (19)
 - ⚠️ **Partially tested**: Broadcasting (17/19, 89%)
 - 🚧 **Placeholder tests**: Matrix (19), Edge cases (28), Shape (23), Utility (25)
 
 ### Documentation: 100% Complete
+
 - ✅ Array API Standard references in all modules
 - ✅ Comprehensive implementation plan (429 lines)
 - ✅ Detailed testing plan (765 lines)
@@ -180,38 +200,48 @@ Updated 3 files to reference Python Array API Standard 2023.12:
 ## Key Technical Highlights
 
 ### 1. Type-Erased Storage Design
+
 ```mojo
 var _data: UnsafePointer[UInt8]  # Raw byte storage
 fn _get_float64(self, index: Int) -> Float64  # Generic getter
 fn _set_float64(self, index: Int, value: Float64)  # Generic setter
-```
-**Benefits**:
+```text
+
+### Benefits
+
 - Supports all 13 dtypes with single implementation
 - Memory-efficient (no per-dtype storage overhead)
 - Enables generic operations across dtypes
 
 ### 2. Operator Overloading
+
 ```mojo
 fn __eq__(self, other: ExTensor) raises -> ExTensor:
     from .comparison import equal
     return equal(self, other)
-```
+```text
+
 **Implemented**: 13 dunder methods
+
 - Arithmetic: `+`, `-`, `*`, `/`, `//`, `%`, `**`, `@`
 - Comparison: `==`, `!=`, `<`, `<=`, `>`, `>=`
 
 **Result**: Pythonic syntax for tensor operations
 
 ### 3. Broadcasting Infrastructure
+
 ```mojo
 fn broadcast_shapes(shape1, shape2) raises -> DynamicVector[Int]
 fn compute_broadcast_strides(original, broadcast) -> DynamicVector[Int]
 struct BroadcastIterator  # Efficient iteration
-```
+```text
+
 **Status**: Complete infrastructure, needs integration into operations
 
 ### 4. Array API Standard Compliance
+
 All operations follow the specification exactly:
+
 - **Creation**: match numpy signature and semantics
 - **Arithmetic**: IEEE 754 for floating-point edge cases
 - **Comparison**: return boolean tensors (DType.bool)
@@ -221,75 +251,92 @@ All operations follow the specification exactly:
 ## Performance Characteristics
 
 ### Current Implementation
+
 - **Algorithm**: Naive O(n) element-wise operations
 - **Memory**: Row-major (C-order) layout
 - **Optimization**: None (correctness first)
 
 ### Future Optimization Plan
+
 1. **Phase 1**: SIMD vectorization for element-wise ops
-2. **Phase 2**: Blocked algorithms for cache efficiency
-3. **Phase 3**: Multi-threading for large tensors
-4. **Phase 4**: GPU acceleration (if Mojo supports)
+1. **Phase 2**: Blocked algorithms for cache efficiency
+1. **Phase 3**: Multi-threading for large tensors
+1. **Phase 4**: GPU acceleration (if Mojo supports)
 
 ## Next Steps (Priority Order)
 
 ### Immediate (This Week)
+
 1. ✅ Clean up duplicate test files - DONE
-2. 🔲 Complete broadcasting integration (~2 days)
+1. 🔲 Complete broadcasting integration (~2 days)
    - Integrate broadcast_shapes() into all arithmetic ops
    - Integrate into all comparison ops
    - Add 10-15 integration tests
-3. 🔲 Add edge case tests for existing ops (~1.5 days)
+1. 🔲 Add edge case tests for existing ops (~1.5 days)
    - Division by zero (IEEE 754 compliance)
    - NaN propagation
    - Overflow/underflow
    - Empty tensors
 
 ### This Sprint (Next 2 Weeks)
+
 1. 🔲 Write matrix operation tests (~1 day, 40 tests)
-2. 🔲 Implement matrix operations (~3-4 days)
+1. 🔲 Implement matrix operations (~3-4 days)
    - matmul(): 2D and batched
    - transpose(): zero-copy view
    - dot(), outer(): 1D operations
-3. 🔲 Write element-wise math tests (~2 days, 62 tests)
-4. 🔲 Implement element-wise math (~2-3 days)
+1. 🔲 Write element-wise math tests (~2 days, 62 tests)
+1. 🔲 Implement element-wise math (~2-3 days)
    - exp(), log(), sqrt(), abs(), sign()
    - tanh(), sin(), cos()
 
 ### This Month
+
 1. 🔲 Complete Priority 1 operations (broadcasting, matrix, math)
-2. 🔲 Write tests for Priority 2 operations (shape manipulation)
-3. 🔲 Begin Priority 2 implementation
-4. 🔲 MVP milestone: Sufficient operations for LeNet-5 implementation
+1. 🔲 Write tests for Priority 2 operations (shape manipulation)
+1. 🔲 Begin Priority 2 implementation
+1. 🔲 MVP milestone: Sufficient operations for LeNet-5 implementation
 
 ## Risks and Mitigation
 
 ### Risk 1: Broadcasting Complexity
+
 **Impact**: HIGH - Required for all operations
-**Mitigation**:
+
+### Mitigation
+
 - Infrastructure complete
 - Start with simple cases (scalar, same-shape)
 - Add complex cases incrementally
 - Comprehensive test coverage
 
 ### Risk 2: Mojo Compiler Unavailable
+
 **Impact**: HIGH - Cannot validate tests
-**Mitigation**:
+
+### Mitigation
+
 - Tests are written and ready
 - Can validate logic by inspection
 - Will run all tests when compiler available
 
 ### Risk 3: Performance Not Meeting Requirements
+
 **Impact**: MEDIUM - May need significant optimization
-**Mitigation**:
+
+### Mitigation
+
 - Focus on correctness first
 - Profile before optimizing
 - SIMD and blocked algorithms planned
 - Multiple optimization phases
 
 ### Risk 4: Scope Creep
+
 **Impact**: MEDIUM - 150+ operations is large
-**Mitigation**:
+
+### Mitigation
+
 - Clear priorities (MVP first)
 - Phased implementation plan
 - Operations can be added incrementally
@@ -298,6 +345,7 @@ All operations follow the specification exactly:
 ## Success Metrics
 
 ### Short-term Success (1 month)
+
 - ✅ 21/21 Priority 1 operations implemented (currently 21/21 basic, 0/21 with broadcasting)
 - ✅ >200 comprehensive tests passing
 - ✅ Broadcasting integrated into all operations
@@ -305,6 +353,7 @@ All operations follow the specification exactly:
 - ✅ Element-wise math operations functional
 
 ### Medium-term Success (3 months)
+
 - ✅ 50+ operations implemented
 - ✅ >400 tests passing
 - ✅ Shape manipulation working
@@ -312,6 +361,7 @@ All operations follow the specification exactly:
 - ✅ MVP: Can implement LeNet-5 from scratch
 
 ### Long-term Success (6 months)
+
 - ✅ 150+ operations implemented
 - ✅ >800 tests passing (>90% coverage)
 - ✅ Performance within 2x of NumPy
@@ -321,13 +371,15 @@ All operations follow the specification exactly:
 ## Resources
 
 ### Documentation
+
 - [Python Array API Standard 2023.12](https://data-apis.org/array-api/latest/)
 - [NumPy API Reference](https://numpy.org/doc/stable/reference/)
 - [PyTorch Tensor API](https://pytorch.org/docs/stable/tensors.html)
 - [Mojo Standard Library](https://docs.modular.com/mojo/lib.html)
 
 ### Repository Structure
-```
+
+```text
 ml-odyssey/
 ├── src/extensor/                   # Implementation
 │   ├── __init__.mojo              # Package exports
@@ -355,11 +407,12 @@ ml-odyssey/
     ├── README.md                  # Issue tracking
     ├── IMPLEMENTATION_PLAN.md     # Operation implementation roadmap (NEW)
     └── TESTING_PLAN.md            # Testing strategy and coverage (NEW)
-```
+```text
 
 ## Conclusion
 
 This session established a solid foundation for ExTensor with:
+
 - **21 operations** fully functional for same-shape tensors
 - **289 tests** with 73% implementation (210 tests passing)
 - **Comprehensive documentation** referencing Array API Standard
@@ -379,6 +432,7 @@ After the initial session, work continued on Priority 1 testing tasks focused on
 ### Edge Case Tests Added (17 new tests)
 
 #### Division by Zero Tests (4 tests)
+
 **File**: `tests/extensor/test_edge_cases.mojo` (lines 311-370)
 
 - **test_divide_by_zero_float()**: Validates 1/0 = +inf (IEEE 754 compliance)
@@ -401,6 +455,7 @@ After the initial session, work continued on Priority 1 testing tasks focused on
   - Requires documentation of expected behavior before implementation
 
 #### Modulo Edge Cases (3 tests)
+
 **File**: `tests/extensor/test_edge_cases.mojo` (lines 377-413)
 
 - **test_modulo_by_zero()**: Validates x % 0 = NaN
@@ -417,6 +472,7 @@ After the initial session, work continued on Priority 1 testing tasks focused on
   - Validates consistent Python semantics for negative values
 
 #### Power Edge Cases (4 tests)
+
 **File**: `tests/extensor/test_edge_cases.mojo` (lines 420-465)
 
 - **test_power_zero_to_zero()**: Convention validation
@@ -436,6 +492,7 @@ After the initial session, work continued on Priority 1 testing tasks focused on
   - Validates standard zero exponentiation
 
 #### Floor Divide Edge Cases (3 tests)
+
 **File**: `tests/extensor/test_edge_cases.mojo` (lines 472-508)
 
 - **test_floor_divide_by_zero()**: Division by zero
@@ -452,6 +509,7 @@ After the initial session, work continued on Priority 1 testing tasks focused on
   - Confirms Python semantics vs C truncation
 
 #### Comparison Edge Cases (3 tests)
+
 **File**: `tests/extensor/test_edge_cases.mojo` (lines 515-562)
 
 - **test_comparison_with_zero()**: Zero boundary testing
@@ -471,6 +529,7 @@ After the initial session, work continued on Priority 1 testing tasks focused on
   - Provides dtype validation
 
 ### Broadcasting Tests Completed (2 placeholder tests)
+
 **File**: `tests/extensor/test_broadcasting.mojo` (lines 274-319)
 
 - **test_broadcast_incompatible_shapes_different_sizes()**: Error handling
@@ -485,13 +544,15 @@ After the initial session, work continued on Priority 1 testing tasks focused on
 ### Test Summary After Continuation
 
 **Total Tests**: 308 tests (was 289)
+
 - **Implemented**: 229 tests (was 210) - +19 tests
 - **Placeholders**: 79 tests (unchanged)
 - **Edge case tests**: 27/28 implemented (96%)
   - Implemented: 19 tests (17 new + 2 broadcasting completions)
   - Placeholders: 9 tests (NaN/infinity tests require special value support)
 
-**Coverage by Category**:
+### Coverage by Category
+
 - ✅ **Creation**: 40/40 (100%)
 - ✅ **Arithmetic**: 40/40 (100%)
 - ✅ **Comparison**: 19/19 (100%)
@@ -515,22 +576,24 @@ After the initial session, work continued on Priority 1 testing tasks focused on
 ### Key Accomplishments
 
 1. **IEEE 754 Compliance**: Division by zero tests confirm proper handling of infinity and NaN
-2. **Python Semantics**: Modulo and floor_divide tests validate Python behavior vs C semantics
-3. **Edge Case Coverage**: 96% of edge cases now tested (only NaN/infinity placeholders remain)
-4. **Broadcasting Complete**: All 25 broadcasting tests fully implemented
-5. **Robustness**: Operations validated against mathematical edge cases
+1. **Python Semantics**: Modulo and floor_divide tests validate Python behavior vs C semantics
+1. **Edge Case Coverage**: 96% of edge cases now tested (only NaN/infinity placeholders remain)
+1. **Broadcasting Complete**: All 25 broadcasting tests fully implemented
+1. **Robustness**: Operations validated against mathematical edge cases
 
 ### Remaining Placeholder Tests
 
 The following edge case tests remain as placeholders due to Mojo language limitations:
 
 **NaN Tests** (3 placeholders):
+
 - test_nan_propagation_add()
 - test_nan_propagation_multiply()
 - test_nan_equality()
 - **Blocker**: Requires `Float32.nan` constant or NaN creation capability
 
 **Infinity Tests** (5 placeholders):
+
 - test_inf_arithmetic()
 - test_inf_multiplication()
 - test_inf_times_zero()
@@ -539,12 +602,14 @@ The following edge case tests remain as placeholders due to Mojo language limita
 - **Blocker**: Requires `Float32.infinity` constant
 
 **Overflow/Underflow Tests** (3 placeholders):
+
 - test_overflow_float32()
 - test_overflow_int32()
 - test_underflow_float64()
 - **Blocker**: Requires extreme value creation and behavior verification
 
 **Other Placeholders** (remaining from original):
+
 - Subnormal numbers (1 test)
 - Numerical stability (2 tests)
 - Special dtype behaviors (3 tests)
@@ -560,25 +625,26 @@ Based on TESTING_PLAN.md Priority 2:
    - dot(): 8 tests (1D vectors)
    - outer(): 7 tests (outer products)
 
-2. 🔲 **Implement matrix operations** (~3-4 days)
+1. 🔲 **Implement matrix operations** (~3-4 days)
    - matmul() for 2D and batched matrices
    - transpose() as zero-copy view
    - dot() for 1D vector operations
    - outer() for outer products
 
-3. 🔲 **Write element-wise math tests** (~2 days, 62 tests)
+1. 🔲 **Write element-wise math tests** (~2 days, 62 tests)
    - Transcendental functions: exp(), log(), sqrt()
    - Trigonometric: sin(), cos(), tanh()
    - Utility: abs(), sign(), clip()
 
-4. 🔲 **Implement element-wise math** (~2-3 days)
+1. 🔲 **Implement element-wise math** (~2-3 days)
    - Leverage Mojo math library
    - Add SIMD optimizations
    - Validate against NumPy
 
 ### Quality Metrics
 
-**Test Quality Indicators**:
+### Test Quality Indicators
+
 - ✅ All tests include clear docstrings
 - ✅ IEEE 754 compliance documented
 - ✅ Python semantics vs C semantics clarified
@@ -587,6 +653,7 @@ Based on TESTING_PLAN.md Priority 2:
 - ✅ Boolean dtype validation for comparisons
 
 **Code Coverage** (estimated):
+
 - Creation operations: ~95%
 - Arithmetic operations: ~90%
 - Comparison operations: ~85%
@@ -597,17 +664,20 @@ Based on TESTING_PLAN.md Priority 2:
 ### Timeline Update
 
 **Completed** (November 17, 2025):
+
 - ✅ Priority 1.1: Basic operations (21 operations)
 - ✅ Priority 1.2: Comprehensive tests (229 implemented)
 - ✅ Priority 1.3: Edge case validation (27/28 tests)
 - ✅ Priority 1.4: Broadcasting infrastructure and tests
 
 **Next Sprint** (1-2 weeks):
+
 - 🔲 Priority 2.1: Matrix operations implementation
 - 🔲 Priority 2.2: Element-wise math functions
 - 🔲 Priority 2.3: Shape manipulation operations
 
 **MVP Target** (2-3 months):
+
 - 50+ operations implemented
 - 400+ tests passing
 - Broadcasting fully integrated
@@ -629,27 +699,32 @@ After completing comprehensive testing, work continued with implementing the 4 c
 ### Matrix Operations Implemented (4 operations)
 
 #### matmul() - Matrix Multiplication
+
 **File**: `src/extensor/matrix.mojo` (lines 9-108)
 
-**Functionality**:
+### Functionality
+
 - **2D matrix multiplication**: (m, k) @ (k, n) → (m, n)
 - **Batched multiplication**: Supports 3D+ tensors automatically
 - **Algorithm**: result[i,j] = sum(a[i,k] * b[k,j] for k in range(a_cols))
 
-**Implementation Details**:
+### Implementation Details
+
 - Separates 2D and batched cases for efficiency
 - 2D case: Triple nested loop (i, j, k)
 - Batched case: Computes batch size from leading dimensions, applies 2D logic per batch
 - Uses `_get_float64()/_set_float64()` for cross-dtype value access
 - Row-major (C-order) memory layout indexing
 
-**Error Handling**:
+### Error Handling
+
 - Validates dtype compatibility
 - Validates dimension compatibility (at least 2D)
 - Validates inner dimensions match (a_cols == b_rows)
 - Clear error messages with dimension values
 
-**Example**:
+### Example
+
 ```mojo
 # 2D: (3, 4) @ (4, 2) → (3, 2)
 var a = ones(shape_3x4, DType.float32)
@@ -658,17 +733,20 @@ var c = matmul(a, b)  # Each element = 4.0
 
 # Batched: (2, 3, 4) @ (2, 4, 2) → (2, 3, 2)
 var result = matmul(batch_a, batch_b)
-```
+```text
 
 #### transpose() - Transpose Tensor Dimensions
+
 **File**: `src/extensor/matrix.mojo` (lines 111-160)
 
-**Functionality**:
+### Functionality
+
 - **2D transpose**: (m, n) → (n, m) via result[i,j] = tensor[j,i]
 - **Multi-dimensional**: Reverses axes (simplified implementation)
 - **Memory**: Data copy (TODO: zero-copy views with strides)
 
-**Implementation Details**:
+### Implementation Details
+
 - 2D case: Double nested loop with swapped indices
   - Source index: j * cols + i (row-major)
   - Destination index: i * rows + j (transposed)
@@ -676,7 +754,8 @@ var result = matmul(batch_a, batch_b)
 - TODO: Implement proper multi-dimensional permutation
 - TODO: Zero-copy views using stride manipulation
 
-**Example**:
+### Example
+
 ```mojo
 # 2D transpose
 var a = ones(shape_3x4, DType.float32)  # (3, 4)
@@ -685,55 +764,64 @@ var b = transpose(a)  # (4, 3)
 # 3D transpose (simplified)
 var t = ones(shape_2x3x4, DType.float32)  # (2, 3, 4)
 var t_T = transpose(t)  # (4, 3, 2) shape, but values not fully permuted
-```
+```text
 
 #### dot() - Dot Product
+
 **File**: `src/extensor/matrix.mojo` (lines 163-185)
 
-**Functionality**:
+### Functionality
+
 - **1D vectors**: Computes sum(a[i] * b[i]) → scalar (0D tensor)
 - **2D matrices**: Delegates to matmul()
 - **Result**: 0D tensor (scalar) for vector dot product
 
-**Implementation Details**:
+### Implementation Details
+
 - Creates 0D result tensor (empty shape vector)
 - Accumulates sum of element-wise products
 - Validates shapes match for 1D case
 - Uses Float64 accumulator for precision
 
-**Example**:
+### Example
+
 ```mojo
 # [1, 2, 3, 4, 5] · [1, 2, 3, 4, 5] = 55
 var a = arange(1.0, 6.0, 1.0, DType.float32)
 var b = arange(1.0, 6.0, 1.0, DType.float32)
 var c = dot(a, b)  # Scalar result: 55.0
-```
+```text
 
 #### outer() - Outer Product
+
 **File**: `src/extensor/matrix.mojo` (lines 187-227)
 
-**Functionality**:
+### Functionality
+
 - **(m,) × (n,)**: Produces (m, n) matrix
 - **Algorithm**: result[i,j] = a[i] * b[j]
 - **Requirements**: Both inputs must be 1D
 
-**Implementation Details**:
+### Implementation Details
+
 - Double nested loop over vector lengths
 - Computes Cartesian product of elements
 - Row-major indexing: i * len_b + j
 - Validates 1D inputs, same dtype
 
-**Example**:
+### Example
+
 ```mojo
 # [1, 2, 3] × [1, 2] → [[1, 2], [2, 4], [3, 6]]
 var a = arange(1.0, 4.0, 1.0, DType.float32)
 var b = arange(1.0, 3.0, 1.0, DType.float32)
 var c = outer(a, b)  # (3, 2) matrix
-```
+```text
 
 ### Dunder Method Support
 
 **__matmul__** operator (`a @ b`):
+
 - Already implemented in `src/extensor/extensor.mojo:345-348`
 - Delegates to matmul() function
 - Enables Pythonic syntax: `c = a @ b`
@@ -741,20 +829,23 @@ var c = outer(a, b)  # (3, 2) matrix
 ### Implementation Summary
 
 **Total Operations**: 25 operations (21 from previous session + 4 matrix ops)
+
 - ✅ Creation: 7 operations
 - ✅ Arithmetic: 7 operations
 - ✅ Comparison: 6 operations
 - ✅ Reduction: 4 operations (all-elements only)
 - ✅ Matrix: 4 operations (NEW)
 
-**Code Changes**:
+### Code Changes
+
 - Modified: `src/extensor/matrix.mojo` (+85 lines, -10 lines)
 - matmul(): Lines 66-108 (43 lines)
 - transpose(): Lines 128-160 (33 lines)
 - dot(): Lines 134-143 (10 lines)
 - outer(): Lines 169-180 (12 lines)
 
-**Testing Status**:
+### Testing Status
+
 - 26 matrix operation tests ready in `test_matrix.mojo`
 - Tests validate: shapes, dtypes, error handling, edge cases
 - 10 matmul tests (2D, batched, errors, dtype preservation)
@@ -764,18 +855,21 @@ var c = outer(a, b)  # (3, 2) matrix
 
 ### Performance Characteristics
 
-**Time Complexity**:
+### Time Complexity
+
 - matmul(m×k, k×n): O(m×n×k) - triple nested loop
 - transpose(m×n): O(m×n) - double nested loop
 - dot(n): O(n) - single loop
 - outer(m, n): O(m×n) - double nested loop
 
-**Memory**:
+### Memory
+
 - All operations create new tensors (no views yet)
 - transpose() copies data (TODO: zero-copy with strides)
 - Row-major (C-order) layout throughout
 
 **Future Optimizations** (TODO):
+
 - SIMD vectorization for inner loops
 - Cache-friendly loop tiling for matmul
 - Zero-copy transpose using strides/views
@@ -792,31 +886,36 @@ var c = outer(a, b)  # (3, 2) matrix
 
 ### Next Steps
 
-**Immediate**:
+### Immediate
+
 1. 🔲 Uncomment matrix test assertions to validate implementations
-2. 🔲 Run matrix operation tests
-3. 🔲 Fix any bugs discovered during testing
+1. 🔲 Run matrix operation tests
+1. 🔲 Fix any bugs discovered during testing
 
-**Priority 2 (remaining)**:
+### Priority 2 (remaining)
+
 1. 🔲 Write element-wise math tests (~62 tests)
-2. 🔲 Implement element-wise math operations (exp, log, sqrt, etc.)
-3. 🔲 Optimize matrix operations (SIMD, tiling)
+1. 🔲 Implement element-wise math operations (exp, log, sqrt, etc.)
+1. 🔲 Optimize matrix operations (SIMD, tiling)
 
-**Priority 3**:
+### Priority 3
+
 1. 🔲 Implement shape manipulation operations
-2. 🔲 Implement indexing and slicing
-3. 🔲 Implement concatenation and stacking
+1. 🔲 Implement indexing and slicing
+1. 🔲 Implement concatenation and stacking
 
 ### Milestone Progress
 
 **MVP Status** (Target: 2-3 months):
+
 - ✅ Basic operations: 25/50 implemented (50%)
 - ✅ Core matrix ops: 4/4 implemented (100%)
 - 🚧 Element-wise math: 0/15 (0%)
 - 🚧 Shape manipulation: 0/10 (0%)
 - **Overall**: ~35% toward MVP
 
-**Testing Coverage**:
+### Testing Coverage
+
 - Total tests: 353 tests
 - Implemented: 255 tests (72%)
 - Ready to validate: 26 matrix tests (pending uncomment)
@@ -825,6 +924,7 @@ var c = outer(a, b)  # (3, 2) matrix
 ### Conclusion
 
 The matrix operations implementation adds critical functionality for neural network layers. With matmul, transpose, dot, and outer now functional, ExTensor can support:
+
 - Linear layers (matmul for weight multiplication)
 - Batch processing (batched matmul)
 - Loss calculations (dot products)
@@ -841,30 +941,36 @@ After completing matrix operations, work continued with implementing element-wis
 ### Element-wise Math Operations Implemented (9 operations)
 
 #### abs() - Absolute Value
+
 **File**: `src/extensor/elementwise_math.mojo` (lines 12-30)
 
-**Functionality**:
+### Functionality
+
 - Element-wise absolute value |x|
 - Works with any dtype (via Float64 conversion)
 - Preserves input dtype in result
 
-**Implementation**:
+### Implementation
+
 ```mojo
 for i in range(numel):
     let val = tensor._get_float64(i)
     result._set_float64(i, math_abs(val))
-```
+```text
 
 **Example**: `[-3.0, -1.0, 0.0, 1.0, 3.0]` → `[3.0, 1.0, 0.0, 1.0, 3.0]`
 
 #### sign() - Sign Function
+
 **File**: `src/extensor/elementwise_math.mojo` (lines 33-61)
 
-**Functionality**:
+### Functionality
+
 - Returns -1 for negative, 0 for zero, +1 for positive
 - Preserves dtype
 
-**Implementation**:
+### Implementation
+
 ```mojo
 if val > 0.0:
     sign_val = 1.0
@@ -872,111 +978,136 @@ elif val < 0.0:
     sign_val = -1.0
 else:
     sign_val = 0.0
-```
+```text
 
 **Example**: `[-2.0, 0.0, 3.0]` → `[-1.0, 0.0, 1.0]`
 
 #### exp() - Exponential Function
+
 **File**: `src/extensor/elementwise_math.mojo` (lines 64-81)
 
-**Functionality**:
+### Functionality
+
 - Computes e^x element-wise
 - Uses `math.exp()` from Mojo stdlib
 
-**Example**:
+### Example
+
 - `exp(0)` → 1.0
 - `exp(1)` → 2.71828 (e)
 - `exp(-1)` → 0.36788 (1/e)
 
 #### log() - Natural Logarithm
+
 **File**: `src/extensor/elementwise_math.mojo` (lines 84-105)
 
-**Functionality**:
+### Functionality
+
 - Computes ln(x) element-wise
 - Validates x > 0, raises error for x ≤ 0
 - Uses `math.log()` from Mojo stdlib
 
-**Error Handling**:
+### Error Handling
+
 - Raises error with value: "log requires positive values, got {val}"
 
-**Example**:
+### Example
+
 - `log(1)` → 0.0
 - `log(e)` → 1.0
 - `log(2)` → 0.69315
 
 #### sqrt() - Square Root
+
 **File**: `src/extensor/elementwise_math.mojo` (lines 108-129)
 
-**Functionality**:
+### Functionality
+
 - Computes √x element-wise
 - Validates x ≥ 0, raises error for x < 0
 - Uses `math.sqrt()` from Mojo stdlib
 
-**Error Handling**:
+### Error Handling
+
 - Raises error with value: "sqrt requires non-negative values, got {val}"
 
-**Example**:
+### Example
+
 - `sqrt(4)` → 2.0
 - `sqrt(0)` → 0.0
 - `sqrt(2)` → 1.41421
 
 #### sin() - Sine Function
+
 **File**: `src/extensor/elementwise_math.mojo` (lines 132-149)
 
-**Functionality**:
+### Functionality
+
 - Computes sin(x) element-wise (x in radians)
 - Uses `math.sin()` from Mojo stdlib
 
-**Example**:
+### Example
+
 - `sin(0)` → 0.0
 - `sin(π/2)` → 1.0
 - `sin(π)` → 0.0
 
 #### cos() - Cosine Function
+
 **File**: `src/extensor/elementwise_math.mojo` (lines 152-169)
 
-**Functionality**:
+### Functionality
+
 - Computes cos(x) element-wise (x in radians)
 - Uses `math.cos()` from Mojo stdlib
 
-**Example**:
+### Example
+
 - `cos(0)` → 1.0
 - `cos(π/2)` → 0.0
 - `cos(π)` → -1.0
 
 #### tanh() - Hyperbolic Tangent
+
 **File**: `src/extensor/elementwise_math.mojo` (lines 172-189)
 
-**Functionality**:
+### Functionality
+
 - Computes tanh(x) element-wise
 - Range: (-1, 1)
 - Uses `math.tanh()` from Mojo stdlib
 
-**Example**:
+### Example
+
 - `tanh(0)` → 0.0
 - `tanh(10)` → 0.99999 (saturates to 1)
 - `tanh(-10)` → -0.99999 (saturates to -1)
 - `tanh(0.5)` → 0.46212
 
 #### clip() - Clamp Values
+
 **File**: `src/extensor/elementwise_math.mojo` (lines 192-222)
 
-**Functionality**:
+### Functionality
+
 - Clamps values to [min_val, max_val] range
 - Values < min_val → min_val
 - Values > max_val → max_val
 - Values in range → unchanged
 
-**Error Handling**:
+### Error Handling
+
 - Validates min_val ≤ max_val
 
-**Example**:
+### Example
+
 - `clip([1, 2, 3, 4, 5], 2.0, 4.0)` → `[2, 2, 3, 4, 4]`
 - `clip([0.5, 1.5, 2.5], 1.0, 2.0)` → `[1.0, 1.5, 2.0]`
 
 ### Implementation Summary
 
 **Total Operations**: 34 operations (25 from previous + 9 element-wise math)
+
 - ✅ Creation: 7 operations
 - ✅ Arithmetic: 7 operations
 - ✅ Comparison: 6 operations
@@ -984,20 +1115,24 @@ else:
 - ✅ Matrix: 4 operations
 - ✅ Element-wise Math: 9 operations (NEW)
 
-**Code Changes**:
+### Code Changes
+
 - Created: `src/extensor/elementwise_math.mojo` (252 lines)
 - Modified: `src/extensor/__init__.mojo` (added 9 exports)
 - Created: `tests/extensor/test_elementwise_math.mojo` (557 lines, 35 tests)
 
-**Implementation Pattern**:
-All operations follow the same pattern:
-1. Create result tensor with same shape and dtype
-2. Loop over all elements using `tensor.numel()`
-3. Read value with `_get_float64(i)`
-4. Apply math function from Mojo stdlib
-5. Write result with `_set_float64(i, val)`
+### Implementation Pattern
 
-**Cross-dtype Support**:
+All operations follow the same pattern:
+
+1. Create result tensor with same shape and dtype
+1. Loop over all elements using `tensor.numel()`
+1. Read value with `_get_float64(i)`
+1. Apply math function from Mojo stdlib
+1. Write result with `_set_float64(i, val)`
+
+### Cross-dtype Support
+
 - All operations use `_get_float64()/_set_float64()` internally
 - Input dtype is preserved in output
 - Float64 used as intermediate precision for calculations
@@ -1006,7 +1141,7 @@ All operations follow the same pattern:
 
 **File**: `tests/extensor/test_elementwise_math.mojo` (557 lines)
 
-**Test Categories**:
+### Test Categories
 
 1. **abs() tests (4 tests)**:
    - Positive values remain unchanged
@@ -1014,72 +1149,76 @@ All operations follow the same pattern:
    - Mixed positive/negative values
    - Dtype preservation (float64)
 
-2. **sign() tests (4 tests)**:
+1. **sign() tests (4 tests)**:
    - Positive values → +1
    - Negative values → -1
    - Zero values → 0
    - Mixed values
 
-3. **exp() tests (4 tests)**:
+1. **exp() tests (4 tests)**:
    - exp(0) = 1
    - exp(1) ≈ e ≈ 2.71828
    - exp(0.5) ≈ 1.64872
    - exp(-1) ≈ 0.36788
 
-4. **log() tests (3 tests)**:
+1. **log() tests (3 tests)**:
    - log(1) = 0
    - log(e) = 1
    - log(2) ≈ 0.69315
 
-5. **sqrt() tests (4 tests)**:
+1. **sqrt() tests (4 tests)**:
    - Perfect squares: sqrt(1,4,9,16,25) = 1,2,3,4,5
    - sqrt(0) = 0
    - sqrt(1) = 1
    - sqrt(2) ≈ 1.41421
 
-6. **sin() tests (3 tests)**:
+1. **sin() tests (3 tests)**:
    - sin(0) = 0
    - sin(π/2) = 1
    - sin(π) ≈ 0
 
-7. **cos() tests (3 tests)**:
+1. **cos() tests (3 tests)**:
    - cos(0) = 1
    - cos(π/2) ≈ 0
    - cos(π) = -1
 
-8. **tanh() tests (4 tests)**:
+1. **tanh() tests (4 tests)**:
    - tanh(0) = 0
    - tanh(10) ≈ 1 (saturation)
    - tanh(-10) ≈ -1 (saturation)
    - tanh(0.5) ≈ 0.46212
 
-9. **clip() tests (3 tests)**:
+1. **clip() tests (3 tests)**:
    - Basic clipping [1,2,3,4,5] → [2,2,3,4,4] with range [2,4]
    - All values below min clipped to min
    - All values above max clipped to max
 
-10. **dtype preservation test (1 test)**:
+1. **dtype preservation test (1 test)**:
     - Validates all operations preserve float64 dtype
 
-**Test Status**:
+### Test Status
+
 - All 35 tests fully implemented with assertions
 - All tests uncommented and ready to run
 - Awaiting Mojo environment for validation
 
 ### Performance Characteristics
 
-**Time Complexity**:
+### Time Complexity
+
 All operations: O(n) where n = tensor.numel()
 
-**Algorithm**:
+### Algorithm
+
 - Naive element-wise loop (no optimization)
 - Focus on correctness first
 
 **Future Optimizations** (TODO):
+
 1. SIMD vectorization for parallel element processing
-2. Loop unrolling for better instruction pipeline utilization
-3. Cache-friendly memory access patterns
-4. Fused operations (e.g., fused abs + clip)
+1. Loop unrolling for better instruction pipeline utilization
+1. Cache-friendly memory access patterns
+1. Fused operations (e.g., fused abs + clip)
 
 ### Commit History
 
@@ -1094,11 +1233,13 @@ All operations: O(n) where n = tensor.numel()
 ### Integration with ExTensor
 
 **Exports**: Added to `src/extensor/__init__.mojo`:
+
 ```mojo
 from .elementwise_math import abs, sign, exp, log, sqrt, sin, cos, tanh, clip
-```
+```text
 
-**Usage Examples**:
+### Usage Examples
+
 ```mojo
 from extensor import ExTensor, ones, abs, exp, tanh, clip
 
@@ -1117,11 +1258,12 @@ var activations = tanh(logits)  # Squash to [-1, 1]
 # Gradient clipping
 var gradients = ones(shape, DType.float32)
 var clipped = clip(gradients, -1.0, 1.0)  # Prevent exploding gradients
-```
+```text
 
 ### Array API Standard Compliance
 
 All operations follow the Python Array API Standard 2023.12:
+
 - **Function signatures**: Match standard specification
 - **Broadcasting**: Will be integrated (same-shape for now)
 - **Dtype preservation**: Input dtype preserved in output
@@ -1131,7 +1273,8 @@ All operations follow the Python Array API Standard 2023.12:
 
 ### Testing Quality Metrics
 
-**Test Coverage**:
+### Test Coverage
+
 - 35 comprehensive tests covering all 9 operations
 - Edge cases: zeros, ones, negative values, boundary values
 - Mathematical identities: exp(0)=1, log(1)=0, sin(0)=0, etc.
@@ -1139,48 +1282,55 @@ All operations follow the Python Array API Standard 2023.12:
 - All assertions uncommented and ready
 
 **Test Validation** (pending Mojo environment):
+
 - Tests written and committed
 - Assertions enabled
 - Ready to run: `mojo test tests/extensor/test_elementwise_math.mojo`
 
 ### Next Steps
 
-**Immediate**:
-1. ✅ Implement element-wise math operations - COMPLETED
-2. ✅ Write comprehensive tests - COMPLETED
-3. ✅ Uncomment test assertions - COMPLETED
-4. 🔲 Run tests in Mojo environment (when available)
-5. 🔲 Fix any bugs discovered during testing
+### Immediate
 
-**Priority 2 (remaining)**:
+1. ✅ Implement element-wise math operations - COMPLETED
+1. ✅ Write comprehensive tests - COMPLETED
+1. ✅ Uncomment test assertions - COMPLETED
+1. 🔲 Run tests in Mojo environment (when available)
+1. 🔲 Fix any bugs discovered during testing
+
+### Priority 2 (remaining)
+
 1. 🔲 Implement remaining element-wise math (10+ more operations)
    - Bitwise operations (bitwise_and, bitwise_or, etc.)
    - Logical operations (logical_and, logical_or, logical_not)
    - Rounding (ceil, floor, round, trunc)
    - More transcendentals (log10, log2, expm1, log1p)
 
-**Priority 3**:
+### Priority 3
+
 1. 🔲 Integrate broadcasting into element-wise operations
-2. 🔲 Add SIMD optimizations
-3. 🔲 Implement shape manipulation operations
-4. 🔲 Implement indexing and slicing
+1. 🔲 Add SIMD optimizations
+1. 🔲 Implement shape manipulation operations
+1. 🔲 Implement indexing and slicing
 
 ### Milestone Progress
 
 **MVP Status** (Target: 2-3 months):
+
 - ✅ Basic operations: 34/50 implemented (68%)
 - ✅ Core matrix ops: 4/4 implemented (100%)
 - ✅ Element-wise math (basic): 9/15 implemented (60%)
 - 🚧 Shape manipulation: 0/10 (0%)
 - **Overall**: ~50% toward MVP
 
-**Testing Coverage**:
+### Testing Coverage
+
 - Total tests: 388 tests (353 + 35 element-wise)
 - Implemented: 290 tests (255 + 35 element-wise)
 - Implementation rate: 75%
 - Placeholder: 98 tests (25%)
 
-**Operations by Category**:
+### Operations by Category
+
 - ✅ Creation: 7/7 (100%)
 - ✅ Arithmetic: 7/7 (100%)
 - ✅ Comparison: 6/6 (100%)
@@ -1194,20 +1344,24 @@ All operations follow the Python Array API Standard 2023.12:
 
 With element-wise math operations, ExTensor now supports:
 
-**Neural Network Layers**:
+### Neural Network Layers
+
 - Activation functions: tanh(), sigmoid (via exp)
 - Layer normalization: mean, sqrt, abs
 - Gradient clipping: clip()
 
-**Loss Functions**:
+### Loss Functions
+
 - Cross-entropy: log(), exp()
 - MSE: power (already implemented)
 
-**Data Preprocessing**:
+### Data Preprocessing
+
 - Normalization: abs(), sign()
 - Feature scaling: clip()
 
-**Scientific Computing**:
+### Scientific Computing
+
 - Transcendental functions: exp(), log(), sqrt()
 - Trigonometric: sin(), cos()
 - Element-wise transformations
@@ -1219,6 +1373,7 @@ The element-wise mathematical operations implementation adds 9 critical function
 Combined with matrix operations from the previous session, ExTensor now has 34 operations implemented (68% toward MVP). The foundation is solid for implementing neural network layers and training loops.
 
 **Key Achievement**: ExTensor can now support:
+
 - Forward passes with matmul + activation functions
 - Loss computation with mathematical operations
 - Gradient clipping for training stability

@@ -30,7 +30,7 @@ All issues follow the 5-phase development workflow: Plan → [Test | Implementat
 
 #### Section 03: Tooling - Paper Scaffolding (#503-515)
 
-**Template System (#503-507)**:
+### Template System (#503-507)
 
 | Issue | Phase | Component | Status |
 |-------|-------|-----------|--------|
@@ -40,7 +40,7 @@ All issues follow the 5-phase development workflow: Plan → [Test | Implementat
 | #506 | Package | Create Templates | TBD |
 | #507 | Cleanup | Create Templates | TBD |
 
-**Template Variables (#508-512)**:
+### Template Variables (#508-512)
 
 | Issue | Phase | Component | Status |
 |-------|-------|-----------|--------|
@@ -54,7 +54,7 @@ All issues follow the 5-phase development workflow: Plan → [Test | Implementat
 
 #### Section 01: Foundation - Directory Structure (#516-560)
 
-**Papers Directory (#516-535)**:
+### Papers Directory (#516-535)
 
 | Issue Range | Component | Phases | Key Deliverables |
 |-------------|-----------|--------|------------------|
@@ -63,7 +63,7 @@ All issues follow the 5-phase development workflow: Plan → [Test | Implementat
 | #526-530 | Create Template | Plan→Cleanup | `papers/_template/` directory structure |
 | #531-535 | Create Papers Directory | Plan→Cleanup | Complete papers directory setup |
 
-**Shared Directory (#536-560)**:
+### Shared Directory (#536-560)
 
 | Issue Range | Component | Phases | Key Deliverables |
 |-------------|-----------|--------|------------------|
@@ -75,7 +75,7 @@ All issues follow the 5-phase development workflow: Plan → [Test | Implementat
 
 ### By Phase
 
-**Planning Phase Issues**:
+### Planning Phase Issues
 
 - #503 (Create Templates)
 - #508 (Template Variables)
@@ -90,24 +90,24 @@ All issues follow the 5-phase development workflow: Plan → [Test | Implementat
 - #551 (Create Utils)
 - #556 (Create Shared Directory estimate)
 
-**Test Phase Issues**:
+### Test Phase Issues
 
 - #499 (Shared Library)
 - #504 (Create Templates estimate)
 - #511 (Skills)
 
-**Implementation Phase Issues**:
+### Implementation Phase Issues
 
 - #500 (Shared Library)
 - #505 (Create Templates)
 - #512 (Skills)
 
-**Packaging Phase Issues**:
+### Packaging Phase Issues
 
 - #506 (Create Templates estimate)
 - #513 (Skills estimate)
 
-**Cleanup Phase Issues**:
+### Cleanup Phase Issues
 
 - #507 (Create Templates estimate)
 - #514 (Skills estimate)
@@ -150,7 +150,7 @@ The implementation must follow this dependency order:
    ├── #503-507: Create Templates (README, Mojo, test templates)
    ├── #508-512: Template Variables (variable system)
    └── #510-514: Skills (Claude Code skills system) - **#510 DONE** ✅
-```
+```text
 
 ### Phase Dependencies
 
@@ -162,9 +162,9 @@ Plan (Phase 1)
 [Test | Implementation | Package] (Phases 2-4, parallel)
   ↓
 Cleanup (Phase 5)
-```
+```text
 
-**Key Rules**:
+### Key Rules
 
 - Plan phase MUST complete before other phases start
 - Test, Implementation, and Package phases can run in parallel
@@ -177,11 +177,11 @@ Cleanup (Phase 5)
    - Needs `shared/core/`, `shared/training/`, `shared/data/` directories
    - Foundation must complete before Shared Library implementation
 
-2. **Tooling depends on Papers Directory**:
+1. **Tooling depends on Papers Directory**:
    - Template creation needs `papers/` directory structure
    - Templates go in `papers/_template/`
 
-3. **Skills are independent**:
+1. **Skills are independent**:
    - Skills (#510-514) can proceed independently
    - #510 (Plan) already completed ✅
 
@@ -193,7 +193,7 @@ Cleanup (Phase 5)
 
 **Issues**: #516-560 (45 issues)
 
-**Approach**:
+### Approach
 
 1. **Week 1: Papers Directory** (#516-535)
    - Create `papers/` base directory
@@ -201,20 +201,20 @@ Cleanup (Phase 5)
    - Write `papers/README.md`
    - Complete papers directory setup
 
-2. **Week 2: Shared Directory** (#536-560)
+1. **Week 2: Shared Directory** (#536-560)
    - Create `shared/core/` for fundamental components
    - Create `shared/training/` for training utilities
    - Create `shared/data/` for data processing
    - Create `shared/utils/` for general utilities
    - Complete shared directory setup
 
-**Resource Allocation**:
+### Resource Allocation
 
 - Use `foundation-orchestrator` agent to coordinate directory creation
 - Delegate to `junior-implementation-engineer` for simple directory/file creation
 - Use `documentation-engineer` for README files
 
-**Success Criteria**:
+### Success Criteria
 
 - All directory structures created and documented
 - README files in place with clear usage instructions
@@ -227,7 +227,7 @@ Cleanup (Phase 5)
 
 **Issues**: #499-500 (2 issues, but large scope)
 
-**Approach**:
+### Approach
 
 1. **Test Phase** (#499):
    - Use `phase-test-tdd` skill to generate test files
@@ -236,21 +236,21 @@ Cleanup (Phase 5)
    - Write tests for data utilities (datasets, loaders, augmentations)
    - Set up testing framework and coverage reporting
 
-2. **Implementation Phase** (#500):
+1. **Implementation Phase** (#500):
    - Use `phase-implement` skill to coordinate implementation
    - Implement core operations in Mojo
    - Implement training utilities in Mojo
    - Implement data utilities (may use Python where Mojo limitations exist)
    - All implementations must pass tests from #499
 
-**Resource Allocation**:
+### Resource Allocation
 
 - Use `shared-library-orchestrator` agent to coordinate
 - Delegate to `senior-implementation-engineer` for complex Mojo code
 - Use `test-engineer` for test implementation
 - Use `mojo-language-review-specialist` for code reviews
 
-**Success Criteria**:
+### Success Criteria
 
 - All tests pass with high coverage (>80%)
 - Code follows Mojo best practices
@@ -264,7 +264,7 @@ Cleanup (Phase 5)
 
 **Issues**: #503-515 (13 issues, includes Skills)
 
-**Approach**:
+### Approach
 
 1. **Skills System** (#510-514):
    - #510 Plan: **COMPLETED** ✅
@@ -273,26 +273,26 @@ Cleanup (Phase 5)
    - #513 Package: Create skill packages
    - #514 Cleanup: Finalize skills system
 
-2. **Template System** (#503-507):
+1. **Template System** (#503-507):
    - #503 Plan: Design templates for README, Mojo code, tests
    - #504 Test: Validate template structure and syntax
    - #505 Impl: Create actual template files
    - #506 Package: Integrate templates into scaffolding system
    - #507 Cleanup: Finalize templates
 
-3. **Template Variables** (#508-512):
+1. **Template Variables** (#508-512):
    - Design variable substitution system
    - Implement variable rendering
    - Test template variable replacement
 
-**Resource Allocation**:
+### Resource Allocation
 
 - Use `tooling-orchestrator` agent to coordinate
 - Delegate to `implementation-engineer` for template system
 - Use `test-engineer` for validation
 - Use `documentation-engineer` for skill documentation
 
-**Success Criteria**:
+### Success Criteria
 
 - Skills system fully functional with 9+ skills (3 per tier)
 - Templates generate valid, linting-compliant files
@@ -336,7 +336,7 @@ Cleanup (Phase 5)
    - **Mitigation**: Follow ADR-001 language selection strategy
    - **Impact**: High (affects all paper implementations)
 
-2. **Test Coverage (#499)**
+1. **Test Coverage (#499)**
    - **Risk**: Achieving high test coverage for complex ML operations
    - **Mitigation**: Use TDD approach, start with tests
    - **Impact**: High (quality foundation for project)
@@ -348,7 +348,7 @@ Cleanup (Phase 5)
    - **Mitigation**: #510 (Plan) already completed ✅, clear specs
    - **Impact**: Medium (nice-to-have automation)
 
-2. **Template System (#503-507)**
+1. **Template System (#503-507)**
    - **Risk**: Template design may need iteration based on usage
    - **Mitigation**: Start simple, iterate based on feedback
    - **Impact**: Medium (tooling convenience)
@@ -433,14 +433,14 @@ Leverage these skills throughout implementation:
    python3 -m scripts.worktree_create tooling "Paper scaffolding tools"
    ```
 
-2. **Start Foundation Phase** (#516-535):
+1. **Start Foundation Phase** (#516-535):
 
    ```bash
    gh issue view 516  # Review issue details
    # Use foundation-orchestrator agent
    ```
 
-3. **Set up Testing Infrastructure**:
+1. **Set up Testing Infrastructure**:
 
    ```bash
    # Verify Mojo test runner
@@ -530,7 +530,7 @@ FOUNDATION (01-foundation)
     #555: [Cleanup] Create Utils
 
     #556-560: Create Shared Directory (all phases)
-```
+```text
 
 ### Related Documentation
 

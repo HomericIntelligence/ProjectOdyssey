@@ -26,18 +26,21 @@ Set up all necessary configuration files for the Mojo/MAX development environmen
 
 **Decision**: Use Magic as the primary package manager for Mojo/MAX dependencies
 
-**Rationale**:
+### Rationale
+
 - Magic is the recommended package manager for Mojo/MAX projects
 - Provides consistent environment management across different platforms
 - Simplifies dependency resolution for Mojo-specific packages
 
-**Approach**:
+### Approach
+
 - Define project metadata (name, version, description)
 - Specify all Mojo/MAX development dependencies
 - Configure appropriate package channels for Mojo ecosystem
 - Document any unusual dependency choices with inline comments
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Using system-level package managers (rejected: lacks Mojo ecosystem integration)
 - Managing dependencies manually (rejected: not reproducible)
 
@@ -45,24 +48,28 @@ Set up all necessary configuration files for the Mojo/MAX development environmen
 
 **Decision**: Use `pyproject.toml` as the central configuration file for Python tooling
 
-**Rationale**:
+### Rationale
+
 - PEP 518/621 standard for Python project configuration
 - Consolidates tool configurations in a single file
 - Better IDE and tooling support
 
-**Approach**:
+### Approach
+
 - Configure project metadata following Python packaging standards
 - Specify Python dependencies for automation and testing scripts
 - Configure development tools (black, ruff, pytest, mypy) with sensible defaults
 - Keep tool configurations minimal and document non-standard choices
 
-**Tools to Configure**:
+### Tools to Configure
+
 - **black**: Code formatting for Python scripts
 - **ruff**: Fast Python linting
 - **pytest**: Testing framework
 - **mypy**: Static type checking
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - Separate config files for each tool (rejected: more complex to maintain)
 - No Python tooling configuration (rejected: inconsistent code quality)
 
@@ -70,29 +77,34 @@ Set up all necessary configuration files for the Mojo/MAX development environmen
 
 **Decision**: Use comprehensive `.gitignore`, `.gitattributes`, and Git LFS for ML project file management
 
-**Rationale**:
+### Rationale
+
 - ML projects generate many artifacts (models, checkpoints, logs) that shouldn't be version-controlled
 - Large model files require special handling to avoid repository bloat
 - Different file types need appropriate Git handling (binary vs text, line endings)
 
-**Git Ignore Strategy**:
+### Git Ignore Strategy
+
 - Exclude all generated files (build artifacts, compiled code, logs)
 - Ignore Python cache and environment files
 - Exclude ML-specific artifacts (checkpoints, trained models, datasets)
 - Keep configuration minimal but comprehensive
 
-**Git LFS Strategy**:
+### Git LFS Strategy
+
 - Track large binary files (>50MB) automatically
 - Configure LFS for model files (`.pt`, `.pth`, `.onnx`, `.safetensors`)
 - Track dataset files if they must be version-controlled
 - Document LFS usage patterns for team
 
-**Git Attributes Strategy**:
+### Git Attributes Strategy
+
 - Configure line ending normalization for cross-platform compatibility
 - Mark binary files to prevent diff attempts
 - Configure merge strategies for specific file types
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - DVC for data versioning (deferred: added complexity, may add later)
 - No LFS configuration (rejected: will cause repository bloat)
 - Minimal `.gitignore` (rejected: will clutter repository)
@@ -101,12 +113,14 @@ Set up all necessary configuration files for the Mojo/MAX development environmen
 
 **Decision**: Use inline comments in configuration files to explain non-obvious choices
 
-**Rationale**:
+### Rationale
+
 - Configuration files are self-documenting
 - Comments provide context for future maintainers
 - Reduces need for separate documentation
 
-**Approach**:
+### Approach
+
 - Add comments explaining unusual dependency choices
 - Document tool configuration reasoning
 - Link to relevant documentation for complex configurations
@@ -123,29 +137,29 @@ ml-odyssey/
 ├── .gitattributes          # Git file handling configuration
 └── .git/
     └── lfs/                # Git LFS storage (auto-created)
-```
+```text
 
 ### Dependency Management Strategy
 
-**Two-Layer Approach**:
+### Two-Layer Approach
 
 1. **Mojo/MAX Dependencies** (magic.toml):
    - Mojo compiler and runtime
    - MAX framework and libraries
    - System-level development tools
 
-2. **Python Dependencies** (pyproject.toml):
+1. **Python Dependencies** (pyproject.toml):
    - Automation scripts dependencies
    - Testing frameworks
    - Development tooling
 
 ### File Handling Strategy
 
-**Three-Tier Classification**:
+### Three-Tier Classification
 
 1. **Version-Controlled**: Source code, configuration, documentation
-2. **Ignored**: Generated files, caches, logs, temporary files
-3. **LFS-Tracked**: Large binary files (models, datasets) when necessary
+1. **Ignored**: Generated files, caches, logs, temporary files
+1. **LFS-Tracked**: Large binary files (models, datasets) when necessary
 
 ## References
 
@@ -174,6 +188,7 @@ ml-odyssey/
 ## Implementation Notes
 
 This section will be populated during the implementation phase with:
+
 - Actual configuration values chosen
 - Issues encountered during setup
 - Deviations from planned approach

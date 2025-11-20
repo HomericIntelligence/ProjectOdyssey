@@ -108,30 +108,30 @@ Leverage Mojo's type system:
 ### Phase 1: Sum Reduction
 
 1. Implement basic sum along single axis
-2. Add multi-axis support
-3. Implement keepdims functionality
-4. Optimize with SIMD operations
+1. Add multi-axis support
+1. Implement keepdims functionality
+1. Optimize with SIMD operations
 
 ### Phase 2: Mean Reduction
 
 1. Build on sum implementation
-2. Add count normalization
-3. Handle edge cases (division by zero)
-4. Ensure numerical stability
+1. Add count normalization
+1. Handle edge cases (division by zero)
+1. Ensure numerical stability
 
 ### Phase 3: Max/Min Reductions
 
 1. Implement max reduction
-2. Implement min reduction
-3. Handle special values (NaN, Inf)
-4. Optimize comparison operations
+1. Implement min reduction
+1. Handle special values (NaN, Inf)
+1. Optimize comparison operations
 
 ### Phase 4: Edge Case Handling
 
 1. Empty tensor handling
-2. Axis validation
-3. Error reporting
-4. Documentation of limitations
+1. Axis validation
+1. Error reporting
+1. Documentation of limitations
 
 ## API Design
 
@@ -169,7 +169,7 @@ fn min[dtype: DType](
 ) -> Tensor[dtype]:
     """Min reduction along specified axis."""
     pass
-```
+```text
 
 ### Usage Examples
 
@@ -189,25 +189,25 @@ let normalized = tensor - mean_vals
 
 # Find maximum values in each batch
 let batch_max = max(tensor, axis=1, keepdims=True)
-```
+```text
 
 ## Edge Cases to Address
 
 1. **Empty tensors**: Tensors with zero elements in reduced dimensions
-2. **Out-of-bounds axes**: Axis values exceeding tensor dimensionality
-3. **Negative axes**: Support negative indexing (e.g., axis=-1 for last dimension)
-4. **Type overflow**: Ensure accumulator types prevent overflow in sum operations
-5. **NaN propagation**: Define how NaN values propagate through reductions
-6. **Infinity handling**: Handle positive/negative infinity correctly
+1. **Out-of-bounds axes**: Axis values exceeding tensor dimensionality
+1. **Negative axes**: Support negative indexing (e.g., axis=-1 for last dimension)
+1. **Type overflow**: Ensure accumulator types prevent overflow in sum operations
+1. **NaN propagation**: Define how NaN values propagate through reductions
+1. **Infinity handling**: Handle positive/negative infinity correctly
 
 ## Testing Strategy
 
 1. **Unit tests**: Test each reduction operation independently
-2. **Axis variations**: Test None, single axis, multiple axes
-3. **Keepdims variations**: Test with keepdims=True and keepdims=False
-4. **Edge cases**: Empty tensors, single elements, large dimensions
-5. **Numerical stability**: Test with extreme values, verify precision
-6. **Performance tests**: Benchmark against baseline implementations
+1. **Axis variations**: Test None, single axis, multiple axes
+1. **Keepdims variations**: Test with keepdims=True and keepdims=False
+1. **Edge cases**: Empty tensors, single elements, large dimensions
+1. **Numerical stability**: Test with extreme values, verify precision
+1. **Performance tests**: Benchmark against baseline implementations
 
 ## References
 

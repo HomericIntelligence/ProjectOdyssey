@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Define docstring format and requirements
-2. Specify API documentation standards
-3. Create README structure guidelines
-4. Define tutorial writing standards
+1. Specify API documentation standards
+1. Create README structure guidelines
+1. Define tutorial writing standards
 
 ## Success Criteria
 

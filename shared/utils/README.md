@@ -27,9 +27,9 @@ utils/
 ├── config.mojo             # Configuration management
 ├── random.mojo             # Random seed utilities
 └── profiling.mojo          # Timing and profiling tools
-```
+```text
 
-## What Belongs in Utils?
+## What Belongs in Utils
 
 ### Include
 
@@ -99,7 +99,7 @@ struct Logger:
         var record = LogRecord(self.name, level, message)
         for handler in self.handlers:
             handler.emit(record)
-```
+```text
 
 #### Log Levels
 
@@ -112,7 +112,7 @@ struct LogLevel:
     alias WARNING = 30
     alias ERROR = 40
     alias CRITICAL = 50
-```
+```text
 
 #### Handlers
 
@@ -137,9 +137,9 @@ struct FileHandler(Handler):
     fn emit(self, record: LogRecord):
         """Write to file."""
         write_line(self.file, f"[{record.timestamp}] [{record.level_name}] {record.message}")
-```
+```text
 
-**Usage**:
+### Usage
 
 ```mojo
 from shared.utils import Logger, StreamHandler, FileHandler
@@ -155,7 +155,7 @@ logger.add_handler(FileHandler("training.log"))
 logger.info("Starting epoch 1")
 logger.warning("Learning rate reduced")
 logger.error("Validation loss increased")
-```
+```text
 
 ### Visualization (`visualization.mojo`)
 
@@ -194,7 +194,7 @@ fn plot_training_curves(
     # Plot loss curves
     # Plot accuracy curves if provided
     # Save or display
-```
+```text
 
 #### show_images
 
@@ -225,7 +225,7 @@ fn show_images(
     # Create image grid
     # Add labels if provided
     # Display or save
-```
+```text
 
 #### plot_confusion_matrix
 
@@ -261,7 +261,7 @@ fn plot_confusion_matrix(
     # Create heatmap
     # Add class names
     # Display or save
-```
+```text
 
 #### plot_lr_schedule
 
@@ -288,7 +288,7 @@ fn plot_lr_schedule(
     # Simulate scheduler for num_epochs
     # Plot learning rate curve
     # Display or save
-```
+```text
 
 ### Configuration (`config.mojo`)
 
@@ -318,7 +318,7 @@ struct Config:
     fn has(self, key: String) -> Bool:
         """Check if key exists."""
         return key in self.data
-```
+```text
 
 #### load_config / save_config
 
@@ -360,7 +360,7 @@ fn save_config(config: Config, filepath: String):
     # Convert Config to YAML/JSON
     # Write to file
     pass
-```
+```text
 
 #### merge_configs
 
@@ -386,9 +386,9 @@ fn merge_configs(base: Config, override: Config) -> Config:
     # Deep merge configurations
     # Override takes precedence
     pass
-```
+```text
 
-**Usage**:
+### Usage
 
 ```mojo
 from shared.utils import load_config, save_config
@@ -404,7 +404,7 @@ var num_epochs = config.get[Int]("num_epochs")
 # Modify and save
 config.set("learning_rate", 0.005)
 save_config(config, "configs/lenet5_tuned.yaml")
-```
+```text
 
 ### Random Seed Management (`random.mojo`)
 
@@ -432,7 +432,7 @@ fn set_seed(seed: Int):
     # Set Mojo stdlib seed
     # Set custom RNG seeds
     pass
-```
+```text
 
 #### get_random_state / set_random_state
 
@@ -450,9 +450,9 @@ fn get_random_state() -> RandomState:
 fn set_random_state(state: RandomState):
     """Restore RNG state."""
     pass
-```
+```text
 
-**Usage**:
+### Usage
 
 ```mojo
 from shared.utils import set_seed, get_random_state, set_random_state
@@ -465,7 +465,7 @@ var state = get_random_state()
 
 # Restore state after validation
 set_random_state(state)
-```
+```text
 
 ### Profiling and Timing (`profiling.mojo`)
 
@@ -495,9 +495,9 @@ struct Timer:
         var elapsed = now() - self.start_time
         var msg = f"{self.name}: " if self.name else ""
         print(f"{msg}{elapsed:.4f}s")
-```
+```text
 
-**Usage**:
+### Usage
 
 ```mojo
 from shared.utils import Timer
@@ -507,7 +507,7 @@ with Timer("Forward pass"):
 
 with Timer("Backward pass"):
     var grads = compute_gradients(loss, model)
-```
+```text
 
 #### profile decorator
 
@@ -532,7 +532,7 @@ fn profile[func: fn() -> None]():
     # Measure time and memory
     # Print statistics
     pass
-```
+```text
 
 #### memory_usage
 
@@ -551,7 +551,7 @@ fn memory_usage() -> MemoryStats:
         print(f"Memory: {mem.allocated_mb}MB / {mem.peak_mb}MB")
     """
     pass
-```
+```text
 
 ## Usage Examples
 
@@ -596,7 +596,7 @@ for epoch in range(epochs):
 # Plot results
 plot_training_curves(train_losses, val_losses, save_path="results/curves.png")
 logger.info("Training complete!")
-```
+```text
 
 ### Experiment Configuration
 
@@ -616,7 +616,7 @@ model:
 data:
   root: ./data
   augmentation: true
-```
+```text
 
 ### Debugging with Logging
 
@@ -638,47 +638,47 @@ if val_loss > train_loss * 1.5:
 # Log errors for failures
 if not os.path.exists(checkpoint_path):
     logger.error(f"Checkpoint not found: {checkpoint_path}")
-```
+```text
 
 ## Best Practices
 
 ### Logging
 
 1. **Use Appropriate Levels**: DEBUG for development, INFO for production
-2. **Structured Messages**: Use consistent format for log messages
-3. **Context**: Include relevant context (epoch, batch, etc.)
-4. **Performance**: Avoid logging in tight loops
+1. **Structured Messages**: Use consistent format for log messages
+1. **Context**: Include relevant context (epoch, batch, etc.)
+1. **Performance**: Avoid logging in tight loops
 
 ### Configuration
 
 1. **Version Control**: Commit config files to track experiments
-2. **Hierarchical Configs**: Use base configs + overrides for experiments
-3. **Validation**: Validate config values at load time
-4. **Documentation**: Document all config options
+1. **Hierarchical Configs**: Use base configs + overrides for experiments
+1. **Validation**: Validate config values at load time
+1. **Documentation**: Document all config options
 
 ### Reproducibility
 
 1. **Always Set Seed**: Set seed at start of every experiment
-2. **Record Everything**: Log seed, config, environment info
-3. **Version Dependencies**: Record package versions used
-4. **Save Checkpoints**: Save model, optimizer, RNG state
+1. **Record Everything**: Log seed, config, environment info
+1. **Version Dependencies**: Record package versions used
+1. **Save Checkpoints**: Save model, optimizer, RNG state
 
 ### Profiling
 
 1. **Profile Before Optimizing**: Measure to find bottlenecks
-2. **Profile Realistic Workloads**: Use real data, not toy examples
-3. **Compare Fairly**: Use same conditions for comparisons
-4. **Focus on Hot Paths**: Optimize most time-consuming operations
+1. **Profile Realistic Workloads**: Use real data, not toy examples
+1. **Compare Fairly**: Use same conditions for comparisons
+1. **Focus on Hot Paths**: Optimize most time-consuming operations
 
 ## Testing
 
 Utility functions should be tested for:
 
 1. **Logging**: Messages written correctly to handlers
-2. **Config**: Loading, saving, merging work correctly
-3. **Reproducibility**: Same seed produces same results
-4. **Timing**: Timer measurements are accurate
-5. **Visualization**: Plots generated without errors
+1. **Config**: Loading, saving, merging work correctly
+1. **Reproducibility**: Same seed produces same results
+1. **Timing**: Timer measurements are accurate
+1. **Visualization**: Plots generated without errors
 
 See `tests/shared/utils/` for comprehensive test suite.
 
@@ -701,18 +701,18 @@ set_seed(42)  # For reproducible data shuffling
 # In model development
 from shared.utils import plot_training_curves
 plot_training_curves(history.train_loss, history.val_loss)
-```
+```text
 
 ## Future Enhancements
 
 Planned features for future releases:
 
 1. **TensorBoard Integration**: Native TensorBoard logging
-2. **W&B Integration**: Weights & Biases experiment tracking
-3. **Advanced Profiling**: GPU profiling, kernel-level profiling
-4. **Distributed Logging**: Aggregate logs from multiple workers
-5. **Interactive Visualization**: Real-time training visualization
-6. **Experiment Tracking**: Database for experiment management
+1. **W&B Integration**: Weights & Biases experiment tracking
+1. **Advanced Profiling**: GPU profiling, kernel-level profiling
+1. **Distributed Logging**: Aggregate logs from multiple workers
+1. **Interactive Visualization**: Real-time training visualization
+1. **Experiment Tracking**: Database for experiment management
 
 ## References
 
@@ -725,7 +725,7 @@ Planned features for future releases:
 When adding new utilities:
 
 1. Keep utilities general and reusable
-2. Add comprehensive tests
-3. Document with examples
-4. Follow existing patterns
-5. Update this README
+1. Add comprehensive tests
+1. Document with examples
+1. Follow existing patterns
+1. Update this README

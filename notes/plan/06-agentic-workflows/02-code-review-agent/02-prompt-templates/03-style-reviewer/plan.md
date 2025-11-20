@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Design output format for style issues
-2. Create style checklist
-3. Define naming convention rules
-4. Add documentation standards
+1. Create style checklist
+1. Define naming convention rules
+1. Add documentation standards
 
 ## Success Criteria
 

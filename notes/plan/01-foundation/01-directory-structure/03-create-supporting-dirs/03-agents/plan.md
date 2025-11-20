@@ -9,7 +9,7 @@
 This plan establishes the agent system infrastructure for the ml-odyssey project, implementing a comprehensive 6-level hierarchical agent architecture. The system uses two distinct directories:
 
 1. **`.claude/agents/`** - Working sub-agent configuration files (operational agents)
-2. **`agents/`** - Documentation, templates, and reference materials (repository root)
+1. **`agents/`** - Documentation, templates, and reference materials (repository root)
 
 The 6-level agent hierarchy spans from meta-orchestration down to junior implementation agents, enabling sophisticated task decomposition and parallel execution while maintaining clear coordination patterns. This agent system integrates with the 5-phase workflow (Plan → Test/Implementation/Package → Cleanup) and leverages git worktrees for isolated agent contexts.
 
@@ -59,38 +59,38 @@ The 6-level agent hierarchy spans from meta-orchestration down to junior impleme
    - Create `agents/` at repository root for documentation
    - Create `agents/templates/` for reusable templates
 
-2. **Write comprehensive README**:
+1. **Write comprehensive README**:
    - Explain distinction between `.claude/agents/` (operational) and `agents/` (documentation)
    - Document the 6-level hierarchy with clear role definitions
    - Clarify sub-agents vs skills (sub-agents = separate contexts; skills = capabilities)
    - Explain git worktree integration for agent context isolation
    - Provide quick-start guide for creating new agents
 
-3. **Document agent hierarchy**:
+1. **Document agent hierarchy**:
    - Create `agents/hierarchy.md` with visual diagram
    - Define responsibilities for each level (0-5)
    - Document delegation patterns and escalation paths
    - Specify which levels orchestrate vs execute
 
-4. **Create delegation rules documentation**:
+1. **Create delegation rules documentation**:
    - Write `agents/delegation-rules.md` with orchestration patterns
    - Define when to delegate up vs down the hierarchy
    - Document coordination mechanisms (status files, git integration)
    - Provide decision trees for task routing
 
-5. **Develop configuration templates**:
+1. **Develop configuration templates**:
    - Create templates for all 6 agent levels in `agents/templates/`
    - Include example prompts, capabilities, and constraints for each level
    - Document required fields and optional customizations
    - Provide template for task handoff formats
 
-6. **Create example configurations**:
+1. **Create example configurations**:
    - Provide sample Level 0 meta-orchestrator config
    - Provide sample Level 1 section orchestrator config
    - Provide sample Level 3 specialist config
    - Provide sample Level 4-5 implementation configs
 
-7. **Document workflow integration**:
+1. **Document workflow integration**:
    - Explain how agents interact with 5-phase workflow
    - Document which agent levels handle which phases
    - Clarify planning vs implementation vs cleanup responsibilities

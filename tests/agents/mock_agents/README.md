@@ -40,7 +40,7 @@ python3 tests/agents/test_loading.py tests/agents/mock_agents/
 python3 tests/agents/test_delegation.py tests/agents/mock_agents/
 python3 tests/agents/test_integration.py tests/agents/mock_agents/
 python3 tests/agents/test_mojo_patterns.py tests/agents/mock_agents/
-```
+```text
 
 ## Expected Results
 
@@ -105,10 +105,10 @@ Real agents (from issue #64) will:
 ## Usage
 
 1. **Initial Testing**: Run all validation scripts against mock agents
-2. **Baseline**: Document results as baseline in test-results.md
-3. **Script Validation**: Verify test scripts work correctly
-4. **Fix Issues**: Fix any script bugs discovered
-5. **Transition**: Once issue #64 completes, test against real agents
+1. **Baseline**: Document results as baseline in test-results.md
+1. **Script Validation**: Verify test scripts work correctly
+1. **Fix Issues**: Fix any script bugs discovered
+1. **Transition**: Once issue #64 completes, test against real agents
 
 ## Maintenance
 

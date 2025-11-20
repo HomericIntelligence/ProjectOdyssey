@@ -51,7 +51,7 @@ production-ready, integrated component.
 - Packaging (Issue #827) - Current Phase
 - Cleanup (Issue #828) - Pending
 
-**Dependencies**:
+### Dependencies
 
 - Issue #825 (Test) - Must be complete before integration testing
 - Issue #826 (Impl) - Must be complete before packaging
@@ -68,18 +68,18 @@ The paper test script must integrate with:
    - Respects main runner's test discovery patterns
    - Returns exit codes compatible with main runner
 
-2. **Paper Directory Structure**
+1. **Paper Directory Structure**
    - Located at `papers/<paper-name>/`
    - Contains `tests/` directory with test files
    - References configuration from `configs/papers/<paper-name>/`
    - Follows repository paper conventions
 
-3. **Configuration System** (`configs/papers/<paper-name>/`)
+1. **Configuration System** (`configs/papers/<paper-name>/`)
    - Loads paper-specific configurations
    - Uses `configs/defaults/` as fallback
    - Validates against schemas in `configs/schemas/`
 
-4. **Shared Test Infrastructure**
+1. **Shared Test Infrastructure**
    - Uses common test fixtures from `tests/fixtures/`
    - Integrates with test reporting framework
    - Compatible with CI/CD pipelines
@@ -118,15 +118,15 @@ The paper test script must integrate with:
 
 #### 1. Test Runner Integration
 
-**Current Structure**:
+### Current Structure
 
 ```text
 scripts/
 ├── run_tests.py (main test runner)
 └── paper_test.py (paper-specific tests) NEW
-```
+```text
 
-**Integration Pattern**:
+### Integration Pattern
 
 ```python
 # run_tests.py can optionally call paper_test.py
@@ -135,11 +135,11 @@ if args.paper:
     tester = PaperTester(args.paper)
     results = tester.run()
     # Integrate results with overall test report
-```
+```text
 
 #### 2. Paper Structure Validation
 
-**Expected Paper Structure**:
+### Expected Paper Structure
 
 ```text
 papers/lenet5/
@@ -154,9 +154,9 @@ papers/lenet5/
 ├── configs/
 │   └── (linked to configs/papers/lenet5/)
 └── README.md
-```
+```text
 
-**Script Validates**:
+### Script Validates
 
 - All required files present
 - Proper directory structure
@@ -166,7 +166,7 @@ papers/lenet5/
 
 #### 3. Configuration Integration
 
-**Loading Pattern**:
+### Loading Pattern
 
 ```text
 Paper Config Resolution:
@@ -175,11 +175,11 @@ Paper Config Resolution:
 3. Fall back to configs/defaults/
 4. Merge with runtime overrides
 5. Validate against configs/schemas/
-```
+```text
 
 #### 4. Test Execution Integration
 
-**Test Discovery**:
+### Test Discovery
 
 - Automatic discovery of test_*.py files in papers/test-paper/tests/
 - Optional pytest configuration via pytest.ini
@@ -188,7 +188,7 @@ Paper Config Resolution:
 
 #### 5. Reporting Integration
 
-**Output Format**:
+### Output Format
 
 - JSON report format for machine parsing
 - Human-readable summary output
@@ -264,16 +264,16 @@ setup.py / setup.cfg:
 - Description: Paper test script for ML Odyssey
 - Entry points: paper-test command
 - Dependencies: pytest, pyyaml, etc.
-```
+```text
 
 #### 3. Installation Procedures
 
 For end users:
 
 1. Clone repository or install package
-2. Ensure dependencies installed (handled by pixi)
-3. Run: `python scripts/paper_test.py --paper <paper-name>`
-4. Verify: `python scripts/paper_test.py --help`
+1. Ensure dependencies installed (handled by pixi)
+1. Run: `python scripts/paper_test.py --paper <paper-name>`
+1. Verify: `python scripts/paper_test.py --help`
 
 ### CI/CD Integration
 
@@ -297,10 +297,10 @@ For end users:
 When packaging for release:
 
 1. Tag version: `v0.1.0`
-2. Build artifacts
-3. Run final validation tests
-4. Publish to package repository (if applicable)
-5. Update installation documentation
+1. Build artifacts
+1. Run final validation tests
+1. Publish to package repository (if applicable)
+1. Update installation documentation
 
 ### Implementation Checklist
 
@@ -353,27 +353,27 @@ When packaging for release:
 
 ### Success Metrics
 
-**Integration**:
+### Integration
 
 - Paper test script callable from main test runner
 - All integration tests passing
 - No regressions in main test runner functionality
 
-**Packaging**:
+### Packaging
 
 - Distribution artifacts created (if applicable)
 - Installation procedures documented
 - Clean environment installation succeeds
 - All dependencies properly specified
 
-**Documentation**:
+### Documentation
 
 - Integration points clearly documented
 - Usage examples accurate and complete
 - API documentation comprehensive
 - Troubleshooting guide helpful
 
-**Quality**:
+### Quality
 
 - Zero integration-related failures
 - All compatibility tests passing
@@ -388,13 +388,13 @@ When packaging for release:
    - `scripts/config/paper_test.yaml` - Default paper test configurations
    - Integration examples and best practices
 
-2. **Package Metadata** (if creating standalone package)
+1. **Package Metadata** (if creating standalone package)
    - `setup.py` - Package setup file
    - `setup.cfg` - Package configuration
    - `pyproject.toml` - Modern Python packaging config
    - `MANIFEST.in` - File inclusion rules
 
-3. **Installation Documentation**
+1. **Installation Documentation**
    - `docs/INSTALLATION.md` - Detailed installation guide
    - `docs/INTEGRATION.md` - Integration guide for developers
 
@@ -405,16 +405,16 @@ When packaging for release:
    - Integrate paper test result reporting
    - Update help documentation
 
-2. **Main README** (`README.md`)
+1. **Main README** (`README.md`)
    - Add paper test script to tools section
    - Link to integration documentation
    - Add example usage
 
-3. **Dependencies** (`pixi.toml`)
+1. **Dependencies** (`pixi.toml`)
    - Add paper test script dependencies if not already present
    - Ensure version compatibility
 
-4. **CI/CD Workflows**
+1. **CI/CD Workflows**
    - Add integration testing job
    - Add packaging job (if applicable)
    - Update release workflow (if applicable)
@@ -428,13 +428,13 @@ Location: `tests/integration/test_paper_script.py`
 Test cases:
 
 1. Paper test script successfully integrates with main runner
-2. Structure validation works with valid papers
-3. Structure validation rejects invalid papers
-4. Configuration loading works correctly
-5. Test discovery finds all paper tests
-6. Test execution succeeds
-7. Error handling for edge cases
-8. Reporting works correctly
+1. Structure validation works with valid papers
+1. Structure validation rejects invalid papers
+1. Configuration loading works correctly
+1. Test discovery finds all paper tests
+1. Test execution succeeds
+1. Error handling for edge cases
+1. Reporting works correctly
 
 ### Compatibility Tests
 
@@ -463,22 +463,22 @@ Verify examples in documentation:
    - Analyze Issue #826 implementation
    - Identify specific integration requirements
 
-2. **Implement Integration**
+1. **Implement Integration**
    - Integrate with main test runner
    - Add dependency management
    - Update documentation
 
-3. **Create Packaging**
+1. **Create Packaging**
    - Define package metadata
    - Create distribution artifacts
    - Document installation procedures
 
-4. **Validate Integration**
+1. **Validate Integration**
    - Run full integration test suite
    - Test with multiple paper implementations
    - Verify documentation accuracy
 
-5. **Issue #828 (Cleanup)**
+1. **Issue #828 (Cleanup)**
    - Refactor based on integration learnings
    - Optimize performance
    - Polish documentation
@@ -494,15 +494,15 @@ Verify examples in documentation:
 
 ## Implementation Order
 
-**Phase Dependency Chain**:
+### Phase Dependency Chain
 
 1. Plan (Issue #824) - Complete
-2. Test (Issue #825) - write tests
-3. Implementation (Issue #826) - implement functionality
-4. **Packaging (Issue #827)** - integrate outputs
-5. Cleanup (Issue #828) - polish and finalize
+1. Test (Issue #825) - write tests
+1. Implementation (Issue #826) - implement functionality
+1. **Packaging (Issue #827)** - integrate outputs
+1. Cleanup (Issue #828) - polish and finalize
 
-**Start Conditions**:
+### Start Conditions
 
 - Issue #825 (test phase) significantly advanced or complete
 - Issue #826 (implementation) available for review

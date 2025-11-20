@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Implement forward method
-2. Connect all layers sequentially
-3. Add activation functions
+1. Connect all layers sequentially
+1. Add activation functions
 
 ## Success Criteria
 

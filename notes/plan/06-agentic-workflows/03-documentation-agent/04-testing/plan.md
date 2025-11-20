@@ -32,9 +32,9 @@ Create comprehensive tests for all documentation agent capabilities including do
 ## Steps
 
 1. Create tests for docstring quality and completeness
-2. Create tests for README generation and accuracy
-3. Create tests for tutorial clarity and correctness
-4. Set up continuous testing
+1. Create tests for README generation and accuracy
+1. Create tests for tutorial clarity and correctness
+1. Set up continuous testing
 
 ## Success Criteria
 

@@ -37,7 +37,7 @@ function as expected when invoked by agents or directly.
 
 (Add notes here during implementation)
 
-**Workflow**:
+### Workflow
 
 - Requires: #510 (Plan) complete ✅
 - Recommended: #64 (Agents Implementation) in progress

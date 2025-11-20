@@ -33,7 +33,7 @@ The step scheduler implements a simple but effective learning rate reduction str
 
 ```text
 lr(t) = lr_initial * (gamma ^ floor(t / step_size))
-```
+```text
 
 Where:
 
@@ -51,16 +51,16 @@ Where:
 
 ### Mode Support
 
-**Dual Mode Operation**:
+### Dual Mode Operation
 
 1. **Step-based mode**: Counts individual training steps (batches)
-2. **Epoch-based mode**: Counts complete passes through dataset
+1. **Epoch-based mode**: Counts complete passes through dataset
 
 Both modes use the same decay formula but differ in what constitutes a "step" in the calculation.
 
 ### State Management
 
-**Serialization Requirements**:
+### Serialization Requirements
 
 The scheduler must support training resumption by saving/restoring:
 
@@ -78,24 +78,24 @@ This enables:
 
 ### Integration Points
 
-**Optimizer Integration**:
+### Optimizer Integration
 
 The scheduler must work with the optimizer's learning rate parameter:
 
 1. Scheduler computes new learning rate based on step count
-2. Optimizer applies the learning rate to parameter updates
-3. Updates happen before/after optimizer step (configurable)
+1. Optimizer applies the learning rate to parameter updates
+1. Updates happen before/after optimizer step (configurable)
 
-**Common Integration Pattern**:
+### Common Integration Pattern
 
 ```mojo
 optimizer.step()  # Update parameters
 scheduler.step()  # Update learning rate for next iteration
-```
+```text
 
 ### Configuration Defaults
 
-**Recommended Default Values**:
+### Recommended Default Values
 
 - `step_size`: 30 (reduces every 30 steps/epochs)
 - `gamma`: 0.1 (10x reduction per interval)
@@ -105,15 +105,15 @@ These values are based on common practice in literature (e.g., ResNet training).
 
 ### API Design Principles
 
-**Interface Requirements**:
+### Interface Requirements
 
 1. **Simple Construction**: Initialize with minimal required parameters
-2. **Explicit Updates**: Clear `step()` method for scheduler updates
-3. **State Access**: `get_lr()` method to query current learning rate
-4. **State Persistence**: `state_dict()` and `load_state_dict()` for serialization
-5. **Type Safety**: Leverage Mojo's type system for compile-time safety
+1. **Explicit Updates**: Clear `step()` method for scheduler updates
+1. **State Access**: `get_lr()` method to query current learning rate
+1. **State Persistence**: `state_dict()` and `load_state_dict()` for serialization
+1. **Type Safety**: Leverage Mojo's type system for compile-time safety
 
-**Example API Usage**:
+### Example API Usage
 
 ```mojo
 # Initialize scheduler
@@ -134,34 +134,34 @@ for epoch in range(num_epochs):
         scheduler.step()  # Update learning rate
 
         current_lr = scheduler.get_lr()
-```
+```text
 
 ### Implementation Strategy
 
 **Phased Implementation** (aligned with 5-phase workflow):
 
 1. **Plan Phase** (Issue #323): This document - architecture and API design
-2. **Test Phase** (Issue #324): TDD implementation with comprehensive test coverage
-3. **Implementation Phase** (Issue #325): Core scheduler logic in Mojo
-4. **Packaging Phase** (Issue #326): Integration with training utilities
-5. **Cleanup Phase** (Issue #327): Optimization and finalization
+1. **Test Phase** (Issue #324): TDD implementation with comprehensive test coverage
+1. **Implementation Phase** (Issue #325): Core scheduler logic in Mojo
+1. **Packaging Phase** (Issue #326): Integration with training utilities
+1. **Cleanup Phase** (Issue #327): Optimization and finalization
 
 ### Key Considerations
 
-**Numerical Stability**:
+### Numerical Stability
 
 - Use integer step counter to avoid floating-point accumulation errors
 - Compute decay exponent as `floor(step / step_size)` for exact interval boundaries
 - Store initial_lr separately from current_lr to prevent drift
 
-**Edge Cases**:
+### Edge Cases
 
 - `step_size = 0`: Invalid configuration (raise error)
 - `gamma <= 0` or `gamma >= 1`: Invalid decay factor (raise error)
 - Negative step counter: Invalid state (raise error)
 - First step (step=0): Should use initial_lr without decay
 
-**Performance**:
+### Performance
 
 - Scheduler update is lightweight (simple multiplication)
 - No SIMD optimization needed (single scalar operation)

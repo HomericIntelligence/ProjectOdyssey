@@ -34,14 +34,14 @@ This planning phase will produce:
 
 **Decision**: Implement standard Python iterator protocol with `__iter__` and `__next__` methods.
 
-**Rationale**:
+### Rationale
 
 - Enables use with native Python `for` loops and iteration constructs
 - Familiar pattern for Python developers
 - Simplifies integration with existing Python ML frameworks
 - Allows use of built-in functions like `next()`, `iter()`, and iteration utilities
 
-**Implementation**:
+### Implementation
 
 - `__iter__()` returns `self` to make the data loader itself iterable
 - `__next__()` yields the next batch and raises `StopIteration` at epoch end
@@ -51,13 +51,13 @@ This planning phase will produce:
 
 **Decision**: Support both finite epoch-based iteration and infinite streaming.
 
-**Rationale**:
+### Rationale
 
 - Finite mode: Standard training with defined epochs (most common use case)
 - Infinite mode: Online learning, continuous training, or reinforcement learning scenarios
 - Different applications have different iteration requirements
 
-**Design**:
+### Design
 
 - Finite mode (default): Raises `StopIteration` after all batches yielded once
 - Infinite mode: Automatically resets to beginning after epoch end, never raises `StopIteration`
@@ -68,20 +68,20 @@ This planning phase will produce:
 
 **Decision**: Track iterator position internally with reset capability for new epochs.
 
-**Rationale**:
+### Rationale
 
 - Training loops typically iterate multiple epochs over the same dataset
 - State must persist across `__next__` calls within an epoch
 - State must reset cleanly between epochs
 - Support for resumption if training is interrupted
 
-**State Variables**:
+### State Variables
 
 - `_current_batch_index`: Position within current epoch (0 to num_batches-1)
 - `_epoch_complete`: Boolean flag indicating if current epoch finished
 - `_num_batches`: Total number of batches per epoch (computed from dataset size and batch size)
 
-**Reset Behavior**:
+### Reset Behavior
 
 - Calling `__iter__()` resets state for new epoch
 - Resets `_current_batch_index` to 0
@@ -92,14 +92,14 @@ This planning phase will produce:
 
 **Decision**: Iterator delegates to batching (#395) and shuffling (#396) components.
 
-**Rationale**:
+### Rationale
 
 - Separation of concerns: iterator handles traversal, not data organization
 - Batching component owns batch creation logic
 - Shuffling component owns randomization logic
 - Iterator simply accesses pre-organized batches sequentially
 
-**Integration Pattern**:
+### Integration Pattern
 
 ```python
 def __next__(self):
@@ -113,21 +113,21 @@ def __next__(self):
     batch = self._get_batch_at_index(self._current_batch_index)
     self._current_batch_index += 1
     return batch
-```
+```text
 
 ### 5. Error Handling and Edge Cases
 
 **Decision**: Explicit handling of edge cases with clear error messages.
 
-**Edge Cases**:
+### Edge Cases
 
 1. **Empty dataset**: Immediately raise `StopIteration` on first `__next__` call
-2. **Batch size larger than dataset**: Return single batch containing all samples
-3. **Dataset size not divisible by batch size**: Final batch contains remaining samples
-4. **Concurrent iteration**: Not supported - data loader is not thread-safe
-5. **Mid-iteration reset**: Calling `__iter__()` during iteration resets state (restarts epoch)
+1. **Batch size larger than dataset**: Return single batch containing all samples
+1. **Dataset size not divisible by batch size**: Final batch contains remaining samples
+1. **Concurrent iteration**: Not supported - data loader is not thread-safe
+1. **Mid-iteration reset**: Calling `__iter__()` during iteration resets state (restarts epoch)
 
-**Error Messages**:
+### Error Messages
 
 - Clear messages indicating which edge case was encountered
 - Guidance on how to resolve (e.g., "Dataset is empty. Provide non-empty dataset.")
@@ -136,13 +136,13 @@ def __next__(self):
 
 **Decision**: Lazy batch generation with minimal memory overhead.
 
-**Rationale**:
+### Rationale
 
 - Large datasets should not require loading entire dataset into memory
 - Batches generated on-demand during iteration
 - State tracking uses minimal memory (few integer counters)
 
-**Performance**:
+### Performance
 
 - O(1) time complexity for `__next__` operation (batch already prepared by batching component)
 - O(1) space complexity for iterator state
@@ -185,7 +185,7 @@ class DataLoader:
             - Infinite mode: Automatically resets and continues indefinitely
         """
         pass
-```
+```text
 
 ### Usage Examples
 
@@ -202,7 +202,7 @@ for epoch in range(num_epochs):
         train_step(batch)
     # StopIteration raised automatically at epoch end
     # Next epoch: __iter__() resets state
-```
+```text
 
 #### Infinite Iteration (Continuous Training)
 
@@ -218,7 +218,7 @@ for batch in loader:  # Never raises StopIteration
     # Manual stopping condition required
     if should_stop():
         break
-```
+```text
 
 #### Manual Iteration Control
 
@@ -232,7 +232,7 @@ iterator = iter(loader)  # Calls __iter__()
 batch1 = next(iterator)  # Calls __next__()
 batch2 = next(iterator)
 # ... continue until StopIteration
-```
+```text
 
 ## References
 

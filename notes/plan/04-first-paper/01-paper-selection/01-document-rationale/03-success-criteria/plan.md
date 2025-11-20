@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Define accuracy targets
-2. Specify performance metrics
-3. List completion criteria
+1. Specify performance metrics
+1. List completion criteria
 
 ## Success Criteria
 

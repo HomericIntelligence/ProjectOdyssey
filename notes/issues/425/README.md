@@ -46,15 +46,17 @@ All implementation files are complete and functional:
 
 #### 1. Image Augmentations (`transforms.mojo`)
 
-**Transform Trait**:
+### Transform Trait
+
 ```mojo
 trait Transform:
     fn __call__(self, data: Tensor) raises -> Tensor:
         """Apply transform to tensor data."""
         ...
-```
+```text
 
-**Implemented Transforms**:
+### Implemented Transforms
+
 - ✅ `ToTensor`: Convert data to tensor format
 - ✅ `Normalize`: Standardize values (mean/std normalization)
 - ✅ `RandomHorizontalFlip`: Mirror image horizontally with probability
@@ -65,7 +67,8 @@ trait Transform:
 - ✅ `RandomErasing`: Mask rectangular regions (cutout augmentation)
 - ✅ `Compose/Pipeline`: Sequential composition of transforms
 
-**Key Features**:
+### Key Features
+
 - Probability-based random application
 - Configurable parameters (rotation angle, crop size, flip probability)
 - Fill value support for empty regions
@@ -73,26 +76,30 @@ trait Transform:
 
 #### 2. Text Augmentations (`text_transforms.mojo`)
 
-**TextTransform Trait**:
+### TextTransform Trait
+
 ```mojo
 trait TextTransform:
     fn __call__(self, text: String) raises -> String:
         """Apply transform to text data."""
         ...
-```
+```text
 
-**Implemented Transforms**:
+### Implemented Transforms
+
 - ✅ `RandomSwap`: Swap word positions randomly
 - ✅ `RandomDeletion`: Delete words with probability (preserves at least one word)
 - ✅ `RandomInsertion`: Insert words from vocabulary
 - ✅ `RandomSynonymReplacement`: Replace words with synonyms
 - ✅ `TextCompose/TextPipeline`: Sequential text transform chains
 
-**Helper Functions**:
+### Helper Functions
+
 - ✅ `split_words`: Space-based tokenization
 - ✅ `join_words`: Reconstruct text from word list
 
-**Key Features**:
+### Key Features
+
 - Probability-based word operations
 - Configurable number of operations (n_times parameter)
 - Vocabulary-based insertion
@@ -101,7 +108,8 @@ trait TextTransform:
 
 #### 3. Generic Transforms (`generic_transforms.mojo`)
 
-**Implemented Transforms**:
+### Implemented Transforms
+
 - ✅ `IdentityTransform`: Passthrough (no modification)
 - ✅ `LambdaTransform`: Apply custom function element-wise
 - ✅ `ConditionalTransform`: Apply transform based on predicate
@@ -112,7 +120,8 @@ trait TextTransform:
 - ✅ `SequentialTransform`: Chain multiple transforms
 - ✅ `BatchTransform`: Apply transform to list of tensors
 
-**Key Features**:
+### Key Features
+
 - Domain-agnostic implementations
 - Composable patterns (sequential, conditional, batch)
 - Type conversions with proper handling
@@ -124,7 +133,8 @@ trait TextTransform:
 
 **Objective**: Unified API for all transform types
 
-**Proposed Structure**:
+### Proposed Structure
+
 ```mojo
 # shared/data/augmentations_master.mojo
 
@@ -173,7 +183,7 @@ struct AugmentationMaster:
     fn apply_generic(self, data: Tensor) raises -> Tensor:
         """Apply generic transform pipeline."""
         return self.generic_pipeline(data)
-```
+```text
 
 **Status**: Not yet implemented (deferred to future work)
 
@@ -181,7 +191,8 @@ struct AugmentationMaster:
 
 #### 2. Cross-Domain Utilities
 
-**Potential Features**:
+### Potential Features
+
 - Automatic type detection for transform selection
 - Mixed pipelines supporting multiple data types
 - Serialization/deserialization of augmentation configurations
@@ -195,7 +206,8 @@ struct AugmentationMaster:
 
 **Decision**: Use separate trait hierarchies for different transform types
 
-**Rationale**:
+### Rationale
+
 - `Transform` trait for tensor-based operations (images, generic)
 - `TextTransform` trait for string-based operations (text)
 - Type safety at compile time
@@ -205,7 +217,8 @@ struct AugmentationMaster:
 
 **Decision**: Favor composition patterns (Pipeline, Compose) over class hierarchies
 
-**Rationale**:
+### Rationale
+
 - More flexible than inheritance
 - Easy to add/remove transforms
 - Sequential application is explicit
@@ -215,7 +228,8 @@ struct AugmentationMaster:
 
 **Decision**: All random operations accept probability parameter
 
-**Rationale**:
+### Rationale
+
 - Gradual intensity tuning (0.0 = never, 1.0 = always)
 - Conditional augmentation based on training phase
 - Conservative defaults prevent unexpected behavior
@@ -224,7 +238,8 @@ struct AugmentationMaster:
 
 **Decision**: Transforms are stateless value types
 
-**Rationale**:
+### Rationale
+
 - Simpler to reason about (no hidden state)
 - Thread-safe by default
 - Easy to serialize/deserialize
@@ -244,7 +259,7 @@ fn _flip_horizontal_simd[width: Int, height: Int, channels: Int](
     # SIMD-optimized row reversal
     # Process multiple pixels per iteration
     ...
-```
+```text
 
 ### Deterministic Randomness
 
@@ -258,7 +273,7 @@ var flip = RandomHorizontalFlip(0.5)
 
 # Users can set seed via TestFixtures or similar mechanism
 # for reproducible augmentation pipelines
-```
+```text
 
 ### Error Handling
 
@@ -272,7 +287,7 @@ if len(words) <= 1:
 # RandomCrop handles padding for undersized images
 if crop_size > image_size:
     # Apply padding first, then crop
-```
+```text
 
 ## References
 
@@ -305,6 +320,7 @@ if crop_size > image_size:
 ### Current State
 
 All core augmentation functionality is implemented and tested:
+
 - ✅ 14 image augmentation tests passing
 - ✅ 35 text augmentation tests passing
 - ✅ 42 generic transform tests passing
@@ -314,10 +330,10 @@ All core augmentation functionality is implemented and tested:
 ### Design Patterns Used
 
 1. **Trait System**: Type-safe transform interfaces
-2. **Value Semantics**: Stateless transforms as `@value` structs
-3. **Composition**: Pipeline/Compose for sequential application
-4. **Probability Control**: Configurable random application
-5. **SIMD Optimization**: Performance for image operations
+1. **Value Semantics**: Stateless transforms as `@value` structs
+1. **Composition**: Pipeline/Compose for sequential application
+1. **Probability Control**: Configurable random application
+1. **SIMD Optimization**: Performance for image operations
 
 ### Known Limitations
 
@@ -327,22 +343,22 @@ All core augmentation functionality is implemented and tested:
    - Basic synonym dictionary (not semantic embeddings)
    - May produce ungrammatical text
 
-2. **Image Augmentations**:
+1. **Image Augmentations**:
    - ColorJitter is placeholder (not fully implemented)
    - Advanced interpolation methods not available
    - No GPU acceleration (CPU-only)
 
-3. **Generic Transforms**:
+1. **Generic Transforms**:
    - LambdaTransform requires function definition (no inline lambdas)
    - ConditionalTransform needs explicit predicate function
 
 ### Future Enhancements
 
 1. **Master Module**: Unified API (documented above, not critical)
-2. **Advanced Text**: Semantic-aware synonym replacement with embeddings
-3. **GPU Support**: Accelerated augmentations for large images
-4. **Streaming**: Memory-efficient augmentation for large datasets
-5. **Presets**: Common augmentation strategies (e.g., AutoAugment)
+1. **Advanced Text**: Semantic-aware synonym replacement with embeddings
+1. **GPU Support**: Accelerated augmentations for large images
+1. **Streaming**: Memory-efficient augmentation for large datasets
+1. **Presets**: Common augmentation strategies (e.g., AutoAugment)
 
 ---
 

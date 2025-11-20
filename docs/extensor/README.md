@@ -71,7 +71,7 @@ cd ml-odyssey
 
 # Build the package (when Mojo package manager is available)
 mojo package shared/core -o shared_core.mojopkg
-```
+```text
 
 ### Using in Your Project
 
@@ -89,7 +89,7 @@ fn main():
 
     # Arithmetic with broadcasting
     let c = add(a, b)  # Element-wise addition
-```
+```text
 
 ## Quick Start
 
@@ -117,7 +117,7 @@ fn example_creation():
 
     # Create identity matrix
     let e = eye(4, DType.float32)  # 4x4 identity matrix
-```
+```text
 
 ### Arithmetic with Broadcasting
 
@@ -147,7 +147,7 @@ fn example_broadcasting():
     shape_vec[0] = 4
     let vec = ones(shape_vec, DType.float32)  # Shape (4,)
     let e = add(a, vec)  # Shape (3, 4) - broadcasts along rows
-```
+```text
 
 ### Shape Manipulation
 
@@ -171,7 +171,7 @@ fn example_shapes():
     tensors[0] = a
     tensors[1] = c
     let d = concatenate(tensors, axis=0)  # Concatenate along first axis
-```
+```text
 
 ### Matrix Operations
 
@@ -194,18 +194,18 @@ fn example_matrix():
 
     # Transpose
     let d = transpose(a)  # 4x3
-```
+```text
 
 ## Broadcasting Rules
 
 ExTensor follows NumPy-style broadcasting rules:
 
 1. **Dimensions are compared right-to-left**
-2. **Dimensions are compatible if**:
+1. **Dimensions are compatible if**:
    - They are equal, OR
    - One of them is 1
-3. **Missing dimensions are treated as 1**
-4. **Output shape is the element-wise maximum**
+1. **Missing dimensions are treated as 1**
+1. **Output shape is the element-wise maximum**
 
 ### Broadcasting Examples
 
@@ -213,7 +213,7 @@ ExTensor follows NumPy-style broadcasting rules:
 Shape (3, 4, 5) + Shape (4, 5)    → (3, 4, 5)  # Missing dim treated as 1
 Shape (3, 1, 5) + Shape (3, 4, 5) → (3, 4, 5)  # Size 1 broadcasts
 Shape (3, 4)    + Shape (5,)      → ERROR      # Incompatible shapes
-```
+```text
 
 ## API Reference
 
@@ -223,7 +223,7 @@ Shape (3, 4)    + Shape (5,)      → ERROR      # Incompatible shapes
 
 Create a tensor filled with zeros.
 
-**Parameters**:
+### Parameters
 
 - `shape: DynamicVector[Int]` - Shape of the output tensor
 - `dtype: DType` - Data type of tensor elements
@@ -238,7 +238,7 @@ Create a tensor filled with ones.
 
 Create a tensor filled with a specific value.
 
-**Parameters**:
+### Parameters
 
 - `shape: DynamicVector[Int]` - Shape of the output tensor
 - `value: Float64` - Fill value
@@ -248,7 +248,7 @@ Create a tensor filled with a specific value.
 
 Create a 1D tensor with evenly spaced values.
 
-**Parameters**:
+### Parameters
 
 - `start: Float64` - Start value (inclusive)
 - `stop: Float64` - Stop value (exclusive)
@@ -263,7 +263,7 @@ All arithmetic operations support NumPy-style broadcasting.
 
 Element-wise addition with broadcasting.
 
-**Parameters**:
+### Parameters
 
 - `a: ExTensor` - First tensor
 - `b: ExTensor` - Second tensor
@@ -308,7 +308,7 @@ Element-wise exponentiation with broadcasting.
 
 Reshape tensor to new shape.
 
-**Parameters**:
+### Parameters
 
 - `tensor: ExTensor` - Input tensor
 - `new_shape: DynamicVector[Int]` - New shape (total elements must match)
@@ -323,7 +323,7 @@ Flatten tensor to 1D.
 
 Concatenate tensors along existing axis.
 
-**Parameters**:
+### Parameters
 
 - `tensors: DynamicVector[ExTensor]` - List of tensors to concatenate
 - `axis: Int` - Axis along which to concatenate
@@ -358,12 +358,12 @@ ExTensor uses **stride-based broadcasting** which avoids unnecessary data copyin
 - ✅ Shape manipulation operations
 - ✅ Element-wise math operations
 
-**In Progress**:
+### In Progress
 
 - ⏳ Packaging and distribution (#221)
 - ⏳ Code cleanup and optimization (#222)
 
-**Future Work**:
+### Future Work
 
 - ⬜ Additional Array API Standard operations
 - ⬜ SIMD optimization

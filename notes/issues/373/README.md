@@ -54,10 +54,10 @@ The implementation must handle three distinct dataset categories:
 Critical design constraint: `__len__` must guarantee that all indices `0 <= i < len(dataset)` are valid for `__getitem__`:
 
 ```python
-# This contract must always hold:
+# This contract must always hold
 for i in range(len(dataset)):
     sample = dataset[i]  # Must never raise IndexError
-```
+```text
 
 Implementation strategies:
 
@@ -67,13 +67,13 @@ Implementation strategies:
 
 ### 3. Performance Considerations
 
-**Lazy Computation for File-Based Datasets**:
+### Lazy Computation for File-Based Datasets
 
 - First call to `__len__` may scan entire file
 - Result must be cached to avoid repeated expensive operations
 - Trade-off: Initial latency vs. memory overhead of caching
 
-**Memory-Efficient Counting**:
+### Memory-Efficient Counting
 
 - For large files, count records without loading data into memory
 - Use iterative scanning rather than loading entire dataset
@@ -81,13 +81,13 @@ Implementation strategies:
 
 ### 4. Error Handling Strategy
 
-**Unsized Datasets**:
+### Unsized Datasets
 
 - Raise `TypeError` with descriptive message
 - Follows Python convention (e.g., `len(generator)` raises TypeError)
 - Message format: `"Dataset type 'X' does not support len()"`
 
-**Corrupted/Inaccessible Data**:
+### Corrupted/Inaccessible Data
 
 - If size computation fails (file unreadable, network error), propagate exception
 - Don't silently return 0 or None
@@ -97,17 +97,17 @@ Implementation strategies:
 
 The `__len__` implementation enables:
 
-**Progress Tracking**:
+### Progress Tracking
 
 - Data loaders can display progress: "Batch 45/100"
 - Training loops can estimate time remaining
 
-**Batch Calculation**:
+### Batch Calculation
 
 - `num_batches = len(dataset) // batch_size`
 - Enables proper epoch iteration
 
-**Validation**:
+### Validation
 
 - Sanity check that dataset is not empty
 - Verify expected dataset size matches actual
@@ -131,7 +131,7 @@ def __len__(self) -> int:
         - Result is cached for subsequent calls to maintain consistency
         - Must remain constant for the lifetime of the dataset (unless explicitly mutated)
     """
-```
+```text
 
 ## Implementation Strategies
 
@@ -145,7 +145,7 @@ class InMemoryDataset:
 
     def __len__(self):
         return self._length  # O(1) lookup
-```
+```text
 
 **Pros**: Instant, no computation needed
 **Cons**: Only works for pre-loaded data
@@ -170,7 +170,7 @@ class FileDataset:
             for _ in f:
                 count += 1
         return count
-```
+```text
 
 **Pros**: Memory-efficient, only computes when needed
 **Cons**: First call has latency
@@ -187,7 +187,7 @@ class StreamingDataset:
             f"{type(self).__name__} is a streaming dataset with undefined length. "
             "Use iteration instead of len()."
         )
-```
+```text
 
 **Pros**: Clear error message guides user to correct API
 **Cons**: Cannot use with APIs requiring `len()`
@@ -200,7 +200,7 @@ class StreamingDataset:
 # Must return 0, not raise error
 empty_dataset = InMemoryDataset([])
 assert len(empty_dataset) == 0
-```
+```text
 
 ### Single-Sample Datasets
 
@@ -208,7 +208,7 @@ assert len(empty_dataset) == 0
 # Must return 1
 single_dataset = InMemoryDataset([sample])
 assert len(single_dataset) == 1
-```
+```text
 
 ### Corrupted Files
 
@@ -220,7 +220,7 @@ try:
 except IOError as e:
     # Caller handles appropriately
     pass
-```
+```text
 
 ### Consistency After Caching
 
@@ -230,7 +230,7 @@ dataset = FileDataset("data.csv")
 len1 = len(dataset)
 len2 = len(dataset)
 assert len1 == len2  # Must be identical
-```
+```text
 
 ## References
 

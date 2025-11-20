@@ -15,6 +15,7 @@ Conduct comprehensive code review of WarmupLR implementation, tests, and documen
 ## Review Scope
 
 Reviews all previous phases:
+
 - **Plan** (Issue #334): Design specification
 - **Test** (Issue #335): Test suite
 - **Implementation** (Issue #336): Code quality
@@ -26,7 +27,8 @@ Reviews all previous phases:
 
 **File**: `shared/training/schedulers.mojo` (Lines 158-213)
 
-**Strengths**:
+### Strengths
+
 - ✅ Clean, simple implementation
 - ✅ Comprehensive docstrings
 - ✅ Type-safe
@@ -34,10 +36,11 @@ Reviews all previous phases:
 - ✅ Defensive programming (warmup_epochs <= 0 check)
 - ✅ Float64 precision
 
-**Issues**:
+### Issues
+
 1. No parameter validation
-2. No state management
-3. Starts from 0.0 (hardcoded, no start_lr parameter)
+1. No state management
+1. Starts from 0.0 (hardcoded, no start_lr parameter)
 
 **Performance**: ✅ O(1) time, 16 bytes space
 
@@ -52,6 +55,7 @@ Reviews all previous phases:
 **Critical Finding**: ⚠️ **75% INCOMPLETE**
 
 **Using Mock** (3 tests):
+
 - test_warmup_scheduler_initialization
 - test_warmup_scheduler_linear_increase
 - test_warmup_scheduler_reaches_target
@@ -80,9 +84,10 @@ Reviews all previous phases:
 
 **Docstring**: ✅ Excellent with formula
 
-**Missing**:
+### Missing
+
 1. start_lr parameter (not supported)
-2. PyTorch comparison
+1. PyTorch comparison
 
 **Rating**: ⭐⭐⭐⭐½ (4.5/5)
 
@@ -129,20 +134,20 @@ Reviews all previous phases:
    - 75% tests are TODO
    - Cannot verify correctness
 
-2. **Tests Use Mock** (CRITICAL)
+1. **Tests Use Mock** (CRITICAL)
    - 3 tests use MockWarmupScheduler
    - Don't validate actual implementation
 
 ### 🟡 Medium Priority
 
-3. **No Parameter Validation**
-4. **Integration Tests Missing**
-5. **Missing State Management**
+1. **No Parameter Validation**
+1. **Integration Tests Missing**
+1. **Missing State Management**
 
 ### 🟢 Low Priority
 
-6. **No start_lr Parameter** (starts from 0.0 only)
-7. **Missing PyTorch Comparison**
+1. **No start_lr Parameter** (starts from 0.0 only)
+1. **Missing PyTorch Comparison**
 
 ---
 
@@ -171,7 +176,8 @@ Reviews all previous phases:
 
 **The implementation is excellent, but tests are inadequate (75% TODO).**
 
-**Recommendation**:
+### Recommendation
+
 - **DO NOT USE** in production until tests complete
 - **SAFE TO USE** for experimentation
 - **READY FOR PRODUCTION** after Actions 1-2

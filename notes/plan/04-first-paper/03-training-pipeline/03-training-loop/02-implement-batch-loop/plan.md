@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Iterate over all batches
-2. Perform forward and backward passes
-3. Update parameters with optimizer
+1. Perform forward and backward passes
+1. Update parameters with optimizer
 
 ## Success Criteria
 

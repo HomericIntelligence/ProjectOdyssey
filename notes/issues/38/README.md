@@ -13,12 +13,12 @@ Create comprehensive test suite for data processing utilities following TDD prin
    - Index validation and negative indexing
    - Consistency and immutability guarantees
 
-2. **test_tensor_dataset.mojo** (10 tests, 185 lines)
+1. **test_tensor_dataset.mojo** (10 tests, 185 lines)
    - In-memory tensor storage and access
    - Size matching and validation
    - Memory efficiency (views not copies)
 
-3. **test_file_dataset.mojo** (13 tests, 220 lines)
+1. **test_file_dataset.mojo** (13 tests, 220 lines)
    - Lazy loading from disk
    - File pattern filtering and directory scanning
    - Label extraction (filename, directory, separate file)
@@ -31,12 +31,12 @@ Create comprehensive test suite for data processing utilities following TDD prin
    - Iteration and batch size consistency
    - drop_last and multi-epoch support
 
-2. **test_batch_loader.mojo** (11 tests, 240 lines)
+1. **test_batch_loader.mojo** (11 tests, 240 lines)
    - Fixed-size batching with tensor stacking
    - Shuffling (deterministic with seed, varies per epoch)
    - Performance and memory efficiency
 
-3. **test_parallel_loader.mojo** (12 tests, 260 lines)
+1. **test_parallel_loader.mojo** (12 tests, 260 lines)
    - Multi-threaded data loading
    - Worker coordination and correctness
    - Prefetching and resource cleanup
@@ -49,19 +49,19 @@ Create comprehensive test suite for data processing utilities following TDD prin
    - Sequential application order
    - Error propagation and validation
 
-2. **test_image_transforms.mojo** (16 tests, 285 lines)
+1. **test_image_transforms.mojo** (16 tests, 285 lines)
    - Resize (upscaling, aspect ratio, interpolation)
    - Crop (center, random, with padding)
    - Normalize (basic, per-channel, range)
    - ColorJitter and Flip operations
 
-3. **test_tensor_transforms.mojo** (15 tests, 250 lines)
+1. **test_tensor_transforms.mojo** (15 tests, 250 lines)
    - Reshape (flatten, squeeze, unsqueeze)
    - Type conversion (Float32, Int32, uint8 scaling)
    - Transpose and permute dimensions
    - Lambda and Clamp transforms
 
-4. **test_augmentations.mojo** (11 tests, 215 lines)
+1. **test_augmentations.mojo** (11 tests, 215 lines)
     - Random augmentation determinism
     - RandomRotation, RandomCrop, RandomHorizontalFlip
     - RandomErasing (cutout)
@@ -74,12 +74,12 @@ Create comprehensive test suite for data processing utilities following TDD prin
     - Deterministic ordering
     - Integration with DataLoader
 
-2. **test_random.mojo** (13 tests, 245 lines)
+1. **test_random.mojo** (13 tests, 245 lines)
     - Random shuffling with/without seed
     - Sampling with replacement
     - Correctness (all indices, no duplicates)
 
-3. **test_weighted.mojo** (16 tests, 320 lines)
+1. **test_weighted.mojo** (16 tests, 320 lines)
     - Weighted probabilistic sampling
     - Class balancing and inverse frequency
     - Determinism and error handling
@@ -96,9 +96,9 @@ Create comprehensive test suite for data processing utilities following TDD prin
 ### Coverage by Subsystem
 
 1. **Datasets**: 30 tests covering interface, in-memory, and lazy loading
-2. **Loaders**: 32 tests covering basic, batching, and parallel loading
-3. **Transforms**: 54 tests covering pipeline, image ops, tensor ops, augmentations
-4. **Samplers**: 40 tests covering sequential, random, and weighted sampling
+1. **Loaders**: 32 tests covering basic, batching, and parallel loading
+1. **Transforms**: 54 tests covering pipeline, image ops, tensor ops, augmentations
+1. **Samplers**: 40 tests covering sequential, random, and weighted sampling
 
 ### Test Categories
 
@@ -244,7 +244,7 @@ tests/shared/data/
     ├── test_sequential.mojo
     ├── test_random.mojo
     └── test_weighted.mojo
-```
+```text
 
 ✅ **Success Criteria Coverage**
 
@@ -288,7 +288,7 @@ mojo test tests/shared/data/samplers/
 
 # Run with coverage
 mojo test --coverage tests/shared/data/
-```
+```text
 
 ### CI Workflow
 
@@ -313,16 +313,16 @@ Tests will automatically run:
    - Ensure all `test_base_dataset.mojo` tests pass
    - Then `test_tensor_dataset.mojo`, `test_file_dataset.mojo`
 
-2. **Implement Data Loaders**
+1. **Implement Data Loaders**
    - Start with `test_base_loader.mojo`
    - Progress to batching, then parallel loading
 
-3. **Implement Transforms**
+1. **Implement Transforms**
    - Begin with Pipeline composition
    - Add image transforms, tensor transforms
    - Finish with augmentations
 
-4. **Implement Samplers**
+1. **Implement Samplers**
    - Sequential first (simplest)
    - Random with proper seeding
    - Weighted with class balancing
@@ -334,12 +334,12 @@ Tests will automatically run:
    - Stress tests with large datasets
    - Performance benchmarks
 
-2. **Integration Tests**
+1. **Integration Tests**
    - End-to-end data pipeline tests
    - Compatibility with training loops
    - Memory leak detection
 
-3. **Documentation**
+1. **Documentation**
    - Usage examples from passing tests
    - Performance tuning guide
    - Troubleshooting common issues

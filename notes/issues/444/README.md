@@ -25,6 +25,7 @@ Develop comprehensive tests for test fixtures to ensure they provide consistent 
 ### Existing Fixtures
 
 **TestFixtures** (conftest.mojo):
+
 ```mojo
 struct TestFixtures:
     """Collection of reusable test fixtures and utilities."""
@@ -43,9 +44,10 @@ struct TestFixtures:
 
     # TODO(#1538): Add tensor fixture methods when Tensor type is implemented
     # (Lines 160-181 have commented-out tensor fixture methods)
-```
+```text
 
-**Current Status**:
+### Current Status
+
 - Basic seeding fixtures implemented
 - Tensor/model/dataset fixtures pending Tensor implementation
 - No explicit scoping mechanism (Mojo may not have pytest-style fixtures)
@@ -57,15 +59,15 @@ struct TestFixtures:
    - Does `set_seed()` produce reproducible random values?
    - Can multiple tests use the same seed without interference?
 
-2. **Fixture Consistency**:
+1. **Fixture Consistency**:
    - Do fixtures produce identical data on repeated calls?
    - Do fixtures reset properly between tests?
 
-3. **Fixture Reusability**:
+1. **Fixture Reusability**:
    - Can multiple tests use the same fixture?
    - Do fixtures maintain independence between tests?
 
-4. **Documentation Validation**:
+1. **Documentation Validation**:
    - Are fixture docstrings accurate?
    - Do usage examples work?
 
@@ -126,7 +128,7 @@ fn test_different_seeds_produce_different_values() raises:
     # Values should differ
     # (This might fail with low probability, but very unlikely)
     assert_not_equal(val1, val2)
-```
+```text
 
 ### 2. Data Generator Tests (`test_data_fixtures.mojo`)
 
@@ -176,7 +178,7 @@ fn test_sequential_fixture_values() raises:
     assert_almost_equal(vec[2], 12.0, tolerance=1e-10)
     assert_almost_equal(vec[3], 13.0, tolerance=1e-10)
     assert_almost_equal(vec[4], 14.0, tolerance=1e-10)
-```
+```text
 
 ### 3. Fixture Scoping Tests (`test_fixture_scoping.mojo`)
 
@@ -213,7 +215,7 @@ fn test_fixture_reusability() raises:
 
     # Should get same value (same seed)
     assert_almost_equal(val1, val2, tolerance=1e-10)
-```
+```text
 
 ### 4. Fixture Documentation Tests (`test_fixture_docs.mojo`)
 
@@ -240,7 +242,7 @@ fn test_set_seed_behavior_matches_docs() raises:
     # Should be deterministic (same values)
     assert_almost_equal(val1, val2, tolerance=1e-10,
                         message="set_seed should be deterministic per docs")
-```
+```text
 
 ### 5. Future Fixtures Tests (`test_future_fixtures.mojo`)
 
@@ -272,28 +274,32 @@ fn test_set_seed_behavior_matches_docs() raises:
 //     """Verify dataset fixtures have known properties."""
 //     var dataset = TestFixtures.synthetic_dataset(n_samples=100)
 //     assert_equal(dataset.size(), 100)
-```
+```text
 
 ## Test Coverage Goals
 
-**Seed Fixtures**:
+### Seed Fixtures
+
 - [x] Deterministic seed value
 - [x] Reproducible random generation
 - [x] Independence between tests
 - [x] Documentation accuracy
 
-**Data Generator Fixtures**:
+### Data Generator Fixtures
+
 - [x] Consistency across calls
 - [x] Independence of instances
 - [x] Correct values generated
 - [x] Edge cases (size=0, size=1)
 
-**Fixture Lifecycle**:
+### Fixture Lifecycle
+
 - [ ] Scoping behavior (if applicable)
 - [x] Reusability across tests
 - [x] No resource leaks
 
 **Future Fixtures** (when implemented):
+
 - [ ] Tensor fixtures
 - [ ] Model fixtures
 - [ ] Dataset fixtures
@@ -317,26 +323,28 @@ fn test_set_seed_behavior_matches_docs() raises:
 
 **Key Principle**: Validate that fixtures behave as documented and expected
 
-**Focus Areas**:
+### Focus Areas
+
 1. **Correctness**: Fixtures produce correct data
-2. **Consistency**: Same inputs → same outputs
-3. **Independence**: Fixtures don't interfere with each other
-4. **Documentation**: Behavior matches documentation
+1. **Consistency**: Same inputs → same outputs
+1. **Independence**: Fixtures don't interfere with each other
+1. **Documentation**: Behavior matches documentation
 
 ### Minimal Changes Principle
 
 **Current State**: Basic seed fixtures exist and work
 **Testing Goal**: Validate they work correctly, identify any gaps
 
-**Priorities**:
+### Priorities
+
 1. **High**: Test existing seed fixtures thoroughly
-2. **Medium**: Test data generator fixtures
-3. **Low**: Prepare for future fixture tests (when Tensor ready)
+1. **Medium**: Test data generator fixtures
+1. **Low**: Prepare for future fixture tests (when Tensor ready)
 
 ### Next Steps
 
 1. Implement seed fixture tests
-2. Implement data generator tests
-3. Validate fixture documentation
-4. Test fixture independence
-5. Document findings for Implementation phase (#445)
+1. Implement data generator tests
+1. Validate fixture documentation
+1. Test fixture independence
+1. Document findings for Implementation phase (#445)

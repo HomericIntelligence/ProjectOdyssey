@@ -34,16 +34,20 @@ As specified in the issue description.
 ## Implementation Notes
 
 ## Overview
+
 Create a workflow that takes a research paper and produces an implementation plan. The workflow analyzes the paper, suggests an architecture, and generates scaffolding code.
 
 ## Packaging Objectives
+
 - Integrate the implementation with existing codebase
 - Ensure all dependencies are properly configured
 - Verify compatibility with other components
 - Package for deployment/distribution
 
 ## Integration Requirements
+
 Based on outputs:
+
 - Paper analysis with key findings
 - Suggested architecture and module structure
 - Scaffolding code with function signatures
@@ -51,12 +55,14 @@ Based on outputs:
 - Documentation of design decisions
 
 ## Integration Steps
+
 1. Analyze paper to extract key information
-2. Suggest architecture based on analysis
-3. Generate code scaffolding
-4. Create implementation plan
+1. Suggest architecture based on analysis
+1. Generate code scaffolding
+1. Create implementation plan
 
 ## Success Criteria
+
 - [ ] Workflow completes all steps successfully
 - [ ] Analysis captures all important details
 - [ ] Architecture suggestions are appropriate
@@ -65,6 +71,7 @@ Based on outputs:
 - [ ] Errors at any step are handled gracefully
 
 ## Notes
+
 Chain the paper analyzer and architecture suggester templates. Use tool calls to read the paper and write generated code. Each step should validate its outputs before proceeding. Keep generated code simple - focus on structure, not full implementation.
 
 ## Status

@@ -30,8 +30,8 @@ Create a specialized script for testing individual paper implementations. This t
 ## Steps
 
 1. Identify and validate specific paper
-2. Check paper structure and required files
-3. Run all tests for the paper
+1. Check paper structure and required files
+1. Run all tests for the paper
 
 ## Success Criteria
 

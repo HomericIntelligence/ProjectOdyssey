@@ -44,7 +44,7 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 
 **Decision**: Implement both ExTensor (dynamic tensor) sharing a common trait interface.
 
-**Rationale**:
+### Rationale
 
 - ExTensor uses runtime shape validation with SIMD optimization
 - ExTensor provides runtime flexibility for research and experimentation
@@ -52,7 +52,7 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 - Mojo's parametric types allow compile-time shape specification without runtime overhead
 - Runtime flexibility with SIMD-optimized performance
 
-**Trade-offs**:
+### Trade-offs
 
 - More implementation complexity vs single dynamic-only approach
 - Benefit: 2-10x performance improvement for static paths in tight loops
@@ -62,7 +62,7 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 
 **Decision**: Ground all operations in tensor calculus principles (tensor algebra).
 
-**Rationale**:
+### Rationale
 
 - Ensures mathematical correctness and consistency
 - Tensor addition/subtraction only for same-rank tensors (preserves structure)
@@ -70,7 +70,7 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 - Contraction (Einstein summation) decreases rank
 - Clear semantics prevent subtle mathematical errors
 
-**Examples**:
+### Examples
 
 - Element-wise ops preserve shape: `(3,4,5) + (3,4,5) → (3,4,5)`
 - Outer product increases rank: `(3,4) ⊗ (5,6) → (3,4,5,6)`
@@ -80,7 +80,7 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 
 **Decision**: Follow Python Array API Standard 2024 for API design.
 
-**Rationale**:
+### Rationale
 
 - Ecosystem compatibility (NumPy, PyTorch, JAX conventions)
 - Well-tested API surface (proven in production)
@@ -93,39 +93,39 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 
 **Decision**: Implement NumPy-style broadcasting for all compatible operations.
 
-**Algorithm**:
+### Algorithm
 
 1. Compare shapes element-wise from right to left
-2. Dimensions are compatible if equal or one is 1
-3. Missing dimensions treated as 1
-4. Output shape is element-wise maximum of input shapes
+1. Dimensions are compatible if equal or one is 1
+1. Missing dimensions treated as 1
+1. Output shape is element-wise maximum of input shapes
 
-**Rationale**:
+### Rationale
 
 - De facto standard in ML (NumPy, PyTorch, JAX)
 - Efficient computation without data replication
 - Supports common patterns (batch ops, bias addition, normalization)
 
-**Examples**:
+### Examples
 
 ```text
 (3, 4, 5) + (4, 5)    → (3, 4, 5)  # Missing dim = 1
 (3, 1, 5) + (3, 4, 5) → (3, 4, 5)  # Size 1 broadcasts
 (3, 4, 5) + (3, 4, 1) → (3, 4, 5)  # Size 1 broadcasts
-```
+```text
 
 ### 5. Multi-Dtype Support
 
 **Decision**: Support all common numeric types via Mojo's DType system.
 
-**Supported types**:
+### Supported types
 
 - Float: DType.float16, float32, float64
 - Integer: DType.int8, int16, int32, int64
 - Unsigned: DType.uint8, uint16, uint32, uint64
 - Boolean: DType.bool
 
-**Rationale**:
+### Rationale
 
 - Covers all ML use cases (float32 most common, int8/uint8 for quantization)
 - Parametric DType enables type-safe generic code
@@ -136,20 +136,20 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 
 **Decision**: Row-major (C-order) strided memory layout with explicit ownership.
 
-**Layout**:
+### Layout
 
 - Row-major (C-order) as default (cache-friendly for most ML ops)
 - Strided memory for zero-copy slicing and transpose
 - Contiguous memory guarantee for SIMD operations
 
-**Ownership**:
+### Ownership
 
 - Tensors own their memory by default
 - `borrowed` for read-only access (no allocation)
 - `inout` for in-place mutations
 - Explicit copy operation when needed
 
-**Rationale**:
+### Rationale
 
 - Row-major matches NumPy/PyTorch defaults
 - Strided memory enables efficient views
@@ -159,13 +159,13 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 
 **Decision**: Compile-time validation for static tensors, runtime validation for dynamic tensors.
 
-**Static tensors (ExStaticTensor)**:
+### Static tensors (ExStaticTensor)
 
 - Shape mismatches caught at compile-time
 - Type mismatches caught at compile-time
 - Zero runtime overhead for validation
 
-**Dynamic tensors (ExTensor)**:
+### Dynamic tensors (ExTensor)
 
 - Shape validation at runtime with clear error messages
 - Type validation at runtime
@@ -178,7 +178,7 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 - `0.0 / 0.0` → `NaN`
 - Overflow → saturate to infinity
 
-**Rationale**:
+### Rationale
 
 - Leverages Mojo's type system for safety
 - Static path gets performance and safety
@@ -193,7 +193,7 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 
 **Operator API**: `a + b`, `a @ b`, `a[0:10, :]`
 
-**Rationale**:
+### Rationale
 
 - Function API: explicit, unambiguous, supports keyword args
 - Operator API: natural mathematical syntax, familiar to ML practitioners
@@ -221,7 +221,7 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 - Einstein summation (einsum)
 - Lazy evaluation and operation fusion
 
-**Rationale**:
+### Rationale
 
 - YAGNI: Don't implement until needed
 - Focus on solid foundation first
@@ -232,7 +232,7 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 
 **Decision**: Focus on SIMD vectorization and static tensor compile-time optimization.
 
-**Optimizations**:
+### Optimizations
 
 - SIMD vectorization for element-wise operations
 - Compile-time shape optimization for static tensors
@@ -240,13 +240,13 @@ Design and document the architecture for ExTensors (Extensible Tensors), a compr
 - Strided memory for zero-copy views
 - Loop unrolling for small fixed-size tensors
 
-**Benchmarks**:
+### Benchmarks
 
 - Target: ≥2x speedup for static vs dynamic in tight loops
 - Verify SIMD speedup for element-wise ops
 - Profile memory access patterns
 
-**Rationale**:
+### Rationale
 
 - SIMD provides immediate performance benefit
 - Static tensors unlock compile-time optimization
@@ -289,36 +289,36 @@ These questions must be answered during the planning phase:
 
 1. **Static vs Dynamic API Unification**: Should there be a unified API that automatically selects ExStaticTensor vs ExTensor based on compile-time information, or should users explicitly choose?
 
-2. **Shape Representation**: How should shapes be represented?
+1. **Shape Representation**: How should shapes be represented?
    - Static: Parametric types? Variadic parameters? Fixed-size array?
    - Dynamic: Runtime array? List? SIMD-optimized buffer?
 
-3. **Trait Design**: What trait(s) should both variants implement?
+1. **Trait Design**: What trait(s) should both variants implement?
    - Common `Tensor` trait with all operations?
    - Separate `TensorOps`, `TensorShape`, `TensorDType` traits?
    - How to handle static-only optimizations in trait?
 
-4. **Broadcasting Implementation**: Should broadcasting be:
+1. **Broadcasting Implementation**: Should broadcasting be:
    - Separate function/trait that operations call?
    - Integrated into each operation?
    - Compile-time for ExTensor operations?
 
-5. **Memory Ownership in Operations**: What ownership model for tensor operations?
+1. **Memory Ownership in Operations**: What ownership model for tensor operations?
    - Return new owned tensor (safe but allocates)?
    - Support in-place mutations via `inout` parameters?
    - Provide both owned and in-place variants?
 
-6. **Zero-Copy Operations**: Which operations can be zero-copy?
+1. **Zero-Copy Operations**: Which operations can be zero-copy?
    - Zero-copy: transpose, reshape, slice (views)
    - Requires allocation: arithmetic, matmul, reductions
    - How to indicate view vs copy in API?
 
-7. **Testing Strategy**: How to avoid duplicating tests for static and dynamic?
+1. **Testing Strategy**: How to avoid duplicating tests for static and dynamic?
    - Parametric test functions over both types?
    - Shared test cases with type-specific setup?
    - Separate test files or unified?
 
-8. **SIMD Vectorization**: Where to apply SIMD?
+1. **SIMD Vectorization**: Where to apply SIMD?
    - Element-wise ops (add, mul, div, etc.)
    - Reduction ops (sum, mean, max, min)
    - What SIMD width? Parametric over width?
@@ -339,15 +339,15 @@ This section will be updated as the planning phase progresses with any discoveri
 
 **Status**: Planning phase - Initial design document created
 
-**Next Steps**:
+### Next Steps
 
 1. Answer the 8 key design questions above
-2. Create detailed API specification document (function signatures, type annotations)
-3. Document broadcasting algorithm with pseudocode
-4. Specify memory layout and stride calculations
-5. Define trait interfaces for ExStaticTensor and ExTensor
-6. Document SIMD optimization opportunities
-7. Create examples showing static vs dynamic usage patterns
-8. Prepare specifications for Test phase (issue #219)
-9. Prepare specifications for Implementation phase (issue #220)
-10. Prepare specifications for Package phase (issue #221)
+1. Create detailed API specification document (function signatures, type annotations)
+1. Document broadcasting algorithm with pseudocode
+1. Specify memory layout and stride calculations
+1. Define trait interfaces for ExStaticTensor and ExTensor
+1. Document SIMD optimization opportunities
+1. Create examples showing static vs dynamic usage patterns
+1. Prepare specifications for Test phase (issue #219)
+1. Prepare specifications for Implementation phase (issue #220)
+1. Prepare specifications for Package phase (issue #221)

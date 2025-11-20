@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Create test cases with buggy code
-2. Define expected findings for each test
-3. Write tests for correctness review
-4. Validate detection accuracy
+1. Define expected findings for each test
+1. Write tests for correctness review
+1. Validate detection accuracy
 
 ## Success Criteria
 

@@ -31,8 +31,8 @@ Configure the research assistant agent with a clear role definition, constraints
 ## Steps
 
 1. Create configuration file with basic structure
-2. Define agent role, purpose, and constraints
-3. Configure available tools and their usage patterns
+1. Define agent role, purpose, and constraints
+1. Configure available tools and their usage patterns
 
 ## Success Criteria
 

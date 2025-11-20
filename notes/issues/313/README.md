@@ -31,14 +31,14 @@ after training.
 
 **Decision**: Disable gradient computation during validation loop
 
-**Rationale**:
+### Rationale
 
 - Validation is inference-only, no weight updates needed
 - Saves significant memory (no backward graph storage)
 - Improves performance by skipping gradient calculations
 - Standard practice in deep learning frameworks
 
-**Implementation Approach**:
+### Implementation Approach
 
 - Use context manager to disable gradients (equivalent to PyTorch's `torch.no_grad()`)
 - Ensure model is in evaluation mode before validation
@@ -48,14 +48,14 @@ after training.
 
 **Decision**: Require model to be in evaluation mode during validation
 
-**Rationale**:
+### Rationale
 
 - Disables dropout layers (use all neurons for stable predictions)
 - Batch normalization uses running statistics instead of batch statistics
 - Ensures deterministic and reproducible validation results
 - Matches expected behavior during inference
 
-**Implementation Approach**:
+### Implementation Approach
 
 - Add explicit check/assertion for evaluation mode
 - Document expected model state before validation
@@ -65,14 +65,14 @@ after training.
 
 **Decision**: Support both per-batch and aggregated metrics
 
-**Rationale**:
+### Rationale
 
 - Per-batch metrics useful for debugging and variance analysis
 - Aggregated metrics provide overall performance summary
 - Allows flexible analysis of validation results
 - Matches standard ML framework patterns
 
-**Implementation Approach**:
+### Implementation Approach
 
 - Compute metrics for each batch (loss, accuracy, etc.)
 - Aggregate using appropriate statistics (mean for loss, weighted average for accuracy)
@@ -83,14 +83,14 @@ after training.
 
 **Decision**: Support both full validation and subset validation
 
-**Rationale**:
+### Rationale
 
 - Full validation provides complete accuracy assessment
 - Subset validation enables faster iteration during development
 - Subset validation useful for large datasets where full validation is expensive
 - Common pattern in production ML systems
 
-**Implementation Approach**:
+### Implementation Approach
 
 - Add configuration parameter for number of validation batches
 - Default to full validation (None or -1)
@@ -101,14 +101,14 @@ after training.
 
 **Decision**: Provide callback hooks at key validation events
 
-**Rationale**:
+### Rationale
 
 - Enables extensibility without modifying core loop
 - Supports logging, monitoring, and custom behavior
 - Matches callback pattern from training loop
 - Allows users to inject custom logic (early stopping, logging, etc.)
 
-**Implementation Approach**:
+### Implementation Approach
 
 - `on_validation_start()`: Called before validation begins
 - `on_validation_batch()`: Called after each batch
@@ -119,14 +119,14 @@ after training.
 
 **Decision**: Validation loop as method on Trainer interface
 
-**Rationale**:
+### Rationale
 
 - Keeps validation logic encapsulated with training logic
 - Allows sharing state (model, device, configuration)
 - Simplifies user interface (single trainer object)
 - Standard pattern in ML frameworks
 
-**Interface**:
+### Interface
 
 ```mojo
 fn validate(
@@ -146,20 +146,20 @@ fn validate(
         ValidationResults containing per-batch and aggregated metrics
     """
     pass
-```
+```text
 
 ### 7. Error Handling
 
 **Decision**: Fail fast with clear error messages for common issues
 
-**Rationale**:
+### Rationale
 
 - Helps users quickly identify configuration issues
 - Prevents silent failures or incorrect results
 - Improves debugging experience
 - Reduces support burden
 
-**Key Checks**:
+### Key Checks
 
 - Model is in evaluation mode (not training mode)
 - Validation data loader is not empty
@@ -170,14 +170,14 @@ fn validate(
 
 **Decision**: Minimize memory footprint during validation
 
-**Rationale**:
+### Rationale
 
 - Validation often runs on large datasets
 - Memory is limited, especially on GPUs
 - No need to store intermediate activations or gradients
 - Enables larger batch sizes for faster validation
 
-**Implementation Approach**:
+### Implementation Approach
 
 - Use no-gradient context throughout
 - Avoid storing unnecessary intermediate results
@@ -202,15 +202,15 @@ Trainer (BaseTrainer)
     ├── aggregated_metrics: Dict[String, Float64]
     ├── num_batches: Int
     └── num_samples: Int
-```
+```text
 
 ### Integration Points
 
 1. **Trainer Interface**: Validation loop is a method on the BaseTrainer
-2. **Data Loaders**: Uses DataLoader interface for batch iteration
-3. **Metrics**: Uses Metric interface for computation and aggregation
-4. **Callbacks**: Integrates with callback system for extensibility
-5. **Model**: Requires model to implement evaluation mode toggle
+1. **Data Loaders**: Uses DataLoader interface for batch iteration
+1. **Metrics**: Uses Metric interface for computation and aggregation
+1. **Callbacks**: Integrates with callback system for extensibility
+1. **Model**: Requires model to implement evaluation mode toggle
 
 ### Data Flow
 
@@ -228,13 +228,13 @@ Trainer (BaseTrainer)
 6. Aggregate metrics across all batches
 7. Trigger on_validation_end() callback
 8. Return ValidationResults
-```
+```text
 
 ## API Contracts
 
 ### Trainer.validate()
 
-**Signature**:
+### Signature
 
 ```mojo
 fn validate(
@@ -243,23 +243,23 @@ fn validate(
     metrics: List[Metric],
     num_batches: Optional[Int] = None
 ) raises -> ValidationResults
-```
+```text
 
-**Preconditions**:
+### Preconditions
 
 - Model must be initialized and loaded
 - Validation data loader must not be empty
 - Metrics must be compatible with model outputs
 - Model and data must be on compatible devices
 
-**Postconditions**:
+### Postconditions
 
 - Model remains in evaluation mode
 - ValidationResults contains valid metrics for all batches processed
 - All callbacks have been invoked appropriately
 - No gradients have been computed or stored
 
-**Exceptions**:
+### Exceptions
 
 - `ModelNotInEvalModeError`: Model is not in evaluation mode
 - `EmptyDataLoaderError`: Validation data loader has no batches
@@ -268,7 +268,7 @@ fn validate(
 
 ### ValidationResults
 
-**Structure**:
+### Structure
 
 ```mojo
 struct ValidationResults:
@@ -297,11 +297,11 @@ struct ValidationResults:
     fn aggregate(inout self):
         """Compute aggregated metrics from per-batch metrics."""
         pass
-```
+```text
 
 ### Callbacks
 
-**Validation Start**:
+### Validation Start
 
 ```mojo
 fn on_validation_start(inout self, trainer: Trainer):
@@ -311,9 +311,9 @@ fn on_validation_start(inout self, trainer: Trainer):
         trainer: Trainer instance running validation
     """
     pass
-```
+```text
 
-**Validation Batch**:
+### Validation Batch
 
 ```mojo
 fn on_validation_batch(
@@ -330,9 +330,9 @@ fn on_validation_batch(
         metrics: Metrics computed for this batch
     """
     pass
-```
+```text
 
-**Validation End**:
+### Validation End
 
 ```mojo
 fn on_validation_end(
@@ -347,7 +347,7 @@ fn on_validation_end(
         results: Final validation results
     """
     pass
-```
+```text
 
 ## Implementation Guidelines
 
@@ -356,33 +356,33 @@ fn on_validation_end(
 Following [mojo-language-review-specialist.md](../../../../.claude/agents/mojo-language-review-specialist.md):
 
 1. **Use `fn` over `def`**: Validation loop is performance-critical, use strict `fn`
-2. **Memory safety**: Use `borrowed` for read-only model access, `inout` for trainer state
-3. **SIMD optimization**: Consider SIMD for metrics aggregation if processing large result arrays
-4. **Ownership**: Clear ownership of ValidationResults (returned owned to caller)
+1. **Memory safety**: Use `borrowed` for read-only model access, `inout` for trainer state
+1. **SIMD optimization**: Consider SIMD for metrics aggregation if processing large result arrays
+1. **Ownership**: Clear ownership of ValidationResults (returned owned to caller)
 
 ### Error Handling Strategy
 
 1. **Precondition validation**: Check all preconditions at start of validate()
-2. **Clear error messages**: Include context (which check failed, expected vs actual state)
-3. **Early exit**: Fail fast if preconditions not met
-4. **Resource cleanup**: Ensure model mode restored even on error (use defer or try/finally equivalent)
+1. **Clear error messages**: Include context (which check failed, expected vs actual state)
+1. **Early exit**: Fail fast if preconditions not met
+1. **Resource cleanup**: Ensure model mode restored even on error (use defer or try/finally equivalent)
 
 ### Testing Strategy
 
 See related issue #314 for test implementation. Key test categories:
 
 1. **Functional tests**: Correct metrics computation and aggregation
-2. **Mode tests**: Model in evaluation mode, gradients disabled
-3. **Callback tests**: Callbacks invoked at correct times with correct data
-4. **Edge cases**: Empty validation set, single batch, very large datasets
-5. **Integration tests**: With real model and data loader
+1. **Mode tests**: Model in evaluation mode, gradients disabled
+1. **Callback tests**: Callbacks invoked at correct times with correct data
+1. **Edge cases**: Empty validation set, single batch, very large datasets
+1. **Integration tests**: With real model and data loader
 
 ### Performance Considerations
 
 1. **Batch size**: Larger batches during validation (no gradient memory overhead)
-2. **Device utilization**: Maximize GPU utilization with efficient batch processing
-3. **Metrics computation**: Compute metrics efficiently (vectorized operations)
-4. **Memory footprint**: Monitor and optimize memory usage
+1. **Device utilization**: Maximize GPU utilization with efficient batch processing
+1. **Metrics computation**: Compute metrics efficiently (vectorized operations)
+1. **Memory footprint**: Monitor and optimize memory usage
 
 ## References
 

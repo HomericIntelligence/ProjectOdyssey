@@ -80,9 +80,9 @@ Focuses exclusively on Mojo language idioms, ownership semantics, compile-time f
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -274,7 +274,7 @@ See [code-review-orchestrator.md](./code-review-orchestrator.md#review-comment-p
 
 ### Example 1: Incorrect Ownership - Unnecessary Copy
 
-**Code**:
+### Code
 
 ```mojo
 fn process_tensor(owned tensor: Tensor) -> Float32:
@@ -285,7 +285,7 @@ fn process_tensor(owned tensor: Tensor) -> Float32:
     return total
 ```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 🔴 CRITICAL: Incorrect ownership pattern - unnecessary copy
@@ -326,7 +326,7 @@ taking ownership is necessary (e.g., storing in a struct, consuming).
 
 ### Example 3: fn vs def Misuse
 
-**Code**:
+### Code
 
 ```mojo
 def matrix_multiply(a: Tensor, b: Tensor) -> Tensor:
@@ -335,7 +335,7 @@ def matrix_multiply(a: Tensor, b: Tensor) -> Tensor:
     return result
 ```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 🟠 MAJOR: Using 'def' for performance-critical code
@@ -425,21 +425,21 @@ fn matrix_multiply(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
 
 ### Ownership Rules
 
-**Use `owned`**:
+### Use `owned`
 
 - Taking ownership of a value
 - Storing in a struct field
 - Consuming the parameter
 - Transferring ownership
 
-**Use `borrowed`**:
+### Use `borrowed`
 
 - Read-only access (most common)
 - Temporary inspection
 - No ownership transfer
 - Zero-copy access
 
-**Use `inout`**:
+### Use `inout`
 
 - Mutating the parameter
 - In-place modifications
@@ -448,7 +448,7 @@ fn matrix_multiply(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
 
 ### fn vs def Guidelines
 
-**Use `fn`**:
+### Use `fn`
 
 - Production code
 - Performance-critical paths
@@ -456,7 +456,7 @@ fn matrix_multiply(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
 - When type safety is critical
 - When optimization matters
 
-**Use `def`**:
+### Use `def`
 
 - Prototyping and exploration
 - Python interoperability
@@ -466,14 +466,14 @@ fn matrix_multiply(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
 
 ### SIMD Best Practices
 
-**When to use SIMD**:
+### When to use SIMD
 
 - Element-wise array operations
 - Data-parallel computations
 - Contiguous memory access
 - Performance-critical loops
 
-**SIMD considerations**:
+### SIMD considerations
 
 - Handle remainder elements
 - Ensure proper alignment
@@ -483,14 +483,14 @@ fn matrix_multiply(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
 
 ### Compile-Time Features
 
-**Use `@parameter`**:
+### Use `@parameter`
 
 - Compile-time constants
 - Loop unrolling hints
 - Generic type parameters
 - Configuration values
 
-**Parameter guidelines**:
+### Parameter guidelines
 
 - Keep parameter count reasonable
 - Document parameter constraints
@@ -499,14 +499,14 @@ fn matrix_multiply(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
 
 ### Value Type Design
 
-**Lifecycle methods**:
+### Lifecycle methods
 
 - `__init__`: Always required
 - `__copyinit__`: For deep copy semantics
 - `__moveinit__`: For efficient moves
 - `__del__`: For resource cleanup
 
-**When to implement**:
+### When to implement
 
 - Always: `__init__`
 - Heap memory: All four methods
@@ -541,8 +541,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -575,7 +575,7 @@ After creating PR:
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -628,13 +628,13 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Reviewing implementation with potential overflow issues
 
-**Actions**:
+### Actions
 
 1. Identify operations that could overflow (exp, large multiplications)
-2. Check for numerical stability patterns (log-sum-exp, epsilon values)
-3. Provide specific fixes with mathematical justification
-4. Reference best practices and paper specifications
-5. Categorize findings by severity
+1. Check for numerical stability patterns (log-sum-exp, epsilon values)
+1. Provide specific fixes with mathematical justification
+1. Reference best practices and paper specifications
+1. Categorize findings by severity
 
 **Outcome**: Numerically stable implementation preventing runtime errors
 
@@ -642,12 +642,12 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Implementation tightly coupling unrelated components
 
-**Actions**:
+### Actions
 
 1. Analyze component dependencies and coupling
-2. Identify violations of separation of concerns
-3. Suggest refactoring with interface-based design
-4. Provide concrete code examples of improvements
-5. Group similar issues into single review comment
+1. Identify violations of separation of concerns
+1. Suggest refactoring with interface-based design
+1. Provide concrete code examples of improvements
+1. Group similar issues into single review comment
 
 **Outcome**: Actionable feedback leading to better architecture

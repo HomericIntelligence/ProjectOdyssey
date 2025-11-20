@@ -8,7 +8,7 @@ This directory contains tests for foundational repository components.
 
 Comprehensive test suite for `papers/` directory creation and management.
 
-**Test Coverage**:
+### Test Coverage
 
 - **Unit Tests** (3 tests):
   - `test_create_papers_directory_success` - Verify successful directory creation
@@ -37,7 +37,7 @@ Comprehensive test suite for `papers/` directory creation and management.
 
 Comprehensive test suite for supporting directories validation (benchmarks/, docs/, agents/, tools/, configs/).
 
-**Test Coverage**:
+### Test Coverage
 
 - **Existence Tests** (5 tests):
   - `test_benchmarks_directory_exists` - Verify benchmarks/ exists
@@ -93,25 +93,25 @@ Shared pytest fixtures for foundation tests:
 
 ```bash
 pytest tests/foundation/
-```
+```text
 
 ### Run specific test file
 
 ```bash
 pytest tests/foundation/test_papers_directory.py
-```
+```text
 
 ### Run with verbose output
 
 ```bash
 pytest tests/foundation/test_papers_directory.py -v
-```
+```text
 
 ### Run specific test
 
 ```bash
 pytest tests/foundation/test_papers_directory.py::TestPapersDirectoryCreation::test_create_papers_directory_success
-```
+```text
 
 ## Test Structure
 

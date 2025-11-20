@@ -28,8 +28,8 @@ Create the main README documentation for the LeNet-5 implementation, including a
 ## Steps
 
 1. Paper Overview
-2. Usage Guide
-3. Results Section
+1. Usage Guide
+1. Results Section
 
 ## Success Criteria
 

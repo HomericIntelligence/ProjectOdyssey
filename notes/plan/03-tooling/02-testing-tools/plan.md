@@ -30,8 +30,8 @@ Build comprehensive testing infrastructure including test runners, paper-specifi
 ## Steps
 
 1. Create general test runner for all repository tests
-2. Build paper-specific test script for targeted testing
-3. Implement coverage tool for measuring test completeness
+1. Build paper-specific test script for targeted testing
+1. Implement coverage tool for measuring test completeness
 
 ## Success Criteria
 

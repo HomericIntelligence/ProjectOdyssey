@@ -26,21 +26,25 @@ Implement missing test utilities and enhance existing ones based on findings fro
 ### Existing Implementations
 
 **Fully Implemented** (conftest.mojo):
+
 - 7 assertion functions (assert_true, assert_false, assert_equal, etc.)
 - TestFixtures with deterministic seeding
 - BenchmarkResult struct for performance tracking
 - 3 data generators (create_test_vector, create_test_matrix, create_sequential_vector)
 
 **Placeholder/TODO** (conftest.mojo):
+
 - `measure_time[func]()` - Returns 0.0, needs implementation
 - `measure_throughput[func](n_iterations)` - Uses measure_time, needs implementation
 - Tensor fixture methods (commented out, lines 160-181)
 
 **Fully Implemented** (helpers/assertions.mojo):
+
 - 4 basic assertions (assert_true, assert_equal_int, assert_equal_float, assert_close_float)
 - 8 ExTensor-specific assertions (assert_shape, assert_dtype, assert_all_close, etc.)
 
 **Placeholder** (helpers/):
+
 - `fixtures.mojo` - All TODOs, no implementation
 - `utils.mojo` - All TODOs, no implementation
 
@@ -49,8 +53,8 @@ Implement missing test utilities and enhance existing ones based on findings fro
 Based on **YAGNI** and **Minimal Changes** principles, prioritize:
 
 1. **High Priority**: Fill gaps in actively used utilities
-2. **Medium Priority**: Implement TODO items that tests actually need
-3. **Low Priority**: Remove unused placeholders
+1. **Medium Priority**: Implement TODO items that tests actually need
+1. **Low Priority**: Remove unused placeholders
 
 ## Implementation Strategy
 
@@ -61,6 +65,7 @@ Based on **YAGNI** and **Minimal Changes** principles, prioritize:
 **Decision Point**: Are these actually used in tests?
 
 **If Used** - Implement:
+
 ```mojo
 fn measure_time[func: fn () raises -> None]() raises -> Float64:
     """Measure execution time of a function.
@@ -79,7 +84,7 @@ fn measure_time[func: fn () raises -> None]() raises -> Float64:
     var end = now()
 
     return Float64((end - start).total_seconds() * 1000.0)
-```
+```text
 
 **If Not Used** - Remove placeholders to reduce clutter
 
@@ -89,7 +94,8 @@ fn measure_time[func: fn () raises -> None]() raises -> Float64:
 
 **Decision Point**: Are these needed now, or wait for Tensor implementation?
 
-**Options**:
+### Options
+
 1. **Implement now** if Tensor is available:
    ```mojo
    @staticmethod
@@ -102,6 +108,7 @@ fn measure_time[func: fn () raises -> None]() raises -> Float64:
        """Create random tensor with deterministic seed."""
        Self.set_seed()
        return Tensor.randn((rows, cols))
+
    ```
 
 2. **Keep commented** if Tensor not ready (current approach is fine)
@@ -114,6 +121,7 @@ fn measure_time[func: fn () raises -> None]() raises -> Float64:
 
 **Potential Additions** (if tests need them):
 ```mojo
+
 fn create_random_vector(size: Int, seed: Int = 42) -> List[Float32]:
     """Create random vector with deterministic seed.
 
@@ -151,8 +159,8 @@ fn create_zeros_vector(size: Int) -> List[Float32]:
         List of 0.0 values.
     """
     return create_test_vector(size, 0.0)
-```
 
+```text
 **Decision**: Only add if tests actually need them (check test suite)
 
 ### 4. Mock Objects
@@ -168,6 +176,7 @@ fn create_zeros_vector(size: Int) -> List[Float32]:
 
 **Example** (if needed):
 ```mojo
+
 struct MockFileSystem:
     """Mock file system for testing file operations."""
     var files: Dict[String, String]  # path -> content
@@ -186,14 +195,15 @@ struct MockFileSystem:
     fn exists(self, path: String) -> Bool:
         """Mock file existence check."""
         return path in self.files
-```
 
+```text
 ### 5. Enhanced Assertion Messages
 
 **Current**: Basic error messages
 
 **Enhancement** (if needed):
 ```mojo
+
 fn assert_equal[T: Comparable](a: T, b: T, message: String = "") raises:
     """Assert exact equality of two values.
 
@@ -211,8 +221,8 @@ fn assert_equal[T: Comparable](a: T, b: T, message: String = "") raises:
         if message:
             error_msg = message + " | " + error_msg
         raise Error(error_msg)
-```
 
+```text
 ### 6. Placeholder Resolution (helpers/)
 
 **fixtures.mojo** (17 lines, all TODOs):

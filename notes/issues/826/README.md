@@ -154,19 +154,19 @@ Related implementation issues that feed into this work:
    - Load paper metadata
    - Handle errors gracefully
 
-2. **Check paper structure and required files**
+1. **Check paper structure and required files**
    - Verify directory structure
    - Check for required files
    - Validate naming conventions
    - Generate structure report
 
-3. **Run all tests for the paper**
+1. **Run all tests for the paper**
    - Discover test files
    - Execute tests
    - Collect results
    - Generate test report
 
-4. **Integrate into cohesive script**
+1. **Integrate into cohesive script**
    - Combine all components
    - Accept command-line arguments
    - Generate comprehensive output

@@ -117,10 +117,10 @@ This is the final cleanup phase after Plan, Test, Implementation, and Package ph
 The cleanup phase focuses on:
 
 1. Refactoring code for optimal quality and maintainability
-2. Removing technical debt and temporary workarounds
-3. Ensuring comprehensive documentation
-4. Performing final validation and optimization
-5. Achieving production-ready status
+1. Removing technical debt and temporary workarounds
+1. Ensuring comprehensive documentation
+1. Performing final validation and optimization
+1. Achieving production-ready status
 
 ### Dependencies
 
@@ -137,14 +137,14 @@ This cleanup phase runs **AFTER** all parallel phases (Test/Implementation/Packa
 
 #### 1. Review and Refactor Coverage Instrumentation
 
-**Files to Review**:
+### Files to Review
 
 - Coverage collection utilities (implementation from #832)
 - Coverage data aggregation code
 - Coverage report generation logic
 - Integration points with test runner
 
-**Refactoring Goals**:
+### Refactoring Goals
 
 - Consolidate duplicate code patterns
 - Optimize hot-path execution
@@ -155,21 +155,21 @@ This cleanup phase runs **AFTER** all parallel phases (Test/Implementation/Packa
 
 #### 2. Optimize Performance
 
-**Areas for Optimization**:
+### Areas for Optimization
 
 - Coverage data collection path (minimize overhead)
 - File I/O for coverage storage (batch writes, compression)
 - Report generation (incremental updates, caching)
 - Memory usage during aggregation (streaming processing)
 
-**Performance Targets**:
+### Performance Targets
 
 - Coverage collection overhead: < 5% of test execution time
 - Data storage: < 100MB for typical test suites
 - Report generation: < 10 seconds for large suites
 - Memory footprint: < 50MB per test process
 
-**Implementation Strategy**:
+### Implementation Strategy
 
 - Profile current implementation with benchmarks
 - Identify bottlenecks (expect I/O and aggregation)
@@ -179,7 +179,7 @@ This cleanup phase runs **AFTER** all parallel phases (Test/Implementation/Packa
 
 #### 3. Eliminate Technical Debt
 
-**Debt Elimination Tasks**:
+### Debt Elimination Tasks
 
 - Remove all TODO and FIXME comments
 - Replace placeholder implementations with final versions
@@ -191,7 +191,7 @@ This cleanup phase runs **AFTER** all parallel phases (Test/Implementation/Packa
 
 #### 1. Coverage Best Practices Guide (`coverage/BEST_PRACTICES.md`)
 
-**Content sections**:
+### Content sections
 
 - When to measure coverage (per-commit, per-PR, nightly)
 - Coverage goals by component type (library: 90%, utilities: 85%, tools: 75%)
@@ -201,7 +201,7 @@ This cleanup phase runs **AFTER** all parallel phases (Test/Implementation/Packa
 - Coverage metrics interpretation
 - Team workflow recommendations
 
-**Example anti-patterns to document**:
+### Example anti-patterns to document
 
 - Excluding too much code from coverage
 - Ignoring coverage changes in CI/CD
@@ -210,20 +210,20 @@ This cleanup phase runs **AFTER** all parallel phases (Test/Implementation/Packa
 
 #### 2. Coverage Configuration Cookbook (`coverage/COOKBOOK.md`)
 
-**Minimum 8 recipes**:
+### Minimum 8 recipes
 
 1. **Basic project coverage** - Single module/package setup
-2. **Multi-module coverage** - Monorepo with multiple packages
-3. **Excluding test files** - Proper test exclusion patterns
-4. **Conditional coverage** - Platform-specific code coverage
-5. **Performance-critical sections** - Coverage for hot paths
-6. **CI/CD integration** - Automated coverage reporting
-7. **Coverage badges** - GitHub README badge integration
-8. **Baseline establishment** - Setting initial coverage goals
-9. **Coverage trending** - Historical coverage tracking
-10. **Branch coverage** - Configuration for branch/decision coverage
+1. **Multi-module coverage** - Monorepo with multiple packages
+1. **Excluding test files** - Proper test exclusion patterns
+1. **Conditional coverage** - Platform-specific code coverage
+1. **Performance-critical sections** - Coverage for hot paths
+1. **CI/CD integration** - Automated coverage reporting
+1. **Coverage badges** - GitHub README badge integration
+1. **Baseline establishment** - Setting initial coverage goals
+1. **Coverage trending** - Historical coverage tracking
+1. **Branch coverage** - Configuration for branch/decision coverage
 
-**Recipe format**:
+### Recipe format
 
 ```markdown
 
@@ -233,22 +233,25 @@ This cleanup phase runs **AFTER** all parallel phases (Test/Implementation/Packa
 
 **Configuration**:
 ```yaml
-# YAML configuration example
-```
 
+# YAML configuration example
+
+```text
 **Code example**:
 ```mojo
-# Mojo code example
-```
 
+# Mojo code example
+
+```text
 **Expected output**:
 ```text
-# Expected results
-```
 
+# Expected results
+
+```text
 **Tips and troubleshooting**:
 - Common issues and solutions
-```
+```text
 
 #### 3. Enhanced Coverage Documentation
 
@@ -274,7 +277,7 @@ This cleanup phase runs **AFTER** all parallel phases (Test/Implementation/Packa
 
 #### 4. Troubleshooting Guide (`coverage/TROUBLESHOOTING.md`)
 
-**Common issues to address**:
+### Common issues to address
 
 - Coverage collection not working (permissions, paths)
 - Missing coverage data (exclusions, filters)
@@ -283,7 +286,7 @@ This cleanup phase runs **AFTER** all parallel phases (Test/Implementation/Packa
 - Integration issues (CI/CD, GitHub)
 - Mojo-specific issues (language features)
 
-**Format per issue**:
+### Format per issue
 
 ```markdown
 
@@ -304,11 +307,11 @@ This cleanup phase runs **AFTER** all parallel phases (Test/Implementation/Packa
 **Related issues**:
 - Issue ABC
 - Issue XYZ
-```
+```text
 
 #### 5. FAQ Section
 
-**Common questions**:
+### Common questions
 
 - How much overhead does coverage add?
 - How do I exclude certain files from coverage?
@@ -325,7 +328,7 @@ This cleanup phase runs **AFTER** all parallel phases (Test/Implementation/Packa
 
 #### 1. Coverage Linting Tool (`scripts/lint_coverage.py`)
 
-**Lint checks to implement**:
+### Lint checks to implement
 
 - Configuration schema validation
 - Unused exclusion patterns
@@ -335,7 +338,7 @@ This cleanup phase runs **AFTER** all parallel phases (Test/Implementation/Packa
 - Deprecated configuration options
 - Performance anti-patterns (overly broad filters)
 
-**Tool features**:
+### Tool features
 
 - YAML schema validation
 - Pattern matching for common mistakes
@@ -344,13 +347,13 @@ This cleanup phase runs **AFTER** all parallel phases (Test/Implementation/Packa
 - Batch processing of multiple configurations
 - Exit codes for CI/CD integration
 
-**Usage**:
+### Usage
 
 ```bash
 python3 scripts/lint_coverage.py coverage/
 python3 scripts/lint_coverage.py --strict coverage/
 python3 scripts/lint_coverage.py --fix coverage/  # Auto-fix where possible
-```
+```text
 
 #### 2. Schema Validation
 
@@ -364,7 +367,7 @@ python3 scripts/lint_coverage.py --fix coverage/  # Auto-fix where possible
 - Nested structure validation
 - Conditional requirements
 
-**Validation implementation**:
+### Validation implementation
 
 - Mojo schema validator using existing patterns
 - Clear error messages with location info
@@ -375,25 +378,25 @@ python3 scripts/lint_coverage.py --fix coverage/  # Auto-fix where possible
 
 **Workflow**: `.github/workflows/collect-coverage.yml`
 
-**Triggers**:
+### Triggers
 
 - On push to main
 - On pull requests
 - Scheduled nightly runs
 - Manual trigger option
 
-**Workflow steps**:
+### Workflow steps
 
 1. Run full test suite with coverage enabled
-2. Collect coverage data from all tests
-3. Generate coverage reports
-4. Validate coverage configuration
-5. Compare against baseline
-6. Report coverage metrics
-7. Post results as PR comment (on PR)
-8. Upload artifacts for storage
+1. Collect coverage data from all tests
+1. Generate coverage reports
+1. Validate coverage configuration
+1. Compare against baseline
+1. Report coverage metrics
+1. Post results as PR comment (on PR)
+1. Upload artifacts for storage
 
-**Report artifacts**:
+### Report artifacts
 
 - JSON coverage data
 - HTML coverage reports
@@ -404,7 +407,7 @@ python3 scripts/lint_coverage.py --fix coverage/  # Auto-fix where possible
 
 #### 1. Comprehensive Test Suite
 
-**Test coverage goals**:
+### Test coverage goals
 
 - 100% coverage of coverage utility code
 - All major code paths tested
@@ -412,7 +415,7 @@ python3 scripts/lint_coverage.py --fix coverage/  # Auto-fix where possible
 - Integration tests with test runner
 - Performance regression tests
 
-**Test organization**:
+### Test organization
 
 - Unit tests for individual components
 - Integration tests for workflows
@@ -421,7 +424,7 @@ python3 scripts/lint_coverage.py --fix coverage/  # Auto-fix where possible
 
 #### 2. User Acceptance Testing
 
-**Testing with team**:
+### Testing with team
 
 - Real project coverage collection
 - CI/CD integration verification
@@ -430,7 +433,7 @@ python3 scripts/lint_coverage.py --fix coverage/  # Auto-fix where possible
 - Performance validation
 - Edge case discovery
 
-**Feedback incorporation**:
+### Feedback incorporation
 
 - Documentation improvements based on feedback
 - Additional troubleshooting entries
@@ -439,21 +442,21 @@ python3 scripts/lint_coverage.py --fix coverage/  # Auto-fix where possible
 
 ### Success Metrics
 
-**Code Quality Metrics**:
+### Code Quality Metrics
 
 - Zero TODO/FIXME comments: ✓ Target achieved
 - Test coverage: 100% of utility code
 - Code formatting: 100% Mojo format compliance
 - Type safety: Zero unsafe patterns
 
-**Performance Metrics**:
+### Performance Metrics
 
 - Collection overhead: < 5% vs baseline tests
 - Data storage: < 100MB typical
 - Report generation: < 10 seconds
 - Memory impact: < 50MB per process
 
-**Documentation Metrics**:
+### Documentation Metrics
 
 - All public APIs documented
 - All configuration options documented
@@ -461,7 +464,7 @@ python3 scripts/lint_coverage.py --fix coverage/  # Auto-fix where possible
 - 10+ FAQ questions answered
 - 100% of common issues in troubleshooting guide
 
-**User Satisfaction**:
+### User Satisfaction
 
 - Team feedback positive
 - Documentation clarity confirmed
@@ -470,9 +473,9 @@ python3 scripts/lint_coverage.py --fix coverage/  # Auto-fix where possible
 
 ### Workflow Integration
 
-**Coverage Cleanup Workflow**:
+### Coverage Cleanup Workflow
 
-```
+```text
 Issue #833 (Cleanup) starts when:
 ├── Issue #830 (Plan) is complete
 ├── Issue #831 (Test) is complete
@@ -486,45 +489,45 @@ Cleanup phase produces:
 ├── Validation tools and scripts
 ├── CI/CD integration
 └── Production-ready coverage system
-```
+```text
 
 ### Next Steps
 
-**Immediate**:
+### Immediate
 
 1. Review implementation from Issue #832
-2. Identify refactoring opportunities
-3. Profile performance characteristics
-4. List technical debt items
+1. Identify refactoring opportunities
+1. Profile performance characteristics
+1. List technical debt items
 
-**Short-term**:
+### Short-term
 
 1. Refactor identified code sections
-2. Optimize performance bottlenecks
-3. Remove technical debt
-4. Create documentation outline
+1. Optimize performance bottlenecks
+1. Remove technical debt
+1. Create documentation outline
 
-**Medium-term**:
+### Medium-term
 
 1. Write comprehensive documentation
-2. Implement linting tools
-3. Develop test suite for coverage code
-4. Create cookbook recipes
+1. Implement linting tools
+1. Develop test suite for coverage code
+1. Create cookbook recipes
 
-**Long-term**:
+### Long-term
 
 1. Conduct team UAT
-2. Gather feedback and iterate
-3. Final code review and approval
-4. Declare production readiness
+1. Gather feedback and iterate
+1. Final code review and approval
+1. Declare production readiness
 
 ### Open Questions
 
 1. **Coverage tool choice**: Use coverage.py or native Mojo instrumentation?
-2. **Data format**: What format for coverage data storage (JSON, YAML, custom)?
-3. **Report generation**: Simple HTML or integration with coverage.io/Codecov?
-4. **Baseline metrics**: What initial coverage targets for different component types?
-5. **Team requirements**: Any specific coverage goals or constraints?
+1. **Data format**: What format for coverage data storage (JSON, YAML, custom)?
+1. **Report generation**: Simple HTML or integration with coverage.io/Codecov?
+1. **Baseline metrics**: What initial coverage targets for different component types?
+1. **Team requirements**: Any specific coverage goals or constraints?
 
 These questions should be addressed during Issue #830 (Plan) phase. Document decisions in
 this README as they are made.

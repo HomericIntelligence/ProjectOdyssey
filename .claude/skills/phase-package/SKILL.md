@@ -23,7 +23,7 @@ Compiled Mojo modules:
 ```bash
 ./scripts/package_mojo_module.sh tensor
 # Creates: packages/tensor.mojopkg
-```
+```text
 
 ### 2. Distribution Archives
 
@@ -32,7 +32,7 @@ Tar/zip archives for tooling and documentation:
 ```bash
 ./scripts/create_distribution.sh ml-odyssey-v0.1.0
 # Creates: dist/ml-odyssey-v0.1.0.tar.gz
-```
+```text
 
 ### 3. Installation Procedures
 
@@ -41,7 +41,7 @@ Scripts and documentation for installation:
 ```bash
 ./scripts/create_installer.sh tensor
 # Creates: install_tensor.sh, INSTALL.md
-```
+```text
 
 ## Workflow
 
@@ -53,7 +53,7 @@ Scripts and documentation for installation:
 
 # Build specific package
 ./scripts/build_package.sh tensor
-```
+```text
 
 ### 2. Create Archives
 
@@ -61,13 +61,13 @@ Scripts and documentation for installation:
 # Create distribution archive
 ./scripts/create_archive.sh v0.1.0
 
-# Includes:
+# Includes
 # - packages/*.mojopkg
 # - README.md
 # - LICENSE
 # - INSTALL.md
 # - examples/
-```
+```text
 
 ### 3. Test Installation
 
@@ -75,11 +75,11 @@ Scripts and documentation for installation:
 # Test in clean environment
 ./scripts/test_installation.sh packages/tensor.mojopkg
 
-# Verifies:
+# Verifies
 # - Package can be imported
 # - Dependencies resolved
 # - Examples work
-```
+```text
 
 ### 4. Create CI Workflow
 
@@ -88,7 +88,7 @@ Scripts and documentation for installation:
 ./scripts/create_packaging_workflow.sh
 
 # Creates: .github/workflows/package.yml
-```
+```text
 
 ## Package Structure
 
@@ -100,9 +100,9 @@ src/tensor/
 ├── ops.mojo           # Operations module
 └── types.mojo         # Type definitions
 
-# Builds to:
+# Builds to
 packages/tensor.mojopkg
-```
+```text
 
 ### Distribution Archive Layout
 
@@ -118,7 +118,7 @@ ml-odyssey-v0.1.0/
 ├── README.md
 ├── LICENSE
 └── INSTALL.md
-```
+```text
 
 ## Quality Checks
 
@@ -140,23 +140,23 @@ Before finalizing package:
 
 ## Examples
 
-**Package Mojo module:**
+### Package Mojo module:
 
 ```bash
 ./scripts/package_mojo_module.sh tensor
-```
+```text
 
-**Create distribution:**
+### Create distribution:
 
 ```bash
 ./scripts/create_distribution.sh v0.1.0
-```
+```text
 
-**Test package:**
+### Test package:
 
 ```bash
 ./scripts/test_package.sh tensor.mojopkg
-```
+```text
 
 ## Scripts Available
 

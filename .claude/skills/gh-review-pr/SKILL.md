@@ -27,7 +27,7 @@ gh pr diff <pr-number>
 
 # Check PR status
 gh pr checks <pr-number>
-```
+```text
 
 ### 2. Review Checklist
 
@@ -67,20 +67,20 @@ Use the review comment template from templates/review_comment.md to provide stru
 Provide review as markdown with sections:
 
 1. **Summary** - Overall assessment
-2. **Strengths** - What's done well
-3. **Issues** - Problems that must be fixed
-4. **Suggestions** - Optional improvements
-5. **Verdict** - Approve / Request Changes / Comment
+1. **Strengths** - What's done well
+1. **Issues** - Problems that must be fixed
+1. **Suggestions** - Optional improvements
+1. **Verdict** - Approve / Request Changes / Comment
 
 ## Examples
 
-**Good usage:**
+### Good usage:
 
 - "Review PR #42"
 - "Check if PR #15 is ready to merge"
 - "Evaluate the quality of pull request 7"
 
-**Scripts Available:**
+### Scripts Available:
 
 - `scripts/check_pr_status.sh` - Check CI and review status
 - `scripts/analyze_changes.sh` - Analyze code changes

@@ -39,17 +39,17 @@ This cleanup phase focuses on:
    - Refactor for better maintainability and performance
    - Remove code duplication and technical debt
 
-2. **Documentation Finalization**
+1. **Documentation Finalization**
    - Complete user documentation for all testing tools
    - Add comprehensive inline documentation
    - Create usage examples and best practices
 
-3. **Performance Optimization**
+1. **Performance Optimization**
    - Profile test execution performance
    - Optimize test discovery and execution
    - Reduce overhead in coverage measurement
 
-4. **Final Testing and Validation**
+1. **Final Testing and Validation**
    - Run comprehensive tests on all testing tools
    - Validate against success criteria
    - Perform integration testing with real papers

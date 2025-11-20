@@ -18,14 +18,14 @@ Integrate StepLR scheduler into the training library package and ensure proper e
 
 **File**: `shared/training/schedulers.mojo`
 
-```
+```text
 shared/training/
 ├── __init__.mojo           # Main package exports
 ├── base.mojo               # LRScheduler trait
 ├── schedulers.mojo         # StepLR implementation (HERE)
 └── schedulers/
     └── __init__.mojo       # Scheduler subpackage exports
-```
+```text
 
 ### 2. Export Configuration
 
@@ -37,7 +37,7 @@ shared/training/
 from shared.training.base import LRScheduler
 
 # StepLR is defined here - automatically available when file is imported
-```
+```text
 
 #### In `shared/training/schedulers/__init__.mojo`
 
@@ -48,7 +48,7 @@ from ..schedulers import StepLR, CosineAnnealingLR, WarmupLR
 
 # Re-export for convenience
 __all__ = ["StepLR", "CosineAnnealingLR", "WarmupLR"]
-```
+```text
 
 #### In `shared/training/__init__.mojo`
 
@@ -67,7 +67,7 @@ __all__ = [
     "LRScheduler",
     # ... other exports
 ]
-```
+```text
 
 ### 3. Import Patterns
 
@@ -86,17 +86,19 @@ from shared.training import StepLR
 # Option 4: Import entire module
 from shared.training import schedulers
 var sched = schedulers.StepLR(...)
-```
+```text
 
 **Recommended**: Option 1 or 3 (most explicit)
 
 ### 4. Public API Surface
 
-**Exported symbols**:
+### Exported symbols
+
 - `StepLR` - Main scheduler struct
 - `LRScheduler` - Base trait (for type annotations)
 
-**Not exported**:
+### Not exported
+
 - Internal helper functions (none in current implementation)
 - Private implementation details
 
@@ -114,7 +116,7 @@ var scheduler = StepLR(base_lr=0.1, step_size=30, gamma=0.1)
 for epoch in range(100):
     var new_lr = scheduler.get_lr(epoch)
     optimizer.set_lr(new_lr)
-```
+```text
 
 ### With Training Loop
 
@@ -129,7 +131,7 @@ var trainer = BaseTrainer(
 )
 
 trainer.fit(train_data, val_data, num_epochs=100)
-```
+```text
 
 ### With Callbacks
 
@@ -144,7 +146,7 @@ var callback = LoggingCallback(log_interval=1)
 for epoch in range(100):
     var lr = scheduler.get_lr(epoch)
     callback.log("lr", lr, epoch)
-```
+```text
 
 ## Documentation Integration
 
@@ -163,6 +165,7 @@ Reduces learning rate by a multiplicative factor at fixed intervals.
 
 **Usage**:
 ```mojo
+
 from shared.training import StepLR
 
 var scheduler = StepLR(
@@ -172,26 +175,27 @@ var scheduler = StepLR(
 )
 
 # In training loop
+
 for epoch in range(100):
     var lr = scheduler.get_lr(epoch)
     optimizer.set_lr(lr)
-```
 
+```text
 **Common configurations**:
 - `step_size=30, gamma=0.1` - Classic step decay (AlexNet, VGG)
 - `step_size=50, gamma=0.5` - Gentler decay
 - `step_size=100, gamma=0.9` - Very gradual decay
-```
+```text
 
 ### API Documentation
 
 Auto-generated from docstrings:
 
-```
+```text
 StepLR(base_lr: Float64, step_size: Int, gamma: Float64)
 ├── __init__(base_lr, step_size, gamma)
 └── get_lr(epoch: Int, batch: Int = 0) -> Float64
-```
+```text
 
 ## Dependency Management
 
@@ -200,13 +204,14 @@ StepLR(base_lr: Float64, step_size: Int, gamma: Float64)
 ```mojo
 shared.training.base
 └── LRScheduler trait
-```
+```text
 
 **No circular dependencies**: ✅
 
 ### External Dependencies
 
-**Standard library only**:
+### Standard library only
+
 - Mojo builtin operators (`**`, `//`)
 - No external packages required
 
@@ -226,7 +231,7 @@ shared.training.base
 description = "Learning rate schedulers for training optimization"
 exports = ["StepLR", "CosineAnnealingLR", "WarmupLR"]
 dependencies = ["shared.training.base"]
-```
+```text
 
 ## Testing Package Integration
 
@@ -244,7 +249,7 @@ fn test_steplr_import_from_training() raises:
     from shared.training import StepLR
     var sched = StepLR(base_lr=0.1, step_size=10, gamma=0.1)
     assert_true(True)  # Import successful
-```
+```text
 
 ### Integration Tests
 
@@ -253,7 +258,7 @@ fn test_steplr_import_from_training() raises:
 mojo test tests/shared/training/test_training_infrastructure.mojo
 
 # Expected: All integration tests pass
-```
+```text
 
 ## Success Criteria
 
@@ -267,14 +272,17 @@ mojo test tests/shared/training/test_training_infrastructure.mojo
 
 ## Files Modified
 
-**Package exports**:
+### Package exports
+
 - `shared/training/__init__.mojo` - Add StepLR to exports
 - `shared/training/schedulers/__init__.mojo` - Add StepLR to exports
 
-**Documentation**:
+### Documentation
+
 - `shared/training/README.md` - Add StepLR usage examples
 
 **No changes needed** (already correct):
+
 - `shared/training/schedulers.mojo` - Implementation file
 
 ## Implementation Status

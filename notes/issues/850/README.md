@@ -66,8 +66,8 @@ To be filled during implementation
 The testing infrastructure is organized into three main components:
 
 1. **Test Runner** - Universal test execution system
-2. **Paper Test Script** - Focused testing for individual papers
-3. **Coverage Tool** - Code coverage measurement and validation
+1. **Paper Test Script** - Focused testing for individual papers
+1. **Coverage Tool** - Code coverage measurement and validation
 
 This modular design allows each component to evolve independently while maintaining clear interfaces for integration.
 
@@ -93,7 +93,7 @@ Provide a unified command to discover and execute all tests in the repository wi
 
 **Purpose**: Locate all test files and cases in the repository.
 
-**Functionality**:
+### Functionality
 
 - Recursive scanning of repository directories
 - Pattern-based test file identification:
@@ -103,7 +103,7 @@ Provide a unified command to discover and execute all tests in the repository wi
 - Support for test markers and tags
 - Efficient caching to avoid repeated scans
 
-**Configuration**:
+### Configuration
 
 ```text
 Test Discovery Config:
@@ -111,9 +111,9 @@ Test Discovery Config:
 ├── Exclude patterns: Directories to skip (e.g., venv, __pycache__)
 ├── Test frameworks: List of supported frameworks (pytest, mojo test)
 └── Cache strategy: How to cache discovered tests
-```
+```text
 
-**Output**:
+### Output
 
 ```text
 Discovered Tests:
@@ -122,13 +122,13 @@ Discovered Tests:
 ├── Test name/function
 ├── Associated tags
 └── Paper association (if applicable)
-```
+```text
 
 ##### 1.2 Test Execution Engine
 
 **Purpose**: Execute discovered tests in an isolated, controlled manner.
 
-**Functionality**:
+### Functionality
 
 - Sequential and parallel execution modes
 - Test isolation (separate processes when possible)
@@ -137,7 +137,7 @@ Discovered Tests:
 - Resource cleanup after each test
 - Error capture with full context
 
-**Execution Strategies**:
+### Execution Strategies
 
 1. **Isolated Execution** (Default)
    - Each test runs in separate process
@@ -145,17 +145,17 @@ Discovered Tests:
    - No cross-test interference
    - Supports parallel execution
 
-2. **Grouped Execution** (When needed)
+1. **Grouped Execution** (When needed)
    - Related tests run together
    - Shared setup/teardown
    - Faster for tightly-coupled tests
 
-3. **Sequential Execution** (Fallback)
+1. **Sequential Execution** (Fallback)
    - Tests run one at a time
    - Useful for debugging
    - Simpler state management
 
-**Configuration**:
+### Configuration
 
 ```text
 Execution Config:
@@ -164,9 +164,9 @@ Execution Config:
 ├── Execution strategy: isolated, grouped, sequential
 ├── Environment variables: Setup for test environment
 └── Cleanup strategy: Resource cleanup approach
-```
+```text
 
-**Output**:
+### Output
 
 ```text
 Execution Results:
@@ -176,13 +176,13 @@ Execution Results:
 ├── Output (stdout/stderr)
 ├── Error traceback (if failed)
 └── Performance metrics
-```
+```text
 
 ##### 1.3 Result Reporting System
 
 **Purpose**: Format and present test results clearly.
 
-**Functionality**:
+### Functionality
 
 - Real-time test progress display
 - Summary statistics (passed, failed, skipped, errors)
@@ -191,7 +191,7 @@ Execution Results:
 - Actionable error messages
 - Multiple output formats
 
-**Report Formats**:
+### Report Formats
 
 1. **Console Output** (Interactive)
    - Real-time progress bar
@@ -199,19 +199,19 @@ Execution Results:
    - Concise failure summaries
    - Total statistics
 
-2. **Detailed Report** (File)
+1. **Detailed Report** (File)
    - Complete test listing
    - Full error output and tracebacks
    - Performance breakdown
    - Coverage information
    - Machine-readable format (JSON option)
 
-3. **CI/CD Format**
+1. **CI/CD Format**
    - GitHub Actions compatible
    - JUnit XML format
    - Artifact-friendly structure
 
-**Output Example**:
+### Output Example
 
 ```text
 Test Results Summary
@@ -231,11 +231,11 @@ Performance:
   ⚠ test_training_large_batch (12.3s)
   ⚠ test_validation_full_dataset (8.7s)
 ═══════════════════════════════════════════════
-```
+```text
 
 #### Test Runner Interface
 
-**CLI Specification**:
+### CLI Specification
 
 ```bash
 # Run all tests
@@ -264,9 +264,9 @@ Performance:
 
 # Stop on first failure
 ./test-runner --fail-fast
-```
+```text
 
-**Exit Codes**:
+### Exit Codes
 
 - 0: All tests passed
 - 1: One or more tests failed
@@ -293,24 +293,24 @@ Provide focused testing and validation for individual paper implementations.
 
 **Purpose**: Verify paper implementation structure and completeness.
 
-**Validations**:
+### Validations
 
 1. **Structure Validation**
    - Required directories exist (src/, tests/, docs/)
    - Key files present (README.md, implementation files)
    - Correct naming conventions
 
-2. **Implementation Validation**
+1. **Implementation Validation**
    - All required components implemented
    - API signatures match specification
    - Required test files present
 
-3. **Documentation Validation**
+1. **Documentation Validation**
    - README has required sections
    - API documentation complete
    - Examples included where needed
 
-**Configuration**:
+### Configuration
 
 ```text
 Paper Structure:
@@ -331,9 +331,9 @@ papers/
 │   │   └── example.ipynb
 │   └── assets/
 │       └── (reference images, datasets)
-```
+```text
 
-**Output**:
+### Output
 
 ```text
 Paper Structure Validation
@@ -344,13 +344,13 @@ Paper Structure Validation
 ✓ Implementation matches specification
 ─────────────────────────────────────────
 Status: VALID
-```
+```text
 
 ##### 2.2 Paper Test Runner
 
 **Purpose**: Execute all tests associated with a specific paper.
 
-**Functionality**:
+### Functionality
 
 - Run unit tests for paper components
 - Run integration tests for full pipeline
@@ -358,7 +358,7 @@ Status: VALID
 - Measure performance metrics
 - Generate paper-specific reports
 
-**Test Categories**:
+### Test Categories
 
 1. **Unit Tests**
    - Model architecture tests
@@ -366,19 +366,19 @@ Status: VALID
    - Utility function tests
    - Single component isolation
 
-2. **Integration Tests**
+1. **Integration Tests**
    - Full training pipeline
    - End-to-end inference
    - Multi-component interaction
    - Checkpointing and resumption
 
-3. **Validation Tests**
+1. **Validation Tests**
    - Accuracy against baselines
    - Performance metrics
    - Numerical stability
    - Reproducibility verification
 
-**Configuration**:
+### Configuration
 
 ```text
 Paper Test Config:
@@ -387,9 +387,9 @@ Paper Test Config:
 ├── Performance baselines: Expected metrics
 ├── Accuracy thresholds: Minimum acceptable accuracy
 └── Reproducibility seed: For deterministic validation
-```
+```text
 
-**Output**:
+### Output
 
 ```text
 Paper Test Results: LeNet-5
@@ -403,11 +403,11 @@ Latency: 2.3ms (vs 2.5ms baseline)  ✓
 Memory: 45MB (vs 50MB baseline)     ✓
 ═════════════════════════════════════
 Status: PASSED
-```
+```text
 
 #### Paper Test Script Interface
 
-**CLI Specification**:
+### CLI Specification
 
 ```bash
 # Run all tests for a paper
@@ -427,9 +427,9 @@ Status: PASSED
 
 # Compare to baseline
 ./test-paper lenet-5 --compare-baseline
-```
+```text
 
-**Exit Codes**:
+### Exit Codes
 
 - 0: All validations and tests passed
 - 1: One or more tests failed
@@ -456,7 +456,7 @@ Measure, report, and validate code coverage for testing completeness.
 
 **Purpose**: Gather code coverage data during test execution.
 
-**Functionality**:
+### Functionality
 
 - Instrument code for coverage tracking
 - Collect line coverage data
@@ -464,21 +464,21 @@ Measure, report, and validate code coverage for testing completeness.
 - Collect function coverage data
 - Support for both Mojo and Python code
 
-**Coverage Metrics**:
+### Coverage Metrics
 
 1. **Line Coverage**
    - Percentage of executable lines executed
    - Identifies untested statements
 
-2. **Branch Coverage**
+1. **Branch Coverage**
    - Percentage of conditional branches taken
    - Identifies untested conditions
 
-3. **Function Coverage**
+1. **Function Coverage**
    - Percentage of functions called
    - Identifies untested code sections
 
-**Configuration**:
+### Configuration
 
 ```text
 Coverage Collection Config:
@@ -487,9 +487,9 @@ Coverage Collection Config:
 ├── Exclude patterns: Paths to skip
 ├── Instrumentation strategy: How to instrument code
 └── Data output format: Storage format for coverage data
-```
+```text
 
-**Output**:
+### Output
 
 ```text
 Coverage Data (JSON):
@@ -515,13 +515,13 @@ Coverage Data (JSON):
     "functions": 100.0
   }
 }
-```
+```text
 
 ##### 3.2 Coverage Reporter
 
 **Purpose**: Generate human-readable coverage reports.
 
-**Report Formats**:
+### Report Formats
 
 1. **Console Summary**
    - Overall coverage percentage
@@ -529,18 +529,18 @@ Coverage Data (JSON):
    - Trend indicators
    - Pass/fail status
 
-2. **HTML Report**
+1. **HTML Report**
    - Interactive coverage visualization
    - Line-by-line coverage highlighting
    - Coverage tree navigation
    - Historical trends
 
-3. **JSON Report**
+1. **JSON Report**
    - Machine-readable format
    - Integration with CI/CD tools
    - Programmatic threshold checking
 
-**Output Example**:
+### Output Example
 
 ```text
 Code Coverage Report
@@ -555,13 +555,13 @@ src/utils.mojo              100%     100%       100%
 Total                       96.2%    92.8%      94.5%
 ═══════════════════════════════════════════════════════
 Status: PASSED (threshold: 90%)
-```
+```text
 
 ##### 3.3 Threshold Validator
 
 **Purpose**: Enforce coverage requirements.
 
-**Functionality**:
+### Functionality
 
 - Check overall coverage against minimum threshold
 - Check file-specific coverage requirements
@@ -569,7 +569,7 @@ Status: PASSED (threshold: 90%)
 - Support graduated thresholds (e.g., strict for core, lenient for utils)
 - Generate actionable reports for below-threshold code
 
-**Threshold Configuration**:
+### Threshold Configuration
 
 ```text
 Coverage Thresholds:
@@ -581,24 +581,24 @@ Coverage Thresholds:
 ├── Utilities: 80%
 ├── Examples/notebooks: 70% (or none)
 └── Actions on failure: Fail CI, warn, or report only
-```
+```text
 
-**Validation Rules**:
+### Validation Rules
 
 1. **Overall Coverage**
    - Must meet minimum threshold
    - Prevents reducing overall coverage
 
-2. **Per-File Coverage**
+1. **Per-File Coverage**
    - Critical files have higher thresholds
    - Utility files have lower thresholds
 
-3. **Component Coverage**
+1. **Component Coverage**
    - Core ML components: 95%+ required
    - Data handling: 95%+ required
    - Training utilities: 90%+ required
 
-**Output**:
+### Output
 
 ```text
 Coverage Threshold Validation
@@ -611,11 +611,11 @@ Component Thresholds:
   Training (95% threshold):   94.1%             ✗ FAIL
 ────────────────────────────────────────────────────────
 Status: FAILED - Training component below threshold
-```
+```text
 
 #### Coverage Tool Interface
 
-**CLI Specification**:
+### CLI Specification
 
 ```bash
 # Run tests and collect coverage
@@ -638,7 +638,7 @@ Status: FAILED - Training component below threshold
 
 # Specify coverage data file
 ./coverage --data .coverage.json --report
-```
+```text
 
 ### 4. Integration Architecture
 
@@ -652,7 +652,7 @@ Test Execution Flow:
 4. Coverage Collector gathers metrics
 5. Coverage Reporter generates reports
 6. Threshold Validator checks requirements
-```
+```text
 
 #### Configuration Management
 
@@ -682,37 +682,37 @@ output-format = "json"
 overall = 90
 core = 95
 utilities = 80
-```
+```text
 
 #### Error Handling Strategy
 
-**Test Failures**:
+### Test Failures
 
 1. **Test Timeout**
    - Clear message indicating test timeout
    - Suggestion to increase timeout
    - Last output captured for debugging
 
-2. **Environment Setup Failure**
+1. **Environment Setup Failure**
    - List missing dependencies
    - Provide installation instructions
    - Suggest documentation references
 
-3. **Coverage Data Issues**
+1. **Coverage Data Issues**
    - Report collection failures
    - Suggest alternative measurement approaches
    - Log detailed diagnostics
 
 #### Performance Considerations
 
-**Test Execution Performance**:
+### Test Execution Performance
 
 - **Parallel Execution**: Default 8 workers for faster execution
 - **Test Caching**: Cache test discovery between runs
 - **Lazy Coverage**: Only collect coverage when requested
 - **Incremental Testing**: Option to run only changed tests
 
-**Scaling Considerations**:
+### Scaling Considerations
 
 - Support repositories with 1000+ tests
 - Handle tests taking seconds to minutes
@@ -728,12 +728,12 @@ utilities = 80
    - Name should describe what is tested
    - Use descriptive assertion messages
 
-2. **Test Organization**
+1. **Test Organization**
    - One logical test per function
    - Group related tests in same file
    - Use markers for test categorization
 
-3. **Test Independence**
+1. **Test Independence**
    - No dependencies between tests
    - Each test creates required state
    - Proper cleanup after execution
@@ -745,12 +745,12 @@ utilities = 80
    - Check coverage locally
    - Address warnings early
 
-2. **CI/CD Integration**
+1. **CI/CD Integration**
    - Run full test suite on every commit
    - Enforce coverage thresholds
    - Generate historical reports
 
-3. **Debugging Failures**
+1. **Debugging Failures**
    - Run failing test in isolation
    - Check test logs for details
    - Use verbose output for debugging
@@ -764,17 +764,17 @@ utilities = 80
    - Understand test patterns in use
    - Document coverage requirements
 
-2. **Define Architecture**
+1. **Define Architecture**
    - Design test discovery mechanism
    - Define test execution strategy
    - Plan coverage collection approach
 
-3. **Document APIs**
+1. **Document APIs**
    - Specify CLI interfaces
    - Define configuration schema
    - Document expected behaviors
 
-4. **Create Design Document**
+1. **Create Design Document**
    - Consolidate all specifications
    - Add examples and use cases
    - Prepare for implementation phase
@@ -784,9 +784,9 @@ utilities = 80
 After this planning phase is complete:
 
 1. **Issue #851**: Create comprehensive test suite
-2. **Issue #852**: Implement testing infrastructure
-3. **Issue #853**: Package and integrate testing tools
-4. **Issue #854**: Cleanup, documentation, and finalization
+1. **Issue #852**: Implement testing infrastructure
+1. **Issue #853**: Package and integrate testing tools
+1. **Issue #854**: Cleanup, documentation, and finalization
 
 ## Related Documentation
 

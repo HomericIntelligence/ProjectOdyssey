@@ -28,10 +28,10 @@ None (leaf node)
 ## Steps
 
 1. Create visual directory tree of main structure
-2. Explain purpose of papers/ directory
-3. Explain purpose of shared/ directory
-4. Document supporting directories (benchmarks, docs, agents, tools, configs)
-5. Describe how directories relate and work together
+1. Explain purpose of papers/ directory
+1. Explain purpose of shared/ directory
+1. Document supporting directories (benchmarks, docs, agents, tools, configs)
+1. Describe how directories relate and work together
 
 ## Success Criteria
 

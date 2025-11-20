@@ -23,13 +23,13 @@ Configure package channels in magic.toml to specify where Magic should look for 
 
 **Decision**: Use conda-forge as primary channel with Modular-specific channels for Mojo/MAX packages.
 
-**Rationale**:
+### Rationale
 
 - conda-forge is the standard, community-maintained package repository with extensive package availability
 - Modular channels are required for Mojo/MAX-specific packages not available in conda-forge
 - This combination ensures both general Python/ML packages and Mojo-specific tools are accessible
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Using only conda-forge: Would miss Mojo/MAX-specific packages
 - Using only Modular channels: Would require duplicating all general packages
@@ -39,13 +39,13 @@ Configure package channels in magic.toml to specify where Magic should look for 
 
 **Decision**: Set explicit channel priority to ensure deterministic package resolution.
 
-**Rationale**:
+### Rationale
 
 - Prevents conflicts when packages exist in multiple channels
 - Ensures consistent builds across different environments
 - Allows Modular channels to override general packages when needed
 
-**Configuration Approach**:
+### Configuration Approach
 
 - Primary: conda-forge (for general packages)
 - Secondary: Modular channels (for Mojo/MAX packages)
@@ -55,7 +55,7 @@ Configure package channels in magic.toml to specify where Magic should look for 
 
 **Decision**: Use Magic's TOML-based channel configuration format.
 
-**Format**:
+### Format
 
 ```toml
 [channels]
@@ -64,9 +64,9 @@ channels = [
     "conda-forge",
     # Add Modular channels as needed for Mojo/MAX
 ]
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Follows Magic's native configuration format
 - Simple, readable, and maintainable
@@ -80,13 +80,13 @@ This configuration is part of the foundation layer, establishing the package man
 
 ### Dependencies
 
-**Inputs**:
+### Inputs
 
 - Existing magic.toml file with project metadata
 - Existing dependencies section (from issue #610)
 - Knowledge of required package sources
 
-**Outputs**:
+### Outputs
 
 - Configured channels section in magic.toml
 - Validated package resolution capability
@@ -105,15 +105,15 @@ This configuration is part of the foundation layer, establishing the package man
    - Insert after project metadata and before/after dependencies
    - Use array format for channel list
 
-2. **Configure conda-forge channel**
+1. **Configure conda-forge channel**
    - Primary channel for Python, NumPy, testing frameworks, etc.
    - Ensures access to standard ML/AI packages
 
-3. **Add Modular channels**
+1. **Add Modular channels**
    - Required for Mojo/MAX-specific packages
    - Research exact channel names from Modular documentation
 
-4. **Set channel priority**
+1. **Set channel priority**
    - Verify priority order resolves all dependencies
    - Test that conflicts are resolved correctly
 

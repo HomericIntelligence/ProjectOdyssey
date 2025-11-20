@@ -21,7 +21,7 @@ Keep worktrees synchronized with remote changes.
 ```bash
 # In any worktree
 git fetch origin
-```
+```text
 
 ### 2. Update Main Worktree
 
@@ -31,7 +31,7 @@ cd ../ml-odyssey
 
 # Pull latest
 git pull origin main
-```
+```text
 
 ### 3. Update Feature Worktree
 
@@ -44,7 +44,7 @@ git rebase origin/main
 
 # Or merge if preferred
 git merge origin/main
-```
+```text
 
 ### Sync Script
 
@@ -52,11 +52,11 @@ git merge origin/main
 # Sync all worktrees
 ./scripts/sync_all_worktrees.sh
 
-# This:
+# This
 # 1. Fetches from remote
 # 2. Updates main worktree
 # 3. Offers to rebase feature worktrees
-```
+```text
 
 ## Best Practices
 
@@ -75,13 +75,13 @@ git status  # See conflicts
 # Fix conflicts
 git add .
 git rebase --continue
-```
+```text
 
 ### Diverged Branches
 
 ```bash
 # If branch has diverged
 git pull --rebase origin main
-```
+```text
 
 See `worktree-create` for creating worktrees.

@@ -28,10 +28,10 @@ This document provides a comprehensive implementation plan for issues #498-768 i
 Each of the 58 components follows the 5-phase workflow:
 
 1. **Plan** - Design and documentation (MOSTLY COMPLETE)
-2. **Test** - Write tests following TDD (NOT STARTED)
-3. **Implementation** - Build functionality (NOT STARTED)
-4. **Package** - Integration and packaging (NOT STARTED)
-5. **Cleanup** - Refactor and finalize (NOT STARTED)
+1. **Test** - Write tests following TDD (NOT STARTED)
+1. **Implementation** - Build functionality (NOT STARTED)
+1. **Package** - Integration and packaging (NOT STARTED)
+1. **Cleanup** - Refactor and finalize (NOT STARTED)
 
 ## Implementation Phases
 
@@ -78,19 +78,19 @@ Each of the 58 components follows the 5-phase workflow:
    - Create shared directory
    - Create supporting directories
 
-2. **Configuration Files** (3 components)
+1. **Configuration Files** (3 components)
    - Pixi/Magic.toml configuration
    - Pyproject.toml setup
    - Git configuration
 
-3. **Initial Documentation** (3 components)
+1. **Initial Documentation** (3 components)
    - README.md
    - CONTRIBUTING.md
    - CODE_OF_CONDUCT.md
 
 #### Work Breakdown
 
-**Test Phase (Week 2)**:
+### Test Phase (Week 2)
 
 - **Agent**: foundation-test-specialist
 - **Deliverables**:
@@ -99,7 +99,7 @@ Each of the 58 components follows the 5-phase workflow:
   - Documentation completeness tests
 - **Success Criteria**: All tests passing, 90%+ coverage
 
-**Implementation Phase (Weeks 2-3)**:
+### Implementation Phase (Weeks 2-3)
 
 - **Agent**: foundation-implementation-engineer
 - **Deliverables**:
@@ -108,7 +108,7 @@ Each of the 58 components follows the 5-phase workflow:
   - Initial documentation files
 - **Success Criteria**: Structure matches specs, configs valid
 
-**Package Phase (Week 3)**:
+### Package Phase (Week 3)
 
 - **Agent**: foundation-package-specialist
 - **Deliverables**:
@@ -117,7 +117,7 @@ Each of the 58 components follows the 5-phase workflow:
   - Foundation package (.tar.gz)
 - **Success Criteria**: Clean install on fresh system
 
-**Cleanup Phase (Week 4)**:
+### Cleanup Phase (Week 4)
 
 - **Agent**: foundation-cleanup-specialist
 - **Tasks**:
@@ -146,14 +146,14 @@ Each of the 58 components follows the 5-phase workflow:
    - Weight initializers (Xavier, Kaiming, uniform)
    - Metrics (accuracy, loss, confusion matrix)
 
-2. **Testing Framework** (3 components)
+1. **Testing Framework** (3 components)
    - Test infrastructure setup
    - Unit test utilities
    - Coverage tracking
 
 #### Work Breakdown
 
-**Test Phase (Week 3)**:
+### Test Phase (Week 3)
 
 - **Agent**: shared-library-test-specialist
 - **Focus**: TDD for all mathematical operations
@@ -162,7 +162,7 @@ Each of the 58 components follows the 5-phase workflow:
   - Activation function tests
   - Numerical stability tests
 
-**Implementation Phase (Weeks 3-5)**:
+### Implementation Phase (Weeks 3-5)
 
 - **Agent**: mojo-implementation-engineer
 - **Language**: Mojo (required for ML operations)
@@ -171,7 +171,7 @@ Each of the 58 components follows the 5-phase workflow:
   - Activation functions with SIMD optimization
   - Memory-safe initializers
 
-**Package Phase (Week 5)**:
+### Package Phase (Week 5)
 
 - **Agent**: shared-library-package-specialist
 - **Deliverables**:
@@ -179,7 +179,7 @@ Each of the 58 components follows the 5-phase workflow:
   - Integration tests
   - Performance benchmarks
 
-**Cleanup Phase (Week 6)**:
+### Cleanup Phase (Week 6)
 
 - **Tasks**:
   - Performance optimization
@@ -206,14 +206,14 @@ Each of the 58 components follows the 5-phase workflow:
    - Learning rate schedulers (step, cosine, warmup)
    - Callback system (checkpointing, early stopping)
 
-2. **Data Utilities** (3 components)
+1. **Data Utilities** (3 components)
    - Base dataset interface
    - Data loader with batching
    - Augmentation pipeline
 
 #### Work Breakdown
 
-**Test Phase (Week 5)**:
+### Test Phase (Week 5)
 
 - **Focus**: Training workflow tests
 - **Deliverables**:
@@ -221,7 +221,7 @@ Each of the 58 components follows the 5-phase workflow:
   - Scheduler behavior tests
   - Data pipeline tests
 
-**Implementation Phase (Weeks 5-7)**:
+### Implementation Phase (Weeks 5-7)
 
 - **Language**: Mojo for performance-critical paths
 - **Deliverables**:
@@ -229,14 +229,14 @@ Each of the 58 components follows the 5-phase workflow:
   - Efficient data loading
   - Composable augmentations
 
-**Package Phase (Week 7)**:
+### Package Phase (Week 7)
 
 - **Deliverables**:
   - Training utilities package
   - Data utilities package
   - Integration examples
 
-**Cleanup Phase (Week 8)**:
+### Cleanup Phase (Week 8)
 
 - **Focus**: API consistency
 - **Tasks**:
@@ -257,17 +257,17 @@ Each of the 58 components follows the 5-phase workflow:
    - Directory generator
    - CLI interface
 
-2. **Testing Tools** (3 components)
+1. **Testing Tools** (3 components)
    - Test runner
    - Paper test script
    - Coverage tool
 
-3. **Setup Scripts** (3 components)
+1. **Setup Scripts** (3 components)
    - Mojo installer
    - Environment setup
    - Verification script
 
-4. **Validation Tools** (3 components)
+1. **Validation Tools** (3 components)
    - Paper validator
    - Benchmark validator
    - Completeness checker
@@ -294,24 +294,24 @@ Each of the 58 components follows the 5-phase workflow:
 #### Components to Implement
 
 1. **Paper Selection & Setup** (3 components)
-2. **Model Implementation** (3 components)
+1. **Model Implementation** (3 components)
    - Core layers (conv, pooling, FC)
    - Model architecture
    - Model tests
-3. **Training Pipeline** (4 components)
+1. **Training Pipeline** (4 components)
    - Loss function
    - Optimizer
    - Training loop
    - Validation
-4. **Data Pipeline** (3 components)
+1. **Data Pipeline** (3 components)
    - MNIST download
    - Preprocessing
    - Dataset loader
-5. **Testing** (3 components)
+1. **Testing** (3 components)
    - Unit tests
    - Integration tests
    - Validation tests
-6. **Documentation** (3 components)
+1. **Documentation** (3 components)
    - README
    - Implementation notes
    - Reproduction guide
@@ -337,12 +337,12 @@ Each of the 58 components follows the 5-phase workflow:
    - Benchmark workflow
    - Security scan workflow
 
-2. **Pre-commit Hooks** (3 components)
+1. **Pre-commit Hooks** (3 components)
    - Hook configuration
    - Format checker
    - Linting
 
-3. **Templates** (3 components)
+1. **Templates** (3 components)
    - Issue templates
    - PR template
    - Config templates
@@ -368,13 +368,13 @@ Each of the 58 components follows the 5-phase workflow:
    - Workflows
    - Testing
 
-2. **Code Review Agent** (4 components)
+1. **Code Review Agent** (4 components)
    - Configuration
    - Review templates
    - Workflows
    - Testing
 
-3. **Documentation Agent** (4 components)
+1. **Documentation Agent** (4 components)
    - Configuration
    - Doc templates
    - Workflows
@@ -412,11 +412,11 @@ Each of the 58 components follows the 5-phase workflow:
 The critical path flows through:
 
 1. **Foundation** (2 weeks) - Blocks everything
-2. **Core Operations** (3 weeks) - Blocks training/data
-3. **Training Utils** (3 weeks) - Blocks first paper
-4. **First Paper Implementation** (3 weeks) - Validates framework
-5. **CI/CD Setup** (2 weeks) - Ensures quality
-6. **Integration** (1 week) - Final validation
+1. **Core Operations** (3 weeks) - Blocks training/data
+1. **Training Utils** (3 weeks) - Blocks first paper
+1. **First Paper Implementation** (3 weeks) - Validates framework
+1. **CI/CD Setup** (2 weeks) - Ensures quality
+1. **Integration** (1 week) - Final validation
 
 **Minimum Timeline**: 14 weeks if perfectly parallelized
 
@@ -452,10 +452,10 @@ The critical path flows through:
 1. **Mojo Maturity**: Language/compiler bugs
    - *Mitigation*: Fallback to Python where allowed per ADR-001
 
-2. **Numerical Stability**: ML operations precision
+1. **Numerical Stability**: ML operations precision
    - *Mitigation*: Extensive testing, reference implementations
 
-3. **Performance**: Meeting benchmark targets
+1. **Performance**: Meeting benchmark targets
    - *Mitigation*: Iterative optimization, profiling
 
 ### Resource Risks
@@ -463,7 +463,7 @@ The critical path flows through:
 1. **Mojo Expertise**: Limited experienced developers
    - *Mitigation*: Pair programming, knowledge sharing
 
-2. **Parallel Coordination**: Managing concurrent streams
+1. **Parallel Coordination**: Managing concurrent streams
    - *Mitigation*: Daily standups, clear interfaces
 
 ### Schedule Risks
@@ -471,7 +471,7 @@ The critical path flows through:
 1. **Dependencies**: Blocking issues in critical path
    - *Mitigation*: Buffer time, parallel development where possible
 
-2. **Integration Issues**: Components not working together
+1. **Integration Issues**: Components not working together
    - *Mitigation*: Early integration tests, clear APIs
 
 ## Quality Standards

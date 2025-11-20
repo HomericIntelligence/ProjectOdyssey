@@ -51,7 +51,7 @@ Explain why this decision was made. Include:
 
 Description of the alternative approach.
 
-**Why not chosen:**
+### Why not chosen:
 
 - Reason 1
 - Reason 2
@@ -60,7 +60,7 @@ Description of the alternative approach.
 
 Description of the alternative approach.
 
-**Why not chosen:**
+### Why not chosen:
 
 - Reason 1
 - Reason 2

@@ -53,14 +53,16 @@ The paper-specific test runner provides a focused test execution environment for
 
 **Decision**: Discover and run only tests in the paper's dedicated test directory.
 
-**Rationale**:
+### Rationale
+
 - Provides focused feedback on single paper implementation
 - Avoids running entire test suite (slow feedback loop)
 - Enables quick iteration during development
 - Matches typical workflow (developer works on one paper at a time)
 - Clear isolation between papers and their tests
 
-**Implementation Details**:
+### Implementation Details
+
 - Paper root directory contains `tests/` subdirectory
 - All tests for a paper are located in `<paper-name>/tests/`
 - Test runner searches this directory recursively
@@ -71,14 +73,16 @@ The paper-specific test runner provides a focused test execution environment for
 
 **Decision**: Support both unit tests and integration tests in the same test run.
 
-**Rationale**:
+### Rationale
+
 - Unit tests validate individual components
 - Integration tests validate end-to-end workflows
 - Developers need complete validation in single command
 - Both test types share same execution infrastructure
 - Can mark test types with pytest markers for filtering
 
-**Implementation Details**:
+### Implementation Details
+
 - Use pytest.mark.unit for unit tests
 - Use pytest.mark.integration for integration tests
 - Both run by default in single execution
@@ -90,14 +94,16 @@ The paper-specific test runner provides a focused test execution environment for
 
 **Decision**: Show progress during execution and clear final results report.
 
-**Rationale**:
+### Rationale
+
 - Long-running tests need feedback to user
 - Progress indication prevents perception of hanging
 - Clear results summary helps developers understand what passed/failed
 - Actionable error messages help debugging
 - Timing information useful for optimization
 
-**Implementation Details**:
+### Implementation Details
+
 - Display test count and execution time
 - Show real-time progress (dots for passing, F for failures, etc.)
 - Group results by test type (unit vs integration)
@@ -109,14 +115,16 @@ The paper-specific test runner provides a focused test execution environment for
 
 **Decision**: Optimize for fast feedback loop during development.
 
-**Rationale**:
+### Rationale
+
 - Developers want sub-second response for simple changes
 - Compilation/setup overhead dominates for small test sets
 - Caching common setup reduces repeated work
 - Parallel execution helps with larger test sets
 - Memory efficiency important for resource-constrained environments
 
-**Implementation Details**:
+### Implementation Details
+
 - Parallel test execution via pytest-xdist (configurable worker count)
 - Test result caching (invalidated on file changes)
 - Lazy import of test dependencies
@@ -127,14 +135,16 @@ The paper-specific test runner provides a focused test execution environment for
 
 **Decision**: Handle edge cases gracefully with helpful error messages.
 
-**Rationale**:
+### Rationale
+
 - Malformed test files should not crash runner
 - Missing directories should provide clear guidance
 - Conflicting test markers should be detected
 - Import errors should be clearly reported
 - Timeout/resource limit errors need handling
 
-**Implementation Details**:
+### Implementation Details
+
 - Validate paper directory exists
 - Validate tests directory exists (create if needed)
 - Check for valid Python files before import
@@ -148,14 +158,16 @@ The paper-specific test runner provides a focused test execution environment for
 
 **Decision**: Comprehensive docstrings and inline comments for clarity.
 
-**Rationale**:
+### Rationale
+
 - Cleanup phase emphasizes code quality
 - Future maintainers need clear understanding
 - API documentation enables integration
 - Comments explain non-obvious logic
 - Examples show usage patterns
 
-**Documentation Standards**:
+### Documentation Standards
+
 - Module-level docstring describing purpose and usage
 - Function docstrings with purpose, parameters, returns, and exceptions
 - Class docstrings describing responsibility and usage
@@ -167,13 +179,15 @@ The paper-specific test runner provides a focused test execution environment for
 
 **Decision**: Clean separation of concerns with clear module structure.
 
-**Rationale**:
+### Rationale
+
 - Maintainability improves with good organization
 - Testing becomes easier with focused modules
 - Reuse and integration easier with clear boundaries
 - Single Responsibility Principle reduces bugs
 
-**Module Structure**:
+### Module Structure
+
 - `test_runner.py` - Main entry point and CLI
 - `discovery.py` - Test discovery and collection
 - `executor.py` - Test execution and result collection
@@ -185,13 +199,15 @@ The paper-specific test runner provides a focused test execution environment for
 
 **Decision**: Eliminate temporary workarounds and refactor for clarity.
 
-**Rationale**:
+### Rationale
+
 - Cleanup phase is opportunity to fix accumulated issues
 - Technical debt slows future development
 - Complex code harder to maintain and debug
 - Clear code reduces bug introduction
 
-**Areas for Improvement**:
+### Areas for Improvement
+
 - Remove any hardcoded values (use configuration)
 - Eliminate code duplication (DRY principle)
 - Simplify complex functions (break into smaller pieces)
@@ -203,13 +219,15 @@ The paper-specific test runner provides a focused test execution environment for
 
 **Decision**: Comprehensive test coverage with edge case handling.
 
-**Rationale**:
+### Rationale
+
 - Test the test runner itself (meta-testing)
 - Catch regressions during development
 - Ensure robustness in production
 - Edge cases are most likely to fail
 
-**Test Coverage**:
+### Test Coverage
+
 - Unit tests for discovery logic (file patterns, filtering)
 - Unit tests for execution logic (test running, result collection)
 - Unit tests for reporting (output formatting)
@@ -223,7 +241,8 @@ The paper-specific test runner provides a focused test execution environment for
 
 **Integration Point**: Use pytest as the underlying test framework.
 
-**Approach**:
+### Approach
+
 - Leverage pytest's discovery and execution engine
 - Use pytest configuration files (pytest.ini, conftest.py)
 - Support pytest plugins (xdist for parallel execution)
@@ -234,7 +253,8 @@ The paper-specific test runner provides a focused test execution environment for
 
 **Integration Point**: Use in automated testing pipelines.
 
-**Approach**:
+### Approach
+
 - Fast execution suitable for CI feedback loops
 - Clear exit codes for pass/fail detection
 - Structured output (JSON, XML) for CI systems
@@ -245,7 +265,8 @@ The paper-specific test runner provides a focused test execution environment for
 
 **Integration Point**: Compatible with IDE test runners.
 
-**Approach**:
+### Approach
+
 - Standard pytest command format
 - Clear output for IDE parsing
 - Support for test result visualization
@@ -286,7 +307,7 @@ python -m test_runner lenet5 --fail-fast
 
 # Set timeout per test
 python -m test_runner lenet5 --timeout 30
-```
+```text
 
 #### 2. Configuration File (.test-runner.yaml)
 
@@ -314,7 +335,7 @@ output_format: text
 exclude_markers:
   - slow
   - requires_gpu
-```
+```text
 
 #### 3. Environment Variables
 
@@ -330,25 +351,28 @@ export TEST_RUNNER_FORMAT=json
 
 # Verbose mode
 export TEST_RUNNER_VERBOSE=1
-```
+```text
 
 ### Performance Characteristics
 
 #### Expected Performance
 
 **Small Test Suite** (1-10 tests):
+
 - Discovery: <100ms
 - Setup: <500ms
 - Execution: Depends on test complexity (typically <5s)
 - Total: <10s for typical case
 
 **Medium Test Suite** (10-100 tests):
+
 - Discovery: <200ms
 - Setup: <500ms
 - Execution: Depends on parallel workers (typically 10-30s with 4 workers)
 - Total: <40s typical case
 
 **Large Test Suite** (100+ tests):
+
 - Benefits significantly from parallel execution
 - 4 workers reduces execution time 75% vs sequential
 - Memory usage scales with test count
@@ -356,10 +380,10 @@ export TEST_RUNNER_VERBOSE=1
 #### Optimization Opportunities
 
 1. **Test Result Caching**: Cache passing tests (invalidate on file changes)
-2. **Lazy Loading**: Defer imports until needed
-3. **Parallel Execution**: Default to 4 workers for multi-core systems
-4. **Early Exit**: Stop on first failure (--fail-fast)
-5. **Fixture Optimization**: Reuse expensive fixtures across tests
+1. **Lazy Loading**: Defer imports until needed
+1. **Parallel Execution**: Default to 4 workers for multi-core systems
+1. **Early Exit**: Stop on first failure (--fail-fast)
+1. **Fixture Optimization**: Reuse expensive fixtures across tests
 
 ## Cleanup Tasks
 
@@ -422,6 +446,7 @@ export TEST_RUNNER_VERBOSE=1
 ## Files Affected
 
 ### Core Implementation
+
 - `scripts/test_runner/` - Test runner module (to be refactored)
 - `scripts/test_runner/__init__.py` - Package initialization
 - `scripts/test_runner/test_runner.py` - Main CLI entry point
@@ -432,12 +457,14 @@ export TEST_RUNNER_VERBOSE=1
 - `scripts/test_runner/utils.py` - Utility functions
 
 ### Tests
+
 - `tests/scripts/test_test_runner.py` - Test runner tests
 - `tests/scripts/test_discovery.py` - Discovery logic tests
 - `tests/scripts/test_executor.py` - Execution logic tests
 - `tests/scripts/test_reporter.py` - Reporting logic tests
 
 ### Documentation
+
 - `scripts/test_runner/README.md` - User guide
 - `scripts/test_runner/API.md` - API reference
 - `docs/guides/paper-testing.md` - Integration guide
@@ -445,6 +472,7 @@ export TEST_RUNNER_VERBOSE=1
 ## Success Metrics
 
 ### Code Quality
+
 - [ ] All linting checks pass (pylint, flake8, black)
 - [ ] Type checking passes (mypy) with no warnings
 - [ ] Test coverage >= 90%
@@ -452,12 +480,14 @@ export TEST_RUNNER_VERBOSE=1
 - [ ] Cyclomatic complexity within acceptable limits
 
 ### Performance
+
 - [ ] Test discovery < 200ms for typical papers
 - [ ] Test execution parallelizes efficiently (75%+ speedup with 4 workers)
 - [ ] Memory usage < 500MB for typical test sets
 - [ ] No memory leaks detected in long runs
 
 ### Documentation
+
 - [ ] All public APIs documented
 - [ ] Module docstrings complete
 - [ ] Usage examples provided
@@ -465,6 +495,7 @@ export TEST_RUNNER_VERBOSE=1
 - [ ] API reference complete
 
 ### Testing
+
 - [ ] Test coverage >= 90%
 - [ ] All edge cases covered
 - [ ] Performance tests pass
@@ -476,9 +507,9 @@ export TEST_RUNNER_VERBOSE=1
 After cleanup phase completion:
 
 1. **Integration Testing**: Verify tool works with all paper implementations
-2. **Documentation Review**: Have team review all documentation
-3. **Performance Baseline**: Establish performance metrics
-4. **Release Preparation**: Prepare for distribution
+1. **Documentation Review**: Have team review all documentation
+1. **Performance Baseline**: Establish performance metrics
+1. **Release Preparation**: Prepare for distribution
 
 ## Related Documentation
 
@@ -499,12 +530,14 @@ After cleanup phase completion:
 ## Blockers and Risks
 
 ### Potential Blockers
+
 - Unclear test structure in existing implementation
 - Missing or incomplete test discovery logic
 - Performance bottlenecks in large test sets
 - Compatibility issues with various paper structures
 
 ### Risk Mitigation
+
 - Review implementation code early
 - Profile performance bottlenecks
 - Create comprehensive test suite

@@ -45,13 +45,15 @@ Design and document evaluation metrics for assessing model performance, includin
 
 **Decision**: Implement metrics as three independent, composable components (Accuracy, Loss Tracking, Confusion Matrix).
 
-**Rationale**:
+### Rationale
+
 - Each metric serves a distinct purpose in model evaluation
 - Independent components allow flexible usage (use only what's needed)
 - Easier to test and maintain individual components
 - Supports incremental development (can implement one at a time)
 
-**Trade-offs**:
+### Trade-offs
+
 - Requires consistent API patterns across components
 - May need a higher-level wrapper for common use cases
 - Could lead to code duplication if not carefully designed
@@ -60,13 +62,15 @@ Design and document evaluation metrics for assessing model performance, includin
 
 **Decision**: Support both incremental updates and single-batch computation for all metrics.
 
-**Rationale**:
+### Rationale
+
 - Training typically processes mini-batches, requiring incremental updates
 - Validation often evaluates full datasets, benefiting from batched computation
 - Large datasets may not fit in memory, requiring incremental processing
 - Flexibility enables different evaluation workflows
 
-**Implementation Strategy**:
+### Implementation Strategy
+
 - Metrics maintain internal state for accumulation
 - Provide `update()` method for incremental additions
 - Provide `compute()` method to calculate final result
@@ -76,13 +80,15 @@ Design and document evaluation metrics for assessing model performance, includin
 
 **Decision**: Accept both logits and probabilities for accuracy metrics.
 
-**Rationale**:
+### Rationale
+
 - Different model implementations output different formats
 - Softmax application is computationally expensive
 - Top-k selection works on both logits and probabilities
 - Reduces burden on calling code
 
-**Implementation**:
+### Implementation
+
 - Internally convert to consistent format (likely argmax for predictions)
 - Document which operations are performed automatically
 - Avoid redundant computations (don't softmax if already probabilities)
@@ -91,12 +97,14 @@ Design and document evaluation metrics for assessing model performance, includin
 
 **Decision**: Prioritize memory efficiency for loss tracking and confusion matrix.
 
-**Rationale**:
+### Rationale
+
 - Loss tracking over long runs can accumulate many values
 - Confusion matrix for large class counts (e.g., ImageNet: 1000 classes) requires significant memory
 - Training is memory-constrained (GPU memory limits)
 
-**Implementation Strategy**:
+### Implementation Strategy
+
 - Loss tracking: Store only necessary statistics (not all individual values)
 - Moving averages: Use fixed-size circular buffer
 - Confusion matrix: Use sparse representation if appropriate
@@ -106,7 +114,8 @@ Design and document evaluation metrics for assessing model performance, includin
 
 **Decision**: Support multiple normalization modes for confusion matrix (by row, column, total, none).
 
-**Rationale**:
+### Rationale
+
 - Different normalizations reveal different insights:
   - Row normalization (by true label): Shows recall per class
   - Column normalization (by predicted label): Shows precision per class
@@ -115,7 +124,8 @@ Design and document evaluation metrics for assessing model performance, includin
 - Scientific papers use different conventions
 - Visualization tools expect different formats
 
-**Trade-offs**:
+### Trade-offs
+
 - Increases API surface area
 - Requires clear documentation of what each mode means
 - May confuse users unfamiliar with confusion matrices
@@ -124,12 +134,14 @@ Design and document evaluation metrics for assessing model performance, includin
 
 **Decision**: Define clear behavior for edge cases (empty batches, single class, NaN/Inf values).
 
-**Rationale**:
+### Rationale
+
 - Edge cases cause runtime failures if not handled
 - Silent failures are worse than clear errors
 - Consistent behavior aids debugging
 
-**Defined Behaviors**:
+### Defined Behaviors
+
 - Empty batches: Return 0.0 for accuracy, skip for loss tracking
 - Single class: Confusion matrix becomes 1x1, accuracy is 100% if correct
 - NaN/Inf in loss: Raise error (indicates training instability)
@@ -139,12 +151,14 @@ Design and document evaluation metrics for assessing model performance, includin
 
 **Decision**: Provide helpers to extract precision, recall, and F1 from confusion matrix.
 
-**Rationale**:
+### Rationale
+
 - These metrics are commonly needed for classification evaluation
 - Calculations are straightforward but error-prone to implement manually
 - Encourages best practices in model evaluation
 
-**Scope Limitation**:
+### Scope Limitation
+
 - Only include most common metrics (precision, recall, F1)
 - Avoid expanding to specialized metrics (MCC, Cohen's kappa) initially
 - Users can compute custom metrics from confusion matrix directly
@@ -153,12 +167,13 @@ Design and document evaluation metrics for assessing model performance, includin
 
 **Decision**: Follow consistent API patterns across all metric components.
 
-**Rationale**:
+### Rationale
+
 - Reduces cognitive load when using multiple metrics
 - Enables generic metric handling code
 - Facilitates future extension with new metrics
 
-**Common API Pattern**:
+### Common API Pattern
 
 ```mojo
 struct MetricName:
@@ -173,18 +188,20 @@ struct MetricName:
 
     fn reset(inout self):
         """Clear accumulated state."""
-```
+```text
 
 ### 9. Integration Points
 
 **Decision**: Design metrics to integrate with training pipeline through standardized interfaces.
 
-**Rationale**:
+### Rationale
+
 - Metrics are consumed by training loops, validation, and logging
 - Standardized interfaces enable generic training code
 - Reduces coupling between training logic and specific metrics
 
-**Integration Strategy**:
+### Integration Strategy
+
 - Metrics should be passable as collection (List of metrics)
 - Training loop calls `update()` during validation
 - Logging code calls `compute()` at end of epoch
@@ -194,12 +211,14 @@ struct MetricName:
 
 **Decision**: Use SIMD operations for performance-critical paths (accuracy computation, matrix accumulation).
 
-**Rationale**:
+### Rationale
+
 - Metrics are computed frequently during training
 - SIMD can significantly accelerate element-wise operations
 - Mojo's SIMD support makes this straightforward
 
-**Implementation Notes**:
+### Implementation Notes
+
 - Vectorize comparisons for accuracy calculation
 - Use SIMD for confusion matrix accumulation
 - Profile to identify bottlenecks before optimizing
@@ -232,10 +251,10 @@ struct MetricName:
 ## Next Steps
 
 1. **Review this planning document** - Ensure all design decisions are sound
-2. **Begin Test Phase** (Issue #294) - Write comprehensive tests following TDD
-3. **Begin Implementation** (Issue #295) - Implement metrics following the design
-4. **Begin Packaging** (Issue #296) - Integrate metrics into shared library
-5. **Cleanup Phase** (Issue #297) - Refactor and finalize after parallel phases complete
+1. **Begin Test Phase** (Issue #294) - Write comprehensive tests following TDD
+1. **Begin Implementation** (Issue #295) - Implement metrics following the design
+1. **Begin Packaging** (Issue #296) - Integrate metrics into shared library
+1. **Cleanup Phase** (Issue #297) - Refactor and finalize after parallel phases complete
 
 ---
 

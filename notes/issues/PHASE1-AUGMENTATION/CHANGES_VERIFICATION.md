@@ -18,15 +18,17 @@
 
 ### Change 1: Import Enhancements (Line 7)
 
-**Before**:
+### Before
+
 ```mojo
 from math import sqrt, floor, ceil
-```
+```text
 
-**After**:
+### After
+
 ```mojo
 from math import sqrt, floor, ceil, sin, cos
-```
+```text
 
 **Reason**: Added trigonometric functions needed for rotation calculations.
 
@@ -39,22 +41,24 @@ from math import sqrt, floor, ceil, sin, cos
 ```mojo
 # Type alias for backward compatibility and more intuitive naming
 alias Pipeline = Compose
-```
+```text
 
 **Reason**: Provides backward-compatible naming convention for composition pipelines.
 
-**Usage**:
+### Usage
+
 ```mojo
 var pipeline = Pipeline([flip, rotate, normalize])
-# Instead of:
+# Instead of
 var pipeline = Compose([flip, rotate, normalize])
-```
+```text
 
 ---
 
 ### Change 3: RandomHorizontalFlip Fix (Lines 414-460)
 
-**Old Implementation (lines 414-439)**:
+### Old Implementation (lines 414-439)
+
 ```mojo
 fn __call__(self, data: Tensor) raises -> Tensor:
     """Randomly flip image horizontally with probability p.
@@ -77,9 +81,10 @@ fn __call__(self, data: Tensor) raises -> Tensor:
     # TODO: For proper image flipping, need to reverse only width dimension
     # This simplified implementation reverses all elements
     return Tensor(flipped^)
-```
+```text
 
-**New Implementation (lines 414-460)**:
+### New Implementation (lines 414-460)
+
 ```mojo
 fn __call__(self, data: Tensor) raises -> Tensor:
     """Randomly flip image horizontally with probability p.
@@ -119,9 +124,10 @@ fn __call__(self, data: Tensor) raises -> Tensor:
                 flipped.append(Float32(data[src_idx]))
 
     return Tensor(flipped^)
-```
+```text
 
-**Key Changes**:
+### Key Changes
+
 - ✅ Calculate image dimensions from total elements
 - ✅ Loop through height and width preserving structure
 - ✅ Reverse only width dimension (w_orig = width - 1 - w_idx)
@@ -132,7 +138,7 @@ fn __call__(self, data: Tensor) raises -> Tensor:
 
 ### Change 4: RandomVerticalFlip New Struct (Lines 463-526)
 
-**Added as new struct after RandomHorizontalFlip**:
+### Added as new struct after RandomHorizontalFlip
 
 ```mojo
 @value
@@ -199,9 +205,10 @@ struct RandomVerticalFlip(Transform):
                     flipped.append(Float32(data[src_idx]))
 
         return Tensor(flipped^)
-```
+```text
 
-**Key Features**:
+### Key Features
+
 - ✅ Mirrors RandomHorizontalFlip structure
 - ✅ Reverses height dimension (h_orig = height - 1 - h_idx)
 - ✅ Same probability mechanism
@@ -212,7 +219,8 @@ struct RandomVerticalFlip(Transform):
 
 ### Change 5: RandomRotation Implementation (Lines 551-627)
 
-**Old Implementation (lines 464-494)**:
+### Old Implementation (lines 464-494)
+
 ```mojo
 fn __call__(self, data: Tensor) raises -> Tensor:
     """Randomly rotate image within specified degree range.
@@ -235,9 +243,10 @@ fn __call__(self, data: Tensor) raises -> Tensor:
     #
     # For now, return original tensor unchanged
     return data
-```
+```text
 
-**New Implementation (lines 551-627)**:
+### New Implementation (lines 551-627)
+
 ```mojo
 fn __call__(self, data: Tensor) raises -> Tensor:
     """Randomly rotate image within specified degree range.
@@ -316,9 +325,10 @@ fn __call__(self, data: Tensor) raises -> Tensor:
                     rotated.append(Float32(self.fill_value))
 
     return Tensor(rotated^)
-```
+```text
 
-**Key Improvements**:
+### Key Improvements
+
 - ✅ Generates random angle within specified range
 - ✅ Converts degrees to radians properly
 - ✅ Pre-computes cos/sin values
@@ -332,6 +342,7 @@ fn __call__(self, data: Tensor) raises -> Tensor:
 ## Verification Checklist
 
 ### Code Quality
+
 - ✅ All functions use `fn` keyword (performance-critical)
 - ✅ Proper struct definition with `@value` decorator
 - ✅ Correct trait implementation (Transform)
@@ -339,6 +350,7 @@ fn __call__(self, data: Tensor) raises -> Tensor:
 - ✅ No compile-time errors or warnings expected
 
 ### Functionality
+
 - ✅ RandomHorizontalFlip reverses width dimension only
 - ✅ RandomVerticalFlip reverses height dimension only
 - ✅ RandomRotation performs actual rotation with fill handling
@@ -346,6 +358,7 @@ fn __call__(self, data: Tensor) raises -> Tensor:
 - ✅ All probability logic correct (p threshold)
 
 ### Documentation
+
 - ✅ Comprehensive docstrings with Args/Returns/Raises
 - ✅ Mathematical formulas documented
 - ✅ Assumptions clearly stated
@@ -353,6 +366,7 @@ fn __call__(self, data: Tensor) raises -> Tensor:
 - ✅ Limitations noted
 
 ### Testing Ready
+
 - ✅ Probability-based transforms testable
 - ✅ Deterministic tests possible (seeded randomness)
 - ✅ Shape preservation verifiable
@@ -362,12 +376,14 @@ fn __call__(self, data: Tensor) raises -> Tensor:
 
 ## Import Statement Verification
 
-**Line 7 after changes**:
+### Line 7 after changes
+
 ```mojo
 from math import sqrt, floor, ceil, sin, cos
-```
+```text
 
 Provides all necessary imports for:
+
 - ✅ `sqrt()` - Image dimension calculation
 - ✅ `sin()` - Rotation matrix calculation
 - ✅ `cos()` - Rotation matrix calculation
@@ -405,9 +421,10 @@ When test suite runs, these should pass:
 ## Compilation Check
 
 All code should compile cleanly with:
+
 ```bash
 mojo format shared/data/transforms.mojo
 mojo build shared/data/transforms.mojo
-```
+```text
 
 No warnings or errors expected.

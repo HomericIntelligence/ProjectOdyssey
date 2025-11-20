@@ -12,16 +12,16 @@ File: `magic.toml` lines 22-24
 # Future: Channels section
 # [tool.magic.channels]
 # Add custom package channels here
-```
+```text
 
 ## Rationale
 
 Channels section is **intentionally left as placeholder** because:
 
 1. Default Magic channels are sufficient for foundation phase
-2. Will be activated when adding external Mojo packages (Section 04)
-3. Structure is documented and ready for future use
-4. Magic package manager supports custom channels when needed
+1. Will be activated when adding external Mojo packages (Section 04)
+1. Structure is documented and ready for future use
+1. Magic package manager supports custom channels when needed
 
 ## Success Criteria
 
@@ -30,6 +30,6 @@ Channels section is **intentionally left as placeholder** because:
 - ✅ Structure follows Magic package manager conventions
 - ✅ Ready for channel additions in implementation phase
 
-**References:**
+### References:
 
 - Config file: `/magic.toml:22-24` (commented placeholder)

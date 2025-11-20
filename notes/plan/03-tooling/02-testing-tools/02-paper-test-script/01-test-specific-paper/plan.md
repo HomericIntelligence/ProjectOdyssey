@@ -27,9 +27,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Parse paper identifier from user input
-2. Locate paper directory in repository
-3. Load paper configuration and metadata
-4. Set up test context for the paper
+1. Locate paper directory in repository
+1. Load paper configuration and metadata
+1. Set up test context for the paper
 
 ## Success Criteria
 

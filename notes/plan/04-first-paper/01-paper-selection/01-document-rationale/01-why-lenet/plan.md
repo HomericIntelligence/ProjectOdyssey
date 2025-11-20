@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Explain LeNet-5's historical importance
-2. Document architectural simplicity
-3. Note educational value
+1. Document architectural simplicity
+1. Note educational value
 
 ## Success Criteria
 

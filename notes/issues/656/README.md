@@ -26,20 +26,23 @@ Design and document the Git configuration for proper handling of ML artifacts, l
 
 **Decision**: Organize .gitignore into clearly-commented sections by category
 
-**Rationale**:
+### Rationale
+
 - ML projects generate diverse file types (Python bytecode, Mojo build artifacts, model checkpoints, datasets, logs)
 - Clear organization makes .gitignore maintainable and auditable
 - Prevents accidental commits of large or sensitive files
 
-**Sections**:
-1. Python-specific patterns (\_\_pycache\_\_, *.pyc, .pytest_cache, etc.)
-2. Mojo/MAX-specific patterns (build artifacts, compiled outputs)
-3. ML-specific patterns (checkpoints, logs, datasets, wandb, tensorboard)
-4. IDE patterns (.vscode/, .idea/, *.swp)
-5. OS-specific patterns (.DS_Store, Thumbs.db)
-6. Environment patterns (.env, venv/, .pixi/)
+### Sections
 
-**Alternatives Considered**:
+1. Python-specific patterns (\_\_pycache\_\_, *.pyc, .pytest_cache, etc.)
+1. Mojo/MAX-specific patterns (build artifacts, compiled outputs)
+1. ML-specific patterns (checkpoints, logs, datasets, wandb, tensorboard)
+1. IDE patterns (.vscode/, .idea/, *.swp)
+1. OS-specific patterns (.DS_Store, Thumbs.db)
+1. Environment patterns (.env, venv/, .pixi/)
+
+### Alternatives Considered
+
 - Using separate .gitignore files per directory: Rejected - adds complexity, harder to audit
 - Minimal .gitignore with manual exclusions: Rejected - error-prone, doesn't scale
 
@@ -47,17 +50,20 @@ Design and document the Git configuration for proper handling of ML artifacts, l
 
 **Decision**: Configure line ending normalization and binary file handling explicitly
 
-**Rationale**:
+### Rationale
+
 - Cross-platform development (Linux, macOS, Windows) requires consistent line endings
 - Binary files (models, images, datasets) should not have line ending transformations
 - Git LFS patterns need to be defined in .gitattributes
 
-**Configurations**:
-1. Text files: Auto line ending normalization (*.py, *.md, *.toml, *.yaml, *.mojo)
-2. Binary files: Explicitly mark as binary (*.pt, *.pth, *.onnx, *.pkl, *.png, *.jpg)
-3. LFS patterns: Track large file types with Git LFS
+### Configurations
 
-**Alternatives Considered**:
+1. Text files: Auto line ending normalization (*.py, *.md, *.toml, *.yaml, *.mojo)
+1. Binary files: Explicitly mark as binary (*.pt, *.pth, *.onnx, *.pkl, *.png, *.jpg)
+1. LFS patterns: Track large file types with Git LFS
+
+### Alternatives Considered
+
 - Rely on Git defaults: Rejected - inconsistent behavior across platforms
 - Manual line ending management: Rejected - error-prone, causes diff noise
 
@@ -65,19 +71,22 @@ Design and document the Git configuration for proper handling of ML artifacts, l
 
 **Decision**: Use Git LFS for all large ML artifacts (models, checkpoints, datasets)
 
-**Rationale**:
+### Rationale
+
 - Model files can be hundreds of MB to several GB
 - Without LFS, repository size grows unbounded with each model version
 - LFS stores pointers in Git, actual files in LFS storage
 - Essential for ML project scalability
 
-**LFS Tracked Files**:
-1. Model files: *.pt, *.pth, *.onnx, *.pb, *.h5, *.safetensors
-2. Checkpoint files: *.ckpt, *.checkpoint
-3. Dataset files: *.tar.gz, *.zip (in datasets/)
-4. Pickle files: *.pkl, *.pickle (large serialized objects)
+### LFS Tracked Files
 
-**Alternatives Considered**:
+1. Model files: *.pt, *.pth, *.onnx, *.pb, *.h5, *.safetensors
+1. Checkpoint files: *.ckpt, *.checkpoint
+1. Dataset files: *.tar.gz, *.zip (in datasets/)
+1. Pickle files: *.pkl, *.pickle (large serialized objects)
+
+### Alternatives Considered
+
 - DVC (Data Version Control): Rejected for initial setup - adds complexity, Git LFS is standard
 - Cloud storage with download scripts: Rejected - Git LFS provides better integration
 - No LFS: Rejected - would bloat repository unacceptably
@@ -86,18 +95,21 @@ Design and document the Git configuration for proper handling of ML artifacts, l
 
 **Decision**: Include inline comments in config files and separate contributor guide
 
-**Rationale**:
+### Rationale
+
 - Inline comments explain patterns directly where they're used
 - Separate guide provides context for contributors new to LFS
 - Self-documenting configurations reduce onboarding friction
 
-**Documentation Components**:
-1. Inline comments in .gitignore (section headers, unusual patterns)
-2. Inline comments in .gitattributes (explaining LFS and binary markers)
-3. Contributor guide for Git LFS setup and usage
-4. README section on file handling best practices
+### Documentation Components
 
-**Alternatives Considered**:
+1. Inline comments in .gitignore (section headers, unusual patterns)
+1. Inline comments in .gitattributes (explaining LFS and binary markers)
+1. Contributor guide for Git LFS setup and usage
+1. README section on file handling best practices
+
+### Alternatives Considered
+
 - Minimal documentation: Rejected - Git LFS requires contributor education
 - External wiki only: Rejected - inline comments provide immediate context
 
@@ -105,18 +117,21 @@ Design and document the Git configuration for proper handling of ML artifacts, l
 
 **Decision**: Three separate components for .gitignore, .gitattributes, and Git LFS
 
-**Rationale**:
+### Rationale
+
 - Each component has distinct purpose and deliverables
 - Can be implemented and tested independently
 - Follows single responsibility principle
 - Allows parallel development
 
-**Components**:
-1. Update .gitignore - Comprehensive ignore patterns
-2. Configure .gitattributes - File handling and line endings
-3. Setup Git LFS - Large file storage initialization
+### Components
 
-**Alternatives Considered**:
+1. Update .gitignore - Comprehensive ignore patterns
+1. Configure .gitattributes - File handling and line endings
+1. Setup Git LFS - Large file storage initialization
+
+### Alternatives Considered
+
 - Single monolithic component: Rejected - violates separation of concerns
 - More granular components: Rejected - creates unnecessary dependencies
 

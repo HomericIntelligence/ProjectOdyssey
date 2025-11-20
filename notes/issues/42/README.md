@@ -49,7 +49,7 @@ profiling that will be reused across all paper implementations.
 
 ### File Structure
 
-```
+```text
 shared/utils/
 ├── __init__.mojo
 ├── logging.mojo
@@ -58,7 +58,7 @@ shared/utils/
 ├── visualization.mojo
 ├── random.mojo
 └── profiling.mojo
-```
+```text
 
 ## Implementation Phases
 

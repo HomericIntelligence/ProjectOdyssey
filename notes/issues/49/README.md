@@ -62,9 +62,9 @@ following Mojo best practices and test-driven development.
 This issue requires implementing foundational ML components in Mojo. The implementation follows these principles:
 
 1. **Performance First**: Use SIMD, inline critical paths, minimize allocations
-2. **Type Safety**: Leverage Mojo's ownership and borrowing for memory safety
-3. **Test-Driven**: Coordinate with Issue #48 for test specifications
-4. **Modular Design**: Clear interfaces, minimal coupling between modules
+1. **Type Safety**: Leverage Mojo's ownership and borrowing for memory safety
+1. **Test-Driven**: Coordinate with Issue #48 for test specifications
+1. **Modular Design**: Clear interfaces, minimal coupling between modules
 
 ## Implementation Status
 
@@ -80,7 +80,7 @@ This issue requires implementing foundational ML components in Mojo. The impleme
    - Reviewed test specifications from Issue #48
    - Reviewed design documentation from Issue #47
 
-2. **Implementation Plan Created** (DONE)
+1. **Implementation Plan Created** (DONE)
    - See `IMPLEMENTATION_PLAN.md` for comprehensive breakdown
    - Components organized by complexity (High/Medium/Low)
    - Delegation strategy defined (Senior/Standard/Junior Engineers)
@@ -109,18 +109,18 @@ Package structure already established:
 ### Next Steps
 
 1. ✅ Create issue documentation (DONE)
-2. ✅ Create comprehensive implementation plan (DONE)
-3. **Delegate to engineers** (NEXT):
+1. ✅ Create comprehensive implementation plan (DONE)
+1. **Delegate to engineers** (NEXT):
    - Create delegation issues for each engineer
    - Assign components based on complexity
    - Set up coordination infrastructure
-4. **Begin implementation** (Week 1):
+1. **Begin implementation** (Week 1):
    - Senior Engineer: Tensor Type (CRITICAL)
    - Junior Engineer: Base Traits
    - Engineers A/B: Prepare for layers and data modules
-5. Track progress against timeline in IMPLEMENTATION_PLAN.md
-6. Coordinate with Issue #48 for test-driven development
-7. Create PR linking to this issue when implementation complete
+1. Track progress against timeline in IMPLEMENTATION_PLAN.md
+1. Coordinate with Issue #48 for test-driven development
+1. Create PR linking to this issue when implementation complete
 
 ## Implementation Findings
 
@@ -154,7 +154,7 @@ Package structure already established:
 
 ```text
 Tensor Type → Linear Layer → SGD Optimizer → Basic Training Loop → Validation Loop
-```
+```text
 
 **Blocker Risk**: Tensor Type is CRITICAL - all other components depend on it. Must prioritize Week 1.
 
@@ -163,21 +163,21 @@ Tensor Type → Linear Layer → SGD Optimizer → Basic Training Loop → Valid
 **Test-Driven Development** with Issue #48:
 
 1. All components have test specifications in Issue #48
-2. Engineers run tests locally during development
-3. All tests must pass before PR merge
-4. Numerical accuracy tests require tolerance 1e-6 vs PyTorch
-5. Property-based tests validate batch independence and determinism
+1. Engineers run tests locally during development
+1. All tests must pass before PR merge
+1. Numerical accuracy tests require tolerance 1e-6 vs PyTorch
+1. Property-based tests validate batch independence and determinism
 
 ### Delegation Strategy
 
-**Engineer Assignments**:
+### Engineer Assignments
 
 - **Senior Engineer** (8 components, 6-8 weeks): Critical path (Tensor, Linear, Conv2D, Optimizers, Training Loops)
 - **Implementation Engineer A** (13 components, 6-8 weeks): Layers, Metrics, Schedulers
 - **Implementation Engineer B** (12 components, 6-8 weeks): Data, Callbacks, Utils
 - **Junior Engineer** (14 components, 4-6 weeks): Traits, Initializers, Simple Transforms
 
-**Parallel Execution**:
+### Parallel Execution
 
 - Phase 1 (Weeks 1-2): Tensor (CRITICAL), Traits, Initializers
 - Phase 2 (Weeks 3-4): Layers, Dataset design
@@ -196,13 +196,13 @@ Tensor Type → Linear Layer → SGD Optimizer → Basic Training Loop → Valid
    - Use `inout` for mutable references
    - Move semantics (`^`) for performance
 
-2. **SIMD Optimization**:
+1. **SIMD Optimization**:
    - Use `simdwidthof[DType.float32]()` for optimal width
    - Vectorize element-wise operations
    - Horizontal reductions for sum/mean
    - Align memory for SIMD access
 
-3. **Performance**:
+1. **Performance**:
    - Use `@always_inline` for hot paths
    - Use `fn` for type-checked, optimized functions
    - Use `struct` for value types
@@ -210,28 +210,28 @@ Tensor Type → Linear Layer → SGD Optimizer → Basic Training Loop → Valid
 
 ### Risk Mitigation
 
-**Identified Risks**:
+### Identified Risks
 
 1. **Tensor Complexity**: May take longer than estimated
    - Mitigation: Minimal functional Tensor first, optimize later
 
-2. **Mojo Tooling**: New language, may have gaps
+1. **Mojo Tooling**: New language, may have gaps
    - Mitigation: Document workarounds, Python interop fallback
 
-3. **Performance Targets**: May not hit 2x PyTorch initially
+1. **Performance Targets**: May not hit 2x PyTorch initially
    - Mitigation: Correctness first, defer optimization to Issue #51
 
-4. **Test Suite Gaps**: Issue #48 tests may need expansion
+1. **Test Suite Gaps**: Issue #48 tests may need expansion
    - Mitigation: Coordinate with Test Specialist for additions
 
-5. **Dependency Cascade**: Tensor delay blocks everything
+1. **Dependency Cascade**: Tensor delay blocks everything
    - Mitigation: Parallel tracks, stub interfaces if needed
 
 ## Technical Debt
 
 Will be tracked during implementation and documented for Issue #51 (Cleanup).
 
-**Expected Technical Debt Areas**:
+### Expected Technical Debt Areas
 
 - Performance optimization opportunities
 - Code duplication in similar components

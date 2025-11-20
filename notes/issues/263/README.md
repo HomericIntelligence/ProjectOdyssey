@@ -25,13 +25,13 @@ Design and document the Kaiming (He) initialization method for neural network we
 
 ### Initialization Variants
 
-**Kaiming Uniform Distribution:**
+### Kaiming Uniform Distribution:
 
 - Formula: `W ~ U(-limit, limit)` where `limit = sqrt(6/fan)`
 - Theoretical basis: Uniform distribution with variance = 2/fan
 - Use case: When uniform weight distribution is preferred
 
-**Kaiming Normal Distribution:**
+### Kaiming Normal Distribution:
 
 - Formula: `W ~ N(0, std)` where `std = sqrt(2/fan)`
 - Theoretical basis: Normal distribution with variance = 2/fan
@@ -56,10 +56,10 @@ Design and document the Kaiming (He) initialization method for neural network we
 Kaiming initialization is based on the following principles:
 
 1. **ReLU Activation Impact:** ReLU zeros out approximately half of the activations (negative values)
-2. **Variance Preservation:** To maintain signal variance through layers, use Var(W) = 2/fan
-3. **Scaling Factor:** The factor of 2 (vs 1 in Xavier) compensates for ReLU's zero-out effect
+1. **Variance Preservation:** To maintain signal variance through layers, use Var(W) = 2/fan
+1. **Scaling Factor:** The factor of 2 (vs 1 in Xavier) compensates for ReLU's zero-out effect
 
-**Derivation:**
+### Derivation:
 
 - For linear layer: `y = Wx + b`
 - With ReLU activation: `E[ReLU(x)²] ≈ (1/2)E[x²]` (half of activations zeroed)
@@ -67,7 +67,7 @@ Kaiming initialization is based on the following principles:
 
 ### API Design
 
-**Function Signatures (to be implemented):**
+### Function Signatures (to be implemented):
 
 ```mojo
 fn kaiming_uniform[fan_mode: String = "fan_in"](
@@ -105,7 +105,7 @@ fn kaiming_normal[fan_mode: String = "fan_in"](
         where std = sqrt(2/fan)
     """
     pass
-```
+```text
 
 ### Fan Calculation
 
@@ -124,52 +124,52 @@ fn calculate_fan(shape: TensorShape, mode: String) -> Int:
         return shape[0]  # Output features
     else:
         raise ValueError("mode must be 'fan_in' or 'fan_out'")
-```
+```text
 
 ### Consistency with Xavier/Glorot
 
 To maintain API consistency across initializers:
 
 1. **Naming Convention:** `kaiming_uniform()` and `kaiming_normal()` match Xavier naming
-2. **Parameter Order:** shape, seed pattern consistent across initializers
-3. **Fan Mode:** Both Xavier and Kaiming support fan_in/fan_out selection
-4. **Return Type:** All initializers return Tensor objects
+1. **Parameter Order:** shape, seed pattern consistent across initializers
+1. **Fan Mode:** Both Xavier and Kaiming support fan_in/fan_out selection
+1. **Return Type:** All initializers return Tensor objects
 
 ### Implementation Strategy
 
-**Phase 1: Core Functions**
+### Phase 1: Core Functions
 
 1. Implement fan calculation utility
-2. Implement Kaiming uniform with correct scaling
-3. Implement Kaiming normal with correct variance
+1. Implement Kaiming uniform with correct scaling
+1. Implement Kaiming normal with correct variance
 
-**Phase 2: Reproducibility**
+### Phase 2: Reproducibility
 
 1. Ensure random seed handling works correctly
-2. Verify initialization is deterministic with same seed
-3. Test variance of generated weights
+1. Verify initialization is deterministic with same seed
+1. Test variance of generated weights
 
-**Phase 3: Validation**
+### Phase 3: Validation
 
 1. Verify mathematical correctness (variance = 2/fan)
-2. Test both fan modes produce correct statistics
-3. Compare with PyTorch/TensorFlow implementations
+1. Test both fan modes produce correct statistics
+1. Compare with PyTorch/TensorFlow implementations
 
 ### Testing Strategy
 
-**Statistical Tests:**
+### Statistical Tests:
 
 - Verify mean ≈ 0 for both uniform and normal variants
 - Verify variance ≈ 2/fan for both variants
 - Test with different layer sizes (small, medium, large)
 
-**Reproducibility Tests:**
+### Reproducibility Tests:
 
 - Same seed produces identical initialization
 - Different seeds produce different initialization
 - Verify across multiple runs
 
-**Edge Cases:**
+### Edge Cases:
 
 - Single neuron (fan = 1)
 - Very wide layers (fan >> 1)
@@ -177,14 +177,14 @@ To maintain API consistency across initializers:
 
 ### Dependencies
 
-**Required Components:**
+### Required Components:
 
 - Random number generation (uniform and normal distributions)
 - Tensor data structure
 - Basic math operations (sqrt)
 - Optional type support
 
-**Integration Points:**
+### Integration Points:
 
 - Will be used by layer initialization in neural network modules
 - Must work with existing Tensor API
@@ -192,24 +192,24 @@ To maintain API consistency across initializers:
 
 ## References
 
-**Source Plan:**
+### Source Plan:
 
 - [Kaiming He Plan](/home/mvillmow/ml-odyssey-manual/notes/plan/02-shared-library/01-core-operations/03-initializers/02-kaiming-he/plan.md)
 - [Initializers Parent Plan](/home/mvillmow/ml-odyssey-manual/notes/plan/02-shared-library/01-core-operations/03-initializers/plan.md)
 
-**Related Issues:**
+### Related Issues:
 
 - Issue #264: [Test] Kaiming He - Test Implementation
 - Issue #265: [Impl] Kaiming He - Implementation
 - Issue #266: [Package] Kaiming He - Integration and Packaging
 - Issue #267: [Cleanup] Kaiming He - Finalization
 
-**Research Papers:**
+### Research Papers:
 
 - He et al. (2015): "Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification"
 - Original paper introducing Kaiming initialization for ReLU networks
 
-**Related Components:**
+### Related Components:
 
 - Xavier/Glorot Initializer (sibling component)
 - Uniform/Normal Initializer (sibling component)

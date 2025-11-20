@@ -27,10 +27,11 @@ Design and document the validation logic to verify that generated paper structur
 **Validation Strategy**: Implement a multi-level validation approach that checks:
 
 1. **Structure validation** - Directory and file existence
-2. **Content validation** - File format and syntax correctness
-3. **Convention validation** - Repository standards compliance
+1. **Content validation** - File format and syntax correctness
+1. **Convention validation** - Repository standards compliance
 
 **Rationale**: Separating validation into distinct levels allows for:
+
 - Clear error categorization
 - Progressive validation (fail fast on structure, then check content)
 - Easier maintenance and extension
@@ -38,7 +39,7 @@ Design and document the validation logic to verify that generated paper structur
 
 ### API Design
 
-**Core Interface**:
+### Core Interface
 
 ```mojo
 struct ValidationReport:
@@ -67,9 +68,10 @@ fn validate_paper_structure(
         IOError: If paper_path doesn't exist or isn't accessible
     """
     pass
-```
+```text
 
 **Rationale**: This API design provides:
+
 - Clear input/output contracts
 - Structured error reporting
 - Extensible validation rules
@@ -77,29 +79,34 @@ fn validate_paper_structure(
 
 ### Validation Rules
 
-**Required Directories**:
+### Required Directories
+
 - `/papers/<paper-name>/` - Root paper directory
 - `/papers/<paper-name>/src/` - Source code
 - `/papers/<paper-name>/tests/` - Test files
 - `/papers/<paper-name>/docs/` - Documentation
 
-**Required Files**:
+### Required Files
+
 - `/papers/<paper-name>/README.md` - Paper overview
 - `/papers/<paper-name>/plan.md` - Implementation plan
 - `/papers/<paper-name>/pyproject.toml` - Project configuration
 
-**Content Validation**:
+### Content Validation
+
 - YAML files: Valid YAML syntax
 - Markdown files: Basic structure (headers, no broken links)
 - TOML files: Valid TOML syntax
 - Mojo files: Basic syntax check (if present)
 
-**Convention Validation**:
+### Convention Validation
+
 - File names follow kebab-case
 - README.md contains required sections
 - plan.md follows Template 1 format (9 sections)
 
 **Rationale**: These rules ensure:
+
 - Consistency across all generated papers
 - Immediate detection of generation failures
 - Compliance with repository standards
@@ -107,7 +114,7 @@ fn validate_paper_structure(
 
 ### Error Reporting
 
-**Error Message Format**:
+### Error Message Format
 
 ```text
 VALIDATION FAILED
@@ -128,9 +135,10 @@ Suggestions:
   - Run: mkdir -p /papers/lenet-5/tests /papers/lenet-5/docs
   - Create README.md using template: scripts/templates/paper_README.md
   - Fix TOML syntax: remove trailing comma at line 5
-```
+```text
 
 **Rationale**: Clear, actionable error messages that:
+
 - Group errors by category
 - Show exact locations
 - Provide specific fix suggestions
@@ -138,48 +146,56 @@ Suggestions:
 
 ### Alternatives Considered
 
-**Alternative 1: Simple boolean validation**
+### Alternative 1: Simple boolean validation
+
 - Just return True/False
 - ❌ Rejected: Doesn't provide enough information for debugging
 - ❌ No actionable guidance for users
 
 **Alternative 2: Schema-based validation (JSON Schema, Pydantic)**
+
 - Use formal schema definitions
 - ❌ Rejected: Over-engineered for current needs
 - ❌ Adds unnecessary dependencies
 - ✅ Could revisit if validation becomes complex
 
-**Alternative 3: Linter-style validation**
+### Alternative 3: Linter-style validation
+
 - Validate everything, report all issues with severity levels
 - ⚠️ Considered but simplified: Current approach uses this concept but keeps it lightweight
 - ✅ May expand later if needed
 
 ### Implementation Approach
 
-**Phase 1: Structure Validation**
+### Phase 1: Structure Validation
+
 1. Check directory existence using Path.exists()
-2. Check file existence for required files
-3. Build list of missing items
+1. Check file existence for required files
+1. Build list of missing items
 
-**Phase 2: Content Validation**
+### Phase 2: Content Validation
+
 1. Read each file
-2. Parse based on file type (YAML, TOML, Markdown)
-3. Validate syntax and structure
-4. Record errors with line numbers
+1. Parse based on file type (YAML, TOML, Markdown)
+1. Validate syntax and structure
+1. Record errors with line numbers
 
-**Phase 3: Convention Validation**
+### Phase 3: Convention Validation
+
 1. Check naming conventions
-2. Validate README.md structure
-3. Validate plan.md format (if present)
-4. Check for common issues
+1. Validate README.md structure
+1. Validate plan.md format (if present)
+1. Check for common issues
 
-**Phase 4: Report Generation**
+### Phase 4: Report Generation
+
 1. Aggregate all findings
-2. Generate suggestions based on errors
-3. Format report for readability
-4. Return structured ValidationReport
+1. Generate suggestions based on errors
+1. Format report for readability
+1. Return structured ValidationReport
 
 **Rationale**: Phased approach allows:
+
 - Early exit on critical failures
 - Progressive validation
 - Clear separation of concerns
@@ -206,10 +222,10 @@ Suggestions:
 ### Key Considerations
 
 1. **Keep validation simple** - Focus on essential checks, avoid over-engineering
-2. **Provide actionable errors** - Every error message should tell users exactly what's wrong and how to fix it
-3. **Never modify files** - Validation is read-only, never auto-fix
-4. **Performance** - Validation should be fast (< 1 second for typical paper structure)
-5. **Extensibility** - Design should allow adding new validation rules easily
+1. **Provide actionable errors** - Every error message should tell users exactly what's wrong and how to fix it
+1. **Never modify files** - Validation is read-only, never auto-fix
+1. **Performance** - Validation should be fast (< 1 second for typical paper structure)
+1. **Extensibility** - Design should allow adding new validation rules easily
 
 ### Open Questions
 
@@ -220,6 +236,7 @@ Suggestions:
 ### Testing Strategy
 
 Tests should cover:
+
 - Valid paper structure (all checks pass)
 - Missing directories
 - Missing files

@@ -30,8 +30,8 @@ Configure the complete development environment including dependencies, environme
 ## Steps
 
 1. Install required dependencies
-2. Configure environment variables
-3. Set up git hooks for automation
+1. Configure environment variables
+1. Set up git hooks for automation
 
 ## Success Criteria
 

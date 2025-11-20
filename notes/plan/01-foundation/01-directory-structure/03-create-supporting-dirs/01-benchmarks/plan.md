@@ -27,9 +27,9 @@ None (leaf node)
 ## Steps
 
 1. Create benchmarks/ directory at repository root
-2. Write README explaining benchmarking approach and usage
-3. Document expected structure for benchmark scripts
-4. Provide guidelines for running and reporting benchmarks
+1. Write README explaining benchmarking approach and usage
+1. Document expected structure for benchmark scripts
+1. Provide guidelines for running and reporting benchmarks
 
 ## Success Criteria
 

@@ -27,9 +27,9 @@ None (leaf node)
 ## Steps
 
 1. Implement Xavier uniform variant with correct scaling
-2. Create Xavier normal variant with proper variance
-3. Ensure correct calculation of fan_in and fan_out
-4. Support random seed for reproducible initialization
+1. Create Xavier normal variant with proper variance
+1. Ensure correct calculation of fan_in and fan_out
+1. Support random seed for reproducible initialization
 
 ## Success Criteria
 

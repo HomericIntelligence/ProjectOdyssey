@@ -34,11 +34,11 @@ Implement the LeNet-5 convolutional neural network from the seminal 1998 paper "
 ## Steps
 
 1. Paper Selection
-2. Model Implementation
-3. Training Pipeline
-4. Data Pipeline
-5. Testing
-6. Documentation
+1. Model Implementation
+1. Training Pipeline
+1. Data Pipeline
+1. Testing
+1. Documentation
 
 ## Success Criteria
 

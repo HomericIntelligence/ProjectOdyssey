@@ -16,13 +16,13 @@ Created 9 test files covering all training utility components (4,268 total lines
    - Checkpoint save/load interface
    - Validation interface
 
-2. **test_training_loop.mojo** (502 lines, 18 test cases)
+1. **test_training_loop.mojo** (502 lines, 18 test cases)
    - Forward/backward pass execution
    - Loss computation and gradient accumulation
    - Weight updates via optimizer
    - Batch processing and epoch completion
 
-3. **test_validation_loop.mojo** (453 lines, 18 test cases)
+1. **test_validation_loop.mojo** (453 lines, 18 test cases)
    - Forward-only pass without gradients
    - No weight updates during validation
    - Metrics computation (loss, accuracy)
@@ -36,13 +36,13 @@ Created 9 test files covering all training utility components (4,268 total lines
    - Multiple step reductions
    - Edge cases (zero step, negative gamma)
 
-2. **test_cosine_scheduler.mojo** (374 lines, 11 test cases)
+1. **test_cosine_scheduler.mojo** (374 lines, 11 test cases)
    - Cosine annealing curve following
    - Smooth continuous decay
    - eta_min (minimum LR) parameter
    - T_max (period) configuration
 
-3. **test_warmup_scheduler.mojo** (433 lines, 15 test cases)
+1. **test_warmup_scheduler.mojo** (433 lines, 15 test cases)
    - Linear warmup from start_lr to target_lr
    - Integration with other schedulers (chaining)
    - Monotonic increase property
@@ -56,13 +56,13 @@ Created 9 test files covering all training utility components (4,268 total lines
    - Best model tracking
    - Filepath templates and directory creation
 
-2. **test_early_stopping.mojo** (427 lines, 12 test cases)
+1. **test_early_stopping.mojo** (427 lines, 12 test cases)
    - Monitoring validation metrics
    - Stopping when no improvement
    - Patience parameter handling
    - Restoring best weights
 
-3. **test_logging_callback.mojo** (450 lines, 18 test cases)
+1. **test_logging_callback.mojo** (450 lines, 18 test cases)
    - Training progress logging
    - Metric tracking and history
    - Verbosity levels (silent, progress bar, one-line)
@@ -74,19 +74,19 @@ Created 9 test files covering all training utility components (4,268 total lines
 
 All 9 components from Issue #32 planning have comprehensive test coverage:
 
-**Base Trainer (3 components)**:
+### Base Trainer (3 components)
 
 - Trainer Interface: Contract validation, training workflow, checkpointing
 - Training Loop: Forward/backward passes, weight updates, batch processing
 - Validation Loop: Evaluation without updates, metrics computation
 
-**Learning Rate Schedulers (3 components)**:
+### Learning Rate Schedulers (3 components)
 
 - Step Scheduler: Fixed interval decay, gamma factor, multiple steps
 - Cosine Scheduler: Smooth annealing, cosine curve, eta_min/T_max
 - Warmup Scheduler: Linear increase, scheduler chaining, stability
 
-**Callback System (3 components)**:
+### Callback System (3 components)
 
 - Checkpointing: State save/load, best model tracking, file management
 - Early Stopping: Patience-based stopping, best weight restoration
@@ -104,7 +104,7 @@ Each component includes:
 
 ### Key Test Scenarios
 
-**Critical Tests (MUST work)**:
+### Critical Tests (MUST work)
 
 - Training loop updates weights correctly
 - Validation never modifies weights
@@ -113,7 +113,7 @@ Each component includes:
 - Early stopping triggers after patience exhausted
 - Callbacks integrate with training workflow
 
-**Important Tests (SHOULD work)**:
+### Important Tests (SHOULD work)
 
 - Gradient accumulation and zeroing
 - Different batch sizes handling
@@ -125,19 +125,19 @@ Each component includes:
 
 ### From tests/shared/conftest.mojo
 
-**Assertion Functions**:
+### Assertion Functions
 
 - `assert_true()`, `assert_false()`, `assert_equal()`
 - `assert_almost_equal()` - Float comparison with tolerance
 - `assert_greater()`, `assert_less()` - Numeric comparisons
 
-**Test Data Generators**:
+### Test Data Generators
 
 - `create_test_vector()` - Simple test vectors
 - `create_test_matrix()` - 2D test matrices
 - `create_sequential_vector()` - Sequential values
 
-**Test Fixtures**:
+### Test Fixtures
 
 - `TestFixtures.deterministic_seed()` - Reproducible randomness
 - Future fixtures for tensors, models, datasets (TODO in conftest)
@@ -146,22 +146,22 @@ Each component includes:
 
 1. **All tests use `fn` syntax** - Following Mojo best practices for performance-critical code
 
-2. **Tests are currently stubs with TODO comments** - Following TDD:
+1. **Tests are currently stubs with TODO comments** - Following TDD:
    - Tests define API contracts
    - Implementation in Issue #34 will make tests pass
    - Each test includes expected behavior in comments
 
-3. **No mocking frameworks** - Using real implementations when available:
+1. **No mocking frameworks** - Using real implementations when available:
    - Simple test data (known values)
    - Minimal test doubles only when necessary
    - Concrete examples over complex mocks
 
-4. **Focus on critical paths** - Not 100% coverage:
+1. **Focus on critical paths** - Not 100% coverage:
    - Core functionality thoroughly tested
    - Edge cases for critical behaviors
    - Property-based tests for mathematical correctness
 
-5. **Deterministic and reproducible** - All tests should:
+1. **Deterministic and reproducible** - All tests should:
    - Use fixed seeds for randomness
    - Produce identical results on repeated runs
    - Not depend on external state
@@ -188,7 +188,7 @@ All 9 components from Issue #32 have dedicated test files:
 
 Tests define API contracts for all planned interfaces:
 
-**Trainer Interface**:
+### Trainer Interface
 
 ```mojo
 trait Trainer:
@@ -196,23 +196,23 @@ trait Trainer:
     fn validate(self, val_loader: DataLoader) -> Dict
     fn save_checkpoint(self, path: String) -> None
     fn load_checkpoint(self, path: String) -> None
-```
+```text
 
-**Learning Rate Schedulers**:
+### Learning Rate Schedulers
 
 ```mojo
 StepLR(optimizer: Optimizer, step_size: Int, gamma: Float32 = 0.1)
 CosineAnnealingLR(optimizer: Optimizer, T_max: Int, eta_min: Float32 = 0.0)
 LinearWarmup(optimizer: Optimizer, warmup_epochs: Int, start_lr: Float32 = 0.0)
-```
+```text
 
-**Callbacks**:
+### Callbacks
 
 ```mojo
 Checkpointing(filepath: String, monitor: String, save_best_only: Bool, save_frequency: Int)
 EarlyStopping(monitor: String, patience: Int, min_delta: Float32, restore_best_weights: Bool)
 LoggingCallback(metrics: List[String], log_frequency: Int, verbose: Int)
-```
+```text
 
 ## Success Criteria Met
 
@@ -236,12 +236,12 @@ LoggingCallback(metrics: List[String], log_frequency: Int, verbose: Int)
    - Implement schedulers
    - Add callback system
 
-2. **Remove TODO comments as tests pass**:
+1. **Remove TODO comments as tests pass**:
    - Uncomment test code
    - Verify assertions work correctly
    - Add any missing fixtures
 
-3. **Run tests in CI**:
+1. **Run tests in CI**:
    - All tests should pass before PR merge
    - Add to `.github/workflows/test.yml`
 
@@ -252,12 +252,12 @@ LoggingCallback(metrics: List[String], log_frequency: Int, verbose: Int)
    - Empty datasets
    - Malformed inputs
 
-2. **Add integration tests** (deferred to cleanup):
+1. **Add integration tests** (deferred to cleanup):
    - Full training workflow end-to-end
    - Multiple callbacks together
    - Complex scheduler chains
 
-3. **Add benchmark tests** (optional):
+1. **Add benchmark tests** (optional):
    - Training loop performance
    - Validation speed vs training
    - Memory usage during checkpointing
@@ -278,24 +278,24 @@ LoggingCallback(metrics: List[String], log_frequency: Int, verbose: Int)
 Following TDD workflow:
 
 1. **Red**: Tests written (currently failing/stubbed)
-2. **Green**: Implementation makes tests pass (Issue #34)
-3. **Refactor**: Code cleanup and optimization (Issue #36)
+1. **Green**: Implementation makes tests pass (Issue #34)
+1. **Refactor**: Code cleanup and optimization (Issue #36)
 
 ### Testing Philosophy
 
-**Quality over Quantity**:
+### Quality over Quantity
 
 - Each test validates specific behavior
 - Tests should survive refactoring (test behavior, not implementation)
 - No tests "just for coverage" - each test adds value
 
-**Critical Path Focus**:
+### Critical Path Focus
 
 - Core functionality thoroughly tested (training loop, weight updates)
 - Integration points tested (scheduler+optimizer, callbacks+trainer)
 - Edge cases for security/correctness (validation no-op, checkpoint restore)
 
-**Deterministic and Fast**:
+### Deterministic and Fast
 
 - All tests use fixed seeds
 - No flaky tests allowed
@@ -315,7 +315,7 @@ These ensure our implementations match industry-standard behavior.
 
 Created comprehensive test suite for training utilities with **131 test cases** across **9 test files** (4,268 lines total). All tests define clear API contracts following TDD principles, covering 9 components from Issue #32 planning. Tests ready for implementation phase (Issue #34).
 
-**Test Distribution**:
+### Test Distribution
 
 - Base Trainer: 50 test cases (38%)
 - Schedulers: 39 test cases (30%)

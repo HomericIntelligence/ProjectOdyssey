@@ -26,7 +26,8 @@ Design and create template files for all standard paper components including REA
 
 **Decision**: Use simple string substitution with double-brace placeholders (e.g., `{{VARIABLE_NAME}}`)
 
-**Rationale**:
+### Rationale
+
 - Avoids dependency on complex templating engines (Jinja2, Mustache, etc.)
 - Easy to create and modify templates without learning new syntax
 - Clear visual distinction between template variables and code
@@ -43,21 +44,21 @@ Based on repository structure and paper requirements, we need templates for:
    - References to original paper
    - Usage instructions
 
-2. **Mojo Implementation Template**
+1. **Mojo Implementation Template**
    - Module docstring with paper reference
    - Common imports (stdlib, tensor operations)
    - Placeholder struct/class definitions
    - Main model implementation stub
    - Forward pass skeleton
 
-3. **Test File Template**
+1. **Test File Template**
    - Test module structure
    - Example test cases for model initialization
    - Example test cases for forward pass
    - Placeholder for paper-specific tests
    - Import statements for testing framework
 
-4. **Documentation Template**
+1. **Documentation Template**
    - Architecture overview section
    - API reference placeholder
    - Usage examples section
@@ -67,7 +68,8 @@ Based on repository structure and paper requirements, we need templates for:
 
 **Decision**: Use UPPERCASE_SNAKE_CASE for all template variables
 
-**Standard Variables**:
+### Standard Variables
+
 - `{{PAPER_TITLE}}` - Full paper title
 - `{{AUTHOR_NAME}}` - Primary author name(s)
 - `{{PUBLICATION_YEAR}}` - Year paper was published
@@ -76,7 +78,8 @@ Based on repository structure and paper requirements, we need templates for:
 - `{{MODEL_NAME}}` - Primary model/architecture name
 - `{{DESCRIPTION}}` - Brief description of the paper
 
-**Rationale**:
+### Rationale
+
 - Consistent with common templating conventions
 - Easy to identify in template files
 - Reduces risk of accidental substitution of real code
@@ -86,7 +89,8 @@ Based on repository structure and paper requirements, we need templates for:
 
 **Decision**: Store templates in `templates/paper/` directory structure
 
-**Structure**:
+### Structure
+
 ```text
 templates/
 └── paper/
@@ -94,9 +98,10 @@ templates/
     ├── model.mojo.template
     ├── test_model.mojo.template
     └── docs.md.template
-```
+```text
 
-**Rationale**:
+### Rationale
+
 - Centralized location for all paper templates
 - `.template` extension clearly identifies template files
 - Hierarchical organization allows for future template categories
@@ -106,13 +111,15 @@ templates/
 
 **Decision**: Start with minimal templates covering essential structure
 
-**Minimal Template Approach**:
+### Minimal Template Approach
+
 - Include only required sections and boilerplate
 - Avoid over-prescriptive content that limits flexibility
 - Provide clear comments/guidance within templates
 - Allow for easy extension and customization
 
-**Rationale**:
+### Rationale
+
 - Aligns with plan guidance: "Start with minimal templates"
 - Easier to maintain and evolve
 - Reduces friction when customizing for specific papers
@@ -122,13 +129,15 @@ templates/
 
 **Decision**: Templates must pass linting and formatting checks when placeholders are replaced
 
-**Validation Requirements**:
+### Validation Requirements
+
 - Mojo templates must be valid Mojo syntax (after substitution)
 - Markdown templates must pass markdownlint checks
 - All templates must follow repository coding standards
 - Templates must include proper docstrings and comments
 
-**Rationale**:
+### Rationale
+
 - Ensures generated code meets quality standards
 - Reduces manual cleanup after template instantiation
 - Provides good starting point for implementation
@@ -171,20 +180,20 @@ templates/
 Key design considerations to address during implementation:
 
 1. **Template Location**: Verify templates directory exists or should be created
-2. **File Extensions**: Confirm `.template` extension or use different convention
-3. **Variable Syntax**: Ensure `{{VAR}}` syntax doesn't conflict with Mojo/Markdown syntax
-4. **Example Content**: Determine level of example content to include in templates
-5. **Comments**: Balance between helpful guidance and template clutter
+1. **File Extensions**: Confirm `.template` extension or use different convention
+1. **Variable Syntax**: Ensure `{{VAR}}` syntax doesn't conflict with Mojo/Markdown syntax
+1. **Example Content**: Determine level of example content to include in templates
+1. **Comments**: Balance between helpful guidance and template clutter
 
 ### Open Questions
 
 Questions to resolve during implementation:
 
 1. Should templates include example imports for common libraries?
-2. Should test templates include fixtures or just basic test structure?
-3. Should README template include badges (CI, license, etc.)?
-4. Should templates include placeholder license headers?
-5. Should templates reference specific Mojo stdlib versions?
+1. Should test templates include fixtures or just basic test structure?
+1. Should README template include badges (CI, license, etc.)?
+1. Should templates include placeholder license headers?
+1. Should templates reference specific Mojo stdlib versions?
 
 ### Dependencies
 
@@ -209,8 +218,9 @@ Quantifiable metrics for template quality:
 
 **Planning Phase Status**: In Progress
 
-**Next Steps**:
+### Next Steps
+
 1. Complete design decisions above
-2. Hand off to Test phase (Issue #504)
-3. Hand off to Implementation phase (Issue #505)
-4. Coordinate with Packaging phase (Issue #506)
+1. Hand off to Test phase (Issue #504)
+1. Hand off to Implementation phase (Issue #505)
+1. Coordinate with Packaging phase (Issue #506)

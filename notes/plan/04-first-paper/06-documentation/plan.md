@@ -30,8 +30,8 @@ Create comprehensive documentation for the LeNet-5 implementation, including a d
 ## Steps
 
 1. README
-2. Implementation Notes
-3. Reproduction Guide
+1. Implementation Notes
+1. Reproduction Guide
 
 ## Success Criteria
 

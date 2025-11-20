@@ -41,11 +41,11 @@ The papers/README.md serves as the primary guide for contributors adding researc
 to ML Odyssey. It should:
 
 1. **Welcome contributors** with a clear overview of the papers directory
-2. **Explain the paper implementation structure** including directory organization
-3. **Provide step-by-step instructions** for adding a new paper
-4. **Document standards** for code, testing, and documentation
-5. **Reference existing papers** for examples (when available)
-6. **Link to relevant resources** for Mojo, testing frameworks, and research papers
+1. **Explain the paper implementation structure** including directory organization
+1. **Provide step-by-step instructions** for adding a new paper
+1. **Document standards** for code, testing, and documentation
+1. **Reference existing papers** for examples (when available)
+1. **Link to relevant resources** for Mojo, testing frameworks, and research papers
 
 ### Key Design Decisions
 
@@ -71,18 +71,18 @@ papers/
 ├── alexnet/               # Additional papers
 │   └── ...
 └── .gitkeep
-```
+```text
 
 ### Content Sections Planned
 
 1. **Overview** - What is papers/ and what it contains
-2. **Quick Start** - Getting oriented with the directory
-3. **Directory Structure** - How papers are organized
-4. **Adding a New Paper** - Step-by-step workflow
-5. **Standards** - Code, testing, and documentation requirements
-6. **Development Workflow** - 5-phase workflow integration
-7. **Resources** - Links to Mojo docs, testing tools, research papers
-8. **Examples** - References to implemented papers
+1. **Quick Start** - Getting oriented with the directory
+1. **Directory Structure** - How papers are organized
+1. **Adding a New Paper** - Step-by-step workflow
+1. **Standards** - Code, testing, and documentation requirements
+1. **Development Workflow** - 5-phase workflow integration
+1. **Resources** - Links to Mojo docs, testing tools, research papers
+1. **Examples** - References to implemented papers
 
 ### Next Steps
 

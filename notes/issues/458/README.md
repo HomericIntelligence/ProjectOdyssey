@@ -49,7 +49,7 @@ training runs.
 
 #### Trainer Tests
 
-**Base Trainer Interface**:
+### Base Trainer Interface
 
 - Test initialization with valid/invalid configurations
 - Test training loop execution (epoch iteration, batch processing)
@@ -57,7 +57,7 @@ training runs.
 - Test state management (epoch counter, loss history)
 - Test error handling for invalid inputs
 
-**Training/Validation Workflows**:
+### Training/Validation Workflows
 
 - Test epoch loop completes specified number of iterations
 - Test batch loop processes all batches correctly
@@ -67,13 +67,13 @@ training runs.
 
 #### Learning Rate Scheduler Tests
 
-**Common Tests (All Schedulers)**:
+### Common Tests (All Schedulers)
 
 - Test initialization with valid/invalid parameters
 - Test learning rate update at each step
 - Test scheduler state persistence and restoration
 
-**Scheduler-Specific Tests**:
+### Scheduler-Specific Tests
 
 - **StepLR**: Verify rate drops by gamma every step_size epochs
 - **ExponentialLR**: Verify exponential decay with formula: lr = lr0 * gamma^epoch
@@ -81,7 +81,7 @@ training runs.
   `lr = lr_min + 0.5 * (lr_max - lr_min) * (1 + cos(epoch/T_max * π))`
 - **ReduceLROnPlateau**: Verify rate reduction when metric plateaus (requires metric tracking mock)
 
-**Mathematical Verification**:
+### Mathematical Verification
 
 - Pre-compute expected learning rates for first 10-20 steps
 - Assert actual rates match expected values within tolerance (e.g., 1e-6)
@@ -89,14 +89,14 @@ training runs.
 
 #### Callback Tests
 
-**Callback Interface**:
+### Callback Interface
 
 - Test callback registration with trainer
 - Test hook invocation order (on_train_begin, on_epoch_start, on_batch_end, etc.)
 - Test callback state sharing between hooks
 - Test callback removal and modification
 
-**Hook Invocation Tests**:
+### Hook Invocation Tests
 
 - **on_train_begin**: Called once before training starts
 - **on_train_end**: Called once after training completes
@@ -105,7 +105,7 @@ training runs.
 - **on_batch_start**: Called before each batch
 - **on_batch_end**: Called after each batch
 
-**State Tracking**:
+### State Tracking
 
 - Use counters to verify each hook is called correct number of times
 - Track parameters passed to hooks (epoch number, batch number, loss values)
@@ -113,7 +113,7 @@ training runs.
 
 #### Integration Tests
 
-**Component Interaction**:
+### Component Interaction
 
 - Test trainer + scheduler: Verify learning rate updates during training
 - Test trainer + callbacks: Verify callback hooks are called at correct points
@@ -121,7 +121,7 @@ training runs.
 - Test early stopping workflow: Callback stops training when condition met
 - Test checkpointing workflow: Callback saves model at intervals
 
-**Mock Strategy**:
+### Mock Strategy
 
 - Mock forward pass (return fixed loss value)
 - Mock backward pass (skip gradient computation)
@@ -138,7 +138,7 @@ training runs.
 
 ### Edge Cases and Error Conditions
 
-**Trainer Edge Cases**:
+### Trainer Edge Cases
 
 - Empty dataset
 - Single batch dataset
@@ -146,14 +146,14 @@ training runs.
 - Resume from checkpoint
 - Training with zero epochs
 
-**Scheduler Edge Cases**:
+### Scheduler Edge Cases
 
 - Learning rate at boundaries (min/max)
 - Zero learning rate
 - Invalid gamma values (negative, > 1 for exponential)
 - Plateau with constant metrics
 
-**Callback Edge Cases**:
+### Callback Edge Cases
 
 - No callbacks registered
 - Multiple callbacks of same type
@@ -164,13 +164,13 @@ training runs.
 
 **Test Framework**: Mojo's built-in testing framework (when available) or pytest for Python-based tests
 
-**Assertion Libraries**:
+### Assertion Libraries
 
 - Numerical assertions with tolerance (for floating-point comparisons)
 - State assertions (verify expected state transitions)
 - Mock verification (verify mock calls and arguments)
 
-**Test Utilities**:
+### Test Utilities
 
 - Fixture generators for toy models
 - Fixture generators for synthetic datasets
@@ -193,6 +193,7 @@ training runs.
 ### Current Test Coverage
 
 **Existing Test Files** (in `/home/user/ml-odyssey/tests/shared/training/`):
+
 - `test_optimizers.mojo` - TDD stubs with 16 TODOs, well-defined API contracts
 - `test_schedulers.mojo` - Test file exists (needs verification)
 - `test_warmup_scheduler.mojo` - 14 test functions defined
@@ -209,32 +210,36 @@ training runs.
 - `test_numerical_safety.mojo` - 11 TODOs for safety checks
 - `test_loops.mojo` - Test file exists
 
-**Test Status Analysis**:
+### Test Status Analysis
+
 - **Total test functions**: 100+ defined across training test files
 - **Implementation status**: Mix of TDD stubs and implemented tests
 - **TODOs count**: ~95 TODO markers across 15 files
 - **Test runner**: Not yet created for training tests
 
-**Comparison with Data Tests**:
+### Comparison with Data Tests
+
 - Data tests have comprehensive test runner (`run_all_tests.mojo`)
 - Training tests have more organizational structure
 - Both follow TDD principles with clear API contracts
 
 ### Gap Analysis
 
-**What Exists**:
-1. **Well-organized test structure** - Separate files for each component
-2. **Clear API contracts** - Test stubs document expected interfaces
-3. **Comprehensive coverage** - Tests for all training components
-4. **Numerical safety tests** - Dedicated file for stability checks
+### What Exists
 
-**What's Missing**:
+1. **Well-organized test structure** - Separate files for each component
+1. **Clear API contracts** - Test stubs document expected interfaces
+1. **Comprehensive coverage** - Tests for all training components
+1. **Numerical safety tests** - Dedicated file for stability checks
+
+### What's Missing
+
 1. **Test implementations** - Most tests are stubs waiting for implementation
-2. **Callback tests** - test_callbacks.mojo is empty
-3. **Mock frameworks** - Need mocking strategy for training workflows
-4. **Mathematical verification** - Scheduler formulas need reference implementations
-5. **Integration tests** - Full training workflow verification
-6. **Test runner** - Unified runner for all training tests
+1. **Callback tests** - test_callbacks.mojo is empty
+1. **Mock frameworks** - Need mocking strategy for training workflows
+1. **Mathematical verification** - Scheduler formulas need reference implementations
+1. **Integration tests** - Full training workflow verification
+1. **Test runner** - Unified runner for all training tests
 
 ### Recommendations
 
@@ -243,17 +248,17 @@ training runs.
    - CosineAnnealing (mathematical formula verification)
    - WarmupScheduler (combines multiple schedulers)
 
-2. **Mock Strategy for Workflows**:
+1. **Mock Strategy for Workflows**:
    - Mock forward/backward passes
    - Mock optimizer steps
    - Focus on workflow correctness, not numerical accuracy
 
-3. **Statistical Verification**:
+1. **Statistical Verification**:
    - Pre-compute expected LR values for 10-20 steps
    - Compare actual vs expected within tolerance (1e-6)
    - Test boundary conditions (epoch 0, final epoch)
 
-4. **Create Test Runner**:
+1. **Create Test Runner**:
    - Similar to `tests/shared/data/run_all_tests.mojo`
    - Group tests by component (schedulers, callbacks, loops)
    - Provide summary statistics

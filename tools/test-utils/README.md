@@ -10,7 +10,7 @@ Generate synthetic test data for ML model testing.
 
 **Language**: Mojo (required for performance-critical data generation, SIMD optimization)
 
-**Usage**:
+### Usage
 
 ```mojo
 from tools.test_utils.data_generators import TensorGenerator
@@ -38,9 +38,9 @@ fn test_example():
         28,  # height
         28   # width
     )
-```
+```text
 
-**Features**:
+### Features
 
 - Random tensors with uniform distribution
 - Zero and one-filled tensors
@@ -53,7 +53,7 @@ Common test models for infrastructure testing.
 
 **Language**: Mojo (required for type safety, model compatibility)
 
-**Usage**:
+### Usage
 
 ```mojo
 from tools.test_utils.fixtures import SimpleCNN, LinearModel, create_test_model
@@ -68,9 +68,9 @@ fn test_model():
     # Use in tests
     let input = generator.generate_batch(32, 1, 28, 28)
     let output = cnn.forward(input)
-```
+```text
 
-**Available Fixtures**:
+### Available Fixtures
 
 - `SimpleCNN`: Minimal 2-layer CNN for testing
 - `LinearModel`: Simple fully-connected layer

@@ -7,19 +7,20 @@ Redesign the ML Odyssey shared library to implement a clean two-level hierarchy 
 ## Current State Analysis
 
 ### What Exists
+
 1. **ExTensor Implementation** (`src/extensor/`)
    - Comprehensive tensor with 150+ operations
    - SIMD-optimized, Array API Standard compliant
    - Dynamic shapes, 13 data types
    - Files: `extensor.mojo`, `arithmetic.mojo`, `matrix.mojo`, `reduction.mojo`, `activations.mojo`, `losses.mojo`, `initializers.mojo`, `elementwise_math.mojo`, `comparison.mojo`, `broadcasting.mojo`, `shape.mojo`
 
-2. **Shared Library Structure** (`shared/`)
+1. **Shared Library Structure** (`shared/`)
    - `core/`: Stub directories (layers/, ops/, types/, utils/)
    - `data/`: Implemented (datasets, loaders, transforms) - imports non-existent `tensor.Tensor`
    - `training/`: Partially implemented (loops, metrics, optimizers/sgd as function)
    - `utils/`: Implemented (config, logging, io, profiling, random, visualization)
 
-3. **Architecture Gaps**
+1. **Architecture Gaps**
    - Tests expect class-based APIs: `Linear()`, `SGD()`, `ReLU()`, `Tensor()`
    - Implementation provides functional APIs: `sgd_step()`, `relu()`, ExTensor struct
    - ExTensor is in wrong location (`src/` instead of `shared/core/types/`)
@@ -30,14 +31,16 @@ Redesign the ML Odyssey shared library to implement a clean two-level hierarchy 
 
 ### Two-Level Hierarchy
 
-**Level 1: Functional Layer (Pure Functions)**
+### Level 1: Functional Layer (Pure Functions)
+
 - Location: `shared/core/ops/` and `shared/core/types/`
 - All functions take only ExTensors (scalars represented as 0-D ExTensors)
 - Pure, stateless, composable functions
 - Type-generic (work with any ExTensor dtype that makes sense)
 - Examples: `matmul(a: ExTensor, b: ExTensor) -> ExTensor`, `relu(x: ExTensor) -> ExTensor`, `sgd_step(...) -> ExTensor`
 
-**Level 2: Class-Based Layer (Stateful Wrappers)**
+### Level 2: Class-Based Layer (Stateful Wrappers)
+
 - Location: `shared/core/layers/` and `shared/training/optimizers/`
 - Classes with state (weights, biases, optimizer momentum, etc.)
 - Compose functional operations
@@ -46,7 +49,7 @@ Redesign the ML Odyssey shared library to implement a clean two-level hierarchy 
 
 ### Directory Structure (After Migration)
 
-```
+```text
 shared/
 ├── core/
 │   ├── types/
@@ -84,23 +87,26 @@ shared/
 ├── training/loops/                # Already implemented
 ├── training/metrics/              # Already implemented
 └── utils/                         # Already implemented
-```
+```text
 
 ## Design Principles
 
 ### 1. ExTensor as the Universal Type
+
 - **No Tensor alias** - everything uses ExTensor directly
 - Scalars represented as 0-D ExTensors when needed
 - All functional operations signature: `fn op(ExTensor, ...) -> ExTensor`
 - Type-generic through ExTensor's built-in dtype support
 
 ### 2. Functional Layer Composability
+
 - Pure functions with no side effects (except optimizer state updates)
 - Functions work with any ExTensor dtype that makes sense for the operation
 - Broadcasting follows Array API Standard
 - All operations in `shared/core/ops/` are functional building blocks
 
 ### 3. Class Layer Responsibilities
+
 - **State management**: Hold weights, biases, optimizer state
 - **Initialization**: Initialize parameters using functional initializers
 - **Forward pass**: Compose functional operations
@@ -108,6 +114,7 @@ shared/
 - **Serialization**: Save/load state (future)
 
 ### 4. Clear Separation of Concerns
+
 ```mojo
 # Level 1: Functional (in shared/core/ops/)
 fn relu(x: ExTensor) -> ExTensor:
@@ -121,17 +128,19 @@ struct ReLU:
     fn forward(self, x: ExTensor) -> ExTensor:
         """Forward pass delegates to functional relu."""
         return relu(x)  # Delegates to functional layer
-```
+```text
 
 ## Implementation Tasks
 
 ### Phase 1: Migrate ExTensor to shared/core/types/
 
 **Files to move from `src/extensor/` to `shared/core/types/`:**
-1. `extensor.mojo` → `shared/core/types/extensor.mojo`
-2. `shape.mojo` → `shared/core/types/shape.mojo`
 
-**Update `shared/core/types/__init__.mojo`:**
+1. `extensor.mojo` → `shared/core/types/extensor.mojo`
+1. `shape.mojo` → `shared/core/types/shape.mojo`
+
+### Update `shared/core/types/__init__.mojo`:
+
 ```mojo
 """Core types module - ExTensor and shape utilities."""
 
@@ -153,22 +162,24 @@ __all__ = [
     "reshape", "squeeze", "unsqueeze", "expand_dims", "flatten", "ravel",
     "concatenate", "stack"
 ]
-```
+```text
 
 ### Phase 2: Migrate Operations to shared/core/ops/
 
 **Files to move from `src/extensor/` to `shared/core/ops/`:**
-1. `arithmetic.mojo` → `shared/core/ops/arithmetic.mojo`
-2. `matrix.mojo` → `shared/core/ops/matrix.mojo`
-3. `reduction.mojo` → `shared/core/ops/reduction.mojo`
-4. `elementwise_math.mojo` → `shared/core/ops/elementwise.mojo`
-5. `comparison.mojo` → `shared/core/ops/comparison.mojo`
-6. `broadcasting.mojo` → `shared/core/ops/broadcasting.mojo`
-7. `activations.mojo` → `shared/core/ops/activations.mojo`
-8. `losses.mojo` → `shared/core/ops/losses.mojo`
-9. `initializers.mojo` → `shared/core/ops/initializers.mojo`
 
-**Update `shared/core/ops/__init__.mojo`:**
+1. `arithmetic.mojo` → `shared/core/ops/arithmetic.mojo`
+1. `matrix.mojo` → `shared/core/ops/matrix.mojo`
+1. `reduction.mojo` → `shared/core/ops/reduction.mojo`
+1. `elementwise_math.mojo` → `shared/core/ops/elementwise.mojo`
+1. `comparison.mojo` → `shared/core/ops/comparison.mojo`
+1. `broadcasting.mojo` → `shared/core/ops/broadcasting.mojo`
+1. `activations.mojo` → `shared/core/ops/activations.mojo`
+1. `losses.mojo` → `shared/core/ops/losses.mojo`
+1. `initializers.mojo` → `shared/core/ops/initializers.mojo`
+
+### Update `shared/core/ops/__init__.mojo`:
+
 ```mojo
 """Core operations module - Functional tensor operations."""
 
@@ -219,11 +230,12 @@ __all__ = [
     # Initializers
     "xavier_uniform", "xavier_normal", "he_uniform", "he_normal", "uniform", "normal"
 ]
-```
+```text
 
 ### Phase 3: Implement Layer Classes (shared/core/layers/)
 
-**Create `shared/core/layers/linear.mojo`:**
+### Create `shared/core/layers/linear.mojo`:
+
 ```mojo
 """Linear (fully connected) layer implementation."""
 
@@ -296,9 +308,10 @@ struct Linear:
         if self.bias:
             params.append(self.bias.value())
         return params
-```
+```text
 
-**Create `shared/core/layers/activation.mojo`:**
+### Create `shared/core/layers/activation.mojo`:
+
 ```mojo
 """Activation layer implementations."""
 
@@ -325,9 +338,10 @@ struct Tanh:
     fn forward(self, x: ExTensor) -> ExTensor:
         """Apply tanh activation."""
         return tanh_op(x)
-```
+```text
 
-**Create `shared/core/layers/conv.mojo`:**
+### Create `shared/core/layers/conv.mojo`:
+
 ```mojo
 """Convolutional layer implementations."""
 
@@ -416,9 +430,10 @@ struct Conv2D:
         if self.bias:
             params.append(self.bias.value())
         return params
-```
+```text
 
-**Update `shared/core/layers/__init__.mojo`:**
+### Update `shared/core/layers/__init__.mojo`:
+
 ```mojo
 """Neural network layers module."""
 
@@ -433,11 +448,12 @@ __all__ = [
     "Sigmoid",
     "Tanh"
 ]
-```
+```text
 
 ### Phase 4: Implement Optimizer Classes (shared/training/optimizers/)
 
-**Update `shared/training/optimizers/sgd.mojo`:**
+### Update `shared/training/optimizers/sgd.mojo`:
+
 ```mojo
 """SGD optimizer - both functional and class-based APIs."""
 
@@ -547,9 +563,10 @@ struct SGD:
         """Clear velocity buffers (if needed)."""
         # Velocity persists across steps, so this is typically not needed
         pass
-```
+```text
 
-**Create `shared/training/optimizers/adam.mojo`:**
+### Create `shared/training/optimizers/adam.mojo`:
+
 ```mojo
 """Adam optimizer implementation."""
 
@@ -637,9 +654,10 @@ struct Adam:
         # Store updated moments
         self.m_buffers[param_id] = m
         self.v_buffers[param_id] = v
-```
+```text
 
 **Update `shared/training/optimizers/__init__.mojo`:**
+
 ```mojo
 """Optimizers module - both functional and class-based APIs."""
 
@@ -656,28 +674,31 @@ __all__ = [
     # Class-based
     "SGD", "Adam"
 ]
-```
+```text
 
 ### Phase 5: Fix Import Paths
 
 **Files to update (replace `from tensor import Tensor` with `from shared.core.types import ExTensor`):**
-1. `shared/data/datasets.mojo`
-2. `shared/data/transforms.mojo`
-3. `shared/data/loaders.mojo`
-4. `shared/data/generic_transforms.mojo`
 
-**Example fix for `shared/data/datasets.mojo`:**
+1. `shared/data/datasets.mojo`
+1. `shared/data/transforms.mojo`
+1. `shared/data/loaders.mojo`
+1. `shared/data/generic_transforms.mojo`
+
+### Example fix for `shared/data/datasets.mojo`:
+
 ```mojo
-# OLD:
+# OLD
 from tensor import Tensor
 
-# NEW:
+# NEW
 from shared.core.types import ExTensor
-```
+```text
 
 ### Phase 6: Update Core Module Exports
 
-**Update `shared/core/__init__.mojo`:**
+### Update `shared/core/__init__.mojo`:
+
 ```mojo
 """Core library module - Types, operations, and layers."""
 
@@ -709,24 +730,26 @@ __all__ = [
     # Layers
     "Linear", "Conv2D", "ReLU", "Sigmoid", "Tanh"
 ]
-```
+```text
 
 ## Testing Strategy
 
 ### Update Test Files
 
-**Update test imports:**
+### Update test imports:
+
 ```mojo
-# OLD (what tests currently expect):
+# OLD (what tests currently expect)
 from tests.shared.conftest import Tensor, Shape
 
-# NEW (after migration):
+# NEW (after migration)
 from shared.core.types import ExTensor
 from shared.core.layers import Linear, Conv2D, ReLU, Sigmoid, Tanh
 from shared.training.optimizers import SGD, Adam, AdamW, RMSprop
-```
+```text
 
-**Example test update:**
+### Example test update:
+
 ```mojo
 # tests/shared/core/test_layers.mojo
 
@@ -754,7 +777,7 @@ fn test_linear_forward() raises:
     var output_shape = output.shape()
     assert_equal(output_shape[0], 2)
     assert_equal(output_shape[1], 5)
-```
+```text
 
 ## Migration Checklist
 
@@ -804,14 +827,14 @@ fn test_linear_forward() raises:
 ## Success Criteria
 
 1. ✅ All ExTensor code moved from `src/extensor/` to `shared/core/`
-2. ✅ Clear separation: functional ops in `ops/`, classes in `layers/` and `optimizers/`
-3. ✅ No `Tensor` alias - everything uses `ExTensor`
-4. ✅ Layer classes (Linear, Conv2D, ReLU, etc.) implemented
-5. ✅ Optimizer classes (SGD, Adam, AdamW, RMSprop) implemented
-6. ✅ All test files compile and can be uncommented
-7. ✅ Clean two-level architecture: functional core + class wrapper
-8. ✅ All imports work correctly
-9. ✅ No code duplication between functional and class layers
+1. ✅ Clear separation: functional ops in `ops/`, classes in `layers/` and `optimizers/`
+1. ✅ No `Tensor` alias - everything uses `ExTensor`
+1. ✅ Layer classes (Linear, Conv2D, ReLU, etc.) implemented
+1. ✅ Optimizer classes (SGD, Adam, AdamW, RMSprop) implemented
+1. ✅ All test files compile and can be uncommented
+1. ✅ Clean two-level architecture: functional core + class wrapper
+1. ✅ All imports work correctly
+1. ✅ No code duplication between functional and class layers
 
 ## Expected Outcome
 
@@ -825,6 +848,7 @@ After completing this architecture redesign:
 - **No src/extensor**: Everything consolidated in `shared/`
 
 This architecture provides:
+
 - **Flexibility**: Use functional APIs for custom operations
 - **Convenience**: Use class APIs for standard layers
 - **Composability**: Build complex models from simple building blocks

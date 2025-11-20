@@ -102,6 +102,6 @@ Broke the long GitHub URL at a natural boundary (after the link itself) to keep 
 ## Next Steps
 
 1. Run full markdown linter validation to confirm all fixes
-2. Verify pre-commit hooks pass
-3. Run tests to ensure no regressions
-4. Create PR linking to this issue
+1. Verify pre-commit hooks pass
+1. Run tests to ensure no regressions
+1. Create PR linking to this issue

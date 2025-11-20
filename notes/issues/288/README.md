@@ -26,7 +26,7 @@ Design and document the confusion matrix component for detailed classification a
 
 ### Architecture Design
 
-**Confusion Matrix Structure:**
+### Confusion Matrix Structure:
 
 - **Matrix Shape**: NxN for N classes (square matrix)
 - **Row Convention**: Rows represent ground truth labels
@@ -34,20 +34,20 @@ Design and document the confusion matrix component for detailed classification a
 - **Cell Values**: Count of samples where ground_truth=row and prediction=column
 - **Data Type**: Integer counters (accumulate over batches)
 
-**Key Design Choices:**
+### Key Design Choices:
 
 1. **Accumulation Strategy**:
    - Support incremental updates for large datasets
    - Allow both batch-wise accumulation and single-batch computation
    - Enable reset functionality for starting new evaluation runs
 
-2. **Normalization Options**:
+1. **Normalization Options**:
    - Row normalization: Show percentage of each true class predicted as each class
    - Column normalization: Show percentage of each predicted class from each true class
    - Total normalization: Show percentage of all samples
    - No normalization: Raw counts
 
-3. **Derived Metrics**:
+1. **Derived Metrics**:
    - Per-class precision: diagonal / column_sum
    - Per-class recall: diagonal / row_sum
    - Per-class F1-score: 2 * (precision * recall) / (precision + recall)
@@ -55,7 +55,7 @@ Design and document the confusion matrix component for detailed classification a
 
 ### API Design
 
-**Core Operations:**
+### Core Operations:
 
 ```mojo
 # Initialize confusion matrix
@@ -72,16 +72,16 @@ struct ConfusionMatrix:
     fn get_precision(self) -> Tensor[DType.float32]
     fn get_recall(self) -> Tensor[DType.float32]
     fn get_f1_score(self) -> Tensor[DType.float32]
-```
+```text
 
-**Input Handling:**
+### Input Handling:
 
 - Accept class indices (integers 0 to N-1)
 - Support logits (automatically convert to class indices via argmax)
 - Validate inputs are within valid class range
 - Handle edge cases (empty batches, single-class predictions)
 
-**Output Formats:**
+### Output Formats:
 
 - Raw matrix: Integer counts
 - Normalized matrix: Float percentages
@@ -90,7 +90,7 @@ struct ConfusionMatrix:
 
 ### Implementation Strategy
 
-**Phase 1 - Test (Issue #289):**
+### Phase 1 - Test (Issue #289):
 
 - Test matrix accumulation correctness
 - Test normalization modes (row, column, total)
@@ -98,22 +98,22 @@ struct ConfusionMatrix:
 - Test derived metrics calculations
 - Test edge cases (empty batches, single class, all correct/incorrect)
 
-**Phase 2 - Implementation (Issue #290):**
+### Phase 2 - Implementation (Issue #290):
 
 1. Implement ConfusionMatrix struct with initialization
-2. Implement update() method for accumulating predictions
-3. Implement normalize() method with multiple modes
-4. Implement derived metric extractors (precision, recall, F1)
-5. Add reset() for starting new evaluation runs
+1. Implement update() method for accumulating predictions
+1. Implement normalize() method with multiple modes
+1. Implement derived metric extractors (precision, recall, F1)
+1. Add reset() for starting new evaluation runs
 
-**Phase 3 - Packaging (Issue #291):**
+### Phase 3 - Packaging (Issue #291):
 
 - Integrate with metrics module
 - Export public API
 - Add example usage in documentation
 - Create visualization helpers (optional)
 
-**Phase 4 - Cleanup (Issue #292):**
+### Phase 4 - Cleanup (Issue #292):
 
 - Refactor for clarity and performance
 - Optimize memory usage for large class counts
@@ -122,19 +122,19 @@ struct ConfusionMatrix:
 
 ### Technical Considerations
 
-**Memory Management:**
+### Memory Management:
 
 - Matrix size scales as O(N²) for N classes
 - Use owned tensor for internal storage
 - Consider sparse representation for large N (future optimization)
 
-**Performance:**
+### Performance:
 
 - Accumulation is O(batch_size) per update
 - Normalization is O(N²) (computed on-demand, not cached)
 - Derived metrics are O(N) each
 
-**Edge Cases:**
+### Edge Cases:
 
 - Empty batch: No-op, don't update matrix
 - Single class in batch: Update only relevant row/column
@@ -142,7 +142,7 @@ struct ConfusionMatrix:
 - All correct predictions: Diagonal only populated
 - All incorrect predictions: Diagonal zeros, off-diagonal populated
 
-**Integration Points:**
+### Integration Points:
 
 - Works with Accuracy metrics (share predictions/labels)
 - Complements Loss tracking (different aspects of performance)

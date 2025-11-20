@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Instrument source code for coverage tracking
-2. Hook into test execution to collect data
-3. Record which lines are executed during tests
-4. Store coverage data in standard format
+1. Hook into test execution to collect data
+1. Record which lines are executed during tests
+1. Store coverage data in standard format
 
 ## Success Criteria
 

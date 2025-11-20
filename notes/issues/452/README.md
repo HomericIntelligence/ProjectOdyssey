@@ -28,23 +28,27 @@ Final refactoring and cleanup of the entire test framework based on learnings fr
 ### Framework Components Status
 
 **1. Setup Testing** (#433-437):
+
 - Test directory structure
 - Test discovery and running
 - CI integration
 - Status: Functional, may have TODOs
 
 **2. Test Utilities** (#438-442):
+
 - Assertions (conftest.mojo, helpers/assertions.mojo)
 - Data generators
 - Status: Functional, has placeholders (measure_time, fixtures)
 
 **3. Test Fixtures** (#443-447):
+
 - Seed fixtures (implemented)
 - Data generators (implemented)
 - Tensor fixtures (commented out, pending Tensor)
 - Status: Partially implemented
 
-**Combined Status**:
+### Combined Status
+
 - Framework is functional (91+ tests passing)
 - Has TODO placeholders
 - May have redundancy between conftest.mojo and helpers/
@@ -54,37 +58,43 @@ Final refactoring and cleanup of the entire test framework based on learnings fr
 
 ### 1. Cross-Component Code Review
 
-**Review All Framework Files**:
+### Review All Framework Files
+
 ```bash
 # Core framework files to review
 tests/shared/conftest.mojo            # 337 lines
 tests/helpers/assertions.mojo         # 365 lines
 tests/helpers/fixtures.mojo           # 17 lines (placeholders)
 tests/helpers/utils.mojo              # 14 lines (placeholders)
-```
+```text
 
-**Questions to Answer**:
+### Questions to Answer
+
 1. Is there redundancy between files?
-2. Are all functions actually used?
-3. Are placeholder files needed or should they be removed?
-4. Is code organization optimal?
+1. Are all functions actually used?
+1. Are placeholder files needed or should they be removed?
+1. Is code organization optimal?
 
 ### 2. TODO Consolidation
 
-**Identify All TODOs Across Framework**:
+### Identify All TODOs Across Framework
 
 **conftest.mojo**:
+
 - Lines 259-262: `measure_time()` placeholder
 - Lines 279-281: `measure_throughput()` placeholder
 - Lines 160-181: Commented tensor fixture methods
 
 **helpers/fixtures.mojo**:
+
 - Lines 7-15: All placeholders for ExTensor fixtures
 
 **helpers/utils.mojo**:
+
 - Lines 7-12: All placeholders for utilities
 
-**Resolution Strategy**:
+### Resolution Strategy
+
 | TODO | Dependencies Met? | Used in Tests? | Action |
 |------|------------------|---------------|--------|
 | measure_time | Check if time module available | Check usage | Implement/Remove/Track |
@@ -95,13 +105,15 @@ tests/helpers/utils.mojo              # 14 lines (placeholders)
 
 ### 3. Redundancy Elimination
 
-**Potential Redundancy**:
+### Potential Redundancy
 
-**Assertions**:
+### Assertions
+
 - `conftest.mojo` has: assert_true, assert_false, assert_equal, etc.
 - `helpers/assertions.mojo` also has: assert_true, assert_false, assert_equal_int, assert_equal_float
 
-**Analysis Needed**:
+### Analysis Needed
+
 ```mojo
 // Are these duplicates?
 // conftest.mojo
@@ -109,21 +121,24 @@ fn assert_true(condition: Bool, message: String = "") raises
 
 // helpers/assertions.mojo
 fn assert_true(condition: Bool, message: String = "") raises
-```
+```text
 
-**Resolution Options**:
+### Resolution Options
+
 1. **Keep both** if they serve different purposes (general vs ExTensor-specific)
-2. **Consolidate** if identical - keep one version, remove other
-3. **Differentiate** - make purposes clear in docstrings
+1. **Consolidate** if identical - keep one version, remove other
+1. **Differentiate** - make purposes clear in docstrings
 
-**Recommended**:
+### Recommended
+
 - Keep general assertions in conftest.mojo (any test can use)
 - Keep ExTensor-specific assertions in helpers/assertions.mojo
 - Remove basic assertions from helpers/assertions.mojo if they duplicate conftest.mojo
 
 ### 4. File Organization Review
 
-**Current Organization**:
+### Current Organization
+
 ```text
 tests/
 ├── shared/
@@ -132,14 +147,16 @@ tests/
 │   ├── assertions.mojo         # ExTensor assertions (365 lines)
 │   ├── fixtures.mojo           # Placeholders (17 lines)
 │   └── utils.mojo              # Placeholders (14 lines)
-```
+```text
 
-**Questions**:
+### Questions
+
 1. Should `helpers/fixtures.mojo` and `helpers/utils.mojo` be removed if they're just placeholders?
-2. Is the separation between `shared/` and `helpers/` clear and useful?
-3. Should anything be reorganized?
+1. Is the separation between `shared/` and `helpers/` clear and useful?
+1. Should anything be reorganized?
 
-**Decision Criteria**:
+### Decision Criteria
+
 - **Keep files** if they have implementation or will soon
 - **Remove files** if they're empty placeholders with no near-term implementation
 - **Document intent** if keeping placeholders (in file comments)
@@ -147,30 +164,34 @@ tests/
 ### 5. Documentation Validation
 
 **Created in Package Phase** (#451):
+
 - Quick start guide
 - Tutorial
 - API reference
 - Best practices
 - Troubleshooting guide
 
-**Validation Tasks**:
-1. **Test all examples**: Do code examples work?
-2. **Verify accuracy**: Do docs match implementation?
-3. **Check completeness**: Are all functions documented?
-4. **Fix errors**: Correct any mistakes found
+### Validation Tasks
 
-**Validation Process**:
+1. **Test all examples**: Do code examples work?
+1. **Verify accuracy**: Do docs match implementation?
+1. **Check completeness**: Are all functions documented?
+1. **Fix errors**: Correct any mistakes found
+
+### Validation Process
+
 ```bash
 # Extract code examples from documentation
 grep -A 10 "```mojo" docs/testing/*.md > /tmp/test_examples.mojo
 
 # Try to run examples (if feasible)
 # Verify they compile and work as documented
-```
+```text
 
 ### 6. Performance Final Check
 
-**Benchmark Critical Paths**:
+### Benchmark Critical Paths
+
 ```mojo
 fn benchmark_framework_overhead() raises:
     """Measure framework overhead."""
@@ -215,9 +236,10 @@ fn benchmark_fixture_creation() raises:
     var ratio = (large_time / small_time) / (10000.0 / 10.0)
     assert_true(ratio < 2.0,
                 "Should scale linearly with size")
-```
+```text
 
-**If Performance Issues Found**:
+### If Performance Issues Found
+
 - Optimize hot paths
 - Consider caching for expensive operations
 - Document performance characteristics
@@ -289,7 +311,7 @@ Regular benchmarking of framework overhead
 ### Framework Usage
 - Most used assertion: TBD
 - Most used fixture: TBD
-```
+```text
 
 ### 8. Future Roadmap
 
@@ -361,7 +383,7 @@ Regular benchmarking of framework overhead
 - Python pytest compatibility layer (Mojo is different language)
 - GUI test runner (CLI sufficient)
 - Mocking framework (YAGNI - not needed yet)
-```
+```text
 
 ## Cleanup Tasks
 
@@ -373,12 +395,12 @@ Regular benchmarking of framework overhead
    - Identify redundancies
    - Check for dead code
 
-2. **Documentation Review**:
+1. **Documentation Review**:
    - Test all examples
    - Verify API documentation accuracy
    - Check for missing content
 
-3. **Usage Analysis**:
+1. **Usage Analysis**:
    - Find which utilities are used
    - Find which fixtures are used
    - Identify unused code
@@ -390,17 +412,17 @@ Regular benchmarking of framework overhead
    - Track in issues if dependencies not ready
    - Remove if not needed
 
-2. **Eliminate Redundancy**:
+1. **Eliminate Redundancy**:
    - Remove duplicate functions
    - Consolidate similar code
    - Clear separation of concerns
 
-3. **Remove Dead Code**:
+1. **Remove Dead Code**:
    - Delete unused functions
    - Remove empty placeholder files
    - Clean up commented code
 
-4. **Optimize Performance**:
+1. **Optimize Performance**:
    - Profile critical paths
    - Optimize hotspots
    - Document performance characteristics
@@ -412,7 +434,7 @@ Regular benchmarking of framework overhead
    - Fix inaccuracies
    - Complete missing sections
 
-2. **Add Meta-Documentation**:
+1. **Add Meta-Documentation**:
    - Lessons learned
    - Future roadmap
    - Contributing guidelines
@@ -424,12 +446,12 @@ Regular benchmarking of framework overhead
    - Verify no regressions
    - Check all tests still pass
 
-2. **Documentation**:
+1. **Documentation**:
    - Verify all links work
    - Check all examples work
    - Ensure completeness
 
-3. **CI**:
+1. **CI**:
    - Verify CI passes
    - No warnings or errors
    - Performance metrics within bounds
@@ -455,62 +477,76 @@ Regular benchmarking of framework overhead
 
 (To be filled during cleanup phase)
 
-**Redundancies Removed**:
+### Redundancies Removed
+
 - TBD
 
-**TODOs Resolved**:
+### TODOs Resolved
+
 - TBD
 
 **TODOs Deferred** (with tracking):
+
 - TBD
 
-**Code Removed**:
+### Code Removed
+
 - TBD
 
-**Documentation Fixes**:
+### Documentation Fixes
+
 - TBD
 
 ### Lessons Learned
 
-**Framework Development**:
+### Framework Development
+
 - TBD
 
-**Documentation**:
+### Documentation
+
 - TBD
 
-**Testing Best Practices**:
+### Testing Best Practices
+
 - TBD
 
 ### Final Metrics
 
-**Code Quality**:
+### Code Quality
+
 - Total framework LOC: TBD
 - Test coverage of framework: TBD
 - Complexity metrics: TBD
 
-**Usage Statistics**:
+### Usage Statistics
+
 - Total tests using framework: 91+
 - Most used utilities: TBD
 - Most used fixtures: TBD
 
-**Performance**:
+### Performance
+
 - Assertion overhead: TBD ns
 - Fixture creation time: TBD ms
 - Framework load time: TBD ms
 
 ### Recommendations
 
-**For Future Framework Work**:
-1. TBD
-2. TBD
-3. TBD
+### For Future Framework Work
 
-**For Test Writers**:
 1. TBD
-2. TBD
-3. TBD
+1. TBD
+1. TBD
 
-**For Maintainers**:
+### For Test Writers
+
 1. TBD
-2. TBD
-3. TBD
+1. TBD
+1. TBD
+
+### For Maintainers
+
+1. TBD
+1. TBD
+1. TBD

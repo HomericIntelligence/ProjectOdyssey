@@ -28,7 +28,7 @@ enabling consistent and efficient creation of new paper implementations.
 **Decision**: Use simple string replacement (e.g., `{{PAPER_TITLE}}` → actual title) instead of a full templating
 engine like Jinja2 or Mustache.
 
-**Rationale**:
+### Rationale
 
 - Paper templates have straightforward substitution needs - primarily metadata fields
 - Simple approach is easier to understand, maintain, and debug
@@ -36,7 +36,7 @@ engine like Jinja2 or Mustache.
 - Sufficient for current requirements (YAGNI principle)
 - Can upgrade later if more complex logic is needed
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Jinja2: Overkill for simple substitution; adds dependency
 - Mustache: Similar to Jinja2, more than needed
@@ -47,7 +47,7 @@ engine like Jinja2 or Mustache.
 
 **Decision**: Use uppercase with underscores for template placeholders (e.g., `PAPER_TITLE`, `AUTHOR_NAME`, `DATE`).
 
-**Rationale**:
+### Rationale
 
 - Clear visual distinction from surrounding content
 - Common convention in templating systems (environment variables, constants)
@@ -60,14 +60,14 @@ engine like Jinja2 or Mustache.
 
 **Decision**: Store templates in a dedicated `templates/` directory structure within the tooling section.
 
-**Rationale**:
+### Rationale
 
 - Centralized location for all template files
 - Easy to locate and modify
 - Supports template versioning and updates
 - Allows for template categories (README, code, tests, docs)
 
-**Structure**:
+### Structure
 
 ```text
 templates/
@@ -79,17 +79,17 @@ templates/
 │   └── test_paper.mojo.template
 └── docs/
     └── usage.md.template
-```
+```text
 
 ### 4. Template Variable System Architecture
 
 **Decision**: Three-tier variable system:
 
 1. **Required variables** - Must be provided (PAPER_TITLE, AUTHOR_NAME)
-2. **Optional variables with defaults** - Can be omitted (DATE defaults to current date)
-3. **Computed variables** - Derived from other variables (PAPER_SLUG from PAPER_TITLE)
+1. **Optional variables with defaults** - Can be omitted (DATE defaults to current date)
+1. **Computed variables** - Derived from other variables (PAPER_SLUG from PAPER_TITLE)
 
-**Rationale**:
+### Rationale
 
 - Ensures essential information is always present
 - Provides convenience with sensible defaults
@@ -101,25 +101,25 @@ templates/
 **Decision**: Fail fast with clear error messages for missing required variables; warn but continue for optional
 variables.
 
-**Rationale**:
+### Rationale
 
 - Prevents incomplete file generation
 - Clear feedback helps users correct issues quickly
 - Warnings for optional variables maintain flexibility
 - Aligns with principle of least astonishment (POLA)
 
-**Error Message Format**:
+### Error Message Format
 
 ```text
 Error: Missing required variable 'PAPER_TITLE'
 Please provide a value for PAPER_TITLE using --title option
-```
+```text
 
 ### 6. Template Rendering Output
 
 **Decision**: Render templates to in-memory strings first, validate, then write to disk atomically.
 
-**Rationale**:
+### Rationale
 
 - Prevents partial file writes on error
 - Allows validation before disk modification
@@ -130,7 +130,7 @@ Please provide a value for PAPER_TITLE using --title option
 
 **Decision**: Implement template rendering in Python (not Mojo) as part of tooling infrastructure.
 
-**Rationale**:
+### Rationale
 
 - Tooling/automation context - Python is appropriate per ADR-001
 - No performance-critical operations (one-time file generation)
@@ -148,14 +148,14 @@ The template system consists of three main components:
 
 **Purpose**: Design and create template files for all standard paper components.
 
-**Key Files**:
+### Key Files
 
 - `templates/readme/README.md.template` - Paper documentation template
 - `templates/code/implementation.mojo.template` - Mojo implementation stub
 - `templates/tests/test_paper.mojo.template` - Test file template
 - `templates/docs/usage.md.template` - Usage documentation template
 
-**Design Principles**:
+### Design Principles
 
 - Self-documenting with clear placeholder names
 - Minimal but complete - cover essential structure
@@ -166,7 +166,7 @@ The template system consists of three main components:
 
 **Purpose**: Define variable schema, validation rules, and default values.
 
-**Standard Variables**:
+### Standard Variables
 
 Required:
 
@@ -184,7 +184,7 @@ Computed:
 - `PAPER_SLUG` - URL-friendly version of title (e.g., "lenet-5")
 - `PAPER_DIR` - Directory name derived from slug
 
-**Validation Rules**:
+### Validation Rules
 
 - PAPER_TITLE: Non-empty, max 200 chars
 - AUTHOR_NAME: Non-empty, max 100 chars
@@ -195,18 +195,18 @@ Computed:
 
 **Purpose**: Process templates and substitute variables to generate output files.
 
-**Workflow**:
+### Workflow
 
 1. Load template file from disk
-2. Parse for variable placeholders ({{VAR_NAME}})
-3. Validate all required variables are provided
-4. Apply default values for optional variables
-5. Compute derived variables
-6. Perform string substitution
-7. Validate rendered output
-8. Write to target file atomically
+1. Parse for variable placeholders ({{VAR_NAME}})
+1. Validate all required variables are provided
+1. Apply default values for optional variables
+1. Compute derived variables
+1. Perform string substitution
+1. Validate rendered output
+1. Write to target file atomically
 
-**Error Handling**:
+### Error Handling
 
 - Missing required variables → Error and exit
 - Invalid variable values → Error with validation message
@@ -228,16 +228,16 @@ Paper Scaffolding CLI
 │   └── Creates paper directory structure
 └── CLI Interface
     └── User-facing command-line tool
-```
+```text
 
-**Flow**:
+### Flow
 
 1. User runs CLI: `paper-scaffold --title "LeNet-5" --author "LeCun et al."`
-2. CLI validates input and prepares variables
-3. Template System renders all template files
-4. Directory Generator creates target structure
-5. Rendered files written to appropriate locations
-6. User gets complete, ready-to-use paper implementation
+1. CLI validates input and prepares variables
+1. Template System renders all template files
+1. Directory Generator creates target structure
+1. Rendered files written to appropriate locations
+1. User gets complete, ready-to-use paper implementation
 
 ## References
 

@@ -19,7 +19,7 @@ The ml-odyssey project uses a comprehensive 5-phase development workflow that in
 6-level agent hierarchy. This document explains how agents participate in each phase, coordinate work, and execute
 in parallel when appropriate.
 
-**Key Principles**:
+### Key Principles
 
 - **Plan First**: Design and specifications must complete before implementation begins
 - **Parallel Execution**: Test, Implementation, and Packaging run simultaneously after Plan completes
@@ -47,9 +47,9 @@ in parallel when appropriate.
               ┌──────────────────┐
               │ Phase 5: Cleanup │ ← Sequential, After Parallel
               └──────────────────┘
-```
+```text
 
-**Dependencies**:
+### Dependencies
 
 - **Plan → Test/Impl/Package**: Parallel phases require Plan specifications
 - **Test/Impl/Package → Cleanup**: Cleanup collects issues from all parallel phases
@@ -127,17 +127,17 @@ Component Specialists (Level 3)
   ├─> Implementation Specialist
   ├─> Test Specialist
   └─> Documentation Specialist
-```
+```text
 
 ### Workflow
 
 1. **Chief Architect** analyzes requirements and creates strategic plan
-2. **Section Orchestrator** breaks work into modules
-3. **Design Agents** create component specifications:
+1. **Section Orchestrator** breaks work into modules
+1. **Design Agents** create component specifications:
    - Architecture Design: Component structure, interfaces, data flow
    - Integration Design: Cross-component APIs, dependencies
    - Security Design: Threat models, security requirements
-4. **Component Specialists** create detailed specifications:
+1. **Component Specialists** create detailed specifications:
    - Implementation Specialist: Function/class breakdown
    - Test Specialist: Test cases and coverage requirements
    - Documentation Specialist: Documentation outline
@@ -183,7 +183,7 @@ Test Specialist:
     * Test gradient computation
     * Test SIMD optimization correctness
   - Creates test plan for Test Engineers
-```
+```text
 
 **Completion Criteria**: All specifications reviewed and approved, ready for parallel execution.
 
@@ -202,13 +202,13 @@ Component Specialist (Level 3) - Coordinates parallel work
   ├─> Test Specialist → Test Engineers (Phase 2)
   ├─> Implementation Specialist → Implementation Engineers (Phase 3)
   └─> Documentation Specialist → Documentation Engineers (Phase 4)
-```
+```text
 
 ### Phase 2: Test
 
 **Agents**: Test Specialist, Test Engineers (Levels 3-5)
 
-**Work**:
+### Work
 
 - Implement unit tests from test plan
 - Create integration tests
@@ -216,14 +216,14 @@ Component Specialist (Level 3) - Coordinates parallel work
 - Set up test automation
 - Verify coverage requirements
 
-**Deliverables**:
+### Deliverables
 
 - Test files (`.mojo`, `.py`)
 - Test fixtures
 - Test utilities
 - Coverage reports
 
-**Mojo Example**:
+### Mojo Example
 
 ```mojo
 # tests/test_conv2d.mojo
@@ -253,13 +253,13 @@ fn test_conv2d_simd_optimization():
 
     # Results should match within floating point tolerance
     assert_tensors_close(output_naive, output_simd, atol=1e-5)
-```
+```text
 
 ### Phase 3: Implementation
 
 **Agents**: Implementation Specialist, Implementation Engineers (Levels 3-5)
 
-**Work**:
+### Work
 
 - Implement functions and classes from specs
 - Write performance-critical Mojo code
@@ -267,14 +267,14 @@ fn test_conv2d_simd_optimization():
 - Add inline documentation
 - Coordinate with Test phase for TDD
 
-**Deliverables**:
+### Deliverables
 
 - Implementation code (`.mojo`, `.py`)
 - Inline documentation
 - API implementations
 - Performance optimizations
 
-**Mojo Example**:
+### Mojo Example
 
 ```mojo
 # src/model/layers/conv2d.mojo
@@ -373,13 +373,13 @@ struct Conv2D:
         # Vectorize over output spatial dimensions
         for out_y in range(output.shape[2]):
             vectorize[compute_pixel, simd_width](output.shape[3], out_y)
-```
+```text
 
 ### Phase 4: Packaging
 
 **Agents**: Documentation Specialist, Documentation Engineers, Integration Engineers (Levels 3-5)
 
-**Work**:
+### Work
 
 - Write API documentation
 - Create usage examples
@@ -387,7 +387,7 @@ struct Conv2D:
 - Integrate test and implementation artifacts
 - Create package configurations
 
-**Deliverables**:
+### Deliverables
 
 - README files
 - API documentation
@@ -395,7 +395,7 @@ struct Conv2D:
 - Integration scripts
 - Package configurations
 
-**Example**:
+### Example
 
 ```markdown
 # Conv2D Layer
@@ -409,9 +409,10 @@ The `Conv2D` layer implements 2D convolution operations optimized with SIMD for 
 ### Constructor
 
 ```mojo
-Conv2D(in_channels: Int, out_channels: Int, kernel_size: Int)
-```
 
+Conv2D(in_channels: Int, out_channels: Int, kernel_size: Int)
+
+```text
 **Parameters**:
 
 - `in_channels`: Number of input channels
@@ -423,9 +424,10 @@ Conv2D(in_channels: Int, out_channels: Int, kernel_size: Int)
 #### forward
 
 ```mojo
-fn forward(self, input: Tensor[DType.float32]) -> Tensor[DType.float32]
-```
 
+fn forward(self, input: Tensor[DType.float32]) -> Tensor[DType.float32]
+
+```text
 Apply 2D convolution to input tensor.
 
 **Parameters**:
@@ -439,19 +441,23 @@ Apply 2D convolution to input tensor.
 ## Usage Example
 
 ```mojo
+
 from model.layers import Conv2D
 from tensor import Tensor
 
 # Create layer: 1 input channel, 6 output channels, 5x5 kernel
+
 var conv = Conv2D(in_channels=1, out_channels=6, kernel_size=5)
 
 # Create input: batch=1, channels=1, 28x28 image (MNIST)
+
 var input = Tensor[DType.float32](1, 1, 28, 28)
 
 # Forward pass
-var output = conv.forward(input)  # Shape: (1, 6, 24, 24)
-```
 
+var output = conv.forward(input)  # Shape: (1, 6, 24, 24)
+
+```text
 ## Performance
 
 The implementation uses SIMD vectorization for optimal performance:
@@ -470,34 +476,34 @@ The implementation uses SIMD vectorization for optimal performance:
 
 ### Coordination Between Phases
 
-**Test ↔ Implementation (TDD)**:
+### Test ↔ Implementation (TDD)
 
 ```text
 1. Test Engineer writes failing test
 2. Signals Implementation Engineer via status update
 3. Implementation Engineer implements feature
 4. Test passes, both proceed to next feature
-```
+```text
 
-**Implementation ↔ Packaging**:
+### Implementation ↔ Packaging
 
 ```text
 1. Implementation Engineer completes function
 2. Documentation Engineer reads implementation
 3. Extracts API signature and behavior
 4. Writes documentation with examples
-```
+```text
 
-**Git Worktree Isolation**:
+### Git Worktree Isolation
 
 ```bash
 # Each phase has its own worktree
 worktrees/issue-63-test-agents/      # Test Engineers work here
 worktrees/issue-64-impl-agents/      # Implementation Engineers work here
 worktrees/issue-65-pkg-agents/       # Documentation Engineers work here
-```
+```text
 
-**Cross-Worktree Coordination**:
+### Cross-Worktree Coordination
 
 - **Option 1**: Cherry-pick commits between worktrees
 - **Option 2**: Coordinate through specifications (preferred)
@@ -517,19 +523,19 @@ Collect issues discovered during parallel phases, refactor code, and finalize qu
 Level 0-3: Identify architectural and design issues
 Level 3-5: Fix code quality, refactor, optimize
 All: Final quality review
-```
+```text
 
 ### Workflow
 
 1. **Collect Issues**: Aggregate issues from Test/Impl/Package phases
-2. **Prioritize**: Section Orchestrators prioritize cleanup tasks
-3. **Execute**: Agents fix issues at appropriate levels
-4. **Validate**: Tests still pass, documentation updated
-5. **Finalize**: Final sign-off from all levels
+1. **Prioritize**: Section Orchestrators prioritize cleanup tasks
+1. **Execute**: Agents fix issues at appropriate levels
+1. **Validate**: Tests still pass, documentation updated
+1. **Finalize**: Final sign-off from all levels
 
 ### Common Cleanup Tasks
 
-**Level 3-4 (Specialists and Engineers)**:
+### Level 3-4 (Specialists and Engineers)
 
 - Refactor duplicated code
 - Fix code smells (long functions, complex logic)
@@ -538,20 +544,20 @@ All: Final quality review
 - Update documentation based on implementation learnings
 - Add missing edge case handling
 
-**Level 2 (Design Agents)**:
+### Level 2 (Design Agents)
 
 - Validate architectural integrity
 - Review interfaces for consistency
 - Approve refactoring plans
 - Update design documents
 
-**Level 1 (Orchestrators)**:
+### Level 1 (Orchestrators)
 
 - Aggregate cleanup status
 - Ensure section-wide consistency
 - Coordinate cross-module refactoring
 
-**Level 0 (Chief Architect)**:
+### Level 0 (Chief Architect)
 
 - Final architectural review
 - Approve for production
@@ -576,7 +582,7 @@ All: Final quality review
 - [ ] Documentation: Add troubleshooting section
 - [ ] Example: Add comparison with PyTorch implementation
 - [ ] README: Explain SIMD optimization benefits
-```
+```text
 
 ## Workflow Diagrams
 
@@ -624,7 +630,7 @@ All: Final quality review
                    │         ↓              │
                    │  Production Ready      │
                    └────────────────────────┘
-```
+```text
 
 ### Agent Level Participation
 
@@ -650,7 +656,7 @@ Level 5    │ ░░  │    │ ██  │    │ ██  │    │ ██  
 (Junior)   └─────┘    └─────┘    └─────┘    └─────┘    └─────┘
 
 Legend: ███ = Heavy involvement, ██ = Moderate, ░░ = Light/Oversight
-```
+```text
 
 ## Examples by Phase
 
@@ -681,7 +687,7 @@ Test Specialist:
     * Test max value selection
     * Test SIMD correctness vs naive
     * Test gradient computation
-```
+```text
 
 #### Phase 2: Test (Parallel with 3 & 4)
 
@@ -691,7 +697,7 @@ Test Engineer:
   - Implements test_max_value_selection()
   - Implements test_simd_correctness()
   - Creates test fixtures with known outputs
-```
+```text
 
 #### Phase 3: Implementation (Parallel with 2 & 4)
 
@@ -701,7 +707,7 @@ Implementation Engineer:
   - Implements forward() method
   - Implements _max_pool_simd() with SIMD
   - Coordinates with Test: runs tests, fixes failures
-```
+```text
 
 #### Phase 4: Packaging (Parallel with 2 & 3)
 
@@ -711,7 +717,7 @@ Documentation Engineer:
   - Creates usage examples
   - Adds to model layers guide
   - Updates API reference
-```
+```text
 
 #### Phase 5: Cleanup
 
@@ -725,7 +731,7 @@ Implementation Engineer:
   - Refactors _max_pool_simd into smaller functions
   - Adds missing test case
   - Adds performance benchmarks to docs
-```
+```text
 
 ### Example 2: Bug Fix - Incorrect Gradient Computation
 
@@ -737,7 +743,7 @@ Component Specialist:
   - Root cause: incorrect index calculation in backward pass
   - Creates fix specification
   - Plan is minimal: just fix description
-```
+```text
 
 #### Phase 2: Test (Parallel with 3 & 4)
 
@@ -746,7 +752,7 @@ Test Engineer:
   - Writes failing test that reproduces bug
   - Test: gradient should match numerical gradient
   - Commits test to test worktree
-```
+```text
 
 #### Phase 3: Implementation (Parallel with 2 & 4)
 
@@ -756,7 +762,7 @@ Implementation Engineer:
   - Fixes index calculation in backward()
   - Verifies test passes
   - Commits fix to impl worktree
-```
+```text
 
 #### Phase 4: Packaging (Parallel with 2 & 4)
 
@@ -764,7 +770,7 @@ Implementation Engineer:
 Documentation Engineer:
   - Updates CHANGELOG with bug fix
   - No major doc changes needed
-```
+```text
 
 #### Phase 5: Cleanup
 
@@ -772,7 +778,7 @@ Documentation Engineer:
 - Add regression test for related edge cases
 - Review other gradient calculations for similar bugs
 - Update gradient testing guidelines
-```
+```text
 
 ## Parallel Execution Patterns
 
@@ -792,9 +798,9 @@ Iteration 2:
   Impl Engineer: Implement feature B → PASS
 
 ... continue until component complete
-```
+```text
 
-**Benefits**:
+### Benefits
 
 - Tests guide implementation
 - Continuous validation
@@ -819,9 +825,9 @@ Late (75% complete):
 
 Complete (100%):
   Doc Engineer: Final review and polish
-```
+```text
 
-**Benefits**:
+### Benefits
 
 - Documentation stays current
 - API design validated early
@@ -846,7 +852,7 @@ mojo test tests/
 mojo build src/
 
 # Document any integration issues in cleanup issue
-```
+```text
 
 **Frequency**: Weekly or at major milestones
 
@@ -855,47 +861,47 @@ mojo build src/
 ### Planning Phase
 
 1. **Complete Before Starting Parallel Work**: Don't rush Plan phase
-2. **Detailed Specifications**: Parallel phases depend on clear specs
-3. **Success Criteria**: Define "done" for each phase
-4. **Identify Dependencies**: Document cross-component dependencies
-5. **Risk Assessment**: Identify potential issues early
+1. **Detailed Specifications**: Parallel phases depend on clear specs
+1. **Success Criteria**: Define "done" for each phase
+1. **Identify Dependencies**: Document cross-component dependencies
+1. **Risk Assessment**: Identify potential issues early
 
 ### Parallel Phases
 
 1. **Clear Ownership**: Each worktree has clear owner/team
-2. **Status Updates**: Regular communication (daily for active work)
-3. **Coordinate Interfaces**: Agree on APIs early
-4. **Incremental Progress**: Deliver in small, testable increments
-5. **Git Hygiene**: Commit frequently, write clear messages
+1. **Status Updates**: Regular communication (daily for active work)
+1. **Coordinate Interfaces**: Agree on APIs early
+1. **Incremental Progress**: Deliver in small, testable increments
+1. **Git Hygiene**: Commit frequently, write clear messages
 
 ### TDD Coordination
 
 1. **Test First**: Write failing test before implementation
-2. **Red-Green-Refactor**: Test fails → Implement → Test passes → Refactor
-3. **Communication**: Test Engineers signal when tests ready
-4. **Integration**: Run tests from test worktree against impl worktree
+1. **Red-Green-Refactor**: Test fails → Implement → Test passes → Refactor
+1. **Communication**: Test Engineers signal when tests ready
+1. **Integration**: Run tests from test worktree against impl worktree
 
 ### Cleanup Phase
 
 1. **Continuous Collection**: Add cleanup tasks throughout parallel phases
-2. **Prioritize**: High-impact issues first
-3. **Validate**: Ensure tests still pass after refactoring
-4. **Document**: Update docs to match refactored code
-5. **Final Review**: All levels review their respective work
+1. **Prioritize**: High-impact issues first
+1. **Validate**: Ensure tests still pass after refactoring
+1. **Document**: Update docs to match refactored code
+1. **Final Review**: All levels review their respective work
 
 ### Worktree Management
 
 1. **One Issue = One Worktree**: Clear isolation
-2. **Branch Naming**: Consistent (e.g., `63-test-agents`)
-3. **Regular Merges**: Don't let branches diverge too far
-4. **Clean Up**: Remove worktrees after PR merges
+1. **Branch Naming**: Consistent (e.g., `63-test-agents`)
+1. **Regular Merges**: Don't let branches diverge too far
+1. **Clean Up**: Remove worktrees after PR merges
 
 ### Communication
 
 1. **Status Reports**: After major milestones
-2. **Blockers**: Escalate immediately
-3. **Handoffs**: Clear documentation when passing work
-4. **Retrospectives**: Learn from each 5-phase cycle
+1. **Blockers**: Escalate immediately
+1. **Handoffs**: Clear documentation when passing work
+1. **Retrospectives**: Learn from each 5-phase cycle
 
 ## Common Pitfalls
 

@@ -22,11 +22,11 @@ Regenerate github_issue.md files from plan.md.
 # Regenerate all github_issue.md files
 python3 scripts/regenerate_github_issues.py
 
-# This:
+# This
 # 1. Finds all plan.md files
 # 2. Generates github_issue.md for each
 # 3. Preserves issue numbers if already created
-```
+```text
 
 ### Regenerate Section
 
@@ -35,14 +35,14 @@ python3 scripts/regenerate_github_issues.py
 python3 scripts/regenerate_github_issues.py --section 01-foundation
 
 # Only processes plans in that section
-```
+```text
 
 ### Regenerate Single Component
 
 ```bash
 # Regenerate specific component
 ./scripts/regenerate_single_issue.sh notes/plan/01-foundation/plan.md
-```
+```text
 
 ## Important Rules
 
@@ -67,7 +67,7 @@ git diff notes/plan/01-foundation/github_issue.md
 git add notes/plan/01-foundation/plan.md
 git add notes/plan/01-foundation/github_issue.md
 git commit -m "docs: update foundation plan"
-```
+```text
 
 ## Script Behavior
 
@@ -89,7 +89,7 @@ After regenerating:
 
 # Test issue creation (dry-run)
 ./scripts/create_single_component_issues.py notes/plan/01-foundation/github_issue.md --dry-run
-```
+```text
 
 ## Scripts
 

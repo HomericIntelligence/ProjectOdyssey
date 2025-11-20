@@ -28,8 +28,8 @@ Validate that the LeNet-5 implementation achieves the expected performance metri
 ## Steps
 
 1. Validate Accuracy
-2. Validate Performance
-3. Compare Baseline
+1. Validate Performance
+1. Compare Baseline
 
 ## Success Criteria
 

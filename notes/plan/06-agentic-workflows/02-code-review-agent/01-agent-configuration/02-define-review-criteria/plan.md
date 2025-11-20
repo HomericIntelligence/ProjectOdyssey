@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Define correctness criteria (bugs, logic errors, edge cases)
-2. Define performance criteria (complexity, efficiency, memory)
-3. Define style criteria (readability, conventions, documentation)
-4. Create review checklists
+1. Define performance criteria (complexity, efficiency, memory)
+1. Define style criteria (readability, conventions, documentation)
+1. Create review checklists
 
 ## Success Criteria
 

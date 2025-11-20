@@ -61,7 +61,7 @@ hardware:
   mixed_precision: false   # Use mixed precision training
   num_workers: 4           # Dataloader workers
   pin_memory: true         # Pin memory for GPU
-```
+```text
 
 ### configs/defaults/model.yaml
 
@@ -89,7 +89,7 @@ architecture:
   pooling: "max"                  # Pooling type: max, avg
   padding: "same"                 # Padding strategy: same, valid
   bias: true                      # Use bias terms
-```
+```text
 
 ### configs/defaults/data.yaml
 
@@ -136,7 +136,7 @@ split:
   val: 0.1                               # Validation data fraction
   test: 0.1                              # Test data fraction
   stratified: true                       # Use stratified split
-```
+```text
 
 ## Paper-Specific Configurations
 
@@ -225,7 +225,7 @@ layers:
 loss:
   name: "cross_entropy"
   label_smoothing: 0.0
-```
+```text
 
 ### configs/papers/lenet5/training.yaml
 
@@ -264,7 +264,7 @@ logging:
   interval: 100          # Log every 100 batches
   save_checkpoints: true
   checkpoint_frequency: 5
-```
+```text
 
 ### configs/papers/lenet5/data.yaml
 
@@ -305,7 +305,7 @@ split:
   train: 60000           # Absolute numbers for MNIST
   val: 10000            # From training set
   test: 10000           # Separate test set
-```
+```text
 
 ## Experiment Configurations
 
@@ -344,7 +344,7 @@ tracking:
 expected_results:
   test_accuracy: 0.991    # 99.1% accuracy reported in paper
   tolerance: 0.003        # ±0.3% acceptable variance
-```
+```text
 
 ### configs/experiments/lenet5/augmented.yaml
 
@@ -411,7 +411,7 @@ tracking:
     enabled: false
     project: "ml-odyssey"
     name: "lenet5_augmented"
-```
+```text
 
 ## Schema Files
 
@@ -515,7 +515,7 @@ properties:
       checkpoint_frequency:
         type: integer
         minimum: 1
-```
+```text
 
 ## Template Files
 
@@ -560,7 +560,7 @@ data:
 notes: |
   Add any implementation notes, special considerations,
   or deviations from the paper here.
-```
+```text
 
 ### configs/templates/experiment.yaml
 
@@ -615,6 +615,6 @@ expected_results:
 notes: |
   Any special considerations, observations,
   or future work based on this experiment.
-```
+```text
 
 These example files provide concrete, implementable specifications for Issue #74.

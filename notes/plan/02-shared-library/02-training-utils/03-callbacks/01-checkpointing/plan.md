@@ -29,10 +29,10 @@ None (leaf node)
 ## Steps
 
 1. Implement state collection from all components
-2. Create checkpoint saving with metadata
-3. Add checkpoint loading and state restoration
-4. Support multiple checkpoint retention strategies
-5. Enable best model tracking by metric
+1. Create checkpoint saving with metadata
+1. Add checkpoint loading and state restoration
+1. Support multiple checkpoint retention strategies
+1. Enable best model tracking by metric
 
 ## Success Criteria
 

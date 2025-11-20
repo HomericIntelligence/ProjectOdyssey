@@ -30,8 +30,8 @@ Create essential documentation files to guide contributors and users. This inclu
 ## Steps
 
 1. Write comprehensive README with overview, quickstart, and structure
-2. Create CONTRIBUTING.md with workflow, standards, and PR process
-3. Add CODE_OF_CONDUCT.md to establish community guidelines
+1. Create CONTRIBUTING.md with workflow, standards, and PR process
+1. Add CODE_OF_CONDUCT.md to establish community guidelines
 
 ## Success Criteria
 

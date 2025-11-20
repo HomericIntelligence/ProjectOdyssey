@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Create README template with placeholders for paper info
-2. Design Mojo code templates for common patterns
-3. Build test file templates with example tests
-4. Create documentation templates for usage guides
+1. Design Mojo code templates for common patterns
+1. Build test file templates with example tests
+1. Create documentation templates for usage guides
 
 ## Success Criteria
 

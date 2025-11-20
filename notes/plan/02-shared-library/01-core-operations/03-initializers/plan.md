@@ -29,8 +29,8 @@ Implement weight initialization methods that are crucial for effective neural ne
 ## Steps
 
 1. Implement Xavier/Glorot initialization with proper variance scaling
-2. Create Kaiming/He initialization for ReLU networks
-3. Build basic uniform and normal distribution initializers
+1. Create Kaiming/He initialization for ReLU networks
+1. Build basic uniform and normal distribution initializers
 
 ## Success Criteria
 

@@ -15,7 +15,7 @@ and stability.
 - **MINOR**: New features, backward compatible
 - **PATCH**: Bug fixes, backward compatible
 
-**Examples**:
+### Examples
 
 - `1.0.0` → `2.0.0`: Breaking changes (remove deprecated API)
 - `1.0.0` → `1.1.0`: New feature (add Attention layer)
@@ -27,7 +27,7 @@ and stability.
 
 **Hotfix releases**: As needed for critical bugs
 
-**Release types**:
+### Release types
 
 - **Alpha** (`0.1.0-alpha.1`): Early development, unstable
 - **Beta** (`0.1.0-beta.1`): Feature-complete, testing phase
@@ -85,14 +85,17 @@ and stability.
 ```bash
 
 # Create release branch from develop
+
 git checkout develop
 git pull origin develop
 git checkout -b release/v1.2.0
 
 # Update version number
+
 sed -i 's/version = ".*"/version = "1.2.0"/' pyproject.toml
 
 # Commit version bump
+
 git add pyproject.toml
 git commit -m "chore: bump version to 1.2.0"
 git push -u origin release/v1.2.0
@@ -102,6 +105,7 @@ git push -u origin release/v1.2.0
 ### Step 2: Update CHANGELOG
 
 ```markdown
+
 ```markdown
 
 # CHANGELOG.md
@@ -140,19 +144,24 @@ git push -u origin release/v1.2.0
 ```bash
 
 # Run all tests
+
 pixi run mojo test tests/
 pytest tests/
 
 # Run pre-commit hooks
+
 pre-commit run --all-files
 
 # Run benchmarks
+
 mojo benchmarks/scripts/run_benchmarks.mojo
 
 # Build documentation
+
 mkdocs build
 
 # Validate agent configs
+
 python3 tests/agents/validate_configs.py .claude/agents/
 
 ```text
@@ -160,6 +169,7 @@ python3 tests/agents/validate_configs.py .claude/agents/
 ### Step 4: Create Release Candidate
 
 ```bash
+
 ```bash
 
 # Tag RC
@@ -186,24 +196,29 @@ gh release upload v1.2.0-rc.1 ml-odyssey-v1.2.0-rc.1.mojopkg
 ```bash
 
 # Merge to main
+
 git checkout main
 git merge release/v1.2.0
 git push origin main
 
 # Tag final release
+
 git tag v1.2.0
 git push origin v1.2.0
 
 # Build final packages
+
 mojo package shared/ -o ml-odyssey-v1.2.0.mojopkg
 
 # Create GitHub Release
+
 gh release create v1.2.0 \
     --title "ML Odyssey v1.2.0" \
     --notes-file RELEASE_NOTES.md \
     ml-odyssey-v1.2.0.mojopkg
 
 # Deploy docs
+
 mkdocs gh-deploy
 
 ```text
@@ -211,6 +226,7 @@ mkdocs gh-deploy
 ### Step 6: Announce Release
 
 ```markdown
+
 ```markdown
 
 **Template for release announcement:**
@@ -226,6 +242,7 @@ We're excited to announce ML Odyssey v1.2.0, featuring:
 ## Installation
 
 ```bash
+
 ```bash
 
 pixi install ml-odyssey==1.2.0
@@ -259,6 +276,7 @@ For critical bugs in production:
 ### Hotfix Process
 
 ```bash
+
 ```bash
 
 # Create hotfix branch from main
@@ -306,14 +324,14 @@ Each release should include:
 
 ## Deprecation Policy
 
-**Deprecation process**:
+### Deprecation process
 
 1. **Announce**: Deprecate in MINOR release, keep functionality
-2. **Warn**: Add deprecation warnings to code
-3. **Document**: Update docs with migration guide
-4. **Remove**: Remove in next MAJOR release
+1. **Warn**: Add deprecation warnings to code
+1. **Document**: Update docs with migration guide
+1. **Remove**: Remove in next MAJOR release
 
-**Example**:
+### Example
 
 ```mojo
 ```mojo
@@ -335,6 +353,7 @@ fn old_function(x: Tensor) -> Tensor:
 **Test compatibility**:
 
 ```bash
+
 ```bash
 
 # Run tests against previous release
@@ -345,18 +364,21 @@ pytest tests/compatibility/
 
 ## Release Tools
 
-**GitHub CLI**:
+### GitHub CLI
 
 ```bash
 ```bash
 
 # Create release
+
 gh release create v1.2.0 --generate-notes
 
 # List releases
+
 gh release list
 
 # View release
+
 gh release view v1.2.0
 
 ```text
@@ -364,6 +386,7 @@ gh release view v1.2.0
 **Mojo Packaging**:
 
 ```bash
+
 ```bash
 
 # Build package
@@ -382,17 +405,17 @@ mojo run -I shared.mojopkg examples/test.mojo
 
 ## Summary
 
-**Release Process**:
+### Release Process
 
 1. Create release branch
-2. Update version and CHANGELOG
-3. Run quality checks
-4. Create RC for testing
-5. Fix critical bugs
-6. Tag and release
-7. Announce and document
+1. Update version and CHANGELOG
+1. Run quality checks
+1. Create RC for testing
+1. Fix critical bugs
+1. Tag and release
+1. Announce and document
 
-**Key Points**:
+### Key Points
 
 - Follow semantic versioning
 - Test thoroughly before release
@@ -401,7 +424,7 @@ mojo run -I shared.mojopkg examples/test.mojo
 - Document all changes
 - Communicate clearly with users
 
-**Next Steps**:
+### Next Steps
 
 - Review current issues for next release
 - Plan feature roadmap

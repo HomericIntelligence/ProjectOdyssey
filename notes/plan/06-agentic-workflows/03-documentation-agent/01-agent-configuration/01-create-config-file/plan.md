@@ -28,9 +28,9 @@ None (implementation level)
 ## Steps
 
 1. Create configuration file with proper format
-2. Add agent metadata and version information
-3. Define documentation settings and defaults
-4. Add schema validation
+1. Add agent metadata and version information
+1. Define documentation settings and defaults
+1. Add schema validation
 
 ## Success Criteria
 

@@ -11,8 +11,8 @@
 External feedback revealed three strategic gaps in the ML Odyssey project communication and architecture:
 
 1. **Accessibility barrier:** Plan file generation is unclear to newcomers
-2. **Expectation mismatch:** README doesn't communicate current status or vision
-3. **Architectural question:** Should automation framework be extracted as standalone project?
+1. **Expectation mismatch:** README doesn't communicate current status or vision
+1. **Architectural question:** Should automation framework be extracted as standalone project?
 
 This document summarizes the proposed response through three GitHub issues.
 
@@ -26,7 +26,7 @@ This document summarizes the proposed response through three GitHub issues.
 
 **What it solves:** Makes plan file creation accessible through comprehensive tutorial, templates, and examples.
 
-**Deliverables:**
+### Deliverables:
 
 - Comprehensive guide at `notes/review/plan-file-guide.md`
 - Copyable template at `.templates/plan-template.md`
@@ -49,7 +49,7 @@ This document summarizes the proposed response through three GitHub issues.
 
 **What it solves:** Clarifies that project is in infrastructure phase while articulating vision for eventual outcomes.
 
-**Deliverables:**
+### Deliverables:
 
 - New "Current Status" section (infrastructure phase)
 - New "Vision & Expected Outcomes" section (10-100x speedups)
@@ -73,7 +73,7 @@ This document summarizes the proposed response through three GitHub issues.
 
 **What it solves:** Makes informed decision about whether to extract automation framework as standalone repository.
 
-**Deliverables:**
+### Deliverables:
 
 - ADR-002 documenting decision and rationale
 - Trade-off analysis of extraction vs unified approaches
@@ -90,22 +90,22 @@ This document summarizes the proposed response through three GitHub issues.
 
 ## Strategic Rationale
 
-### Why This Approach?
+### Why This Approach
 
-**Chief Architect perspective:**
+### Chief Architect perspective:
 
 1. **Address immediate barriers first** (Issue #1) - Removes contributor friction
-2. **Set clear expectations** (Issue #2) - Prevents continued confusion
-3. **Make strategic decisions deliberately** (Issue #3) - No rush, gather data first
+1. **Set clear expectations** (Issue #2) - Prevents continued confusion
+1. **Make strategic decisions deliberately** (Issue #3) - No rush, gather data first
 
-**Alignment with project principles:**
+### Alignment with project principles:
 
 - **KISS:** Simple documentation improvements before complex architectural changes
 - **YAGNI:** Don't extract automation until we know it's valuable standalone
 - **Modularity:** Design for potential extraction even if staying unified
 - **POLA:** Clear communication reduces surprise and confusion
 
-### Why This Order?
+### Why This Order
 
 ```text
 Issue #1 (Plan File Guide)
@@ -115,14 +115,14 @@ Issue #2 (README Status/Vision)
 [Time for dogfooding and data gathering]
     ↓
 Issue #3 (Strategic Decision)
-```
+```text
 
-**Reasoning:**
+### Reasoning:
 
 1. **Issues #1 and #2 are low-risk, high-value documentation** - No downside, clear benefit
-2. **Issue #3 benefits from more data** - Current state: no ML implementations yet, so automation value is theoretical
-3. **Dogfooding automation during ML implementation** validates whether extraction makes sense
-4. **Documentation improvements help regardless** of Issue #3 outcome
+1. **Issue #3 benefits from more data** - Current state: no ML implementations yet, so automation value is theoretical
+1. **Dogfooding automation during ML implementation** validates whether extraction makes sense
+1. **Documentation improvements help regardless** of Issue #3 outcome
 
 ## Comparison to Feedback
 
@@ -209,29 +209,29 @@ None identified
 ### Immediate (Week 1)
 
 1. Create GitHub issues from drafts
-2. Begin work on Issue #1 (plan file guide)
-3. Begin work on Issue #2 (README enhancements)
+1. Begin work on Issue #1 (plan file guide)
+1. Begin work on Issue #2 (README enhancements)
 
 ### Near-term (Week 2-4)
 
 1. Complete and merge Issue #1
-2. Complete and merge Issue #2
-3. Gather community feedback
-4. Begin analysis for Issue #3
+1. Complete and merge Issue #2
+1. Gather community feedback
+1. Begin analysis for Issue #3
 
 ### Medium-term (Month 1-2)
 
 1. Make decision on Issue #3
-2. Implement chosen approach
-3. Monitor outcomes
-4. Begin first ML implementation (LeNet-5)
+1. Implement chosen approach
+1. Monitor outcomes
+1. Begin first ML implementation (LeNet-5)
 
 ## Open Questions
 
 1. **Community input:** Should we explicitly solicit feedback on automation framework value?
-2. **Timing:** Wait for first ML implementation before deciding Issue #3?
-3. **Scope:** Should Issue #2 include actual mockups/diagrams or just text?
-4. **Validation:** How to measure success of documentation improvements?
+1. **Timing:** Wait for first ML implementation before deciding Issue #3?
+1. **Scope:** Should Issue #2 include actual mockups/diagrams or just text?
+1. **Validation:** How to measure success of documentation improvements?
 
 ## Conclusion
 

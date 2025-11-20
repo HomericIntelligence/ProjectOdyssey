@@ -30,10 +30,10 @@ None (leaf node)
 ## Steps
 
 1. Select appropriate coverage tool for Mojo
-2. Install and configure coverage collection
-3. Integrate with test framework
-4. Set up coverage data storage
-5. Configure CI to collect coverage
+1. Install and configure coverage collection
+1. Integrate with test framework
+1. Set up coverage data storage
+1. Configure CI to collect coverage
 
 ## Success Criteria
 

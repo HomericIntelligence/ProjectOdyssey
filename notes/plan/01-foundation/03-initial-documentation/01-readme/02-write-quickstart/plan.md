@@ -29,10 +29,10 @@ None (leaf node)
 ## Steps
 
 1. List prerequisites (Mojo/MAX, Python, Git LFS)
-2. Write step-by-step installation instructions
-3. Include magic/pip install commands
-4. Provide a simple example to verify setup
-5. Add troubleshooting tips for common issues
+1. Write step-by-step installation instructions
+1. Include magic/pip install commands
+1. Provide a simple example to verify setup
+1. Add troubleshooting tips for common issues
 
 ## Success Criteria
 

@@ -30,8 +30,8 @@ Create standardized GitHub templates for issues, pull requests, and repository c
 ## Steps
 
 1. Issue Templates
-2. PR Template
-3. Config Templates
+1. PR Template
+1. Config Templates
 
 ## Success Criteria
 

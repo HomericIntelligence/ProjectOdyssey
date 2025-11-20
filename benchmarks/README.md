@@ -45,7 +45,7 @@ benchmarks/
 │   └── compare_results.mojo
 └── results/               # Timestamped results
     └── {timestamp}_results.json
-```
+```text
 
 ## Performance Targets
 
@@ -63,7 +63,7 @@ benchmarks/
 mojo benchmarks/scripts/run_benchmarks.mojo
 
 # Output: benchmarks/results/{timestamp}_results.json
-```
+```text
 
 ### Comparing Results
 
@@ -75,7 +75,7 @@ mojo benchmarks/scripts/compare_results.mojo \
 
 # Exit code 0: No regressions
 # Exit code 1: Regressions detected (>10% slowdown)
-```
+```text
 
 ### CI/CD Integration
 
@@ -109,7 +109,7 @@ See `.github/workflows/benchmarks.yml` for CI configuration.
     }
   ]
 }
-```
+```text
 
 ### Baseline Management
 
@@ -122,9 +122,9 @@ See `.github/workflows/benchmarks.yml` for CI configuration.
 ### Adding New Benchmarks
 
 1. Add benchmark to `scripts/run_benchmarks.mojo`
-2. Run benchmark suite to verify
-3. Update baseline if needed (with approval)
-4. Document benchmark in this README
+1. Run benchmark suite to verify
+1. Update baseline if needed (with approval)
+1. Document benchmark in this README
 
 ### Benchmark Design Principles
 

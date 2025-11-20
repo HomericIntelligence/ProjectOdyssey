@@ -30,10 +30,10 @@ None (leaf node)
 ## Steps
 
 1. Generate console summary reports
-2. Create detailed HTML reports
-3. Provide file and function breakdowns
-4. Add uncovered line highlighting
-5. Support historical coverage tracking
+1. Create detailed HTML reports
+1. Provide file and function breakdowns
+1. Add uncovered line highlighting
+1. Support historical coverage tracking
 
 ## Success Criteria
 

@@ -13,7 +13,7 @@ mojo package shared --release -o dist/ml_odyssey_shared.mojopkg
 
 # Build and install in one step
 mojo package shared --install
-```
+```text
 
 ## Build Modes
 
@@ -23,9 +23,9 @@ Fast compilation with minimal optimizations, suitable for development:
 
 ```bash
 mojo package shared
-```
+```text
 
-**Characteristics**:
+### Characteristics
 
 - Fast compilation
 - Debug symbols included
@@ -38,9 +38,9 @@ Optimized build for production use:
 
 ```bash
 mojo package shared --release -o dist/ml_odyssey_shared.mojopkg
-```
+```text
 
-**Characteristics**:
+### Characteristics
 
 - Full optimizations enabled
 - No debug symbols
@@ -54,9 +54,9 @@ Build with full debug information:
 
 ```bash
 mojo package shared --debug
-```
+```text
 
-**Characteristics**:
+### Characteristics
 
 - Full debug symbols
 - Minimal optimizations
@@ -90,7 +90,7 @@ out = "build"
 # Path configuration
 tests = "tests/shared"
 examples = "examples/shared"
-```
+```text
 
 ### Directory Structure
 
@@ -109,7 +109,7 @@ ml-odyssey/
 │   └── shared/                # Shared library tests
 ├── build/                     # Build artifacts (gitignored)
 └── dist/                      # Distribution packages (gitignored)
-```
+```text
 
 ## Build Commands
 
@@ -120,7 +120,7 @@ ml-odyssey/
 mojo package shared
 
 # Output: ./shared.mojopkg
-```
+```text
 
 ### Custom Output Path
 
@@ -130,7 +130,7 @@ mojo package shared -o build/ml_odyssey_shared.mojopkg
 
 # Specify output directory (filename auto-generated)
 mojo package shared -o build/
-```
+```text
 
 ### Build and Install
 
@@ -138,10 +138,10 @@ mojo package shared -o build/
 # Build and install in one step
 mojo package shared --install
 
-# Equivalent to:
+# Equivalent to
 # mojo package shared -o /tmp/shared.mojopkg
 # mojo install /tmp/shared.mojopkg
-```
+```text
 
 ### Clean Build
 
@@ -155,7 +155,7 @@ mojo uninstall ml-odyssey-shared
 # Full clean
 rm -rf build/ dist/
 mojo uninstall ml-odyssey-shared
-```
+```text
 
 ## Build Options
 
@@ -170,7 +170,7 @@ mojo package shared --release
 
 # Optimize for size
 mojo package shared --optimize-size
-```
+```text
 
 ### Debug Information
 
@@ -180,7 +180,7 @@ mojo package shared --debug
 
 # Strip debug symbols (default for release)
 mojo package shared --release
-```
+```text
 
 ### Parallelization
 
@@ -190,7 +190,7 @@ mojo package shared -j 8
 
 # Use all available cores
 mojo package shared -j auto
-```
+```text
 
 ## Testing the Build
 
@@ -205,7 +205,7 @@ mojo test tests/shared/test_imports.mojo
 
 # Run tests with verbose output
 mojo test tests/shared/ -v
-```
+```text
 
 ### Verify Installation
 
@@ -215,14 +215,14 @@ mojo run scripts/verify_installation.mojo
 
 # Check installed packages
 mojo list | grep ml-odyssey
-```
+```text
 
 ### Import Tests
 
 ```bash
 # Test imports work
 mojo run -c "from shared import VERSION; print(VERSION)"
-```
+```text
 
 ## Distribution
 
@@ -242,7 +242,7 @@ tar -czf dist/ml_odyssey_shared-0.1.0.tar.gz \
     shared/README.md \
     shared/INSTALL.md \
     shared/EXAMPLES.md
-```
+```text
 
 ### Publishing (Future)
 
@@ -254,7 +254,7 @@ mojo publish dist/ml_odyssey_shared-0.1.0.mojopkg
 
 # Install from registry
 mojo install ml-odyssey-shared
-```
+```text
 
 ## Build Targets
 
@@ -263,7 +263,7 @@ mojo install ml-odyssey-shared
 ```bash
 # Build shared library package
 mojo package shared -o build/ml_odyssey_shared.mojopkg
-```
+```text
 
 ### Static Library (Future)
 
@@ -272,7 +272,7 @@ When Mojo supports static libraries:
 ```bash
 # Build static library
 mojo build shared --lib -o build/libml_odyssey_shared.a
-```
+```text
 
 ### Shared Object (Future)
 
@@ -281,7 +281,7 @@ When Mojo supports shared objects:
 ```bash
 # Build shared object
 mojo build shared --shared -o build/libml_odyssey_shared.so
-```
+```text
 
 ## Build Performance
 
@@ -293,9 +293,9 @@ mojo build shared --shared -o build/libml_odyssey_shared.so
    mojo package shared -j auto
    ```
 
-2. **Incremental builds**: Mojo caches compiled modules
+1. **Incremental builds**: Mojo caches compiled modules
 
-3. **Development mode**: Skip optimizations during development
+1. **Development mode**: Skip optimizations during development
 
    ```bash
    mojo package shared  # Fast, no optimizations
@@ -320,7 +320,7 @@ build/
 ├── ml_odyssey_shared.mojopkg     # Main package file
 ├── .build_cache/                 # Compilation cache
 └── intermediate/                 # Intermediate build files
-```
+```text
 
 ### Package File Structure
 
@@ -347,7 +347,7 @@ export MOJO_OPT_LEVEL="2"  # 0-3
 
 # Enable verbose output
 export MOJO_VERBOSE="1"
-```
+```text
 
 ### Build Requirements
 
@@ -379,7 +379,7 @@ pixi run mojo run scripts/verify_installation.mojo
 
 # Create distribution
 sha256sum dist/ml_odyssey_shared.mojopkg > dist/checksums.txt
-```
+```text
 
 ### GitHub Actions Example
 
@@ -408,7 +408,7 @@ jobs:
         run: |
           mojo package shared --install
           mojo run scripts/verify_installation.mojo
-```
+```text
 
 ## Troubleshooting
 
@@ -416,38 +416,38 @@ jobs:
 
 **Problem**: Compilation errors
 
-**Solution**:
+### Solution
 
 1. Check Mojo version: `mojo --version`
-2. Clean build artifacts: `rm -rf build/`
-3. Update dependencies: `pixi install`
-4. Check for syntax errors in `.mojo` files
+1. Clean build artifacts: `rm -rf build/`
+1. Update dependencies: `pixi install`
+1. Check for syntax errors in `.mojo` files
 
 **Problem**: Out of memory during build
 
-**Solution**:
+### Solution
 
 1. Reduce parallelization: `mojo package shared -j 2`
-2. Close other applications
-3. Build in release mode only when needed
+1. Close other applications
+1. Build in release mode only when needed
 
 **Problem**: Missing dependencies
 
-**Solution**:
+### Solution
 
 1. Check `mojo.toml` dependencies
-2. Verify Mojo standard library is available
-3. Update Mojo to latest version
+1. Verify Mojo standard library is available
+1. Update Mojo to latest version
 
 ### Installation Issues
 
 **Problem**: Package not found after installation
 
-**Solution**:
+### Solution
 
 1. Check installation path: `mojo list`
-2. Verify MOJO_PATH: `echo $MOJO_PATH`
-3. Reinstall: `mojo package shared --install`
+1. Verify MOJO_PATH: `echo $MOJO_PATH`
+1. Reinstall: `mojo package shared --install`
 
 ## Best Practices
 
@@ -461,13 +461,13 @@ jobs:
    mojo package shared --install  # Fast rebuild
    ```
 
-2. **Test frequently**: Run tests after each significant change
+1. **Test frequently**: Run tests after each significant change
 
    ```bash
    mojo test tests/shared/
    ```
 
-3. **Release validation**: Build release mode before commits
+1. **Release validation**: Build release mode before commits
 
    ```bash
    mojo package shared --release
@@ -477,8 +477,8 @@ jobs:
 ### Version Management
 
 1. **Update version** in `mojo.toml` for releases
-2. **Tag releases** in git: `git tag v0.1.0`
-3. **Create release package** with version in filename
+1. **Tag releases** in git: `git tag v0.1.0`
+1. **Create release package** with version in filename
 
 ## Additional Resources
 

@@ -31,7 +31,8 @@ Set up the testing infrastructure for the shared library, including installing a
 
 **Rationale**: Native Mojo testing ensures full language compatibility and optimal performance. Python tools are mature fallback options if native support is limited.
 
-**Implications**:
+### Implications
+
 - Test discovery should mirror source structure
 - Test running should be simple (single command)
 - CI integration must fail on test failures
@@ -40,7 +41,8 @@ Set up the testing infrastructure for the shared library, including installing a
 
 **Decision**: Focus on utilities actually needed, not hypothetical ones.
 
-**Key Components**:
+### Key Components
+
 - Tensor comparison utilities with tolerance for floating point
 - Shape and dimension assertion helpers
 - Test data generators (simple and deterministic)
@@ -49,7 +51,8 @@ Set up the testing infrastructure for the shared library, including installing a
 
 **Rationale**: Practical utilities that solve real testing problems are more valuable than comprehensive but unused utilities. Start minimal and expand based on actual needs.
 
-**Implications**:
+### Implications
+
 - Utilities must provide clear error messages
 - Comparisons must handle floating point appropriately
 - Generators should produce valid, deterministic test data
@@ -59,7 +62,8 @@ Set up the testing infrastructure for the shared library, including installing a
 
 **Decision**: Use pytest-style fixtures if available in Mojo, with appropriate scopes.
 
-**Key Components**:
+### Key Components
+
 - Sample tensor fixtures (small, medium, large sizes)
 - Model fixtures (simple test models)
 - Dataset fixtures (toy datasets with known properties)
@@ -68,7 +72,8 @@ Set up the testing infrastructure for the shared library, including installing a
 
 **Rationale**: Fixtures provide consistent test environments and reduce duplication. Proper scoping balances test speed with isolation.
 
-**Implications**:
+### Implications
+
 - Fixtures must be simple and focused
 - Setup and teardown must work correctly
 - Fixtures should be well-documented (purpose and contents)
@@ -76,13 +81,15 @@ Set up the testing infrastructure for the shared library, including installing a
 
 ### Testing Philosophy
 
-**Guiding Principles**:
+### Guiding Principles
+
 - Aim for high test coverage but focus on meaningful tests over percentage targets
 - Write clear, maintainable tests that serve as documentation
 - Use fixtures to reduce duplication and improve test clarity
 - Tests should be easy to write and extend
 
-**Quality Standards**:
+### Quality Standards
+
 - Tests must be reliable (no flaky tests)
 - Test failures must be actionable (clear error messages)
 - Tests should run quickly (appropriate fixture scoping)

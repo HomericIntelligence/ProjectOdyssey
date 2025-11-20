@@ -48,7 +48,7 @@ issue_url = result.stdout.strip()  # Get the issue URL
 result = run("gh issue create ...")
 # result.stdout - NOT AVAILABLE
 # result.exit_code - NOT AVAILABLE
-```
+```text
 
 **Without output capture, we cannot get issue URLs. The workflow breaks completely.**
 
@@ -80,12 +80,12 @@ result = run("gh issue create ...")
 - Installation: Via Pixi package manager
 - Status: Operational and accessible
 
-**Verification**:
+### Verification
 
 ```bash
 $ pixi run mojo --version
 Mojo 0.25.7.0.dev2025110405 (2114fc9b)
-```
+```text
 
 ## 2. Python Scripts Analysis
 
@@ -97,13 +97,13 @@ Mojo 0.25.7.0.dev2025110405 (2114fc9b)
    - Requires: stdout capture, exit code checking, JSON state files
    - Critical: Retry logic with exponential backoff
 
-2. **regenerate_github_issues.py** (446 LOC)
+1. **regenerate_github_issues.py** (446 LOC)
    - Generates github_issue.md from plan.md
    - Heavy regex usage for markdown parsing
    - JSON state management
    - Complex string manipulation
 
-3. **create_single_component_issues.py** (197 LOC)
+1. **create_single_component_issues.py** (197 LOC)
    - Testing utility for single component
    - Similar requirements to create_issues.py
 
@@ -124,7 +124,7 @@ result = subprocess.run(
 issue_url = result.stdout.strip()  # CRITICAL: Need stdout access
 if result.returncode != 0:         # CRITICAL: Need exit code
     handle_error(result.stderr)    # CRITICAL: Need stderr access
-```
+```text
 
 **Regex Operations** (15+ patterns):
 
@@ -135,9 +135,9 @@ ISSUE_SECTION_PATTERN = re.compile(
 )
 title_match = re.search(r'\*\*Title\*\*:\s*`([^`]+)`', content)
 labels = re.findall(r'`([^`]+)`', labels_text)
-```
+```text
 
-**JSON State Management**:
+### JSON State Management
 
 ```python
 state = {
@@ -146,16 +146,16 @@ state = {
     'pending': [...]
 }
 json.dump(state, f, indent=2)
-```
+```text
 
-**Advanced String Methods**:
+### Advanced String Methods
 
 - `.split()`, `.strip()`, `.replace()`, `.find()`, `.join()`
 - Multi-line string handling
 - Template substitution
 - Unicode handling
 
-**Error Handling**:
+### Error Handling
 
 - 20+ try/except blocks
 - Exception chaining
@@ -170,7 +170,7 @@ json.dump(state, f, indent=2)
 
 **Test Results**: See `notes/issues/8/tests/test_file_io.mojo`
 
-**Findings**:
+### Findings
 
 - Read files: Works perfectly
 - Write files: Works perfectly
@@ -186,7 +186,7 @@ json.dump(state, f, indent=2)
 
 **Status**: INSUFFICIENT - Major limitations
 
-**Findings**:
+### Findings
 
 - Can execute commands
 - Can call `gh` CLI
@@ -209,7 +209,7 @@ json.dump(state, f, indent=2)
 
 **Status**: PARTIAL - Basic operations work, advanced missing
 
-**Findings**:
+### Findings
 
 - Basic indexing and slicing: Works
 - String concatenation: Works
@@ -229,13 +229,13 @@ json.dump(state, f, indent=2)
 
 **Status**: NOT AVAILABLE - No native regex support
 
-**Findings**:
+### Findings
 
 - No regex module in stdlib
 - No pattern matching syntax
 - Could use Python interop (defeats purpose)
 
-**Current Usage in Scripts**:
+### Current Usage in Scripts
 
 - 15+ regex patterns for markdown parsing
 - Complex patterns with groups and flags (MULTILINE, DOTALL)
@@ -245,7 +245,7 @@ json.dump(state, f, indent=2)
 
 **Risk Level**: HIGH
 
-**Workaround**:
+### Workaround
 
 - Manual string parsing (extremely complex)
 - Python interop (defeats purpose of conversion)
@@ -255,14 +255,14 @@ json.dump(state, f, indent=2)
 
 **Status**: NEWLY ADDED - Recently introduced, maturity unknown
 
-**Research Findings**:
+### Research Findings
 
 - JSON module added to stdlib in May 2025
 - Documentation is sparse
 - API maturity unknown
 - No examples found in official docs
 
-**Current Usage in Scripts**:
+### Current Usage in Scripts
 
 - State file persistence (critical for resume capability)
 - Configuration management
@@ -278,7 +278,7 @@ json.dump(state, f, indent=2)
 
 **Status**: BASIC - try/except exists, maturity unclear
 
-**Findings**:
+### Findings
 
 - Basic try/except/raise syntax exists
 - Exception types and hierarchy unclear
@@ -375,7 +375,7 @@ json.dump(state, f, indent=2)
 
 **Confidence Level**: LOW - Many unknowns
 
-**ROI Analysis**:
+### ROI Analysis
 
 - **Estimated Effort**: 7-9 weeks of development
 - **Estimated Benefit**: Zero (current scripts work perfectly)
@@ -394,15 +394,15 @@ json.dump(state, f, indent=2)
    functionality. Without the ability to capture `gh` CLI output, we cannot get issue URLs, making the
    entire conversion pointless.
 
-2. **High Complexity**: Even with workarounds, the conversion would require:
+1. **High Complexity**: Even with workarounds, the conversion would require:
    - Python interop for subprocess (defeats purpose)
    - Complete rewrite of regex-based parsing (high risk)
    - Building helper libraries for missing stdlib features
 
-3. **Low ROI**: The current Python scripts work perfectly. The conversion would take 2-3 months,
+1. **Low ROI**: The current Python scripts work perfectly. The conversion would take 2-3 months,
    introduce bugs and maintenance burden, provide no tangible benefits, and risk breaking a working system.
 
-4. **Mojo Maturity**: Mojo v0.25.7 is early-stage for systems scripting with missing critical stdlib
+1. **Mojo Maturity**: Mojo v0.25.7 is early-stage for systems scripting with missing critical stdlib
    features, sparse documentation, and not battle-tested for this use case.
 
 ### Decision Criteria Met
@@ -422,14 +422,14 @@ Our NO-GO criteria were:
 
 **Approach**: Maintain current Python automation
 
-**Pros**:
+### Pros
 
 - Scripts work perfectly
 - Zero risk
 - Zero effort
 - Battle-tested and reliable
 
-**Cons**:
+### Cons
 
 - Language inconsistency with project focus
 
@@ -442,14 +442,14 @@ Python is the right tool for this job.
 
 **Approach**: Keep Python for automation, use Mojo for new ML/AI code
 
-**Pros**:
+### Pros
 
 - Use the right tool for each job
 - Python excels at scripting
 - Mojo excels at ML performance
 - Realistic and pragmatic
 
-**Cons**:
+### Cons
 
 - Two languages to maintain
 
@@ -461,12 +461,12 @@ Python is the right tool for this job.
 
 **Example**: Convert a basic file processing script as proof-of-concept
 
-**Pros**:
+### Pros
 
 - Learning experience
 - Tests Mojo capabilities
 
-**Cons**:
+### Cons
 
 - Doesn't solve the main problem
 - Wastes time on non-critical work
@@ -492,12 +492,12 @@ Python is the right tool for this job.
    - Can set timeouts
    - Can handle errors properly
 
-2. **Regex or Equivalent**
+1. **Regex or Equivalent**
    - Native regex module, OR
    - Mature pattern matching syntax, OR
    - Documented alternative parsing approach
 
-3. **Stable JSON Module**
+1. **Stable JSON Module**
    - Well-documented API
    - Community adoption
    - Battle-tested
@@ -505,9 +505,9 @@ Python is the right tool for this job.
 ### Nice-to-Have
 
 1. String methods (strip, split, replace, etc.)
-2. Enhanced error handling
-3. Dataclass-like syntax
-4. Better documentation with examples
+1. Enhanced error handling
+1. Dataclass-like syntax
+1. Better documentation with examples
 
 ### Monitoring Strategy
 
@@ -527,28 +527,28 @@ Python is the right tool for this job.
 ### Immediate Actions (This Week)
 
 1. Document findings (COMPLETE)
-2. Update Issue #8 with NO-GO decision
-3. Close or postpone Issue #8
-4. Update project documentation:
+1. Update Issue #8 with NO-GO decision
+1. Close or postpone Issue #8
+1. Update project documentation:
    - Python remains the standard for automation
    - Mojo focus remains on ML/AI implementation
 
 ### Long-Term Actions (Next 6-12 Months)
 
 1. Monitor Mojo releases for subprocess improvements
-2. Track community progress on systems scripting
-3. Maintain Python scripts as primary tooling
-4. Reassess quarterly per monitoring strategy
+1. Track community progress on systems scripting
+1. Maintain Python scripts as primary tooling
+1. Reassess quarterly per monitoring strategy
 
 ### Archive Test Results
 
 1. Keep test files in `notes/issues/8/tests/`
-2. Document test results for future reference
-3. Update when Mojo capabilities improve
+1. Document test results for future reference
+1. Update when Mojo capabilities improve
 
 ## 11. Philosophy
 
-**Use the right tool for the job.**
+### Use the right tool for the job.
 
 - **Python**: Excellent for automation, scripting, tooling
 - **Mojo**: Excellent for ML/AI performance-critical code
@@ -597,7 +597,7 @@ File content verified
 Testing path operations...
 Path construction works
   Result: notes/plan/01-foundation
-```
+```text
 
 **Subprocess Test** (PARTIAL - BLOCKING):
 
@@ -613,7 +613,7 @@ gh CLI accessible
 CRITICAL ISSUE: Cannot capture stdout/stderr!
 subprocess.run() appears to only execute commands
 but doesn't provide access to output or exit codes
-```
+```text
 
 **String Operations Test** (PARTIAL):
 
@@ -635,7 +635,7 @@ Need to investigate:
   - Regex support in stdlib
   - String.find() / String.contains()
   - Pattern matching alternatives
-```
+```text
 
 ### Critical Blocker Explained
 
@@ -645,7 +645,7 @@ The Python scripts use this pattern 20+ times:
 # Create GitHub issue and capture the URL
 result = subprocess.run(['gh', 'issue', 'create', ...], capture_output=True)
 issue_url = result.stdout.strip()  # CRITICAL: Need this URL
-```
+```text
 
 Mojo v0.25.7 cannot do this:
 
@@ -656,7 +656,7 @@ var result = run("gh issue create ...")
 # But CANNOT access the output
 # result.stdout - DOES NOT EXIST
 # result.exit_code - DOES NOT EXIST
-```
+```text
 
 **Without the issue URL, the entire workflow breaks.** This single limitation blocks the conversion.
 
@@ -677,7 +677,7 @@ efforts on ML/AI implementations where Mojo's performance advantages are most va
 
 ---
 
-**Assessment Metadata**:
+### Assessment Metadata
 
 - **Agent**: Tooling Orchestrator (Level 1)
 - **Method**: Empirical testing, web research, risk analysis

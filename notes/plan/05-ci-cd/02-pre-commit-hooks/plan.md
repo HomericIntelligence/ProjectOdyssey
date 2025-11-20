@@ -30,8 +30,8 @@ Set up pre-commit hooks that run locally before commits to catch formatting, lin
 ## Steps
 
 1. Hook Configuration
-2. Format Checker
-3. Linting
+1. Format Checker
+1. Linting
 
 ## Success Criteria
 

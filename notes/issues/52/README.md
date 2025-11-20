@@ -31,7 +31,7 @@ to ensure performance consistency across development.
 
 ### File Structure
 
-```
+```text
 benchmarks/
 ├── README.md
 ├── baselines/
@@ -41,7 +41,7 @@ benchmarks/
 │   └── compare_results.mojo
 └── results/
     └── {timestamp}_results.json
-```
+```text
 
 ### Performance Targets
 

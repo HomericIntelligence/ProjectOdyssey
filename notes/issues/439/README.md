@@ -25,6 +25,7 @@ Develop comprehensive tests for the test utilities themselves to ensure assertio
 ### Existing Test Utilities
 
 **conftest.mojo** provides:
+
 1. **Assertion Functions** (8 types):
    - `assert_true(condition, message)` - Basic boolean assertion
    - `assert_false(condition, message)` - Negated boolean assertion
@@ -34,31 +35,32 @@ Develop comprehensive tests for the test utilities themselves to ensure assertio
    - `assert_greater(a, b, message)` - Greater than comparison
    - `assert_less(a, b, message)` - Less than comparison
 
-2. **Test Fixtures**:
+1. **Test Fixtures**:
    - `TestFixtures.deterministic_seed()` - Returns fixed seed (42)
    - `TestFixtures.set_seed()` - Sets deterministic random seed
 
-3. **Benchmark Utilities**:
+1. **Benchmark Utilities**:
    - `BenchmarkResult` struct with timing/throughput/memory metrics
    - `print_benchmark_results(results)` - Formatted output
 
-4. **Test Helpers** (placeholders):
+1. **Test Helpers** (placeholders):
    - `measure_time[func]()` - TODO: Not implemented
    - `measure_throughput[func](n_iterations)` - TODO: Not implemented
 
-5. **Test Data Generators**:
+1. **Test Data Generators**:
    - `create_test_vector(size, value)` - Uniform value vector
    - `create_test_matrix(rows, cols, value)` - Uniform value matrix
    - `create_sequential_vector(size, start)` - Sequential values [start, start+1, ...]
 
 **helpers/assertions.mojo** provides:
+
 1. **Basic Assertions**:
    - `assert_true/false(condition, message)`
    - `assert_equal_int(a, b, message)`
    - `assert_equal_float(a, b, tolerance, message)`
    - `assert_close_float(a, b, rtol, atol, message)` - NumPy-style closeness
 
-2. **ExTensor Assertions**:
+1. **ExTensor Assertions**:
    - `assert_shape[T](tensor, expected, message)` - Shape validation
    - `assert_dtype[T](tensor, expected_dtype, message)` - Type validation
    - `assert_numel[T](tensor, expected_numel, message)` - Element count
@@ -71,22 +73,26 @@ Develop comprehensive tests for the test utilities themselves to ensure assertio
 ### What Needs Testing
 
 **1. Assertion Correctness**:
+
 - Do assertions pass when they should?
 - Do assertions fail when they should?
 - Are error messages clear and helpful?
 
 **2. Edge Case Handling**:
+
 - NaN comparisons (should NaN == NaN?)
 - Infinity comparisons (+inf, -inf)
 - Zero handling (avoid division by zero in relative tolerances)
 - Empty tensors/vectors
 
 **3. Tolerance Behavior**:
+
 - Absolute tolerance (atol) works correctly
 - Relative tolerance (rtol) works correctly
 - Combined tolerances (atol + rtol * |b|)
 
 **4. Data Generator Reliability**:
+
 - Generators produce expected output
 - Deterministic seeding works (same seed = same output)
 - Edge cases (size=0, size=1, large sizes)
@@ -153,7 +159,7 @@ fn test_comparisons() raises:
     except:
         raised = True
     assert_true(raised, "assert_greater should fail for 3.0 > 5.0")
-```
+```text
 
 ### 2. Tolerance Tests (`test_tolerances.mojo`)
 
@@ -193,7 +199,7 @@ fn test_infinity_handling() raises:
     """Verify infinity comparisons work correctly."""
     var inf_val = Float64(1.0) / Float64(0.0)
     assert_close_float(inf_val, inf_val, rtol=1e-5, atol=1e-8)
-```
+```text
 
 ### 3. Data Generator Tests (`test_generators.mojo`)
 
@@ -243,7 +249,7 @@ fn test_deterministic_seed() raises:
     var val2 = randn()
 
     assert_almost_equal(val1, val2, tolerance=1e-10)
-```
+```text
 
 ### 4. Error Message Tests (`test_error_messages.mojo`)
 
@@ -270,7 +276,7 @@ fn test_assert_almost_equal_shows_diff() raises:
         var msg = str(e)
         # Should show the difference (0.5)
         # (Implementation-specific)
-```
+```text
 
 ## References
 
@@ -290,7 +296,8 @@ fn test_assert_almost_equal_shows_diff() raises:
 
 **Key Principle**: Test the test utilities to ensure reliability
 
-**Why Meta-Testing Matters**:
+### Why Meta-Testing Matters
+
 - Test utilities are foundational - bugs here affect all tests
 - Assertion failures must be trustworthy
 - Error messages must be clear for debugging
@@ -306,7 +313,7 @@ fn test_assert_almost_equal_shows_diff() raises:
 ### Next Steps
 
 1. Implement meta-tests for all assertion functions
-2. Test edge cases thoroughly
-3. Verify error message quality
-4. Test data generators for determinism
-5. Document findings for Implementation phase (#440)
+1. Test edge cases thoroughly
+1. Verify error message quality
+1. Test data generators for determinism
+1. Document findings for Implementation phase (#440)

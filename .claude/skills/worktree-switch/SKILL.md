@@ -22,11 +22,11 @@ Switch between git worktrees efficiently.
 # See all worktrees
 git worktree list
 
-# Example output:
+# Example output
 # /home/user/ml-odyssey              abc1234 [main]
 # /home/user/ml-odyssey-42-feature   def5678 [42-feature]
 # /home/user/ml-odyssey-73-bugfix    ghi9012 [73-bugfix]
-```
+```text
 
 ### Switch Worktree
 
@@ -36,7 +36,7 @@ cd ../ml-odyssey-42-feature
 
 # Verify current worktree
 git worktree list | grep "*"
-```
+```text
 
 ### Quick Switch Script
 
@@ -44,7 +44,7 @@ git worktree list | grep "*"
 # Switch by issue number
 ./scripts/switch_worktree.sh 42
 # Changes to worktree for issue #42
-```
+```text
 
 ## Tips
 
@@ -54,7 +54,7 @@ git worktree list | grep "*"
 # Add to ~/.bashrc or ~/.zshrc
 alias wt='git worktree list'
 alias wtcd='cd $(git worktree list | fzf | awk "{print \$1}")'
-```
+```text
 
 ### Terminal Multiplexer
 
@@ -67,7 +67,7 @@ cd ../ml-odyssey-42-feature
 
 # Switch sessions
 tmux attach -t issue-42
-```
+```text
 
 ## Best Practices
 

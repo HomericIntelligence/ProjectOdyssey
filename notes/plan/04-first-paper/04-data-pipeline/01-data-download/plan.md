@@ -28,8 +28,8 @@ Download the MNIST dataset from the official source, verify the integrity of dow
 ## Steps
 
 1. Download MNIST
-2. Verify Checksum
-3. Extract Files
+1. Verify Checksum
+1. Extract Files
 
 ## Success Criteria
 

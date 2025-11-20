@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Create test cases with sample functions/classes
-2. Define expected docstring outputs
-3. Write tests for docstring generation
-4. Validate quality and completeness
+1. Define expected docstring outputs
+1. Write tests for docstring generation
+1. Validate quality and completeness
 
 ## Success Criteria
 

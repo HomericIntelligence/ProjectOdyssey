@@ -10,10 +10,10 @@ ML Odyssey consists of five integrated architectural components:
 
 1. **Repository Architecture** - Organized into logical sections (foundation, shared library, papers,
    tooling, CI/CD, agentic workflows)
-2. **Shared Library** - Reusable components for tensors, layers, activations, training utilities, and data processing
-3. **Paper Implementations** - Research paper reproductions using shared library components
-4. **Agent System** - 6-level hierarchical structure for AI-assisted development with 43+ reusable skills
-5. **Build & Deployment** - Mojo package management, CI/CD pipelines, and distribution infrastructure
+1. **Shared Library** - Reusable components for tensors, layers, activations, training utilities, and data processing
+1. **Paper Implementations** - Research paper reproductions using shared library components
+1. **Agent System** - 6-level hierarchical structure for AI-assisted development with 43+ reusable skills
+1. **Build & Deployment** - Mojo package management, CI/CD pipelines, and distribution infrastructure
 
 ## Repository Architecture
 
@@ -87,6 +87,7 @@ All components use Mojo's performance features (struct for value types, SIMD for
 Paper implementations follow a consistent pattern with shared library reuse:
 
 ```text
+
 ```text
 
 papers/{paper_name}/
@@ -110,7 +111,7 @@ Each paper:
 
 The agent system implements a 6-level hierarchy enabling AI-assisted development through task decomposition and delegation:
 
-**Level 0: Chief Architect**
+### Level 0: Chief Architect
 
 - Strategic decisions and system-wide architecture
 - Paper selection and repository roadmap
@@ -120,7 +121,7 @@ The agent system implements a 6-level hierarchy enabling AI-assisted development
 - Foundation, Shared Library, Tooling, Papers, CI/CD, Agentic Workflows
 - Coordinate work within major sections
 
-**Level 2: Design/Module Orchestrators**
+### Level 2: Design/Module Orchestrators
 
 - Architecture design and code review coordination
 - Cross-module integration planning
@@ -130,12 +131,12 @@ The agent system implements a 6-level hierarchy enabling AI-assisted development
 - Implementation, testing, documentation, performance, security
 - Component-level expert work
 
-**Level 4: Engineers**
+### Level 4: Engineers
 
 - Implementation tasks and code authoring
 - Focused, well-defined technical work
 
-**Level 5: Junior Engineers**
+### Level 5: Junior Engineers
 
 - Simple, well-defined tasks with detailed instructions
 - Support for standard operations
@@ -151,19 +152,19 @@ See `notes/review/agent-system-overview.md` for complete hierarchy documentation
 
 ## Build and Deployment
 
-**Build System**:
+### Build System
 
 - **Mojo Packages** (`.mojopkg`) - Compiled modules for shared library and tools
 - **Build Artifacts** - Generated from `mojo.toml` and `pixi.toml`
 - **Local Development** - `pixi shell` provides development environment
 
-**Deployment**:
+### Deployment
 
 - **CI/CD Pipelines** - `.github/workflows/` with pre-commit validation, testing, and packaging
 - **Distribution** - Package archives (`.tar.gz`, `.zip`) for tools and documentation
 - **Installation** - Local development via pixi, package installation via Mojo package manager
 
-**Testing**:
+### Testing
 
 - Unit tests with pytest for Python utilities
 - Mojo test framework for Mojo code
@@ -175,10 +176,10 @@ See `notes/review/agent-system-overview.md` for complete hierarchy documentation
 The system uses a 5-phase structured workflow for component development:
 
 1. **Plan** - Design and specification (produces requirements for other phases)
-2. **Test** - TDD-driven test suite (parallel after Plan)
-3. **Implementation** - Code authoring and functionality (parallel after Plan)
-4. **Package** - Building distributable artifacts (parallel after Plan)
-5. **Cleanup** - Refactoring and finalization (after parallel phases)
+1. **Test** - TDD-driven test suite (parallel after Plan)
+1. **Implementation** - Code authoring and functionality (parallel after Plan)
+1. **Package** - Building distributable artifacts (parallel after Plan)
+1. **Cleanup** - Refactoring and finalization (after parallel phases)
 
 Each phase has dedicated agent roles, clear entry/exit criteria, and automated CI validation.
 

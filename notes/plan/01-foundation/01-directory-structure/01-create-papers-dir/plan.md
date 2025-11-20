@@ -29,8 +29,8 @@ Set up the papers directory structure which will contain individual paper implem
 ## Steps
 
 1. Create the papers base directory at repository root
-2. Write README explaining how papers directory works
-3. Create template directory with standard structure for paper implementations
+1. Write README explaining how papers directory works
+1. Create template directory with standard structure for paper implementations
 
 ## Success Criteria
 

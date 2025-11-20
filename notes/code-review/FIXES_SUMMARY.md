@@ -19,7 +19,7 @@ findings from Phase 2 implementations.
 
 **Function**: `safe_write_file(filepath: String, content: String) -> Bool`
 
-**Changes**:
+### Changes
 
 ```mojo
 # Before: Non-atomic fallback that defeats the purpose
@@ -34,9 +34,9 @@ except:
     # Fallback only if Python interop fails
     with open(filepath, "w") as f:
         f.write(content)
-```
+```text
 
-**Impact**:
+### Impact
 
 - Prevents data corruption on interrupted writes
 - Uses OS-level atomic rename (Unix/Linux guarantee)
@@ -46,7 +46,7 @@ except:
 
 **Function**: `join_path(base: String, path: String) raises -> String`
 
-**Changes**:
+### Changes
 
 ```mojo
 # Added validation before joining
@@ -54,9 +54,9 @@ if ".." in path:
     raise Error("Path traversal detected: path contains '..'")
 if path.startswith("/"):
     raise Error("Path traversal detected: absolute path not allowed")
-```
+```text
 
-**Impact**:
+### Impact
 
 - Blocks directory traversal attacks using ".."
 - Prevents absolute path injection
@@ -76,7 +76,7 @@ if path.startswith("/"):
 - `get_bool(key: String, default: Bool = False) raises -> Bool`
 - `get_list(key: String) raises -> List[String]`
 
-**Changes**:
+### Changes
 
 ```mojo
 # Before: Silent type mismatch returns default
@@ -97,9 +97,9 @@ if val.value_type != "int":
         "': expected int but got " + val.value_type
     )
 return val.int_val
-```
+```text
 
-**Impact**:
+### Impact
 
 - Distinguishes missing keys (OK) from type errors (bug)
 - Clear error messages show expected vs actual type
@@ -108,20 +108,20 @@ return val.int_val
 
 #### Fix 4: Config File Validation (Lines 447-525)
 
-**Functions**:
+### Functions
 
 - `from_yaml(filepath: String) raises -> Config`
 - `from_json(filepath: String) raises -> Config`
 
-**Changes**:
+### Changes
 
 ```mojo
 # Added after reading file content
 if len(content.strip()) == 0:
     raise Error("Config file is empty: " + filepath)
-```
+```text
 
-**Impact**:
+### Impact
 
 - Detects empty/corrupted config files early
 - Prevents cryptic parsing errors downstream
@@ -147,7 +147,7 @@ if len(content.strip()) == 0:
 
 **Approach**: Separate missing key (default) from wrong type (error)
 
-**Rationale**:
+### Rationale
 
 - Missing keys are common (use defaults)
 - Type errors indicate bugs (should crash)
@@ -170,17 +170,17 @@ if len(content.strip()) == 0:
    - Test successful atomic write
    - Test Python interop fallback
    - Test partial write recovery
-2. **Path Traversal**:
+1. **Path Traversal**:
 
    - Test ".." rejection
    - Test absolute path rejection
    - Test valid relative paths
-3. **Type Safety**:
+1. **Type Safety**:
 
    - Test correct type access (no error)
    - Test wrong type access (raises error)
    - Test missing key (returns default)
-4. **File Validation**:
+1. **File Validation**:
 
    - Test empty file rejection
    - Test whitespace-only file rejection
@@ -189,8 +189,8 @@ if len(content.strip()) == 0:
 ### Integration Tests Needed
 
 1. Checkpoint save/load with atomic writes
-2. Config loading with type mismatches
-3. Path operations in realistic scenarios
+1. Config loading with type mismatches
+1. Path operations in realistic scenarios
 
 ## Performance Impact
 
@@ -217,13 +217,13 @@ All new errors indicate bugs that should be fixed, not valid use cases.
 
 ### For Code Using join_path()
 
-**Before**:
+### Before
 
 ```mojo
 var path = join_path(base, user_input)  # Could be exploited
-```
+```text
 
-**After**:
+### After
 
 ```mojo
 try:
@@ -231,17 +231,17 @@ try:
 except e:
     # Handle invalid path (log security event)
     print("Invalid path: " + str(e))
-```
+```text
 
 ### For Code Using Config Getters
 
-**Before**:
+### Before
 
 ```mojo
 var lr = config.get_float("learning_rate")  # Silent 0.0 on type error
-```
+```text
 
-**After**:
+### After
 
 ```mojo
 try:
@@ -249,17 +249,17 @@ try:
 except e:
     # Handle type mismatch (fix config file)
     print("Config error: " + str(e))
-```
+```text
 
 ### For Code Loading Configs
 
-**Before**:
+### Before
 
 ```mojo
 var config = Config.from_yaml("config.yaml")  # Silent empty config
-```
+```text
 
-**After**:
+### After
 
 ```mojo
 try:
@@ -267,30 +267,30 @@ try:
 except e:
     # Handle empty/invalid file
     print("Config load error: " + str(e))
-```
+```text
 
 ## Next Steps
 
 ### Immediate (Before Commit)
 
 1. ✅ Implement all 4 fixes
-2. ✅ Update documentation
-3. ⏳ Run unit tests
-4. ⏳ Verify no regressions
+1. ✅ Update documentation
+1. ⏳ Run unit tests
+1. ⏳ Verify no regressions
 
 ### Short-term (This PR)
 
 1. Add unit tests for new validation
-2. Update related code to handle new errors
-3. Document migration guide
-4. Create PR with fixes
+1. Update related code to handle new errors
+1. Document migration guide
+1. Create PR with fixes
 
 ### Long-term (Future Issues)
 
 1. Replace Python interop with native Mojo when available
-2. Add comprehensive schema validation
-3. Implement symlink/canonicalization when pathlib available
-4. Add performance benchmarks
+1. Add comprehensive schema validation
+1. Implement symlink/canonicalization when pathlib available
+1. Add performance benchmarks
 
 ## Related Issues
 
@@ -321,11 +321,11 @@ git commit -m "fix(utils): add validation to config file loading"
 # Documentation
 git add notes/code-review/utils-fixes.md notes/code-review/FIXES_SUMMARY.md
 git commit -m "docs(review): document utils critical fixes implementation"
-```
+```text
 
 ## Summary Statistics
 
-**Total Changes**:
+### Total Changes
 
 - 2 files modified
 - 9 functions enhanced
@@ -333,7 +333,7 @@ git commit -m "docs(review): document utils critical fixes implementation"
 - 0 breaking API changes (only error behavior)
 - 4 critical security/reliability issues resolved
 
-**Code Quality**:
+### Code Quality
 
 - All changes follow Mojo best practices
 - Clear error messages for debugging

@@ -26,14 +26,14 @@ Define the foundational dataset interface for consistent data access across all 
 
 **Decision**: Implement a minimal, Pythonic interface following Python's sequence protocol.
 
-**Rationale**:
+### Rationale
 
 - Adheres to Python's "duck typing" philosophy and existing conventions
 - Makes datasets interchangeable with standard Python sequences
 - Reduces learning curve for developers familiar with Python
 - Enables use with standard Python tools (len(), indexing, slicing)
 
-**Key Methods**:
+### Key Methods
 
 - `__len__()` - Returns total number of samples (enables `len(dataset)`)
 - `__getitem__(index)` - Returns sample at index (enables `dataset[i]`)
@@ -42,7 +42,7 @@ Define the foundational dataset interface for consistent data access across all 
 
 **Decision**: Use abstract base class (ABC) approach for interface definition.
 
-**Rationale**:
+### Rationale
 
 - Provides clear contract enforcement through abstract methods
 - Enables isinstance() checks for type validation
@@ -54,7 +54,7 @@ Define the foundational dataset interface for consistent data access across all 
 
 **Decision**: Standardize on tuple format `(data, label)` for consistency.
 
-**Rationale**:
+### Rationale
 
 - Consistent return format simplifies downstream processing
 - Aligns with PyTorch dataset conventions (reduces friction for familiar developers)
@@ -65,14 +65,14 @@ Define the foundational dataset interface for consistent data access across all 
 
 **Decision**: Support both integer indexing and slice notation.
 
-**Rationale**:
+### Rationale
 
 - Integer indexing: Essential for single sample retrieval
 - Slice notation: Enables batch retrieval without explicit loops
 - Negative indexing: Pythonic way to access from end of dataset
 - Consistent with Python sequence behavior
 
-**Implementation Notes**:
+### Implementation Notes
 
 - Validate indices are within bounds `[0, len(dataset))`
 - Support negative indices via modulo arithmetic
@@ -83,14 +83,14 @@ Define the foundational dataset interface for consistent data access across all 
 
 **Decision**: Apply transforms/preprocessing within `__getitem__` method.
 
-**Rationale**:
+### Rationale
 
 - Lazy evaluation: Only process data when accessed
 - Memory efficiency: Avoid storing transformed data
 - Flexibility: Different transforms can be applied to same dataset
 - Composability: Transforms can be chained/swapped easily
 
-**Considerations**:
+### Considerations
 
 - Transforms should be optional (default: no transformation)
 - Transform function signature: `transform(data) -> data`
@@ -100,13 +100,13 @@ Define the foundational dataset interface for consistent data access across all 
 
 **Decision**: Distinguish between sized and unsized datasets.
 
-**Rationale**:
+### Rationale
 
 - Static datasets (files, arrays): Known size, return count directly
 - Dynamic datasets (generators, streams): May need lazy computation or caching
 - Infinite datasets (continuous streams): Raise NotImplementedError or return special value
 
-**Implementation**:
+### Implementation
 
 - For file-based: Scan directory or use cached metadata
 - For in-memory: Return array/list length directly
@@ -116,13 +116,13 @@ Define the foundational dataset interface for consistent data access across all 
 
 **Decision**: Design interface to be thread-safe for concurrent access.
 
-**Rationale**:
+### Rationale
 
 - Data loaders often use multiple workers for performance
 - Concurrent access is common in training pipelines
 - Prevents race conditions and data corruption
 
-**Implementation Strategy**:
+### Implementation Strategy
 
 - Avoid mutable shared state in dataset instances
 - Use thread-local storage for worker-specific resources
@@ -132,14 +132,14 @@ Define the foundational dataset interface for consistent data access across all 
 
 **Decision**: Use standard Python exceptions with descriptive messages.
 
-**Error Types**:
+### Error Types
 
 - `IndexError`: Out-of-bounds index access
 - `TypeError`: Invalid index type (not int or slice)
 - `NotImplementedError`: Unsupported operations (e.g., len() on infinite dataset)
 - `ValueError`: Invalid configuration or parameters
 
-**Error Messages**:
+### Error Messages
 
 - Include actual index and valid range
 - Suggest corrective action when possible
@@ -149,7 +149,7 @@ Define the foundational dataset interface for consistent data access across all 
 
 **Decision**: Provide comprehensive documentation for interface and implementations.
 
-**Required Documentation**:
+### Required Documentation
 
 - Abstract base class docstrings with method contracts
 - Usage examples for common patterns
@@ -160,7 +160,7 @@ Define the foundational dataset interface for consistent data access across all 
 
 **Decision**: Design for cross-compatibility with PyTorch and future Mojo implementations.
 
-**Strategy**:
+### Strategy
 
 - Mirror PyTorch Dataset API where appropriate
 - Use standard Python types (no PyTorch-specific tensors in interface)

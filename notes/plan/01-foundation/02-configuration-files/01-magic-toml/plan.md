@@ -30,8 +30,8 @@ Create and configure the magic.toml file for the Magic package manager. This fil
 ## Steps
 
 1. Create base magic.toml with project metadata
-2. Add all required dependencies for Mojo/MAX development
-3. Configure package channels and sources
+1. Add all required dependencies for Mojo/MAX development
+1. Configure package channels and sources
 
 ## Success Criteria
 

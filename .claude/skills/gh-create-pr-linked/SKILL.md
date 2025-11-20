@@ -33,15 +33,15 @@ gh pr create --title "Title" --body "$(cat <<'EOF'
 Closes #<issue-number>
 EOF
 )"
-```
+```text
 
 ### Workflow
 
 1. **Verify changes are committed and pushed**
-2. **Check current branch tracks remote** (use `git status`)
-3. **Push branch if needed**: `git push -u origin branch-name`
-4. **Create PR with issue link**: `gh pr create --issue <number>`
-5. **Verify link appears in issue** (check issue's Development section)
+1. **Check current branch tracks remote** (use `git status`)
+1. **Push branch if needed**: `git push -u origin branch-name`
+1. **Create PR with issue link**: `gh pr create --issue <number>`
+1. **Verify link appears in issue** (check issue's Development section)
 
 ## PR Requirements
 
@@ -72,21 +72,21 @@ gh pr checks <pr-number>
 
 # Verify issue link (check Development section in issue)
 gh issue view <issue-number>
-```
+```text
 
 ## Examples
 
-**Create PR linked to issue:**
+### Create PR linked to issue:
 
 ```bash
 ./scripts/create_linked_pr.sh 42
-```
+```text
 
-**Create PR with custom body:**
+### Create PR with custom body:
 
 ```bash
 ./scripts/create_linked_pr.sh 42 "Custom description of changes"
-```
+```text
 
 ## Scripts Available
 

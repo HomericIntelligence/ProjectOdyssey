@@ -29,10 +29,10 @@ None (leaf node)
 ## Steps
 
 1. Implement batch iteration over training data
-2. Create forward pass with loss computation
-3. Add backward pass with gradient computation
-4. Integrate optimizer for weight updates
-5. Add callback hooks and metric tracking
+1. Create forward pass with loss computation
+1. Add backward pass with gradient computation
+1. Integrate optimizer for weight updates
+1. Add callback hooks and metric tracking
 
 ## Success Criteria
 

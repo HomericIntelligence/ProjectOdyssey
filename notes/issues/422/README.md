@@ -58,7 +58,7 @@ generic_transforms.mojo (~600-800 lines)
     ├── find_min/find_max
     ├── compute_mean/compute_std
     └── utility functions
-```
+```text
 
 ### Code Pattern Analysis
 
@@ -74,9 +74,10 @@ fn normalize_simd[simd_width: Int](idx: Int):
     result.store[simd_width](idx, normalized)
 
 vectorize[normalize_simd, simd_width](data.num_elements())
-```
+```text
 
-**Review Points**:
+### Review Points
+
 - ✅ SIMD used for Normalize
 - ✅ SIMD used for Standardize
 - ✅ SIMD width determined by `simdwidthof[dtype]()`
@@ -93,9 +94,10 @@ fn __init__(inout self, min_val: Float32, max_val: Float32):
                    String(min_val) + " >= " + String(max_val))
     self.min_val = min_val
     self.max_val = max_val
-```
+```text
 
-**Review Points**:
+### Review Points
+
 - ✅ Parameter validation at initialization
 - ✅ Clear error messages with context
 - ✅ Proper use of `raises` annotation
@@ -111,9 +113,10 @@ fn inverse(self, data: Tensor[dtype]) raises -> Tensor[dtype]:
     if self.input_min is None or self.input_max is None:
         raise Error("Cannot denormalize without input range")
     # ... denormalization logic ...
-```
+```text
 
-**Review Points**:
+### Review Points
+
 - ✅ Normalize has inverse
 - ✅ Standardize has inverse
 - ✅ Sequential has inverse (reverse order)
@@ -127,9 +130,10 @@ fn inverse(self, data: Tensor[dtype]) raises -> Tensor[dtype]:
 fn __init__(inout self, owned transforms: List[Transform]):
     """Create sequential composition."""
     self.transforms = transforms^  # Transfer ownership
-```
+```text
 
-**Review Points**:
+### Review Points
+
 - ✅ `owned` for transfers
 - ✅ No memory leaks
 - ✅ Proper lifetimes
@@ -166,27 +170,27 @@ fn __init__(inout self, owned transforms: List[Transform]):
 To be identified during code review. Expected areas:
 
 1. **SIMD Correctness**: Verify vectorization is correct and efficient
-2. **Error Handling**: Ensure all edge cases covered
-3. **Memory Safety**: Verify no leaks or unsafe operations
-4. **API Consistency**: Ensure all transforms follow same patterns
+1. **Error Handling**: Ensure all edge cases covered
+1. **Memory Safety**: Verify no leaks or unsafe operations
+1. **API Consistency**: Ensure all transforms follow same patterns
 
 #### Priority 2: Code Quality Improvements
 
 Potential improvements:
 
 1. **Extract Common Patterns**: DRY principle for repeated code
-2. **Helper Functions**: Reduce duplication in SIMD kernels
-3. **Named Constants**: Replace magic numbers
-4. **Documentation**: Add complexity notes and examples
+1. **Helper Functions**: Reduce duplication in SIMD kernels
+1. **Named Constants**: Replace magic numbers
+1. **Documentation**: Add complexity notes and examples
 
 #### Priority 3: Nice-to-Have Enhancements
 
 Future improvements:
 
 1. **Performance Optimizations**: Advanced SIMD techniques
-2. **Additional Transforms**: Clamp, Round, Clip, etc.
-3. **Lazy Evaluation**: For pipeline optimization
-4. **Zero-Copy Operations**: Where possible
+1. **Additional Transforms**: Clamp, Round, Clip, etc.
+1. **Lazy Evaluation**: For pipeline optimization
+1. **Zero-Copy Operations**: Where possible
 
 ## Performance Analysis
 
@@ -223,7 +227,7 @@ fn benchmark_normalize() raises:
     var avg_time = duration / iterations
 
     print("Normalize (10K elements): " + String(avg_time) + " ms")
-```
+```text
 
 #### Pipeline Benchmarks
 
@@ -249,7 +253,7 @@ fn benchmark_preprocessing_pipeline() raises:
     var avg_time = duration / iterations
 
     print("Preprocessing pipeline: " + String(avg_time) + " ms")
-```
+```text
 
 ### Performance Bottleneck Analysis
 
@@ -259,11 +263,11 @@ fn benchmark_preprocessing_pipeline() raises:
    - **Mitigation**: Consider in-place operations for critical paths
    - **Impact**: Moderate (modern allocators are fast)
 
-2. **Memory Bandwidth**: Large tensors limited by memory speed
+1. **Memory Bandwidth**: Large tensors limited by memory speed
    - **Mitigation**: SIMD helps with cache utilization
    - **Impact**: Low for typical sizes (<1MB)
 
-3. **Type Conversions**: Cannot use SIMD for different types
+1. **Type Conversions**: Cannot use SIMD for different types
    - **Mitigation**: None needed (already efficient)
    - **Impact**: Low (simple element copy)
 
@@ -274,20 +278,20 @@ fn benchmark_preprocessing_pipeline() raises:
    alias simd_width = simdwidthof[dtype]()  # Optimal for platform
    ```
 
-2. **In-Place Operations**: Add `_inplace` variants
+1. **In-Place Operations**: Add `_inplace` variants
    ```mojo
    fn normalize_inplace(inout data: Tensor[dtype]) raises:
        """Normalize in-place (no allocation)."""
        # ... modify data directly ...
    ```
 
-3. **Transform Fusion**: Combine sequential operations
+1. **Transform Fusion**: Combine sequential operations
    ```mojo
    # Instead of: normalize -> standardize (2 passes)
    # Fuse to: (x - min) / range * scale + offset (1 pass)
    ```
 
-4. **Lazy Evaluation**: Defer computation until needed
+1. **Lazy Evaluation**: Defer computation until needed
    ```mojo
    var lazy = pipeline.lazy(data)  # No computation yet
    var result = lazy.evaluate()    # Compute when needed
@@ -296,16 +300,19 @@ fn benchmark_preprocessing_pipeline() raises:
 ### Performance Recommendations
 
 **Phase 1**: Verify targets met with basic implementation
+
 - Run microbenchmarks
 - Compare against targets
 - Identify any major issues
 
 **Phase 2**: Optimize only if needed
+
 - Profile hot paths
 - Implement targeted optimizations
 - Verify improvements
 
 **Phase 3**: Advanced optimizations (future work)
+
 - Transform fusion
 - In-place operations
 - Lazy evaluation
@@ -338,10 +345,10 @@ fn benchmark_preprocessing_pipeline() raises:
 Areas that commonly need additional documentation:
 
 1. **Edge Cases**: Behavior with empty tensors, single elements
-2. **Performance**: Time/space complexity for all operations
-3. **Examples**: More complex usage scenarios
-4. **Integration**: How to combine with other transforms
-5. **Best Practices**: Common patterns and anti-patterns
+1. **Performance**: Time/space complexity for all operations
+1. **Examples**: More complex usage scenarios
+1. **Integration**: How to combine with other transforms
+1. **Best Practices**: Common patterns and anti-patterns
 
 ## Integration Verification
 
@@ -370,7 +377,7 @@ transforms.append(Normalize[DType.float32](0, 1)) # Generic
 transforms.append(Standardize[DType.float32](0.5, 0.5)) # Generic
 
 var pipeline = Sequential(transforms)
-```
+```text
 
 **Status**: TBD
 **Issues**: TBD
@@ -387,7 +394,7 @@ var embeddings = tokenize_and_embed(text)  # Tensor[DType.float32]
 # Apply generic preprocessing
 var std = Standardize[DType.float32](0.0, 1.0)
 var preprocessed = std(embeddings)
-```
+```text
 
 **Status**: TBD
 **Issues**: TBD
@@ -405,7 +412,7 @@ var processed_text = text_pipeline(text_embeddings)
 
 # Combine for model
 var multimodal_input = concatenate(processed_image, processed_text)
-```
+```text
 
 **Status**: TBD
 **Issues**: TBD
@@ -442,12 +449,14 @@ To be filled after integration testing:
 ### Test Quality Assessment
 
 **Strengths** (expected):
+
 - ✅ Comprehensive coverage of all transforms
 - ✅ Edge cases tested
 - ✅ Determinism verified
 - ✅ Integration scenarios covered
 
 **Weaknesses** (potential):
+
 - ⚠️ May need more property-based tests
 - ⚠️ Performance regression tests
 - ⚠️ Stress tests with large tensors
@@ -461,7 +470,7 @@ To be filled after integration testing:
        # Test with many random inputs
    ```
 
-2. **Performance Regression Tests**:
+1. **Performance Regression Tests**:
    ```mojo
    fn test_normalize_performance_regression() raises:
        """Ensure performance doesn't degrade."""
@@ -469,7 +478,7 @@ To be filled after integration testing:
        assert_true(time < PERFORMANCE_BASELINE * 1.1)  # 10% tolerance
    ```
 
-3. **Stress Tests**:
+1. **Stress Tests**:
    ```mojo
    fn test_normalize_large_tensor() raises:
        """Test with very large tensor (1M elements)."""
@@ -493,19 +502,19 @@ To be filled after integration testing:
 ### Pre-Release Verification
 
 1. **Code Review**: Peer review by another developer
-2. **Integration Testing**: Test with real data pipelines
-3. **Performance Profiling**: Verify no regressions
-4. **Documentation Review**: Ensure accuracy and completeness
-5. **API Stability**: Confirm no breaking changes planned
+1. **Integration Testing**: Test with real data pipelines
+1. **Performance Profiling**: Verify no regressions
+1. **Documentation Review**: Ensure accuracy and completeness
+1. **API Stability**: Confirm no breaking changes planned
 
 ### Known Limitations
 
 To be documented after implementation:
 
 1. **Feature Gaps**: Missing transforms or functionality
-2. **Performance**: Known performance bottlenecks
-3. **Compatibility**: Platform or version limitations
-4. **Edge Cases**: Unhandled edge cases
+1. **Performance**: Known performance bottlenecks
+1. **Compatibility**: Platform or version limitations
+1. **Edge Cases**: Unhandled edge cases
 
 ## Future Enhancements
 
@@ -517,12 +526,12 @@ To be documented after implementation:
    - `Clip`: Clip outliers
    - `Log/Exp`: Logarithmic transformations
 
-2. **Performance Optimizations**:
+1. **Performance Optimizations**:
    - In-place operation variants
    - Transform fusion for Sequential
    - Zero-copy reshape when possible
 
-3. **Usability Improvements**:
+1. **Usability Improvements**:
    - Automatic stats computation (`Standardize.from_data()`)
    - Pipe operator support (`norm | std | reshape`)
    - Better error messages
@@ -534,12 +543,12 @@ To be documented after implementation:
    - Branching pipelines (conditional paths)
    - Transform caching (memoization)
 
-2. **GPU Support**:
+1. **GPU Support**:
    - CUDA/Metal implementations
    - Automatic device selection
    - Batch processing on GPU
 
-3. **Serialization**:
+1. **Serialization**:
    - Save/load transform configurations
    - Export to ONNX or similar
    - Reproducibility support
@@ -551,12 +560,12 @@ To be documented after implementation:
    - Lazy evaluation with graph optimization
    - Compile-time transform composition
 
-2. **Extended Functionality**:
+1. **Extended Functionality**:
    - Probabilistic transforms (noise injection)
    - Learned transforms (trainable parameters)
    - Adaptive transforms (data-dependent)
 
-3. **Framework Integration**:
+1. **Framework Integration**:
    - PyTorch compatibility layer
    - TensorFlow integration
    - ONNX Runtime support
@@ -575,22 +584,22 @@ To be identified during review. Expected:
 ### High Priority (Address in Next Release)
 
 1. **Performance Benchmarking**: Verify all targets met
-2. **Integration Testing**: Test with real pipelines
-3. **Documentation Polish**: Add more examples
-4. **API Finalization**: Lock down public API
+1. **Integration Testing**: Test with real pipelines
+1. **Documentation Polish**: Add more examples
+1. **API Finalization**: Lock down public API
 
 ### Medium Priority (Address in Future Releases)
 
 1. **Additional Transforms**: Clamp, Round, etc.
-2. **Performance Optimizations**: In-place, fusion
-3. **Advanced Features**: Pipe operators, auto-stats
-4. **GPU Support**: CUDA/Metal backends
+1. **Performance Optimizations**: In-place, fusion
+1. **Advanced Features**: Pipe operators, auto-stats
+1. **GPU Support**: CUDA/Metal backends
 
 ### Low Priority (Future Enhancements)
 
 1. **Serialization**: Save/load configs
-2. **Automatic Optimization**: Graph fusion
-3. **Framework Integration**: PyTorch, TensorFlow
+1. **Automatic Optimization**: Graph fusion
+1. **Framework Integration**: PyTorch, TensorFlow
 
 ## Conclusion
 
@@ -601,17 +610,17 @@ To be identified during review. Expected:
 ### Expected Strengths
 
 1. **Comprehensive**: Covers all common preprocessing needs
-2. **Performance**: SIMD-optimized for critical paths
-3. **Composable**: Works well with Sequential
-4. **Reversible**: Inverse transforms for visualization
-5. **Well-Tested**: 48 tests with high coverage
+1. **Performance**: SIMD-optimized for critical paths
+1. **Composable**: Works well with Sequential
+1. **Reversible**: Inverse transforms for visualization
+1. **Well-Tested**: 48 tests with high coverage
 
 ### Expected Areas for Improvement
 
 1. **Performance**: May need optimization after profiling
-2. **Features**: Additional transforms could be useful
-3. **Documentation**: Always room for more examples
-4. **Integration**: May discover issues with real use cases
+1. **Features**: Additional transforms could be useful
+1. **Documentation**: Always room for more examples
+1. **Integration**: May discover issues with real use cases
 
 ### Final Recommendation
 

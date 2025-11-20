@@ -35,7 +35,7 @@ shared/
 
 ### Tensor Operations (`shared/core/ops/`)
 
-**Basic Operations**:
+### Basic Operations
 
 ```mojo
 
@@ -57,7 +57,7 @@ fn mean(x: Tensor, dim: Optional[Int] = None) -> Tensor
 
 ### Neural Network Layers (`shared/core/layers/`)
 
-**Linear (Dense) Layer**:
+### Linear (Dense) Layer
 
 ```mojo
 
@@ -75,7 +75,7 @@ struct Linear:
 
 ```text
 
-**Convolutional Layer**:
+### Convolutional Layer
 
 ```mojo
 
@@ -95,7 +95,7 @@ struct Conv2D:
 
 ```text
 
-**Pooling Layers**:
+### Pooling Layers
 
 ```mojo
 
@@ -155,7 +155,7 @@ fn kaiming_init(inout tensor: Tensor, mode: String = "fan_in"):
 
 ### Optimizers (`shared/training/optimizers/`)
 
-**SGD with Momentum**:
+### SGD with Momentum
 
 ```mojo
 
@@ -229,7 +229,7 @@ struct CosineAnnealingLR:
 
 ### Callbacks (`shared/training/callbacks/`)
 
-**Base Callback Interface**:
+### Base Callback Interface
 
 ```mojo
 
@@ -243,7 +243,7 @@ trait Callback:
 
 ```text
 
-**Built-in Callbacks**:
+### Built-in Callbacks
 
 ```mojo
 
@@ -455,10 +455,10 @@ fn create_dataloaders():
 ### Adding a New Component
 
 1. **Plan**: Document what the component does
-2. **Test**: Write tests first (TDD)
-3. **Implement**: Follow Mojo patterns
-4. **Document**: Add docstrings and examples
-5. **Export**: Add to `__init__.mojo`
+1. **Test**: Write tests first (TDD)
+1. **Implement**: Follow Mojo patterns
+1. **Document**: Add docstrings and examples
+1. **Export**: Add to `__init__.mojo`
 
 ### Example: Adding a New Layer
 
@@ -492,21 +492,21 @@ from .new_layer import MyNewLayer
 ## Best Practices
 
 1. **Use `fn` for ML Code** - Type safety and performance
-2. **Test Everything** - Unit tests + gradient checks
-3. **SIMD When Beneficial** - But measure first
-4. **Document Clearly** - Docstrings with examples
-5. **Keep it Simple** - Correctness > cleverness
-6. **Link to Papers** - Reference original implementations
+1. **Test Everything** - Unit tests + gradient checks
+1. **SIMD When Beneficial** - But measure first
+1. **Document Clearly** - Docstrings with examples
+1. **Keep it Simple** - Correctness > cleverness
+1. **Link to Papers** - Reference original implementations
 
 ## Performance Considerations
 
-**When to Optimize**:
+### When to Optimize
 
 - Component is proven bottleneck (profile first)
 - Used in hot path (training loop)
 - Simple optimization gives large gain
 
-**Optimization Techniques**:
+### Optimization Techniques
 
 - SIMD for element-wise ops
 - In-place operations
@@ -542,12 +542,12 @@ The shared library provides:
 - **Data**: Dataset interface, DataLoader, Transforms
 - **Utils**: Initialization, Metrics, Configuration
 
-**Key principles**:
+### Key principles
 
 1. Reusable across papers
-2. Thoroughly tested
-3. Well-documented
-4. Performance-optimized (after correctness)
-5. Following Mojo best practices
+1. Thoroughly tested
+1. Well-documented
+1. Performance-optimized (after correctness)
+1. Following Mojo best practices
 
 **Get started**: Browse `shared/` directory, read tests for examples, import into your paper implementation.

@@ -43,22 +43,22 @@ Coordinate modules within sections.
 # Invoke orchestrator for section
 ./scripts/run_orchestrator.sh foundation
 
-# This:
+# This
 # 1. Loads orchestrator configuration
 # 2. Reviews section plan
 # 3. Breaks into components
 # 4. Delegates to design agents
 # 5. Monitors progress
-```
+```text
 
 ### Orchestrator Workflow
 
 1. **Review Plans** - Read section specifications
-2. **Break Down** - Divide into manageable components
-3. **Delegate** - Assign to appropriate agents
-4. **Monitor** - Track progress
-5. **Integrate** - Coordinate results
-6. **Escalate** - Handle blockers
+1. **Break Down** - Divide into manageable components
+1. **Delegate** - Assign to appropriate agents
+1. **Monitor** - Track progress
+1. **Integrate** - Coordinate results
+1. **Escalate** - Handle blockers
 
 ## Delegation Pattern
 
@@ -70,7 +70,7 @@ Module Design Agent (L2)
 Component Specialist (L3)
   ↓ delegates to
 Implementation Engineer (L4)
-```
+```text
 
 ## Scripts
 

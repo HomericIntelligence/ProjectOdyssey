@@ -29,7 +29,7 @@ version = "0.1.0"
 description = "Mojo-based AI Research Platform"
 channels = ["conda-forge"]
 platforms = ["linux-64", "osx-arm64"]
-```
+```text
 
 - Configured for Mojo project with proper metadata
 - Mojo version requirement (>=24.4)

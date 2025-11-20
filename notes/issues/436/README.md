@@ -28,7 +28,8 @@ Package the testing framework setup components for distribution and reuse, creat
 **Test Helpers**: `/tests/helpers/*.mojo`
 **Test Suites**: Distributed across `/tests/` subdirectories
 
-**Current Organization**:
+### Current Organization
+
 ```text
 tests/
 ├── shared/
@@ -38,7 +39,7 @@ tests/
 │   ├── fixtures.mojo       # Fixture placeholders (17 lines)
 │   └── utils.mojo          # Utility placeholders (14 lines)
 └── [component_tests]/      # Various test suites
-```
+```text
 
 ### What Packaging Means
 
@@ -49,17 +50,18 @@ tests/
    - Provide clear API for test utilities
    - Document usage patterns
 
-2. **Creating Test Templates**:
+1. **Creating Test Templates**:
    - Template test files for new components
    - CI configuration templates
    - Test structure examples
 
-3. **Documentation for Reuse**:
+1. **Documentation for Reuse**:
    - How to write new tests using the framework
    - How to set up testing for new components
    - How to integrate with CI
 
 **Note**: Unlike code packages (`.mojopkg`), testing infrastructure is typically:
+
 - Used internally within the project
 - Distributed as source files
 - Documented for reuse patterns
@@ -72,12 +74,13 @@ tests/
 
 **Packaging Goal**: Make utilities importable from any test file
 
-**Approach**:
+### Approach
+
 ```mojo
 // In any test file
 from tests.shared.conftest import assert_almost_equal, TestFixtures, BenchmarkResult
 from tests.helpers.assertions import assert_shape, assert_all_close
-```
+```text
 
 **Deliverable**: Verify import paths work correctly across test suite
 
@@ -85,25 +88,28 @@ from tests.helpers.assertions import assert_shape, assert_all_close
 
 **If Implemented in #435**: Package test runner as executable script
 
-**Options**:
+### Options
+
 - Shell script: `scripts/run_tests.sh`
 - Python script: `scripts/run_tests.py`
 - Mojo executable: `scripts/run_tests.mojo` (if feasible)
 
-**Packaging**:
+### Packaging
+
 ```bash
 # Make executable
 chmod +x scripts/run_tests.sh
 
 # Add to PATH or document usage
 ./scripts/run_tests.sh [options]
-```
+```text
 
 ### 3. CI Templates
 
 **Goal**: Provide reusable CI configuration for testing
 
 **Template**: `.github/workflows/test-template.yml`
+
 ```yaml
 name: Component Tests
 
@@ -121,19 +127,21 @@ jobs:
     strategy:
       matrix:
         component: [core, data, training, utils]
-```
+```text
 
 **Deliverable**: Template with documentation on customization
 
 ### 4. Documentation Package
 
-**Contents**:
+### Contents
+
 - `docs/testing/setup-guide.md` - How to set up testing for new components
 - `docs/testing/writing-tests.md` - Test writing best practices
 - `docs/testing/ci-integration.md` - CI setup instructions
 - `docs/testing/api-reference.md` - Test utilities API reference
 
-**Structure**:
+### Structure
+
 ```markdown
 # Testing Setup Guide
 
@@ -149,26 +157,30 @@ jobs:
 - Assertions: assert_true, assert_equal, assert_almost_equal
 - Fixtures: TestFixtures.set_seed(), TestFixtures.deterministic_seed()
 - Generators: create_test_vector(), create_test_matrix()
-```
+```text
 
 ## Deliverables Summary
 
 ### 1. Importable Test Utilities
+
 - [x] conftest.mojo already exists and is importable
 - [ ] Document import patterns
 - [ ] Verify imports work across test suite
 
 ### 2. Test Runner (if implemented)
+
 - [ ] Package as executable script
 - [ ] Add to project scripts/
 - [ ] Document usage and options
 
 ### 3. CI Templates
+
 - [ ] Create reusable workflow template
 - [ ] Document customization points
 - [ ] Provide examples for common scenarios
 
 ### 4. Documentation
+
 - [ ] Setup guide for new components
 - [ ] Test writing best practices
 - [ ] API reference for test utilities
@@ -190,20 +202,23 @@ jobs:
 
 **Key Insight**: Testing infrastructure packaging is about **organization and documentation**, not creating distributable binaries.
 
-**Focus Areas**:
+### Focus Areas
+
 1. **Organization**: Ensure test utilities are well-organized and easy to import
-2. **Documentation**: Provide clear guides for using the test framework
-3. **Templates**: Offer reusable patterns for common testing scenarios
-4. **CI Integration**: Make it easy to add testing to new components
+1. **Documentation**: Provide clear guides for using the test framework
+1. **Templates**: Offer reusable patterns for common testing scenarios
+1. **CI Integration**: Make it easy to add testing to new components
 
 ### Minimal Changes Principle
 
-**Current State Assessment**:
+### Current State Assessment
+
 - Test utilities already exist in `conftest.mojo`
 - Tests are already organized by component
 - Imports already work (tests are passing)
 
-**Packaging Needs**:
+### Packaging Needs
+
 - Document the existing organization
 - Create templates for new tests
 - Document CI integration patterns
@@ -212,7 +227,7 @@ jobs:
 ### Next Steps
 
 1. Document current import patterns
-2. Create test file templates
-3. Document CI integration approach
-4. Create testing setup guide
-5. Verify documentation with new test creation
+1. Create test file templates
+1. Document CI integration approach
+1. Create testing setup guide
+1. Verify documentation with new test creation

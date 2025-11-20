@@ -84,38 +84,38 @@ contracts, and integration patterns that will guide implementation and testing w
 This is the Planning Phase (Phase 1 of 5) for the Coverage Tool component. The planning phase must complete
 before Test, Implementation, and Packaging phases can begin.
 
-**Key Planning Tasks**:
+### Key Planning Tasks
 
 1. **Architecture Design**
    - Define component structure: Collection → Storage → Reporting → Validation
    - Identify dependencies and integration points
    - Design data flow from test execution to coverage reports
 
-2. **Coverage Measurement Strategy**
+1. **Coverage Measurement Strategy**
    - Focus: Line coverage (statement coverage)
    - Future: Branch coverage support
    - Metrics: Per-file coverage, per-function coverage, overall coverage
    - Granularity: Track covered/uncovered lines with source locations
 
-3. **Report Generation**
+1. **Report Generation**
    - HTML reports with visual coverage indicators (green/red highlighting)
    - Text reports for CI/CD integration and logs
    - Summary statistics (percentage, absolute numbers)
    - Source code display with coverage information
 
-4. **Configuration System**
+1. **Configuration System**
    - Threshold configuration (minimum coverage percentages)
    - Per-file or project-wide settings
    - Exclusion patterns (e.g., test files, generated code)
    - Default thresholds: 80% overall (adjustable per project)
 
-5. **API Design**
+1. **API Design**
    - Data collection API during test execution
    - Report generation API
    - Threshold validation API
    - Configuration loading API
 
-6. **Integration Points**
+1. **Integration Points**
    - Integration with test runners (pytest, unittest, custom)
    - CI/CD workflow integration
    - Build system integration
@@ -123,28 +123,28 @@ before Test, Implementation, and Packaging phases can begin.
 
 ### Design Considerations
 
-**Coverage Collection**:
+### Coverage Collection
 
 - Instrument code at runtime or through test runner hooks
 - Store coverage data in efficient format (binary or JSON)
 - Support multiple test execution instances with merging
 - Handle concurrent test execution
 
-**Reporting**:
+### Reporting
 
 - HTML reports with source code display
 - Text reports for terminal/CI consumption
 - JSON format for machine parsing
 - Clear visualization of covered vs uncovered regions
 
-**Thresholds**:
+### Thresholds
 
 - Project-wide minimum threshold (e.g., 80%)
 - Per-file thresholds for granular control
 - Fail-fast validation in CI/CD pipelines
 - Clear error messages for threshold violations
 
-**Performance**:
+### Performance
 
 - Minimal overhead during test execution
 - Efficient data storage and retrieval
@@ -172,11 +172,11 @@ Coverage Tool Architecture
     ├── Threshold checking
     ├── Error reporting
     └── Exit code management
-```
+```text
 
 ### Mojo-Specific Patterns
 
-**Recommended Approaches**:
+### Recommended Approaches
 
 - Use `fn` for performance-critical coverage collection code
 - Leverage structs for immutable coverage data (with `owned` semantics)
@@ -184,7 +184,7 @@ Coverage Tool Architecture
 - Use Mojo's type system for robust data structures
 - Implement efficient string building for report generation
 
-**Integration**:
+### Integration
 
 - Python wrappers for test runner integration (initially)
 - Mojo implementation for core coverage collection
@@ -192,14 +192,14 @@ Coverage Tool Architecture
 
 ### Dependencies and Integration
 
-**External Integrations**:
+### External Integrations
 
 - Test runner adapters (pytest, unittest, custom runners)
 - Build system integration (Pixi, Make, etc.)
 - CI/CD systems (GitHub Actions, etc.)
 - Shared library utilities (from `/shared`)
 
-**Internal Integrations**:
+### Internal Integrations
 
 - Use shared logging utilities
 - Leverage shared configuration system
@@ -219,7 +219,7 @@ Coverage Tool Architecture
 - **Packaging Phase** (Issue #847) - Create distribution package and integration
 - **Cleanup Phase** (Issue #848) - Refactor, optimize, finalize documentation
 
-**Estimated Effort**:
+### Estimated Effort
 
 - Planning: 2-3 days (documentation and design)
 - Testing: 2-3 days (comprehensive test suite)
@@ -231,35 +231,35 @@ Coverage Tool Architecture
 ### Next Steps
 
 1. Review this planning document for completeness and accuracy
-2. Identify any gaps or questions in architecture design
-3. Create detailed API specifications (in separate documentation)
-4. Generate child issues for Test, Implementation, Packaging, and Cleanup phases
-5. Begin Test phase (Issue #845) after planning approval
+1. Identify any gaps or questions in architecture design
+1. Create detailed API specifications (in separate documentation)
+1. Generate child issues for Test, Implementation, Packaging, and Cleanup phases
+1. Begin Test phase (Issue #845) after planning approval
 
 ### Notes for Implementation Teams
 
-**For Test Phase (Issue #845)**:
+### For Test Phase (Issue #845)
 
 - Start writing tests for coverage collection mechanisms
 - Design test fixtures for multi-run scenario coverage merging
 - Plan tests for HTML and text report generation
 - Test threshold validation with various threshold configurations
 
-**For Implementation Phase (Issue #846)**:
+### For Implementation Phase (Issue #846)
 
 - Follow architecture defined in this planning phase
 - Implement components in order: Collector → Storage → Reporter → Validator
 - Integrate with test runners (start with pytest)
 - Add configuration loading from defaults
 
-**For Packaging Phase (Issue #847)**:
+### For Packaging Phase (Issue #847)
 
 - Create distributable package with coverage tool components
 - Provide installation scripts and CI/CD integration
 - Document integration with existing ML Odyssey workflows
 - Create example usage for paper implementations
 
-**For Cleanup Phase (Issue #848)**:
+### For Cleanup Phase (Issue #848)
 
 - Collect optimization issues from implementation
 - Refactor for performance if needed
@@ -274,7 +274,7 @@ Coverage Tool Architecture
 
 **Created**: 2025-11-16
 
-**Expected Child Issues**:
+### Expected Child Issues
 
 - Issue #845: [Test] Coverage Tool - Write Tests
 - Issue #846: [Impl] Coverage Tool - Implementation

@@ -25,7 +25,7 @@ Set up the testing framework infrastructure for the shared library, including se
 
 **Decision**: Choose between Mojo native testing (if available) or pytest-style Python tools.
 
-**Considerations**:
+### Considerations
 
 - **Mojo Native Testing**: If Mojo provides native testing capabilities, prefer this for better language integration and performance
 - **Python Tools Adaptation**: If native testing is limited, adapt Python pytest for Mojo code testing
@@ -37,7 +37,7 @@ Set up the testing framework infrastructure for the shared library, including se
 
 **Decision**: Organize tests to mirror source structure.
 
-**Structure**:
+### Structure
 
 ```text
 shared-library/
@@ -47,7 +47,7 @@ shared-library/
 └── tests/
     └── component/
         └── test_module.mojo
-```
+```text
 
 **Rationale**: Mirroring structure makes tests easy to locate and maintain. Clear correspondence between source and test files reduces cognitive load.
 
@@ -55,7 +55,7 @@ shared-library/
 
 **Decision**: Implement automatic test discovery using naming conventions.
 
-**Conventions**:
+### Conventions
 
 - Test files: `test_*.mojo` or `*_test.mojo`
 - Test functions: `test_*` prefix
@@ -67,7 +67,7 @@ shared-library/
 
 **Decision**: Provide single command for running all tests.
 
-**Requirements**:
+### Requirements
 
 - Simple invocation: `./run_tests.sh` or `mojo test`
 - Filter capability: Run specific tests or test suites
@@ -80,7 +80,7 @@ shared-library/
 
 **Decision**: Integrate tests into CI/CD pipeline with fail-fast behavior.
 
-**Configuration**:
+### Configuration
 
 - Run tests on every commit
 - Run tests on pull requests
@@ -94,7 +94,7 @@ shared-library/
 
 **Decision**: Clear, actionable test output with failure details.
 
-**Requirements**:
+### Requirements
 
 - Pass/fail status for each test
 - Execution time for performance tracking
@@ -113,22 +113,22 @@ Based on the source plan, the implementation will follow these steps:
    - Assess pytest compatibility with Mojo
    - Choose framework based on maturity and features
 
-2. **Create test directory structure**
+1. **Create test directory structure**
    - Establish `tests/` directory hierarchy
    - Mirror source structure in test organization
    - Document directory conventions
 
-3. **Configure test discovery and collection**
+1. **Configure test discovery and collection**
    - Set up naming conventions for auto-discovery
    - Configure test collection patterns
    - Implement test filtering mechanisms
 
-4. **Set up test running commands**
+1. **Set up test running commands**
    - Create test runner script
    - Add command-line options (verbose, filter, etc.)
    - Document usage and examples
 
-5. **Integrate with CI/CD pipeline**
+1. **Integrate with CI/CD pipeline**
    - Add test job to CI configuration
    - Configure fail-fast behavior
    - Set up coverage reporting

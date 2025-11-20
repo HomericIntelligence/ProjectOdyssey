@@ -59,7 +59,7 @@ tools/
     ├── training_template.py    # Training loop templates (Python - templating)
     ├── data_pipeline.py        # Data pipeline generator (Python - templating)
     └── metrics_generator.py    # Metrics code generator (Python - templating)
-```
+```text
 
 ## Tool Categories
 
@@ -67,7 +67,7 @@ tools/
 
 **Purpose**: Generate complete directory structure and boilerplate files for new paper implementations.
 
-**Core Functionality**:
+### Core Functionality
 
 - Create paper directory structure following repository conventions
 - Generate model implementation stubs from templates
@@ -75,12 +75,12 @@ tools/
 - Generate documentation templates (README, notes)
 - Configure paper metadata and settings
 
-**Language Choice**:
+### Language Choice
 
 - **Python** for main scaffolding script (requires regex for template processing)
 - **Mojo** templates for generated code (actual implementation files)
 
-**Example Usage**:
+### Example Usage
 
 ```bash
 # Create new paper implementation
@@ -89,26 +89,26 @@ python tools/paper-scaffold/scaffold.py \
     --author "LeCun et al." \
     --year 1998 \
     --output papers/lenet5/
-```
+```text
 
 ### 2. Testing Utilities (`test-utils/`)
 
 **Purpose**: Provide reusable testing components for ML implementations.
 
-**Core Functionality**:
+### Core Functionality
 
 - Generate synthetic test data (images, tensors, sequences)
 - Provide common test fixtures (models, datasets, configs)
 - Analyze test coverage and identify gaps
 - Measure and track performance metrics
 
-**Language Choice**:
+### Language Choice
 
 - **Mojo** for data generators and fixtures (performance, type safety)
 - **Python** for coverage analysis (integration with existing tools)
 - **Mojo** for performance utilities (accurate measurements)
 
-**Example Usage**:
+### Example Usage
 
 ```mojo
 from tools.test_utils import generate_batch, ModelFixture
@@ -118,13 +118,13 @@ fn test_forward_pass():
     let batch = generate_batch(shape=(32, 3, 28, 28))
     let output = model.forward(batch)
     assert output.shape == (32, 10)
-```
+```text
 
 ### 3. Benchmarking (`benchmarking/`)
 
 **Purpose**: Measure and track performance characteristics of ML implementations.
 
-**Core Functionality**:
+### Core Functionality
 
 - Benchmark model inference latency
 - Measure training throughput (samples/second)
@@ -132,12 +132,12 @@ fn test_forward_pass():
 - Compare performance across implementations
 - Generate performance reports and visualizations
 
-**Language Choice**:
+### Language Choice
 
 - **Mojo** for all benchmarking code (required for accurate ML performance measurement)
 - **Python** for report generation only (matplotlib/pandas for visualization)
 
-**Example Usage**:
+### Example Usage
 
 ```mojo
 from tools.benchmarking import ModelBenchmark
@@ -148,13 +148,13 @@ fn benchmark_lenet():
     bench.measure_training(epochs=1, batch_size=32)
     bench.measure_memory()
     bench.save_results("benchmarks/lenet5.json")
-```
+```text
 
 ### 4. Code Generation (`codegen/`)
 
 **Purpose**: Generate boilerplate code and common patterns for ML implementations.
 
-**Core Functionality**:
+### Core Functionality
 
 - Generate Mojo struct definitions from specifications
 - Create training loop boilerplate with proper structure
@@ -162,12 +162,12 @@ fn benchmark_lenet():
 - Create metrics calculation code
 - Generate backward pass implementations from forward definitions
 
-**Language Choice**:
+### Language Choice
 
 - **Python** for all code generators (string templating, regex for parsing)
 - Generated output is Mojo code
 
-**Example Usage**:
+### Example Usage
 
 ```bash
 # Generate layer implementation
@@ -181,7 +181,7 @@ python tools/codegen/training_template.py \
     --optimizer SGD \
     --loss CrossEntropy \
     --metrics "accuracy,loss"
-```
+```text
 
 ## Language Selection Strategy
 
@@ -210,7 +210,7 @@ Tool Purpose?
     - Test data generation
     - Fixture creation
     - Type-safe utilities
-```
+```text
 
 ### Justification Documentation
 
@@ -232,7 +232,7 @@ Justification:
 
 Reference: ADR-001
 """
-```
+```text
 
 ## Distinction from scripts/ Directory
 
@@ -240,7 +240,7 @@ Reference: ADR-001
 
 **Purpose**: Repository automation and maintenance
 
-**Contents**:
+### Contents
 
 - GitHub issue creation and management
 - CI/CD automation scripts
@@ -248,7 +248,7 @@ Reference: ADR-001
 - Agent system management
 - Build and packaging scripts
 
-**Characteristics**:
+### Characteristics
 
 - Focused on repository operations
 - Integrate with external services (GitHub)
@@ -259,14 +259,14 @@ Reference: ADR-001
 
 **Purpose**: Developer productivity during implementation
 
-**Contents**:
+### Contents
 
 - Paper scaffolding generators
 - Testing utilities and helpers
 - Performance benchmarking tools
 - Code generation utilities
 
-**Characteristics**:
+### Characteristics
 
 - Focused on development workflow
 - Used directly by developers
@@ -329,12 +329,12 @@ Reference: ADR-001
    - Ensure no existing tool handles this
    - Get consensus on approach
 
-2. **Choose Appropriate Language**
+1. **Choose Appropriate Language**
    - Follow ADR-001 decision tree
    - Document justification if Python
    - Default to Mojo unless blocked
 
-3. **Create Tool Structure**
+1. **Create Tool Structure**
 
    ```text
    tools/<category>/<tool_name>/
@@ -344,13 +344,13 @@ Reference: ADR-001
    └── examples/        # Usage examples
    ```
 
-4. **Write Documentation**
+1. **Write Documentation**
    - Clear purpose statement
    - Installation/setup instructions
    - Usage examples with output
    - Troubleshooting section
 
-5. **Add Tests**
+1. **Add Tests**
    - Unit tests for core functionality
    - Integration tests for CLI
    - Example validation tests
@@ -365,14 +365,14 @@ Reference: ADR-001
 - Review Python tools for Mojo conversion
 - Archive unused tools
 
-**Version Compatibility**:
+### Version Compatibility
 
 - Track Mojo version requirements
 - Document breaking changes
 - Maintain compatibility matrix
 - Provide migration guides
 
-**Quality Standards**:
+### Quality Standards
 
 - All tools must have tests
 - Documentation required before merge

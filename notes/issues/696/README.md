@@ -27,14 +27,14 @@ contributors submit high-quality PRs that can be reviewed and merged efficiently
 
 **Decision**: Expand the existing PR section in CONTRIBUTING.md rather than creating a separate document.
 
-**Rationale**:
+### Rationale
 
 - CONTRIBUTING.md already contains a "Pull Request Process" section (lines 191-251)
 - Contributors expect to find PR guidance in CONTRIBUTING.md
 - Keeping related information together reduces navigation overhead
 - Easier to maintain when everything is in one place
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Create separate PULL_REQUEST.md - Rejected: Adds fragmentation, harder to find
 - Create docs/pr-guide.md - Rejected: Duplicates content from CONTRIBUTING.md
@@ -45,18 +45,18 @@ contributors submit high-quality PRs that can be reviewed and merged efficiently
 **Decision**: Structure PR section into clear subsections covering the complete lifecycle:
 
 1. Before You Start (preparation)
-2. Creating Your Pull Request (submission)
-3. Code Review (addressing feedback)
-4. Merging (completion)
+1. Creating Your Pull Request (submission)
+1. Code Review (addressing feedback)
+1. Merging (completion)
 
-**Rationale**:
+### Rationale
 
 - Mirrors the natural workflow of creating a PR
 - Easy to find information for each stage
 - Reduces cognitive load by separating concerns
 - Supports both new and experienced contributors
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Single narrative flow - Rejected: Hard to scan for specific information
 - FAQ-style Q&A - Rejected: Doesn't match natural workflow
@@ -66,7 +66,7 @@ contributors submit high-quality PRs that can be reviewed and merged efficiently
 
 **Decision**: Include specific commands for replying to review comments using GitHub API.
 
-**Rationale**:
+### Rationale
 
 - CLAUDE.md already documents this pattern (lines 134-165)
 - Common source of confusion (general comments vs review replies)
@@ -83,14 +83,14 @@ contributors submit high-quality PRs that can be reviewed and merged efficiently
 
 **Decision**: Add section on what makes a good PR description.
 
-**Rationale**:
+### Rationale
 
 - Currently missing from CONTRIBUTING.md
 - Directly impacts review efficiency
 - Reduces back-and-forth communication
 - Helps PRs get merged faster
 
-**Content to Include**:
+### Content to Include
 
 - Clear title format (conventional commits style already used)
 - Description structure (context, changes, testing)
@@ -102,14 +102,14 @@ contributors submit high-quality PRs that can be reviewed and merged efficiently
 
 **Decision**: Create an actionable checklist that covers technical and process requirements.
 
-**Rationale**:
+### Rationale
 
 - Makes requirements explicit and verifiable
 - Reduces reviewer burden
 - Helps contributors self-check before submission
 - Can be used in PR templates
 
-**Checklist Sections**:
+### Checklist Sections
 
 - Code quality (tests, formatting, linting)
 - Documentation (code comments, README updates)
@@ -120,14 +120,14 @@ contributors submit high-quality PRs that can be reviewed and merged efficiently
 
 **Decision**: Document what reviewers look for and how long reviews typically take.
 
-**Rationale**:
+### Rationale
 
 - Reduces uncertainty for contributors
 - Sets appropriate expectations
 - Helps contributors prepare better PRs
 - Makes the process feel fair and predictable
 
-**Content to Include**:
+### Content to Include
 
 - Review criteria (correctness, clarity, maintainability, tests)
 - Typical review timeline
@@ -138,13 +138,13 @@ contributors submit high-quality PRs that can be reviewed and merged efficiently
 
 **Decision**: Provide specific guidance on addressing different types of feedback.
 
-**Rationale**:
+### Rationale
 
 - Common point of confusion for contributors
 - Different feedback types require different responses
 - Explicit guidance reduces mistakes
 
-**Feedback Types**:
+### Feedback Types
 
 - Required changes (blocking)
 - Suggestions (non-blocking)
@@ -155,7 +155,7 @@ contributors submit high-quality PRs that can be reviewed and merged efficiently
 
 **Decision**: Link to CLAUDE.md for detailed technical workflows, keep CONTRIBUTING.md focused on contributor-facing guidance.
 
-**Rationale**:
+### Rationale
 
 - Avoid duplication between CONTRIBUTING.md and CLAUDE.md
 - CONTRIBUTING.md is for all contributors (external + internal)
@@ -183,10 +183,10 @@ This section will be filled during the implementation phase (#698).
 ### Key Considerations for Implementation
 
 1. **Preserve Existing Content**: The PR section already has valuable information (lines 191-251)
-2. **Add Missing Pieces**: Focus on what's not covered yet (PR quality guidelines, review criteria)
-3. **Enhance What Exists**: Improve review comment handling with more examples
-4. **Maintain Consistency**: Match tone and style of existing CONTRIBUTING.md
-5. **Visual Clarity**: Use proper markdown formatting (code blocks, lists, headings)
+1. **Add Missing Pieces**: Focus on what's not covered yet (PR quality guidelines, review criteria)
+1. **Enhance What Exists**: Improve review comment handling with more examples
+1. **Maintain Consistency**: Match tone and style of existing CONTRIBUTING.md
+1. **Visual Clarity**: Use proper markdown formatting (code blocks, lists, headings)
 
 ### Sections to Add/Enhance
 

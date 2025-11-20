@@ -29,32 +29,32 @@ cat notes/issues/<number>/test-feedback.md
 
 # Review package integration issues
 cat notes/issues/<number>/package-issues.md
-```
+```text
 
 ### 2. Refactor Code
 
 Address code quality issues:
 
-**Remove duplication:**
+### Remove duplication:
 
 ```bash
 ./scripts/detect_duplication.sh
 # Refactor duplicated code into shared functions
-```
+```text
 
-**Improve naming:**
+### Improve naming:
 
 ```bash
 ./scripts/check_naming.sh
 # Rename unclear variables/functions
-```
+```text
 
-**Simplify complexity:**
+### Simplify complexity:
 
 ```bash
 ./scripts/check_complexity.sh
 # Break down complex functions
-```
+```text
 
 ### 3. Update Documentation
 
@@ -65,7 +65,7 @@ Ensure documentation is accurate and complete:
 # Add/update docstrings
 # Create/update ADRs
 # Update examples
-```
+```text
 
 ### 4. Final Quality Checks
 
@@ -84,7 +84,7 @@ pre-commit run --all-files
 
 # Verify no TODOs remain
 grep -r "TODO" src/ || echo "✅ No TODOs"
-```
+```text
 
 ## Refactoring Guidelines
 
@@ -101,7 +101,7 @@ fn process(data: Tensor) -> Tensor:
 # After: Simplified
 fn process(data: Tensor) -> Tensor:
     return pipeline(data, [transform1, transform2, transform3])
-```
+```text
 
 ### DRY - Don't Repeat Yourself
 
@@ -116,7 +116,7 @@ fn add_f64(a: Float64, b: Float64) -> Float64:
 # After: Generic
 fn add[dtype: DType](a: Scalar[dtype], b: Scalar[dtype]) -> Scalar[dtype]:
     return a + b
-```
+```text
 
 ### Single Responsibility
 
@@ -135,7 +135,7 @@ fn load_data(path: String) -> RawData:
 fn preprocess_data(data: RawData) -> Tensor:
     let cleaned = remove_outliers(data)
     return normalize(cleaned)
-```
+```text
 
 ## Cleanup Checklist
 
@@ -159,7 +159,7 @@ fn preprocess_data(data: RawData) -> Tensor:
 ./scripts/find_unused_code.sh
 
 # Remove after verification
-```
+```text
 
 ### 2. Consolidate Imports
 
@@ -172,7 +172,7 @@ from module1 import func3
 # After: Organized
 from module1 import func1, func3
 from module2 import func2
-```
+```text
 
 ### 3. Standardize Error Handling
 
@@ -181,7 +181,7 @@ from module2 import func2
 fn safe_operation() raises -> Result:
     # Proper error handling
     pass
-```
+```text
 
 ### 4. Add Missing Tests
 
@@ -191,17 +191,17 @@ fn safe_operation() raises -> Result:
 
 # Add tests for uncovered code
 ./scripts/generate_missing_tests.sh
-```
+```text
 
 ## Integration with Workflow
 
-**Cleanup runs after:**
+### Cleanup runs after:
 
 - Test phase completes
 - Implementation phase completes
 - Package phase completes
 
-**Cleanup produces:**
+### Cleanup produces:
 
 - Refactored, clean code
 - Updated documentation

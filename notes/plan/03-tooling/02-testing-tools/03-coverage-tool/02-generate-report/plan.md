@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Load and parse coverage data
-2. Calculate coverage percentages per file
-3. Generate HTML report with source highlighting
-4. Create text summary for console output
+1. Calculate coverage percentages per file
+1. Generate HTML report with source highlighting
+1. Create text summary for console output
 
 ## Success Criteria
 

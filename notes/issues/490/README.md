@@ -49,13 +49,15 @@ Implement final integration and improvements for the complete coverage system, a
 
 **Key Insight**: Most coverage infrastructure is already implemented through component issues (#473-487).
 
-**This phase focuses on**:
+### This phase focuses on
+
 - ✅ Integration verification (not new features)
 - ✅ Filling small gaps (if any found during testing)
 - ✅ Documentation updates (linking components)
 - ✅ Final validation (end-to-end testing)
 
-**This phase does NOT**:
+### This phase does NOT
+
 - ❌ Rebuild existing components
 - ❌ Add new features beyond spec
 - ❌ Refactor working code
@@ -75,16 +77,16 @@ pytest --cov=scripts \
        --cov-report=term \
        --cov-fail-under=80
 
-# Expected flow:
+# Expected flow
 # 1. Coverage collected during tests (Setup Coverage)
 # 2. Reports generated (Coverage Reports)
 # 3. Thresholds checked (Coverage Gates)
 
-# Verify artifacts created:
+# Verify artifacts created
 ls .coverage           # Coverage data
 ls htmlcov/            # HTML reports
 ls coverage.xml        # XML report
-```
+```text
 
 **2. Validate CI Integration**
 
@@ -94,12 +96,12 @@ Test in CI environment:
 # Local CI simulation
 act -j test-with-coverage
 
-# Verify:
+# Verify
 # 1. Coverage collection works in CI
 # 2. Reports uploaded as artifacts
 # 3. Gates enforce thresholds
 # 4. PR comments show coverage (if configured)
-```
+```text
 
 **3. Check Configuration Consistency**
 
@@ -109,12 +111,12 @@ Ensure all components use same config:
 # Verify configuration in one place
 cat pyproject.toml | grep -A 20 "tool.coverage"
 
-# Should define:
+# Should define
 # - Source paths
 # - Exclusion patterns
 # - Threshold values
 # - Report formats
-```
+```text
 
 **4. Test Error Scenarios**
 
@@ -132,22 +134,22 @@ python scripts/check_coverage_regression.py \
   --current coverage.xml \
   --baseline coverage-baseline.xml
 # Expected: Skip with info message
-```
+```text
 
 ### Implementation Tasks (If Needed)
 
 **Only implement if gaps found during integration testing:**
 
-**Gap 1: Configuration Centralization**
+### Gap 1: Configuration Centralization
 
 If configuration scattered across files:
 
 ```bash
 # Consolidate to pyproject.toml
-# Move settings from .coveragerc, setup.cfg, etc.
-```
+# Move settings from .coveragerc, setup.cfg, etc
+```text
 
-**Gap 2: CI Workflow Optimization**
+### Gap 2: CI Workflow Optimization
 
 If CI has redundant steps:
 
@@ -159,9 +161,9 @@ If CI has redundant steps:
            --cov-report=html \
            --cov-report=xml \
            --cov-fail-under=80
-```
+```text
 
-**Gap 3: Missing Integration Scripts**
+### Gap 3: Missing Integration Scripts
 
 If manual steps required:
 
@@ -171,35 +173,37 @@ If manual steps required:
 set -e
 pytest --cov=scripts --cov-report=html --cov-report=xml --cov-fail-under=80
 python scripts/check_coverage_regression.py --current coverage.xml --baseline main-coverage.xml
-```
+```text
 
-**Gap 4: Documentation Links**
+### Gap 4: Documentation Links
 
 If documentation doesn't link components:
 
 ```markdown
-# Update docs/testing/coverage.md to link:
+# Update docs/testing/coverage.md to link
 # - Setup guide
 # - Reports guide
 # - Gates guide
-```
+```text
 
 ### Files to Create/Modify
 
-**Only if gaps identified:**
+### Only if gaps identified:
 
 **New Files** (if needed):
+
 - `scripts/run_coverage.sh` - Wrapper script for complete workflow
 - `docs/testing/coverage-overview.md` - System overview linking all components
 
 **Modified Files** (minimal changes):
+
 - `pyproject.toml` - Ensure all coverage config here
 - `.github/workflows/test.yml` - Optimize if redundant
 - `README.md` - Add coverage overview section
 
 ### Validation Workflow
 
-**Test end-to-end coverage:**
+### Test end-to-end coverage:
 
 ```bash
 # 1. Clean state
@@ -227,11 +231,11 @@ python scripts/check_coverage_regression.py \
   --current coverage.xml \
   --baseline coverage-baseline.xml \
   --max-decrease 2.0
-```
+```text
 
 ### Integration Patterns
 
-**Pattern 1: Unified Coverage Command**
+### Pattern 1: Unified Coverage Command
 
 Single command for all coverage tasks:
 
@@ -241,9 +245,9 @@ make coverage  # or just: pytest --cov=scripts
 
 # CI workflow
 make coverage-ci  # includes threshold and regression checks
-```
+```text
 
-**Pattern 2: Modular Reporting**
+### Pattern 2: Modular Reporting
 
 Different reports for different contexts:
 
@@ -257,13 +261,13 @@ open htmlcov/index.html
 
 # CI integration
 pytest --cov=scripts --cov-report=xml
-```
+```text
 
-**Pattern 3: Progressive Gates**
+### Pattern 3: Progressive Gates
 
 Gates check incrementally:
 
-```
+```text
 1. Threshold check (must pass)
    ↓
 2. Regression check (must pass on PR)
@@ -271,11 +275,11 @@ Gates check incrementally:
 3. Report generation (always happens)
    ↓
 4. Artifact upload (for review)
-```
+```text
 
 ### Common Integration Issues
 
-**Issue 1: Data Not Flowing Between Components**
+### Issue 1: Data Not Flowing Between Components
 
 **Symptom**: Reports show wrong data, gates check wrong coverage
 
@@ -284,9 +288,9 @@ Gates check incrementally:
 ```toml
 [tool.coverage.run]
 data_file = ".coverage"  # Explicit path
-```
+```text
 
-**Issue 2: CI Steps Run in Wrong Order**
+### Issue 2: CI Steps Run in Wrong Order
 
 **Symptom**: Gates check before reports generated
 
@@ -297,9 +301,9 @@ steps:
   - run: pytest --cov=scripts  # 1. Collect
   - run: coverage html          # 2. Report
   - run: coverage report --fail-under=80  # 3. Gate
-```
+```text
 
-**Issue 3: Configuration Conflicts**
+### Issue 3: Configuration Conflicts
 
 **Symptom**: Different components use different settings
 

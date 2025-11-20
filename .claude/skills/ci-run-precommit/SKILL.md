@@ -27,28 +27,28 @@ Configured in `.pre-commit-config.yaml`:
   entry: mojo format
   language: system
   files: \.(mojo|🔥)$
-```
+```text
 
 ### 2. Trailing Whitespace
 
 ```yaml
 - id: trailing-whitespace
   name: Trim Trailing Whitespace
-```
+```text
 
 ### 3. End of File Fixer
 
 ```yaml
 - id: end-of-file-fixer
   name: Fix End of Files
-```
+```text
 
 ### 4. YAML Check
 
 ```yaml
 - id: check-yaml
   name: Check YAML
-```
+```text
 
 ### 5. Large Files Check
 
@@ -56,14 +56,14 @@ Configured in `.pre-commit-config.yaml`:
 - id: check-added-large-files
   name: Check for Large Files
   args: ['--maxkb=1000']
-```
+```text
 
 ### 6. Mixed Line Ending
 
 ```yaml
 - id: mixed-line-ending
   name: Fix Mixed Line Endings
-```
+```text
 
 ### 7. Markdownlint (Disabled Currently)
 
@@ -71,7 +71,7 @@ Configured in `.pre-commit-config.yaml`:
 # Will enable after fixing existing files
 - id: markdownlint-cli2
   name: Markdown Lint
-```
+```text
 
 ## Usage
 
@@ -86,7 +86,7 @@ pre-commit run
 
 # Automatically runs on commit
 git commit -m "message"
-```
+```text
 
 ### Run Specific Hook
 
@@ -96,7 +96,7 @@ pre-commit run trailing-whitespace --all-files
 
 # Run on specific file
 pre-commit run --files src/tensor.mojo
-```
+```text
 
 ### Install Hooks
 
@@ -105,7 +105,7 @@ pre-commit run --files src/tensor.mojo
 pre-commit install
 
 # Now hooks run automatically on git commit
-```
+```text
 
 ## Hook Behavior
 
@@ -118,7 +118,7 @@ These hooks fix issues automatically:
 - `mixed-line-ending` - Fixes line endings
 - `mojo-format` - Formats Mojo code
 
-**Workflow when auto-fix runs:**
+### Workflow when auto-fix runs:
 
 ```bash
 git commit -m "message"
@@ -127,7 +127,7 @@ git commit -m "message"
 
 git add .  # Stage the fixes
 git commit -m "message"  # Commit again
-```
+```text
 
 ### Check-Only Hooks
 
@@ -155,7 +155,7 @@ jobs:
       - uses: actions/setup-python@v5
       - run: pip install pre-commit
       - run: pre-commit run --all-files
-```
+```text
 
 ## Common Issues
 
@@ -171,15 +171,15 @@ Trim Trailing Whitespace....Failed
 Files were modified by this hook. Additional output:
 
 Fixing file.md
-```
+```text
 
-**Fix:**
+### Fix:
 
 ```bash
 # Files were fixed, just stage and re-commit
 git add .
 git commit -m "message"
-```
+```text
 
 ### YAML Validation Fails
 
@@ -189,7 +189,7 @@ Check YAML...Failed
 - exit code: 1
 
 Syntax error in .github/workflows/test.yml
-```
+```text
 
 **Fix:** Correct YAML syntax
 
@@ -201,9 +201,9 @@ Check for Large Files...Failed
 - exit code: 1
 
 large_file.bin (1500 KB) exceeds 1000 KB
-```
+```text
 
-**Fix:**
+### Fix:
 
 - Don't commit large files
 - Use Git LFS if needed
@@ -211,7 +211,7 @@ large_file.bin (1500 KB) exceeds 1000 KB
 
 ## Skipping Hooks
 
-**Only when necessary:**
+### Only when necessary:
 
 ```bash
 # Skip all hooks (not recommended)
@@ -219,9 +219,9 @@ git commit --no-verify -m "message"
 
 # Skip specific hook
 SKIP=trailing-whitespace git commit -m "message"
-```
+```text
 
-**When to skip:**
+### When to skip:
 
 - Emergency hotfix
 - Hook has bug
@@ -231,13 +231,13 @@ SKIP=trailing-whitespace git commit -m "message"
 
 ## Examples
 
-**Run all hooks:**
+### Run all hooks:
 
 ```bash
 pre-commit run --all-files
-```
+```text
 
-**Run before committing:**
+### Run before committing:
 
 ```bash
 # Check if commit will pass
@@ -245,19 +245,19 @@ pre-commit run
 
 # If passing, commit
 git commit -m "message"
-```
+```text
 
-**Install hooks:**
+### Install hooks:
 
 ```bash
 pre-commit install
-```
+```text
 
-**Update hooks:**
+### Update hooks:
 
 ```bash
 pre-commit autoupdate
-```
+```text
 
 ## Scripts Available
 
@@ -268,10 +268,10 @@ pre-commit autoupdate
 ## Best Practices
 
 1. **Install hooks** - Run `pre-commit install` once
-2. **Let hooks fix** - Don't bypass, let them auto-fix
-3. **Run before push** - Verify CI will pass
-4. **Don't skip** - Only skip in emergencies
-5. **Keep updated** - Run `pre-commit autoupdate` periodically
+1. **Let hooks fix** - Don't bypass, let them auto-fix
+1. **Run before push** - Verify CI will pass
+1. **Don't skip** - Only skip in emergencies
+1. **Keep updated** - Run `pre-commit autoupdate` periodically
 
 ## Workflow Integration
 
@@ -286,13 +286,13 @@ pre-commit install
 
 # Test
 pre-commit run --all-files
-```
+```text
 
 ### Daily Workflow
 
 ```bash
 # Make changes
-# ...
+#
 
 # Commit (hooks run automatically)
 git commit -m "feat: new feature"
@@ -300,7 +300,7 @@ git commit -m "feat: new feature"
 # If hooks fix files
 git add .
 git commit -m "feat: new feature"
-```
+```text
 
 ### Before PR
 
@@ -310,6 +310,6 @@ pre-commit run --all-files
 
 # If passing, create PR
 gh pr create --issue 42
-```
+```text
 
 See `.pre-commit-config.yaml` for complete hook configuration.

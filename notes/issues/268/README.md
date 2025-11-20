@@ -29,6 +29,7 @@ Design and document basic uniform and normal distribution initializers for neura
 **Decision**: Implement four distinct initializer functions as building blocks
 
 **Rationale**: These basic initializers serve as the foundation for more sophisticated initialization strategies (Xavier/Glorot, Kaiming/He). By keeping them simple and focused, they can be:
+
 - Easily composed into more complex schemes
 - Used independently for specific use cases (biases, embeddings)
 - Tested and verified independently
@@ -39,7 +40,8 @@ Design and document basic uniform and normal distribution initializers for neura
 
 **Default Range**: [-0.1, 0.1]
 
-**Key Considerations**:
+### Key Considerations
+
 - Bounds must be configurable to support different initialization strategies
 - Default range provides reasonable starting weights for most scenarios
 - Must validate that low < high to prevent invalid distributions
@@ -51,7 +53,8 @@ Design and document basic uniform and normal distribution initializers for neura
 
 **Default Parameters**: mean=0, std=0.01
 
-**Key Considerations**:
+### Key Considerations
+
 - Mean typically zero for symmetric weight distributions
 - Standard deviation controls initial weight magnitude
 - Small default std (0.01) prevents saturation in sigmoid/tanh networks
@@ -61,13 +64,15 @@ Design and document basic uniform and normal distribution initializers for neura
 
 **Decision**: Support explicit seed parameter for reproducibility
 
-**Rationale**:
+### Rationale
+
 - Research reproducibility requires deterministic initialization
 - Debugging benefits from consistent weight initialization
 - Testing requires reproducible behavior
 - Production may want randomness (no seed specified)
 
-**Implementation Approach**:
+### Implementation Approach
+
 - Accept optional seed parameter in all initializers
 - If seed provided, set random state before generation
 - If seed not provided, use current random state
@@ -75,12 +80,14 @@ Design and document basic uniform and normal distribution initializers for neura
 
 ### 5. Convenience Initializers
 
-**Zero Initialization**:
+### Zero Initialization
+
 - Common for bias initialization
 - Simple wrapper around constant(0.0)
 - No randomness needed
 
-**Constant Initialization**:
+### Constant Initialization
+
 - Useful for specific initialization strategies
 - Accept value parameter
 - Fill tensor with specified constant
@@ -88,7 +95,8 @@ Design and document basic uniform and normal distribution initializers for neura
 
 ### 6. Type Safety and Memory Management
 
-**Mojo-Specific Considerations**:
+### Mojo-Specific Considerations
+
 - Use `fn` for all initializer functions (type safety, performance)
 - Leverage `owned` parameters for tensor ownership transfer
 - Use `borrowed` parameters for read-only access (shape, params)
@@ -97,15 +105,17 @@ Design and document basic uniform and normal distribution initializers for neura
 
 ### 7. API Design Principles
 
-**Function Signatures**:
+### Function Signatures
+
 ```mojo
 fn uniform(shape: TensorShape, low: Float64 = -0.1, high: Float64 = 0.1, seed: Optional[Int] = None) -> Tensor
 fn normal(shape: TensorShape, mean: Float64 = 0.0, std: Float64 = 0.01, seed: Optional[Int] = None) -> Tensor
 fn zeros(shape: TensorShape) -> Tensor
 fn constant(shape: TensorShape, value: Float64) -> Tensor
-```
+```text
 
-**Design Principles**:
+### Design Principles
+
 - Explicit shape parameter (type-safe, clear intent)
 - Sensible defaults (minimize boilerplate)
 - Optional seed for reproducibility
@@ -115,12 +125,14 @@ fn constant(shape: TensorShape, value: Float64) -> Tensor
 
 **Context**: Part of initializers module alongside Xavier/Glorot and Kaiming/He
 
-**Dependencies**:
+### Dependencies
+
 - Requires tensor operations (creation, filling)
 - Requires random number generation (uniform, normal)
 - Foundation for variance-scaled initializers
 
-**Usage Pattern**:
+### Usage Pattern
+
 - Direct use for biases, embeddings, custom schemes
 - Building blocks for Xavier/Glorot (uniform and normal variants)
 - Building blocks for Kaiming/He (uniform and normal variants)

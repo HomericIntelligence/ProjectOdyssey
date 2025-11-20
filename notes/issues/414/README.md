@@ -52,18 +52,18 @@ Following TDD principles and the established image augmentation test pattern:
    - Test determinism with seed
    - Validate output correctness
 
-2. **Semantic Preservation Tests**:
+1. **Semantic Preservation Tests**:
    - Verify augmented text retains meaning
    - Check word count constraints
    - Validate grammatical structure preservation
 
-3. **Edge Case Tests**:
+1. **Edge Case Tests**:
    - Empty string handling
    - Single word texts
    - Special characters and punctuation
    - Unicode support
 
-4. **Pipeline Composition Tests**:
+1. **Pipeline Composition Tests**:
    - Multiple augmentations in sequence
    - Determinism in pipeline
    - Composability validation
@@ -71,6 +71,7 @@ Following TDD principles and the established image augmentation test pattern:
 ### Simplification Strategy
 
 Given Mojo's current limitations:
+
 - Use simple string operations (split/join on spaces)
 - Hardcode small synonym dictionary for testing
 - Focus on word-level operations
@@ -84,57 +85,65 @@ Create: `/home/user/ml-odyssey/tests/shared/data/transforms/test_text_augmentati
 
 ### Tests Created (35 total)
 
-**Helper Function Tests (6)**:
+### Helper Function Tests (6)
+
 1. `test_split_words_basic` - Verify space-based tokenization
-2. `test_split_words_empty` - Handle empty strings
-3. `test_split_words_single` - Single word handling
-4. `test_join_words_basic` - Join with spaces
-5. `test_join_words_empty` - Empty list handling
-6. `test_join_words_single` - Single word joining
+1. `test_split_words_empty` - Handle empty strings
+1. `test_split_words_single` - Single word handling
+1. `test_join_words_basic` - Join with spaces
+1. `test_join_words_empty` - Empty list handling
+1. `test_join_words_single` - Single word joining
 
-**RandomSwap Tests (5)**:
+### RandomSwap Tests (5)
+
 1. `test_random_swap_basic` - Basic swap functionality
-2. `test_random_swap_probability` - Probability respect (p=0.0)
-3. `test_random_swap_empty_text` - Empty string edge case
-4. `test_random_swap_single_word` - Single word edge case
-5. `test_random_swap_deterministic` - Seed-based reproducibility
+1. `test_random_swap_probability` - Probability respect (p=0.0)
+1. `test_random_swap_empty_text` - Empty string edge case
+1. `test_random_swap_single_word` - Single word edge case
+1. `test_random_swap_deterministic` - Seed-based reproducibility
 
-**RandomDeletion Tests (6)**:
+### RandomDeletion Tests (6)
+
 1. `test_random_deletion_basic` - Basic deletion with p=0.5
-2. `test_random_deletion_probability_never` - No deletion with p=0.0
-3. `test_random_deletion_preserves_one_word` - At least one word preserved
-4. `test_random_deletion_empty_text` - Empty string handling
-5. `test_random_deletion_single_word` - Single word preservation
-6. `test_random_deletion_deterministic` - Reproducibility
+1. `test_random_deletion_probability_never` - No deletion with p=0.0
+1. `test_random_deletion_preserves_one_word` - At least one word preserved
+1. `test_random_deletion_empty_text` - Empty string handling
+1. `test_random_deletion_single_word` - Single word preservation
+1. `test_random_deletion_deterministic` - Reproducibility
 
-**RandomInsertion Tests (5)**:
+### RandomInsertion Tests (5)
+
 1. `test_random_insertion_basic` - Insert from vocabulary
-2. `test_random_insertion_probability` - Probability respect (p=0.0)
-3. `test_random_insertion_empty_text` - Empty string edge case
-4. `test_random_insertion_empty_vocabulary` - Empty vocabulary handling
-5. `test_random_insertion_deterministic` - Reproducibility
+1. `test_random_insertion_probability` - Probability respect (p=0.0)
+1. `test_random_insertion_empty_text` - Empty string edge case
+1. `test_random_insertion_empty_vocabulary` - Empty vocabulary handling
+1. `test_random_insertion_deterministic` - Reproducibility
 
-**RandomSynonymReplacement Tests (5)**:
+### RandomSynonymReplacement Tests (5)
+
 1. `test_random_synonym_replacement_basic` - Replace with synonyms
-2. `test_random_synonym_replacement_probability` - Probability respect (p=0.0)
-3. `test_random_synonym_replacement_no_synonyms` - No matching synonyms
-4. `test_random_synonym_replacement_empty_text` - Empty string handling
-5. `test_random_synonym_replacement_deterministic` - Reproducibility
+1. `test_random_synonym_replacement_probability` - Probability respect (p=0.0)
+1. `test_random_synonym_replacement_no_synonyms` - No matching synonyms
+1. `test_random_synonym_replacement_empty_text` - Empty string handling
+1. `test_random_synonym_replacement_deterministic` - Reproducibility
 
-**Pipeline/Composition Tests (3)**:
+### Pipeline/Composition Tests (3)
+
 1. `test_text_compose_basic` - Sequential transform application
-2. `test_text_compose_deterministic` - Pipeline reproducibility
-3. `test_text_pipeline_alias` - TextPipeline alias verification
+1. `test_text_compose_deterministic` - Pipeline reproducibility
+1. `test_text_pipeline_alias` - TextPipeline alias verification
 
-**Integration Tests (2)**:
+### Integration Tests (2)
+
 1. `test_all_augmentations_together` - All four augmentations in pipeline
-2. `test_augmentation_preserves_word_count_without_insertion_deletion` - Swap+synonym preserve count
+1. `test_augmentation_preserves_word_count_without_insertion_deletion` - Swap+synonym preserve count
 
 ### Test Patterns Used
 
 Following established image augmentation test patterns:
 
-**Probability Testing**:
+### Probability Testing
+
 ```mojo
 // Test p=0.0 (never apply)
 var transform = RandomSwap(0.0, 10)
@@ -145,9 +154,10 @@ assert_equal(result, text)
 var transform = RandomSwap(1.0, 1)
 var result = transform(text)
 // Verify transformation occurred
-```
+```text
 
-**Determinism Testing**:
+### Determinism Testing
+
 ```mojo
 TestFixtures.set_seed()
 var result1 = transform(text)
@@ -156,9 +166,10 @@ TestFixtures.set_seed()
 var result2 = transform(text)
 
 assert_equal(result1, result2)
-```
+```text
 
-**Edge Case Testing**:
+### Edge Case Testing
+
 - Empty strings
 - Single words
 - Empty vocabularies/synonym dictionaries
@@ -177,6 +188,7 @@ assert_equal(result1, result2)
 ### Status
 
 **Test Phase**: ✅ Complete
+
 - 35 comprehensive tests implemented
 - All test patterns from image augmentations applied
 - Edge cases thoroughly covered

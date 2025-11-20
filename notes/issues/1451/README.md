@@ -34,21 +34,25 @@ As specified in the issue description.
 ## Implementation Notes
 
 ## Overview
+
 Configure the tools available to the research assistant agent for code analysis, file operations, and information retrieval. Define tool permissions, usage patterns, and integration points.
 
 ## Cleanup Objectives
+
 - Refactor code for optimal quality and maintainability
 - Remove technical debt and temporary workarounds
 - Ensure comprehensive documentation
 - Perform final validation and optimization
 
 ## Cleanup Tasks
+
 - Code review and refactoring
 - Documentation finalization
 - Performance optimization
 - Final testing and validation
 
 ## Success Criteria
+
 - [ ] All necessary tools are configured
 - [ ] Permissions are appropriate and secure
 - [ ] Usage guidelines are clear
@@ -56,6 +60,7 @@ Configure the tools available to the research assistant agent for code analysis,
 - [ ] Error handling is defined
 
 ## Notes
+
 Focus on tools needed for research: reading papers/code, analyzing implementations, searching codebases. Keep permissions minimal but sufficient. Document how tools should be chained for complex tasks.
 
 ## Status

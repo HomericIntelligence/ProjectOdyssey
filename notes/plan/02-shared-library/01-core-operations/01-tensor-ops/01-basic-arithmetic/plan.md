@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Implement addition with broadcasting support
-2. Create subtraction following broadcasting rules
-3. Build multiplication with element-wise semantics
-4. Implement division with safe zero handling
+1. Create subtraction following broadcasting rules
+1. Build multiplication with element-wise semantics
+1. Implement division with safe zero handling
 
 ## Success Criteria
 

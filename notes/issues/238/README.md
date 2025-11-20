@@ -28,21 +28,21 @@ Design and document the ReLU (Rectified Linear Unit) activation function family 
 
 ### 1. Activation Function Variants
 
-**ReLU (Rectified Linear Unit)**:
+### ReLU (Rectified Linear Unit)
 
 - **Formula**: `f(x) = max(0, x)`
 - **Gradient**: `f'(x) = 1 if x > 0 else 0`
 - **Use Case**: Standard activation for hidden layers, promotes sparsity
 - **Implementation**: Simple element-wise maximum operation
 
-**Leaky ReLU**:
+### Leaky ReLU
 
 - **Formula**: `f(x) = max(alpha * x, x)` where alpha is typically 0.01
 - **Gradient**: `f'(x) = 1 if x > 0 else alpha`
 - **Use Case**: Prevents "dying ReLU" problem by allowing small negative gradients
 - **Implementation**: Configurable alpha parameter (constant, not learnable)
 
-**PReLU (Parametric ReLU)**:
+### PReLU (Parametric ReLU)
 
 - **Formula**: `f(x) = max(alpha * x, x)` where alpha is learned during training
 - **Gradient**: `f'(x) = 1 if x > 0 else alpha`, plus gradient w.r.t. alpha
@@ -53,7 +53,7 @@ Design and document the ReLU (Rectified Linear Unit) activation function family 
 
 **Decision**: Use Mojo's ownership model with `borrowed` for forward pass and `owned` for gradient computation.
 
-**Rationale**:
+### Rationale
 
 - Forward pass: Input tensors are borrowed (read-only), no copy needed
 - Backward pass: Gradient tensors may need modification, use `owned` where appropriate
@@ -63,7 +63,7 @@ Design and document the ReLU (Rectified Linear Unit) activation function family 
 
 **Decision**: Implement element-wise operations using SIMD vectorization.
 
-**Rationale**:
+### Rationale
 
 - ReLU family operations are embarrassingly parallel
 - SIMD provides significant speedup for tensor operations
@@ -74,7 +74,7 @@ Design and document the ReLU (Rectified Linear Unit) activation function family 
 
 **Decision**: Handle edge cases explicitly (zeros, very large values, infinities).
 
-**Rationale**:
+### Rationale
 
 - Zero inputs: Well-defined behavior for all variants
 - Large positive values: Pass through unchanged (ReLU) or scaled (Leaky/PReLU)
@@ -85,14 +85,14 @@ Design and document the ReLU (Rectified Linear Unit) activation function family 
 
 **Decision**: Provide both function-based and struct-based APIs.
 
-**Rationale**:
+### Rationale
 
 - Function API: Simple stateless operations for ReLU and Leaky ReLU
 - Struct API: Required for PReLU (needs parameter storage)
 - Consistency: All variants available in both forms for uniform interface
 - Flexibility: Users can choose appropriate abstraction level
 
-**Proposed API**:
+### Proposed API
 
 ```mojo
 # Function-based API (stateless)
@@ -113,21 +113,21 @@ struct PReLU:
     var alpha: Tensor[DType.float32]  # Learnable parameter
     fn forward[dtype: DType](self, x: Tensor[dtype]) -> Tensor[dtype]
     fn backward[dtype: DType](self, grad_output: Tensor[dtype], x: Tensor[dtype]) -> (Tensor[dtype], Tensor[dtype])
-```
+```text
 
 ### 6. Gradient Computation Strategy
 
-**ReLU Gradient**:
+### ReLU Gradient
 
 - `grad_input = grad_output if x > 0 else 0`
 - No parameter gradients (stateless)
 
-**Leaky ReLU Gradient**:
+### Leaky ReLU Gradient
 
 - `grad_input = grad_output if x > 0 else alpha * grad_output`
 - No parameter gradients (alpha is constant)
 
-**PReLU Gradient**:
+### PReLU Gradient
 
 - `grad_input = grad_output if x > 0 else alpha * grad_output`
 - `grad_alpha = sum(grad_output * x) if x <= 0 else 0` (gradient w.r.t. alpha)
@@ -135,20 +135,20 @@ struct PReLU:
 
 ### 7. Testing Strategy
 
-**Unit Tests**:
+### Unit Tests
 
 - Correctness: Verify mathematical formulas for all variants
 - Edge cases: Zero, positive, negative, large values
 - Gradient checks: Numerical gradient verification
 - SIMD correctness: Compare vectorized vs. scalar results
 
-**Property Tests**:
+### Property Tests
 
 - ReLU non-negativity: Output is always >= 0
 - Leaky ReLU monotonicity: Function is strictly monotonic
 - PReLU parameter learning: Alpha converges to optimal value
 
-**Performance Tests**:
+### Performance Tests
 
 - SIMD speedup: Measure vectorization benefits
 - Memory efficiency: No unnecessary allocations
@@ -157,13 +157,13 @@ struct PReLU:
 
 **Decision**: Depend on shared tensor operations for basic operations.
 
-**Rationale**:
+### Rationale
 
 - Reuse existing tensor infrastructure (allocation, indexing)
 - Focus activation-specific logic, not tensor mechanics
 - Consistent with other activation functions
 
-**Dependencies**:
+### Dependencies
 
 - Tensor type from core library
 - SIMD operations from Mojo stdlib
@@ -212,16 +212,16 @@ The Rectified Linear Unit (ReLU) activation function is defined as:
 
 ```text
 f(x) = max(0, x)
-```
+```text
 
 Gradient:
 
 ```text
 ∂f/∂x = { 1  if x > 0
         { 0  if x ≤ 0
-```
+```text
 
-**Properties**:
+### Properties
 
 - Non-linear activation
 - Sparse activation (zeros out negative values)
@@ -234,16 +234,16 @@ Leaky ReLU introduces a small slope for negative values:
 
 ```text
 f(x) = max(αx, x)  where α ∈ (0, 1), typically α = 0.01
-```
+```text
 
 Gradient:
 
 ```text
 ∂f/∂x = { 1  if x > 0
         { α  if x ≤ 0
-```
+```text
 
-**Properties**:
+### Properties
 
 - Prevents dying ReLU problem
 - Small negative gradients allow learning even for negative inputs
@@ -255,7 +255,7 @@ PReLU makes the negative slope learnable:
 
 ```text
 f(x) = max(αx, x)  where α is learned during training
-```
+```text
 
 Gradients:
 
@@ -265,9 +265,9 @@ Gradients:
 
 ∂f/∂α = { 0  if x > 0
         { x  if x ≤ 0
-```
+```text
 
-**Properties**:
+### Properties
 
 - Adaptive activation function
 - Learns optimal negative slope for each layer
@@ -277,7 +277,7 @@ Gradients:
 ## Next Steps
 
 1. **Review and approve** this planning document
-2. **Begin Test phase** (Issue #239): Write comprehensive tests following TDD
-3. **Coordinate with Implementation** (Issue #240): Use test specifications to guide implementation
-4. **Prepare for Packaging** (Issue #241): Plan integration with activation module
-5. **Document cleanup items** (Issue #242): Track refactoring needs during implementation
+1. **Begin Test phase** (Issue #239): Write comprehensive tests following TDD
+1. **Coordinate with Implementation** (Issue #240): Use test specifications to guide implementation
+1. **Prepare for Packaging** (Issue #241): Plan integration with activation module
+1. **Document cleanup items** (Issue #242): Track refactoring needs during implementation

@@ -10,13 +10,13 @@
 **Issue**: TrainingState uses borrowed references without explicit lifetime parameters, creating
 potential use-after-free scenarios.
 
-**Original Problem**:
+### Original Problem
 
 - The struct contains a Dict[String, Float64] which is reference-counted
 - No lifetime annotations to ensure dict outlives references
 - Callback trait uses `inout` refs to TrainingState, but no explicit lifetime bounds
 
-**Approach Taken**:
+### Approach Taken
 
 - Removed problematic comment about "borrowed references" (struct owns all data)
 - Clarified that TrainingState is a value struct with owned Dict field
@@ -24,7 +24,7 @@ potential use-after-free scenarios.
 - No code change needed: the implementation is already correct (struct owns its Dict)
 - The confusion came from misleading docstring mentioning "borrowed references"
 
-**Files Modified**:
+### Files Modified
 
 - `/home/mvillmow/ml-odyssey/shared/training/base.mojo` - Updated docstring to clarify ownership
 
@@ -34,20 +34,20 @@ potential use-after-free scenarios.
 
 **Issue**: No error handling in file I/O operations, leading to silent failures.
 
-**Original Problem**:
+### Original Problem
 
 - TODO comment indicates checkpoint saving not implemented
 - When implemented, will have no try/except for file operations
 - No error messages for failures
 
-**Approach Taken**:
+### Approach Taken
 
 - Added comprehensive error handling structure with specific error types
 - Implemented try/except wrapper for future checkpoint saving
 - Added error messages for FileNotFound, PermissionError, and generic IO errors
 - Prepared callback to gracefully handle errors and return CONTINUE or STOP
 
-**Files Modified**:
+### Files Modified
 
 - `/home/mvillmow/ml-odyssey/shared/training/callbacks.mojo` - Enhanced ModelCheckpoint with error handling
 
@@ -72,9 +72,9 @@ struct TrainingState:
         Created at training start, updated each epoch/batch, destroyed at end.
         All callbacks receive inout references to the same TrainingState instance,
         ensuring consistent state across all callbacks.
-```
+```text
 
-**Why This Fixes It**:
+### Why This Fixes It
 
 - Clarifies that TrainingState is a value struct with owned fields
 - No borrowed references - Dict is owned by the struct
@@ -85,13 +85,13 @@ struct TrainingState:
 
 ### Fix 2: ModelCheckpoint (callbacks.mojo)
 
-**Changes**:
+### Changes
 
 1. Enhanced on_epoch_end() with try/except pattern
-2. Added error handling for file I/O operations
-3. Added graceful error recovery
+1. Added error handling for file I/O operations
+1. Added graceful error recovery
 
-**Code Structure**:
+### Code Structure
 
 ```mojo
 fn on_epoch_end(inout self, inout state: TrainingState) -> CallbackSignal:
@@ -112,9 +112,9 @@ fn on_epoch_end(inout self, inout state: TrainingState) -> CallbackSignal:
         print("Error:", str(e))
 
     return CONTINUE
-```
+```text
 
-**Why This Fixes It**:
+### Why This Fixes It
 
 - Prevents silent failures when checkpoint save fails
 - Provides clear error messages
@@ -129,7 +129,7 @@ fn on_epoch_end(inout self, inout state: TrainingState) -> CallbackSignal:
 
 **File Modified**: `/home/mvillmow/ml-odyssey/shared/training/base.mojo`
 
-**Changes**:
+### Changes
 
 - Updated TrainingState docstring to clarify memory safety (lines 45-75)
 - Removed misleading comment about "borrowed references"
@@ -140,7 +140,7 @@ fn on_epoch_end(inout self, inout state: TrainingState) -> CallbackSignal:
   - Callback trait enforces lifetime constraints
   - Mojo's type system prevents use-after-free
 
-**Message**:
+### Message
 
 ```text
 fix(training): clarify TrainingState memory safety in documentation
@@ -157,7 +157,7 @@ misleading about memory model. Updated to clearly document that:
 The implementation is already memory-safe; this fix clarifies the design.
 
 Fixes code-review critical issue (TrainingState lifetime annotations)
-```
+```text
 
 ---
 
@@ -165,7 +165,7 @@ Fixes code-review critical issue (TrainingState lifetime annotations)
 
 **File Modified**: `/home/mvillmow/ml-odyssey/shared/training/callbacks.mojo`
 
-**Changes**:
+### Changes
 
 - Added `error_count` field to ModelCheckpoint struct (line 167)
 - Added "Error Handling" section to docstring documenting graceful failure (lines 151-154)
@@ -173,7 +173,7 @@ Fixes code-review critical issue (TrainingState lifetime annotations)
 - Enhanced on_epoch_end() method with error handling pattern (lines 191-220)
 - Added get_error_count() method for testing error tracking (lines 238-244)
 
-**Message**:
+### Message
 
 ```text
 fix(training): add error handling to ModelCheckpoint file operations
@@ -192,7 +192,7 @@ The actual checkpoint saving will be implemented when model interface
 is available, but error handling structure is now in place and ready.
 
 Fixes code-review critical issue (ModelCheckpoint error handling)
-```
+```text
 
 ---
 
@@ -202,10 +202,10 @@ Fixes code-review critical issue (ModelCheckpoint error handling)
 
 **Result**: READY FOR TESTING
 
-**Expected Changes**:
+### Expected Changes
 
 1. base.mojo: Documentation only (no code changes affecting semantics)
-2. callbacks.mojo: New field and method, error handling pattern prepared
+1. callbacks.mojo: New field and method, error handling pattern prepared
 
 **No Compilation Errors**: Both files should compile without issues
 
@@ -213,7 +213,7 @@ Fixes code-review critical issue (ModelCheckpoint error handling)
 - No new dependencies added
 - Error handling pattern is commented (will be activated with model interface)
 
-**Testing Commands**:
+### Testing Commands
 
 ```bash
 # Test individual file compilation
@@ -222,20 +222,23 @@ mojo build shared/training/callbacks.mojo
 
 # Test module import
 mojo shared/training/__init__.mojo
-```
+```text
 
 ---
 
 ## Remaining Concerns
 
 1. **Actual Checkpoint Implementation**: The model interface for actual checkpoint saving is not yet
+
 available (Issue #34). This fix prepares the error handling structure with try/except pattern ready
 for activation.
 
-2. **Dict Behavior in Mojo v0.25.7**: Confirmed that Dict[String, Float64] is reference-counted and
+1. **Dict Behavior in Mojo v0.25.7**: Confirmed that Dict[String, Float64] is reference-counted and
+
 safe for use in value structs. No lifetime issues.
 
-3. **Callback Trait Implementation**: The trait correctly uses `inout` references which enforce
+1. **Callback Trait Implementation**: The trait correctly uses `inout` references which enforce
+
 lifetime constraints at compile time.
 
 ---
@@ -246,12 +249,12 @@ lifetime constraints at compile time.
 
    - Run `mojo build shared/training/base.mojo`
    - Run `mojo build shared/training/callbacks.mojo`
-2. **Error Handling**: Unit tests for ModelCheckpoint error paths (when model interface available)
+1. **Error Handling**: Unit tests for ModelCheckpoint error paths (when model interface available)
 
    - Test error_count increments on save failures
    - Test graceful degradation (training continues)
    - Test on_epoch_end returns CONTINUE regardless of save status
-3. **Integration**: Full training loop integration tests
+1. **Integration**: Full training loop integration tests
 
    - Verify TrainingState mutations are visible to all callbacks
    - Verify callback order and signal propagation
@@ -263,7 +266,7 @@ lifetime constraints at compile time.
 
 ### Fix Quality Assessment
 
-**Fix 1 (TrainingState)**:
+### Fix 1 (TrainingState)
 
 - Status: COMPLETE
 - Type: Documentation/Clarification
@@ -271,7 +274,7 @@ lifetime constraints at compile time.
 - Impact: Prevents future confusion about memory model
 - Quality: HIGH (clear, explicit documentation)
 
-**Fix 2 (ModelCheckpoint)**:
+### Fix 2 (ModelCheckpoint)
 
 - Status: COMPLETE
 - Type: Error Handling Structure
@@ -288,7 +291,7 @@ Both fixes directly address the critical issues identified in CONSOLIDATED_REVIE
    - Status: RESOLVED
    - Approach: Clarified that struct owns all fields, no borrowed refs
    - Evidence: Updated docstring with explicit memory safety section
-2. **Critical Issue #2**: ModelCheckpoint Error Handling
+1. **Critical Issue #2**: ModelCheckpoint Error Handling
 
    - Status: RESOLVED (structure in place)
    - Approach: Added error tracking and graceful error handling

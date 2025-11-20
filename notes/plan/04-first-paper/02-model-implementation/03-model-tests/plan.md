@@ -29,8 +29,8 @@ Write comprehensive unit tests for all model components including individual lay
 ## Steps
 
 1. Test Layers
-2. Test Forward
-3. Test Shapes
+1. Test Forward
+1. Test Shapes
 
 ## Success Criteria
 

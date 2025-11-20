@@ -87,7 +87,7 @@ struct CosineAnnealingLR(LRScheduler):
         var progress = Float64(clamped_epoch) / Float64(self.T_max)
         var cosine_factor = (1.0 + cos(pi * progress)) / 2.0
         return self.eta_min + (self.base_lr - self.eta_min) * cosine_factor
-```
+```text
 
 ## Implementation Decisions
 
@@ -95,7 +95,8 @@ struct CosineAnnealingLR(LRScheduler):
 
 **Decision**: Provide default value for eta_min parameter
 
-**Rationale**:
+### Rationale
+
 - Most common use case is decaying to zero
 - Reduces boilerplate for typical usage
 - User can override if needed
@@ -104,7 +105,8 @@ struct CosineAnnealingLR(LRScheduler):
 
 **Decision**: Clamp epoch to T_max, return eta_min beyond
 
-**Rationale**:
+### Rationale
+
 - Graceful handling if training runs longer than expected
 - Avoids negative cosine values beyond period
 - Simple and intuitive behavior
@@ -115,7 +117,8 @@ struct CosineAnnealingLR(LRScheduler):
 
 **Decision**: Return base_lr if T_max <= 0
 
-**Rationale**:
+### Rationale
+
 - Prevents division by zero
 - Graceful degradation
 - Consistent with StepLR pattern
@@ -124,7 +127,8 @@ struct CosineAnnealingLR(LRScheduler):
 
 **Decision**: Import cos from math module
 
-**Rationale**:
+### Rationale
+
 - Efficient, well-tested implementation
 - No need to implement cosine ourselves
 - Standard approach across all Mojo code
@@ -133,7 +137,8 @@ struct CosineAnnealingLR(LRScheduler):
 
 **Decision**: Use Float64 for all floating point calculations
 
-**Rationale**:
+### Rationale
+
 - Higher precision for progress calculation
 - Avoids accumulation of rounding errors
 - Consistent with StepLR and other schedulers
@@ -148,7 +153,7 @@ from math import pi, cos
 
 # From base module
 from shared.training.base import LRScheduler
-```
+```text
 
 ### Trait Implementation
 
@@ -158,7 +163,7 @@ Implements `LRScheduler` trait:
 trait LRScheduler:
     fn get_lr(self, epoch: Int, batch: Int = 0) -> Float64:
         ...
-```
+```text
 
 **Compliance**: ✅ Full compliance with interface
 
@@ -170,9 +175,10 @@ The formula implementation:
 var progress = Float64(clamped_epoch) / Float64(self.T_max)
 var cosine_factor = (1.0 + cos(pi * progress)) / 2.0
 return self.eta_min + (self.base_lr - self.eta_min) * cosine_factor
-```
+```text
 
 Maps to mathematical formula:
+
 - `progress` ∈ [0, 1] represents position in cycle
 - `cos(π × progress)` ∈ [-1, 1] is cosine value
 - `(1 + cos(...)) / 2` ∈ [0, 1] normalizes to unit range
@@ -196,11 +202,12 @@ fn get_lr(self, epoch: Int, batch: Int = 0) -> Float64:
     var progress = Float64(clamped_epoch) / Float64(self.T_max)  # O(1)
     var cosine_factor = (1.0 + cos(pi * progress)) / 2.0  # O(1)
     return self.eta_min + (self.base_lr - self.eta_min) * cosine_factor  # O(1)
-```
+```text
 
 **Total**: O(1) - Constant time
 
-**Benchmarking**:
+### Benchmarking
+
 - Cosine computation: ~50-100 nanoseconds
 - Total per call: ~100-150 nanoseconds
 - Negligible compared to training time
@@ -208,6 +215,7 @@ fn get_lr(self, epoch: Int, batch: Int = 0) -> Float64:
 ### Memory Complexity
 
 **Struct size**: 24 bytes
+
 - `base_lr`: 8 bytes (Float64)
 - `T_max`: 8 bytes (Int)
 - `eta_min`: 8 bytes (Float64)
@@ -218,13 +226,15 @@ fn get_lr(self, epoch: Int, batch: Int = 0) -> Float64:
 
 ### Numerical Stability
 
-**Cosine function**:
+### Cosine function
+
 - Input: `π × progress` where progress ∈ [0, 1]
 - Input range: [0, π] - well-conditioned
 - Output range: [-1, 1] - bounded
 - No risk of overflow or underflow
 
-**Division by T_max**:
+### Division by T_max
+
 - Protected by T_max <= 0 check
 - Progress always in [0, 1]
 - Numerically stable
@@ -242,7 +252,7 @@ var scheduler: LRScheduler = CosineAnnealingLR(...)
 # Works with any code expecting LRScheduler
 fn train(scheduler: LRScheduler):
     var lr = scheduler.get_lr(epoch=0)
-```
+```text
 
 ### With Training Loop
 
@@ -251,7 +261,7 @@ fn train(scheduler: LRScheduler):
 fn train_one_epoch(scheduler: LRScheduler):
     var lr = scheduler.get_lr(current_epoch)
     optimizer.set_lr(lr)
-```
+```text
 
 ### With Optimizer
 
@@ -259,7 +269,7 @@ fn train_one_epoch(scheduler: LRScheduler):
 # Scheduler computes, training loop applies
 var lr = scheduler.get_lr(epoch)
 optimizer.set_lr(lr)
-```
+```text
 
 ### With Warmup
 
@@ -269,7 +279,7 @@ if epoch < warmup_epochs:
     lr = warmup_scheduler.get_lr(epoch)
 else:
     lr = cosine_scheduler.get_lr(epoch - warmup_epochs)
-```
+```text
 
 ## Testing Verification
 
@@ -320,13 +330,16 @@ All tests from issue #330 pass:
 
 ## Files
 
-**Implementation**:
+### Implementation
+
 - `shared/training/schedulers.mojo` - Lines 81-151 (CosineAnnealingLR struct)
 
-**Tests**:
+### Tests
+
 - `tests/shared/training/test_cosine_scheduler.mojo` - 350 lines
 
-**Documentation**:
+### Documentation
+
 - `shared/training/README.md` - Usage examples
 
 ## Implementation Status

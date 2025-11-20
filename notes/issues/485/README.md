@@ -52,16 +52,18 @@ Implement coverage quality gates that enforce minimum coverage standards in CI, 
 ```bash
 # pytest-cov has --cov-fail-under flag
 pytest --cov=scripts --cov-fail-under=80
-```
+```text
 
 This automatically fails if coverage < 80%.
 
-**What NOT to Build**:
+### What NOT to Build
+
 - ❌ Custom threshold checker (pytest-cov has this)
 - ❌ Complex gate orchestration (CI does this)
 - ❌ Coverage comparison engine (coverage.py has this)
 
-**What to Build**:
+### What to Build
+
 - ✅ CI workflow configuration
 - ✅ Exception patterns configuration
 - ✅ Custom failure messages (optional enhancement)
@@ -88,7 +90,7 @@ omit = [
     "**/*_pb2.py",      # Generated protobuf
     "**/__generated__/*" # Generated code
 ]
-```
+```text
 
 **2. CI Workflow Integration**
 
@@ -146,7 +148,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           MINIMUM_GREEN: 90
           MINIMUM_ORANGE: 80
-```
+```text
 
 **3. Regression Detection Script**
 
@@ -169,7 +171,6 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-
 def parse_coverage_xml(xml_path: Path) -> float:
     """Parse coverage percentage from Cobertura XML."""
     tree = ET.parse(xml_path)
@@ -177,7 +178,6 @@ def parse_coverage_xml(xml_path: Path) -> float:
     # Cobertura format: <coverage line-rate="0.85" ...>
     line_rate = float(root.attrib.get('line-rate', 0))
     return line_rate * 100  # Convert to percentage
-
 
 def main():
     parser = argparse.ArgumentParser(description='Check coverage regression')
@@ -223,10 +223,9 @@ def main():
             print(f"   Coverage improved by {delta:.2f}%")
         sys.exit(0)
 
-
 if __name__ == '__main__':
     main()
-```
+```text
 
 **4. Store Baseline Coverage**
 
@@ -263,7 +262,7 @@ jobs:
           name: main-coverage
           path: coverage.xml
           retention-days: 30
-```
+```text
 
 **5. Exception Configuration**
 
@@ -278,19 +277,22 @@ omit = [
     "**/*_pb2.py",       # Generated protobuf
     "**/__generated__/*" # Any generated code
 ]
-```
+```text
 
 ### Files to Create/Modify
 
-**New Files**:
+### New Files
+
 - `scripts/check_coverage_regression.py` - Regression detection
 - `.github/workflows/store-baseline-coverage.yml` - Store main coverage
 
-**Modified Files**:
+### Modified Files
+
 - `pyproject.toml` - Add `fail_under` threshold
 - `.github/workflows/test.yml` - Add coverage gates
 
-**Configuration**:
+### Configuration
+
 - Update `omit` patterns in pyproject.toml for exceptions
 
 ### Validation Checklist
@@ -310,9 +312,10 @@ python scripts/check_coverage_regression.py \
 
 # Test in CI (locally)
 act -j test-with-coverage
-```
+```text
 
 Expected behaviors:
+
 - [ ] Fails when coverage < 80%
 - [ ] Fails when regression > 2%
 - [ ] Passes when coverage meets requirements

@@ -41,27 +41,27 @@ This cleanup phase focuses on:
    - Ensure consistent error handling patterns
    - Optimize platform detection logic
 
-2. **Documentation Finalization**
+1. **Documentation Finalization**
    - Complete user documentation for platform detection
    - Add comprehensive inline documentation (docstrings)
    - Create usage examples for common scenarios
    - Document supported platforms and architectures
    - Add troubleshooting guide for common issues
 
-3. **Performance Optimization**
+1. **Performance Optimization**
    - Profile platform detection execution time
    - Optimize system calls if needed
    - Ensure minimal overhead (target <100ms execution time)
    - Cache results if appropriate
 
-4. **Final Testing and Validation**
+1. **Final Testing and Validation**
    - Run comprehensive test suite on all supported platforms
    - Validate against all success criteria
    - Perform integration testing with Mojo installer
    - Test error messages for clarity and actionability
    - Verify consistent behavior across different environments
 
-5. **Quality Gates**
+1. **Quality Gates**
    - [ ] All tests pass (unit, integration, end-to-end)
    - [ ] Code coverage ≥ 90%
    - [ ] No linting errors (pylint, mypy)

@@ -30,8 +30,8 @@ Create a verification script that checks the development environment is properly
 ## Steps
 
 1. Verify Mojo is installed and accessible
-2. Check all dependencies are present
-3. Run smoke tests to confirm functionality
+1. Check all dependencies are present
+1. Run smoke tests to confirm functionality
 
 ## Success Criteria
 

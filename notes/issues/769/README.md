@@ -29,7 +29,7 @@ Design and document an interactive prompt system for collecting paper informatio
 
 **Decision**: Use Python for the interactive prompt system.
 
-**Rationale**:
+### Rationale
 
 - This is a CLI automation/tooling component (not ML/AI implementation)
 - Requires robust user input handling and validation
@@ -37,7 +37,7 @@ Design and document an interactive prompt system for collecting paper informatio
 - Follows ADR-001 guidance: "Python for automation tasks" when Mojo limitations apply
 - No performance-critical operations - user interaction is I/O bound
 
-**Justification per ADR-001**:
+### Justification per ADR-001
 
 - Category: Automation/tooling (Section 03-tooling)
 - Python is the right tool for interactive CLI applications
@@ -47,7 +47,7 @@ Design and document an interactive prompt system for collecting paper informatio
 
 **Decision**: Implement a prompt orchestrator with field-specific validators.
 
-**Components**:
+### Components
 
 ```text
 PromptOrchestrator
@@ -55,9 +55,9 @@ PromptOrchestrator
 ├── InputCollector (display prompts, collect input, handle retries)
 ├── Validator (validate input, generate error messages)
 └── MetadataBuilder (construct validated paper metadata)
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Separation of concerns: prompt logic, validation, metadata construction
 - Extensible: easy to add new fields or validation rules
@@ -68,22 +68,22 @@ PromptOrchestrator
 
 **Decision**: Sequential field-by-field prompts with immediate validation.
 
-**Flow**:
+### Flow
 
 1. Display field description and examples
-2. Show default value (if available)
-3. Collect user input
-4. Validate immediately
-5. If invalid: show error, re-prompt
-6. If valid: move to next field
-7. After all fields: display summary, confirm before proceeding
+1. Show default value (if available)
+1. Collect user input
+1. Validate immediately
+1. If invalid: show error, re-prompt
+1. If valid: move to next field
+1. After all fields: display summary, confirm before proceeding
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Form-style (all fields at once)**: Rejected - harder to validate incrementally, overwhelming for users
 - **Wizard with back/forward navigation**: Deferred to future enhancement - adds complexity, not required for MVP
 
-**Rationale**:
+### Rationale
 
 - Simple and intuitive
 - Immediate feedback reduces frustration
@@ -92,17 +92,17 @@ PromptOrchestrator
 
 ### 4. Field Definitions
 
-**Required Fields**:
+### Required Fields
 
 - **title**: Paper title (string, 1-200 chars, alphanumeric + punctuation)
 - **author**: Author name(s) (string, 1-100 chars, letters + spaces + commas)
 
-**Optional Fields**:
+### Optional Fields
 
 - **description**: Brief description (string, 0-500 chars, any printable characters)
 - **year**: Publication year (integer, 1900-current year)
 
-**Validation Rules**:
+### Validation Rules
 
 | Field | Required | Format | Example | Error Message |
 |-------|----------|--------|---------|---------------|
@@ -115,21 +115,21 @@ PromptOrchestrator
 
 **Decision**: Three-tier error handling strategy.
 
-**Tiers**:
+### Tiers
 
 1. **Input Validation**: Catch format errors immediately (invalid chars, length violations)
-2. **Semantic Validation**: Catch logical errors (year in future, duplicate paper names)
-3. **System Errors**: Catch I/O errors (stdin closed, terminal not available)
+1. **Semantic Validation**: Catch logical errors (year in future, duplicate paper names)
+1. **System Errors**: Catch I/O errors (stdin closed, terminal not available)
 
-**Error Message Format**:
+### Error Message Format
 
 ```text
 ❌ Error: {clear description of what's wrong}
 💡 Tip: {helpful suggestion to fix it}
 📝 Example: {valid example}
-```
+```text
 
-**Recovery Strategy**:
+### Recovery Strategy
 
 - Format errors: re-prompt with error message
 - System errors: fall back to non-interactive mode or fail gracefully
@@ -142,17 +142,17 @@ PromptOrchestrator
 **Default Sources** (priority order):
 
 1. Environment variables (e.g., `ML_ODYSSEY_AUTHOR`)
-2. Git config (e.g., `user.name` for author)
-3. Previous session data (cached from last run)
-4. Sensible fallbacks (e.g., current year)
+1. Git config (e.g., `user.name` for author)
+1. Previous session data (cached from last run)
+1. Sensible fallbacks (e.g., current year)
 
-**Display Format**:
+### Display Format
 
 ```text
 Enter paper title [default: {value}]:
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Reduces typing for common values
 - Speeds up workflow for power users
@@ -160,19 +160,19 @@ Enter paper title [default: {value}]:
 
 ### 7. Integration Points
 
-**Input from Argument Parsing**:
+### Input from Argument Parsing
 
 - Receive dictionary of parsed command-line arguments
 - Only prompt for missing required fields
 - Merge prompted values with CLI arguments
 
-**Output to Paper Scaffolding**:
+### Output to Paper Scaffolding
 
 - Return validated `PaperMetadata` dictionary
 - Keys: `title`, `author`, `description`, `year`
 - All values are validated and sanitized
 
-**Interface**:
+### Interface
 
 ```python
 def collect_missing_metadata(
@@ -195,7 +195,7 @@ def collect_missing_metadata(
         ValidationError: If user input is invalid after max retries
         SystemError: If terminal is not available
     """
-```
+```text
 
 ## References
 
@@ -203,14 +203,14 @@ def collect_missing_metadata(
 - **Parent Component**: [/notes/plan/03-tooling/01-paper-scaffolding/03-cli-interface/plan.md](/home/mvillmow/ml-odyssey-manual/notes/plan/03-tooling/01-paper-scaffolding/03-cli-interface/plan.md)
 - **Language Guidance**: [/notes/review/adr/ADR-001-language-selection-tooling.md](/home/mvillmow/ml-odyssey-manual/notes/review/adr/ADR-001-language-selection-tooling.md)
 
-**Related Issues**:
+### Related Issues
 
 - Issue #770: [Test] User Prompts - Write Tests
 - Issue #771: [Implementation] User Prompts - Build Functionality
 - Issue #772: [Packaging] User Prompts - Integration
 - Issue #773: [Cleanup] User Prompts - Refactoring
 
-**Dependencies**:
+### Dependencies
 
 - Argument parsing component must be completed first (#766)
 - Template system provides paper structure (#754-757)

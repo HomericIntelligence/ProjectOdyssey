@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Implement backward pass for loss
-2. Compute gradients correctly
-3. Verify with finite differences
+1. Compute gradients correctly
+1. Verify with finite differences
 
 ## Success Criteria
 

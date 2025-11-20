@@ -27,9 +27,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Load template files from disk
-2. Parse template content for variable placeholders
-3. Substitute variables with provided values
-4. Write rendered content to output files
+1. Parse template content for variable placeholders
+1. Substitute variables with provided values
+1. Write rendered content to output files
 
 ## Success Criteria
 

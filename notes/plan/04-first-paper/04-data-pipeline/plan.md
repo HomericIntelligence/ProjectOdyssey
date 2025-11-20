@@ -30,8 +30,8 @@ Build the complete data pipeline for the MNIST dataset, including downloading th
 ## Steps
 
 1. Data Download
-2. Preprocessing
-3. Dataset Loader
+1. Preprocessing
+1. Dataset Loader
 
 ## Success Criteria
 

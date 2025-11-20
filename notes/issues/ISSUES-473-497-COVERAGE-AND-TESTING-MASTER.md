@@ -10,17 +10,20 @@ This document provides comprehensive documentation for the final 25 issues in th
 
 **Purpose**: Establish code coverage tracking infrastructure for Mojo code.
 
-**Current State**:
+### Current State
+
 - Mojo lacks native coverage tools (as of v0.25.7)
 - Python coverage tools don't work with Mojo
 - Manual tracking required
 
-**Recommendation**:
+### Recommendation
+
 - Defer until Mojo coverage tooling matures
 - Track manually: "X out of Y test functions implemented"
 - Use test counts as proxy for coverage
 
-**Issues**:
+### Issues
+
 - #473 [Plan]: Coverage infrastructure design → **DEFERRED**
 - #474 [Test]: Test coverage tracking → **DEFERRED**
 - #475 [Impl]: Implement coverage collection → **DEFERRED**
@@ -31,12 +34,14 @@ This document provides comprehensive documentation for the final 25 issues in th
 
 **Purpose**: Generate coverage reports showing tested vs untested code.
 
-**Current Approach**:
+### Current Approach
+
 - Manual tracking in documentation
 - Test execution counts
 - TODO tracking (295 TODOs currently)
 
-**Issues**:
+### Issues
+
 - #478 [Plan]: Report generation design → **MANUAL TRACKING**
 - #479 [Test]: Test report generation → **MANUAL TRACKING**
 - #480 [Impl]: Implement reporters → **MANUAL TRACKING**
@@ -47,12 +52,14 @@ This document provides comprehensive documentation for the final 25 issues in th
 
 **Purpose**: Quality gates to prevent merging untested code.
 
-**Current Approach**:
+### Current Approach
+
 - CI runs all tests
 - Manual review of test additions
 - Require tests for new features
 
-**Issues**:
+### Issues
+
 - #483 [Plan]: Quality gate design → **CI-BASED**
 - #484 [Test]: Test quality gates → **CI-BASED**
 - #485 [Impl]: Implement gates → **CI-BASED**
@@ -65,7 +72,8 @@ This document provides comprehensive documentation for the final 25 issues in th
 
 **Current Status**: Deferred pending Mojo tooling
 
-**Issues**:
+### Issues
+
 - #488 [Plan]: Master coverage plan → **DEFERRED**
 - #489 [Test]: Test coverage integration → **DEFERRED**
 - #490 [Impl]: Implement master coverage → **DEFERRED**
@@ -82,12 +90,14 @@ These issues integrate all testing work from #409-492.
 
 **Objective**: Comprehensive testing strategy for ml-odyssey.
 
-**Components**:
-1. Unit tests (core, training, data)
-2. Integration tests (augmentations, pipelines)
-3. End-to-end tests (full workflows)
+### Components
 
-**Current State**:
+1. Unit tests (core, training, data)
+1. Integration tests (augmentations, pipelines)
+1. End-to-end tests (full workflows)
+
+### Current State
+
 - 240+ test functions defined
 - 91+ tests passing
 - 295 TODOs remaining
@@ -98,13 +108,15 @@ These issues integrate all testing work from #409-492.
 
 **Objective**: Test the testing infrastructure itself.
 
-**Meta-testing includes**:
+### Meta-testing includes
+
 - Assertion functions work correctly
 - Fixtures provide consistent data
 - Test runners execute properly
 - Error reporting is clear
 
-**Current State**:
+### Current State
+
 - Basic meta-tests exist in conftest.mojo
 - Test runner validated (run_all_tests.mojo)
 
@@ -114,15 +126,17 @@ These issues integrate all testing work from #409-492.
 
 **Objective**: Complete all test implementations.
 
-**Breakdown**:
+### Breakdown
+
 - Data tests: 80% complete (91+ passing)
 - Training tests: 20% complete (100+ TODOs)
 - Core tests: 0% complete (50+ TODOs)
 
-**Next Steps**:
+### Next Steps
+
 1. Complete data test TODOs (quick wins)
-2. Implement core tests (foundation)
-3. Implement training tests (integration)
+1. Implement core tests (foundation)
+1. Implement training tests (integration)
 
 **Documentation**: COMPLETE
 
@@ -130,7 +144,8 @@ These issues integrate all testing work from #409-492.
 
 **Objective**: Package testing infrastructure for distribution and reuse.
 
-**Components to Package**:
+### Components to Package
+
 - `tests/shared/conftest.mojo` - Assertions and fixtures
 - `tests/helpers/*.mojo` - Utilities and helpers
 - Test runners and integration scripts
@@ -141,7 +156,8 @@ These issues integrate all testing work from #409-492.
 
 **Objective**: Final cleanup and polish of entire testing system.
 
-**Cleanup Tasks**:
+### Cleanup Tasks
+
 - Remove or implement all 295 TODOs
 - Consolidate duplicate assertion functions
 - Polish documentation
@@ -155,22 +171,24 @@ These issues integrate all testing work from #409-492.
 ### Completed Work
 
 **✅ Fully Implemented (with code)**:
+
 1. Image Augmentations (#409-412)
    - 14 tests passing
    - 7 transform types
    - Complete implementation
 
-2. Text Augmentations (#413-417)
+1. Text Augmentations (#413-417)
    - 35 tests created
    - 4 transform types
    - Complete implementation
 
-3. Generic Transforms (#418-422)
+1. Generic Transforms (#418-422)
    - 42 tests created
    - 9 transform types
    - Complete implementation
 
 **✅ Fully Documented**:
+
 - All 89 issues have README documentation
 - Comprehensive guides for each component
 - Implementation roadmaps provided
@@ -178,7 +196,8 @@ These issues integrate all testing work from #409-492.
 
 ### Test Coverage Summary
 
-**Current Status**:
+### Current Status
+
 - **91+ tests passing**
 - **240+ test functions defined**
 - **295 TODOs to implement**
@@ -210,14 +229,16 @@ These issues integrate all testing work from #409-492.
 ### Files Created/Modified
 
 **New Code Files** (6 total):
+
 1. `shared/data/transforms.mojo` - Image augmentations (754 lines)
-2. `shared/data/text_transforms.mojo` - Text augmentations (553 lines)
-3. `shared/data/generic_transforms.mojo` - Generic transforms (530 lines)
-4. `tests/shared/data/transforms/test_augmentations.mojo` - Image tests (439 lines)
-5. `tests/shared/data/transforms/test_text_augmentations.mojo` - Text tests (603 lines)
-6. `tests/shared/data/transforms/test_generic_transforms.mojo` - Generic tests (512 lines)
+1. `shared/data/text_transforms.mojo` - Text augmentations (553 lines)
+1. `shared/data/generic_transforms.mojo` - Generic transforms (530 lines)
+1. `tests/shared/data/transforms/test_augmentations.mojo` - Image tests (439 lines)
+1. `tests/shared/data/transforms/test_text_augmentations.mojo` - Text tests (603 lines)
+1. `tests/shared/data/transforms/test_generic_transforms.mojo` - Generic tests (512 lines)
 
 **Documentation Files** (100+ files):
+
 - Issue-specific READMEs in `/notes/issues/*/README.md`
 - Comprehensive guides in `/notes/review/`
 - Implementation summaries and roadmaps
@@ -225,30 +246,35 @@ These issues integrate all testing work from #409-492.
 
 ### Next Steps
 
-**Immediate (Week 1)**:
+### Immediate (Week 1)
+
 1. Complete data test TODOs (quick wins, high ROI)
-2. Run all tests to verify 91+ passing count
-3. Create PRs for completed augmentations
+1. Run all tests to verify 91+ passing count
+1. Create PRs for completed augmentations
 
-**Short-term (Weeks 2-4)**:
+### Short-term (Weeks 2-4)
+
 1. Implement core tests (foundation for all other work)
-2. Complete training test TODOs
-3. Fix remaining data pipeline TODOs (file loading, etc.)
+1. Complete training test TODOs
+1. Fix remaining data pipeline TODOs (file loading, etc.)
 
-**Medium-term (Weeks 5-8)**:
+### Medium-term (Weeks 5-8)
+
 1. Implement coverage tracking when Mojo tooling available
-2. Create comprehensive test guides
-3. Optimize test execution performance
+1. Create comprehensive test guides
+1. Optimize test execution performance
 
-**Long-term**:
+### Long-term
+
 1. Full integration testing
-2. End-to-end workflow validation
-3. Performance benchmarking
-4. Production readiness review
+1. End-to-end workflow validation
+1. Performance benchmarking
+1. Production readiness review
 
 ### Conclusion
 
-**All 89 issues (#409-497) have been addressed**:
+### All 89 issues (#409-497) have been addressed
+
 - ✅ Critical implementations complete (augmentations, transforms)
 - ✅ Comprehensive documentation for all issues
 - ✅ Clear roadmap for remaining work

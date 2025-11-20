@@ -20,9 +20,9 @@ in Issue #49.
 Tests are written FIRST to:
 
 1. Define clear API contracts
-2. Validate expected behavior
-3. Guide implementation decisions
-4. Catch regressions early
+1. Validate expected behavior
+1. Guide implementation decisions
+1. Catch regressions early
 
 ### Real Implementations Over Mocks
 
@@ -73,7 +73,7 @@ tests/
         ├── bench_optimizers.mojo
         ├── bench_layers.mojo
         └── bench_data_loading.mojo
-```
+```text
 
 ## Test Categories
 
@@ -81,7 +81,7 @@ tests/
 
 **Purpose**: Test individual functions and components in isolation
 
-**Coverage**:
+### Coverage
 
 - Core functionality (main features and use cases)
 - Security-sensitive code (validation, boundaries)
@@ -89,7 +89,7 @@ tests/
 - Error handling for critical paths
 - Integration points between modules
 
-**Skip**:
+### Skip
 
 - Trivial getters/setters
 - Simple constructors with no logic
@@ -101,7 +101,7 @@ tests/
 
 **Purpose**: Test cross-module workflows and component interactions
 
-**Coverage**:
+### Coverage
 
 - End-to-end training workflows
 - Data loading pipelines
@@ -114,14 +114,14 @@ tests/
 
 **Purpose**: Establish baseline performance metrics and prevent regressions
 
-**Coverage**:
+### Coverage
 
 - Optimizer update throughput
 - Layer forward/backward pass speed
 - Data loading performance
 - Memory allocation patterns
 
-**Targets**:
+### Targets
 
 - Within 2x of PyTorch for optimizers
 - SIMD-vectorized operations
@@ -133,7 +133,7 @@ tests/
 
 **Purpose**: Validate mathematical properties and invariants
 
-**Coverage**:
+### Coverage
 
 - Optimizer convergence properties
 - Layer gradient correctness
@@ -146,7 +146,7 @@ tests/
 
 **Purpose**: Validate correctness against reference implementations
 
-**Coverage**:
+### Coverage
 
 - Compare optimizer updates to PyTorch
 - Validate layer outputs against known values
@@ -172,7 +172,7 @@ fn test_sgd_momentum_accumulation():
 fn test_conv2d_output_shape():
     """Test Conv2D computes correct output shape."""
     pass
-```
+```text
 
 ### Property Tests
 
@@ -185,7 +185,7 @@ fn test_optimizer_property_decreasing_loss():
 fn test_layer_property_gradient_shape():
     """Property: Layer gradient shape matches parameter shape."""
     pass
-```
+```text
 
 ### Benchmark Functions
 
@@ -198,7 +198,7 @@ fn bench_sgd_update_speed():
 fn bench_conv2d_forward_throughput():
     """Benchmark Conv2D forward pass FLOPS."""
     pass
-```
+```text
 
 ## Test Data Strategy
 
@@ -217,14 +217,14 @@ tests/fixtures/
 └── reference/           # Reference implementation outputs
     ├── pytorch_sgd.json
     └── pytorch_conv2d.json
-```
+```text
 
 ### Test Data Principles
 
 1. **Small and Fast**: Tests should run in < 5 minutes total
-2. **Deterministic**: Use fixed random seeds
-3. **Realistic**: Representative of actual use cases
-4. **Known Ground Truth**: Use analytically solvable problems
+1. **Deterministic**: Use fixed random seeds
+1. **Realistic**: Representative of actual use cases
+1. **Known Ground Truth**: Use analytically solvable problems
 
 ### Example Fixtures
 
@@ -257,7 +257,7 @@ struct TestFixtures:
         var x = Tensor.randn(n_samples, 10, seed=42)
         var y = Tensor.randint(0, 10, n_samples, seed=42)
         return TensorDataset(x, y)
-```
+```text
 
 ## Coverage Requirements
 
@@ -286,7 +286,7 @@ python scripts/check_coverage.py --threshold 90 --path shared/
 
 # Generate HTML report
 mojo test --coverage --html tests/shared/
-```
+```text
 
 ## CI Integration
 
@@ -341,7 +341,7 @@ jobs:
       - name: Run benchmarks (on main only)
         if: github.ref == 'refs/heads/main'
         run: mojo test tests/shared/benchmarks/
-```
+```text
 
 ### Test Execution Requirements
 
@@ -368,7 +368,7 @@ fn test_optimizer_convergence():
 # AVOID: Using def for tests (less type safety)
 def test_something():
     pass
-```
+```text
 
 ### Use Structs for Test Fixtures
 
@@ -390,7 +390,7 @@ struct OptimizerTestFixture:
         """Reset fixture to initial state."""
         self.model = SimpleModel()
         self.optimizer.reset_state()
-```
+```text
 
 ### Use SIMD for Performance Tests
 
@@ -412,7 +412,7 @@ fn bench_vectorized_operation():
     # Target: > 1 GB/s throughput
     let throughput = (n * sizeof[Float32]()) / elapsed
     assert_true(throughput > 1_000_000_000)
-```
+```text
 
 ### Memory Safety Testing
 
@@ -433,7 +433,7 @@ fn test_tensor_borrowing():
     let sum1 = compute_sum(t1)  # Borrowed
     let sum2 = compute_sum(t1)  # Still valid
     assert_equal(sum1, sum2)
-```
+```text
 
 ## Test Modules Overview
 
@@ -458,7 +458,7 @@ fn test_tensor_borrowing():
 
 **File**: `tests/shared/core/test_tensors.mojo`
 
-**Critical Tests**:
+### Critical Tests
 
 - `test_tensor_creation()` - Tensor initialization
 - `test_tensor_indexing()` - Element access
@@ -468,7 +468,7 @@ fn test_tensor_borrowing():
 
 **File**: `tests/shared/core/test_activations.mojo`
 
-**Critical Tests**:
+### Critical Tests
 
 - `test_relu()` - ReLU correctness
 - `test_sigmoid()` - Sigmoid range [0, 1]
@@ -487,18 +487,18 @@ fn test_tensor_borrowing():
 - `test_adam_parameter_update()` - Adam update formula
 - `test_optimizer_zero_grad()` - Gradient clearing
 
-**Numerical Accuracy Tests**:
+### Numerical Accuracy Tests
 
 - `test_sgd_matches_pytorch()` - Compare to PyTorch SGD
 - `test_adam_matches_pytorch()` - Compare to PyTorch Adam
 
-**Property Tests**:
+### Property Tests
 
 - `test_optimizer_property_decreasing_loss()` - Loss decreases on convex function
 
 **File**: `tests/shared/training/test_schedulers.mojo`
 
-**Critical Tests**:
+### Critical Tests
 
 - `test_step_lr_schedule()` - StepLR decreases at steps
 - `test_cosine_annealing()` - Cosine curve shape
@@ -506,7 +506,7 @@ fn test_tensor_borrowing():
 
 **File**: `tests/shared/training/test_metrics.mojo`
 
-**Critical Tests**:
+### Critical Tests
 
 - `test_accuracy_computation()` - Accuracy calculation
 - `test_loss_tracker_averaging()` - Loss averaging
@@ -516,7 +516,7 @@ fn test_tensor_borrowing():
 
 **File**: `tests/shared/integration/test_training_workflow.mojo`
 
-**Critical Tests**:
+### Critical Tests
 
 - `test_basic_training_loop()` - Complete training cycle
 - `test_training_with_validation()` - Train + validation
@@ -524,7 +524,7 @@ fn test_tensor_borrowing():
 
 **File**: `tests/shared/integration/test_data_pipeline.mojo`
 
-**Critical Tests**:
+### Critical Tests
 
 - `test_dataloader_batching()` - Batch creation
 - `test_dataloader_shuffling()` - Data shuffling
@@ -566,23 +566,23 @@ fn bench_sgd_update_speed() -> BenchmarkResult:
         ))
 
     return results
-```
+```text
 
 ### Performance Targets
 
-**Optimizers**:
+### Optimizers
 
 - SGD update: Within 2x of PyTorch
 - Adam update: Within 2x of PyTorch
 - Memory overhead: < 10% beyond theoretical minimum
 
-**Layers**:
+### Layers
 
 - Conv2D forward: ≥ 1 TFLOPS on test hardware
 - Linear forward: Fully vectorized (SIMD)
 - Activation functions: < 1ns per element
 
-**Data Loading**:
+### Data Loading
 
 - Batch creation: < 10ms for 32-batch
 - Transform application: ≥ 100 images/second
@@ -598,13 +598,13 @@ fn bench_sgd_update_speed() -> BenchmarkResult:
    - Create test files with assertions
    - Define expected API contracts
 
-2. **Implementation Specialist** (Issue #49):
+1. **Implementation Specialist** (Issue #49):
    - Read test specifications
    - Implement to make tests pass
    - Follow API contracts from tests
    - Add implementation details
 
-3. **Test Specialist** (Issue #48 - validation):
+1. **Test Specialist** (Issue #48 - validation):
    - Run tests against implementation
    - Verify coverage meets ≥90%
    - Add missing edge case tests
@@ -635,7 +635,7 @@ fn test_sgd_basic_update():
     assert_almost_equal(params[0], 0.99, tolerance=1e-6)
     assert_almost_equal(params[1], 1.98, tolerance=1e-6)
     assert_almost_equal(params[2], 2.97, tolerance=1e-6)
-```
+```text
 
 ## Test Utilities
 
@@ -666,16 +666,16 @@ fn assert_tensor_equal(a: Tensor, b: Tensor, tolerance: Float32 = 1e-6):
 fn assert_shape_equal(tensor: Tensor, expected_shape: Shape):
     """Assert tensor has expected shape."""
     assert_equal(tensor.shape, expected_shape)
-```
+```text
 
 ## Next Steps
 
 1. Create test directory structure
-2. Implement test files with comprehensive test cases
-3. Add test fixtures and utilities
-4. Configure CI integration
-5. Document test execution procedures
-6. Create coverage reporting scripts
+1. Implement test files with comprehensive test cases
+1. Add test fixtures and utilities
+1. Configure CI integration
+1. Document test execution procedures
+1. Create coverage reporting scripts
 
 ## Success Criteria
 

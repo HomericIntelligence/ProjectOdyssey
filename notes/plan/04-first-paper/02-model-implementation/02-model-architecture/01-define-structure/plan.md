@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Create LeNet-5 model class
-2. Add all layers in correct order
-3. Define layer connections
+1. Add all layers in correct order
+1. Define layer connections
 
 ## Success Criteria
 

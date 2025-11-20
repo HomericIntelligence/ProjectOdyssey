@@ -25,7 +25,7 @@ Design and document a command-line argument parsing system for the paper scaffol
 
 **Decision**: Implement argument parsing in Python using the standard library `argparse` module.
 
-**Rationale**:
+### Rationale
 
 - **Follows ADR-001**: This is automation/tooling, not ML/AI implementation
 - **Standard Library**: argparse is mature, well-tested, and part of Python stdlib (no external dependencies)
@@ -33,7 +33,7 @@ Design and document a command-line argument parsing system for the paper scaffol
 - **Consistency**: Aligns with existing tooling scripts (create_issues.py, regenerate_github_issues.py)
 - **Documentation**: Extensive documentation and community resources available
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Mojo**: Not suitable - this is a CLI tool requiring subprocess interaction and text processing (ADR-001 establishes Python for automation tasks)
 - **click**: More features than needed; adds external dependency
@@ -43,7 +43,7 @@ Design and document a command-line argument parsing system for the paper scaffol
 
 **Decision**: Support both long-form and short-form arguments with sensible defaults.
 
-**Core Arguments**:
+### Core Arguments
 
 ```text
 --title, -t         Paper title (required in non-interactive mode)
@@ -54,9 +54,9 @@ Design and document a command-line argument parsing system for the paper scaffol
 --interactive, -i   Interactive mode with prompts (default: True if args missing)
 --help, -h          Show help message
 --version, -v       Show version information
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - **Follows conventions**: Standard CLI patterns (--help, --version, short aliases)
 - **Flexibility**: Supports both batch processing (all args) and interactive use (prompts for missing)
@@ -66,25 +66,25 @@ Design and document a command-line argument parsing system for the paper scaffol
 
 **Decision**: Implement three-tier validation: argparse built-in, custom validators, and business logic validation.
 
-**Tier 1 - argparse built-in**:
+### Tier 1 - argparse built-in
 
 - Type checking (str, int, Path)
 - Required vs optional arguments
 - Mutually exclusive groups (if needed)
 
-**Tier 2 - Custom validators**:
+### Tier 2 - Custom validators
 
 - Path validation (parent directory exists, writable)
 - Year validation (reasonable range, e.g., 1950-current year)
 - Title/author format validation (non-empty, printable characters)
 
-**Tier 3 - Business logic validation**:
+### Tier 3 - Business logic validation
 
 - Template existence validation
 - Output directory conflict detection (already exists with content)
 - Cross-argument validation (e.g., template compatibility with year)
 
-**Rationale**:
+### Rationale
 
 - **Fail Fast**: Catch errors before creating any files
 - **Clear Messages**: Each tier provides specific, actionable error messages
@@ -94,7 +94,7 @@ Design and document a command-line argument parsing system for the paper scaffol
 
 **Decision**: Follow standard help text conventions with clear sections and examples.
 
-**Structure**:
+### Structure
 
 ```text
 usage: scaffold-paper [-h] [-v] [-t TITLE] [-a AUTHOR] [-y YEAR] [-o OUTPUT_DIR] [--template TEMPLATE] [-i]
@@ -123,9 +123,9 @@ examples:
 
   # Custom output directory
   $ scaffold-paper -t "LeNet-5" -a "LeCun et al." -o ~/projects/lenet
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - **Discoverability**: Users can learn the tool through --help
 - **Examples**: Real-world usage examples guide users
@@ -135,7 +135,7 @@ examples:
 
 **Decision**: Automatically detect mode based on argument completeness; allow explicit override with --interactive.
 
-**Logic**:
+### Logic
 
 ```python
 if args.interactive or missing_required_args():
@@ -144,9 +144,9 @@ if args.interactive or missing_required_args():
 else:
     # Use provided arguments
     collected_args = args
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - **User-Friendly**: Default to interactive when args are missing (better UX)
 - **Automation-Friendly**: Support fully non-interactive mode for scripts/CI
@@ -156,22 +156,22 @@ else:
 
 **Decision**: Use argparse's error handling with custom formatting for better UX.
 
-**Approach**:
+### Approach
 
 - Let argparse handle basic errors (unknown args, type errors)
 - Override `ArgumentParser.error()` to format messages consistently
 - Provide "did you mean?" suggestions for typos
 - Include relevant help section in error output
 
-**Example Error Output**:
+### Example Error Output
 
 ```text
 error: argument --title/-t: required in non-interactive mode
 
 Try 'scaffold-paper --help' for more information.
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - **Consistency**: All errors follow same format
 - **Guidance**: Point users to help or correction
@@ -219,7 +219,7 @@ Try 'scaffold-paper --help' for more information.
 │              User Prompt Module (if interactive)            │
 │           (tooling/scaffolding/user_prompts.py)             │
 └─────────────────────────────────────────────────────────────┘
-```
+```text
 
 ## API Contract
 
@@ -244,12 +244,12 @@ if not validation_result.is_valid:
 title = args.title
 author = args.author
 output_dir = args.output_dir
-```
+```text
 
 ### Return Types
 
 ```python
-# argparse.Namespace with attributes:
+# argparse.Namespace with attributes
 class ParsedArguments:
     title: str | None
     author: str | None
@@ -263,7 +263,7 @@ class ValidationResult:
     is_valid: bool
     error_message: str | None
     validated_args: ParsedArguments | None
-```
+```text
 
 ## Integration Points
 
@@ -276,7 +276,7 @@ class ValidationResult:
 
 ```text
 Command Line → Argument Parser → Validation → [Interactive Prompts?] → Scaffold Generator
-```
+```text
 
 ## Testing Strategy
 

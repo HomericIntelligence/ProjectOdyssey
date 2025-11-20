@@ -12,16 +12,16 @@ Successfully implemented all four Phase 1 augmentation tasks for the ML Odyssey 
 
 ```mojo
 from math import sqrt, floor, ceil, sin, cos
-```
+```text
 
 ### 2. Pipeline Type Alias (Lines 89-90)
 
-**Added backward-compatible alias**:
+### Added backward-compatible alias
 
 ```mojo
 # Type alias for backward compatibility and more intuitive naming
 alias Pipeline = Compose
-```
+```text
 
 Allows using `Pipeline([...])` instead of `Compose([...])` for more intuitive naming.
 
@@ -57,9 +57,10 @@ fn __call__(self, data: Tensor) raises -> Tensor:
                 flipped.append(Float32(data[src_idx]))
 
     return Tensor(flipped^)
-```
+```text
 
-**Key Points**:
+### Key Points
+
 - Reverses only width dimension (columns)
 - Preserves height (rows) and channel organization
 - Uses proper index calculation: `(row * width + col) * channels + channel`
@@ -67,7 +68,7 @@ fn __call__(self, data: Tensor) raises -> Tensor:
 
 ### 4. RandomVerticalFlip Implementation (Lines 463-526)
 
-**New struct that flips height dimension**:
+### New struct that flips height dimension
 
 ```mojo
 @value
@@ -104,9 +105,10 @@ struct RandomVerticalFlip(Transform):
                     flipped.append(Float32(data[src_idx]))
 
         return Tensor(flipped^)
-```
+```text
 
-**Key Points**:
+### Key Points
+
 - Mirrors RandomHorizontalFlip but flips rows instead of columns
 - Same probability mechanism and dimension assumptions
 - Properly implements vertical flip by reversing height dimension
@@ -168,9 +170,10 @@ fn __call__(self, data: Tensor) raises -> Tensor:
                     rotated.append(Float32(self.fill_value))
 
     return Tensor(rotated^)
-```
+```text
 
-**Key Points**:
+### Key Points
+
 - Generates random angle in specified degree range
 - Converts degrees to radians using standard formula
 - Uses inverse rotation matrix for proper sampling
@@ -183,12 +186,14 @@ fn __call__(self, data: Tensor) raises -> Tensor:
 ### Horizontal Flip
 
 For pixel at position (h, w, c) in flattened tensor:
+
 - **Index calculation**: `idx = (h * width + w) * channels + c`
 - **Flip operation**: Replace w with `(width - 1 - w)`
 
 ### Vertical Flip
 
 For pixel at position (h, w, c):
+
 - **Index calculation**: Same as horizontal
 - **Flip operation**: Replace h with `(height - 1 - h)`
 
@@ -196,34 +201,38 @@ For pixel at position (h, w, c):
 
 For output pixel at (x, y), find source pixel using inverse rotation:
 
-```
+```text
 x_src = (x - cx) * cos(θ) - (y - cy) * sin(θ) + cx
 y_src = (x - cx) * sin(θ) + (y - cy) * cos(θ) + cy
-```
+```text
 
 Where (cx, cy) = (width/2, height/2) is image center.
 
 ## Mojo Code Quality Features
 
 ### Memory Management
+
 - ✅ Proper ownership semantics with `owned` parameter in Compose
 - ✅ Move semantics with `^` operator for tensor transfers
 - ✅ No memory leaks or dangling references
 - ✅ Correct List/Tensor lifetime management
 
 ### Type Safety
+
 - ✅ Struct-based value semantics (@value decorator)
 - ✅ Trait-based polymorphism (Transform trait)
 - ✅ Explicit type annotations on all variables
 - ✅ No dynamic typing or implicit conversions
 
 ### Performance Patterns
+
 - ✅ Direct index calculations avoiding redundant sqrt calls
 - ✅ Pre-computed rotation matrix values
 - ✅ Single pass through tensor elements
 - ✅ Minimal intermediate allocations
 
 ### Documentation
+
 - ✅ Comprehensive docstrings with Args/Returns/Raises
 - ✅ Clear explanation of assumptions (square images, channels)
 - ✅ Mathematical formulas documented in comments
@@ -235,7 +244,8 @@ Where (cx, cy) = (width/2, height/2) is image center.
 
 **Rationale**: Mojo's Tensor API doesn't expose shape metadata on flattened tensors.
 
-**Trade-offs**:
+### Trade-offs
+
 - ✅ Simple implementation
 - ✅ Works for common sizes (28×28, 32×32, 64×64, 224×224)
 - ❌ Can't handle non-square images
@@ -253,7 +263,8 @@ Where (cx, cy) = (width/2, height/2) is image center.
 
 **Rationale**: Balance between quality and speed.
 
-**Trade-offs**:
+### Trade-offs
+
 - ✅ Fast computation
 - ✅ Simple implementation
 - ❌ Some artifacts at edges
@@ -284,14 +295,15 @@ The implementation is designed to pass these test categories:
 ## Future Improvements
 
 1. **Shape Metadata Support**: Parametrize H, W, C dimensions
-2. **Bilinear Interpolation**: Better rotation quality
-3. **In-Place Operations**: Optimize memory for large images
-4. **Batch Processing**: Process multiple images simultaneously
-5. **SIMD Optimization**: Vectorize element-wise operations
+1. **Bilinear Interpolation**: Better rotation quality
+1. **In-Place Operations**: Optimize memory for large images
+1. **Batch Processing**: Process multiple images simultaneously
+1. **SIMD Optimization**: Vectorize element-wise operations
 
 ## Validation Steps
 
 All implementations:
+
 - ✅ Follow Mojo best practices (fn vs def, struct vs class)
 - ✅ Use proper memory management (owned, borrowed, move semantics)
 - ✅ Implement Transform trait correctly
@@ -304,7 +316,7 @@ All implementations:
 ## Next Steps
 
 1. Run test suite to verify functionality
-2. Benchmark performance on various image sizes
-3. Profile memory usage during transformations
-4. Consider SIMD optimizations if performance is critical
-5. Prepare for Phase 2 (additional augmentations)
+1. Benchmark performance on various image sizes
+1. Profile memory usage during transformations
+1. Consider SIMD optimizations if performance is critical
+1. Prepare for Phase 2 (additional augmentations)

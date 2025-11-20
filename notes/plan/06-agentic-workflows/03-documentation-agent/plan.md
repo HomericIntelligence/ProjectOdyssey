@@ -33,9 +33,9 @@ Create an AI documentation agent that generates and maintains comprehensive proj
 ## Steps
 
 1. Configure agent with documentation standards and tools
-2. Create prompt templates for different documentation types
-3. Implement workflows for docstring generation, README updates, and tutorial creation
-4. Write comprehensive tests for all documentation capabilities
+1. Create prompt templates for different documentation types
+1. Implement workflows for docstring generation, README updates, and tutorial creation
+1. Write comprehensive tests for all documentation capabilities
 
 ## Success Criteria
 

@@ -26,7 +26,7 @@ fn add[dtype: DType](a: Scalar[dtype], b: Scalar[dtype]) -> Scalar[dtype]:
 # ❌ Untyped (Python-style)
 def add_untyped(a, b):
     return a + b
-```
+```text
 
 ### 2. Trait Constraints
 
@@ -34,7 +34,7 @@ def add_untyped(a, b):
 # Ensure type supports required operations
 fn process[T: Copyable](data: T):
     let copy = data  # OK: T is Copyable
-```
+```text
 
 ### 3. Compile-Time Checks
 
@@ -46,7 +46,7 @@ fn validate[size: Int]():
 fn create_array[size: Int]():
     validate[size]()  # Compile-time check
     # Create array
-```
+```text
 
 ## Common Issues
 
@@ -60,7 +60,7 @@ fn process(data):
 # ✅ Explicit types
 fn process(data: Tensor[DType.float32]) -> Tensor[DType.float32]:
     return data
-```
+```text
 
 ### 2. Incorrect Parameter Constraints
 
@@ -72,7 +72,7 @@ fn sort[T](data: List[T]):
 # ✅ With constraint
 fn sort[T: Comparable](data: List[T]):
     # T guaranteed comparable
-```
+```text
 
 ### 3. Type Mismatches
 
@@ -84,7 +84,7 @@ let c = a + b  # Error: different types!
 
 # ✅ Explicit conversion
 let c = a + Float32(b)
-```
+```text
 
 ## Checklist
 

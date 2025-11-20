@@ -50,7 +50,7 @@ Establish the agent system infrastructure for ml-odyssey, implementing a compreh
 
 **Decision**: Separate operational configurations (`.claude/agents/`) from documentation (`agents/`)
 
-**Rationale**:
+### Rationale
 
 - Operational configs are working files used by Claude Code during execution
 - Documentation, templates, and examples are reference materials for developers
@@ -62,7 +62,7 @@ Establish the agent system infrastructure for ml-odyssey, implementing a compreh
 
 **Decision**: Implement a 6-level hierarchical architecture (Level 0 to Level 5)
 
-**Hierarchy Structure**:
+### Hierarchy Structure
 
 - **Level 0**: Meta-Orchestrator (Chief Architect Agent) - Strategic decisions and architecture
 - **Level 1**: Section Orchestrators (6 sections: Foundation, Core ML, Advanced ML, Production, Deployment, Maintenance)
@@ -71,7 +71,7 @@ Establish the agent system infrastructure for ml-odyssey, implementing a compreh
 - **Level 4**: Implementation Engineers (Senior, Standard, Test, Docs, Performance)
 - **Level 5**: Junior Engineers (Simple tasks, boilerplate generation)
 
-**Rationale**:
+### Rationale
 
 - Enables sophisticated task decomposition from strategic to tactical
 - Supports parallel execution at appropriate levels
@@ -84,7 +84,7 @@ Establish the agent system infrastructure for ml-odyssey, implementing a compreh
 
 **Decision**: Clearly distinguish between sub-agents (separate contexts) and skills (capabilities within context)
 
-**Sub-agents**:
+### Sub-agents
 
 - Operate in separate execution contexts
 - Have independent state and memory
@@ -92,7 +92,7 @@ Establish the agent system infrastructure for ml-odyssey, implementing a compreh
 - Use git worktrees for isolated branches
 - Defined in configuration files
 
-**Skills**:
+### Skills
 
 - Capabilities/tools available within a single agent's context
 - Shared state and memory with parent agent
@@ -100,7 +100,7 @@ Establish the agent system infrastructure for ml-odyssey, implementing a compreh
 - No separate context or isolation
 - Invoked as part of agent's task execution
 
-**Rationale**:
+### Rationale
 
 - Prevents confusion about when to use each approach
 - Clarifies coordination mechanisms needed
@@ -111,14 +111,14 @@ Establish the agent system infrastructure for ml-odyssey, implementing a compreh
 
 **Decision**: Leverage git worktrees for agent context isolation
 
-**Implementation**:
+### Implementation
 
 - Each agent can work in its own git worktree
 - Agents work on isolated branches to prevent conflicts
 - Enables true parallel execution without interference
 - Status files and handoff protocols coordinate between agents
 
-**Rationale**:
+### Rationale
 
 - Prevents merge conflicts from parallel work
 - Provides natural isolation boundaries
@@ -130,13 +130,13 @@ Establish the agent system infrastructure for ml-odyssey, implementing a compreh
 
 **Decision**: Map agent levels to workflow phases explicitly
 
-**Mapping**:
+### Mapping
 
 - **Planning Phase**: Primarily Levels 0-2 (orchestrators and designers)
 - **Test/Implementation/Package Phases**: Primarily Levels 3-5 (specialists and engineers)
 - **Cleanup Phase**: All levels participate (review and refinement)
 
-**Rationale**:
+### Rationale
 
 - Aligns agent capabilities with workflow requirements
 - Clarifies which agents handle which phases
@@ -148,7 +148,7 @@ Establish the agent system infrastructure for ml-odyssey, implementing a compreh
 
 **Decision**: Provide configuration templates for all agent levels
 
-**Templates Include**:
+### Templates Include
 
 - Required fields for each level
 - Example prompts and capabilities
@@ -156,7 +156,7 @@ Establish the agent system infrastructure for ml-odyssey, implementing a compreh
 - Task handoff formats
 - Status reporting structures
 
-**Rationale**:
+### Rationale
 
 - Accelerates new agent creation
 - Ensures consistency across configurations
@@ -169,14 +169,14 @@ Establish the agent system infrastructure for ml-odyssey, implementing a compreh
 
 **Decision**: Treat `agents/` directory as single source of truth for agent system design
 
-**Priority**:
+### Priority
 
 1. Write comprehensive documentation first
-2. Create templates based on documented patterns
-3. Build example configurations following templates
-4. Deploy operational configs to `.claude/agents/`
+1. Create templates based on documented patterns
+1. Build example configurations following templates
+1. Deploy operational configs to `.claude/agents/`
 
-**Rationale**:
+### Rationale
 
 - Ensures design is well-thought-out before implementation
 - Creates reference material for all stakeholders

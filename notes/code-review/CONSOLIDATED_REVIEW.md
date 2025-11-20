@@ -18,13 +18,13 @@
 ### Critical Issues (2)
 
 1. **Memory Safety** - TrainingState uses borrowed references without clear lifetime annotations
-2. **Error Handling** - No error handling in ModelCheckpoint file I/O
+1. **Error Handling** - No error handling in ModelCheckpoint file I/O
 
 ### Major Issues (3)
 
 1. **Type Safety** - CallbackSignal uses raw integers instead of enum
-2. **Performance** - EarlyStopping performs unnecessary dict lookups
-3. **API Design** - No thread-safety guarantees for parallel training
+1. **Performance** - EarlyStopping performs unnecessary dict lookups
+1. **API Design** - No thread-safety guarantees for parallel training
 
 ### Minor Issues (3)
 
@@ -43,13 +43,13 @@
 ### Critical Issues (2)
 
 1. **Type Safety** - ConfigValue union type implementation is unsafe
-2. **Security** - No input validation for config files
+1. **Security** - No input validation for config files
 
 ### Major Issues (3)
 
 1. **Memory** - Inefficient List[String] copying
-2. **Error Messages** - Generic errors don't indicate problem key
-3. **API** - Missing nested configuration access
+1. **Error Messages** - Generic errors don't indicate problem key
+1. **API** - Missing nested configuration access
 
 ### Minor Issues (3)
 
@@ -68,15 +68,15 @@
 ### Critical Issues (3)
 
 1. **Data Loss Risk** - Atomic write incomplete (fallback corrupts files)
-2. **Platform Issues** - Placeholder implementations will fail
-3. **Security** - No path traversal protection
+1. **Platform Issues** - Placeholder implementations will fail
+1. **Security** - No path traversal protection
 
 ### Major Issues (4)
 
 1. **Error Handling** - Generic try/except swallows all exceptions
-2. **Serialization** - Text format inefficient and error-prone
-3. **Hardcoded Values** - Home directory hardcoded
-4. **Missing Features** - No compression despite docstrings
+1. **Serialization** - Text format inefficient and error-prone
+1. **Hardcoded Values** - Home directory hardcoded
+1. **Missing Features** - No compression despite docstrings
 
 ### Minor Issues (3)
 
@@ -95,14 +95,14 @@
 ### Critical Issues (2)
 
 1. **JSON Parsing** - Manual string parsing extremely error-prone
-2. **Exit Codes** - Could exit success despite failures
+1. **Exit Codes** - Could exit success despite failures
 
 ### Major Issues (4)
 
 1. **Platform Detection** - Relies on potentially unset env vars
-2. **Missing Validation** - No matching benchmark name validation
-3. **Hardcoded Threshold** - 10% should be configurable
-4. **Code Organization** - Mixing concerns in single file
+1. **Missing Validation** - No matching benchmark name validation
+1. **Hardcoded Threshold** - 10% should be configurable
+1. **Code Organization** - Mixing concerns in single file
 
 ### Minor Issues (3)
 
@@ -140,20 +140,20 @@
 ### Immediate (Before Phase 3)
 
 1. Fix memory safety in TrainingState
-2. Implement proper JSON parsing in benchmarks
-3. Add error handling to checkpoint saving
+1. Implement proper JSON parsing in benchmarks
+1. Add error handling to checkpoint saving
 
 ### Short-term (Phase 3)
 
 1. Complete atomic write implementation
-2. Add input validation for config files
-3. Implement proper error types
+1. Add input validation for config files
+1. Implement proper error types
 
 ### Long-term (Future)
 
 1. Refactor ConfigValue to variant type
-2. Implement binary serialization
-3. Add comprehensive integration tests
+1. Implement binary serialization
+1. Add comprehensive integration tests
 
 ## Sign-off
 

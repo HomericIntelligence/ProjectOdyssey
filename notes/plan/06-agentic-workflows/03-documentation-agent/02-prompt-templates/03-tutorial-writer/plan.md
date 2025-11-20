@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Design tutorial structure with learning flow
-2. Create prompt with teaching guidelines
-3. Add few-shot tutorial examples
-4. Define code example integration
+1. Create prompt with teaching guidelines
+1. Add few-shot tutorial examples
+1. Define code example integration
 
 ## Success Criteria
 

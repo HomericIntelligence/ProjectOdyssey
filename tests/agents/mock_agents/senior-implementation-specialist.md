@@ -86,10 +86,10 @@ Design SIMD-optimized tensor multiplication.
 Senior Implementation Specialist:
 
 1. Analyzes performance requirements
-2. Designs SIMD vectorization strategy
-3. Plans memory layout for cache efficiency
-4. Creates detailed specifications
-5. Delegates implementation to engineers
+1. Designs SIMD vectorization strategy
+1. Plans memory layout for cache efficiency
+1. Creates detailed specifications
+1. Delegates implementation to engineers
 
 ### Example 2: Memory-Efficient Data Structure
 
@@ -98,9 +98,9 @@ Design custom memory pool for training.
 Senior Implementation Specialist:
 
 1. Plans ownership model (owned/borrowed)
-2. Designs struct-based implementation
-3. Coordinates with Performance Specialist
-4. Delegates to Senior Implementation Engineer
+1. Designs struct-based implementation
+1. Coordinates with Performance Specialist
+1. Delegates to Senior Implementation Engineer
 
 ## Constraints
 

@@ -8,7 +8,7 @@ Design channel configuration for Magic package manager.
 
 Channels configuration structure designed for future custom package sources.
 
-**Design Details:**
+### Design Details:
 
 - Channels allow custom package sources (conda-forge, modular, custom)
 - Configuration location: `magic.toml` under `[tool.magic.channels]`
@@ -20,16 +20,16 @@ Channels configuration structure designed for future custom package sources.
 # Future: Channels section
 # [tool.magic.channels]
 # Add custom package channels here
-```
+```text
 
 ## Rationale
 
 Channels are **intentionally deferred** because:
 
 1. Default channels (modular) are sufficient for foundation phase
-2. Custom channels will be needed when adding external Mojo packages
-3. Structure is documented and ready for future activation
-4. Magic package manager supports this when needed
+1. Custom channels will be needed when adding external Mojo packages
+1. Structure is documented and ready for future activation
+1. Magic package manager supports this when needed
 
 ## Success Criteria
 
@@ -37,6 +37,6 @@ Channels are **intentionally deferred** because:
 - ✅ Configuration format defined (TOML table format)
 - ✅ Documentation complete with placeholder in magic.toml
 
-**References:**
+### References:
 
 - Config file: `/magic.toml:22-24` (commented placeholder)

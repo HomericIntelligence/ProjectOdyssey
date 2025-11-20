@@ -32,7 +32,7 @@ The text augmentation system follows a **composable pipeline pattern** where ind
 
 **Purpose**: Replace words with semantically similar alternatives to increase lexical diversity.
 
-**Approach**:
+### Approach
 
 - Use word embeddings or thesaurus-based lookup
 - Apply replacement with configurable probability
@@ -45,7 +45,7 @@ The text augmentation system follows a **composable pipeline pattern** where ind
 
 **Purpose**: Add contextually appropriate words to increase sentence variation.
 
-**Approach**:
+### Approach
 
 - Select words from vocabulary or context-appropriate word list
 - Insert at random positions with configurable probability
@@ -58,7 +58,7 @@ The text augmentation system follows a **composable pipeline pattern** where ind
 
 **Purpose**: Vary word order while preserving overall meaning.
 
-**Approach**:
+### Approach
 
 - Swap adjacent or nearby word pairs
 - Apply with configurable probability
@@ -71,7 +71,7 @@ The text augmentation system follows a **composable pipeline pattern** where ind
 
 **Purpose**: Create shorter variations by removing non-critical words.
 
-**Approach**:
+### Approach
 
 - Delete words with configurable probability
 - Preserve minimum sentence length
@@ -84,7 +84,7 @@ The text augmentation system follows a **composable pipeline pattern** where ind
 
 **Purpose**: Translate to another language and back to create paraphrases.
 
-**Approach**:
+### Approach
 
 - Requires translation model or API
 - Resource-intensive but produces high-quality augmentations
@@ -127,30 +127,30 @@ struct AugmentationPipeline:
         for aug in self.augmentations:
             result = aug.augment(result, aug.config)
         return result
-```
+```text
 
 ### Implementation Strategy
 
 #### Phase 1: Core Operations
 
 1. Implement synonym replacement using simple word embeddings
-2. Create random insertion with vocabulary sampling
-3. Add random swap for adjacent word pairs
-4. Implement random deletion with minimum length preservation
+1. Create random insertion with vocabulary sampling
+1. Add random swap for adjacent word pairs
+1. Implement random deletion with minimum length preservation
 
 #### Phase 2: Pipeline Composition
 
 1. Design composable pipeline structure
-2. Implement configuration system
-3. Add probability-based application
-4. Create pipeline builder interface
+1. Implement configuration system
+1. Add probability-based application
+1. Create pipeline builder interface
 
 #### Phase 3: Safety and Validation
 
 1. Add semantic preservation checks
-2. Implement grammatical validation (basic)
-3. Create label validation (ensure labels still apply)
-4. Add configurable safety constraints
+1. Implement grammatical validation (basic)
+1. Create label validation (ensure labels still apply)
+1. Add configurable safety constraints
 
 ### Technical Considerations
 
@@ -162,7 +162,7 @@ struct AugmentationPipeline:
 - Type safety for configuration parameters
 - Memory efficiency for large-scale augmentation
 
-**Potential Python Integration**:
+### Potential Python Integration
 
 - External synonym dictionaries (WordNet, word embeddings)
 - Pre-trained models for back-translation (if implemented)

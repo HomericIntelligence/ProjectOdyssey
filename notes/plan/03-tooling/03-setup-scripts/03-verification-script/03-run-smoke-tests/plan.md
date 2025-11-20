@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Identify smoke tests to run
-2. Execute tests in clean environment
-3. Collect results and output
-4. Report on environment health
+1. Execute tests in clean environment
+1. Collect results and output
+1. Report on environment health
 
 ## Success Criteria
 

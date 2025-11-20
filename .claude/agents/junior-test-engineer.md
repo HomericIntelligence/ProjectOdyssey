@@ -35,9 +35,9 @@ Level 5 Junior Engineer responsible for simple testing tasks, test boilerplate, 
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -77,7 +77,7 @@ See [mojo-language-review-specialist.md](./mojo-language-review-specialist.md) f
 
 #### Function Definitions (fn vs def)
 
-**Use `fn` for**:
+### Use `fn` for
 
 - Performance-critical functions (compile-time optimization)
 - Functions with explicit type annotations
@@ -88,9 +88,9 @@ See [mojo-language-review-specialist.md](./mojo-language-review-specialist.md) f
 fn matrix_multiply[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]) -> Tensor[dtype]:
     # Optimized, type-safe implementation
     ...
-```
+```text
 
-**Use `def` for**:
+### Use `def` for
 
 - Python-compatible functions
 - Dynamic typing needed
@@ -101,11 +101,11 @@ fn matrix_multiply[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]) -> Tensor[d
 def load_dataset(path: String) -> PythonObject:
     # Flexible, Python-compatible implementation
     ...
-```
+```text
 
 #### Type Definitions (struct vs class)
 
-**Use `struct` for**:
+### Use `struct` for
 
 - Value types with stack allocation
 - Performance-critical data structures
@@ -120,9 +120,9 @@ struct Layer:
 
     fn forward(self, input: Tensor) -> Tensor:
         ...
-```
+```text
 
-**Use `class` for**:
+### Use `class` for
 
 - Reference types with heap allocation
 - Object-oriented inheritance
@@ -135,11 +135,11 @@ class Model:
 
     def add_layer(self, layer: Layer):
         self.layers.append(layer)
-```
+```text
 
 #### Memory Management Patterns
 
-**Ownership Patterns**:
+### Ownership Patterns
 
 - `owned`: Transfer ownership (move semantics)
 - `borrowed`: Read-only access without ownership
@@ -157,11 +157,11 @@ fn analyze_tensor(borrowed tensor: Tensor) -> Float32:
 fn update_tensor(inout tensor: Tensor):
     # Mutate in place, no ownership transfer
     tensor.normalize_()
-```
+```text
 
 #### SIMD and Vectorization
 
-**Use SIMD for**:
+### Use SIMD for
 
 - Element-wise tensor operations
 - Matrix/vector computations
@@ -176,16 +176,16 @@ fn vectorized_add[simd_width: Int](a: Tensor, b: Tensor) -> Tensor:
 
     vectorize[add_simd, simd_width](a.num_elements())
     return result
-```
+```text
 
 ## Workflow
 
 1. Receive test specification
-2. Write test using simple, concrete test data
-3. Run tests locally
-4. Verify tests run in CI
-5. Fix any simple issues
-6. Report results
+1. Write test using simple, concrete test data
+1. Run tests locally
+1. Verify tests run in CI
+1. Fix any simple issues
+1. Report results
 
 ## No Delegation
 
@@ -209,8 +209,8 @@ Level 5 is the lowest level - no delegation.
 When blocked or needing guidance:
 
 1. Escalate to immediate supervisor (relevant Specialist)
-2. If still blocked, Specialist escalates to Design level
-3. If architectural issue, escalates to Orchestrator level
+1. If still blocked, Specialist escalates to Design level
+1. If architectural issue, escalates to Orchestrator level
 
 ## Workflow Phase
 
@@ -271,7 +271,7 @@ Use the `gh-create-pr-linked` skill to create PRs:
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -313,8 +313,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -338,13 +338,13 @@ After creating PR:
 
 **Scenario**: Writing Mojo implementation of 2D convolution
 
-**Actions**:
+### Actions
 
 1. Review function specification and interface design
-2. Implement forward pass with proper tensor operations
-3. Add error handling and input validation
-4. Optimize with SIMD where applicable
-5. Write inline documentation
+1. Implement forward pass with proper tensor operations
+1. Add error handling and input validation
+1. Optimize with SIMD where applicable
+1. Write inline documentation
 
 **Outcome**: Working convolution implementation ready for testing
 
@@ -352,13 +352,13 @@ After creating PR:
 
 **Scenario**: Gradient shape mismatch causing training failures
 
-**Actions**:
+### Actions
 
 1. Reproduce bug with minimal test case
-2. Trace tensor dimensions through backward pass
-3. Fix dimension handling in gradient computation
-4. Verify fix with unit tests
-5. Update documentation if needed
+1. Trace tensor dimensions through backward pass
+1. Fix dimension handling in gradient computation
+1. Verify fix with unit tests
+1. Update documentation if needed
 
 **Outcome**: Correct gradient computation with all tests passing
 

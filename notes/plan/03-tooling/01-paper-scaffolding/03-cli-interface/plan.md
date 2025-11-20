@@ -30,8 +30,8 @@ Build a command-line interface for the paper scaffolding tool that provides an i
 ## Steps
 
 1. Implement argument parsing for command-line options
-2. Create interactive prompts for collecting paper information
-3. Format output messages and progress indicators
+1. Create interactive prompts for collecting paper information
+1. Format output messages and progress indicators
 
 ## Success Criteria
 

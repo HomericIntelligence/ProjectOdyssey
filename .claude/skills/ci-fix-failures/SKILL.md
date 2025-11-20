@@ -27,7 +27,7 @@ gh run view <run-id>
 
 # Get failed logs
 gh run view <run-id> --log-failed
-```
+```text
 
 ### 2. Identify Failure
 
@@ -37,14 +37,14 @@ gh run download <run-id>
 
 # Or view online
 gh run view <run-id> --web
-```
+```text
 
 ### 3. Reproduce Locally
 
 ```bash
 # Run same commands as CI
 ./scripts/reproduce_ci.sh <run-id>
-```
+```text
 
 ## Common Failures
 
@@ -52,24 +52,24 @@ gh run view <run-id> --web
 
 ```text
 Trailing whitespace....Failed
-```
+```text
 
-**Fix:**
+### Fix:
 
 ```bash
 pre-commit run --all-files
 git add .
 git commit --amend --no-edit
 git push --force-with-lease
-```
+```text
 
 ### 2. Test Failures
 
 ```text
 test_tensor_add....FAILED
-```
+```text
 
-**Fix:**
+### Fix:
 
 ```bash
 # Run tests locally
@@ -78,37 +78,37 @@ mojo test tests/
 # Fix failing test
 # Re-run to verify
 # Push fix
-```
+```text
 
 ### 3. Linting Failures
 
 ```text
 Markdown lint....Failed
-```
+```text
 
-**Fix:**
+### Fix:
 
 ```bash
 npx markdownlint-cli2 --fix "**/*.md"
 git add .
 git commit -m "fix: markdown linting"
 git push
-```
+```text
 
 ### 4. Build Failures
 
 ```text
 Error: Cannot find module
-```
+```text
 
-**Fix:**
+### Fix:
 
 ```bash
 # Check dependencies
 # Update imports
 # Re-build locally
 # Push fix
-```
+```text
 
 ## Fixing Workflow
 
@@ -120,7 +120,7 @@ Error: Cannot find module
 ./scripts/reproduce_ci_failure.sh
 
 # 3. Fix issue
-# ... make changes ...
+# ... make changes
 
 # 4. Verify fix
 ./scripts/run_ci_locally.sh
@@ -132,7 +132,7 @@ git push
 
 # 6. Verify CI passes
 gh pr checks <pr-number> --watch
-```
+```text
 
 ## Scripts
 

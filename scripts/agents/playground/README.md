@@ -34,8 +34,8 @@ these scripts are no longer needed for regular development.
 These scripts should generally not be run unless you're:
 
 1. Doing similar refactoring on a fork
-2. Understanding the historical development process
-3. Extracting patterns for new automation scripts
+1. Understanding the historical development process
+1. Extracting patterns for new automation scripts
 
 ## Modern Alternatives
 

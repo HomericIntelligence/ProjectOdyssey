@@ -38,12 +38,14 @@ Complete documentation for 20 issues (#433-452) covering the testing infrastruct
 
 **Key Files**: `/tests/shared/conftest.mojo` (337 lines), `/tests/helpers/assertions.mojo` (365 lines)
 
-**Implemented**:
+### Implemented
+
 - 7 general assertions (assert_true, assert_equal, assert_almost_equal, etc.)
 - 8 ExTensor assertions (assert_shape, assert_all_close, etc.)
 - 3 data generators (create_test_vector, create_test_matrix, create_sequential_vector)
 
-**TODOs**:
+### TODOs
+
 - measure_time() - Placeholder, needs Mojo time module
 - measure_throughput() - Depends on measure_time
 
@@ -61,12 +63,14 @@ Complete documentation for 20 issues (#433-452) covering the testing infrastruct
 
 **Key Files**: `/tests/shared/conftest.mojo` (TestFixtures struct), `/tests/helpers/fixtures.mojo` (placeholders)
 
-**Implemented**:
+### Implemented
+
 - TestFixtures.deterministic_seed() - Returns 42
 - TestFixtures.set_seed() - Sets deterministic random seed
 - Data generators (vectors, matrices, sequential)
 
-**TODOs**:
+### TODOs
+
 - Tensor fixtures (commented out, waiting for Tensor implementation - Issue #1538)
 - ExTensor fixtures (placeholders in helpers/fixtures.mojo)
 - Model fixtures
@@ -91,37 +95,43 @@ Complete documentation for 20 issues (#433-452) covering the testing infrastruct
 ### What Exists and Works
 
 **Test Infrastructure** ✅:
+
 - Test directory structure (`/tests/` organized by component)
 - Test naming convention (`test_*.mojo`)
 - Test execution (`mojo test <file>.mojo`)
 - 91+ tests passing
 
 **Utilities** ✅:
+
 - Comprehensive assertion functions
 - ExTensor-specific assertions
 - Data generators for common patterns
 - Benchmark utilities
 
 **Fixtures** ✅:
+
 - Deterministic seeding for reproducible tests
 - Data generators for vectors and matrices
 - TestFixtures struct for organization
 
 ### What Needs Work
 
-**Placeholders/TODOs**:
-1. `measure_time()` and `measure_throughput()` - Waiting for Mojo time module
-2. Tensor fixtures - Waiting for Tensor implementation (Issue #1538)
-3. `helpers/fixtures.mojo` - All placeholders (17 lines)
-4. `helpers/utils.mojo` - All placeholders (14 lines)
+### Placeholders/TODOs
 
-**Documentation Gaps**:
+1. `measure_time()` and `measure_throughput()` - Waiting for Mojo time module
+1. Tensor fixtures - Waiting for Tensor implementation (Issue #1538)
+1. `helpers/fixtures.mojo` - All placeholders (17 lines)
+1. `helpers/utils.mojo` - All placeholders (14 lines)
+
+### Documentation Gaps
+
 - No comprehensive testing guide
 - No API reference for utilities
 - No fixture catalog
 - No best practices documentation
 
-**Potential Redundancy**:
+### Potential Redundancy
+
 - Basic assertions in both `conftest.mojo` and `helpers/assertions.mojo`
 - Need analysis of which to keep where
 
@@ -135,17 +145,17 @@ Complete documentation for 20 issues (#433-452) covering the testing infrastruct
    - **Option C**: Keep with tracked TODOs
    - **Recommended**: Check ExTensor availability, implement if ready, otherwise remove
 
-2. **Timing Utilities** (`measure_time()`, `measure_throughput()`):
+1. **Timing Utilities** (`measure_time()`, `measure_throughput()`):
    - **Option A**: Implement if Mojo time module available
    - **Option B**: Remove if not used in tests
    - **Option C**: Keep as tracked TODO (Issue #1538)
    - **Recommended**: Check usage in tests, remove if unused
 
-3. **Assertion Redundancy**:
+1. **Assertion Redundancy**:
    - **Decision Needed**: Keep basic assertions in both files or consolidate?
    - **Recommended**: Keep general assertions in `conftest.mojo`, only ExTensor-specific in `helpers/`
 
-4. **Tensor Fixtures**:
+1. **Tensor Fixtures**:
    - **Depends on**: Tensor implementation (Issue #1538)
    - **Action**: Uncomment and implement when Tensor is ready
    - **Until then**: Keep commented with TODO reference
@@ -159,42 +169,42 @@ Complete documentation for 20 issues (#433-452) covering the testing infrastruct
    - Document what works
    - Identify any gaps
 
-2. **Issue #439** (Test Test Utilities):
+1. **Issue #439** (Test Test Utilities):
    - Meta-test the test utilities
    - Ensure assertions work correctly
    - Validate edge case handling
 
-3. **Issue #444** (Test Test Fixtures):
+1. **Issue #444** (Test Test Fixtures):
    - Test seed fixtures for determinism
    - Test data generators for consistency
    - Validate fixture independence
 
 ### Medium Priority (After Testing)
 
-4. **Issue #435** (Impl Setup Testing):
+1. **Issue #435** (Impl Setup Testing):
    - Fill gaps found in testing
    - Minimal changes only
 
-5. **Issue #440** (Impl Test Utilities):
+1. **Issue #440** (Impl Test Utilities):
    - Resolve TODOs based on availability
    - Remove or implement placeholders
 
-6. **Issue #445** (Impl Test Fixtures):
+1. **Issue #445** (Impl Test Fixtures):
    - Implement tensor fixtures if ready
    - Otherwise, clean up TODOs
 
 ### Lower Priority (Documentation & Cleanup)
 
-7. **Issues #436, #441, #446** (Packaging):
+1. **Issues #436, #441, #446** (Packaging):
    - Create documentation (API reference, catalogs, guides)
    - Package for easy reuse
 
-8. **Issues #437, #442, #447** (Cleanup):
+1. **Issues #437, #442, #447** (Cleanup):
    - Final refactoring
    - Remove dead code
    - Resolve remaining TODOs
 
-9. **Issues #449-452** (Test Framework Integration):
+1. **Issues #449-452** (Test Framework Integration):
    - Integration testing
    - Final implementation
    - Complete documentation
@@ -213,13 +223,15 @@ Complete documentation for 20 issues (#433-452) covering the testing infrastruct
 
 **Key Insight**: The testing infrastructure **already works** (91+ tests passing).
 
-**Approach**:
-1. **Document what exists** - Most work is documentation
-2. **Validate it works** - Test phase confirms functionality
-3. **Fill critical gaps only** - Don't over-engineer
-4. **Clean up TODOs** - Resolve or track properly
+### Approach
 
-**Avoid**:
+1. **Document what exists** - Most work is documentation
+1. **Validate it works** - Test phase confirms functionality
+1. **Fill critical gaps only** - Don't over-engineer
+1. **Clean up TODOs** - Resolve or track properly
+
+### Avoid
+
 - Rebuilding working infrastructure
 - Adding features "just in case"
 - Over-abstracting simple patterns
@@ -238,6 +250,7 @@ Complete documentation for 20 issues (#433-452) covering the testing infrastruct
    # Check usage
    grep -r "from tests.shared.conftest import" tests/
    grep -r "from tests.helpers.assertions import" tests/
+
    ```
 
 2. **Start with Testing**:

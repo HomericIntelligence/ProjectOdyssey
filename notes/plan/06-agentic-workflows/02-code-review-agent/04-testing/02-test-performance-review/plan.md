@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Create test cases with inefficient code
-2. Define expected performance findings
-3. Write tests for performance review
-4. Validate analysis accuracy
+1. Define expected performance findings
+1. Write tests for performance review
+1. Validate analysis accuracy
 
 ## Success Criteria
 

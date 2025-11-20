@@ -12,7 +12,7 @@ datasets/
 ├── cifar10/          # CIFAR-10 image classification dataset
 ├── synthetic/        # Synthetic datasets for testing
 └── custom/           # Custom datasets for specific papers
-```
+```text
 
 ## Quick Start
 
@@ -21,7 +21,7 @@ Download MNIST dataset:
 ```python
 from shared.data import download_mnist
 download_mnist("datasets/mnist/")
-```
+```text
 
 ## Usage
 
@@ -37,10 +37,10 @@ Each dataset should be organized in its own subdirectory with:
 ### Adding New Datasets
 
 1. Create dataset subdirectory
-2. Add download script
-3. Document preprocessing steps
-4. Include dataset statistics
-5. Add usage examples
+1. Add download script
+1. Document preprocessing steps
+1. Include dataset statistics
+1. Add usage examples
 
 ### Dataset Format
 
@@ -82,7 +82,7 @@ from shared.data import load_dataset
 
 train_data, train_labels = load_dataset("mnist", split="train")
 test_data, test_labels = load_dataset("mnist", split="test")
-```
+```text
 
 ## Storage Guidelines
 

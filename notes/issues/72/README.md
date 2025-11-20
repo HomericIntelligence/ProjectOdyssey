@@ -34,14 +34,14 @@ Design and document the architecture for the `configs/` directory system that wi
 ### Key Design Decisions Made
 
 1. **Three-tier configuration hierarchy**: defaults → paper-specific → experiment-specific
-2. **YAML as primary format** with JSON support for interoperability
-3. **Mojo-first utilities** leveraging existing `shared/utils/config.mojo`
-4. **Schema validation** using YAML comments and Mojo type checking
-5. **Environment variable substitution** for deployment flexibility
+1. **YAML as primary format** with JSON support for interoperability
+1. **Mojo-first utilities** leveraging existing `shared/utils/config.mojo`
+1. **Schema validation** using YAML comments and Mojo type checking
+1. **Environment variable substitution** for deployment flexibility
 
 ### Directory Structure Finalized
 
-```
+```text
 configs/
 ├── README.md                    # Main documentation
 ├── defaults/                    # Default configurations
@@ -62,7 +62,7 @@ configs/
 └── templates/                   # Configuration templates
     ├── paper.yaml              # Template for new papers
     └── experiment.yaml         # Template for experiments
-```
+```text
 
 ### Integration Points Identified
 

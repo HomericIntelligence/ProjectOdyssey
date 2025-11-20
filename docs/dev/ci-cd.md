@@ -22,13 +22,13 @@ Located in `.github/workflows/`:
 
 **File**: `.github/workflows/test.yml`
 
-**Triggers**:
+### Triggers
 
 - Pull request creation/update
 - Push to `main` branch
 - Manual workflow dispatch
 
-**Jobs**:
+### Jobs
 
 ```yaml
 
@@ -90,7 +90,7 @@ jobs:
 
 **Purpose**: Enforce code quality standards
 
-**Checks**:
+### Checks
 
 - Markdown linting (`markdownlint-cli2`)
 - Trailing whitespace removal
@@ -187,7 +187,7 @@ act -j test-mojo
 - Up-to-date with base branch
 - No merge conflicts
 
-**Configure in GitHub**:
+### Configure in GitHub
 
 Settings → Branches → Branch protection rules → `main`
 
@@ -205,11 +205,11 @@ Settings → Branches → Branch protection rules → `main`
 
 **Trigger**: Push to `main`
 
-**Process**:
+### Process
 
 1. Build MkDocs site
-2. Deploy to GitHub Pages
-3. Update documentation URL
+1. Deploy to GitHub Pages
+1. Update documentation URL
 
 ```yaml
 
@@ -356,11 +356,11 @@ View at: `<https://github.com/owner/ml-odyssey/actions`>
 ## Best Practices
 
 1. **Test Locally First** - Run pre-commit and tests before pushing
-2. **Small PRs** - Easier to review and faster CI
-3. **Clear Commit Messages** - Help with debugging CI failures
-4. **Monitor CI Times** - Optimize if jobs take >10 minutes
-5. **Use Caching** - Speed up workflows with appropriate caching
-6. **Fail Fast** - Order jobs by speed, fail on first error
+1. **Small PRs** - Easier to review and faster CI
+1. **Clear Commit Messages** - Help with debugging CI failures
+1. **Monitor CI Times** - Optimize if jobs take >10 minutes
+1. **Use Caching** - Speed up workflows with appropriate caching
+1. **Fail Fast** - Order jobs by speed, fail on first error
 
 ## Skills for CI/CD
 
@@ -379,27 +379,27 @@ See `.claude/skills/` for details.
 
 ## Summary
 
-**CI Pipeline**:
+### CI Pipeline
 
 - Automated testing (Mojo + Python)
 - Code quality checks (pre-commit)
 - Agent configuration validation
 - Documentation building
 
-**CD Pipeline**:
+### CD Pipeline
 
 - Automatic docs deployment to GitHub Pages
 - (Planned) Package building and releases
 
-**Key Points**:
+### Key Points
 
 1. All PRs must pass CI before merge
-2. Pre-commit hooks catch issues early
-3. Tests run on every commit
-4. Documentation auto-deploys on main
-5. Use local simulation to debug
+1. Pre-commit hooks catch issues early
+1. Tests run on every commit
+1. Documentation auto-deploys on main
+1. Use local simulation to debug
 
-**Next Steps**:
+### Next Steps
 
 - Set up branch protection
 - Configure required status checks

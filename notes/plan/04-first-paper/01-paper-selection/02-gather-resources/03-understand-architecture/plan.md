@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Study architecture diagram from paper
-2. Document all layer specifications
-3. Note hyperparameters and design choices
+1. Document all layer specifications
+1. Note hyperparameters and design choices
 
 ## Success Criteria
 

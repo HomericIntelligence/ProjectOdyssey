@@ -30,9 +30,9 @@ None (top-level)
 ## Steps
 
 1. Create the complete directory structure with papers, shared, and supporting directories
-2. Set up configuration files for Magic package manager and Python tooling
-3. Configure Git settings including ignore patterns, attributes, and LFS
-4. Write initial documentation to guide repository usage and contributions
+1. Set up configuration files for Magic package manager and Python tooling
+1. Configure Git settings including ignore patterns, attributes, and LFS
+1. Write initial documentation to guide repository usage and contributions
 
 ## Success Criteria
 

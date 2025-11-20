@@ -37,7 +37,8 @@ Design and document a comprehensive data augmentation framework that increases t
 
 **Decision**: Use callable objects (functors) or simple functions for transforms to support both stateless operations and stateful configurations.
 
-**Rationale**:
+### Rationale
+
 - Functors allow storing augmentation parameters (e.g., rotation angle range, flip probability) while remaining callable
 - Simple functions work for stateless transforms (e.g., pure normalization)
 - Both patterns support composition through sequential chaining
@@ -47,7 +48,8 @@ Design and document a comprehensive data augmentation framework that increases t
 
 **Decision**: Implement transform composition using a pipeline/sequential pattern with explicit ordering.
 
-**Rationale**:
+### Rationale
+
 - Order matters for augmentations (normalize before color jitter, crop before rotation)
 - Sequential chains are easier to understand and debug than complex DAGs
 - Supports conditional application (apply transform with probability P)
@@ -57,7 +59,8 @@ Design and document a comprehensive data augmentation framework that increases t
 
 **Decision**: Make all augmentations optional with configurable probabilities, and provide sensible defaults that err on the conservative side.
 
-**Rationale**:
+### Rationale
+
 - Not all augmentations are appropriate for all tasks (e.g., flipping digits can change labels)
 - Users need control over augmentation intensity to balance diversity vs. semantic validity
 - Conservative defaults prevent unintended label corruption
@@ -65,18 +68,21 @@ Design and document a comprehensive data augmentation framework that increases t
 
 ### Modality-Specific Considerations
 
-**Image Augmentations**:
+### Image Augmentations
+
 - Geometric transforms must handle edge cases (padding, interpolation)
 - Color augmentations should preserve relative color relationships
 - Must work with various image sizes and formats
 
-**Text Augmentations**:
+### Text Augmentations
+
 - Synonym replacement is safest (preserves grammar and meaning)
 - Random operations (insertion, deletion, swap) should be subtle
 - Consider using word embeddings for contextually appropriate synonyms
 - Grammar preservation is important for downstream tasks
 
-**Generic Transforms**:
+### Generic Transforms
+
 - Type-agnostic implementations using trait bounds or protocol classes
 - Support both batched and unbatched data (tensors vs. single samples)
 - Provide inverse transforms where mathematically meaningful (e.g., normalization ↔ denormalization)
@@ -85,7 +91,8 @@ Design and document a comprehensive data augmentation framework that increases t
 
 **Decision**: All random operations accept an optional seed parameter and use deterministic RNG when provided.
 
-**Rationale**:
+### Rationale
+
 - Training reproducibility requires deterministic data augmentation
 - Debugging needs consistent behavior across runs
 - Experimentation benefits from controlled randomness
@@ -95,7 +102,8 @@ Design and document a comprehensive data augmentation framework that increases t
 
 **Decision**: Implement augmentations in Mojo for performance-critical paths, with SIMD optimizations for image operations.
 
-**Rationale**:
+### Rationale
+
 - Image augmentations are compute-intensive (per-pixel operations)
 - SIMD parallelism provides significant speedups for geometric and color transforms
 - Mojo's zero-cost abstractions maintain performance while enabling clean APIs
@@ -132,9 +140,9 @@ Design and document a comprehensive data augmentation framework that increases t
 The augmentation framework requires careful balance between:
 
 1. **Flexibility**: Support diverse augmentation strategies across modalities
-2. **Safety**: Preserve semantic meaning and label validity
-3. **Performance**: Leverage SIMD for compute-intensive operations
-4. **Usability**: Provide intuitive APIs with sensible defaults
+1. **Safety**: Preserve semantic meaning and label validity
+1. **Performance**: Leverage SIMD for compute-intensive operations
+1. **Usability**: Provide intuitive APIs with sensible defaults
 
 ### Key Considerations for Implementation Phase
 
@@ -147,9 +155,9 @@ The augmentation framework requires careful balance between:
 
 1. Should transforms mutate data in-place or return new copies?
    - **Recommendation**: Return new copies by default, provide in-place variants for performance when needed
-2. How to handle batch vs. single-sample APIs?
+1. How to handle batch vs. single-sample APIs?
    - **Recommendation**: Support both through overloading or type-based dispatch
-3. What level of type safety for transform inputs?
+1. What level of type safety for transform inputs?
    - **Recommendation**: Use Mojo's trait system to enforce compatible types at compile time
 
 ### Notes for Subsequent Phases

@@ -23,6 +23,7 @@
 ## MODULE BREAKDOWN
 
 ### 1. Arithmetic (arithmetic.mojo)
+
 - **Backward Functions**: 5 (4 + 1 helper)
 - **Broadcasting**: YES - Full support via `_reduce_broadcast_dims` helper
 - **Stability**: 1/5 (divide_backward only)
@@ -36,6 +37,7 @@
 **Key Insight**: Arithmetic is fully production-ready with robust broadcasting handling.
 
 ### 2. Matrix (matrix.mojo)
+
 - **Backward Functions**: 2
 - **Broadcasting**: NO (not applicable for matmul)
 - **Stability**: None needed
@@ -46,6 +48,7 @@
 **Key Insight**: Matrix operations cover all neural network layer needs.
 
 ### 3. Reduction (reduction.mojo)
+
 - **Backward Functions**: 4
 - **Broadcasting**: YES (inverse of reduction is broadcast)
 - **Stability**: None explicitly needed
@@ -58,6 +61,7 @@
 **Key Insight**: Reductions handle all loss computation needs (MSE, cross-entropy, etc.)
 
 ### 4. ElementWise Math (elementwise_math.mojo)
+
 - **Backward Functions**: 7
 - **Broadcasting**: NO (element-wise only)
 - **Stability**: 4/7 (log, sqrt, log10, log2)
@@ -73,6 +77,7 @@
 **Key Insight**: Mathematical operations include all standard functions with stability measures.
 
 ### 5. Activations (activations.mojo)
+
 - **Backward Functions**: 7
 - **Broadcasting**: NO (activation functions are element-wise)
 - **Stability**: Special handling for edge cases
@@ -98,28 +103,28 @@
    - Handles broadcast dimensions (size 1)
    - Recursively sums over multiple broadcast axes
 
-2. **add_backward**
+1. **add_backward**
    - Both inputs independently reduced
    - Handles A[5] + B[3,4,5] case
    - Handles A[3,1,5] + B[3,4,5] case
 
-3. **subtract_backward**
+1. **subtract_backward**
    - Same broadcasting as addition
    - Negation applied before reduction
 
-4. **multiply_backward**
+1. **multiply_backward**
    - Computes grad*operand, then reduces
    - Maintains broadcasting semantics
 
-5. **divide_backward**
+1. **divide_backward**
    - Complex: grad_a = grad/b, grad_b = -grad*a/b²
    - Both terms properly reduced
 
-6. **sum_backward**
+1. **sum_backward**
    - Inverse of reduction (broadcasting)
    - Scalar gradient broadcast to all elements
 
-7. **mean_backward**
+1. **mean_backward**
    - Broadcast + scale by 1/N
    - Handles axis-specific means
 
@@ -142,33 +147,33 @@
    grad_b = -grad_output * a / b_squared_safe
    ```
 
-2. **log_backward**: X + epsilon = 1e-10
+1. **log_backward**: X + epsilon = 1e-10
    ```mojo
    result = grad / (x + 1e-10)
    ```
 
-3. **sqrt_backward**: 2*Y + epsilon = 1e-10
+1. **sqrt_backward**: 2*Y + epsilon = 1e-10
    ```mojo
    result = grad / (2.0 * output + 1e-10)
    ```
 
-4. **log10_backward**: X*LN10 + epsilon = 1e-10
+1. **log10_backward**: X*LN10 + epsilon = 1e-10
    ```mojo
    result = grad / (x * 2.302585... + 1e-10)
    ```
 
-5. **log2_backward**: X*LN2 + epsilon = 1e-10
+1. **log2_backward**: X*LN2 + epsilon = 1e-10
    ```mojo
    result = grad / (x * 0.693147... + 1e-10)
    ```
 
 ### Moderate Stability (Precision Preservation)
 
-6. **gelu_backward**
+1. **gelu_backward**
    - Float16 computations use Float32 intermediate precision
    - Prevents underflow in exp(-x²/2)
 
-7. **softmax_backward**
+1. **softmax_backward**
    - Float16 uses Float32 for dot product accumulation
    - Prevents precision loss in normalization term
 
@@ -185,6 +190,7 @@
 ### Multiple Maxima/Minima (Graceful Degradation)
 
 **max_reduce_backward** and **min_reduce_backward**:
+
 - Count equal extrema
 - Split gradient equally: grad / count
 - Example: [1, **3**, 2, **3**] with grad=1 → [0, **0.5**, 0, **0.5**]
@@ -192,32 +198,38 @@
 ### Undefined Points (Convention-Based)
 
 **abs_backward**:
+
 - At X = 0: gradient = 0 (undefined point)
 - Convention: treat as subgradient
 
 **relu_backward**:
+
 - At X = 0: gradient = 0 (technically undefined)
 - Convention: use 0
 
 ### Boundary Conditions
 
 **clip_backward**:
+
 - X < min: gradient = 0
 - X >= min AND X <= max: gradient = ∂L/∂Y
 - X > max: gradient = 0
 
 **leaky_relu_backward**:
+
 - X > 0: gradient = ∂L/∂Y * 1
 - X <= 0: gradient = ∂L/∂Y * alpha (prevents dead neurons)
 
 ### Special Cases
 
 **prelu_backward**:
+
 - Scalar alpha: all elements use same parameter
 - Vector alpha: element-wise parameters
 - Handles gradient accumulation for learnable parameter
 
 **softmax_backward**:
+
 - Scalar input: all gradients sum to zero
 - Max probabilities: very small gradients for non-max classes
 - Properly handles Jacobian constraint
@@ -316,11 +328,11 @@
    - Current: nested loop for each position
    - Optimized: single pass accumulation
 
-2. **max/min_reduce_backward**: Could combine three passes
+1. **max/min_reduce_backward**: Could combine three passes
    - Current: find max, count, set gradients
    - Optimized: single pass with dynamic counting
 
-3. **Broadcasting arithmetic**: Could fuse operations
+1. **Broadcasting arithmetic**: Could fuse operations
    - Current: multiply then reduce
    - Optimized: multiply with reduction simultaneously
 
@@ -335,12 +347,12 @@
    - Backward would need: exp(b * log(a)) for general case
    - Impact: MODERATE (rarely used in basic neural networks)
 
-2. **floor_divide_backward**: Not implemented
+1. **floor_divide_backward**: Not implemented
    - Forward: floor_divide(a, b) = floor(a/b)
    - Backward is non-standard for floor operation
    - Impact: LOW (rarely differentiable)
 
-3. **modulo_backward**: Not implemented
+1. **modulo_backward**: Not implemented
    - Forward: modulo(a, b) = a % b
    - Backward is non-standard for modulo
    - Impact: LOW (rarely used in gradients)
@@ -348,9 +360,10 @@
 ### Recommendation
 
 Priority order:
+
 1. **power_backward**: Medium priority, would complete arithmetic suite
-2. **floor_divide_backward**: Low priority, mathematically complex
-3. **modulo_backward**: Low priority, rarely used
+1. **floor_divide_backward**: Low priority, mathematically complex
+1. **modulo_backward**: Low priority, rarely used
 
 ---
 
@@ -363,20 +376,20 @@ Priority order:
    - Scalar + tensor combinations
    - Multiple prepended dimensions
 
-2. **Numerical stability**:
+1. **Numerical stability**:
    - Very small values (sqrt, log near 0)
    - Very large values (exp overflow)
    - Intermediate computations (division chains)
 
-3. **Multiple maxima/minima**:
+1. **Multiple maxima/minima**:
    - Verify equal gradient splitting
    - Test with different counts of extrema
 
-4. **Dtype conversions** (activations):
+1. **Dtype conversions** (activations):
    - Verify float16 intermediate precision
    - Check rounding in conversions
 
-5. **Softmax edge cases**:
+1. **Softmax edge cases**:
    - Multi-axis softmax
    - Large probabilities
    - Small probabilities
@@ -384,9 +397,9 @@ Priority order:
 ### Integration Tests
 
 1. **Gradient checking**: Numerical vs analytical gradients
-2. **Backward chaining**: Multiple operations in sequence
-3. **Memory usage**: Large tensor backward passes
-4. **Performance**: Benchmark complex graphs
+1. **Backward chaining**: Multiple operations in sequence
+1. **Memory usage**: Large tensor backward passes
+1. **Performance**: Benchmark complex graphs
 
 ---
 
@@ -399,23 +412,24 @@ The ExTensor backward pass implementation is **comprehensive and production-read
 ### Strengths
 
 1. ✓ **Complete coverage** of essential operations
-2. ✓ **Robust broadcasting** with dedicated helper function
-3. ✓ **Numerical stability** with epsilon handling
-4. ✓ **Multiple dtypes** especially in activations
-5. ✓ **Edge case handling** for undefined points
-6. ✓ **Learnable parameters** support (PReLU)
-7. ✓ **Complex activations** (GELU, Softmax with Jacobian)
+1. ✓ **Robust broadcasting** with dedicated helper function
+1. ✓ **Numerical stability** with epsilon handling
+1. ✓ **Multiple dtypes** especially in activations
+1. ✓ **Edge case handling** for undefined points
+1. ✓ **Learnable parameters** support (PReLU)
+1. ✓ **Complex activations** (GELU, Softmax with Jacobian)
 
 ### Weaknesses
 
 1. ⚠️ **Missing power_backward** (low impact)
-2. ⚠️ **Softmax O(n²) algorithm** (could optimize)
-3. ⚠️ **Max/min three-pass** (could fuse passes)
-4. ⚠️ **Limited documentation** of numerical stability choices
+1. ⚠️ **Softmax O(n²) algorithm** (could optimize)
+1. ⚠️ **Max/min three-pass** (could fuse passes)
+1. ⚠️ **Limited documentation** of numerical stability choices
 
 ### Capability Summary
 
 Can train neural networks with:
+
 - Dense layers (matmul + broadcast addition)
 - Element-wise operations (all arithmetic)
 - Non-linearities (ReLU, GELU, Sigmoid, Tanh, Softmax)
@@ -423,6 +437,7 @@ Can train neural networks with:
 - Learnable parameters (PReLU alpha)
 
 Can support:
+
 - Batch processing (matmul batched case)
 - Multi-dtype models (float16/32/64)
 - Complex loss functions (cross-entropy via softmax)

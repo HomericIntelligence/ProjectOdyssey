@@ -30,10 +30,10 @@ None (leaf node)
 ## Steps
 
 1. Write tests for trainer with simple models
-2. Create tests for each LR scheduler type
-3. Build tests for callback functionality
-4. Add integration tests with mocks
-5. Verify training workflows end-to-end
+1. Create tests for each LR scheduler type
+1. Build tests for callback functionality
+1. Add integration tests with mocks
+1. Verify training workflows end-to-end
 
 ## Success Criteria
 

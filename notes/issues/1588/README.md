@@ -21,7 +21,7 @@ The following files were created in the root directory:
    - Testing guidelines
    - Additional resources
 
-2. **CODE_OF_CONDUCT.md** (111 lines)
+1. **CODE_OF_CONDUCT.md** (111 lines)
    - Contributor Covenant v2.1
    - Community commitment and standards
    - Examples of acceptable and unacceptable behavior
@@ -29,7 +29,7 @@ The following files were created in the root directory:
    - 4-level enforcement ladder (Correction, Warning, Temporary Ban, Permanent Ban)
    - Attribution and references
 
-3. **LICENSE** (197 lines)
+1. **LICENSE** (197 lines)
    - Apache License 2.0
    - Full license text with all 9 sections
    - Definitions and legal terms
@@ -45,7 +45,7 @@ The following files were created in the root directory:
 ├── CONTRIBUTING.md         (347 lines)
 ├── CODE_OF_CONDUCT.md      (111 lines)
 └── LICENSE                 (197 lines)
-```
+```text
 
 ## Key Sections Included
 
@@ -117,14 +117,14 @@ The following files were created in the root directory:
 - Complete Apache License 2.0 text
 - All 9 legal sections:
   1. Definitions
-  2. Grant of Copyright License
-  3. Grant of Patent License
-  4. Redistribution conditions
-  5. Submission of Contributions
-  6. Trademarks
-  7. Disclaimer of Warranty
-  8. Limitation of Liability
-  9. Accepting Warranty or Additional Liability
+  1. Grant of Copyright License
+  1. Grant of Patent License
+  1. Redistribution conditions
+  1. Submission of Contributions
+  1. Trademarks
+  1. Disclaimer of Warranty
+  1. Limitation of Liability
+  1. Accepting Warranty or Additional Liability
 - Appendix with boilerplate notice
 - 2025 ML Odyssey Contributors copyright
 
@@ -175,7 +175,7 @@ npx markdownlint-cli2 CONTRIBUTING.md CODE_OF_CONDUCT.md
 # Run all pre-commit hooks
 pre-commit run --all-files
 
-```
+```text
 
 ## References
 
@@ -195,13 +195,13 @@ pre-commit run --all-files
    - Links to CLAUDE.md and workflow documentation
    - Covers both Mojo and Python since project uses both languages
 
-2. **CODE_OF_CONDUCT.md**
+1. **CODE_OF_CONDUCT.md**
    - Uses standard Contributor Covenant v2.1
    - Provides clear enforcement ladder with 4 escalation levels
    - Includes placeholder for enforcement contact email
    - References Mozilla and Contributor Covenant resources
 
-3. **LICENSE**
+1. **LICENSE**
    - Changed from BSD 3-Clause to Apache 2.0 (as required)
    - Includes all 9 legal sections
    - Contains 2025 copyright year
@@ -220,11 +220,11 @@ pre-commit run --all-files
 ## Next Steps
 
 1. Review files for accuracy and completeness
-2. Update CODE_OF_CONDUCT.md with enforcement contact email address
-3. Commit changes: `git add CONTRIBUTING.md CODE_OF_CONDUCT.md LICENSE`
-4. Create commit with message format: `docs: add foundation files (CONTRIBUTING, CODE_OF_CONDUCT, LICENSE)`
-5. Push to feature branch
-6. Link PR to issue #1588 using `gh pr create --issue 1588`
+1. Update CODE_OF_CONDUCT.md with enforcement contact email address
+1. Commit changes: `git add CONTRIBUTING.md CODE_OF_CONDUCT.md LICENSE`
+1. Create commit with message format: `docs: add foundation files (CONTRIBUTING, CODE_OF_CONDUCT, LICENSE)`
+1. Push to feature branch
+1. Link PR to issue #1588 using `gh pr create --issue 1588`
 
 ## Related Issues
 

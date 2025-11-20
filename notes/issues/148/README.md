@@ -22,8 +22,8 @@ Planned the creation of three main configuration areas through
 `/notes/plan/01-foundation/02-configuration-files/plan.md`:
 
 1. **Magic Package Manager** (magic.toml) - Mojo project configuration
-2. **Python Project** (pyproject.toml) - Python tooling and dependencies
-3. **Git Configuration** (.gitignore, .gitattributes) - Version control settings
+1. **Python Project** (pyproject.toml) - Python tooling and dependencies
+1. **Git Configuration** (.gitignore, .gitattributes) - Version control settings
 
 The plan established clear requirements for each configuration file, ensuring reproducible
 development environments.

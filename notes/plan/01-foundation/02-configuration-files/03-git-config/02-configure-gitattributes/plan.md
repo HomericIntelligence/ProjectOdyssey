@@ -28,10 +28,10 @@ None (leaf node)
 ## Steps
 
 1. Create .gitattributes file at repository root
-2. Configure line ending normalization for text files
-3. Mark binary files appropriately
-4. Specify patterns for Git LFS tracking
-5. Add comments explaining configurations
+1. Configure line ending normalization for text files
+1. Mark binary files appropriately
+1. Specify patterns for Git LFS tracking
+1. Add comments explaining configurations
 
 ## Success Criteria
 

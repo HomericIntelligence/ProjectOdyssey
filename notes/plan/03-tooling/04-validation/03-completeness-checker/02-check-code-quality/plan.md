@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Run linters on Mojo and Python code
-2. Check code style and formatting
-3. Perform static analysis
-4. Generate quality report
+1. Check code style and formatting
+1. Perform static analysis
+1. Generate quality report
 
 ## Success Criteria
 

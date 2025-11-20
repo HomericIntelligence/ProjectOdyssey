@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Review generated structure
-2. Add paper-specific directories
-3. Customize for LeNet-5 needs
+1. Add paper-specific directories
+1. Customize for LeNet-5 needs
 
 ## Success Criteria
 

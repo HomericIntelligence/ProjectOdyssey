@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Implement epoch iteration
-2. Track epoch number
-3. Call batch loop for each epoch
+1. Track epoch number
+1. Call batch loop for each epoch
 
 ## Success Criteria
 

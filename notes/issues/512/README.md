@@ -39,7 +39,7 @@ providing reusable capabilities for the agent system.
 
 (Add notes here during implementation)
 
-**Workflow**:
+### Workflow
 
 - Requires: #510 (Plan) complete ✅
 - Recommended: #64 (Agents Impl) in progress (skills integrate with agents)

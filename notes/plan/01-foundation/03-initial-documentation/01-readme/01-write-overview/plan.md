@@ -28,10 +28,10 @@ None (leaf node)
 ## Steps
 
 1. Write compelling introduction explaining what the repository is
-2. Describe the purpose and goals of the project
-3. Explain key features and what makes it valuable
-4. Add context about Mojo/MAX and ML research
-5. Include badges and links to documentation
+1. Describe the purpose and goals of the project
+1. Explain key features and what makes it valuable
+1. Add context about Mojo/MAX and ML research
+1. Include badges and links to documentation
 
 ## Success Criteria
 

@@ -53,7 +53,7 @@ Level 5: Junior Engineers
     ├─> Junior Implementation Engineer
     ├─> Junior Test Engineer
     └─> Junior Documentation Engineer
-```
+```text
 
 ---
 
@@ -63,7 +63,7 @@ Level 5: Junior Engineers
 
 **Scope**: Entire repository ecosystem
 
-**Responsibilities**:
+### Responsibilities
 
 - Select which AI research papers to implement
 - Define repository-wide architectural patterns
@@ -73,14 +73,14 @@ Level 5: Junior Engineers
 - Make technology stack decisions
 - Monitor overall project health
 
-**Inputs**:
+### Inputs
 
 - Research papers
 - User requirements
 - Project goals
 - Industry best practices
 
-**Outputs**:
+### Outputs
 
 - High-level roadmap
 - Architectural decision records (ADRs)
@@ -106,7 +106,7 @@ Level 5: Junior Engineers
 
 **Scope**: Section 01-foundation
 
-**Responsibilities**:
+### Responsibilities
 
 - Coordinate directory structure creation
 - Manage configuration file setup
@@ -121,7 +121,7 @@ Level 5: Junior Engineers
 
 **Scope**: Section 02-shared-library
 
-**Responsibilities**:
+### Responsibilities
 
 - Design shared component architecture
 - Coordinate core operations, training utilities, data utilities
@@ -136,7 +136,7 @@ Level 5: Junior Engineers
 
 **Scope**: Section 03-tooling
 
-**Responsibilities**:
+### Responsibilities
 
 - Coordinate tooling development
 - Ensure tools integrate with workflow
@@ -150,7 +150,7 @@ Level 5: Junior Engineers
 
 **Scope**: Section 04-first-paper and future papers
 
-**Responsibilities**:
+### Responsibilities
 
 - Analyze research paper requirements
 - Design paper-specific architecture
@@ -165,7 +165,7 @@ Level 5: Junior Engineers
 
 **Scope**: Section 05-ci-cd
 
-**Responsibilities**:
+### Responsibilities
 
 - Design CI/CD pipeline architecture
 - Coordinate testing infrastructure, deployment processes, monitoring
@@ -179,7 +179,7 @@ Level 5: Junior Engineers
 
 **Scope**: Section 06-agentic-workflows
 
-**Responsibilities**:
+### Responsibilities
 
 - Design agent system architecture
 - Coordinate research assistant, code review agent, documentation agent
@@ -199,7 +199,7 @@ Level 5: Junior Engineers
 
 **Scope**: Module-level architecture
 
-**Responsibilities**:
+### Responsibilities
 
 - Break down module into components
 - Define component interfaces and contracts
@@ -223,7 +223,7 @@ Level 5: Junior Engineers
 
 **Scope**: Module-level integration
 
-**Responsibilities**:
+### Responsibilities
 
 - Design integration points between components
 - Define module-level APIs
@@ -240,7 +240,7 @@ Level 5: Junior Engineers
 
 **Scope**: Module-level security
 
-**Responsibilities**:
+### Responsibilities
 
 - Threat modeling for module
 - Define security requirements
@@ -261,7 +261,7 @@ Level 5: Junior Engineers
 
 **Scope**: Complex components
 
-**Responsibilities**:
+### Responsibilities
 
 - Break component into functions/classes
 - Design component architecture
@@ -282,7 +282,7 @@ Level 5: Junior Engineers
 
 **Scope**: Component-level testing
 
-**Responsibilities**:
+### Responsibilities
 
 - Create test plan for component
 - Define test cases (unit, integration, edge cases)
@@ -301,7 +301,7 @@ Level 5: Junior Engineers
 
 **Scope**: Component-level documentation
 
-**Responsibilities**:
+### Responsibilities
 
 - Write component README
 - Document APIs and interfaces
@@ -321,7 +321,7 @@ Level 5: Junior Engineers
 
 **Scope**: Component-level performance
 
-**Responsibilities**:
+### Responsibilities
 
 - Define performance requirements
 - Design benchmarks
@@ -340,7 +340,7 @@ Level 5: Junior Engineers
 
 **Scope**: Component-level security implementation
 
-**Responsibilities**:
+### Responsibilities
 
 - Implement security requirements
 - Code security best practices
@@ -363,7 +363,7 @@ Level 5: Junior Engineers
 
 **Scope**: Complex functions/classes
 
-**Responsibilities**:
+### Responsibilities
 
 - Write implementation code
 - Follow coding standards
@@ -389,7 +389,7 @@ Level 5: Junior Engineers
 
 **Scope**: Standard functions/classes
 
-**Responsibilities**:
+### Responsibilities
 
 - Write implementation code
 - Follow coding patterns
@@ -410,7 +410,7 @@ Level 5: Junior Engineers
 
 **Scope**: Test implementation
 
-**Responsibilities**:
+### Responsibilities
 
 - Implement unit tests
 - Implement integration tests
@@ -432,7 +432,7 @@ Level 5: Junior Engineers
 
 **Scope**: Documentation writing
 
-**Responsibilities**:
+### Responsibilities
 
 - Write docstrings
 - Create code examples
@@ -452,7 +452,7 @@ Level 5: Junior Engineers
 
 **Scope**: Performance implementation
 
-**Responsibilities**:
+### Responsibilities
 
 - Write benchmark code
 - Profile code execution
@@ -475,7 +475,7 @@ Level 5: Junior Engineers
 
 **Scope**: Simple functions, boilerplate code
 
-**Responsibilities**:
+### Responsibilities
 
 - Write simple functions
 - Generate boilerplate code
@@ -499,7 +499,7 @@ Level 5: Junior Engineers
 
 **Scope**: Simple test cases
 
-**Responsibilities**:
+### Responsibilities
 
 - Write simple unit tests
 - Generate test boilerplate
@@ -518,7 +518,7 @@ Level 5: Junior Engineers
 
 **Scope**: Simple documentation
 
-**Responsibilities**:
+### Responsibilities
 
 - Fill in docstring templates
 - Format documentation
@@ -617,7 +617,7 @@ Coordinates with: [Same level agents]
 ## Constraints
 
 [What this agent should NOT do]
-```
+```text
 
 ---
 
@@ -656,10 +656,10 @@ Coordinates with: [Same level agents]
 ## Next Steps
 
 1. Create configuration files for each agent in `.claude/agents/`
-2. Create templates in `agents/templates/`
-3. Test agent delegation patterns
-4. Document specific workflows
-5. Train team on agent usage
+1. Create templates in `agents/templates/`
+1. Test agent delegation patterns
+1. Document specific workflows
+1. Train team on agent usage
 
 ## References
 

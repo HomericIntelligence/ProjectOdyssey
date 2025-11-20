@@ -18,14 +18,14 @@ Integrate CosineAnnealingLR scheduler into the training library package and ensu
 
 **File**: `shared/training/schedulers.mojo`
 
-```
+```text
 shared/training/
 ├── __init__.mojo           # Main package exports
 ├── base.mojo               # LRScheduler trait
 ├── schedulers.mojo         # StepLR, CosineAnnealingLR, WarmupLR
 └── schedulers/
     └── __init__.mojo       # Scheduler subpackage exports
-```
+```text
 
 ### 2. Export Configuration
 
@@ -38,7 +38,7 @@ from math import pi, cos
 from shared.training.base import LRScheduler
 
 # All schedulers defined here - automatically available when file is imported
-```
+```text
 
 #### In `shared/training/schedulers/__init__.mojo`
 
@@ -48,7 +48,7 @@ from shared.training.base import LRScheduler
 from ..schedulers import StepLR, CosineAnnealingLR, WarmupLR
 
 __all__ = ["StepLR", "CosineAnnealingLR", "WarmupLR"]
-```
+```text
 
 #### In `shared/training/__init__.mojo`
 
@@ -66,7 +66,7 @@ __all__ = [
     "LRScheduler",
     # ... other exports
 ]
-```
+```text
 
 ### 3. Import Patterns
 
@@ -82,15 +82,17 @@ from shared.training import CosineAnnealingLR
 # Option 3: Import entire module
 from shared.training import schedulers
 var sched = schedulers.CosineAnnealingLR(...)
-```
+```text
 
 ### 4. Public API Surface
 
-**Exported symbols**:
+### Exported symbols
+
 - `CosineAnnealingLR` - Main scheduler struct
 - `LRScheduler` - Base trait (for type annotations)
 
-**Not exported**:
+### Not exported
+
 - Internal helper functions (none in current implementation)
 - `pi`, `cos` (implementation details)
 
@@ -108,7 +110,7 @@ var scheduler = CosineAnnealingLR(base_lr=0.1, T_max=100, eta_min=0.0)
 for epoch in range(100):
     var new_lr = scheduler.get_lr(epoch)
     optimizer.set_lr(new_lr)
-```
+```text
 
 ### With Training Loop
 
@@ -123,7 +125,7 @@ var trainer = BaseTrainer(
 )
 
 trainer.fit(train_data, val_data, num_epochs=100)
-```
+```text
 
 ### With Warmup
 
@@ -141,7 +143,7 @@ for epoch in range(100):
     else:
         lr = cosine.get_lr(epoch - 10)
     optimizer.set_lr(lr)
-```
+```text
 
 ## Documentation Integration
 
@@ -160,6 +162,7 @@ Smoothly decreases learning rate following a cosine curve from base_lr to eta_mi
 
 **Usage**:
 ```mojo
+
 from shared.training import CosineAnnealingLR
 
 var scheduler = CosineAnnealingLR(
@@ -169,36 +172,38 @@ var scheduler = CosineAnnealingLR(
 )
 
 # In training loop
+
 for epoch in range(100):
     var lr = scheduler.get_lr(epoch)
     optimizer.set_lr(lr)
-```
 
+```text
 **Common configurations**:
 - `T_max=epochs, eta_min=0.0` - Standard decay to zero
 - `T_max=epochs, eta_min=1e-6` - Avoid very small LR
 - Combined with warmup for best results
 
 **Formula**:
-```
-lr = eta_min + (base_lr - eta_min) × (1 + cos(π × epoch / T_max)) / 2
-```
+```text
 
+lr = eta_min + (base_lr - eta_min) × (1 + cos(π × epoch / T_max)) / 2
+
+```text
 **When to use**:
 - Modern deep learning (default choice)
 - Better final performance than step decay
 - Smooth optimization trajectory
-```
+```text
 
 ### API Documentation
 
 Auto-generated from docstrings:
 
-```
+```text
 CosineAnnealingLR(base_lr: Float64, T_max: Int, eta_min: Float64 = 0.0)
 ├── __init__(base_lr, T_max, eta_min=0.0)
 └── get_lr(epoch: Int, batch: Int = 0) -> Float64
-```
+```text
 
 ## Dependency Management
 
@@ -211,13 +216,14 @@ shared.training.base
 math (standard library)
 ├── pi constant
 └── cos function
-```
+```text
 
 **No circular dependencies**: ✅
 
 ### External Dependencies
 
-**Standard library only**:
+### Standard library only
+
 - `math.pi` - Pi constant
 - `math.cos` - Cosine function
 - No external packages required
@@ -238,7 +244,7 @@ math (standard library)
 description = "Learning rate schedulers for training optimization"
 exports = ["StepLR", "CosineAnnealingLR", "WarmupLR"]
 dependencies = ["shared.training.base", "math"]
-```
+```text
 
 ## Testing Package Integration
 
@@ -256,7 +262,7 @@ fn test_cosine_import_from_training() raises:
     from shared.training import CosineAnnealingLR
     var sched = CosineAnnealingLR(base_lr=0.1, T_max=100)
     assert_true(True)  # Import successful
-```
+```text
 
 ### Integration Tests
 
@@ -265,7 +271,7 @@ fn test_cosine_import_from_training() raises:
 mojo test tests/shared/training/test_training_infrastructure.mojo
 
 # Expected: All integration tests pass
-```
+```text
 
 ## Success Criteria
 
@@ -279,14 +285,17 @@ mojo test tests/shared/training/test_training_infrastructure.mojo
 
 ## Files Modified
 
-**Package exports**:
+### Package exports
+
 - `shared/training/__init__.mojo` - Add CosineAnnealingLR to exports
 - `shared/training/schedulers/__init__.mojo` - Add CosineAnnealingLR to exports
 
-**Documentation**:
+### Documentation
+
 - `shared/training/README.md` - Add CosineAnnealingLR usage examples
 
 **No changes needed** (already correct):
+
 - `shared/training/schedulers.mojo` - Implementation file
 
 ## Implementation Status

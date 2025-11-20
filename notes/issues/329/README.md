@@ -18,11 +18,12 @@ Design a cosine annealing learning rate scheduler that smoothly decreases the le
 
 The cosine annealing scheduler implements the following formula:
 
-```
+```text
 lr(epoch) = eta_min + (base_lr - eta_min) × (1 + cos(π × epoch / T_max)) / 2
-```
+```text
 
 Where:
+
 - `base_lr`: Initial learning rate (e.g., 0.1)
 - `eta_min`: Minimum learning rate (e.g., 0.0)
 - `T_max`: Total number of epochs (period of cosine)
@@ -32,6 +33,7 @@ Where:
 ### Example Behavior
 
 With `base_lr=0.1`, `T_max=100`, `eta_min=0.0`:
+
 - Epoch 0: lr = 0.1 (maximum, cos(0) = 1)
 - Epoch 25: lr ≈ 0.0854 (cos(π/4) ≈ 0.707)
 - Epoch 50: lr = 0.05 (halfway, cos(π/2) = 0)
@@ -59,7 +61,7 @@ struct CosineAnnealingLR(LRScheduler):
     var base_lr: Float64
     var T_max: Int
     var eta_min: Float64
-```
+```text
 
 #### Constructor
 
@@ -82,7 +84,7 @@ fn __init__(
         Error if T_max <= 0
         Error if eta_min < 0
     """
-```
+```text
 
 #### Core Method
 
@@ -104,7 +106,7 @@ fn get_lr(self, epoch: Int, batch: Int = 0) -> Float64:
         - Epoch is clamped to [0, T_max] range
         - Beyond T_max, LR stays at eta_min
     """
-```
+```text
 
 ### Interface Compliance
 
@@ -117,7 +119,7 @@ trait LRScheduler:
     fn get_lr(self, epoch: Int, batch: Int = 0) -> Float64:
         """Return learning rate for current epoch/batch."""
         ...
-```
+```text
 
 ### Configuration Parameters
 
@@ -127,27 +129,28 @@ trait LRScheduler:
 | `T_max` | Int | Required | [1, ∞) | Total epochs (period) |
 | `eta_min` | Float64 | 0.0 | [0, base_lr) | Minimum learning rate |
 
-**Common Values**:
+### Common Values
+
 - `T_max`: Usually set to total training epochs (e.g., 100, 200, 500)
 - `eta_min`: Often 0.0, sometimes 1e-6 or 1e-4 to avoid very small LR
 
 ### Edge Cases
 
 1. **T_max = 0**: Should raise error (undefined period)
-2. **T_max = 1**: Valid but degenerate (immediate decay to eta_min)
-3. **epoch > T_max**: LR stays at eta_min (cosine beyond period)
-4. **eta_min = base_lr**: Valid but constant LR (no annealing)
-5. **eta_min > base_lr**: Invalid, should raise error
-6. **Negative epoch**: Undefined behavior (should validate)
+1. **T_max = 1**: Valid but degenerate (immediate decay to eta_min)
+1. **epoch > T_max**: LR stays at eta_min (cosine beyond period)
+1. **eta_min = base_lr**: Valid but constant LR (no annealing)
+1. **eta_min > base_lr**: Invalid, should raise error
+1. **Negative epoch**: Undefined behavior (should validate)
 
 ### Mathematical Properties
 
 1. **Smoothness**: First derivative continuous everywhere
-2. **Monotonic decrease**: LR strictly decreases from 0 to T_max
-3. **Boundary values**:
+1. **Monotonic decrease**: LR strictly decreases from 0 to T_max
+1. **Boundary values**:
    - `lr(0) = base_lr`
    - `lr(T_max) = eta_min`
-4. **Symmetry**: Decay is symmetric around T_max/2
+1. **Symmetry**: Decay is symmetric around T_max/2
 
 ### Integration Points
 
@@ -164,7 +167,7 @@ var scheduler = CosineAnnealingLR(base_lr=0.1, T_max=100, eta_min=0.0)
 for epoch in range(100):
     var new_lr = scheduler.get_lr(epoch)
     optimizer.set_lr(new_lr)  # Optimizer must implement this
-```
+```text
 
 #### With Training Loop
 
@@ -179,7 +182,7 @@ fn train(model, data, scheduler):
         for batch in data:
             # ... training logic ...
             pass
-```
+```text
 
 #### With Warmup
 
@@ -196,7 +199,7 @@ for epoch in range(100):
     else:
         var lr = cosine.get_lr(epoch - 10)
     optimizer.set_lr(lr)
-```
+```text
 
 ### State Management
 
@@ -219,17 +222,17 @@ fn load_state_dict(inout self, state: Dict[String, Variant]):
     Args:
         state: Dictionary from state_dict()
     """
-```
+```text
 
 ## Design Rationale
 
-### Why Cosine Annealing?
+### Why Cosine Annealing
 
 1. **Smooth decay**: Continuous changes avoid sudden jumps in loss landscape
-2. **Better final performance**: Often achieves lower final loss than step decay
-3. **Natural decay curve**: Cosine follows natural optimization dynamics
-4. **Simple and effective**: One parameter (T_max), proven in many papers
-5. **SOTA results**: Used in many state-of-the-art papers (ResNet, Transformer)
+1. **Better final performance**: Often achieves lower final loss than step decay
+1. **Natural decay curve**: Cosine follows natural optimization dynamics
+1. **Simple and effective**: One parameter (T_max), proven in many papers
+1. **SOTA results**: Used in many state-of-the-art papers (ResNet, Transformer)
 
 ### Design Decisions
 
@@ -237,19 +240,19 @@ fn load_state_dict(inout self, state: Dict[String, Variant]):
    - Rationale: Same as StepLR - simpler, more flexible
    - Training loop provides epoch number to `get_lr()`
 
-2. **Clamping beyond T_max**: LR stays at eta_min after T_max
+1. **Clamping beyond T_max**: LR stays at eta_min after T_max
    - Rationale: Graceful continuation if training runs longer
    - Alternative: Could restart cycle (cosine annealing with restarts)
 
-3. **Default eta_min = 0.0**: Decay all the way to zero
+1. **Default eta_min = 0.0**: Decay all the way to zero
    - Rationale: Common choice in literature
    - User can set eta_min > 0 to avoid very small LR
 
-4. **Period = T_max, not 2*T_max**: One complete cosine cycle
+1. **Period = T_max, not 2*T_max**: One complete cosine cycle
    - Rationale: Matches PyTorch convention
    - Full cycle goes from +1 to -1 on cosine curve
 
-5. **No restart support**: Single cycle only
+1. **No restart support**: Single cycle only
    - Rationale: KISS principle - keep simple
    - Advanced users can implement restarts in training loop
 
@@ -272,7 +275,8 @@ fn load_state_dict(inout self, state: Dict[String, Variant]):
 
 ### Numerical Stability
 
-**Cosine computation**:
+### Cosine computation
+
 - Use standard library `cos()` function
 - Input range: [0, π] (well-behaved)
 - Output range: [-1, 1] (bounded)
@@ -281,10 +285,10 @@ fn load_state_dict(inout self, state: Dict[String, Variant]):
 ## Validation Strategy
 
 1. **Mathematical correctness**: Verify formula implementation
-2. **Boundary conditions**: Test epoch=0, epoch=T_max, epoch>T_max
-3. **Smoothness**: Verify LR changes continuously
-4. **Integration**: Test with actual optimizer and training loop
-5. **Reproducibility**: Same parameters → same LR schedule
+1. **Boundary conditions**: Test epoch=0, epoch=T_max, epoch>T_max
+1. **Smoothness**: Verify LR changes continuously
+1. **Integration**: Test with actual optimizer and training loop
+1. **Reproducibility**: Same parameters → same LR schedule
 
 ## Success Criteria
 
@@ -299,13 +303,16 @@ fn load_state_dict(inout self, state: Dict[String, Variant]):
 
 ## Files
 
-**Implementation**:
+### Implementation
+
 - `shared/training/schedulers.mojo` - CosineAnnealingLR struct implementation
 
-**Tests**:
+### Tests
+
 - `tests/shared/training/test_cosine_scheduler.mojo` - Comprehensive test suite
 
-**Documentation**:
+### Documentation
+
 - `shared/training/README.md` - Usage examples and API docs
 
 ## References

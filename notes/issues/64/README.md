@@ -290,13 +290,13 @@ Verified existing implementation against requirements:
 
 ### Discrepancies Found
 
-**CRITICAL: Tool Permissions Not Applied**
+### CRITICAL: Tool Permissions Not Applied
 
 - README documents M1 fix (tool permissions restricted per level)
 - ACTUAL STATE: All 38 agents still have Bash access
 - EXPECTED: Only 5 agents should have Bash (test/performance specialists)
 
-**Level-by-Level Analysis**:
+### Level-by-Level Analysis
 
 - L0-L1 (7 agents): Should have `Read,Grep,Glob` only
 - L2 (3 agents): Should have `Read,Write,Grep,Glob` only
@@ -309,43 +309,43 @@ Verified existing implementation against requirements:
 **Phase 1: Tool Permission Audit** (Implementation Engineer)
 
 1. Categorize all 38 agents by level
-2. Identify which agents need Bash (test/performance only)
-3. Create correction matrix
+1. Identify which agents need Bash (test/performance only)
+1. Create correction matrix
 
 **Phase 2: Apply Corrections** (Implementation Engineer)
 
 1. Update tool permissions for each agent
-2. Verify no unintended Bash access remains
-3. Ensure Task tool is available where needed
+1. Verify no unintended Bash access remains
+1. Ensure Task tool is available where needed
 
 **Phase 3: Validation** (Implementation Specialist)
 
 1. Run validation suite on all agents
-2. Verify tool permissions match requirements
-3. Check for any regressions
-4. Confirm all tests pass
+1. Verify tool permissions match requirements
+1. Check for any regressions
+1. Confirm all tests pass
 
 **Phase 4: Documentation** (Implementation Specialist)
 
 1. Update implementation notes
-2. Document actual changes made
-3. Prepare commit message
+1. Document actual changes made
+1. Prepare commit message
 
 ### Delegation
 
-**Task 1: Tool Permission Audit**
+### Task 1: Tool Permission Audit
 
 - Assignee: Implementation Engineer
 - Deliverable: Agent categorization matrix with required tools per agent
 - Files: All 38 agents in `.claude/agents/`
 
-**Task 2: Apply Tool Permission Fixes**
+### Task 2: Apply Tool Permission Fixes
 
 - Assignee: Implementation Engineer
 - Deliverable: Updated agent configs with correct tool permissions
 - Validation: All agents pass permission audit
 
-**Task 3: Final Validation**
+### Task 3: Final Validation
 
 - Assignee: Implementation Specialist (self)
 - Deliverable: Validation report confirming all requirements met
@@ -382,9 +382,9 @@ Verified existing implementation against requirements:
 
 ### Final Verification
 
-**Tool Permission Summary**:
+### Tool Permission Summary
 
-```
+```text
 Level 0 (1 agent):   Read,Grep,Glob,Task (no Bash) ✅
 Level 1 (6 agents):  Read,Grep,Glob,Task,WebFetch (no Bash) ✅
 Level 2 (4 agents):  Read,Write,Grep,Glob,Task (no Bash) ✅
@@ -395,9 +395,9 @@ Level 4 (5 agents):
   - 2 with Bash (test/perf engineers) ✅
   - 3 without Bash ✅
 Level 5 (3 agents):  Read,Write,Edit,Grep,Glob (no Bash) ✅
-```
+```text
 
-**Success Criteria Met**:
+### Success Criteria Met
 
 - ✅ All ~23 agent configs created (actually 38 - exceeds requirement)
 - ✅ All configurations follow Claude Code format with valid frontmatter
@@ -421,7 +421,7 @@ Level 5 (3 agents):  Read,Write,Edit,Grep,Glob (no Bash) ✅
 - Level 4: 3 engineer files (excluding test/performance)
 - Level 5: 3 junior engineer files
 
-**Documentation Created**:
+### Documentation Created
 
 - /notes/issues/64/tool-permission-corrections.md (specification)
 
@@ -432,19 +432,19 @@ Level 5 (3 agents):  Read,Write,Edit,Grep,Glob (no Bash) ✅
 **Files Changed**: 36 files (34 agents + 2 documentation)
 **Lines**: +310 insertions, -34 deletions
 
-**Commit Message**:
+### Commit Message
 
-```
+```text
 feat(agents): restrict Bash tool access following least privilege principle (#64)
-```
+```text
 
-**Next Steps**:
+### Next Steps
 
 1. Push branch to remote
-2. Create pull request linked to Issue #64
-3. Request code review
-4. Address any feedback
-5. Merge to main after approval
+1. Create pull request linked to Issue #64
+1. Request code review
+1. Address any feedback
+1. Merge to main after approval
 
 ## Implementation Complete - 2025-11-16
 
@@ -457,18 +457,18 @@ All requirements for Issue #64 have been successfully implemented and committed.
    - 8 templates created (exceeds 6 required)
    - Team documentation complete
 
-2. **Applied Critical Fix (M1)**
+1. **Applied Critical Fix (M1)**
    - Restricted Bash tool access to only test/performance agents
    - Updated 34 agent configuration files
    - Followed principle of least privilege
 
-3. **Comprehensive Validation**
+1. **Comprehensive Validation**
    - All agents pass YAML frontmatter validation
    - All agents pass configuration structure checks
    - 100% tool permission audit compliance
    - Zero errors
 
-4. **Documentation**
+1. **Documentation**
    - Created detailed correction matrix
    - Updated implementation notes
    - Documented all changes and rationale

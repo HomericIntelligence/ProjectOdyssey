@@ -66,11 +66,11 @@ your-paper-name/
 Create a comprehensive implementation plan:
 
 1. Study the original paper thoroughly
-2. Identify key components and algorithms
-3. Design the module structure
-4. Plan shared library integrations
-5. Document deviations from the paper (if any)
-6. Estimate effort for implementation and testing
+1. Identify key components and algorithms
+1. Design the module structure
+1. Plan shared library integrations
+1. Document deviations from the paper (if any)
+1. Estimate effort for implementation and testing
 
 Deliverables: Architecture design document, structured implementation plan
 
@@ -79,10 +79,10 @@ Deliverables: Architecture design document, structured implementation plan
 Write tests before or alongside implementation:
 
 1. Define test cases for each component
-2. Test individual functions (unit tests)
-3. Test component interactions (integration tests)
-4. Include edge cases and error conditions
-5. Aim for 80%+ code coverage
+1. Test individual functions (unit tests)
+1. Test component interactions (integration tests)
+1. Include edge cases and error conditions
+1. Aim for 80%+ code coverage
 
 Tests verify:
 
@@ -97,10 +97,10 @@ Tests verify:
 Build the model and algorithms:
 
 1. Implement core model architecture in `src/models/`
-2. Create custom layers in `src/layers/` if needed
-3. Add utility functions in `src/utils/`
-4. Implement data loaders in `src/data/`
-5. Run tests continuously to verify correctness
+1. Create custom layers in `src/layers/` if needed
+1. Add utility functions in `src/utils/`
+1. Implement data loaders in `src/data/`
+1. Run tests continuously to verify correctness
 
 Follow Mojo patterns (prefer `fn` over `def`, use `owned`/`borrowed` for memory safety, leverage SIMD).
 
@@ -109,21 +109,21 @@ Follow Mojo patterns (prefer `fn` over `def`, use `owned`/`borrowed` for memory 
 Prepare the implementation for distribution:
 
 1. Create demonstration scripts in `examples/`
-2. Write comprehensive README with paper details
-3. Document all public APIs with docstrings
-4. Create configuration files for experiments
-5. Add Jupyter notebooks for exploration
-6. Verify package can be imported from other projects
+1. Write comprehensive README with paper details
+1. Document all public APIs with docstrings
+1. Create configuration files for experiments
+1. Add Jupyter notebooks for exploration
+1. Verify package can be imported from other projects
 
 ### Phase 5: Cleanup
 
 Finalize and review:
 
 1. Code review and refactoring
-2. Performance optimization
-3. Documentation review
-4. Final testing
-5. Comparison with original paper results
+1. Performance optimization
+1. Documentation review
+1. Final testing
+1. Comparison with original paper results
 
 ## Using the Shared Library
 
@@ -168,10 +168,10 @@ tests/
 ### Validation Strategies
 
 1. **Correctness**: Verify outputs match paper specifications
-2. **Numerical stability**: Test with extreme values
-3. **Performance**: Benchmark against paper results
-4. **Reproducibility**: Test deterministic behavior with fixed seeds
-5. **Edge cases**: Empty inputs, single samples, large batches
+1. **Numerical stability**: Test with extreme values
+1. **Performance**: Benchmark against paper results
+1. **Reproducibility**: Test deterministic behavior with fixed seeds
+1. **Edge cases**: Empty inputs, single samples, large batches
 
 ### Running Tests
 
@@ -270,10 +270,10 @@ Include results comparing your implementation with:
 ## Next Steps
 
 1. Read the original paper thoroughly
-2. Create a GitHub issue for your paper (use Issue template)
-3. Copy the template: `cp -r papers/_template papers/your-name`
-4. Update README with paper information
-5. Begin Phase 1: Plan
-6. Follow the 5-phase workflow
+1. Create a GitHub issue for your paper (use Issue template)
+1. Copy the template: `cp -r papers/_template papers/your-name`
+1. Update README with paper information
+1. Begin Phase 1: Plan
+1. Follow the 5-phase workflow
 
 See [quick-start-new-paper.md](../integration/quick-start-new-paper.md) for a step-by-step guide.

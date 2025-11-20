@@ -23,7 +23,7 @@ Create the shared/training/ directory for training-related utilities and compone
 
 The `shared/training/` directory serves as a central location for reusable training infrastructure that will be shared across multiple paper implementations. This follows the DRY (Don't Repeat Yourself) principle by consolidating common training patterns into a single, well-maintained location.
 
-**Key Components**:
+### Key Components
 
 - Training loops and orchestration
 - Optimizers and optimization algorithms
@@ -39,7 +39,7 @@ The directory will be set up as a proper Python package with `__init__.py`, allo
 from shared.training import TrainingLoop, Optimizer
 from shared.training.metrics import Accuracy, Loss
 from shared.training.callbacks import EarlyStopping, Checkpointing
-```
+```text
 
 ### 3. Documentation Strategy
 

@@ -19,7 +19,7 @@ benchmarks/
 │   └── compare_results.mojo
 └── results/
     └── .gitkeep
-```
+```text
 
 ### Test Suite
 
@@ -31,7 +31,7 @@ tests/tooling/benchmarks/
 ├── test_result_comparison.mojo
 ├── test_regression_detection.mojo
 └── test_ci_integration.mojo
-```
+```text
 
 ## Success Criteria
 
@@ -56,11 +56,11 @@ tests/tooling/benchmarks/
 Created 6 test files (1,026 total lines) in `tests/tooling/benchmarks/`:
 
 1. ****init**.mojo** (22 lines) - Package documentation and test suite overview
-2. **test_benchmark_runner.mojo** (187 lines) - Tests for benchmark execution, timing, iterations, and result collection
-3. **test_baseline_loader.mojo** (184 lines) - Tests for loading baseline JSON, parsing, validation, and error handling
-4. **test_result_comparison.mojo** (205 lines) - Tests for comparison logic, percentage calculations, and threshold checking
-5. **test_regression_detection.mojo** (204 lines) - Tests for regression alerts, exit codes, and reporting
-6. **test_ci_integration.mojo** (224 lines) - Tests for CI/CD workflow integration, PR checks, and historical tracking
+1. **test_benchmark_runner.mojo** (187 lines) - Tests for benchmark execution, timing, iterations, and result collection
+1. **test_baseline_loader.mojo** (184 lines) - Tests for loading baseline JSON, parsing, validation, and error handling
+1. **test_result_comparison.mojo** (205 lines) - Tests for comparison logic, percentage calculations, and threshold checking
+1. **test_regression_detection.mojo** (204 lines) - Tests for regression alerts, exit codes, and reporting
+1. **test_ci_integration.mojo** (224 lines) - Tests for CI/CD workflow integration, PR checks, and historical tracking
 
 **Total Test Cases**: 47 test functions covering all core functionality
 
@@ -78,9 +78,9 @@ benchmarks/
 │   └── compare_results.mojo (50 lines)
 └── results/
     └── .gitkeep (3 lines)
-```
+```text
 
-**Key Files**:
+### Key Files
 
 - **README.md**: Comprehensive documentation of benchmarking infrastructure including architecture, usage, and development guidelines
 - **baseline_results.json**: Example baseline with 4 placeholder benchmarks (tensor_add, matmul at small/large scales)
@@ -155,12 +155,12 @@ benchmarks/
 **Critical Tests** (must pass for Issue #54 implementation):
 
 1. **test_regression_threshold** - Validates >10% slowdown detection (boundary: 10.0% = pass, 10.1% = fail)
-2. **test_exit_code_failure** - Ensures CI integration works (exit 1 on regression)
-3. **test_percentage_change_calculation** - Core math: ((current - baseline) / baseline) * 100
-4. **test_deterministic_execution** - Ensures reproducibility using TestFixtures.set_seed()
-5. **test_ci_exit_code_handling** - Validates CI workflow pass/fail behavior
+1. **test_exit_code_failure** - Ensures CI integration works (exit 1 on regression)
+1. **test_percentage_change_calculation** - Core math: ((current - baseline) / baseline) * 100
+1. **test_deterministic_execution** - Ensures reproducibility using TestFixtures.set_seed()
+1. **test_ci_exit_code_handling** - Validates CI workflow pass/fail behavior
 
-**Edge Cases Covered**:
+### Edge Cases Covered
 
 - Zero baseline values (division by zero prevention)
 - Missing benchmarks in baseline or current results
@@ -170,14 +170,14 @@ benchmarks/
 
 ### Shared Infrastructure Used
 
-**From tests/shared/conftest.mojo**:
+### From tests/shared/conftest.mojo
 
 - **Assertion Functions**: assert_true, assert_false, assert_equal, assert_almost_equal, assert_greater, assert_less
 - **Test Fixtures**: TestFixtures.set_seed(), TestFixtures.deterministic_seed()
 - **BenchmarkResult**: Struct for benchmark results (already exists in shared fixtures)
 - **Measurement Utilities**: measure_time, measure_throughput (placeholder functions)
 
-**Design Philosophy**:
+### Design Philosophy
 
 - Real implementations over mocks (use actual JSON files)
 - Simple test data (concrete examples, not complex fixtures)
@@ -236,7 +236,7 @@ Dedicated test file for CI/CD integration with 10 tests:
 
 ### Alignment with Planning
 
-**From Issue #52 Planning**:
+### From Issue #52 Planning
 
 #### 3-Tier Architecture (Implemented)
 
@@ -263,7 +263,7 @@ benchmarks/
 │   └── compare_results.mojo ✓
 └── results/
     └── {timestamp}_results.json ✓ (directory created)
-```
+```text
 
 #### Success Criteria (Progress)
 
@@ -277,7 +277,7 @@ benchmarks/
 
 ### Next Steps
 
-**For Issue #54 (Implementation)**:
+### For Issue #54 (Implementation)
 
 1. **Implement benchmark runner** (benchmarks/scripts/run_benchmarks.mojo)
    - Timing measurement using Mojo's time module
@@ -285,30 +285,30 @@ benchmarks/
    - Result collection and JSON output
    - Implement test cases in test_benchmark_runner.mojo
 
-2. **Implement baseline loader** (add to compare_results.mojo or separate module)
+1. **Implement baseline loader** (add to compare_results.mojo or separate module)
    - JSON parsing for baseline files
    - Validation and error handling
    - Implement test cases in test_baseline_loader.mojo
 
-3. **Implement comparison logic** (benchmarks/scripts/compare_results.mojo)
+1. **Implement comparison logic** (benchmarks/scripts/compare_results.mojo)
    - Percentage change calculation
    - Threshold checking
    - Report generation
    - Implement test cases in test_result_comparison.mojo and test_regression_detection.mojo
 
-4. **Create CI workflow** (.github/workflows/benchmarks.yml)
+1. **Create CI workflow** (.github/workflows/benchmarks.yml)
    - PR checks
    - Baseline updates on merge
    - Artifact storage
    - Implement test cases in test_ci_integration.mojo
 
-**For Issue #55 (Packaging)**:
+### For Issue #55 (Packaging)
 
 - Integration with existing test infrastructure
 - Documentation of benchmark suite
 - User guide for running benchmarks
 
-**For Issue #56 (Cleanup)**:
+### For Issue #56 (Cleanup)
 
 - Edge case handling (identified in test stubs)
 - Performance optimization

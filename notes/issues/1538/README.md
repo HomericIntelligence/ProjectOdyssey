@@ -81,13 +81,13 @@ Test files in `/tests/shared/fixtures/`:
 
 ### Implementation Summary
 
-**Phase 1: Initial Cleanup (Completed)**
+### Phase 1: Initial Cleanup (Completed)
 
 Problem: Test stubs had uncommented code referencing unimplemented components.
 
 Work: Commented out 178 lines across 13 test functions in test_optimizers.mojo.
 
-**Phase 2: Architecture Migration (Completed)**
+### Phase 2: Architecture Migration (Completed)
 
 Problem: Tests expected class-based API, but architecture uses pure functional design.
 
@@ -100,46 +100,48 @@ Work Completed:
    - Fixed all imports across `shared/data/`, `shared/training/loops/`
    - Updated `shared/core/__init__.mojo` to export 80+ functional operations
 
-2. **Implemented SGD Tests** (4 tests adapted to functional API):
+1. **Implemented SGD Tests** (4 tests adapted to functional API):
    - `test_sgd_initialization()` - Verifies functional API accepts all hyperparameters
    - `test_sgd_basic_update()` - Tests basic SGD without momentum using `sgd_step_simple()`
    - `test_sgd_momentum_accumulation()` - Tests momentum over multiple steps using `sgd_step()`
    - `test_sgd_weight_decay()` - Tests L2 regularization using `sgd_step()`
 
-3. **Implemented Linear Layer Tests** (3 tests adapted to functional API):
+1. **Implemented Linear Layer Tests** (3 tests adapted to functional API):
    - `test_linear_initialization()` - Verifies weight/bias parameter creation with correct shapes
    - `test_linear_forward()` - Tests forward pass: `output = x @ weights.T + bias`
    - `test_linear_no_bias()` - Tests forward pass without bias: `output = x @ weights.T`
 
-4. **Implemented Activation Function Tests** (3 tests adapted to functional API):
+1. **Implemented Activation Function Tests** (3 tests adapted to functional API):
    - `test_relu_activation()` - Tests ReLU zeros negatives, preserves positives
    - `test_sigmoid_range()` - Tests sigmoid outputs in (0, 1), sigmoid(0) = 0.5
    - `test_tanh_range()` - Tests tanh outputs in (-1, 1), tanh(0) = 0.0
 
-5. **Marked Non-Applicable Tests** (4 tests deferred/not applicable):
+1. **Marked Non-Applicable Tests** (4 tests deferred/not applicable):
    - `test_sgd_nesterov_momentum()` - Deferred (requires gradient at lookahead position)
    - `test_sgd_zero_grad()` - Not applicable (no internal state in functional design)
    - `test_linear_backward()` - Deferred (backward pass not yet implemented)
    - `test_relu_in_place()` - Not applicable (pure functional - no mutation)
 
-6. **Implemented Property-Based Tests** (2 tests for functional API):
+1. **Implemented Property-Based Tests** (2 tests for functional API):
    - `test_layer_property_batch_independence()` - Tests batch processing equals individual processing
    - `test_layer_property_deterministic()` - Tests pure functional operations are deterministic
 
-7. **Implemented PyTorch Validation Tests** (4 tests with reference values):
+1. **Implemented PyTorch Validation Tests** (4 tests with reference values):
    - `test_linear_matches_pytorch()` - Validates linear against PyTorch F.linear
    - `test_relu_matches_pytorch()` - Validates ReLU against PyTorch F.relu
    - `test_sigmoid_matches_pytorch()` - Validates sigmoid against PyTorch sigmoid
    - `test_sgd_matches_pytorch()` - Validates SGD with momentum against PyTorch optim.SGD
 
-**Test Implementation Summary**:
+### Test Implementation Summary
+
 - **16 tests implemented** (4 SGD + 3 linear + 3 activation + 2 property + 4 PyTorch validation)
 - **4 tests deferred/not applicable** (Nesterov, zero_grad, backward, in_place)
 - All implemented tests adapted from class-based to pure functional API
 - Tests validate numerical correctness with known expected values
 - PyTorch validation tests include reference Python code and expected outputs
 
-**Test Adaptation Notes**:
+### Test Adaptation Notes
+
 - Original TDD stubs expected: `Layer().forward(x)` (class-based, stateful)
 - Functional API provides: `operation(x, params...)` → `output` (stateless)
 - Tests adapted to use functional API while preserving original intent and numerical expectations
@@ -148,28 +150,28 @@ Work Completed:
 ### Next Steps
 
 1. **Verify tests compile and run** (requires Mojo/pixi environment)
-2. **Implement remaining optimizer tests** (Adam, AdamW, RMSprop - deferred until implementations available)
-3. **Implement layer tests** (Linear, Conv2D, Pooling - functional API now available)
-4. **Validate numerical accuracy** against PyTorch reference implementations
-5. **Measure test coverage** (target ≥90%)
+1. **Implement remaining optimizer tests** (Adam, AdamW, RMSprop - deferred until implementations available)
+1. **Implement layer tests** (Linear, Conv2D, Pooling - functional API now available)
+1. **Validate numerical accuracy** against PyTorch reference implementations
+1. **Measure test coverage** (target ≥90%)
 
 ### Technical Notes
 
-**Architecture Changes**:
+### Architecture Changes
 
 - ✅ Pure functional design - no classes, no internal state
 - ✅ All functions use ExTensor (no Tensor alias)
 - ✅ Caller manages all state (weights, biases, velocity buffers)
 - ✅ Functions return new values, never mutate inputs
 
-**Available Implementations**:
+### Available Implementations
 
 - ExTensor with 150+ operations (migrated from src/extensor/)
 - Functional operations: linear, activations (relu, sigmoid, tanh, gelu, softmax), arithmetic, matrix ops
 - SGD optimizer (functional): `sgd_step()` and `sgd_step_simple()`
 - Placeholders: conv2d, pooling operations (signatures defined, implementations TODO)
 
-**Deferred**:
+### Deferred
 
 - Adam, AdamW, RMSprop optimizers (not yet implemented)
 - Conv2D, pooling implementations (placeholders exist)

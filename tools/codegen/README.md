@@ -10,7 +10,7 @@ Generate Mojo structs and neural network layers.
 
 **Language**: Python (justified by template processing, string manipulation)
 
-**Usage**:
+### Usage
 
 ```bash
 # Generate a simple struct
@@ -24,7 +24,7 @@ python tools/codegen/mojo_boilerplate.py layer Linear \
 # Generate a Conv2D layer
 python tools/codegen/mojo_boilerplate.py layer Conv2D \
     --params in_channels:1 out_channels:32 kernel_size:3
-```
+```text
 
 **Output**: Mojo code printed to stdout (redirect to file as needed)
 
@@ -34,7 +34,7 @@ Generate training loop boilerplate with customizable optimizer and loss function
 
 **Language**: Python (justified by template processing)
 
-**Usage**:
+### Usage
 
 ```bash
 # Generate basic training loop
@@ -45,7 +45,7 @@ python tools/codegen/training_template.py \
     --optimizer Adam \
     --loss MSE \
     --metrics loss accuracy
-```
+```text
 
 **Output**: Complete Mojo training loop code
 

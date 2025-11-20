@@ -49,6 +49,7 @@ fn process_with_sklearn(data: PythonObject) -> PythonObject:
 ### Git Integration
 
 ```bash
+
 ```bash
 
 # Programmatic access via subprocess
@@ -65,12 +66,15 @@ Use `subprocess` module in Python scripts for git operations. Avoid shell escapi
 ```bash
 
 # Creating issues
+
 gh issue create --title "..." --body "..." --label "feature"
 
 # Checking PR status
+
 gh pr checks PR_NUMBER
 
 # Viewing issue details
+
 gh issue view ISSUE_NUMBER --json title,body,state
 
 ```text
@@ -82,6 +86,7 @@ Recommended for automation: `gh pr create --issue NUMBER` links PRs to issues au
 Configuration in `.pre-commit-config.yaml`:
 
 ```yaml
+
 ```yaml
 
 - repo: local
@@ -115,6 +120,7 @@ pre-commit run --all-files
 Structure in `.github/workflows/`:
 
 ```yaml
+
 ```yaml
 
 name: Test Suite
@@ -179,6 +185,7 @@ fn process_pipeline(input_path: String) raises -> Tensor:
 Use structured logging:
 
 ```python
+
 ```python
 
 import logging
@@ -209,6 +216,7 @@ fn train_step(inout model: Model, batch: Tensor) -> Float32:
 Implement periodic health monitoring:
 
 ```bash
+
 ```bash
 
 # Check system resources
@@ -240,6 +248,7 @@ nvidia-smi  # GPU status (if applicable)
 ```python
 
 # Mock external tools in tests
+
 @pytest.fixture
 def mock_git(monkeypatch):
     def mock_run(*args, **kwargs):

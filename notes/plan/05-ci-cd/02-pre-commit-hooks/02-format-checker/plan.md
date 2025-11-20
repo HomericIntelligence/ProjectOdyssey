@@ -30,8 +30,8 @@ Configure pre-commit hooks to automatically format code files, ensuring consiste
 ## Steps
 
 1. Mojo Formatter
-2. Markdown Formatter
-3. YAML Formatter
+1. Markdown Formatter
+1. YAML Formatter
 
 ## Success Criteria
 

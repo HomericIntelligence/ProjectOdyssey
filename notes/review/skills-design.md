@@ -20,9 +20,9 @@ by Claude when appropriate.
 ## Key Principles
 
 1. **Skills are Computational**: Pattern matching, template application, tool orchestration
-2. **Sub-Agents are Judgmental**: Require understanding, trade-offs, decision-making
-3. **Skills are Reusable**: Used by multiple agent types
-4. **Sub-Agents are Specialized**: Focused role with specific responsibilities
+1. **Sub-Agents are Judgmental**: Require understanding, trade-offs, decision-making
+1. **Skills are Reusable**: Used by multiple agent types
+1. **Sub-Agents are Specialized**: Focused role with specific responsibilities
 
 ---
 
@@ -321,16 +321,14 @@ allowed-tools: Read,Write,Grep,Bash
 
 [example input]
 
-```
-
+```text
 **Output**:
 
 ```text
 
 [example output]
 
-```
-
+```text
 ### Example 2: [Another Scenario]
 
 [...]
@@ -359,9 +357,9 @@ allowed-tools: Read,Write,Grep,Bash
 ### How Skills Are Discovered
 
 1. Claude scans `.claude/skills/` directory
-2. Reads SKILL.md frontmatter (name, description)
-3. Matches description against current task
-4. Automatically invokes when appropriate
+1. Reads SKILL.md frontmatter (name, description)
+1. Matches description against current task
+1. Automatically invokes when appropriate
 
 ### Activation Triggers
 
@@ -378,7 +376,7 @@ User: "Generate test boilerplate for this function"
 → Claude identifies: generate_tests skill matches
 → Skill activates automatically
 → Test scaffolding generated
-```
+```text
 
 ---
 
@@ -427,19 +425,19 @@ User: "Generate test boilerplate for this function"
 ### Phase 1: Essential Tier 1 Skills (Issues 68-73)
 
 1. generate_boilerplate
-2. run_tests
-3. analyze_code_structure
+1. run_tests
+1. analyze_code_structure
 
 ### Phase 2: Core Tier 2 Skills
 
 1. extract_algorithm
-2. generate_docstrings
-3. prepare_dataset
+1. generate_docstrings
+1. prepare_dataset
 
 ### Phase 3: Specialized Skills
 
 1. As needed based on usage
-2. Add when specific use cases emerge
+1. Add when specific use cases emerge
 
 ---
 
@@ -448,9 +446,9 @@ User: "Generate test boilerplate for this function"
 Each skill should have:
 
 1. **Validation tests**: Verify skill loads correctly
-2. **Functionality tests**: Test skill operations
-3. **Integration tests**: Test skill usage by agents
-4. **Example tests**: Verify examples in SKILL.md work
+1. **Functionality tests**: Test skill operations
+1. **Integration tests**: Test skill usage by agents
+1. **Example tests**: Verify examples in SKILL.md work
 
 ---
 
@@ -481,11 +479,11 @@ Each skill should have:
 ## Best Practices
 
 1. **Keep Skills Focused**: One clear capability per skill
-2. **Clear Descriptions**: Make it obvious when to use the skill
-3. **Complete Examples**: Show realistic usage scenarios
-4. **Error Handling**: Document how to handle failures
-5. **Tool Restrictions**: Only request necessary tools
-6. **Tier Appropriately**: Place in correct tier based on usage breadth
+1. **Clear Descriptions**: Make it obvious when to use the skill
+1. **Complete Examples**: Show realistic usage scenarios
+1. **Error Handling**: Document how to handle failures
+1. **Tool Restrictions**: Only request necessary tools
+1. **Tier Appropriately**: Place in correct tier based on usage breadth
 
 ---
 

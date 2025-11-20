@@ -48,7 +48,7 @@ extensor/
 ├── indexing.mojo              # Indexing and slicing
 ├── utility.mojo               # Utility operations
 └── bitwise.mojo               # Bitwise operations
-```
+```text
 
 ## Build Process
 
@@ -65,7 +65,7 @@ description = "Extensible tensor library for Mojo"
 
 [dependencies]
 # No external dependencies initially
-```
+```text
 
 ### 2. Build Command
 
@@ -75,7 +75,7 @@ mojo package src/extensor -o extensor.mojopkg
 
 # Verify package
 mojo run -m extensor --version
-```
+```text
 
 ### 3. Installation
 
@@ -85,7 +85,7 @@ mojo install extensor.mojopkg
 
 # Use in other projects
 from extensor import ExTensor
-```
+```text
 
 ## Documentation Requirements
 
@@ -100,7 +100,7 @@ Complete documentation for all operations:
 - Examples for each operation
 - Performance notes (SIMD optimization, zero-copy, etc.)
 
-**Format:**
+### Format:
 
 ```markdown
 ## ExTensor.zeros
@@ -109,9 +109,10 @@ Create a tensor filled with zeros.
 
 **Signature:**
 ```mojo
-fn zeros(shape: DynamicVector[Int], dtype: DType) -> ExTensor
-```
 
+fn zeros(shape: DynamicVector[Int], dtype: DType) -> ExTensor
+
+```text
 **Parameters:**
 - `shape`: The shape of the output tensor
 - `dtype`: The data type of the tensor elements
@@ -121,14 +122,15 @@ fn zeros(shape: DynamicVector[Int], dtype: DType) -> ExTensor
 
 **Examples:**
 ```mojo
+
 let t = ExTensor.zeros((3, 4), DType.float32)
 print(t.shape())  # (3, 4)
-```
 
+```text
 **Performance:**
 - O(n) time where n is the number of elements
 - Memory allocated: shape.product() * dtype.size bytes
-```
+```text
 
 ### User Guide
 
@@ -139,25 +141,25 @@ Step-by-step tutorials for:
    - Creating your first tensor
    - Basic operations
 
-2. **Core Concepts**
+1. **Core Concepts**
    - Shapes and dimensions
    - Data types
    - Broadcasting rules
    - Memory layout
 
-3. **Common Operations**
+1. **Common Operations**
    - Arithmetic with broadcasting
    - Matrix multiplication
    - Reductions and aggregations
    - Reshaping and concatenation
 
-4. **Advanced Topics**
+1. **Advanced Topics**
    - SIMD optimization
    - Zero-copy views
    - Memory management
    - Custom operations
 
-5. **Performance Optimization**
+1. **Performance Optimization**
    - SIMD vectorization tips
    - Memory access patterns
    - Avoiding unnecessary allocations
@@ -171,11 +173,11 @@ How to use ExTensors in ML Odyssey components:
    - Forward pass implementation
    - Backward pass (future)
 
-2. **Data Loading**
+1. **Data Loading**
    - Converting data to ExTensors
    - Batching strategies
 
-3. **Training Loops**
+1. **Training Loops**
    - Gradient computation (future)
    - Optimizer integration (future)
 
@@ -219,7 +221,7 @@ fn main():
     # Reductions
     let sum = z.sum()  # Sum all elements
     let row_sums = z.sum(axis=1, keepdims=True)  # Sum along columns
-```
+```text
 
 ### Advanced: SIMD Optimization
 
@@ -236,7 +238,7 @@ fn main():
 
     # Benchmark SIMD speedup
     # See docs/examples/performance.mojo for details
-```
+```text
 
 ## References
 
@@ -256,11 +258,11 @@ fn main():
 
 **Status:** Ready for packaging after implementation completes
 
-**Next Steps:**
+### Next Steps:
 
 1. Wait for Issue #220 (Implementation) to complete
-2. Create package configuration
-3. Build .mojopkg package
-4. Write comprehensive documentation
-5. Create usage examples
-6. Test package installation and usage
+1. Create package configuration
+1. Build .mojopkg package
+1. Write comprehensive documentation
+1. Create usage examples
+1. Test package installation and usage

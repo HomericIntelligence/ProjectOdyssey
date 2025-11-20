@@ -100,7 +100,7 @@ coverage:
       branches: 75.0       # Minimum branch coverage percentage
       functions: 85.0      # Minimum function coverage percentage
       statements: 80.0     # Minimum statement coverage percentage
-```
+```text
 
 #### Per-File Thresholds
 
@@ -113,7 +113,7 @@ coverage:
         - "**/test_*.mojo"
         - "**/conftest.mojo"
         - "**/migrations/*"
-```
+```text
 
 #### Grace Period Configuration
 
@@ -124,7 +124,7 @@ coverage:
       enabled: true
       age_days: 7          # New files get grace period
       initial_minimum: 50.0  # Initial minimum for new files
-```
+```text
 
 #### Blocking Configuration
 
@@ -135,34 +135,39 @@ coverage:
       enabled: true        # If false, report violations but don't fail CI
       strict_mode: true    # If true, fail on any violation
       allow_decrease: 0.5  # Allow up to 0.5% coverage decrease without review
-```
+```text
 
 ### API Design
 
 #### Core Functions
 
 **validate_coverage(coverage_data, threshold_config)**
+
 - **Purpose**: Main validation entry point
 - **Inputs**: Coverage metrics object, threshold configuration object
 - **Returns**: ValidationResult object with detailed findings
 - **Raises**: ConfigurationError for invalid configuration
 
 **check_overall_coverage(coverage_data, thresholds)**
+
 - **Purpose**: Validate overall project coverage metrics
 - **Inputs**: Project-level coverage metrics, overall thresholds
 - **Returns**: OverallResult with pass/fail status and gaps
 
 **check_per_file_coverage(coverage_by_file, thresholds, exclude_patterns)**
+
 - **Purpose**: Validate per-file coverage metrics
 - **Inputs**: Per-file coverage map, per-file thresholds, exclusion patterns
 - **Returns**: List of FileViolation objects
 
 **apply_grace_period(file_path, grace_config)**
+
 - **Purpose**: Determine if file is within grace period
 - **Inputs**: File path and grace period configuration
 - **Returns**: Boolean indicating grace period status
 
 **generate_violation_report(validation_result)**
+
 - **Purpose**: Create human-readable violation report
 - **Inputs**: ValidationResult object
 - **Returns**: Formatted report string with recommendations
@@ -170,7 +175,8 @@ coverage:
 ### Data Structures
 
 #### ValidationResult
-```
+
+```text
 {
   status: 'pass' | 'fail',
   overall_violations: OverallViolation[],
@@ -179,10 +185,11 @@ coverage:
   recommendations: string[],
   exit_code: int
 }
-```
+```text
 
 #### OverallViolation
-```
+
+```text
 {
   metric_type: 'lines' | 'branches' | 'functions' | 'statements',
   threshold: float,
@@ -190,10 +197,11 @@ coverage:
   gap: float,
   severity: 'critical' | 'major' | 'minor'
 }
-```
+```text
 
 #### FileViolation
-```
+
+```text
 {
   file_path: string,
   metric_type: 'lines' | 'branches' | 'functions',
@@ -203,10 +211,11 @@ coverage:
   in_grace_period: bool,
   affected_lines: int[]
 }
-```
+```text
 
 #### CoverageSummary
-```
+
+```text
 {
   total_files_checked: int,
   files_with_violations: int,
@@ -218,7 +227,7 @@ coverage:
     statements: float
   }
 }
-```
+```text
 
 ### Implementation Strategy
 
@@ -230,12 +239,12 @@ coverage:
    - Compare metrics against thresholds
    - Detect violations
 
-2. Implement metric comparison logic
+1. Implement metric comparison logic
    - File-by-file comparisons
    - Overall project metrics
    - Metric type handling (lines, branches, functions, statements)
 
-3. Grace period mechanism
+1. Grace period mechanism
    - File age detection
    - Temporary threshold reduction for new files
    - Configurable grace period duration
@@ -247,7 +256,7 @@ coverage:
    - Support inheritance (default → paper → experiment)
    - Validate configuration schema
 
-2. Configuration loading
+1. Configuration loading
    - Load from YAML/TOML files
    - Merge with defaults
    - Validate required fields
@@ -260,7 +269,7 @@ coverage:
    - Coverage gap calculations
    - Improvement recommendations
 
-2. Output formatting
+1. Output formatting
    - Console output (human-readable)
    - JSON output (CI/CD integration)
    - HTML reports (detailed analysis)
@@ -272,7 +281,7 @@ coverage:
    - Exit 1 on critical violations
    - Exit 2 on configuration errors
 
-2. Workflow integration
+1. Workflow integration
    - GitHub Actions step configuration
    - Environment variable support
    - Parallel execution with other checks
@@ -285,11 +294,11 @@ Coverage thresholds follow the project's hierarchical configuration system (from
    - Base thresholds for entire project
    - Applied to all papers and experiments
 
-2. **Paper-Specific Config** (`configs/papers/<paper-name>/default.yaml`)
+1. **Paper-Specific Config** (`configs/papers/<paper-name>/default.yaml`)
    - Override thresholds for specific paper implementations
    - Inherits defaults if not specified
 
-3. **Experiment Config** (`configs/papers/<paper>/experiments/<exp-name>.yaml`)
+1. **Experiment Config** (`configs/papers/<paper>/experiments/<exp-name>.yaml`)
    - Override thresholds for specific experiments
    - Inherits paper-level thresholds
 
@@ -298,9 +307,9 @@ Coverage thresholds follow the project's hierarchical configuration system (from
 New files (created within configurable period, e.g., 7 days) receive:
 
 1. **Temporary Reduced Threshold**: Initial minimum (e.g., 50%) while ramping up tests
-2. **Age-Based Exemption**: Files younger than configured age automatically pass per-file checks
-3. **Milestone-Based Progression**: Increase thresholds as file matures
-4. **Opt-In Early Enforcement**: Option to enforce full thresholds immediately for critical files
+1. **Age-Based Exemption**: Files younger than configured age automatically pass per-file checks
+1. **Milestone-Based Progression**: Increase thresholds as file matures
+1. **Opt-In Early Enforcement**: Option to enforce full thresholds immediately for critical files
 
 ### CI/CD Integration Points
 
@@ -310,11 +319,11 @@ New files (created within configurable period, e.g., 7 days) receive:
    - Collect coverage data from pytest/coverage tools
    - Trigger threshold validation
 
-2. **Before Merge Gates**
+1. **Before Merge Gates**
    - Block merge if violations detected (configurable)
    - Provide detailed feedback to developers
 
-3. **Status Reporting**
+1. **Status Reporting**
    - Add checks to pull requests
    - Display coverage trends
    - Show violations preventing merge
@@ -333,12 +342,12 @@ New files (created within configurable period, e.g., 7 days) receive:
    - Per-file validation scales linearly with file count
    - Grace period checks use cached file metadata
 
-2. **Memory Usage**
+1. **Memory Usage**
    - Configuration loading: Minimal overhead
    - Coverage data: Depends on file count and metrics granularity
    - Result objects: Proportional to violation count
 
-3. **Caching Strategy**
+1. **Caching Strategy**
    - Cache configuration after initial load
    - Cache file metadata for grace period calculations
    - Reuse coverage data across multiple checks
@@ -346,18 +355,21 @@ New files (created within configurable period, e.g., 7 days) receive:
 ### Error Handling and Edge Cases
 
 #### Configuration Errors
+
 - Missing required threshold values
 - Invalid percentage values (not 0-100)
 - Malformed configuration files
 - Conflicting grace period settings
 
 #### Coverage Data Issues
+
 - Missing coverage metrics for files
 - Inconsistent metric formats
 - Coverage decreases from previous builds
 - Partial coverage data
 
 #### Grace Period Edge Cases
+
 - File age calculation across time zones
 - Rename/move of files
 - Merge of branches with older files
@@ -371,18 +383,18 @@ New files (created within configurable period, e.g., 7 days) receive:
    - Configuration loading and validation
    - Report generation
 
-2. **Integration Tests**
+1. **Integration Tests**
    - End-to-end validation workflow
    - Configuration inheritance from Issue #74
    - CI/CD exit code behavior
    - Grace period with real file system
 
-3. **Performance Tests**
+1. **Performance Tests**
    - Validation speed with large project (1000+ files)
    - Configuration loading time
    - Memory usage during validation
 
-4. **Regression Tests**
+1. **Regression Tests**
    - Coverage decrease detection
    - Threshold boundary conditions
    - Grace period transitions
@@ -390,29 +402,34 @@ New files (created within configurable period, e.g., 7 days) receive:
 ## Implementation Phases
 
 ### Phase 1: Plan (Current - Issue #839)
+
 - Complete design specification ✅
 - Document architecture and API
 - Define configuration schema
 - Establish CI/CD integration patterns
 
 ### Phase 2: Test (Issue TBD)
+
 - Write test specifications
 - Create test fixtures with sample data
 - Define test coverage targets (ideally 95%+)
 
 ### Phase 3: Implementation (Issue TBD)
+
 - Implement validation engine
 - Integrate with config system (Issue #74)
 - Create reporting system
 - Add CI/CD integration
 
 ### Phase 4: Package (Issue TBD)
+
 - Package threshold checker module
 - Create Python/Mojo wrapper
 - Document installation and usage
 - Add to project CI workflows
 
 ### Phase 5: Cleanup (Issue TBD)
+
 - Refactor code based on implementation learnings
 - Optimize performance
 - Enhance error messages
@@ -424,7 +441,8 @@ New files (created within configurable period, e.g., 7 days) receive:
 
 **Decision**: Use hierarchical configuration system from Issue #74 instead of separate threshold config files.
 
-**Rationale**:
+### Rationale
+
 - Eliminates duplication of threshold definitions
 - Maintains single source of truth
 - Supports paper-level and experiment-level overrides
@@ -434,7 +452,8 @@ New files (created within configurable period, e.g., 7 days) receive:
 
 **Decision**: Use temporary reduced thresholds for new files instead of complete exemptions.
 
-**Rationale**:
+### Rationale
+
 - Ensures new code is tested from the start (TDD principle)
 - Gradually enforces quality standards
 - Prevents accumulation of untested code
@@ -444,7 +463,8 @@ New files (created within configurable period, e.g., 7 days) receive:
 
 **Decision**: Support both strict (blocks merge) and tolerant (warns only) modes.
 
-**Rationale**:
+### Rationale
+
 - Different projects have different risk tolerances
 - Allows gradual enforcement for legacy code
 - Supports critical vs. non-critical modules
@@ -454,7 +474,8 @@ New files (created within configurable period, e.g., 7 days) receive:
 
 **Decision**: Support both per-file and overall project thresholds with separate configurations.
 
-**Rationale**:
+### Rationale
+
 - Per-file ensures all code is tested
 - Overall prevents coverage collapse in critical areas
 - Different files may have different requirements
@@ -464,7 +485,8 @@ New files (created within configurable period, e.g., 7 days) receive:
 
 **Decision**: Support multiple coverage metrics (lines, branches, functions, statements) with independent thresholds.
 
-**Rationale**:
+### Rationale
+
 - Different metrics catch different testing gaps
 - Branch coverage is most comprehensive
 - Line coverage is most common baseline
@@ -490,11 +512,11 @@ New files (created within configurable period, e.g., 7 days) receive:
 ## Success Metrics
 
 1. **Comprehensiveness**: All major components designed and specified
-2. **Clarity**: Design is clear enough for engineers to implement
-3. **Flexibility**: Supports various project configurations and requirements
-4. **Alignment**: Integrates seamlessly with existing configuration system
-5. **Documentation**: All design decisions documented with rationale
-6. **Feasibility**: Design can be implemented in 1-2 weeks
+1. **Clarity**: Design is clear enough for engineers to implement
+1. **Flexibility**: Supports various project configurations and requirements
+1. **Alignment**: Integrates seamlessly with existing configuration system
+1. **Documentation**: All design decisions documented with rationale
+1. **Feasibility**: Design can be implemented in 1-2 weeks
 
 ## Implementation Notes
 
@@ -516,25 +538,29 @@ New files (created within configurable period, e.g., 7 days) receive:
 
 **Planning Phase**: Current issue (Issue #839)
 
-**Requires**:
+### Requires
+
 - Issue #74 (Configs) must be complete
 
-**Can run in parallel with**:
+### Can run in parallel with
+
 - Other planning issues
 - Unrelated implementation work
 
-**Blocks**:
+### Blocks
+
 - Test phase (Issue TBD)
 - Implementation phase (Issue TBD)
 - Packaging phase (Issue TBD)
 
-**Recommended sequence**:
+### Recommended sequence
+
 1. Complete Issue #74 (Configs) ✅
-2. Complete Issue #839 (Plan - Check Thresholds) ← Current
-3. Create Issue TBD (Test - Check Thresholds)
-4. Create Issue TBD (Impl - Check Thresholds)
-5. Create Issue TBD (Package - Check Thresholds)
-6. Create Issue TBD (Cleanup - Check Thresholds)
+1. Complete Issue #839 (Plan - Check Thresholds) ← Current
+1. Create Issue TBD (Test - Check Thresholds)
+1. Create Issue TBD (Impl - Check Thresholds)
+1. Create Issue TBD (Package - Check Thresholds)
+1. Create Issue TBD (Cleanup - Check Thresholds)
 
 **Estimated Duration**: 1-2 days for comprehensive design documentation
 
@@ -553,10 +579,10 @@ New files (created within configurable period, e.g., 7 days) receive:
 Test coverage is a critical quality metric for the ML Odyssey project. As the codebase grows with implementations of multiple papers (LeNet, ResNet, Transformers, etc.), maintaining consistent test coverage becomes increasingly important. An automated threshold validation system:
 
 1. **Prevents Coverage Decay**: Catches merges that reduce test coverage
-2. **Enforces Quality Standards**: Requires minimum coverage before merge
-3. **Provides Feedback**: Shows developers what coverage is missing
-4. **Enables Gradual Improvement**: Grace periods allow ramping up coverage for existing code
-5. **Supports CI/CD**: Integrates with GitHub Actions for automated enforcement
+1. **Enforces Quality Standards**: Requires minimum coverage before merge
+1. **Provides Feedback**: Shows developers what coverage is missing
+1. **Enables Gradual Improvement**: Grace periods allow ramping up coverage for existing code
+1. **Supports CI/CD**: Integrates with GitHub Actions for automated enforcement
 
 ### Coverage Tools Integration
 
@@ -567,6 +593,7 @@ The system is designed to work with standard Python coverage tools:
 - **GitHub Actions**: Integration point for CI/CD
 
 Coverage data is expected in the format provided by `coverage json` command:
+
 ```json
 {
   "meta": {...},
@@ -584,19 +611,19 @@ Coverage data is expected in the format provided by `coverage json` command:
     }
   }
 }
-```
+```text
 
 ### Future Enhancements
 
 Potential future extensions (out of scope for initial implementation):
 
 1. **Coverage Trends**: Track coverage over time, visualize trends in dashboards
-2. **Blame Attribution**: Link uncovered code to responsible developers/PRs
-3. **Complexity-Weighted Coverage**: Higher thresholds for complex code
-4. **Performance Profiling**: Integrate with performance metrics
-5. **Mutation Testing**: Use mutation scores for more comprehensive coverage validation
-6. **Coverage Badges**: Generate dynamic coverage badges for README
-7. **Incremental Coverage**: Only check coverage for changed files
+1. **Blame Attribution**: Link uncovered code to responsible developers/PRs
+1. **Complexity-Weighted Coverage**: Higher thresholds for complex code
+1. **Performance Profiling**: Integrate with performance metrics
+1. **Mutation Testing**: Use mutation scores for more comprehensive coverage validation
+1. **Coverage Badges**: Generate dynamic coverage badges for README
+1. **Incremental Coverage**: Only check coverage for changed files
 
 ## Appendix: Coverage Metrics Reference
 
@@ -606,17 +633,17 @@ Potential future extensions (out of scope for initial implementation):
    - Simplest metric, most commonly used
    - Baseline: typically 80-90%
 
-2. **Branch Coverage**: Percentage of conditional branches executed
+1. **Branch Coverage**: Percentage of conditional branches executed
    - More comprehensive than line coverage
    - Accounts for if/else, loops, etc.
    - Typically 5-10% lower than line coverage
 
-3. **Function Coverage**: Percentage of functions/methods called during tests
+1. **Function Coverage**: Percentage of functions/methods called during tests
    - Ensures all public APIs are exercised
    - Can be 100% even if not all code paths covered
    - Good indicator of API completeness
 
-4. **Statement Coverage**: Similar to line coverage but more precise
+1. **Statement Coverage**: Similar to line coverage but more precise
    - Counts logical statements vs. physical lines
    - More accurate for multi-statement lines
    - Usually very similar to line coverage

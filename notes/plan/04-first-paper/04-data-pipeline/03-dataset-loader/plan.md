@@ -28,8 +28,8 @@ Implement Dataset and DataLoader classes to provide a clean interface for access
 ## Steps
 
 1. Implement Dataset
-2. Implement DataLoader
-3. Test Data Loading
+1. Implement DataLoader
+1. Test Data Loading
 
 ## Success Criteria
 

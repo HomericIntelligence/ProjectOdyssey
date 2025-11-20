@@ -29,8 +29,8 @@ Set up the testing infrastructure for the shared library. This includes installi
 ## Steps
 
 1. Set up test framework with proper configuration
-2. Create test utilities for common testing patterns
-3. Build test fixtures for shared test data
+1. Create test utilities for common testing patterns
+1. Build test fixtures for shared test data
 
 ## Success Criteria
 

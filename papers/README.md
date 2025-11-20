@@ -22,7 +22,7 @@ papers/
 │   ├── examples/         # Usage examples
 │   └── README.md         # Paper-specific documentation
 └── README.md             # This file
-```
+```text
 
 ## Implemented Papers
 
@@ -33,10 +33,10 @@ papers/
 When implementing a new paper:
 
 1. Create a new subdirectory with a descriptive name (e.g., `lenet5`, `alexnet`)
-2. Follow the project structure conventions
-3. Include comprehensive documentation
-4. Write thorough tests
-5. Add examples demonstrating usage
+1. Follow the project structure conventions
+1. Include comprehensive documentation
+1. Write thorough tests
+1. Add examples demonstrating usage
 
 ## License
 

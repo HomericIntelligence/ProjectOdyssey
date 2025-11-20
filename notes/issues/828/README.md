@@ -12,7 +12,7 @@ This issue completes the 5-phase workflow for the Paper Test Script component (I
 The script was designed to make it easy for developers to test individual paper implementations during
 development by providing quick feedback on what's missing or broken.
 
-**Previous Phases**:
+### Previous Phases
 
 - Issue #60: [Plan] Paper Test Script
 - Issue #61: [Test] Paper Test Script
@@ -33,7 +33,7 @@ The cleanup phase produces the following deliverables:
 - Improve code consistency and readability
 - Document all code with inline comments
 
-**Expected Changes**:
+### Expected Changes
 
 - Updated `scripts/test_paper.py` (if it exists from Implementation)
 - Updated `scripts/test_paper.mojo` (if implemented in Mojo)
@@ -49,7 +49,7 @@ The cleanup phase produces the following deliverables:
 - Migration guide if replacing older testing methods
 - Developer guide for extending the script
 
-**Expected Documentation**:
+### Expected Documentation
 
 - `README.md` - User guide and quick start
 - `DESIGN.md` - Architecture and design decisions
@@ -66,7 +66,7 @@ The cleanup phase produces the following deliverables:
 - Performance benchmarking and optimization
 - Edge case testing and bug fixes
 
-**Expected Test Results**:
+### Expected Test Results
 
 - All existing tests pass
 - No performance regressions
@@ -82,7 +82,7 @@ The cleanup phase produces the following deliverables:
 - Validate error handling in real-world scenarios
 - Ensure logging is appropriately configured
 
-**Expected Integration Tests**:
+### Expected Integration Tests
 
 - Standalone testing: `./test_paper.py lenet5`
 - Integration tests: pytest framework
@@ -98,7 +98,7 @@ The cleanup phase produces the following deliverables:
 - Reduce redundant computations
 - Document performance characteristics
 
-**Performance Targets**:
+### Performance Targets
 
 - Script initialization: < 1 second
 - Paper discovery: < 500ms
@@ -200,21 +200,21 @@ The cleanup phase produces the following deliverables:
 This is the **Cleanup** phase (phase 5 of 5) in the hierarchical workflow:
 
 1. **Plan** (Issue #60) - Design and specifications
-2. **Test** (Issue #61) - Test cases and validation approach
-3. **Implementation** (Issue #62) - Actual tool implementation
-4. **Package** (Issue #63) - Distribution and integration
-5. **Cleanup** (Issue #828) - This issue - Finalization and optimization
+1. **Test** (Issue #61) - Test cases and validation approach
+1. **Implementation** (Issue #62) - Actual tool implementation
+1. **Package** (Issue #63) - Distribution and integration
+1. **Cleanup** (Issue #828) - This issue - Finalization and optimization
 
 ### Key Cleanup Objectives
 
 The cleanup phase focuses on:
 
 1. **Code Quality**: Refactor for maintainability and optimization
-2. **Documentation**: Ensure completeness and accuracy
-3. **Testing**: Validate all functionality works correctly
-4. **Integration**: Ensure seamless workflow with rest of system
-5. **Performance**: Optimize execution time and resource usage
-6. **Finalization**: Remove temporary code, document decisions
+1. **Documentation**: Ensure completeness and accuracy
+1. **Testing**: Validate all functionality works correctly
+1. **Integration**: Ensure seamless workflow with rest of system
+1. **Performance**: Optimize execution time and resource usage
+1. **Finalization**: Remove temporary code, document decisions
 
 ### What NOT to Do in Cleanup
 
@@ -245,18 +245,18 @@ If code exists from Implementation (Issue #62):
    - Spot missing error handling
    - Check for performance issues
 
-2. **Refactoring Priority**
+1. **Refactoring Priority**
    - High: Critical bugs, security issues, correctness
    - Medium: Performance, maintainability, readability
    - Low: Style improvements, minor optimizations
 
-3. **Testing During Refactoring**
+1. **Testing During Refactoring**
    - Run tests before and after changes
    - Verify no performance regression
    - Check all edge cases still work
    - Validate integration points
 
-4. **Documentation Updates**
+1. **Documentation Updates**
    - Update DESIGN.md with final architecture
    - Explain all refactoring decisions
    - Document performance optimizations
@@ -285,37 +285,37 @@ Delegate to:
    - Check package structure
    - Understand current state
 
-2. **Identify Improvements** (1-2 hours)
+1. **Identify Improvements** (1-2 hours)
    - Code review for quality
    - Performance profiling
    - Test coverage analysis
    - Documentation completeness check
 
-3. **Plan Refactoring** (1 hour)
+1. **Plan Refactoring** (1 hour)
    - Prioritize changes
    - Estimate effort
    - Create refactoring checklist
    - Communicate plan
 
-4. **Execute Refactoring** (4-8 hours)
+1. **Execute Refactoring** (4-8 hours)
    - Make code quality improvements
    - Add missing documentation
    - Fix bugs and issues
    - Run tests continuously
 
-5. **Optimize Performance** (2-4 hours)
+1. **Optimize Performance** (2-4 hours)
    - Profile execution
    - Fix bottlenecks
    - Benchmark improvements
    - Document optimizations
 
-6. **Final Validation** (2-4 hours)
+1. **Final Validation** (2-4 hours)
    - Run complete test suite
    - Test integration scenarios
    - Verify documentation accuracy
    - Quality assurance review
 
-7. **Prepare for Merge** (1 hour)
+1. **Prepare for Merge** (1 hour)
    - Create summary of changes
    - Document decisions made
    - Link to related issues
@@ -344,7 +344,7 @@ docs/
 tests/
 ├── test_paper_script.py             # Unit tests
 └── fixtures/                        # Test data and papers
-```
+```text
 
 ### Common Cleanup Challenges
 
@@ -353,22 +353,22 @@ tests/
    - Don't restructure working code
    - Focus on maintainability, not perfection
 
-2. **Documentation Completeness**
+1. **Documentation Completeness**
    - Make sure all public APIs are documented
    - Provide concrete examples
    - Cover both happy path and error cases
 
-3. **Performance Optimization**
+1. **Performance Optimization**
    - Profile before and after
    - Don't optimize prematurely
    - Focus on bottlenecks, not trivial code
 
-4. **Testing Coverage**
+1. **Testing Coverage**
    - Maintain test coverage during refactoring
    - Add tests for refactored code
    - Test edge cases thoroughly
 
-5. **Breaking Changes**
+1. **Breaking Changes**
    - Minimize API changes
    - Maintain backward compatibility
    - Document any breaking changes clearly
@@ -403,25 +403,25 @@ The cleanup is successful when:
    - Clear and readable code
    - Good error handling
 
-2. **Documentation**
+1. **Documentation**
    - All public APIs documented
    - Usage examples provided
    - Architecture explained
    - Troubleshooting guide available
 
-3. **Testing**
+1. **Testing**
    - All tests pass
    - No performance regressions
    - Edge cases covered
    - Real-world scenarios tested
 
-4. **Integration**
+1. **Integration**
    - Standalone usage works
    - Integration points tested
    - CI/CD pipeline ready
    - Multiple papers testable
 
-5. **Performance**
+1. **Performance**
    - Script initialization fast
    - No bottlenecks identified
    - Memory usage acceptable
@@ -437,18 +437,18 @@ After Issue #828 (Cleanup) completes:
    - Merge to main branch
    - Tag release if applicable
 
-2. **Team Notification**
+1. **Team Notification**
    - Announce tool availability
    - Share usage documentation
    - Gather feedback from team
 
-3. **Future Improvements**
+1. **Future Improvements**
    - Monitor tool usage
    - Collect feature requests
    - Plan next major version
    - Create new issues for enhancements
 
-4. **Related Work**
+1. **Related Work**
    - Similar cleanup issues in parallel
    - Begin new planning issues
    - Update documentation if needed

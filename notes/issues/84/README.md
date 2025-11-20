@@ -15,7 +15,7 @@ directory with all subdirectories (core, training, data, utils) and comprehensiv
 
 **Location**: `/home/user/ml-odyssey/papers/`
 
-**Structure**:
+### Structure
 
 ```text
 papers/
@@ -32,9 +32,9 @@ papers/
     │   └── train.mojo
     └── configs/
         └── config.yaml
-```
+```text
 
-**Verification**:
+### Verification
 
 - papers/ directory exists ✓
 - Template structure complete ✓
@@ -45,7 +45,7 @@ papers/
 
 **Location**: `/home/user/ml-odyssey/shared/`
 
-**Structure**:
+### Structure
 
 ```text
 shared/
@@ -92,9 +92,9 @@ shared/
     ├── profiling.mojo
     ├── random.mojo
     └── visualization.mojo
-```
+```text
 
-**Verification**:
+### Verification
 
 - shared/ directory exists ✓
 - All subdirectories created (core, training, data, utils) ✓
@@ -115,7 +115,7 @@ shared/
 
 ### Template Complete ✓
 
-**Template includes**:
+### Template includes
 
 - Comprehensive README.md (414 lines) explaining:
   - Quick start guide
@@ -186,7 +186,7 @@ All READMEs include:
 
 ### Integration Documented ✓
 
-**Papers → Shared Integration**:
+### Papers → Shared Integration
 
 Papers can import from shared library:
 
@@ -196,24 +196,24 @@ from shared.core.layers import Conv2D, Linear, ReLU, MaxPool2D
 from shared.core.module import Module
 from shared.training.optimizer import SGD
 from shared.data.dataset import ImageDataset
-```
+```text
 
-**Integration Documentation Locations**:
+### Integration Documentation Locations
 
 1. `shared/README.md` - Main integration overview
    - "Usage in Papers" section (lines 263-288)
    - "Contributing" section (lines 290-312)
 
-2. `shared/MIGRATION.md` - Complete migration guide
+1. `shared/MIGRATION.md` - Complete migration guide
    - Step-by-step migration from paper-specific to shared
    - Before/after examples
    - Best practices
 
-3. `shared/EXAMPLES.md` - Practical examples
+1. `shared/EXAMPLES.md` - Practical examples
    - Complete workflows
    - Integration patterns
 
-4. Each subdirectory README has "Integration" or "Usage" sections:
+1. Each subdirectory README has "Integration" or "Usage" sections:
    - `core/README.md` - "Using Core Components in Papers" (lines 69-97)
    - `training/README.md` - "Using Training Components in Papers" (lines 120-179)
    - `data/README.md` - "Integration with Training" (lines 504-518)
@@ -231,7 +231,7 @@ The directory structure implementation was completed in previous work (likely Is
    - Placeholder **init**.mojo files
    - Example configuration file
 
-2. **shared/** directory created with:
+1. **shared/** directory created with:
    - Main README and supporting documentation (BUILD.md, INSTALL.md, MIGRATION.md, EXAMPLES.md)
    - Four subdirectories (core, training, data, utils)
    - Comprehensive README for each subdirectory
@@ -246,19 +246,19 @@ The directory structure implementation was completed in previous work (likely Is
    - Excellent usage examples
    - Strong guidance on what belongs where
 
-2. **Template Completeness**: Very thorough
+1. **Template Completeness**: Very thorough
    - 414-line template README covers all aspects
    - Step-by-step implementation guide
    - Common patterns documented
    - Paper-specific customization guidance
 
-3. **Integration Clarity**: Well-documented
+1. **Integration Clarity**: Well-documented
    - Multiple documentation files covering integration
    - Clear import examples
    - Migration guide for existing code
    - Best practices for code organization
 
-4. **Mojo-Specific Guidance**: Strong
+1. **Mojo-Specific Guidance**: Strong
    - fn vs def guidelines
    - struct vs class patterns
    - SIMD optimization guidance

@@ -32,8 +32,8 @@ Create a CLI tool that generates complete directory structure and boilerplate fi
 ## Steps
 
 1. Create a template system for generating paper files
-2. Build directory generator to create proper structure
-3. Implement CLI interface for user interaction
+1. Build directory generator to create proper structure
+1. Implement CLI interface for user interaction
 
 ## Success Criteria
 

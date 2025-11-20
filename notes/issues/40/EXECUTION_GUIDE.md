@@ -20,9 +20,9 @@ chmod +x scripts/build_data_package.sh
 
 # Run build
 ./scripts/build_data_package.sh
-```
+```text
 
-**Expected Output**:
+### Expected Output
 
 ```text
 Building Data module package...
@@ -33,16 +33,16 @@ Package created successfully:
 
 ✅ Build complete!
 Package: dist/data-0.1.0.mojopkg
-```
+```text
 
-**Verification**:
+### Verification
 
 ```bash
 # Check package file exists
 ls -lh dist/data-0.1.0.mojopkg
 
 # Should show non-zero file size
-```
+```text
 
 ## Step 2: Test Installation
 
@@ -54,9 +54,9 @@ chmod +x scripts/install_verify_data.sh
 
 # Run verification
 ./scripts/install_verify_data.sh
-```
+```text
 
-**Expected Output**:
+### Expected Output
 
 ```text
 Testing data package installation...
@@ -72,9 +72,9 @@ Compose import OK
 ✅ Data package verification complete!
 All imports successful
 Cleanup complete
-```
+```text
 
-**If verification fails**:
+### If verification fails
 
 - Check that package was built successfully
 - Verify Mojo is in PATH: `which mojo`
@@ -101,7 +101,7 @@ mojo run -c "from data import Transform, Compose; print('Success!')"
 # Cleanup
 cd -
 rm -rf "$TEMP_DIR"
-```
+```text
 
 ## Step 4: Commit Changes
 
@@ -132,7 +132,7 @@ Closes #40"
 
 # Push to remote
 git push origin 40-pkg-data
-```
+```text
 
 ## Step 5: Create Pull Request
 
@@ -143,13 +143,13 @@ gh pr create --issue 40 --fill
 # Or manually with description
 gh pr create --title "feat(data): create distributable package with installation testing" \
   --body "Built dist/data-0.1.0.mojopkg binary package and created installation verification. Closes #40"
-```
+```text
 
 ## Troubleshooting
 
 ### Issue: `mojo package` command not found
 
-**Solution**:
+### Solution
 
 ```bash
 # Check Mojo installation
@@ -162,11 +162,11 @@ pixi shell
 # Retry build
 cd worktrees/40-pkg-data
 ./scripts/build_data_package.sh
-```
+```text
 
 ### Issue: Package build fails with compilation errors
 
-**Solution**:
+### Solution
 
 ```bash
 # Test individual files compile
@@ -178,11 +178,11 @@ mojo build shared/data/transforms.mojo
 
 # Fix any compilation errors
 # Retry build
-```
+```text
 
 ### Issue: Verification script fails with import errors
 
-**Solution**:
+### Solution
 
 ```bash
 # Check package contents (if mojo supports inspection)
@@ -190,17 +190,17 @@ mojo build shared/data/transforms.mojo
 cat shared/data/__init__.mojo | grep -A 30 "__all__"
 
 # Ensure all exported items are actually defined
-```
+```text
 
 ### Issue: dist/ directory already exists but is empty
 
-**Solution**:
+### Solution
 
 ```bash
 # Safe to proceed - dist/ is in .gitignore
 # Build will create .mojopkg file
 ./scripts/build_data_package.sh
-```
+```text
 
 ## Success Criteria Checklist
 
@@ -230,13 +230,13 @@ notes/issues/40/EXECUTION_GUIDE.md      # NEW - This file
 notes/issues/40/package-build-task.md   # NEW - Task specification
 
 dist/data-0.1.0.mojopkg                 # GENERATED (not committed, in .gitignore)
-```
+```text
 
 ## Next Steps
 
 After successful PR merge:
 
 1. Tag release: `git tag v0.1.0`
-2. Consider CI/CD automation (future issue)
-3. Document installation in main README
-4. Apply same pattern to Training and Utils modules
+1. Consider CI/CD automation (future issue)
+1. Document installation in main README
+1. Apply same pattern to Training and Utils modules

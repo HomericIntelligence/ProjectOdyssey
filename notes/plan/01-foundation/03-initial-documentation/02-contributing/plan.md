@@ -31,8 +31,8 @@ Create a comprehensive CONTRIBUTING.md file that guides contributors through the
 ## Steps
 
 1. Document development workflow and environment setup
-2. Define coding standards and best practices
-3. Explain pull request process and requirements
+1. Define coding standards and best practices
+1. Explain pull request process and requirements
 
 ## Success Criteria
 

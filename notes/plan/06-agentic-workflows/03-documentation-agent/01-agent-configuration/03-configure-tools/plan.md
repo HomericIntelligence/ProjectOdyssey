@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Define available tools (parsers, generators, validators)
-2. Configure permissions and access controls
-3. Set up tool integration patterns
-4. Define quality validation rules
+1. Configure permissions and access controls
+1. Set up tool integration patterns
+1. Define quality validation rules
 
 ## Success Criteria
 

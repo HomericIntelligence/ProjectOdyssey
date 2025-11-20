@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Run static analysis tools on code
-2. Execute linters and type checkers
-3. Calculate quality metrics
-4. Compare against thresholds and baselines
+1. Execute linters and type checkers
+1. Calculate quality metrics
+1. Compare against thresholds and baselines
 
 ## Success Criteria
 

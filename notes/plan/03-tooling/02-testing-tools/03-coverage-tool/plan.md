@@ -30,8 +30,8 @@ Build a code coverage tool that measures test completeness and identifies untest
 ## Steps
 
 1. Collect coverage data during test execution
-2. Generate coverage reports in multiple formats
-3. Validate coverage against configured thresholds
+1. Generate coverage reports in multiple formats
+1. Validate coverage against configured thresholds
 
 ## Success Criteria
 

@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Locate original paper PDF
-2. Download and verify paper
-3. Save to project resources
+1. Download and verify paper
+1. Save to project resources
 
 ## Success Criteria
 

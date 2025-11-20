@@ -39,28 +39,28 @@ The template includes six standard subdirectories:
    - Includes `__init__.mojo` for package initialization
    - Structured for modular implementation
 
-2. **tests/** - Comprehensive test suite
+1. **tests/** - Comprehensive test suite
    - Unit tests for individual components
    - Integration tests for full workflows
    - Includes `__init__.mojo` for test package
 
-3. **data/** - Data management
+1. **data/** - Data management
    - Subdirectories for raw, processed, and cached data
    - `.gitkeep` files to track directory structure
    - Data files themselves not tracked (use `.gitignore`)
 
-4. **configs/** - Configuration files
+1. **configs/** - Configuration files
    - Training hyperparameters
    - Model architecture specifications
    - Experiment configurations
    - YAML/JSON format for easy editing
 
-5. **notebooks/** - Jupyter notebooks for exploration
+1. **notebooks/** - Jupyter notebooks for exploration
    - Experimentation and visualization
    - Training demonstrations
    - Results analysis
 
-6. **examples/** - Demonstration scripts
+1. **examples/** - Demonstration scripts
    - Quick start examples
    - Usage patterns
    - Integration demonstrations
@@ -79,25 +79,25 @@ Each subdirectory includes:
 The template README includes:
 
 1. **Overview** - Purpose and paper reference
-2. **Structure** - Directory organization and file purposes
-3. **Quick Start** - How to use the template
-4. **Implementation Guide** - Step-by-step instructions
-5. **Testing** - How to run tests
-6. **Data Management** - How to handle datasets
-7. **Configuration** - How to modify hyperparameters
-8. **Contributing** - How to extend the implementation
+1. **Structure** - Directory organization and file purposes
+1. **Quick Start** - How to use the template
+1. **Implementation Guide** - Step-by-step instructions
+1. **Testing** - How to run tests
+1. **Data Management** - How to handle datasets
+1. **Configuration** - How to modify hyperparameters
+1. **Contributing** - How to extend the implementation
 
 ## Implementation Notes
 
 ### Template Creation Process
 
 1. Created `papers/_template/` directory
-2. Created all standard subdirectories with appropriate structure
-3. Added `.gitkeep` files to ensure empty directories are tracked
-4. Created `__init__.mojo` files for package structure
-5. Added placeholder configuration files demonstrating expected formats
-6. Wrote comprehensive README.md with usage instructions
-7. Ensured all markdown follows project standards
+1. Created all standard subdirectories with appropriate structure
+1. Added `.gitkeep` files to ensure empty directories are tracked
+1. Created `__init__.mojo` files for package structure
+1. Added placeholder configuration files demonstrating expected formats
+1. Wrote comprehensive README.md with usage instructions
+1. Ensured all markdown follows project standards
 
 ### Key Design Principles
 
@@ -149,7 +149,7 @@ papers/_template/
 │   └── .gitkeep                # Track empty directory
 └── examples/
     └── .gitkeep                # Track empty directory
-```
+```text
 
 ## Verification
 

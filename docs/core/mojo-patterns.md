@@ -97,14 +97,14 @@ Mojo provides two function declaration keywords with different trade-offs.
 
 #### Use `fn` for Performance-Critical Code
 
-**When to use `fn`**:
+### When to use `fn`
 
 - Performance-critical functions requiring compile-time optimization
 - Functions with explicit type annotations
 - SIMD/vectorized operations
 - Functions that don't need Python-style dynamic behavior
 
-**Characteristics**:
+### Characteristics
 
 - Requires explicit type annotations
 - Arguments are immutable by default
@@ -125,7 +125,7 @@ fn forward_pass[dtype: DType](
 
 ```text
 
-**Benefits**:
+### Benefits
 
 - Compile-time optimization - functions are inlined and optimized
 - Type safety - errors caught at compile time
@@ -134,14 +134,14 @@ fn forward_pass[dtype: DType](
 
 #### Use `def` for Python Compatibility
 
-**When to use `def`**:
+### When to use `def`
 
 - Python-compatible functions
 - Dynamic typing needed for flexibility
 - Quick prototypes and experiments
 - Functions requiring Python interop
 
-**Characteristics**:
+### Characteristics
 
 - Optional type annotations
 - Arguments are mutable by default (Python-like)
@@ -160,7 +160,7 @@ def load_dataset(path: String) -> PythonObject:
 
 ```text
 
-**Benefits**:
+### Benefits
 
 - Rapid prototyping - faster to write
 - Python interoperability - seamless integration
@@ -185,7 +185,7 @@ Mojo provides both `struct` and `class` with distinct semantics.
 
 #### Use `struct` for Value Types
 
-**When to use `struct`**:
+### When to use `struct`
 
 - Value types with stack allocation
 - Performance-critical data structures
@@ -193,7 +193,7 @@ Mojo provides both `struct` and `class` with distinct semantics.
 - SIMD-compatible types
 - Most ML components (layers, tensors, optimizers)
 
-**Characteristics**:
+### Characteristics
 
 - Stack-allocated by default (fast)
 - Copy-by-value semantics
@@ -229,7 +229,7 @@ struct Layer:
 
 ```text
 
-**Benefits**:
+### Benefits
 
 - Fast allocation - stack allocation is faster than heap
 - Cache-friendly - better memory locality
@@ -238,14 +238,14 @@ struct Layer:
 
 #### Use `class` for Reference Types
 
-**When to use `class`**:
+### When to use `class`
 
 - Reference types with heap allocation
 - Object-oriented inheritance hierarchies
 - Shared mutable state across references
 - Python interoperability
 
-**Characteristics**:
+### Characteristics
 
 - Heap-allocated (managed memory)
 - Reference semantics - multiple references to same object
@@ -277,7 +277,7 @@ class Model:
 
 ```text
 
-**Benefits**:
+### Benefits
 
 - Shared state - multiple references to same object
 - Inheritance - polymorphic behavior
@@ -304,7 +304,7 @@ Mojo's ownership system provides memory safety without garbage collection.
 
 #### `borrowed`: Read-Only Access
 
-**Use `borrowed` when**:
+### Use `borrowed` when
 
 - Function needs to read data without modifying it
 - No ownership transfer required
@@ -319,7 +319,7 @@ fn compute_loss(borrowed predictions: Tensor, borrowed targets: Tensor) -> Float
 
 ```text
 
-**Characteristics**:
+### Characteristics
 
 - No ownership transfer
 - Read-only access
@@ -328,7 +328,7 @@ fn compute_loss(borrowed predictions: Tensor, borrowed targets: Tensor) -> Float
 
 #### `owned`: Transfer Ownership
 
-**Use `owned` when**:
+### Use `owned` when
 
 - Function consumes/transforms data
 - Ownership transfer is intentional
@@ -344,7 +344,7 @@ fn consume_tensor(owned tensor: Tensor) -> Float64:
 
 ```text
 
-**Characteristics**:
+### Characteristics
 
 - Transfers ownership to function
 - Original variable becomes invalid
@@ -353,7 +353,7 @@ fn consume_tensor(owned tensor: Tensor) -> Float64:
 
 #### `inout`: Mutable Reference
 
-**Use `inout` when**:
+### Use `inout` when
 
 - Function needs to modify data in place
 - No ownership transfer desired
@@ -371,7 +371,7 @@ fn update_weights(
 
 ```text
 
-**Characteristics**:
+### Characteristics
 
 - Mutable reference
 - No ownership transfer
@@ -413,7 +413,7 @@ fn relu_simd(inout tensor: Tensor):
 
 ```text
 
-**Key points**:
+### Key points
 
 - `alias simd_width` - compile-time constant for optimal width
 - `@parameter` - compile-time function generation
@@ -438,7 +438,7 @@ fn sum_simd(borrowed tensor: Tensor) -> Float32:
 
 ```text
 
-**Key points**:
+### Key points
 
 - SIMD accumulator for parallel reduction
 - `reduce_add()` - horizontal sum of SIMD vector
@@ -474,7 +474,7 @@ fn matmul_simd(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
 
 ```text
 
-**Key points**:
+### Key points
 
 - Vectorized inner product computation
 - Cache-friendly access patterns
@@ -512,7 +512,7 @@ fn best_update(inout weights: Tensor, borrowed grad: Tensor, lr: Float64):
 
 ```text
 
-**Benefits**:
+### Benefits
 
 - No temporary allocations
 - Reduced memory bandwidth
@@ -545,7 +545,7 @@ struct EfficientConv2D:
 
 ```text
 
-**Benefits**:
+### Benefits
 
 - Eliminates per-forward-pass allocations
 - Predictable memory usage
@@ -578,7 +578,7 @@ struct FixedShape[rows: Int, cols: Int]:
 
 ```text
 
-**Benefits**:
+### Benefits
 
 - Shape errors caught at compile time
 - No runtime overhead for shape checks
@@ -604,7 +604,7 @@ struct Variable[dtype: DType]:
 
 ```text
 
-**Benefits**:
+### Benefits
 
 - Gradient dtype matches value dtype
 - No runtime type conversions
@@ -753,7 +753,7 @@ struct Adam(Optimizer):
 
 ```text
 
-**Benefits**:
+### Benefits
 
 - Polymorphic behavior
 - Consistent interfaces
@@ -917,13 +917,13 @@ pixi run mojo run examples/path/to/example.mojo
 ## Best Practices Summary
 
 1. **Prefer `fn` over `def`** - Use `fn` for ML implementations, `def` only when Python interop is needed
-2. **Use `struct` for ML components** - Layers, optimizers, and most ML objects should be `struct`
-3. **Be explicit with ownership** - Always use `borrowed`, `inout`, or `owned` annotations
-4. **Leverage SIMD** - Vectorize element-wise operations and reductions
-5. **Minimize allocations** - Use in-place operations and buffer reuse
-6. **Use compile-time features** - Parametric types and aliases for optimization
-7. **Type everything** - Explicit types enable better optimization and error detection
-8. **Compose with traits** - Define interfaces with traits for reusable abstractions
+1. **Use `struct` for ML components** - Layers, optimizers, and most ML objects should be `struct`
+1. **Be explicit with ownership** - Always use `borrowed`, `inout`, or `owned` annotations
+1. **Leverage SIMD** - Vectorize element-wise operations and reductions
+1. **Minimize allocations** - Use in-place operations and buffer reuse
+1. **Use compile-time features** - Parametric types and aliases for optimization
+1. **Type everything** - Explicit types enable better optimization and error detection
+1. **Compose with traits** - Define interfaces with traits for reusable abstractions
 
 ## Additional Resources
 
@@ -936,7 +936,7 @@ pixi run mojo run examples/path/to/example.mojo
 When adding new patterns:
 
 1. Include concrete code examples
-2. Explain the "why" behind the pattern
-3. Show anti-patterns to avoid
-4. Provide performance comparisons when relevant
-5. Link to example implementations in the codebase
+1. Explain the "why" behind the pattern
+1. Show anti-patterns to avoid
+1. Provide performance comparisons when relevant
+1. Link to example implementations in the codebase

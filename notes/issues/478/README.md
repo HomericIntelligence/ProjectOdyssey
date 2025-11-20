@@ -14,19 +14,19 @@ The planning phase will produce:
    - Coverage statistics calculation methods
    - Historical tracking data structure
 
-2. **API Contracts**
+1. **API Contracts**
    - Report generator interface
    - Console formatter interface
    - HTML renderer interface
    - Coverage statistics aggregator interface
 
-3. **Design Documentation**
+1. **Design Documentation**
    - Report format specifications (console, HTML)
    - Coverage metrics definitions (line, function, file levels)
    - Visualization design for uncovered code highlighting
    - Historical tracking storage and retrieval strategy
 
-4. **Integration Specifications**
+1. **Integration Specifications**
    - Integration with coverage collection (issue #474-477)
    - Output destinations (console, file system, web)
    - CI/CD integration requirements
@@ -48,7 +48,8 @@ The planning phase will produce:
 
 ### Report Types
 
-**Console Reports**:
+### Console Reports
+
 - Quick feedback for developers during TDD workflow
 - Concise summary showing overall coverage percentage
 - File-level breakdown highlighting low-coverage areas
@@ -56,7 +57,8 @@ The planning phase will produce:
 - Terminal-friendly formatting (colors, alignment)
 - Should complete in milliseconds for fast feedback loop
 
-**HTML Reports**:
+### HTML Reports
+
 - Detailed analysis for comprehensive review
 - Interactive line-by-line coverage visualization
 - Drill-down capability: project → file → function → line
@@ -66,7 +68,8 @@ The planning phase will produce:
 - Search and filter capabilities
 - Static files for CI artifact storage
 
-**Coverage Statistics**:
+### Coverage Statistics
+
 - Line coverage (primary metric)
 - Function coverage (secondary metric)
 - File-level aggregation
@@ -76,14 +79,16 @@ The planning phase will produce:
 
 ### Visualization Strategy
 
-**Uncovered Code Highlighting**:
+### Uncovered Code Highlighting
+
 - Clear visual distinction between covered/uncovered
 - Color-coding: green (covered), red (uncovered), yellow (partial)
 - Line numbers for easy navigation
 - Source code context for understanding gaps
 - Annotations for branch coverage
 
-**Historical Tracking**:
+### Historical Tracking
+
 - Store coverage snapshots per commit/build
 - Track coverage trends over time
 - Identify coverage regressions
@@ -92,18 +97,21 @@ The planning phase will produce:
 
 ### Integration Points
 
-**Coverage Data Sources**:
+### Coverage Data Sources
+
 - Consumes data from Coverage Collection (issue #474-477)
 - Accepts standardized coverage format
 - Handles partial coverage data gracefully
 
-**Output Destinations**:
+### Output Destinations
+
 - Console: stdout for CI/local development
 - File system: HTML reports in configurable directory
 - Web: Static HTML for artifact hosting (GitHub Pages, S3)
 - CI artifacts: Published reports for PR reviews
 
-**Report Generation Triggers**:
+### Report Generation Triggers
+
 - Post-test execution (automatic)
 - On-demand via CLI command
 - CI pipeline stage (after test suite)
@@ -111,12 +119,14 @@ The planning phase will produce:
 
 ### Performance Considerations
 
-**Console Reports**:
+### Console Reports
+
 - Must be fast (sub-second) for TDD workflow
 - Streaming output for large codebases
 - Incremental updates for long test runs
 
-**HTML Reports**:
+### HTML Reports
+
 - Lazy loading for large files
 - Pagination for file lists
 - Client-side filtering/search
@@ -124,13 +134,15 @@ The planning phase will produce:
 
 ### Quality Standards
 
-**Report Accuracy**:
+### Report Accuracy
+
 - Coverage percentages match underlying data
 - Line numbers align with source code
 - No false positives/negatives
 - Consistent across report types
 
-**Usability**:
+### Usability
+
 - Clear, actionable information
 - Easy to identify coverage gaps
 - Intuitive navigation in HTML reports
@@ -153,13 +165,15 @@ The planning phase will produce:
 
 ### Phase 1: Architecture Design
 
-**Tasks**:
+### Tasks
+
 - Define report generation pipeline architecture
 - Specify data flow from collection to visualization
 - Design plugin architecture for custom report formats
 - Document error handling and edge cases
 
-**Key Decisions**:
+### Key Decisions
+
 - Report generator abstraction (interface vs. concrete classes)
 - Format selection mechanism (CLI flags, config file)
 - Caching strategy for incremental reports
@@ -167,13 +181,14 @@ The planning phase will produce:
 
 ### Phase 2: Console Report Design
 
-**Tasks**:
+### Tasks
+
 - Design console output format and layout
 - Specify color scheme and terminal compatibility
 - Define summary statistics display
 - Create file-level breakdown format
 
-**Example Console Output**:
+### Example Console Output
 
 ```text
 Coverage Report
@@ -189,17 +204,19 @@ File-Level Breakdown:
 Uncovered Lines:
   src/utils.mojo: 45-48, 67, 89-92
   src/models/linear.mojo: 12-15, 28-34
-```
+```text
 
 ### Phase 3: HTML Report Design
 
-**Tasks**:
+### Tasks
+
 - Design HTML template structure
 - Specify CSS styling and responsive layout
 - Define JavaScript interactions (filtering, search)
 - Create drill-down navigation flow
 
-**HTML Structure**:
+### HTML Structure
+
 - Index page: Project summary and file list
 - File pages: Line-by-line coverage with source code
 - Function pages: Function-level statistics
@@ -207,26 +224,29 @@ Uncovered Lines:
 
 ### Phase 4: Historical Tracking Design
 
-**Tasks**:
+### Tasks
+
 - Design storage format for historical data
 - Specify data retention policies
 - Define trend calculation algorithms
 - Create visualization for coverage over time
 
-**Storage Options**:
+### Storage Options
+
 - JSON files (simple, version-controllable)
 - SQLite database (queryable, compact)
 - Time-series format (optimized for trends)
 
 ### Phase 5: Integration Specification
 
-**Tasks**:
+### Tasks
+
 - Document integration with test runners
 - Specify CLI interface for report generation
 - Define configuration file format
 - Create CI/CD integration guide
 
-**CLI Interface**:
+### CLI Interface
 
 ```bash
 # Generate console report
@@ -240,7 +260,7 @@ mojo test --coverage-report all
 
 # Historical tracking
 mojo test --coverage-report html --track-history
-```
+```text
 
 ### Design Review Checklist
 
@@ -259,27 +279,27 @@ mojo test --coverage-report html --track-history
    - What additional report formats are needed (JSON, XML, Cobertura)?
    - Should reports support custom templates?
 
-2. **Historical Tracking**:
+1. **Historical Tracking**:
    - How long should historical data be retained?
    - Should trends be calculated locally or in CI?
 
-3. **CI Integration**:
+1. **CI Integration**:
    - Which CI platforms need explicit support (GitHub Actions, GitLab CI)?
    - Should reports be uploaded to coverage services (Codecov, Coveralls)?
 
-4. **Visualization**:
+1. **Visualization**:
    - What visualization libraries are acceptable (D3.js, Chart.js, none)?
    - Should reports be completely static or allow dynamic updates?
 
 ### Next Steps
 
 1. Create detailed architecture specification document
-2. Design console report format with example outputs
-3. Create HTML report mockups (wireframes or prototypes)
-4. Define API contracts for report generators
-5. Document integration requirements for test phase (issue #479)
-6. Review design with Architecture Design Agent
-7. Hand off specifications to Test (issue #479) and Implementation (issue #480) phases
+1. Design console report format with example outputs
+1. Create HTML report mockups (wireframes or prototypes)
+1. Define API contracts for report generators
+1. Document integration requirements for test phase (issue #479)
+1. Review design with Architecture Design Agent
+1. Hand off specifications to Test (issue #479) and Implementation (issue #480) phases
 
 ### Notes from Review
 

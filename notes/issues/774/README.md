@@ -33,14 +33,14 @@ summaries to make the tool pleasant to use and help users understand what's happ
 
 **Decision**: Use a centralized `OutputFormatter` class with specialized methods for different message types.
 
-**Rationale**:
+### Rationale
 
 - Centralization ensures consistent formatting across the application
 - Specialized methods (`success()`, `error()`, `progress()`, etc.) provide clear API
 - Allows for easy testing and mocking of output in tests
 - Supports both colored and non-colored output modes
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Direct print statements**: Rejected - leads to inconsistent formatting and difficult testing
 - **Logging-only approach**: Rejected - logging is for developers, CLI output is for users
@@ -50,7 +50,7 @@ summaries to make the tool pleasant to use and help users understand what's happ
 
 **Decision**: Use ANSI color codes with automatic detection of terminal capabilities.
 
-**Rationale**:
+### Rationale
 
 - Existing codebase already uses ANSI colors (see `scripts/create_issues.py`)
 - Native terminal support, no dependencies required
@@ -66,7 +66,7 @@ summaries to make the tool pleasant to use and help users understand what's happ
 - **Header**: Magenta (`\033[95m`) - section headers, summaries
 - **Bold**: (`\033[1m`) - emphasis for key information
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **No colors**: Rejected - reduces usability and clarity
 - **16-color palette**: Rejected - overkill for CLI tool
@@ -80,13 +80,13 @@ summaries to make the tool pleasant to use and help users understand what's happ
 - **Fallback mode**: Simple text-based progress updates if `tqdm` not installed
 - **Non-interactive mode**: Minimal progress output for scripts/CI
 
-**Rationale**:
+### Rationale
 
 - `tqdm` already used in existing scripts (see `create_issues.py`)
 - Graceful degradation for environments without `tqdm`
 - Non-intrusive in CI/automated environments
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Custom progress bars**: Rejected - reinventing the wheel, `tqdm` is mature
 - **Spinner-only**: Rejected - less informative than progress bars
@@ -100,9 +100,9 @@ summaries to make the tool pleasant to use and help users understand what's happ
 [PREFIX] Main message
   └─ Detail line 1
   └─ Detail line 2
-```
+```text
 
-**Prefixes**:
+### Prefixes
 
 - `✓` - Success
 - `✗` - Error
@@ -110,14 +110,14 @@ summaries to make the tool pleasant to use and help users understand what's happ
 - `ℹ` - Info
 - `→` - Progress/Action
 
-**Rationale**:
+### Rationale
 
 - Visual consistency aids scanning
 - Hierarchical structure for detailed information
 - Unicode symbols are widely supported in modern terminals
 - Easy to parse visually
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Text-only prefixes** (SUCCESS, ERROR): Rejected - verbose, less visual
 - **Emoji-heavy**: Rejected - can be distracting, encoding issues
@@ -128,24 +128,24 @@ summaries to make the tool pleasant to use and help users understand what's happ
 **Decision**: Three-part error message structure:
 
 1. **What happened**: Clear description of the error
-2. **Why it happened**: Context and root cause (when known)
-3. **What to do**: Actionable next steps
+1. **Why it happened**: Context and root cause (when known)
+1. **What to do**: Actionable next steps
 
-**Example**:
+### Example
 
 ```text
 ✗ Failed to create directory: /path/to/papers/invalid
   Cause: Permission denied
   Action: Check directory permissions or choose a different location
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Follows CLI UX best practices
 - Reduces user frustration and support requests
 - Actionable guidance improves user experience
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Simple error strings**: Rejected - not helpful enough
 - **Exception stack traces**: Rejected - too technical for end users
@@ -160,13 +160,13 @@ summaries to make the tool pleasant to use and help users understand what's happ
 - Default to 80 columns if width cannot be detected
 - Allow override via environment variable (`COLUMNS`)
 
-**Rationale**:
+### Rationale
 
 - Professional appearance across different terminal sizes
 - Prevents text truncation or awkward wrapping
 - Standard practice in CLI tools
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Fixed 80 columns**: Rejected - wastes space on modern wide terminals
 - **No wrapping**: Rejected - poor UX on narrow terminals
@@ -177,16 +177,16 @@ summaries to make the tool pleasant to use and help users understand what's happ
 **Decision**: Support three output modes:
 
 1. **Interactive** (default): Full formatting, colors, progress bars
-2. **Quiet**: Minimal output, errors only
-3. **Verbose**: Detailed output with debug information
+1. **Quiet**: Minimal output, errors only
+1. **Verbose**: Detailed output with debug information
 
-**Rationale**:
+### Rationale
 
 - Flexibility for different use cases (interactive vs. scripted)
 - Standard pattern in Unix CLI tools
 - Easy to implement with flag-based toggling
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - **Single mode**: Rejected - not flexible enough
 - **Five+ modes**: Rejected - unnecessary complexity
@@ -202,7 +202,7 @@ output_formatting/
 ├── progress.py              # Progress indicator implementations
 ├── messages.py              # Message template definitions
 └── colors.py                # Color code constants and terminal detection
-```
+```text
 
 ### Key Interfaces
 
@@ -240,7 +240,7 @@ class OutputFormatter:
 
     def summary(self, title: str, items: Dict[str, Any]) -> None:
         """Print formatted summary with key-value pairs."""
-```
+```text
 
 #### ProgressIndicator
 
@@ -253,15 +253,15 @@ class ProgressIndicator(Protocol):
 
     def close(self) -> None:
         """Clean up and finalize progress display."""
-```
+```text
 
 ### Integration Points
 
 1. **CLI Argument Parser**: Receives `--quiet`, `--verbose`, `--no-color` flags
-2. **Error Handling**: Catches exceptions and formats with `formatter.error()`
-3. **File Operations**: Reports progress during file creation/copying
-4. **Validation**: Uses `formatter.warning()` for validation issues
-5. **Completion**: Generates summary with `formatter.summary()`
+1. **Error Handling**: Catches exceptions and formats with `formatter.error()`
+1. **File Operations**: Reports progress during file creation/copying
+1. **Validation**: Uses `formatter.warning()` for validation issues
+1. **Completion**: Generates summary with `formatter.summary()`
 
 ## References
 
@@ -311,9 +311,9 @@ This section will be populated during the implementation phase with:
 
 **Status**: Planning phase complete - ready for test/implementation phases
 
-**Next Steps**:
+### Next Steps
 
 1. Review this design with senior architects
-2. Address any feedback or concerns
-3. Proceed with test phase (Issue #775)
-4. Begin implementation phase (Issue #776)
+1. Address any feedback or concerns
+1. Proceed with test phase (Issue #775)
+1. Begin implementation phase (Issue #776)

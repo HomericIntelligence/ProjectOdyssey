@@ -10,7 +10,7 @@ This guide explains how to install and use the ML Odyssey benchmarking infrastru
 
 **Package**: `benchmarks-0.1.0.tar.gz`
 
-**Contents**:
+### Contents
 
 - Benchmark execution scripts (Mojo)
 - Baseline comparison tools
@@ -26,7 +26,7 @@ This guide explains how to install and use the ML Odyssey benchmarking infrastru
 
 ```bash
 tar -xzf benchmarks-0.1.0.tar.gz
-```
+```text
 
 This will create a `benchmarks/` directory with the following structure:
 
@@ -39,14 +39,14 @@ benchmarks/
 │   ├── run_benchmarks.mojo        # Main benchmark runner
 │   └── compare_results.mojo       # Baseline comparison tool
 └── results/                       # Results directory (initially empty)
-```
+```text
 
 1. Verify installation:
 
 ```bash
 cd benchmarks
 ls -la scripts/
-```
+```text
 
 ### System Requirements
 
@@ -69,13 +69,13 @@ Execute all benchmarks:
 
 ```bash
 mojo benchmarks/scripts/run_benchmarks.mojo
-```
+```text
 
 Output will be written to:
 
 ```text
 benchmarks/results/{timestamp}_results.json
-```
+```text
 
 ### Comparing Results to Baseline
 
@@ -85,14 +85,14 @@ Compare your results against the baseline:
 mojo benchmarks/scripts/compare_results.mojo \
   --baseline benchmarks/baselines/baseline_results.json \
   --current benchmarks/results/{timestamp}_results.json
-```
+```text
 
-**Exit codes**:
+### Exit codes
 
 - `0` - No performance regressions detected
 - `1` - Performance regressions detected (>10% slowdown)
 
-**Regression severity levels**:
+### Regression severity levels
 
 - **Minor**: 10-20% slowdown (warning)
 - **Moderate**: 20-50% slowdown (requires investigation)
@@ -106,13 +106,13 @@ The distribution includes automated benchmark execution via GitHub Actions.
 
 Location: `.github/workflows/benchmark.yml`
 
-**Triggers**:
+### Triggers
 
 - Manual dispatch (`workflow_dispatch`)
 - Scheduled nightly runs (2 AM UTC)
 - Pull requests with `benchmark` label
 
-**Features**:
+### Features
 
 - Matrix strategy for parallel execution
 - Baseline comparison
@@ -128,7 +128,7 @@ gh workflow run benchmark.yml
 
 # Or via GitHub web interface
 # Actions → Performance Benchmarks → Run workflow
-```
+```text
 
 ### PR Integration
 
@@ -136,21 +136,21 @@ Add the `benchmark` label to any PR to trigger benchmarks:
 
 ```bash
 gh pr edit <PR_NUMBER> --add-label benchmark
-```
+```text
 
 ## Benchmark Suites
 
 The workflow supports three benchmark suites:
 
 1. **tensor-ops** - Tensor operation benchmarks
-2. **model-training** - Training loop benchmarks
-3. **data-loading** - Data pipeline benchmarks
+1. **model-training** - Training loop benchmarks
+1. **data-loading** - Data pipeline benchmarks
 
 Run specific suite:
 
 ```bash
 gh workflow run benchmark.yml -f suite=tensor-ops
-```
+```text
 
 ## Verification
 
@@ -159,7 +159,7 @@ gh workflow run benchmark.yml -f suite=tensor-ops
 ```bash
 cd benchmarks
 mojo scripts/run_benchmarks.mojo
-```
+```text
 
 Expected output:
 
@@ -171,7 +171,7 @@ Running benchmarks...
 - matmul_large: XX.X ms
 
 Results written to: results/{timestamp}_results.json
-```
+```text
 
 ### Test Baseline Comparison
 
@@ -179,7 +179,7 @@ Results written to: results/{timestamp}_results.json
 mojo scripts/compare_results.mojo \
   --baseline baselines/baseline_results.json \
   --current results/{latest_timestamp}_results.json
-```
+```text
 
 Expected output:
 
@@ -191,13 +191,13 @@ Comparing results...
 ✓ matmul_large: 2.1% slower
 
 No regressions detected
-```
+```text
 
 ## Troubleshooting
 
 ### Issue: Benchmark fails to run
 
-**Solution**:
+### Solution
 
 1. Verify Mojo compiler is installed: `mojo --version`
 1. Check file permissions: `chmod +x scripts/*.mojo`
@@ -205,7 +205,7 @@ No regressions detected
 
 ### Issue: Comparison fails
 
-**Solution**:
+### Solution
 
 1. Verify baseline file exists: `ls baselines/baseline_results.json`
 1. Check result file exists: `ls results/*.json`
@@ -213,7 +213,7 @@ No regressions detected
 
 ### Issue: CI workflow doesn't run
 
-**Solution**:
+### Solution
 
 1. Verify workflow file is in `.github/workflows/`
 1. Check workflow triggers are configured correctly
@@ -229,14 +229,14 @@ Baseline results should only be updated after verification:
 
 ```bash
 cp results/{timestamp}_results.json baselines/baseline_results.json
-```
+```text
 
 1. Commit updated baseline:
 
 ```bash
 git add baselines/baseline_results.json
 git commit -m "chore(benchmarks): update baseline results"
-```
+```text
 
 1. Document reason for baseline update in commit message
 
@@ -246,13 +246,13 @@ To remove the benchmark tooling:
 
 ```bash
 rm -rf benchmarks/
-```
+```text
 
 To remove CI/CD integration:
 
 ```bash
 rm .github/workflows/benchmark.yml
-```
+```text
 
 ## Support
 

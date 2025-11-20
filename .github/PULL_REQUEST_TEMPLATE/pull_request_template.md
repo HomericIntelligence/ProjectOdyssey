@@ -104,7 +104,7 @@ Closes #
 ### Migration path
 
 1. Step 1 to migrate
-2. Step 2 to migrate
+1. Step 2 to migrate
 
 ## Screenshots
 

@@ -28,8 +28,8 @@ including rendering templates with paper-specific metadata and writing files to 
 The file generation system is the final step in the paper scaffolding workflow:
 
 1. **Template System** → Renders templates with paper-specific variables
-2. **Directory Generator** → Creates folder structure
-3. **File Generator** (this component) → Writes rendered content to files
+1. **Directory Generator** → Creates folder structure
+1. **File Generator** (this component) → Writes rendered content to files
 
 ### Key Architectural Decisions
 
@@ -37,14 +37,14 @@ The file generation system is the final step in the paper scaffolding workflow:
 
 **Decision**: Generate files in a specific, consistent order: README → Implementation → Tests → Documentation
 
-**Rationale**:
+### Rationale
 
 - README first provides immediate context if generation fails mid-process
 - Implementation stubs before tests follows TDD workflow expectations
 - Documentation last as it may reference other files
 - Consistent ordering aids debugging and validation
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Alphabetical order: Rejected - no semantic meaning
 - Parallel generation: Rejected - adds complexity without clear benefit for this use case
@@ -53,13 +53,13 @@ The file generation system is the final step in the paper scaffolding workflow:
 
 **Decision**: Never overwrite existing files without explicit warning/confirmation
 
-**Rationale**:
+### Rationale
 
 - Prevents accidental data loss
 - Aligns with principle of least surprise (POLA)
 - Supports incremental/partial regeneration workflows
 
-**Implementation**:
+### Implementation
 
 - Check file existence before writing
 - Return clear error messages indicating which files already exist
@@ -69,13 +69,13 @@ The file generation system is the final step in the paper scaffolding workflow:
 
 **Decision**: Set permissions to standard repository defaults (0644 for files, 0755 for directories)
 
-**Rationale**:
+### Rationale
 
 - Consistent with Unix conventions
 - Readable by all, writable by owner
 - No execute permissions needed for source files
 
-**Platform Considerations**:
+### Platform Considerations
 
 - Use Python's `os.chmod()` with explicit mode values
 - Handle Windows gracefully (permissions may be no-op)
@@ -84,13 +84,13 @@ The file generation system is the final step in the paper scaffolding workflow:
 
 **Decision**: UTF-8 encoding, platform-native line endings
 
-**Rationale**:
+### Rationale
 
 - UTF-8 is universal standard for source code
 - Git handles line ending normalization via `.gitattributes`
 - Platform-native avoids surprising developers on different OSes
 
-**Implementation**:
+### Implementation
 
 - Python default text mode handles line endings
 - Explicit `encoding='utf-8'` in all file operations
@@ -99,13 +99,13 @@ The file generation system is the final step in the paper scaffolding workflow:
 
 **Decision**: Validate rendered content before writing files
 
-**Rationale**:
+### Rationale
 
 - Catch template errors early (before filesystem changes)
 - Ensures atomic-like behavior (all files valid or none written)
 - Reduces cleanup complexity on errors
 
-**Validation Checks**:
+### Validation Checks
 
 - Content is non-empty
 - Content is valid UTF-8
@@ -138,7 +138,7 @@ def generate_files(
         ValidationError: If rendered content fails validation
         PermissionError: If insufficient permissions to write files
     """
-```
+```text
 
 #### Result Type
 
@@ -149,7 +149,7 @@ class GenerationResult:
     skipped_files: List[Path]  # Already existed
     errors: List[str]
     success: bool
-```
+```text
 
 #### File Type Mapping
 
@@ -169,12 +169,12 @@ class GenerationResult:
    - Invalid file paths (outside target directory)
    - Content validation failures
 
-2. **Generation Errors** (may leave partial state):
+1. **Generation Errors** (may leave partial state):
    - Permission errors during file writing
    - Disk space errors
    - I/O errors
 
-3. **Post-generation Errors** (files created, but verification failed):
+1. **Post-generation Errors** (files created, but verification failed):
    - Permission setting failures
    - Validation of written files
 
@@ -221,12 +221,12 @@ The output validation component (issue #754) expects:
 Refer to issue #750 for comprehensive test plan. Key test scenarios:
 
 1. Successful generation of all file types
-2. Overwrite protection (error when files exist)
-3. Forced overwrite with flag
-4. Partial failure handling
-5. Permission errors
-6. Invalid file paths
-7. Content validation failures
+1. Overwrite protection (error when files exist)
+1. Forced overwrite with flag
+1. Partial failure handling
+1. Permission errors
+1. Invalid file paths
+1. Content validation failures
 
 ## References
 

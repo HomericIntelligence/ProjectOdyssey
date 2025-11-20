@@ -19,14 +19,14 @@ This skill generates plan documentation following ML Odyssey's standard 9-sectio
 All plan.md files must include these 9 sections:
 
 1. **Title** - Component name
-2. **Overview** - Brief description (2-3 sentences)
-3. **Parent Plan** - Link to parent or "None (top-level)"
-4. **Child Plans** - Links to child plans or "None (leaf node)"
-5. **Inputs** - Prerequisites and dependencies
-6. **Outputs** - Deliverables and artifacts
-7. **Steps** - Ordered implementation steps
-8. **Success Criteria** - Measurable completion criteria
-9. **Notes** - Additional context and considerations
+1. **Overview** - Brief description (2-3 sentences)
+1. **Parent Plan** - Link to parent or "None (top-level)"
+1. **Child Plans** - Links to child plans or "None (leaf node)"
+1. **Inputs** - Prerequisites and dependencies
+1. **Outputs** - Deliverables and artifacts
+1. **Steps** - Ordered implementation steps
+1. **Success Criteria** - Measurable completion criteria
+1. **Notes** - Additional context and considerations
 
 ## Usage
 
@@ -38,7 +38,7 @@ All plan.md files must include these 9 sections:
 
 # Example: Create plan for new subsection
 ./scripts/generate_plan.sh "authentication-module" "notes/plan/02-shared-library"
-```
+```text
 
 ### Key Principles
 
@@ -92,14 +92,14 @@ Or: "None (leaf node)" for level 4
 ## Notes
 
 Additional context, considerations, or references.
-```
+```text
 
 ## After Creating Plan
 
 1. **Update parent plan's** "Child Plans" section
-2. **Regenerate GitHub issues**: `python3 scripts/regenerate_github_issues.py --section <section>`
-3. **Verify links** work correctly (relative paths)
-4. **Test issue creation** (dry-run first)
+1. **Regenerate GitHub issues**: `python3 scripts/regenerate_github_issues.py --section <section>`
+1. **Verify links** work correctly (relative paths)
+1. **Test issue creation** (dry-run first)
 
 ## Error Handling
 
@@ -110,17 +110,17 @@ Additional context, considerations, or references.
 
 ## Examples
 
-**Generate new component plan:**
+### Generate new component plan:
 
 ```bash
 ./scripts/generate_plan.sh "tensor-operations" "notes/plan/02-shared-library/01-core"
-```
+```text
 
-**Validate existing plan:**
+### Validate existing plan:
 
 ```bash
 ./scripts/validate_plan.sh "notes/plan/02-shared-library/01-core/plan.md"
-```
+```text
 
 ## Scripts Available
 

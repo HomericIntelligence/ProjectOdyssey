@@ -8,10 +8,10 @@ Effective orchestration is critical for the multi-level agent system to function
 ## Core Principles
 
 1. **Clear Scope Boundaries**: Each level has well-defined scope
-2. **Explicit Delegation**: Higher levels delegate specific tasks
-3. **Horizontal Coordination**: Same-level agents coordinate directly
-4. **Vertical Escalation**: Issues bubble up when unresolvable
-5. **Status Transparency**: All agents report progress clearly
+1. **Explicit Delegation**: Higher levels delegate specific tasks
+1. **Horizontal Coordination**: Same-level agents coordinate directly
+1. **Vertical Escalation**: Issues bubble up when unresolvable
+1. **Status Transparency**: All agents report progress clearly
 
 ---
 
@@ -32,9 +32,9 @@ Module Design Agents
 Component Specialists
   ↓ Decompose components into functions
 Implementation Engineers
-```
+```text
 
-**Example**:
+### Example
 
 ```text
 Task: "Implement LeNet-5 paper"
@@ -58,7 +58,7 @@ Senior Implementation Specialist:
 
   - Breaks into classes: Conv2D, Pool, Dense layers
   - Delegates each class to Implementation Engineers
-```
+```text
 
 ### Pattern 2: Specialization Delegation
 
@@ -70,9 +70,9 @@ Section Orchestrator
   ├─> Architecture Design Agent (for architecture tasks)
   ├─> Security Design Agent (for security tasks)
   └─> Integration Design Agent (for integration tasks)
-```
+```text
 
-**Example**:
+### Example
 
 ```text
 Task: "Implement secure API authentication"
@@ -91,7 +91,7 @@ Security Implementation Specialist:
 
   - Implements auth logic
   - Delegates code generation to Implementation Engineer
-```
+```text
 
 ### Pattern 3: Parallel Delegation
 
@@ -103,7 +103,7 @@ Section Orchestrator
   ├─> Module Design Agent A (parallel)
   ├─> Module Design Agent B (parallel)
   └─> Module Design Agent C (parallel)
-```
+```text
 
 **Example** (5-Phase Workflow):
 
@@ -116,7 +116,7 @@ Component Specialist delegates in parallel to:
   └─> Documentation Writer (write docs)
 
 All three work simultaneously in separate worktrees
-```
+```text
 
 ### Pattern 4: Sequential Delegation
 
@@ -130,9 +130,9 @@ Section Orchestrator
   Step 2 ↓ Delegate to Agent B
         ↓ Wait for completion
   Step 3 ↓ Delegate to Agent C
-```
+```text
 
-**Example**:
+### Example
 
 ```text
 Plan Phase must complete before Test/Impl/Package:
@@ -145,7 +145,7 @@ Plan Phase must complete before Test/Impl/Package:
    ↓ Specialists work in parallel
 3. Section Orchestrator → All agents (Cleanup)
 
-```
+```text
 
 ---
 
@@ -159,15 +159,15 @@ Plan Phase must complete before Test/Impl/Package:
 
 ```text
 Implementation Engineer A <──review──> Implementation Engineer B
-```
+```text
 
 #### Process
 
 1. Engineer A completes implementation
-2. Engineer A requests review from Engineer B
-3. Engineer B reviews code, provides feedback
-4. Engineer A addresses feedback
-5. Both sign off on completion
+1. Engineer A requests review from Engineer B
+1. Engineer B reviews code, provides feedback
+1. Engineer A addresses feedback
+1. Both sign off on completion
 
 #### Pattern: Interface Negotiation
 
@@ -175,16 +175,16 @@ Implementation Engineer A <──review──> Implementation Engineer B
 
 ```text
 Module Design Agent A <──negotiate──> Module Design Agent B
-```
+```text
 
 #### Interface Negotiation Process
 
 1. Agent A designs module A interface
-2. Agent B designs module B interface
-3. Both identify integration points
-4. Negotiate API contracts
-5. Document agreed interfaces
-6. Proceed with implementation
+1. Agent B designs module B interface
+1. Both identify integration points
+1. Negotiate API contracts
+1. Document agreed interfaces
+1. Proceed with implementation
 
 #### Pattern: Resource Coordination
 
@@ -194,15 +194,15 @@ Module Design Agent A <──negotiate──> Module Design Agent B
 Engineer A ─┐
            ├──> Shared Resource (file, database, etc.)
 Engineer B ─┘
-```
+```text
 
 #### Resource Coordination Process
 
 1. Engineers identify shared resource
-2. Coordinate timing to avoid conflicts
-3. Use git worktrees for file isolation
-4. Communicate through status updates
-5. Merge changes carefully
+1. Coordinate timing to avoid conflicts
+1. Use git worktrees for file isolation
+1. Communicate through status updates
+1. Merge changes carefully
 
 ### Vertical Coordination (Across Levels)
 
@@ -218,7 +218,7 @@ Component Specialist
 Module Design Agent
   ↓ Summary Report
 Section Orchestrator
-```
+```text
 
 #### Report Format
 
@@ -251,7 +251,7 @@ Section Orchestrator
 - Write unit tests
 - Request code review
 
-```
+```text
 
 #### Pattern: Specification Cascade
 
@@ -264,7 +264,7 @@ Component Specialist
   ↓ Function Specification
 Implementation Engineer
   ↓ Code Implementation
-```
+```text
 
 #### Specification Format
 
@@ -306,7 +306,7 @@ Security Requirements:
 - Token: JWT with HS256
 - Session timeout: 30 minutes
 
-```
+```text
 
 ---
 
@@ -323,9 +323,9 @@ Implementation Engineer (blocked)
 Component Specialist
   ├─> Can resolve? → Resolve and respond
   └─> Cannot resolve? → Escalate to Module Design Agent
-```
+```text
 
-**Example**:
+### Example
 
 ```text
 Blocker: "Database schema not defined"
@@ -345,7 +345,7 @@ Architecture Design Agent:
   - Designs database schema
   - Provides specification
   - Issue resolved, work continues
-```
+```text
 
 ### Pattern: Conflict Escalation
 
@@ -356,9 +356,9 @@ Architecture Design Agent:
 Agent A (disagrees) ──┐
                       ├──> Common Superior (decides)
 Agent B (disagrees) ──┘
-```
+```text
 
-**Example**:
+### Example
 
 ```text
 Conflict: Choice of data structure (list vs dict)
@@ -373,7 +373,7 @@ Both escalate to:
     - Decides: "Use dict, lookups more important"
     - Provides rationale
     - Both engineers implement decision
-```
+```text
 
 ### Pattern: Quality Escalation
 
@@ -388,7 +388,7 @@ Component Specialist
 Implementation Engineer
   ↓ Fixes issues
 Test Engineer (verifies fix)
-```
+```text
 
 ---
 
@@ -407,7 +407,7 @@ Module Design Agents
   ↓ Component design
 Component Specialists
   ↓ Detailed specifications
-```
+```text
 
 **Completion Criteria**: All plan.md files (local, task-relative) created and reviewed
 
@@ -418,7 +418,7 @@ Component Specialist
   ├─> Test Specialist → Test Engineers (parallel)
   ├─> Implementation Specialist → Implementation Engineers (parallel)
   └─> Documentation Specialist → Documentation Writers (parallel)
-```
+```text
 
 **Coordination**: TDD approach - tests and implementation coordinate
 
@@ -433,7 +433,7 @@ Section Orchestrators
   ↓ Prioritize cleanup
 All agents
   ↓ Execute cleanup tasks
-```
+```text
 
 ---
 
@@ -449,7 +449,7 @@ issue-63-test-agents/          → Test Design Specialist
 issue-64-impl-agents/          → Implementation Specialists
 issue-65-pkg-agents/           → Documentation Specialist
 issue-66-cleanup-agents/       → All agents
-```
+```text
 
 ### Cross-Worktree Coordination
 
@@ -460,7 +460,7 @@ issue-66-cleanup-agents/       → All agents
 ```bash
 cd worktrees/issue-64-impl-agents
 git cherry-pick abc123  # Pick test fixture commit
-```
+```text
 
 #### Option 2: Temporary merge
 
@@ -471,7 +471,7 @@ git merge --no-commit issue-63-test-agents
 # Use merged state
 
 git reset --hard  # Clean up if needed
-```
+```text
 
 #### Option 3: Coordinate through specifications
 
@@ -480,7 +480,7 @@ Test Engineer: Commits test fixtures to issue-63 branch
 Implementation Engineer: Reads specifications (local plan.md or tracked docs) for fixture specs
 Implementation Engineer: Creates fixtures independently in issue-64
 After both complete: Package Engineer merges both
-```
+```text
 
 **Note**: plan.md files are task-relative. For team-wide coordination, use
 tracked documentation in notes/issues/.
@@ -528,7 +528,7 @@ Questions for Next Agent:
 
 - [Any clarifications needed]
 
-```
+```text
 
 ### Blockers
 
@@ -546,7 +546,7 @@ Impact: [How this affects timeline]
 Attempted Solutions: [What you've tried]
 Escalation To: [Who should resolve this]
 Priority: [High/Medium/Low]
-```
+```text
 
 ---
 
@@ -568,11 +568,11 @@ Priority: [High/Medium/Low]
 Escalate when:
 
 1. **Scope Exceeds Authority**: Decision impacts levels above
-2. **Resource Conflicts**: Multiple agents need same resource
-3. **Timeline Issues**: Work blocked or significantly delayed
-4. **Quality Concerns**: Standards violated or quality at risk
-5. **Technical Disagreements**: Agents cannot reach consensus
-6. **Requirements Unclear**: Specifications incomplete or contradictory
+1. **Resource Conflicts**: Multiple agents need same resource
+1. **Timeline Issues**: Work blocked or significantly delayed
+1. **Quality Concerns**: Standards violated or quality at risk
+1. **Technical Disagreements**: Agents cannot reach consensus
+1. **Requirements Unclear**: Specifications incomplete or contradictory
 
 ---
 
@@ -678,7 +678,7 @@ Escalate when:
 10. Foundation Orchestrator
     - Confirms completion
     - Updates Chief Architect
-```
+```text
 
 ### Example 2: Conflict Resolution
 
@@ -702,7 +702,7 @@ Escalate when:
 7. Implementation Engineer updates code
 8. Conflict resolved
 
-```
+```text
 
 ---
 
@@ -751,25 +751,25 @@ should reference this section rather than duplicating content.
 
 #### Step 3: Respond
 
-**For Transient Errors**:
+### For Transient Errors
 
 1. Wait with exponential backoff
-2. Retry up to 3 times
-3. If still failing, reclassify as blocker
+1. Retry up to 3 times
+1. If still failing, reclassify as blocker
 
-**For Recoverable Errors**:
+### For Recoverable Errors
 
 1. Clarify specification
-2. Provide additional context
-3. Re-delegate with improved instructions
-4. Document lesson learned in `/notes/issues/<issue-number>/README.md`
+1. Provide additional context
+1. Re-delegate with improved instructions
+1. Document lesson learned in `/notes/issues/<issue-number>/README.md`
 
-**For Blockers**:
+### For Blockers
 
 1. Document what's blocked and impact
-2. Document what you've tried
-3. Escalate to immediate superior with clear report
-4. Continue with non-blocked tasks if possible
+1. Document what you've tried
+1. Escalate to immediate superior with clear report
+1. Continue with non-blocked tasks if possible
 
 ### Escalation Report Format
 
@@ -804,7 +804,7 @@ should reference this section rather than duplicating content.
 ### Recommended Action
 
 - [Your suggestion for resolution]
-```
+```text
 
 ### Recovery Strategies
 
@@ -844,18 +844,18 @@ should reference this section rather than duplicating content.
 After resolving errors:
 
 1. **Document** the error and resolution in `/notes/issues/<issue-number>/README.md`
-2. **Update** specifications to prevent recurrence
-3. **Share** lessons with peer agents (if applicable)
-4. **Improve** delegation instructions for future tasks
+1. **Update** specifications to prevent recurrence
+1. **Share** lessons with peer agents (if applicable)
+1. **Improve** delegation instructions for future tasks
 
 ### GitHub Issue Requirement
 
 **All work requires a GitHub issue**. If an error occurs and no issue exists:
 
 1. **STOP** work immediately
-2. **Create issue** using `gh issue create` or escalate to have issue created
-3. **Document** error in `/notes/issues/<issue-number>/README.md`
-4. **Resume** work after issue is created
+1. **Create issue** using `gh issue create` or escalate to have issue created
+1. **Document** error in `/notes/issues/<issue-number>/README.md`
+1. **Resume** work after issue is created
 
 No outputs should be created outside `/notes/issues/<issue-number>/` directory.
 

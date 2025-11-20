@@ -21,22 +21,22 @@ This skill provides a complete workflow for implementing a GitHub issue from sta
 ```bash
 # Run complete workflow
 ./scripts/implement_issue.sh <issue-number>
-```
+```text
 
 This executes:
 
 1. **Fetch issue details** from GitHub
-2. **Create branch** with naming convention
-3. **Create worktree** (optional)
-4. **Generate documentation** in `/notes/issues/<number>/`
+1. **Create branch** with naming convention
+1. **Create worktree** (optional)
+1. **Generate documentation** in `/notes/issues/<number>/`
 
 ### Phase 2: Implementation
 
 1. **Read issue requirements** carefully
-2. **Write tests first** (TDD)
-3. **Implement functionality**
-4. **Run tests** and verify passing
-5. **Update documentation** as needed
+1. **Write tests first** (TDD)
+1. **Implement functionality**
+1. **Run tests** and verify passing
+1. **Update documentation** as needed
 
 ### Phase 3: Quality Checks
 
@@ -44,12 +44,12 @@ This executes:
 # Run all quality checks
 ./scripts/check_quality.sh
 
-# This runs:
+# This runs
 # - mojo format (if Mojo code)
 # - pre-commit hooks
 # - tests
 # - linters
-```
+```text
 
 ### Phase 4: Commit and PR
 
@@ -59,7 +59,7 @@ This executes:
 
 # Push and create PR
 ./scripts/create_pr.sh <issue-number>
-```
+```text
 
 ## Step-by-Step Guide
 
@@ -67,7 +67,7 @@ This executes:
 
 ```bash
 ./scripts/implement_issue.sh 42
-```
+```text
 
 Output:
 
@@ -76,7 +76,7 @@ Output:
 ✅ Branch created: 42-add-tensor-ops
 ✅ Documentation: /notes/issues/42/README.md
 ✅ Ready to implement
-```
+```text
 
 ### 2. Read Requirements
 
@@ -86,7 +86,7 @@ gh issue view 42
 
 # Read documentation
 cat /notes/issues/42/README.md
-```
+```text
 
 ### 3. Implement with TDD
 
@@ -97,7 +97,7 @@ mojo-test-generate tensor_ops
 # Write tests
 # Implement code to pass tests
 # Refactor
-```
+```text
 
 ### 4. Quality Check
 
@@ -110,7 +110,7 @@ mojo test tests/
 
 # Pre-commit
 pre-commit run --all-files
-```
+```text
 
 ### 5. Create PR
 
@@ -129,7 +129,7 @@ Closes #42"
 # Push and create PR
 git push -u origin 42-add-tensor-ops
 gh pr create --issue 42
-```
+```text
 
 ## Branch Naming Convention
 
@@ -151,7 +151,7 @@ Follow conventional commits:
 <body>
 
 Closes #<issue-number>
-```
+```text
 
 Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 
@@ -176,7 +176,7 @@ Implement basic tensor operations
 ## Implementation Notes
 - Used SIMD for performance
 - Added edge case handling
-```
+```text
 
 ## Error Handling
 
@@ -199,21 +199,21 @@ Before creating PR:
 
 ## Examples
 
-**Implement feature:**
+### Implement feature:
 
 ```bash
 ./scripts/implement_issue.sh 42
-# ... make changes ...
+# ... make changes
 ./scripts/create_pr.sh 42
-```
+```text
 
-**Implement bugfix:**
+### Implement bugfix:
 
 ```bash
 ./scripts/implement_issue.sh 73
-# ... fix bug and add test ...
+# ... fix bug and add test
 ./scripts/create_pr.sh 73
-```
+```text
 
 ## Scripts Available
 

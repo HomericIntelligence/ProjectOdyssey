@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Determine file paths based on directory structure
-2. Render each template with paper metadata
-3. Write rendered content to target files
-4. Set appropriate file permissions
+1. Render each template with paper metadata
+1. Write rendered content to target files
+1. Set appropriate file permissions
 
 ## Success Criteria
 

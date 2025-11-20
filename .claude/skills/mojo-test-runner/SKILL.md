@@ -28,7 +28,7 @@ mojo test tests/test_tensor.mojo
 
 # Run with verbose output
 mojo test -v tests/
-```
+```text
 
 ### Run Specific Tests
 
@@ -53,7 +53,7 @@ mojo test -v tests/
 
 # Run tests for paper with type filter
 ./scripts/run_tests.sh --paper bert --unit
-```
+```text
 
 ### Test Output
 
@@ -65,7 +65,7 @@ test_tensor_multiplication ... ok
 test_edge_case_empty ... ok
 
 4 tests, 4 passed, 0 failed
-```
+```text
 
 ## Test Types
 
@@ -77,7 +77,7 @@ Fast, isolated tests for individual functions/classes:
 
 ```bash
 mojo test tests/unit/
-```
+```text
 
 ### Integration Tests
 
@@ -87,7 +87,7 @@ Tests for component interactions:
 
 ```bash
 mojo test tests/integration/
-```
+```text
 
 ### Performance Tests
 
@@ -97,7 +97,7 @@ Benchmarks and performance validation:
 
 ```bash
 mojo test tests/performance/
-```
+```text
 
 ## Test Discovery
 
@@ -115,7 +115,7 @@ fn test_my_feature() raises:
 # This won't be discovered (no test_ prefix)
 fn my_helper_function():
     pass
-```
+```text
 
 ## Paper-Specific Testing
 
@@ -133,7 +133,7 @@ Run tests for a specific paper implementation:
 # Combine with test type filters
 ./scripts/run_tests.sh --paper bert --unit
 ./scripts/run_tests.sh --paper gpt-2 --integration
-```
+```text
 
 ### Features
 
@@ -167,7 +167,7 @@ Error: Multiple papers match 'le':
   papers/lenet-7
 
 Please be more specific.
-```
+```text
 
 ### Use Cases
 
@@ -191,14 +191,14 @@ test_tensor_addition
   Got: 4
 
 1 test failed, 1 passed
-```
+```text
 
-**Actions:**
+### Actions:
 
 1. Review failure message
-2. Fix code or test
-3. Re-run tests
-4. Verify passing
+1. Fix code or test
+1. Re-run tests
+1. Verify passing
 
 ### Common Issues
 
@@ -214,21 +214,21 @@ test_tensor_addition
 ```bash
 mojo test tests/
 # Shows pass/fail summary
-```
+```text
 
 ### Verbose Report
 
 ```bash
 mojo test -v tests/
 # Shows detailed output for each test
-```
+```text
 
 ### Coverage Report (Future)
 
 ```bash
 # When coverage tooling available
 ./scripts/run_tests.sh --coverage
-```
+```text
 
 ## CI Integration
 
@@ -237,7 +237,7 @@ Tests run automatically in CI:
 ```yaml
 - name: Run Mojo Tests
   run: mojo test tests/
-```
+```text
 
 ## TDD Workflow
 
@@ -247,13 +247,13 @@ Tests run automatically in CI:
    mojo test tests/test_feature.mojo  # Fails
    ```
 
-2. **Implement minimal code** (Green)
+1. **Implement minimal code** (Green)
 
    ```bash
    mojo test tests/test_feature.mojo  # Passes
    ```
 
-3. **Refactor** (Refactor)
+1. **Refactor** (Refactor)
 
    ```bash
    mojo test tests/test_feature.mojo  # Still passes
@@ -261,29 +261,29 @@ Tests run automatically in CI:
 
 ## Examples
 
-**Run all tests:**
+### Run all tests:
 
 ```bash
 ./scripts/run_tests.sh
-```
+```text
 
-**Run specific file:**
+### Run specific file:
 
 ```bash
 ./scripts/run_tests.sh test_tensor
-```
+```text
 
-**Run unit tests only:**
+### Run unit tests only:
 
 ```bash
 ./scripts/run_tests.sh --unit
-```
+```text
 
-**Watch mode (re-run on changes):**
+### Watch mode (re-run on changes):
 
 ```bash
 ./scripts/run_tests.sh --watch
-```
+```text
 
 ## Scripts Available
 
@@ -294,11 +294,11 @@ Tests run automatically in CI:
 ## Best Practices
 
 1. **Run tests frequently** - After each small change
-2. **Test first** - Write tests before implementation (TDD)
-3. **Fast tests** - Keep unit tests fast (< 1s each)
-4. **Isolated tests** - No dependencies between tests
-5. **Clear names** - Test names describe what they test
-6. **Edge cases** - Test boundaries and error conditions
+1. **Test first** - Write tests before implementation (TDD)
+1. **Fast tests** - Keep unit tests fast (< 1s each)
+1. **Isolated tests** - No dependencies between tests
+1. **Clear names** - Test names describe what they test
+1. **Edge cases** - Test boundaries and error conditions
 
 ## Performance Testing
 
@@ -318,7 +318,7 @@ fn test_performance_simd() raises:
     let result = b.run(work)
     # Assert performance requirements
     assert_true(result.mean < 1000)  # Must be < 1000ns
-```
+```text
 
 ## Integration with Other Skills
 

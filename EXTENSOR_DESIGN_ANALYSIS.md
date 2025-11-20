@@ -114,13 +114,14 @@ The plan structure findings remain the same as the previous analysis:
 
 **Key Feature**: Helper function `_reduce_broadcast_dims` handles gradient reduction for broadcasted operations.
 
-**Broadcasting Example**:
+### Broadcasting Example
+
 ```mojo
 # Forward: (3,4,5) + (5,) → (3,4,5)
 # Backward: grad_b must be reduced from (3,4,5) → (5)
 var (grad_a, grad_b) = add_backward(grad_output, shape_a, shape_b)
 # grad_b is automatically reduced to match original shape
-```
+```text
 
 #### **Matrix Backward Passes (2 functions)** ✅ COMPLETE
 
@@ -129,11 +130,12 @@ var (grad_a, grad_b) = add_backward(grad_output, shape_a, shape_b)
 | `matmul_backward` | 4 cases | ∂L/∂A = grad @ B^T<br>∂L/∂B = A^T @ grad | ✅ Complete |
 | `transpose_backward` | ND tensors | Reverse transpose | ✅ Complete |
 
-**Matmul Backward Cases**:
+### Matmul Backward Cases
+
 1. 2D @ 2D: `(m,k) @ (k,n)` → Standard matrix multiplication gradients
-2. 2D @ 1D: `(m,k) @ (k,)` → Matrix-vector product (linear layer)
-3. 1D @ 2D: `(k,) @ (k,n)` → Vector-matrix product
-4. Batched (3D+): Batch matrix multiplication
+1. 2D @ 1D: `(m,k) @ (k,)` → Matrix-vector product (linear layer)
+1. 1D @ 2D: `(k,) @ (k,n)` → Vector-matrix product
+1. Batched (3D+): Batch matrix multiplication
 
 **Critical for Training**: Case 2 (2D@1D) is essential for neural network layers.
 
@@ -146,7 +148,8 @@ var (grad_a, grad_b) = add_backward(grad_output, shape_a, shape_b)
 | `max_reduce_backward` | Winner-take-all with tie handling | ✅ axis=-1, specific axes | ✅ Complete |
 | `min_reduce_backward` | Winner-take-all with tie handling | ✅ axis=-1, specific axes | ✅ Complete |
 
-**Key Features**:
+### Key Features
+
 - Supports both global reduction (axis=-1) and axis-specific reduction
 - Max/min backward handles ties by splitting gradient equally
 - Keepdims parameter handled correctly
@@ -175,7 +178,8 @@ var (grad_a, grad_b) = add_backward(grad_output, shape_a, shape_b)
 | `softmax_backward` | Jacobian: yi(δij - yj) | Log-sum-exp trick | No | ✅ Complete |
 | `gelu_backward` | Φ(x) + x*φ(x) or tanh approx | Float32 intermediates | No | ✅ Complete |
 
-**Critical Features**:
+### Critical Features
+
 - **PReLU**: Returns **both** grad_input AND grad_alpha (learnable parameter)
 - **Softmax**: Uses full Jacobian matrix computation with normalization constraint
 - **GELU**: Supports both exact (Gaussian CDF) and approximate (tanh) formulas
@@ -184,7 +188,7 @@ var (grad_a, grad_b) = add_backward(grad_output, shape_a, shape_b)
 
 **Test Coverage**: 31 comprehensive tests across all activation functions (100% pass rate)
 
-### 2.3 Activation Functions (Forward Pass) ✅ NEW!
+### 2.3 Activation Functions (Forward Pass) ✅ NEW
 
 | Function | Formula | Numerical Stability | DType Support | Status |
 |----------|---------|---------------------|---------------|--------|
@@ -196,7 +200,7 @@ var (grad_a, grad_b) = add_backward(grad_output, shape_a, shape_b)
 | `softmax` | `exp(x)/Σexp(x)` | **Log-sum-exp trick** | Float16/32/64 | ✅ Complete |
 | `gelu` | `x*Φ(x)` (exact or approx) | **Tanh approximation** | Float16/32/64 | ✅ Complete |
 
-**Numerical Stability Techniques**:
+### Numerical Stability Techniques
 
 1. **Sigmoid Input Clipping** (±20): Prevents exp() overflow
    ```mojo
@@ -205,7 +209,7 @@ var (grad_a, grad_b) = add_backward(grad_output, shape_a, shape_b)
    return 1.0 / (1.0 + exp(-clipped))
    ```
 
-2. **Softmax Log-Sum-Exp Trick**: Handles logits > 1000
+1. **Softmax Log-Sum-Exp Trick**: Handles logits > 1000
    ```mojo
    var max_val = max_reduce(x, axis=axis)
    var shifted = subtract(x, max_val)  # Shift to prevent overflow
@@ -214,12 +218,12 @@ var (grad_a, grad_b) = add_backward(grad_output, shape_a, shape_b)
    return divide(exp_x, sum_exp)
    ```
 
-3. **GELU Tanh Approximation**: Used in BERT/GPT
+1. **GELU Tanh Approximation**: Used in BERT/GPT
    ```mojo
    # Approximation: 0.5*x*(1 + tanh(sqrt(2/pi)*(x + 0.044715*x^3)))
    ```
 
-4. **Float16 High-Precision Intermediates**: Compute in Float32, cast back
+1. **Float16 High-Precision Intermediates**: Compute in Float32, cast back
    ```mojo
    if dtype == DType.float16:
        # Upcast to float32 for computation
@@ -228,18 +232,19 @@ var (grad_a, grad_b) = add_backward(grad_output, shape_a, shape_b)
        return cast_to_float16(result_f32)
    ```
 
-### 2.4 Weight Initializers ✅ NEW!
+### 2.4 Weight Initializers ✅ NEW
 
 | Function | Formula | Distribution | Status |
 |----------|---------|--------------|--------|
 | `xavier_uniform` | U(-√(6/(fan_in+fan_out)), √(6/(fan_in+fan_out))) | Uniform | ✅ Complete |
 | `xavier_normal` | N(0, √(2/(fan_in+fan_out))) | Normal (Gaussian) | ✅ Complete |
 
-**Usage**:
+### Usage
+
 ```mojo
 # Initialize weights for a layer with 128 inputs, 64 outputs
 var W = xavier_uniform(128, 64, DynamicVector[Int](64, 128), DType.float32)
-```
+```text
 
 **Critical for Training**: Proper weight initialization prevents vanishing/exploding gradients.
 
@@ -321,7 +326,7 @@ for epoch in range(100):
     W2 = sgd_step(W2, grad_W2, learning_rate)  # ❌ NOT IMPLEMENTED
     b1 = sgd_step(b1, grad_b1, learning_rate)  # ❌ NOT IMPLEMENTED
     b2 = sgd_step(b2, grad_b2, learning_rate)  # ❌ NOT IMPLEMENTED
-```
+```text
 
 ### 4.2 Missing Components Analysis
 
@@ -360,7 +365,7 @@ fn binary_cross_entropy(logits: ExTensor, y_true: ExTensor) raises -> ExTensor:
     # Negate
     var zero = full(sum_terms.shape(), 0.0, sum_terms.dtype())
     return subtract(zero, sum_terms)
-```
+```text
 
 **Uses ONLY existing operations**: clip, log, subtract, multiply, add, full
 
@@ -376,7 +381,7 @@ fn binary_cross_entropy_backward(
     # Simplified gradient (standard in ML frameworks)
     var grad = subtract(logits, y_true)
     return multiply(grad_output, grad)
-```
+```text
 
 **Uses ONLY**: subtract, multiply
 
@@ -388,7 +393,7 @@ fn sgd_step(params: ExTensor, grad: ExTensor, lr: Float64) raises -> ExTensor:
     var lr_tensor = full(grad.shape(), lr, grad.dtype())
     var update = multiply(lr_tensor, grad)
     return subtract(params, update)
-```
+```text
 
 **Uses ONLY**: full, multiply, subtract
 
@@ -398,7 +403,7 @@ fn sgd_step(params: ExTensor, grad: ExTensor, lr: Float64) raises -> ExTensor:
 fn ones_like(tensor: ExTensor) raises -> ExTensor:
     """Create tensor of ones with same shape and dtype."""
     return ones(tensor.shape(), tensor.dtype())
-```
+```text
 
 **Uses ONLY**: ones (already exists)
 
@@ -477,7 +482,7 @@ fn train_mlp() raises:
 
         if epoch % 10 == 0:
             print("Epoch", epoch, "Loss:", avg_loss._get_float64(0))
-```
+```text
 
 **THIS WORKS TODAY** with the 4 helper functions (~105 lines).
 
@@ -582,8 +587,8 @@ fn train_mlp() raises:
    - `sgd_step` - 10 lines
    - `ones_like` / `zeros_like` - 5 lines each
 
-2. ✅ **Create integration test**: 2-layer MLP training on synthetic data
-3. ✅ **Verify numerical gradients**: Add finite-difference checks
+1. ✅ **Create integration test**: 2-layer MLP training on synthetic data
+1. ✅ **Verify numerical gradients**: Add finite-difference checks
 
 **Alternative**: Use the workaround implementations from Section 4.3 **immediately** (copy-paste ~105 lines).
 
@@ -598,12 +603,12 @@ fn train_mlp() raises:
    - MSE loss (regression)
    - Binary cross-entropy (binary classification)
 
-2. ✅ Add comprehensive tests:
+1. ✅ Add comprehensive tests:
    - Numerical stability tests
    - Gradient verification
    - Edge case handling
 
-3. ✅ Implement `ones_like`, `zeros_like` in extensor core
+1. ✅ Implement `ones_like`, `zeros_like` in extensor core
 
 **Success Criteria**: All loss functions tested and documented, replacing workarounds.
 
@@ -616,11 +621,11 @@ fn train_mlp() raises:
    - Adam optimizer
    - AdamW (weight decay)
 
-2. ✅ Implement parameter management:
+1. ✅ Implement parameter management:
    - Parameter struct with requires_grad
    - ParameterDict for managing model parameters
 
-3. ✅ Implement learning rate schedulers:
+1. ✅ Implement learning rate schedulers:
    - StepLR
    - CosineAnnealingLR
    - WarmupScheduler
@@ -636,11 +641,11 @@ fn train_mlp() raises:
    - Automatic backward pass chaining
    - Dynamic computation graphs
 
-2. ✅ Implement normalization:
+1. ✅ Implement normalization:
    - Batch normalization
    - Layer normalization
 
-3. ✅ Implement shape operation backward passes:
+1. ✅ Implement shape operation backward passes:
    - reshape, squeeze, unsqueeze
    - concatenate, stack, split
 
@@ -651,11 +656,11 @@ fn train_mlp() raises:
 **Priority**: LOW - Enterprise features
 
 1. ✅ CNN support (conv2d, pooling)
-2. ✅ GPU/accelerator support
-3. ✅ Mixed precision training
-4. ✅ Model serialization
-5. ✅ Distributed training
-6. ✅ Performance optimization (SIMD, memory layout)
+1. ✅ GPU/accelerator support
+1. ✅ Mixed precision training
+1. ✅ Model serialization
+1. ✅ Distributed training
+1. ✅ Performance optimization (SIMD, memory layout)
 
 ---
 
@@ -665,16 +670,16 @@ fn train_mlp() raises:
 
 **Is ExTensor ready for training?** ✅ **YES - With 4 helper functions (~105 lines)**
 
-**Why YES now?**
+### Why YES now?
 
 1. ✅ **ALL backward passes implemented** (27/27 critical functions)
-2. ✅ **ALL activation functions implemented** (7 forward + 7 backward)
-3. ✅ **Weight initialization implemented** (Xavier uniform/normal)
-4. ✅ **Broadcasting in backward passes** (handles gradient reduction)
-5. ✅ **Numerical stability** (epsilon, clipping, log-sum-exp)
-6. ✅ **Comprehensive test coverage** (31 activation tests + 220+ total)
+1. ✅ **ALL activation functions implemented** (7 forward + 7 backward)
+1. ✅ **Weight initialization implemented** (Xavier uniform/normal)
+1. ✅ **Broadcasting in backward passes** (handles gradient reduction)
+1. ✅ **Numerical stability** (epsilon, clipping, log-sum-exp)
+1. ✅ **Comprehensive test coverage** (31 activation tests + 220+ total)
 
-**What's needed?**
+### What's needed?
 
 - 4 simple helper functions (~105 lines total) **OR**
 - Use the workaround implementations from Section 4.3 **TODAY**
@@ -692,17 +697,18 @@ fn train_mlp() raises:
 ### 8.2 Key Strengths (NEW!)
 
 1. ✅ **Complete backward pass coverage** (all essential operations)
-2. ✅ **Production-ready activations** (ReLU, sigmoid, tanh, softmax, GELU)
-3. ✅ **Learnable parameters** (PReLU with grad_alpha)
-4. ✅ **Broadcasting support** (dedicated reduction helper)
-5. ✅ **Numerical stability** (5 distinct techniques)
-6. ✅ **Multi-dtype support** (float16/32/64 + integers)
-7. ✅ **Comprehensive testing** (31 activation tests, 100% pass)
-8. ✅ **Proper initialization** (Xavier prevents vanishing/exploding gradients)
+1. ✅ **Production-ready activations** (ReLU, sigmoid, tanh, softmax, GELU)
+1. ✅ **Learnable parameters** (PReLU with grad_alpha)
+1. ✅ **Broadcasting support** (dedicated reduction helper)
+1. ✅ **Numerical stability** (5 distinct techniques)
+1. ✅ **Multi-dtype support** (float16/32/64 + integers)
+1. ✅ **Comprehensive testing** (31 activation tests, 100% pass)
+1. ✅ **Proper initialization** (Xavier prevents vanishing/exploding gradients)
 
 ### 8.3 Critical Changes Since Previous Analysis
 
-**MAJOR IMPLEMENTATIONS COMPLETED**:
+### MAJOR IMPLEMENTATIONS COMPLETED
+
 - ✅ 27 backward passes (was 0)
 - ✅ 14 activation functions (was 0)
 - ✅ 2 initializers (was 0)
@@ -710,6 +716,7 @@ fn train_mlp() raises:
 - ✅ Numerical stability throughout (was partial)
 
 **REMAINING GAPS REDUCED FROM 50+ functions to 4 functions**:
+
 - Binary cross-entropy (forward + backward) - ~90 lines
 - SGD step - ~10 lines
 - ones_like - ~5 lines
@@ -718,35 +725,36 @@ fn train_mlp() raises:
 
 ### 8.4 Next Steps (UPDATED)
 
-**Immediate (Today)**:
+### Immediate (Today)
 
 1. ✅ Copy-paste the 4 workaround functions from Section 4.3 (~105 lines)
-2. ✅ Run the working training loop from Section 4.4
-3. ✅ Verify training converges on synthetic data
+1. ✅ Run the working training loop from Section 4.4
+1. ✅ Verify training converges on synthetic data
 
-**Short Term (This Week)**:
+### Short Term (This Week)
 
-4. ✅ Implement proper loss functions module (replace workarounds)
-5. ✅ Add numerical gradient verification tests
-6. ✅ Document training patterns and examples
+1. ✅ Implement proper loss functions module (replace workarounds)
+1. ✅ Add numerical gradient verification tests
+1. ✅ Document training patterns and examples
 
-**Medium Term (Months 2-3)**:
+### Medium Term (Months 2-3)
 
-7. ✅ Implement advanced optimizers (Adam, AdamW)
-8. ✅ Add parameter management (ParameterDict)
-9. ✅ Implement learning rate scheduling
+1. ✅ Implement advanced optimizers (Adam, AdamW)
+1. ✅ Add parameter management (ParameterDict)
+1. ✅ Implement learning rate scheduling
 
-**Long Term (Months 4-6)**:
+### Long Term (Months 4-6)
 
-10. ✅ Build autograd framework (automatic differentiation)
-11. ✅ Add normalization (batch_norm, layer_norm)
-12. ✅ Implement CNN operations
+1. ✅ Build autograd framework (automatic differentiation)
+1. ✅ Add normalization (batch_norm, layer_norm)
+1. ✅ Implement CNN operations
 
 ### 8.5 Recommendation
 
 **ACTION**: Start training **immediately** using the workaround implementations.
 
-**Rationale**:
+### Rationale
+
 - ExTensor has **all critical backward passes** implemented
 - Only **4 trivial helper functions** (~105 lines) are missing
 - Workarounds exist for all missing functions
@@ -799,23 +807,27 @@ fn train_mlp() raises:
 
 ### Backward Pass Formulas
 
-**Arithmetic**:
+### Arithmetic
+
 - add: ∂(a+b)/∂a = 1, ∂(a+b)/∂b = 1
 - multiply: ∂(a*b)/∂a = b, ∂(a*b)/∂b = a
 - divide: ∂(a/b)/∂a = 1/b, ∂(a/b)/∂b = -a/b²
 
-**Matrix**:
+### Matrix
+
 - matmul: ∂L/∂A = grad @ B^T, ∂L/∂B = A^T @ grad
 - transpose: Reverse transpose
 
-**Activations**:
+### Activations
+
 - ReLU: ∂f/∂x = 1 if x>0 else 0
 - Sigmoid: ∂f/∂x = σ(x)(1-σ(x))
 - Tanh: ∂f/∂x = 1 - tanh²(x)
 - Softmax: ∂yi/∂xj = yi(δij - yj)
 - GELU: ∂f/∂x = Φ(x) + x*φ(x)
 
-**Reductions**:
+### Reductions
+
 - sum: Broadcast gradient to all inputs
 - mean: sum_backward / count
 - max: Winner-take-all with tie handling

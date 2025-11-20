@@ -32,9 +32,9 @@ Design and document modern activation functions: softmax for converting logits t
 
 ```text
 softmax(x) = exp(x - max(x)) / sum(exp(x - max(x)))
-```
+```text
 
-**Implementation Strategy**:
+### Implementation Strategy
 
 - Find max value along specified axis
 - Subtract max from all elements
@@ -45,19 +45,19 @@ softmax(x) = exp(x - max(x)) / sum(exp(x - max(x)))
 
 **Decision**: Provide both exact and approximate implementations.
 
-**Exact Formula**:
+### Exact Formula
 
 ```text
 GELU(x) = x * Phi(x) = x * 0.5 * (1 + erf(x / sqrt(2)))
-```
+```text
 
 **Approximate Formula** (faster, used in original paper):
 
 ```text
 GELU(x) ≈ 0.5 * x * (1 + tanh(sqrt(2/π) * (x + 0.044715 * x^3)))
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Exact formula provides theoretical correctness
 - Approximate formula offers computational efficiency
@@ -68,19 +68,19 @@ GELU(x) ≈ 0.5 * x * (1 + tanh(sqrt(2/π) * (x + 0.044715 * x^3)))
 
 **Decision**: Implement analytical gradients for both functions.
 
-**Softmax Gradient**:
+### Softmax Gradient
 
 ```text
 ∂softmax(x)_i / ∂x_j = softmax(x)_i * (δ_ij - softmax(x)_j)
-```
+```text
 
 where `δ_ij` is Kronecker delta (1 if i=j, 0 otherwise)
 
-**GELU Gradient**:
+### GELU Gradient
 
 ```text
 ∂GELU(x) / ∂x = Phi(x) + x * phi(x)
-```
+```text
 
 where `phi(x)` is the Gaussian PDF
 
@@ -88,7 +88,7 @@ where `phi(x)` is the Gaussian PDF
 
 ### 4. API Design
 
-**Softmax Interface**:
+### Softmax Interface
 
 ```mojo
 fn softmax[dtype: DType](
@@ -107,9 +107,9 @@ fn softmax[dtype: DType](
     Returns:
         Tensor with softmax applied, values sum to 1.0 along axis
     """
-```
+```text
 
-**GELU Interface**:
+### GELU Interface
 
 ```mojo
 fn gelu[dtype: DType](
@@ -126,11 +126,11 @@ fn gelu[dtype: DType](
     Returns:
         Tensor with GELU activation applied
     """
-```
+```text
 
 ### 5. Edge Cases and Stability
 
-**Softmax Edge Cases**:
+### Softmax Edge Cases
 
 - Empty tensors: Raise error
 - Single element: Return 1.0
@@ -138,7 +138,7 @@ fn gelu[dtype: DType](
 - Very large negative values: Handle gracefully (result near 0)
 - Very large positive values: Use log-sum-exp trick
 
-**GELU Edge Cases**:
+### GELU Edge Cases
 
 - Very large positive x: GELU(x) ≈ x
 - Very large negative x: GELU(x) ≈ 0
@@ -146,7 +146,7 @@ fn gelu[dtype: DType](
 
 ### 6. Testing Strategy
 
-**Softmax Tests**:
+### Softmax Tests
 
 - Verify outputs sum to 1.0 (within numerical tolerance)
 - Test numerical stability with large values (±100, ±1000)
@@ -154,7 +154,7 @@ fn gelu[dtype: DType](
 - Test gradient computation accuracy
 - Compare against reference implementations
 
-**GELU Tests**:
+### GELU Tests
 
 - Verify exact and approximate versions produce similar results
 - Test extreme values (±10, ±100)
@@ -164,13 +164,13 @@ fn gelu[dtype: DType](
 
 ### 7. Performance Considerations
 
-**Softmax**:
+### Softmax
 
 - SIMD optimization for exp and sum operations
 - Minimize memory allocations (in-place where possible)
 - Optimize for common case (axis=-1, 2D tensors for classification)
 
-**GELU**:
+### GELU
 
 - Approximate version should be default for performance
 - SIMD optimization for polynomial operations in approximation

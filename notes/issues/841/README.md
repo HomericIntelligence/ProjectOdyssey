@@ -22,8 +22,8 @@ This issue implements the "Check Thresholds" component (third phase of the Cover
 measurement workflow:
 
 1. **Collect Coverage** (Issue #838) - Gathers coverage data during test execution
-2. **Generate Report** (Issue #839) - Creates human-readable coverage reports
-3. **Check Thresholds** (Issue #841) - Validates coverage against configured minimums ← **This Issue**
+1. **Generate Report** (Issue #839) - Creates human-readable coverage reports
+1. **Check Thresholds** (Issue #841) - Validates coverage against configured minimums ← **This Issue**
 
 ## Technical Requirements
 
@@ -92,7 +92,7 @@ check_thresholds.mojo
 ├── validate_coverage()
 ├── format_report()
 └── get_exit_code()
-```
+```text
 
 ### Key Components
 
@@ -102,19 +102,19 @@ check_thresholds.mojo
    - File exclusion patterns
    - Grace period for newly added files
 
-2. **ValidationResult** - Struct containing validation outcome
+1. **ValidationResult** - Struct containing validation outcome
    - Pass/fail status
    - Overall coverage vs. threshold
    - List of specific file violations
    - Recommendations for improvement
 
-3. **FileViolation** - Struct for individual file failures
+1. **FileViolation** - Struct for individual file failures
    - File path
    - Actual coverage percentage
    - Required threshold
    - Whether file is new (grace period applies)
 
-4. **Core Functions**
+1. **Core Functions**
    - `load_threshold_config()` - Load from project config
    - `validate_coverage()` - Check coverage against thresholds
    - `format_report()` - Generate human-readable report
@@ -134,14 +134,14 @@ coverage:
       - __pycache__/
       - "*_test.mojo"
     grace_period_days: 7   # New files get grace period
-```
+```text
 
 ### Integration Points
 
 1. **Upstream**: Receives coverage data from `generate-report` phase
-2. **Downstream**: Provides validation results to CI/CD systems
-3. **Configuration**: Loads thresholds from project config
-4. **Logging**: Uses shared logging utilities for operation tracking
+1. **Downstream**: Provides validation results to CI/CD systems
+1. **Configuration**: Loads thresholds from project config
+1. **Logging**: Uses shared logging utilities for operation tracking
 
 ## Implementation Plan
 
@@ -235,7 +235,7 @@ mojo test --coverage src/tooling/coverage/check_thresholds.mojo
 
 # Integration test with full pipeline
 mojo test tests/tooling/test_coverage_pipeline.mojo
-```
+```text
 
 ## References
 
@@ -269,22 +269,22 @@ mojo test tests/tooling/test_coverage_pipeline.mojo
    - Type-safe threshold comparisons prevent errors
    - SIMD operations can be leveraged for batch validation
 
-2. **Configurable Thresholds** - Allow per-project customization
+1. **Configurable Thresholds** - Allow per-project customization
    - Different projects have different quality standards
    - Teams can adjust thresholds as they improve
    - Grace period allows gradual enforcement
 
-3. **Per-File Tracking** - Enable granular quality monitoring
+1. **Per-File Tracking** - Enable granular quality monitoring
    - Identify specific areas needing more testing
    - Track progress on individual files
    - Support incremental quality improvements
 
-4. **Clear Exit Codes** - Support CI/CD integration
+1. **Clear Exit Codes** - Support CI/CD integration
    - Exit code 0: All thresholds met, merge safe
    - Exit code 1: Thresholds violated, block merge
    - Enables automated quality gates
 
-5. **New File Grace Period** - Support greenfield code
+1. **New File Grace Period** - Support greenfield code
    - New files get temporary threshold relief
    - Allows adding new features without immediate perfection
    - Prevents blocking developers on new code
@@ -311,11 +311,11 @@ mojo test tests/tooling/test_coverage_pipeline.mojo
 ## Development Workflow
 
 1. **Start**: Branch from `main` with issue number prefix
-2. **Implement**: Follow TDD approach - write tests first
-3. **Review**: Ensure code passes all checks and linting
-4. **Test**: Run full test suite with coverage measurement
-5. **Document**: Add docstrings and update this README
-6. **Submit**: Create PR linked to this issue
+1. **Implement**: Follow TDD approach - write tests first
+1. **Review**: Ensure code passes all checks and linting
+1. **Test**: Run full test suite with coverage measurement
+1. **Document**: Add docstrings and update this README
+1. **Submit**: Create PR linked to this issue
 
 ### Estimated Timeline
 
@@ -326,6 +326,7 @@ mojo test tests/tooling/test_coverage_pipeline.mojo
 ### Parallel Work
 
 Can run in parallel with:
+
 - #839 (Generate Report) - shares some data structures
 - #840 (Cleanup) - can begin after core implementation complete
 
@@ -345,10 +346,10 @@ Before submitting PR:
 ## Next Steps
 
 1. Set up development environment and branch
-2. Start with Phase 1: Core data structures
-3. Write tests before implementation (TDD)
-4. Run pre-commit hooks regularly
-5. Submit PR when all phases complete
+1. Start with Phase 1: Core data structures
+1. Write tests before implementation (TDD)
+1. Run pre-commit hooks regularly
+1. Submit PR when all phases complete
 
 ## Workflow Status
 
@@ -360,7 +361,8 @@ Before submitting PR:
 - **Package**: Pending
 - **Cleanup**: Pending
 
-**Dependencies**:
+### Dependencies
+
 - Requires: #799 (Plan) - Complete ✓
 - Blocks: #840 (Cleanup), #841 (Package)
 - Related: #838, #839 (Parallel coverage tool phases)

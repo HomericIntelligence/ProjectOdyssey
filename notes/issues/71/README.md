@@ -45,7 +45,7 @@ tests/tooling/tools/test_directory_structure.py ... [11 items] PASSED
 tests/tooling/tools/test_documentation.py ... [16 items] PASSED
 
 ============================== 42 passed in 0.16s ==============================
-```
+```text
 
 ### Verification Results
 
@@ -113,17 +113,17 @@ The tools system is production-ready with the following status:
    - ✅ Python with ADR-001 justification
    - ✅ Clear documentation and examples
 
-2. **Testing Utilities** (`test-utils/`)
+1. **Testing Utilities** (`test-utils/`)
    - ✅ Data generators implemented (Mojo)
    - ✅ Fixtures implemented (Mojo)
    - ✅ Documentation complete
 
-3. **Benchmarking** (`benchmarking/`)
+1. **Benchmarking** (`benchmarking/`)
    - ✅ Core framework implemented (Mojo)
    - ✅ Runner implemented (Mojo)
    - ⚠️ Memory tracking planned for future
 
-4. **Code Generation** (`codegen/`)
+1. **Code Generation** (`codegen/`)
    - ✅ Mojo boilerplate generator (Python)
    - ✅ Training template generator (Python)
    - ✅ All with ADR-001 justifications

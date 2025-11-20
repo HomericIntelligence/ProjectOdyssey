@@ -29,7 +29,7 @@ strategy, and quality standards for the repository's foundational documentation.
 
 **Decision**: Create three separate root-level documentation files with distinct purposes.
 
-**Rationale**:
+### Rationale
 
 - **README.md**: First impression and entry point - focus on what/why/how to start
 - **CONTRIBUTING.md**: Development workflow and standards - focus on how to contribute
@@ -38,7 +38,7 @@ strategy, and quality standards for the repository's foundational documentation.
 This separation follows GitHub conventions and allows each document to serve a specific audience without overwhelming
 new users.
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Single comprehensive documentation file: Rejected - too overwhelming for new users
 - Wiki-based documentation: Rejected - requires additional setup and lacks discoverability
@@ -48,13 +48,13 @@ new users.
 
 **Decision**: Structure README with three primary sections: Overview, Quickstart, and Repository Structure.
 
-**Rationale**:
+### Rationale
 
 - **Overview**: Answers "What is this project?" and "Why should I care?" immediately
 - **Quickstart**: Gets users from zero to running in < 5 minutes
 - **Repository Structure**: Helps contributors navigate the codebase efficiently
 
-**Content Guidelines**:
+### Content Guidelines
 
 - Keep overview concise (3-5 sentences max)
 - Quickstart should use copy-paste commands wherever possible
@@ -62,7 +62,7 @@ new users.
 - Include badges for build status, test coverage, and license
 - Link to detailed documentation rather than duplicating it
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Comprehensive API documentation in README: Rejected - belongs in separate API docs
 - Detailed architecture explanation: Rejected - link to /notes/review/ instead
@@ -73,22 +73,22 @@ new users.
 **Decision**: Document the 5-phase development workflow (Plan → Test/Impl/Package → Cleanup) with agent hierarchy
 integration.
 
-**Rationale**:
+### Rationale
 
 - This project uses a unique agent-based development workflow
 - Contributors need to understand the hierarchical planning structure
 - Clear workflow reduces confusion and improves contribution quality
 - Aligns with TDD principles and ensures comprehensive testing
 
-**Content Sections**:
+### Content Sections
 
 1. **Environment Setup**: Pixi installation, dependencies, pre-commit hooks
-2. **Development Workflow**: 5-phase process with parallel execution model
-3. **Coding Standards**: Mojo-first principle, Python for automation, type hints, documentation
-4. **Pull Request Process**: Branch naming, commit messages, review workflow
-5. **Testing Requirements**: Unit tests, integration tests, coverage expectations
+1. **Development Workflow**: 5-phase process with parallel execution model
+1. **Coding Standards**: Mojo-first principle, Python for automation, type hints, documentation
+1. **Pull Request Process**: Branch naming, commit messages, review workflow
+1. **Testing Requirements**: Unit tests, integration tests, coverage expectations
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Simple "fork and PR" workflow: Rejected - doesn't match our agent-based approach
 - Detailed architecture in CONTRIBUTING: Rejected - link to /agents/ documentation instead
@@ -98,7 +98,7 @@ integration.
 
 **Decision**: Use Contributor Covenant v2.1 as the base template with minimal customization.
 
-**Rationale**:
+### Rationale
 
 - Industry standard, widely adopted and recognized
 - Comprehensive coverage of expected behaviors
@@ -106,14 +106,14 @@ integration.
 - Well-tested language that has evolved over multiple versions
 - Avoids "reinventing the wheel" and potential legal issues
 
-**Customization Approach**:
+### Customization Approach
 
 - Update contact information for reporting issues
 - Add project-specific context (AI research, academic collaboration)
 - Maintain original enforcement procedures (no custom modifications)
 - Keep tone welcoming and inclusive
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Custom code of conduct: Rejected - high risk of missing important aspects
 - No code of conduct: Rejected - creates unwelcoming environment
@@ -123,7 +123,7 @@ integration.
 
 **Decision**: Establish quality criteria for all documentation.
 
-**Standards**:
+### Standards
 
 - **Clarity**: Use simple, direct language. Avoid jargon unless defined.
 - **Conciseness**: Respect reader's time. Remove unnecessary words.
@@ -132,14 +132,14 @@ integration.
 - **Maintainability**: Structure content for easy updates as project evolves.
 - **Markdown Compliance**: Follow markdownlint rules (see CLAUDE.md)
 
-**Tone Guidelines**:
+### Tone Guidelines
 
 - Welcoming and encouraging for new contributors
 - Professional but not overly formal
 - Assume good faith and provide helpful guidance
 - Focus on "yes, and..." rather than "no, but..."
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Technical-only focus: Rejected - alienates newcomers
 - Overly casual tone: Rejected - lacks professionalism
@@ -149,7 +149,7 @@ integration.
 
 **Decision**: Link between documentation files rather than duplicating content.
 
-**Cross-Reference Map**:
+### Cross-Reference Map
 
 - README → CONTRIBUTING: "See CONTRIBUTING.md for development workflow"
 - README → CODE_OF_CONDUCT: "Please read our CODE_OF_CONDUCT.md"
@@ -157,14 +157,14 @@ integration.
 - CONTRIBUTING → /agents/: "See /agents/README.md for detailed agent hierarchy"
 - CONTRIBUTING → /notes/review/: "See /notes/review/ for architectural decisions"
 
-**Rationale**:
+### Rationale
 
 - Single source of truth for each topic
 - Easier to maintain (update once, not multiple places)
 - Prevents documentation drift and contradictions
 - Follows DRY principle
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Duplicate content for convenience: Rejected - maintenance nightmare
 - No cross-references: Rejected - forces readers to hunt for information

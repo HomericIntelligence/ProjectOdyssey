@@ -34,17 +34,22 @@ As specified in the issue description.
 ## Implementation Notes
 
 ## Overview
+
 Create a prompt template for suggesting implementation architectures based on paper analysis. The template guides the agent through chain-of-thought reasoning to recommend appropriate designs, data structures, and module organization.
 
 ## Testing Objectives
+
 This phase focuses on:
+
 - Writing comprehensive test cases following TDD principles
 - Creating test fixtures and mock data
 - Defining test scenarios for edge cases
 - Setting up test infrastructure
 
 ## What to Test
+
 Based on the expected outputs:
+
 - Architecture suggester prompt template
 - Chain-of-thought reasoning structure
 - Few-shot examples of architecture suggestions
@@ -52,6 +57,7 @@ Based on the expected outputs:
 - Data structure suggestions
 
 ## Test Success Criteria
+
 - [ ] Template uses chain-of-thought reasoning
 - [ ] Suggestions consider paper requirements
 - [ ] Module organization is clear and logical
@@ -60,12 +66,14 @@ Based on the expected outputs:
 - [ ] Few-shot examples show good designs
 
 ## Implementation Steps
+
 1. Create prompt with chain-of-thought structure
-2. Define architecture reasoning steps
-3. Add few-shot examples with rationale
-4. Include Mojo-specific considerations
+1. Define architecture reasoning steps
+1. Add few-shot examples with rationale
+1. Include Mojo-specific considerations
 
 ## Notes
+
 Guide the agent through: understanding requirements, identifying key components, suggesting module structure, recommending data structures, and explaining design rationale. Use XML tags like <requirements>, <components>, <architecture>, <rationale>.
 
 ## Status

@@ -67,9 +67,9 @@ and system-level design patterns. Focuses exclusively on high-level design and s
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -252,7 +252,7 @@ See [code-review-orchestrator.md](./code-review-orchestrator.md#review-comment-p
 
 ### Example 1: Circular Dependency
 
-**Structure**:
+### Structure
 
 ```text
 src/
@@ -293,7 +293,7 @@ struct Trainer:
         pass
 ```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 🔴 CRITICAL: Circular dependency between models and training
@@ -373,7 +373,7 @@ validation/ (no dependencies)
     └── training/ (depends on validation + models)
 ```text
 
-**Benefits**:
+### Benefits
 
 - ✅ No circular dependencies
 - ✅ Validation logic reusable in other contexts
@@ -434,16 +434,16 @@ struct User:
 **Issue**: Domain model (User) directly imports and uses infrastructure
 code (DatabaseConnection). This violates clean architecture principles.
 
-**Problems**:
+### Problems
 
 1. Domain logic coupled to database implementation
-2. Cannot test domain logic without database
-3. Cannot change persistence mechanism without changing domain
-4. Domain layer polluted with infrastructure concerns
-5. Violates Dependency Inversion Principle (DIP)
-6. Business logic now depends on external framework
+1. Cannot test domain logic without database
+1. Cannot change persistence mechanism without changing domain
+1. Domain layer polluted with infrastructure concerns
+1. Violates Dependency Inversion Principle (DIP)
+1. Business logic now depends on external framework
 
-**Correct Dependency Flow**:
+### Correct Dependency Flow
 
 ```text
 
@@ -675,8 +675,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -709,7 +709,7 @@ After creating PR:
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -756,12 +756,12 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Data preprocessing module directly importing neural network training code
 
-**Actions**:
+### Actions
 
 1. Identify circular dependency between data and training layers
-2. Flag violation of separation of concerns
-3. Propose interface-based abstraction to decouple modules
-4. Suggest dependency injection pattern
+1. Flag violation of separation of concerns
+1. Propose interface-based abstraction to decouple modules
+1. Suggest dependency injection pattern
 
 **Outcome**: Clean layered architecture with unidirectional dependencies
 
@@ -769,12 +769,12 @@ For standard delegation patterns, escalation rules, and skip-level guidelines, s
 
 **Scenario**: Public API exposing internal implementation details
 
-**Actions**:
+### Actions
 
 1. Review public interfaces for abstraction leaks
-2. Identify internal types exposed in public signatures
-3. Recommend facade pattern to hide complexity
-4. Validate interface stability and backward compatibility
+1. Identify internal types exposed in public signatures
+1. Recommend facade pattern to hide complexity
+1. Validate interface stability and backward compatibility
 
 **Outcome**: Well-defined public API with encapsulated implementation
 

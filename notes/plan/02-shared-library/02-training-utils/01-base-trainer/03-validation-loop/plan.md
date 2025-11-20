@@ -29,10 +29,10 @@ None (leaf node)
 ## Steps
 
 1. Implement batch iteration over validation data
-2. Create forward pass without gradient computation
-3. Compute and aggregate validation metrics
-4. Add callback hooks for validation events
-5. Support both during-training and post-training validation
+1. Create forward pass without gradient computation
+1. Compute and aggregate validation metrics
+1. Add callback hooks for validation events
+1. Support both during-training and post-training validation
 
 ## Success Criteria
 

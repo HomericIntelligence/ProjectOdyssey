@@ -19,7 +19,7 @@ Design a linear warmup learning rate scheduler that gradually increases the lear
 The warmup scheduler implements the following piecewise linear formula:
 
 ```
-lr(epoch) = base_lr × (epoch / warmup_epochs)    if epoch < warmup_epochs
+lr(epoch) = base_lr Ã— (epoch / warmup_epochs)    if epoch < warmup_epochs
 lr(epoch) = base_lr                              if epoch >= warmup_epochs
 ```
 
@@ -90,7 +90,7 @@ fn get_lr(self, epoch: Int, batch: Int = 0) -> Float64:
         Learning rate for this epoch
 
     Formula:
-        lr = base_lr × (epoch / warmup_epochs)  if epoch < warmup_epochs
+        lr = base_lr Ã— (epoch / warmup_epochs)  if epoch < warmup_epochs
         lr = base_lr                            if epoch >= warmup_epochs
     """
 ```
@@ -217,7 +217,7 @@ for epoch in range(100):
 1. **Mathematical correctness**: Verify linear interpolation formula
 2. **Edge cases**: Test boundary conditions (epoch=0, epoch=warmup_epochs)
 3. **Integration**: Test with actual optimizer and training loop
-4. **Reproducibility**: Same parameters ’ same LR schedule
+4. **Reproducibility**: Same parameters Â’ same LR schedule
 5. **Composition**: Test chaining with decay schedulers
 
 ## Success Criteria
@@ -329,5 +329,5 @@ This design document was created retrospectively to document the existing implem
 - Critical for training with large learning rates or large batches
 - Typical warmup duration: 5-10% of total training
 - After warmup, switch to decay scheduler (cosine, step, etc.)
-- The formula `lr = base_lr × (epoch / warmup_epochs)` produces smooth linear increase
+- The formula `lr = base_lr Ã— (epoch / warmup_epochs)` produces smooth linear increase
 - At epoch 0, LR = 0; at warmup_epochs, LR = base_lr

@@ -28,8 +28,8 @@ Document the rationale for selecting LeNet-5 as the first paper implementation, 
 ## Steps
 
 1. Why LeNet
-2. Requirements
-3. Success Criteria
+1. Requirements
+1. Success Criteria
 
 ## Success Criteria
 

@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Create test cases with tutorial topics
-2. Define expected tutorial structure
-3. Write tests for tutorial generation
-4. Validate clarity and examples
+1. Define expected tutorial structure
+1. Write tests for tutorial generation
+1. Validate clarity and examples
 
 ## Success Criteria
 

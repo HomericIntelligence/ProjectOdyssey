@@ -55,9 +55,9 @@ Level 1 Section Orchestrator responsible for coordinating continuous integration
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -93,7 +93,7 @@ Use Python ONLY for:
 - ⚠️ **Python-only CI tools** - No Mojo bindings and tool is required
 - ⚠️ **Explicit requirements** - Issue specifically requests Python
 
-**Script and Tool Language**:
+### Script and Tool Language
 
 - Build scripts → Mojo
 - Test scripts → Mojo
@@ -128,10 +128,10 @@ When reviewing or setting up CI/CD:
 All tests added to the project MUST:
 
 1. **Run automatically** on PR creation and pushes to main
-2. **Pass before merge** - Configure branch protection
-3. **Complete quickly** - Under 5 minutes for unit tests ideal
-4. **Be deterministic** - No random failures
-5. **Be documented** - Test commands in README or CI config
+1. **Pass before merge** - Configure branch protection
+1. **Complete quickly** - Under 5 minutes for unit tests ideal
+1. **Be deterministic** - No random failures
+1. **Be documented** - Test commands in README or CI config
 
 ### Test Pipeline Organization
 
@@ -153,30 +153,30 @@ See [test-specialist.md](./test-specialist.md#test-prioritization) for test prio
 ### 1. Receive CI/CD Requirements
 
 1. Parse testing and deployment needs from other orchestrators
-2. Identify quality gates and validation criteria
-3. Determine performance benchmarking requirements
-4. Validate infrastructure can support requirements
+1. Identify quality gates and validation criteria
+1. Determine performance benchmarking requirements
+1. Validate infrastructure can support requirements
 
 ### 2. Coordinate Pipeline Development
 
 1. Break down into pipeline components (testing, deployment, monitoring)
-2. Delegate to appropriate specialists
-3. Monitor progress across multiple pipeline stages
-4. Ensure integration with all sections
+1. Delegate to appropriate specialists
+1. Monitor progress across multiple pipeline stages
+1. Ensure integration with all sections
 
 ### 3. Validate Pipelines
 
 1. Collect pipeline implementations from specialists
-2. Test end-to-end pipeline execution
-3. Validate quality gates function correctly
-4. Ensure performance and reliability standards met
+1. Test end-to-end pipeline execution
+1. Validate quality gates function correctly
+1. Ensure performance and reliability standards met
 
 ### 4. Monitor and Report
 
 1. Monitor pipeline health and metrics
-2. Track build times, test coverage, and failure rates
-3. Identify bottlenecks or recurring issues
-4. Escalate infrastructure concerns to Chief Architect
+1. Track build times, test coverage, and failure rates
+1. Identify bottlenecks or recurring issues
+1. Escalate infrastructure concerns to Chief Architect
 
 ## Delegation
 
@@ -211,6 +211,7 @@ trivial fixes (` 20 lines, no design decisions).
 ### Pre-commit Validation
 
 Use the `ci-run-precommit` skill for code quality checks:
+
 - **Invoke when**: Validating code before commit, testing if CI will pass
 - **The skill handles**: All configured pre-commit hooks (formatting, linting, trailing whitespace, etc.)
 - **See**: [ci-run-precommit skill](../.claude/skills/ci-run-precommit/SKILL.md)
@@ -218,6 +219,7 @@ Use the `ci-run-precommit` skill for code quality checks:
 ### Workflow Validation
 
 Use the `ci-validate-workflow` skill to ensure workflow correctness:
+
 - **Invoke when**: Creating/modifying GitHub Actions workflows, troubleshooting CI issues
 - **The skill handles**: Syntax checking, job dependency validation, best practices
 - **See**: [ci-validate-workflow skill](../.claude/skills/ci-validate-workflow/SKILL.md)
@@ -225,6 +227,7 @@ Use the `ci-validate-workflow` skill to ensure workflow correctness:
 ### CI Failure Diagnosis
 
 Use the `ci-fix-failures` skill when CI issues occur:
+
 - **Invoke when**: CI checks fail, investigating build or test issues
 - **The skill handles**: Log analysis, root cause identification, suggested fixes
 - **See**: [ci-fix-failures skill](../.claude/skills/ci-fix-failures/SKILL.md)
@@ -232,6 +235,7 @@ Use the `ci-fix-failures` skill when CI issues occur:
 ### Package Workflow Creation
 
 Use the `ci-package-workflow` skill to create package automation:
+
 - **Invoke when**: Setting up automated package building in CI
 - **The skill handles**: Workflow file generation for .mojopkg and distribution archives
 - **See**: [ci-package-workflow skill](../.claude/skills/ci-package-workflow/SKILL.md)
@@ -239,6 +243,7 @@ Use the `ci-package-workflow` skill to create package automation:
 ### Test Execution
 
 Use the `mojo-test-runner` skill for Mojo test execution in CI:
+
 - **Invoke when**: Running Mojo tests in pipeline
 - **The skill handles**: Test execution and result parsing
 - **See**: [mojo-test-runner skill](../.claude/skills/mojo-test-runner/SKILL.md)
@@ -246,6 +251,7 @@ Use the `mojo-test-runner` skill for Mojo test execution in CI:
 ### Security Scanning
 
 Use the `quality-security-scan` skill for vulnerability detection:
+
 - **Invoke when**: Security validation in pipeline
 - **The skill handles**: Dependency scanning, vulnerability reporting
 - **See**: [quality-security-scan skill](../.claude/skills/quality-security-scan/SKILL.md)
@@ -253,6 +259,7 @@ Use the `quality-security-scan` skill for vulnerability detection:
 ### Coverage Reporting
 
 Use the `quality-coverage-report` skill for test coverage tracking:
+
 - **Invoke when**: Generating coverage metrics in CI
 - **The skill handles**: Coverage calculation and report generation
 - **See**: [quality-coverage-report skill](../.claude/skills/quality-coverage-report/SKILL.md)
@@ -279,7 +286,7 @@ blockers with detailed report.
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -333,8 +340,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -388,13 +395,13 @@ After creating PR:
 
 **Scenario**: Implementing a new component across multiple subsections
 
-**Actions**:
+### Actions
 
 1. Break down component into design, implementation, and testing phases
-2. Delegate design work to design agents
-3. Delegate implementation to implementation specialists
-4. Coordinate parallel work streams
-5. Monitor progress and resolve blockers
+1. Delegate design work to design agents
+1. Delegate implementation to implementation specialists
+1. Coordinate parallel work streams
+1. Monitor progress and resolve blockers
 
 **Outcome**: Component delivered with all phases complete and integrated
 
@@ -402,12 +409,12 @@ After creating PR:
 
 **Scenario**: Two subsections have conflicting approaches to shared interface
 
-**Actions**:
+### Actions
 
 1. Identify dependency conflict between subsections
-2. Escalate to design agents for interface specification
-3. Coordinate implementation updates across both subsections
-4. Validate integration through testing phase
+1. Escalate to design agents for interface specification
+1. Coordinate implementation updates across both subsections
+1. Validate integration through testing phase
 
 **Outcome**: Unified interface with both components working correctly
 

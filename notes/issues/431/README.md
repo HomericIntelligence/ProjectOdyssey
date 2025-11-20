@@ -8,7 +8,7 @@ Package the data utilities module with clean public API exports, comprehensive d
 
 ### Package Structure
 
-```
+```text
 shared/data/
 ├── __init__.mojo                   # Public API exports
 ├── datasets.mojo                   # Dataset interfaces and implementations
@@ -18,7 +18,7 @@ shared/data/
 ├── text_transforms.mojo            # Text augmentations
 ├── generic_transforms.mojo         # Generic transforms
 └── README.md                       # Module documentation
-```
+```text
 
 ### Public API Exports
 
@@ -106,7 +106,7 @@ from .generic_transforms import (
     SequentialTransform,
     BatchTransform,
 )
-```
+```text
 
 ### Module Documentation
 
@@ -133,19 +133,22 @@ The data utilities module provides:
 #### TensorDataset (In-Memory)
 
 ```mojo
+
 from shared.data import TensorDataset
 
 # Create dataset from tensors
+
 var data = Tensor(...)      # Shape: [N, features...]
 var labels = Tensor(...)    # Shape: [N]
 
 var dataset = TensorDataset(data, labels)
 
 # Access samples
+
 print(len(dataset))         # Number of samples
 var sample = dataset[0]     # Get first sample
-```
 
+```text
 **Use Cases**:
 - Small to medium datasets (< 10GB)
 - Fast random access needed
@@ -154,16 +157,19 @@ var sample = dataset[0]     # Get first sample
 #### FileDataset (Placeholder)
 
 ```mojo
+
 from shared.data import FileDataset
 
 # Define file paths
+
 var file_paths = ["img1.jpg", "img2.jpg", "img3.jpg"]
 var dataset = FileDataset(file_paths)
 
 # Note: File loading not yet implemented
-# Use TensorDataset with preprocessed data instead
-```
 
+# Use TensorDataset with preprocessed data instead
+
+```text
 **Current Status**: API defined, file loading deferred
 
 **Workaround**: Preprocess files in Python, load as tensors
@@ -173,12 +179,15 @@ var dataset = FileDataset(file_paths)
 #### DataLoader
 
 ```mojo
+
 from shared.data import TensorDataset, DataLoader
 
 # Create dataset
+
 var dataset = TensorDataset(data, labels)
 
 # Create loader with batching
+
 var loader = DataLoader(
     dataset,
     batch_size=32,
@@ -187,12 +196,13 @@ var loader = DataLoader(
 )
 
 # Iterate over batches
+
 for batch in loader:
     print("Batch size:", batch.size)
     print("Data shape:", batch.data.shape)
     print("Labels:", batch.labels)
-```
 
+```text
 **Features**:
 - Automatic batching
 - Optional shuffling with seed control
@@ -210,27 +220,31 @@ for batch in loader:
 #### SequentialSampler
 
 ```mojo
+
 from shared.data import SequentialSampler
 
-# Sequential access: 0, 1, 2, 3, ...
+# Sequential access: 0, 1, 2, 3, 
+
 var sampler = SequentialSampler(num_samples=100)
 
 for index in sampler:
     print(index)  # 0, 1, 2, ..., 99
-```
 
+```text
 #### RandomSampler
 
 ```mojo
+
 from shared.data import RandomSampler
 
 # Random access with seed
+
 var sampler = RandomSampler(num_samples=100, seed=42)
 
 for index in sampler:
     print(index)  # Random permutation of 0-99
-```
 
+```text
 ### 4. Data Augmentation
 
 See comprehensive augmentation documentation:
@@ -244,6 +258,7 @@ See comprehensive augmentation documentation:
 ### Training Pipeline with Augmentation
 
 ```mojo
+
 from shared.data import (
     TensorDataset,
     DataLoader,
@@ -254,11 +269,13 @@ from shared.data import (
 )
 
 # 1. Create dataset
+
 var train_data = load_training_data()
 var train_labels = load_training_labels()
 var dataset = TensorDataset(train_data, train_labels)
 
 # 2. Setup augmentations
+
 var transforms = List[Transform]()
 transforms.append(RandomHorizontalFlip(0.5))
 transforms.append(RandomRotation((15.0, 15.0)))
@@ -266,6 +283,7 @@ transforms.append(Normalize(0.5, 0.5))
 var augmentations = Pipeline(transforms^)
 
 # 3. Create data loader
+
 var loader = DataLoader(
     dataset,
     batch_size=32,
@@ -274,6 +292,7 @@ var loader = DataLoader(
 )
 
 # 4. Training loop
+
 for epoch in range(num_epochs):
     for batch in loader:
         # Apply augmentations
@@ -288,22 +307,26 @@ for epoch in range(num_epochs):
         # Backward pass and update
         loss.backward()
         optimizer.step()
-```
 
+```text
 ### Validation Pipeline (No Augmentation)
 
 ```mojo
+
 from shared.data import TensorDataset, DataLoader, Normalize
 
 # Validation data (no random augmentations)
+
 var val_data = load_validation_data()
 var val_labels = load_validation_labels()
 var val_dataset = TensorDataset(val_data, val_labels)
 
 # Only apply normalization (no random transforms)
+
 var normalize = Normalize(0.5, 0.5)
 
 # No shuffling for validation
+
 var val_loader = DataLoader(
     val_dataset,
     batch_size=32,
@@ -311,21 +334,24 @@ var val_loader = DataLoader(
 )
 
 # Validation loop
+
 for batch in val_loader:
     var normalized_data = normalize(batch.data)
     var predictions = model(normalized_data)
     # Evaluate metrics
-```
 
+```text
 ### Multi-Epoch Training
 
 ```mojo
+
 from shared.data import TensorDataset, DataLoader
 
 var dataset = TensorDataset(data, labels)
 var loader = DataLoader(dataset, batch_size=32, shuffle=True)
 
 # Multiple epochs
+
 for epoch in range(10):
     print("Epoch", epoch + 1)
 
@@ -335,8 +361,8 @@ for epoch in range(10):
         ...
 
     # Shuffling occurs fresh each epoch (with same seed)
-```
 
+```text
 ## Best Practices
 
 ### 1. Dataset Size Considerations
@@ -371,14 +397,16 @@ for epoch in range(10):
 
 **Training**: Always shuffle
 ```mojo
-var loader = DataLoader(dataset, batch_size=32, shuffle=True, seed=42)
-```
 
+var loader = DataLoader(dataset, batch_size=32, shuffle=True, seed=42)
+
+```text
 **Validation/Testing**: Don't shuffle
 ```mojo
-var loader = DataLoader(dataset, batch_size=32, shuffle=False)
-```
 
+var loader = DataLoader(dataset, batch_size=32, shuffle=False)
+
+```text
 **Reproducibility**: Use consistent seed across experiments
 
 ### 4. Batch Size Selection
@@ -394,14 +422,16 @@ var loader = DataLoader(dataset, batch_size=32, shuffle=False)
 ### Dataset Interface
 
 ```mojo
+
 trait Dataset:
     fn __len__(self) -> Int
     fn __getitem__(self, index: Int) raises -> Tensor
-```
 
+```text
 ### DataLoader
 
 ```mojo
+
 struct DataLoader:
     fn __init__(
         out self,
@@ -412,11 +442,12 @@ struct DataLoader:
     )
     fn __iter__(self) -> DataLoaderIterator
     fn __len__(self) -> Int
-```
 
+```text
 ### Samplers
 
 ```mojo
+
 trait Sampler:
     fn __iter__(self) -> Iterator[Int]
     fn __len__(self) -> Int
@@ -426,8 +457,8 @@ struct SequentialSampler(Sampler):
 
 struct RandomSampler(Sampler):
     fn __init__(out self, num_samples: Int, seed: Int = 42)
-```
 
+```text
 ## Limitations and Future Work
 
 ### Current Limitations
@@ -466,50 +497,56 @@ struct RandomSampler(Sampler):
 **Solution**: Use TensorDataset with preprocessed data
 
 ```python
+
 # In Python: Preprocess and save
+
 import numpy as np
 
 # Load and preprocess
+
 images = load_images()
 processed = preprocess(images)
 np.save("processed_data.npy", processed)
-```
 
+```text
 ```mojo
+
 // In Mojo: Load preprocessed data
 var data = load_numpy_file("processed_data.npy")
 var dataset = TensorDataset(data, labels)
-```
 
+```text
 ### Problem: Memory overflow with TensorDataset
 
 **Solution**: Reduce dataset size or implement batched preprocessing
 
 ```mojo
+
 // Option 1: Subset of data
 var dataset = TensorDataset(data[:10000], labels[:10000])
 
 // Option 2: Process in chunks (custom implementation needed)
-```
 
+```text
 ### Problem: Shuffling not reproducible
 
 **Solution**: Use consistent seed
 
 ```mojo
+
 // Set seed explicitly
 var loader = DataLoader(dataset, batch_size=32, shuffle=True, seed=42)
 
 // Same seed across runs produces same shuffle order
-```
 
+```text
 ## See Also
 
 - [Dataset Implementation](datasets.mojo)
 - [Data Loader Implementation](loaders.mojo)
 - [Augmentation Transforms](transforms.mojo)
 - [Test Suite](../../tests/shared/data/)
-```
+```text
 
 ## Success Criteria
 
@@ -543,18 +580,18 @@ var loader = DataLoader(dataset, batch_size=32, shuffle=True, seed=42)
 ### Packaging Tasks
 
 1. **Verify Exports**: Ensure `__init__.mojo` exports all public symbols
-2. **Create README**: Comprehensive module documentation (shown above)
-3. **Test Imports**: Validate all documented import patterns work
-4. **Document Limitations**: Clear guidance on file loading workaround
-5. **Provide Examples**: Complete workflow demonstrations
+1. **Create README**: Comprehensive module documentation (shown above)
+1. **Test Imports**: Validate all documented import patterns work
+1. **Document Limitations**: Clear guidance on file loading workaround
+1. **Provide Examples**: Complete workflow demonstrations
 
 ### Documentation Strategy
 
 1. **Quick Start**: Simple examples first
-2. **Complete Workflows**: Real-world training pipelines
-3. **Best Practices**: Guidance for common scenarios
-4. **Troubleshooting**: Solutions to likely problems
-5. **API Reference**: Formal specifications
+1. **Complete Workflows**: Real-world training pipelines
+1. **Best Practices**: Guidance for common scenarios
+1. **Troubleshooting**: Solutions to likely problems
+1. **API Reference**: Formal specifications
 
 ---
 

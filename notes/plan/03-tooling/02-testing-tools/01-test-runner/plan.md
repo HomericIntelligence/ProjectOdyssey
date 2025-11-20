@@ -30,8 +30,8 @@ Create a unified test runner that discovers, executes, and reports on all tests 
 ## Steps
 
 1. Implement test discovery across repository
-2. Execute discovered tests with proper isolation
-3. Generate comprehensive result reports
+1. Execute discovered tests with proper isolation
+1. Generate comprehensive result reports
 
 ## Success Criteria
 

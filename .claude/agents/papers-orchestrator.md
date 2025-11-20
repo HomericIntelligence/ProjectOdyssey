@@ -50,9 +50,9 @@ Level 1 Section Orchestrator responsible for coordinating research paper impleme
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -76,30 +76,30 @@ When working with Mojo code, follow patterns in
 ### 1. Receive Paper Assignment
 
 1. Parse paper requirements from Chief Architect
-2. Analyze paper for algorithm, architecture, and hyperparameters
-3. Identify required components (data, model, training, eval)
-4. Validate paper is implementable with available resources
+1. Analyze paper for algorithm, architecture, and hyperparameters
+1. Identify required components (data, model, training, eval)
+1. Validate paper is implementable with available resources
 
 ### 2. Coordinate Implementation
 
 1. Break down into implementation subtasks (data, model, training, eval)
-2. Delegate to appropriate design agents and specialists
-3. Monitor progress across all components
-4. Ensure implementation matches paper specifications
+1. Delegate to appropriate design agents and specialists
+1. Monitor progress across all components
+1. Ensure implementation matches paper specifications
 
 ### 3. Validate Results
 
 1. Collect implementations from specialists
-2. Train model and validate against paper's reported results
-3. Document any deviations or differences
-4. Ensure quality standards met (reproducibility, documentation)
+1. Train model and validate against paper's reported results
+1. Document any deviations or differences
+1. Ensure quality standards met (reproducibility, documentation)
 
 ### 4. Report Status
 
 1. Summarize implementation completed
-2. Report on result comparison with paper
-3. Identify any blockers or discrepancies
-4. Escalate concerns to Chief Architect
+1. Report on result comparison with paper
+1. Identify any blockers or discrepancies
+1. Escalate concerns to Chief Architect
 
 ## Delegation
 
@@ -194,7 +194,7 @@ blockers with detailed report.
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -247,8 +247,8 @@ linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #`issue-number`"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #`issue-number`"
 
 ### PR Requirements
 
@@ -296,13 +296,13 @@ After creating PR:
 
 **Scenario**: Implementing a new component across multiple subsections
 
-**Actions**:
+### Actions
 
 1. Break down component into design, implementation, and testing phases
-2. Delegate design work to design agents
-3. Delegate implementation to implementation specialists
-4. Coordinate parallel work streams
-5. Monitor progress and resolve blockers
+1. Delegate design work to design agents
+1. Delegate implementation to implementation specialists
+1. Coordinate parallel work streams
+1. Monitor progress and resolve blockers
 
 **Outcome**: Component delivered with all phases complete and integrated
 
@@ -310,12 +310,12 @@ After creating PR:
 
 **Scenario**: Two subsections have conflicting approaches to shared interface
 
-**Actions**:
+### Actions
 
 1. Identify dependency conflict between subsections
-2. Escalate to design agents for interface specification
-3. Coordinate implementation updates across both subsections
-4. Validate integration through testing phase
+1. Escalate to design agents for interface specification
+1. Coordinate implementation updates across both subsections
+1. Validate integration through testing phase
 
 **Outcome**: Unified interface with both components working correctly
 

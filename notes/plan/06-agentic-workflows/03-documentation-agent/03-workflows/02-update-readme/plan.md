@@ -31,9 +31,9 @@ None (implementation level)
 ## Steps
 
 1. Analyze project structure and dependencies
-2. Extract information from code and docs
-3. Generate README content using template
-4. Validate completeness and accuracy
+1. Extract information from code and docs
+1. Generate README content using template
+1. Validate completeness and accuracy
 
 ## Success Criteria
 

@@ -42,10 +42,10 @@ are properly organized before running tests.
 The structure validation module provides:
 
 1. **Directory Validation** - Checks that required directories exist
-2. **File Validation** - Verifies required files are present
-3. **Naming Convention Validation** - Detects naming violations
-4. **Report Generation** - Creates structured validation reports
-5. **Helpful Error Messages** - Provides suggestions for fixing issues
+1. **File Validation** - Verifies required files are present
+1. **Naming Convention Validation** - Detects naming violations
+1. **Report Generation** - Creates structured validation reports
+1. **Helpful Error Messages** - Provides suggestions for fixing issues
 
 ### Module Structure
 
@@ -72,7 +72,7 @@ structure.mojo (main module)
     ├── generate_report() - Create structured report
     ├── suggest_fixes() - Generate helpful suggestions
     └── format_errors() - Format error messages
-```
+```text
 
 ### Implementation Phases
 
@@ -104,7 +104,7 @@ struct ValidationReport:
     var results: List[ValidationResult]
     var errors: List[ValidationError]
     var is_valid: Bool
-```
+```text
 
 #### Phase 2: Directory and File Validation
 
@@ -141,7 +141,7 @@ fn validate_naming(paper_path: String) -> (Int, List[ValidationResult]):
     # Check test files start with test_
     # Check model files are named correctly
     # Return count and results
-```
+```text
 
 #### Phase 3: Report Generation and Error Handling
 
@@ -166,7 +166,7 @@ fn suggest_fixes(error: ValidationError) -> String:
     # Suggest creating missing files
     # Suggest naming convention fixes
     # Return user-friendly suggestion
-```
+```text
 
 ### Key Features
 
@@ -207,7 +207,7 @@ ERROR: Missing required directory
 Path: papers/lenet5/src/
 Suggestion: Create the directory with: mkdir -p papers/lenet5/src/
            Then add model implementation in src/model.mojo
-```
+```text
 
 #### 3. Structured Report Output
 
@@ -257,25 +257,25 @@ Tests from Issue #815 validate:
    - Valid files are detected correctly
    - Naming conventions are validated correctly
 
-2. **Missing Directories**
+1. **Missing Directories**
    - Missing `src/` directory is detected
    - Missing `tests/` directory is detected
    - Missing `docs/` directory is detected
    - Error messages suggest how to create missing directories
 
-3. **Missing Files**
+1. **Missing Files**
    - Missing `README.md` is detected
    - Missing model files are detected
    - Missing test files are detected
    - Suggestions include what to create
 
-4. **Naming Violations**
+1. **Naming Violations**
    - Files without `test_` prefix detected
    - Snake_case violations detected
    - Invalid file extensions detected
    - Suggestions show correct naming pattern
 
-5. **Edge Cases**
+1. **Edge Cases**
    - Empty paper directory
    - Symlinks handled correctly
    - Relative vs absolute paths work
@@ -287,17 +287,17 @@ Tests from Issue #815 validate:
 #### With Paper Initialization
 
 ```mojo
-# In papers/lenet5/init.mojo or similar:
+# In papers/lenet5/init.mojo or similar
 fn initialize_paper(paper_path: String) -> Result[ValidationReport]:
     # Create structure
     # Validate structure
     # Report status to user
-```
+```text
 
 #### With Paper Workflows
 
 ```mojo
-# In training scripts:
+# In training scripts
 fn main():
     var paper_path = "papers/lenet5/"
     var validation_result = validate_structure(paper_path)
@@ -305,7 +305,7 @@ fn main():
         print_validation_errors(validation_result)
         return 1
     # Continue with training
-```
+```text
 
 ### File Organization
 
@@ -325,7 +325,7 @@ Papers/
     ├── docs/
     ├── configs/
     └── README.md
-```
+```text
 
 ### Standards and Conventions
 
@@ -355,14 +355,14 @@ Papers/
 ### Next Steps
 
 1. Implement core data structures (ValidationResult, ValidationReport)
-2. Implement directory validation function
-3. Implement file validation function
-4. Implement naming convention validation
-5. Implement report generation and formatting
-6. Add helpful error messages and suggestions
-7. Test against all test cases from Issue #815
-8. Refactor and optimize based on test results
-9. Document implementation with examples
+1. Implement directory validation function
+1. Implement file validation function
+1. Implement naming convention validation
+1. Implement report generation and formatting
+1. Add helpful error messages and suggestions
+1. Test against all test cases from Issue #815
+1. Refactor and optimize based on test results
+1. Document implementation with examples
 
 ## Implementation Status
 
@@ -398,9 +398,9 @@ None identified at start of implementation
 Implementation will be committed as logical units:
 
 1. Core structures and directory validation
-2. File validation functionality
-3. Naming convention validation
-4. Report generation and error messages
-5. Final cleanup and optimization
+1. File validation functionality
+1. Naming convention validation
+1. Report generation and error messages
+1. Final cleanup and optimization
 
 Each commit will reference this issue: `Closes #816`

@@ -28,8 +28,8 @@ Implement the Stochastic Gradient Descent (SGD) optimizer to update model parame
 ## Steps
 
 1. Implement SGD
-2. Test Optimizer
-3. Parameter Updates
+1. Test Optimizer
+1. Parameter Updates
 
 ## Success Criteria
 

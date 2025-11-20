@@ -70,7 +70,7 @@ This document
 
 **Decision**: Implement hierarchical organization from meta-orchestrator to junior engineers
 
-**Levels**:
+### Levels
 
 - Level 0: Chief Architect (strategic)
 - Level 1: Section Orchestrators (tactical)
@@ -91,7 +91,7 @@ This document
 
 **Decision**: Implement skills in `.claude/skills/` with 3-tier taxonomy
 
-**Tiers**:
+### Tiers
 
 - Tier 1: Foundational (used by all)
 - Tier 2: Domain-specific
@@ -103,7 +103,7 @@ This document
 
 **Decision**: Design entire system for Mojo development workflow
 
-**Implications**:
+### Implications
 
 - Agents understand Mojo syntax, SIMD operations, performance patterns
 - Skills include Mojo-specific operations
@@ -154,7 +154,7 @@ This document
 
 **Issue**: Original issues 62-67 were simple directory creation; expanded to comprehensive agent system
 
-**Solution**:
+### Solution
 
 - Clarified distinction between operational configs and documentation
 - Created separate issues for skills (510-514)
@@ -164,7 +164,7 @@ This document
 
 **Issue**: System needed to be tailored for Mojo development, not just generic
 
-**Solution**:
+### Solution
 
 - Added Mojo-specific context to all documentation
 - Created Mojo-focused templates and examples
@@ -174,7 +174,7 @@ This document
 
 **Issue**: 6-level hierarchy is complex to understand and document
 
-**Solution**:
+### Solution
 
 - Created multiple documentation layers (quick reference, detailed specs, examples)
 - Visual diagrams to aid understanding
@@ -191,23 +191,23 @@ This document
 
 ### Issue 63: [Test] Agents
 
-**Next Actions**:
+### Next Actions
 
 1. Create validation tests for agent .md file format
-2. Test agent loading in Claude Code
-3. Validate delegation patterns
-4. Create integration tests
+1. Test agent loading in Claude Code
+1. Validate delegation patterns
+1. Create integration tests
 
 **Estimated Effort**: Medium (2-3 days)
 
 ### Issue 64: [Impl] Agents
 
-**Next Actions**:
+### Next Actions
 
 1. Create .claude/agents/ directory
-2. Implement agent configs for all 6 levels
-3. Create agents/ documentation (use existing drafts)
-4. Create templates from examples
+1. Implement agent configs for all 6 levels
+1. Create agents/ documentation (use existing drafts)
+1. Create templates from examples
 
 **Estimated Effort**: High (1-2 weeks)
 
@@ -215,23 +215,23 @@ This document
 
 ### Issue 65: [Package] Agents
 
-**Next Actions**:
+### Next Actions
 
 1. Create integration documentation
-2. Write setup scripts and validation tools
-3. Develop team onboarding materials
-4. Test full workflow integration
+1. Write setup scripts and validation tools
+1. Develop team onboarding materials
+1. Test full workflow integration
 
 **Estimated Effort**: Medium (3-5 days)
 
 ### Issue 66: [Cleanup] Agents
 
-**Next Actions**:
+### Next Actions
 
 1. Review all agent configurations
-2. Refactor documentation for clarity
-3. Address issues from Test/Impl/Package
-4. Final QA and polish
+1. Refactor documentation for clarity
+1. Address issues from Test/Impl/Package
+1. Final QA and polish
 
 **Estimated Effort**: Low-Medium (2-3 days)
 
@@ -259,18 +259,18 @@ This document
 ### Phase 1: Agents Foundation (Issues 62-66)
 
 1. Issue 63: Test - Validate agent configs work *(2-3 days)*
-2. Issue 64: Impl - Create all agent configs *(1-2 weeks)* **← CRITICAL PATH**
-3. Issue 65: Package - Integration and onboarding *(3-5 days)*
-4. Issue 66: Cleanup - Final polish *(2-3 days)*
+1. Issue 64: Impl - Create all agent configs *(1-2 weeks)* **← CRITICAL PATH**
+1. Issue 65: Package - Integration and onboarding *(3-5 days)*
+1. Issue 66: Cleanup - Final polish *(2-3 days)*
 
 **Total Estimated Time**: 3-4 weeks
 
 ### Phase 2: Skills System (Issues 510-514)
 
 1. Issue 511: Test - Validate skill configs *(2 days)*
-2. Issue 512: Impl - Create skills for all tiers *(1 week)*
-3. Issue 513: Package - Integration documentation *(2-3 days)*
-4. Issue 514: Cleanup - Final polish *(2 days)*
+1. Issue 512: Impl - Create skills for all tiers *(1 week)*
+1. Issue 513: Package - Integration documentation *(2-3 days)*
+1. Issue 514: Cleanup - Final polish *(2 days)*
 
 **Total Estimated Time**: 2 weeks
 
@@ -327,10 +327,10 @@ Generic agent system wouldn't have served the project; Mojo-specific considerati
 ## Open Questions for Implementation
 
 1. **Performance**: How does 6-level delegation affect response time in practice?
-2. **Coordination Overhead**: Is the coordination overhead acceptable?
-3. **Skill Discovery**: Will Claude reliably discover and activate skills?
-4. **Worktree Scale**: How many concurrent worktrees can the team manage?
-5. **Learning Curve**: How long for team to become proficient with agent system?
+1. **Coordination Overhead**: Is the coordination overhead acceptable?
+1. **Skill Discovery**: Will Claude reliably discover and activate skills?
+1. **Worktree Scale**: How many concurrent worktrees can the team manage?
+1. **Learning Curve**: How long for team to become proficient with agent system?
 
 **Recommendation**: Address these during Test phase (Issues 63, 511)
 
@@ -348,7 +348,7 @@ notes/review/
 ├── skills-design.md (12KB)
 ├── orchestration-patterns.md (17KB)
 └── worktree-strategy.md (8.1KB)
-```
+```text
 
 ### Team Documentation (agents/)
 
@@ -360,7 +360,7 @@ agents/
 ├── delegation-rules.md (7.3KB)
 └── templates/
     └── level-4-implementation-engineer.md (8.9KB)
-```
+```text
 
 ### Issue-Specific Documentation (notes/issues/)
 
@@ -377,7 +377,7 @@ notes/issues/
 ├── 512/README.md - [Impl] Skills
 ├── 513/README.md - [Package] Skills
 └── 514/README.md - [Cleanup] Skills
-```
+```text
 
 ### Plans (notes/plan/)
 
@@ -387,7 +387,7 @@ notes/plan/01-foundation/01-directory-structure/03-create-supporting-dirs/
 ├── 04-tools/plan.md (updated)
 ├── 06-skills/plan.md (NEW)
 └── plan.md (updated with skills child)
-```
+```text
 
 **Total Documentation**: ~60KB of comprehensive documentation
 
@@ -416,13 +416,13 @@ notes/plan/01-foundation/01-directory-structure/03-create-supporting-dirs/
 The planning phase for the multi-level agent hierarchy is complete. We have:
 
 1. ✅ Designed a comprehensive 6-level agent system
-2. ✅ Created a 3-tier skills taxonomy
-3. ✅ Updated all plan.md files
-4. ✅ Created extensive documentation (~60KB)
-5. ✅ Updated all relevant GitHub issues
-6. ✅ Created new issues for skills system
-7. ✅ Established git worktree workflow
-8. ✅ Integrated Mojo-specific considerations throughout
+1. ✅ Created a 3-tier skills taxonomy
+1. ✅ Updated all plan.md files
+1. ✅ Created extensive documentation (~60KB)
+1. ✅ Updated all relevant GitHub issues
+1. ✅ Created new issues for skills system
+1. ✅ Established git worktree workflow
+1. ✅ Integrated Mojo-specific considerations throughout
 
 **The system is well-architected, thoroughly documented, and ready for implementation.**
 

@@ -38,13 +38,13 @@ Implement the ExTensor struct and all 150+ operations following Test-Driven Deve
    - Memory layout (row-major, strided)
    - Ownership model (owned, borrowed, inout)
 
-2. **Memory Management**
+1. **Memory Management**
    - Buffer allocation and deallocation
    - Strided memory layout for zero-copy views
    - Contiguous memory guarantee for SIMD operations
    - Reference counting or ownership transfer
 
-3. **Shape and Stride Utilities**
+1. **Shape and Stride Utilities**
    - Shape validation
    - Stride calculation for row-major layout
    - Broadcast shape computation
@@ -55,25 +55,25 @@ Implement the ExTensor struct and all 150+ operations following Test-Driven Deve
 For each operation category (following test file order):
 
 1. **Red** - Run tests and see them fail
-2. **Green** - Implement minimal code to make tests pass
-3. **Refactor** - Clean up implementation while keeping tests green
+1. **Green** - Implement minimal code to make tests pass
+1. **Refactor** - Clean up implementation while keeping tests green
 
 **Implementation Order** (matches test order):
 
 1. Creation operations (foundation for all tests)
-2. Arithmetic operations (core functionality)
-3. Broadcasting (enables arithmetic with different shapes)
-4. Comparison operations (needed for testing)
-5. Shape manipulation
-6. Reduction operations
-7. Matrix operations
-8. Pointwise math operations
-9. Bitwise operations
-10. Indexing and slicing
-11. Utility operations
-12. Edge case handling
-13. Memory safety verification
-14. Performance optimization (SIMD)
+1. Arithmetic operations (core functionality)
+1. Broadcasting (enables arithmetic with different shapes)
+1. Comparison operations (needed for testing)
+1. Shape manipulation
+1. Reduction operations
+1. Matrix operations
+1. Pointwise math operations
+1. Bitwise operations
+1. Indexing and slicing
+1. Utility operations
+1. Edge case handling
+1. Memory safety verification
+1. Performance optimization (SIMD)
 
 ### Phase 3: Optimization
 
@@ -82,12 +82,12 @@ For each operation category (following test file order):
    - Reduction operations (sum, mean, max, min)
    - Appropriate SIMD width selection
 
-2. **Memory Optimizations**
+1. **Memory Optimizations**
    - Zero-copy views (transpose, reshape, slice)
    - Cache-friendly memory access patterns
    - Minimize allocations in hot paths
 
-3. **Broadcasting Optimizations**
+1. **Broadcasting Optimizations**
    - Efficient broadcasting without materialization
    - Specialized paths for common patterns
 
@@ -111,7 +111,7 @@ For each operation category (following test file order):
 
 **Decision:** Implement only dynamic tensors (ExTensor) initially.
 
-**Rationale:**
+### Rationale:
 
 - Simpler implementation following KISS principle
 - Sufficient for research and experimentation
@@ -122,7 +122,7 @@ For each operation category (following test file order):
 
 **Decision:** Use `DynamicVector[Int]` or similar for runtime shape storage.
 
-**Rationale:**
+### Rationale:
 
 - Allows arbitrary number of dimensions
 - Efficient for small dimension counts (typical: 2-5)
@@ -132,7 +132,7 @@ For each operation category (following test file order):
 
 **Decision:** Separate broadcasting utility that computes output shapes and validates compatibility.
 
-**Rationale:**
+### Rationale:
 
 - Reusable across all operations
 - Clear separation of concerns
@@ -148,7 +148,7 @@ For each operation category (following test file order):
 - Read-only operations accept borrowed tensors
 - Mutations require `inout` parameters
 
-**Rationale:**
+### Rationale:
 
 - Safe by default (owned tensors prevent accidental aliasing)
 - Performance optimization available (in-place when needed)
@@ -158,7 +158,7 @@ For each operation category (following test file order):
 
 **Decision:** Transpose, reshape, and slice create views (zero-copy) when possible.
 
-**Rationale:**
+### Rationale:
 
 - Significant performance improvement
 - NumPy/PyTorch users expect this behavior
@@ -170,7 +170,7 @@ For each operation category (following test file order):
 
 **Decision:** Implement standard Mojo traits (Stringable, Representable, Sized, etc.) as appropriate.
 
-**Rationale:**
+### Rationale:
 
 - Interoperability with Mojo ecosystem
 - Standard protocols for common operations
@@ -180,7 +180,7 @@ For each operation category (following test file order):
 
 **Decision:** Runtime validation with descriptive error messages using Mojo's `raises` mechanism.
 
-**Rationale:**
+### Rationale:
 
 - Clear error messages improve developer experience
 - Runtime validation catches shape mismatches early
@@ -190,7 +190,7 @@ For each operation category (following test file order):
 
 **Decision:** Apply SIMD to element-wise operations with configurable width.
 
-**Rationale:**
+### Rationale:
 
 - Significant performance improvement for large tensors
 - Mojo's SIMD support makes this straightforward
@@ -216,9 +216,9 @@ For each operation category (following test file order):
 
 **Status:** Ready to begin implementation
 
-**Next Steps:**
+### Next Steps:
 
 1. Create minimal ExTensor struct (just enough to compile)
-2. Run creation operation tests (they will fail)
-3. Implement creation operations to make tests pass
-4. Continue with arithmetic operations following TDD cycle
+1. Run creation operation tests (they will fail)
+1. Implement creation operations to make tests pass
+1. Continue with arithmetic operations following TDD cycle

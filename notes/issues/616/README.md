@@ -27,13 +27,13 @@ Create comprehensive design documentation and specifications for the magic.toml 
 
 **Decision**: Use standard TOML format with three main sections: project metadata, dependencies, and channels.
 
-**Rationale**:
+### Rationale
 
 - Magic package manager follows conda/pixi conventions
 - Clear separation of concerns makes configuration maintainable
 - TOML format is human-readable and well-supported
 
-**Alternatives Considered**:
+### Alternatives Considered
 
 - Single flat configuration - rejected due to lack of organization
 - YAML format - rejected as Magic specifically requires TOML
@@ -42,14 +42,14 @@ Create comprehensive design documentation and specifications for the magic.toml 
 
 **Decision**: Include minimal but complete metadata: name, version, description, and basic project information.
 
-**Rationale**:
+### Rationale
 
 - Follows Magic best practices for package identification
 - Provides enough information for package discovery
 - Keeps configuration simple and maintainable (KISS principle)
 - Avoids over-specification (YAGNI principle)
 
-**Key Metadata Fields**:
+### Key Metadata Fields
 
 - `name`: "ml-odyssey" (project identifier)
 - `version`: "0.1.0" (semantic versioning, initial development)
@@ -61,27 +61,27 @@ Create comprehensive design documentation and specifications for the magic.toml 
 
 **Decision**: Organize dependencies into logical groups with explicit version constraints only where necessary.
 
-**Rationale**:
+### Rationale
 
 - Mojo/MAX require specific version compatibility
 - Python packages can use more flexible versioning
 - Explicit documentation of why each dependency is needed
 - Minimal constraints allow easier updates (avoid dependency hell)
 
-**Dependency Categories**:
+### Dependency Categories
 
 1. **Core Mojo/MAX**:
    - MAX package (version constraint based on compatibility)
    - Mojo compiler (if separate package)
 
-2. **Python Runtime**:
+1. **Python Runtime**:
    - Python interpreter (version 3.9+ for MAX compatibility)
 
-3. **Development Tools**:
+1. **Development Tools**:
    - Testing frameworks (deferred to later issues)
    - Documentation tools (deferred to later issues)
 
-**Version Constraint Strategy**:
+### Version Constraint Strategy
 
 - Use `>=` for flexible dependencies (e.g., `python >= 3.9`)
 - Use `~=` for compatible version ranges when needed (e.g., `max ~= 24.5`)
@@ -92,20 +92,20 @@ Create comprehensive design documentation and specifications for the magic.toml 
 
 **Decision**: Configure standard conda-forge channel plus Modular-specific channels with appropriate priority.
 
-**Rationale**:
+### Rationale
 
 - conda-forge provides broad package ecosystem
 - Modular channels required for MAX/Mojo packages
 - Channel priority prevents package conflicts
 - Standard approach familiar to conda/pixi users
 
-**Channel Configuration**:
+### Channel Configuration
 
 1. **Primary Channels**:
    - `conda-forge`: Standard package repository
    - Modular channel: For MAX/Mojo packages (exact URL TBD during implementation)
 
-2. **Channel Priority**:
+1. **Channel Priority**:
    - Modular channels take precedence for MAX/Mojo packages
    - conda-forge for everything else
    - Explicit priority prevents ambiguity
@@ -114,14 +114,14 @@ Create comprehensive design documentation and specifications for the magic.toml 
 
 **Decision**: Include inline comments explaining non-obvious choices and constraints.
 
-**Rationale**:
+### Rationale
 
 - Future maintainers need context for decisions
 - Version constraints need justification
 - Channel choices may not be obvious to new contributors
 - Self-documenting configuration reduces support burden
 
-**Comment Guidelines**:
+### Comment Guidelines
 
 - Explain WHY, not WHAT (code shows what)
 - Document version constraint rationale
@@ -132,14 +132,14 @@ Create comprehensive design documentation and specifications for the magic.toml 
 
 **Decision**: Start with minimal valid configuration, expand only as needed.
 
-**Rationale**:
+### Rationale
 
 - YAGNI principle - don't add until required
 - Easier to add than remove
 - Reduces maintenance burden
 - Faster iteration during development
 
-**What to Exclude Initially**:
+### What to Exclude Initially
 
 - Optional dependencies (add when needed)
 - Development-only tools (separate environment)
@@ -154,11 +154,11 @@ Based on the design decisions above, the implementation will proceed in three ph
 
 Create foundation with project metadata and basic structure.
 
-**Files to Create**:
+### Files to Create
 
 - `magic.toml` at repository root
 
-**Sections to Include**:
+### Sections to Include
 
 - `[project]` section with metadata
 - Empty/placeholder `[dependencies]` section
@@ -169,13 +169,13 @@ Create foundation with project metadata and basic structure.
 
 Add all required dependencies with proper versioning.
 
-**Dependencies to Add**:
+### Dependencies to Add
 
 - MAX/Mojo packages with version constraints
 - Python interpreter requirement
 - Essential development packages
 
-**Documentation Requirements**:
+### Documentation Requirements
 
 - Comment for each dependency explaining purpose
 - Version constraint rationale
@@ -185,13 +185,13 @@ Add all required dependencies with proper versioning.
 
 Configure package sources and channel priority.
 
-**Channels to Configure**:
+### Channels to Configure
 
 - conda-forge for standard packages
 - Modular channel(s) for MAX/Mojo
 - Channel priority specification
 
-**Documentation Requirements**:
+### Documentation Requirements
 
 - Explain channel purpose
 - Document priority rationale
@@ -219,24 +219,24 @@ package-name = "version-spec"  # Format: ">=1.0", "~=1.5", "==1.2.3"
 # Channels section
 [channels]
 channels = ["channel-name"]    # List of package sources
-```
+```text
 
 ### Integration Points
 
-**Input Requirements**:
+### Input Requirements
 
 - Repository root directory must exist
 - No conflicting magic.toml file present
 - Write permissions on repository root
 
-**Output Guarantees**:
+### Output Guarantees
 
 - Valid TOML syntax
 - Conformance to Magic schema
 - Parseable by Magic package manager
 - Human-readable and maintainable
 
-**Dependencies**:
+### Dependencies
 
 - Requires completion of directory structure creation
 - Required by all downstream configuration that references packages
@@ -247,10 +247,10 @@ channels = ["channel-name"]    # List of package sources
 Testing will be handled by issue #617. Key test scenarios:
 
 1. **Syntax Validation**: TOML parser can read file without errors
-2. **Schema Validation**: Magic can parse and validate configuration
-3. **Dependency Resolution**: All specified packages are resolvable
-4. **Environment Creation**: Can create environment from magic.toml
-5. **Reproducibility**: Same configuration creates identical environment
+1. **Schema Validation**: Magic can parse and validate configuration
+1. **Dependency Resolution**: All specified packages are resolvable
+1. **Environment Creation**: Can create environment from magic.toml
+1. **Reproducibility**: Same configuration creates identical environment
 
 ## References
 

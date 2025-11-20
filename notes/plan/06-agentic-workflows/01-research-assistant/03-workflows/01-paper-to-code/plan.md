@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Analyze paper to extract key information
-2. Suggest architecture based on analysis
-3. Generate code scaffolding
-4. Create implementation plan
+1. Suggest architecture based on analysis
+1. Generate code scaffolding
+1. Create implementation plan
 
 ## Success Criteria
 

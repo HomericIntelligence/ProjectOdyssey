@@ -92,6 +92,7 @@ docs/
 Documentation can be viewed directly in the repository or built for web deployment:
 
 ```bash
+
 ```bash
 
 # Preview documentation locally (requires mkdocs)
@@ -125,6 +126,6 @@ The documentation is configured for MkDocs in the root `mkdocs.yml` file. This e
 ## Next Steps
 
 1. Review existing documentation in subdirectories
-2. Start with the [Quickstart Guide](getting-started/quickstart.md)
-3. Explore [Core Concepts](core/project-structure.md)
-4. Check [API Reference](dev/api-reference.md) for detailed component documentation
+1. Start with the [Quickstart Guide](getting-started/quickstart.md)
+1. Explore [Core Concepts](core/project-structure.md)
+1. Check [API Reference](dev/api-reference.md) for detailed component documentation

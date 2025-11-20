@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Implement fully connected layer
-2. Support matrix multiplication
-3. Add bias term
+1. Support matrix multiplication
+1. Add bias term
 
 ## Success Criteria
 

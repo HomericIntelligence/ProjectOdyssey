@@ -29,10 +29,10 @@ None (leaf node)
 ## Steps
 
 1. Document code style guidelines (refer to black, ruff configs)
-2. Define documentation standards for code and APIs
-3. Specify testing requirements and coverage expectations
-4. Establish commit message conventions
-5. Provide examples of good practices
+1. Define documentation standards for code and APIs
+1. Specify testing requirements and coverage expectations
+1. Establish commit message conventions
+1. Provide examples of good practices
 
 ## Success Criteria
 

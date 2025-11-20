@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Implement linear warmup (gradual increase)
-2. Add exponential warmup option
-3. Support both step-based and epoch-based warmup
-4. Enable chaining with other schedulers (warmup then decay)
+1. Add exponential warmup option
+1. Support both step-based and epoch-based warmup
+1. Enable chaining with other schedulers (warmup then decay)
 
 ## Success Criteria
 

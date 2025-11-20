@@ -30,7 +30,7 @@ mojo test tests/shared/integration/
 
 # Run benchmarks
 mojo test tests/shared/benchmarks/
-```
+```text
 
 ### Running Tests in CI
 
@@ -82,7 +82,7 @@ tests/shared/
     ├── tensors/                     # Pre-computed tensors
     ├── models/                      # Small model weights
     └── reference/                   # Reference outputs
-```
+```text
 
 ## Test Philosophy
 
@@ -115,7 +115,7 @@ tests/shared/
 
 Test individual functions and components in isolation.
 
-**What to Test**:
+### What to Test
 
 - Core functionality and main use cases
 - Security-sensitive code (validation, boundaries)
@@ -123,7 +123,7 @@ Test individual functions and components in isolation.
 - Error handling for critical paths
 - Integration points between modules
 
-**What to Skip**:
+### What to Skip
 
 - Trivial getters/setters
 - Simple constructors with no logic
@@ -135,7 +135,7 @@ Test individual functions and components in isolation.
 
 Test cross-module workflows and component interactions.
 
-**What to Test**:
+### What to Test
 
 - End-to-end training workflows
 - Data loading pipelines
@@ -148,14 +148,14 @@ Test cross-module workflows and component interactions.
 
 Establish baseline metrics and prevent regressions.
 
-**What to Test**:
+### What to Test
 
 - Optimizer update throughput
 - Layer forward/backward pass speed
 - Data loading performance
 - Memory allocation patterns
 
-**Targets**:
+### Targets
 
 - Within 2x of PyTorch for optimizers
 - SIMD-vectorized operations
@@ -167,7 +167,7 @@ Establish baseline metrics and prevent regressions.
 
 Validate correctness against reference implementations.
 
-**What to Test**:
+### What to Test
 
 - Compare optimizer updates to PyTorch
 - Validate layer outputs against known values
@@ -189,7 +189,7 @@ fn test_sgd_basic_update():
 fn test_conv2d_output_shape():
     """Test Conv2D computes correct output shape."""
     pass
-```
+```text
 
 ### Property Tests
 
@@ -198,7 +198,7 @@ fn test_conv2d_output_shape():
 fn test_optimizer_property_decreasing_loss():
     """Property: Optimizer should decrease loss on convex function."""
     pass
-```
+```text
 
 ### Benchmark Functions
 
@@ -207,7 +207,7 @@ fn test_optimizer_property_decreasing_loss():
 fn bench_sgd_update_speed():
     """Benchmark SGD parameter update throughput."""
     pass
-```
+```text
 
 ## Writing New Tests
 
@@ -232,7 +232,7 @@ fn test_my_feature():
 
     # Assert: Verify expected behavior
     assert_equal(result, expected_value)
-```
+```text
 
 ### 3. Use Test Fixtures
 
@@ -244,7 +244,7 @@ fn test_with_fixture():
     var fixture = TestFixtures.simple_linear_model()
     var output = fixture.forward(test_input)
     assert_shape_equal(output, expected_shape)
-```
+```text
 
 ### 4. Write Clear Assertions
 
@@ -261,7 +261,7 @@ fn test_sgd_updates_parameters():
 fn test_sgd_everything():
     """Test SGD updates, momentum, weight decay, etc."""  # Too broad
     pass
-```
+```text
 
 ## Test Utilities
 
@@ -275,7 +275,7 @@ assert_equal(a, b, message="")               # Exact equality
 assert_almost_equal(a, b, tolerance=1e-6)    # Float near-equality
 assert_tensor_equal(a, b, tolerance=1e-6)    # Tensor equality
 assert_shape_equal(tensor, expected_shape)   # Shape check
-```
+```text
 
 ### Test Fixtures
 
@@ -285,7 +285,7 @@ Located in `conftest.mojo`:
 TestFixtures.small_tensor()                  # 3x3 test tensor
 TestFixtures.simple_linear_model()           # Linear layer
 TestFixtures.synthetic_dataset(n=100)        # Synthetic data
-```
+```text
 
 ## Coverage Reporting
 
@@ -301,7 +301,7 @@ python scripts/check_coverage.py --threshold 90 --path shared/
 # Generate HTML report
 mojo test --coverage --html tests/shared/
 open coverage_html_report/index.html
-```
+```text
 
 ### Coverage Exemptions
 
@@ -336,7 +336,7 @@ fn test_linear_forward():
     # Check values (known computation)
     let expected_value = 10 * 0.1  # sum of weights
     assert_almost_equal(output[0, 0], expected_value)
-```
+```text
 
 ### Testing Optimizers
 
@@ -357,7 +357,7 @@ fn test_sgd_parameter_update():
     assert_almost_equal(params[0], 0.99)  # 1.0 - 0.1*0.1
     assert_almost_equal(params[1], 1.98)  # 2.0 - 0.1*0.2
     assert_almost_equal(params[2], 2.97)  # 3.0 - 0.1*0.3
-```
+```text
 
 ### Testing Data Loaders
 
@@ -383,7 +383,7 @@ fn test_dataloader_batching():
     assert_equal(batch_sizes[1], 32)
     assert_equal(batch_sizes[2], 32)
     assert_equal(batch_sizes[3], 4)  # Partial batch
-```
+```text
 
 ### Testing Integration Workflows
 
@@ -412,7 +412,7 @@ fn test_basic_training_loop():
     # Verify validation accuracy
     var val_acc = evaluate(model, val_data)
     assert_true(val_acc > 0.5)  # Better than random
-```
+```text
 
 ## Performance Benchmarking
 
@@ -450,7 +450,7 @@ fn bench_sgd_update_speed():
 
     # Print results
     print_benchmark_results(results)
-```
+```text
 
 ### Performance Targets
 
@@ -472,7 +472,7 @@ fn test_my_feature():
     var result = function_under_test(data)
     print("Result:", result)  # Debug output
     assert_equal(result, expected)
-```
+```text
 
 ### Coverage Issues
 
@@ -481,10 +481,10 @@ fn test_my_feature():
 mojo test --coverage --show-missing tests/shared/
 
 # Exclude files from coverage
-# Add to .coveragerc:
+# Add to .coveragerc
 # [run]
 # omit = */__init__.mojo
-```
+```text
 
 ### Slow Tests
 
@@ -494,16 +494,16 @@ mojo test --profile tests/shared/
 
 # Run only fast tests
 mojo test -m "not slow" tests/shared/
-```
+```text
 
 ## Contributing
 
 ### Before Adding Tests
 
 1. **Check existing tests**: Avoid duplication
-2. **Choose appropriate test type**: Unit vs integration vs benchmark
-3. **Follow naming conventions**: `test_<component>_<behavior>`
-4. **Write clear docstrings**: Explain what is tested
+1. **Choose appropriate test type**: Unit vs integration vs benchmark
+1. **Follow naming conventions**: `test_<component>_<behavior>`
+1. **Write clear docstrings**: Explain what is tested
 
 ### Test Review Checklist
 
@@ -522,7 +522,7 @@ mojo test -m "not slow" tests/shared/
 - [Mojo Testing Docs](https://docs.modular.com/mojo/tools/testing/) - Official Mojo testing guide
 - [Issue #48](https://github.com/mvillmow/ml-odyssey/issues/48) - Test implementation issue
 
-## Questions?
+## Questions
 
 - Check the test architecture document
 - Review existing test files for examples

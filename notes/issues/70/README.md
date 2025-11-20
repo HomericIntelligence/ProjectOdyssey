@@ -29,7 +29,7 @@ Comprehensive guide covering:
 - Troubleshooting
 - Complete workflow examples
 
-**Key Features**:
+### Key Features
 
 - Clear decision tree for tool selection
 - Integration points with existing infrastructure
@@ -52,7 +52,7 @@ Complete catalog of all development tools:
 - Tool selection guide with decision tree
 - Contributing guidelines
 
-**Tools Cataloged**:
+### Tools Cataloged
 
 - Paper scaffolding (1 tool)
 - Testing utilities (4 tools)
@@ -89,7 +89,7 @@ Automated installation script:
 - Colored terminal output
 - Error handling and reporting
 
-**Features**:
+### Features
 
 - Cross-platform support
 - Prerequisite validation
@@ -109,13 +109,13 @@ Verification script:
 - Verbose mode support
 - Clear summary reporting
 
-**Verification Categories**:
+### Verification Categories
 
 1. Prerequisites (Python, Mojo, Git, repository)
-2. Python dependencies (jinja2, pyyaml, click)
-3. Tool structure (directories and files)
-4. Tool documentation (READMEs)
-5. Output directories (benchmarks, logs)
+1. Python dependencies (jinja2, pyyaml, click)
+1. Tool structure (directories and files)
+1. Tool documentation (READMEs)
+1. Output directories (benchmarks, logs)
 
 ### 5. Dependencies
 
@@ -212,22 +212,22 @@ Confirmed integration with:
 
 ## File Manifest
 
-**Documentation Created**:
+### Documentation Created
 
 - `/tools/INTEGRATION.md` - Integration guide (372 lines)
 - `/tools/CATALOG.md` - Tool catalog (509 lines)
 - `/tools/INSTALL.md` - Installation guide (498 lines)
 
-**Scripts Created**:
+### Scripts Created
 
 - `/tools/setup/install_tools.py` - Installation script (249 lines)
 - `/tools/setup/verify_tools.py` - Verification script (229 lines)
 
-**Configuration Created**:
+### Configuration Created
 
 - `/tools/requirements.txt` - Python dependencies (23 lines)
 
-**Issue Documentation**:
+### Issue Documentation
 
 - `/notes/issues/70/README.md` - This document
 
@@ -252,7 +252,7 @@ cat tools/INTEGRATION.md
 
 # Browse tool catalog
 cat tools/CATALOG.md
-```
+```text
 
 ### Integration Check
 
@@ -271,7 +271,7 @@ ls -1 tools/setup/*.py
 
 # Verify requirements
 cat tools/requirements.txt
-```
+```text
 
 ## Success Criteria
 
@@ -295,11 +295,11 @@ cat tools/requirements.txt
    - Browse `/tools/CATALOG.md` for available tools
    - Reference `/tools/INSTALL.md` for setup
 
-2. **Install Tools**:
+1. **Install Tools**:
    - Run `python3 tools/setup/install_tools.py`
    - Verify with `python3 tools/setup/verify_tools.py`
 
-3. **Use Tools**:
+1. **Use Tools**:
    - Follow examples in INTEGRATION.md
    - Reference tool-specific READMEs
    - Report issues or contribute improvements
@@ -355,16 +355,16 @@ The packaging phase focused on:
 1. **Separate Documentation Files**: Created INTEGRATION.md, CATALOG.md, INSTALL.md instead of
    expanding README.md to maintain clear separation of concerns.
 
-2. **Automated Setup**: Provided both automated (install_tools.py) and manual installation paths
+1. **Automated Setup**: Provided both automated (install_tools.py) and manual installation paths
    to support different user preferences and environments.
 
-3. **Comprehensive Catalog**: Documented all planned tools upfront (even though not yet
+1. **Comprehensive Catalog**: Documented all planned tools upfront (even though not yet
    implemented) to provide clear roadmap and prevent scope creep.
 
-4. **Platform Support**: Documented platform-specific notes for Linux, macOS, and Windows/WSL2
+1. **Platform Support**: Documented platform-specific notes for Linux, macOS, and Windows/WSL2
    to ensure broad compatibility.
 
-5. **Verification First**: Created verification script alongside installation to enable validation
+1. **Verification First**: Created verification script alongside installation to enable validation
    of setup completeness.
 
 ### Integration Strategy

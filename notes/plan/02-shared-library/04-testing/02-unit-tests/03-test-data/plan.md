@@ -30,10 +30,10 @@ None (leaf node)
 ## Steps
 
 1. Write tests for dataset interface (len, getitem)
-2. Create tests for data loader operations
-3. Build tests for augmentations (verify properties preserved)
-4. Add edge case tests (empty datasets, size 1)
-5. Verify complete data pipeline workflows
+1. Create tests for data loader operations
+1. Build tests for augmentations (verify properties preserved)
+1. Add edge case tests (empty datasets, size 1)
+1. Verify complete data pipeline workflows
 
 ## Success Criteria
 

@@ -34,16 +34,20 @@ As specified in the issue description.
 ## Implementation Notes
 
 ## Overview
+
 Create a prompt template for reviewing code implementations against paper specifications. The template helps identify correctness issues, missing components, and discrepancies between paper and code.
 
 ## Packaging Objectives
+
 - Integrate the implementation with existing codebase
 - Ensure all dependencies are properly configured
 - Verify compatibility with other components
 - Package for deployment/distribution
 
 ## Integration Requirements
+
 Based on outputs:
+
 - Implementation reviewer prompt template
 - Review checklist with criteria
 - Few-shot examples of reviews
@@ -51,12 +55,14 @@ Based on outputs:
 - Suggestion templates for improvements
 
 ## Integration Steps
+
 1. Define review criteria and checklist
-2. Create structured feedback format
-3. Add few-shot review examples
-4. Include improvement suggestion patterns
+1. Create structured feedback format
+1. Add few-shot review examples
+1. Include improvement suggestion patterns
 
 ## Success Criteria
+
 - [ ] Template covers all review criteria
 - [ ] Feedback format is clear and actionable
 - [ ] Checklist ensures comprehensive review
@@ -65,6 +71,7 @@ Based on outputs:
 - [ ] Template identifies both issues and strengths
 
 ## Notes
+
 Review criteria should include: correctness of algorithm implementation, completeness of required components, adherence to paper specifications, code quality, and potential bugs. Use XML tags like <correctness>, <completeness>, <issues>, <suggestions>.
 
 ## Status

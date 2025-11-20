@@ -16,6 +16,7 @@ establishing shared/core/ as the single source of truth for tensor operations.
 **Verification Report**: notes/issues/CLEANUP/verification-report.md
 
 File comparison results:
+
 - 6 files identical between src/extensor/ and shared/core/
 - 2 files with 411-523 diff lines (dtype dispatch refactoring)
 - 3 files only in src/extensor/ (superseded by shared/core/ versions)
@@ -36,6 +37,7 @@ Preserved pre-deletion state with verification report for historical reference.
 **Commit**: e52f095 - "refactor(core): remove src/extensor technical debt"
 
 Removed 13 files (6,606 deletions):
+
 - src/extensor/__init__.mojo
 - src/extensor/activations.mojo
 - src/extensor/arithmetic.mojo
@@ -57,6 +59,7 @@ Empty parent directory src/ was automatically removed.
 **Commit**: ad85de4 - "refactor(tests): consolidate extensor tests into shared/core/legacy"
 
 Moved 17 test files from tests/extensor/ to tests/shared/core/legacy/:
+
 - test_activations.mojo
 - test_arithmetic.mojo
 - test_broadcasting.mojo
@@ -83,6 +86,7 @@ Removed empty tests/extensor/ directory.
 **Commit**: eb0bb2c - "refactor(imports): update all extensor imports to shared.core"
 
 Updated 14 files to use shared.core imports:
+
 - tests/helpers/gradient_checking.mojo
 - tests/training/test_accuracy.mojo
 - tests/training/test_confusion_matrix.mojo
@@ -103,6 +107,7 @@ Verified: Zero extensor imports remain in .mojo files.
 ### Phase 6: Update Documentation ✅
 
 Updated docs/extensor/README.md:
+
 - Version bump: 0.1.0 → 0.2.0
 - Added location note: "Location: shared/core/ (formerly src/extensor/)"
 - Added migration note about import changes
@@ -139,7 +144,7 @@ shared/core/                     # 24 files, 9,950 lines - CURRENT
 
 tests/extensor/                  # 17 test files - Using OLD code
 tests/shared/core/               # 15 test files - Using NEW code
-```
+```text
 
 ### After Consolidation
 
@@ -158,16 +163,16 @@ tests/shared/core/               # 32 test files total
 ├── test_*.mojo                  # 15 current tests
 └── legacy/                      # 17 legacy tests (consolidated)
     └── test_*.mojo              # All using shared.core imports
-```
+```text
 
 ### Key Improvements
 
 1. **Single Source of Truth**: shared/core/ is now the only implementation
-2. **No Duplication**: Eliminated 6,487 lines of outdated code
-3. **Consistent Imports**: All code uses `from shared.core`
-4. **Better Organization**: Tests consolidated under tests/shared/core/
-5. **Modern Implementation**: All code has dtype dispatch and @always_inline
-6. **Updated Documentation**: All examples reference shared.core
+1. **No Duplication**: Eliminated 6,487 lines of outdated code
+1. **Consistent Imports**: All code uses `from shared.core`
+1. **Better Organization**: Tests consolidated under tests/shared/core/
+1. **Modern Implementation**: All code has dtype dispatch and @always_inline
+1. **Updated Documentation**: All examples reference shared.core
 
 ## Technical Details
 
@@ -176,9 +181,9 @@ tests/shared/core/               # 32 test files total
 The recent dtype dispatch refactoring (7 commits, 500+ lines) added:
 
 1. **dtype_dispatch.mojo** (421 lines): Infrastructure for type-generic operations
-2. **@always_inline decorators**: Performance optimization for 23+ helper functions
-3. **Numerical gradient checking**: helpers/gradient_checking.mojo (234 lines)
-4. **Code reduction**: 500+ lines removed through generic programming
+1. **@always_inline decorators**: Performance optimization for 23+ helper functions
+1. **Numerical gradient checking**: helpers/gradient_checking.mojo (234 lines)
+1. **Code reduction**: 500+ lines removed through generic programming
 
 ### Files Affected by Dtype Dispatch
 
@@ -190,27 +195,31 @@ The recent dtype dispatch refactoring (7 commits, 500+ lines) added:
 
 ### For Code Using Old Imports
 
-**Before**:
+### Before
+
 ```mojo
 from extensor import ExTensor, zeros, ones, add, multiply
-```
+```text
 
-**After**:
+### After
+
 ```mojo
 from shared.core import ExTensor, zeros, ones, add, multiply
-```
+```text
 
 ### For Build Scripts
 
-**Before**:
+### Before
+
 ```bash
 mojo package src/extensor -o extensor.mojopkg
-```
+```text
 
-**After**:
+### After
+
 ```bash
 mojo package shared/core -o shared_core.mojopkg
-```
+```text
 
 ## Remaining Work
 
@@ -222,10 +231,10 @@ mojo package shared/core -o shared_core.mojopkg
    - shared/types/ (if empty)
    - shared/utils/ (if empty)
 
-2. Consider archiving demo files:
+1. Consider archiving demo files:
    - shared/core/activation_refactored_demo.mojo → notes/review/demos/
 
-3. Merge legacy tests into main test suite:
+1. Merge legacy tests into main test suite:
    - Analyze coverage gaps
    - Merge unique test cases into main tests
    - Remove redundant legacy tests

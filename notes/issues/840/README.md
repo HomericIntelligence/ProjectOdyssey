@@ -42,13 +42,13 @@ ensures the repository maintains adequate test coverage and prevents merging cod
 
 **Status**: Ready to start (depends on related planning issues)
 
-**Dependencies**:
+### Dependencies
 
 - Related planning issue must be complete
 - Can proceed in parallel with implementation phase
 - Coordinates with implementation for TDD workflow
 
-**Test Coverage Goals**:
+### Test Coverage Goals
 
 - Threshold loading: Configuration from project files
 - Threshold comparison: Overall and per-file thresholds
@@ -58,18 +58,18 @@ ensures the repository maintains adequate test coverage and prevents merging cod
 - Grace period: New files are handled appropriately
 - Error handling: Missing config, invalid thresholds, invalid coverage data
 
-**Key Test Files**:
+### Key Test Files
 
 1. `test_threshold_loading.mojo` - Load threshold configuration from project files
-2. `test_threshold_comparison.mojo` - Compare actual coverage against thresholds
-3. `test_violation_detection.mojo` - Identify files and areas below threshold
-4. `test_grace_period.mojo` - Handle grace period for new files
-5. `test_validation_report.mojo` - Generate validation reports with violations
-6. `test_exit_codes.mojo` - Verify CI/CD exit code behavior
-7. `test_threshold_types.mojo` - Test both overall and per-file thresholds
-8. `test_threshold_integration.mojo` - End-to-end workflows
+1. `test_threshold_comparison.mojo` - Compare actual coverage against thresholds
+1. `test_violation_detection.mojo` - Identify files and areas below threshold
+1. `test_grace_period.mojo` - Handle grace period for new files
+1. `test_validation_report.mojo` - Generate validation reports with violations
+1. `test_exit_codes.mojo` - Verify CI/CD exit code behavior
+1. `test_threshold_types.mojo` - Test both overall and per-file thresholds
+1. `test_threshold_integration.mojo` - End-to-end workflows
 
-**TDD Approach**:
+### TDD Approach
 
 - Write tests BEFORE implementation (coordinate with implementation issue)
 - Tests should fail initially
@@ -77,7 +77,7 @@ ensures the repository maintains adequate test coverage and prevents merging cod
 - Iterate on test refinement
 - Tests serve as executable specifications
 
-**Test Scenarios to Cover**:
+### Test Scenarios to Cover
 
 ### Threshold Loading Tests
 
@@ -139,7 +139,7 @@ ensures the repository maintains adequate test coverage and prevents merging cod
 - Fractional coverage percentages (e.g., 88.5%)
 - Mixed new and existing files in same run
 
-**Next Steps**:
+### Next Steps
 
 - Review related planning documentation
 - Create test directory structure
@@ -149,15 +149,15 @@ ensures the repository maintains adequate test coverage and prevents merging cod
 
 ## Test Organization Strategy
 
-**Rationale for 8 Separate Test Files**:
+### Rationale for 8 Separate Test Files
 
 1. Each file has a single responsibility
-2. Easier to run specific test categories
-3. Clearer test failures (file name indicates what failed)
-4. Parallel test execution possible
-5. Matches coverage validation workflow phases
+1. Easier to run specific test categories
+1. Clearer test failures (file name indicates what failed)
+1. Parallel test execution possible
+1. Matches coverage validation workflow phases
 
-**Test File Mapping to Functionality**:
+### Test File Mapping to Functionality
 
 | Test File | Responsibility | Key Components |
 | --- | --- | --- |
@@ -172,7 +172,7 @@ ensures the repository maintains adequate test coverage and prevents merging cod
 
 ## Key Testing Patterns
 
-**Test Fixtures**:
+### Test Fixtures
 
 - Mock configuration objects
 - Mock coverage data (various scenarios)
@@ -180,14 +180,14 @@ ensures the repository maintains adequate test coverage and prevents merging cod
 - Expected report templates
 - Sample thresholds (various levels)
 
-**Parametrized Tests**:
+### Parametrized Tests
 
 - Test multiple threshold levels
 - Test various coverage percentages
 - Test different file types and counts
 - Test edge case coverage values
 
-**Mock Data Strategy**:
+### Mock Data Strategy
 
 - Create realistic coverage data structures
 - Simulate both passing and failing scenarios
@@ -196,21 +196,21 @@ ensures the repository maintains adequate test coverage and prevents merging cod
 
 ## Success Metrics
 
-**Coverage**:
+### Coverage
 
 - All threshold validation logic tested
 - All code paths in comparison logic covered
 - All error conditions handled
 - All output formats tested
 
-**Test Quality**:
+### Test Quality
 
 - Clear, descriptive test names
 - Comprehensive docstrings
 - Proper test isolation (no side effects)
 - Deterministic results
 
-**Readability**:
+### Readability
 
 - Tests serve as documentation
 - Clear assertion messages
@@ -218,7 +218,7 @@ ensures the repository maintains adequate test coverage and prevents merging cod
 
 ## Alignment with Issue Requirements
 
-**From Issue Body**:
+### From Issue Body
 
 ### Testing Objectives (Covered by Plan)
 
@@ -237,7 +237,9 @@ ensures the repository maintains adequate test coverage and prevents merging cod
 ### Test Success Criteria (All Addressed)
 
 - [x] Thresholds are configurable per project → test_threshold_loading.mojo,
+
 test_threshold_types.mojo
+
 - [x] Validation accurately checks coverage → test_threshold_comparison.mojo
 - [x] Clear report shows threshold violations → test_validation_report.mojo
 - [x] Exit code supports CI/CD integration → test_exit_codes.mojo
@@ -261,25 +263,25 @@ test_threshold_types.mojo
 ### Implementation Phase (Related Issue)
 
 1. Implement threshold loading from configuration
-2. Implement comparison logic for coverage vs. thresholds
-3. Implement violation detection and reporting
-4. Implement grace period handling
-5. Run tests to verify implementation
-6. Fix failing tests by improving implementation
-7. Ensure all tests pass before PR
+1. Implement comparison logic for coverage vs. thresholds
+1. Implement violation detection and reporting
+1. Implement grace period handling
+1. Run tests to verify implementation
+1. Fix failing tests by improving implementation
+1. Ensure all tests pass before PR
 
 ### Packaging Phase
 
 1. Integrate threshold validation into CI/CD pipeline
-2. Configure as pre-merge validation
-3. Test integration with GitHub Actions
-4. Document threshold configuration
-5. Deploy to production
+1. Configure as pre-merge validation
+1. Test integration with GitHub Actions
+1. Document threshold configuration
+1. Deploy to production
 
 ### Cleanup Phase
 
 1. Review test coverage
-2. Add any missing edge cases
-3. Refactor test code (remove duplication)
-4. Update documentation as needed
-5. Performance optimization if needed
+1. Add any missing edge cases
+1. Refactor test code (remove duplication)
+1. Update documentation as needed
+1. Performance optimization if needed

@@ -32,8 +32,8 @@ Create a tool that verifies overall repository completeness by checking for requ
 ## Steps
 
 1. Check all required files are present
-2. Assess code quality across repository
-3. Generate comprehensive report
+1. Assess code quality across repository
+1. Generate comprehensive report
 
 ## Success Criteria
 

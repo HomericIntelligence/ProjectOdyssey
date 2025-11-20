@@ -70,7 +70,7 @@ fn function_name(arg1: Type1, arg2: Type2) -> ReturnType:
     """
     # Implementation
     return result
-```
+```text
 
 #### Simple struct
 
@@ -84,7 +84,7 @@ struct StructName:
     fn __init__(inout self, field1: Type1, field2: Type2):
         self.field1 = field1
         self.field2 = field2
-```
+```text
 
 ### Memory Management Basics
 
@@ -121,7 +121,7 @@ fn get_shape(borrowed tensor: Tensor) -> Shape:
         Shape of the tensor
     """
     return tensor.shape
-```
+```text
 
 ### Example 2: Boilerplate Code
 
@@ -139,7 +139,7 @@ struct TestData:
     fn __init__(inout self, input: Tensor, expected: Tensor):
         self.input = input
         self.expected = expected
-```
+```text
 
 ### Example 3: Code Formatting
 
@@ -148,9 +148,9 @@ Clean up code formatting:
 Junior Engineer:
 
 1. Runs Mojo formatter
-2. Applies standard indentation
-3. Adds missing docstrings
-4. Reports completion
+1. Applies standard indentation
+1. Adds missing docstrings
+1. Reports completion
 
 ## Constraints
 

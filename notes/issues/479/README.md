@@ -65,7 +65,7 @@ def test_console_report_lists_low_coverage_files():
     # Given: Coverage data with files at different percentages
     # When: Generate console report
     # Then: Files < 80% are highlighted
-```
+```text
 
 **2. HTML Report Testing**
 
@@ -83,7 +83,7 @@ def test_html_report_highlights_uncovered_lines():
     # Given: File with partial coverage
     # When: Generate HTML file page
     # Then: Uncovered lines have red background
-```
+```text
 
 **3. Statistics Calculation Testing**
 
@@ -101,7 +101,7 @@ def test_branch_coverage_calculation():
     # Given: Coverage data with branch information
     # When: Calculate branch coverage
     # Then: Accounts for both taken and missed branches
-```
+```text
 
 **4. Historical Tracking Testing**
 
@@ -119,11 +119,11 @@ def test_historical_tracking_calculates_delta():
     # Given: Two coverage snapshots
     # When: Calculate delta
     # Then: Returns difference in percentage points
-```
+```text
 
 ### Test Fixtures
 
-**Mock Coverage Data**:
+### Mock Coverage Data
 
 ```python
 # conftest.py or fixtures file
@@ -149,30 +149,34 @@ def sample_coverage_data():
             "coverage_percent": 86.67
         }
     }
-```
+```text
 
 ### Key Test Scenarios
 
-**Report Generation**:
+### Report Generation
+
 - [ ] Console report generates for valid coverage data
 - [ ] HTML report creates all necessary files
 - [ ] Reports handle empty coverage data gracefully
 - [ ] Reports handle 100% coverage correctly
 - [ ] Reports handle 0% coverage correctly
 
-**Accuracy**:
+### Accuracy
+
 - [ ] Coverage percentages match input data
 - [ ] Uncovered lines are correctly identified
 - [ ] File-level statistics aggregate correctly
 - [ ] Module-level rollups are accurate
 
-**Formatting**:
+### Formatting
+
 - [ ] Console report is readable in terminal
 - [ ] HTML report is valid HTML5
 - [ ] Colors are accessible (colorblind-friendly)
 - [ ] Reports work in different browsers
 
-**Performance**:
+### Performance
+
 - [ ] Report generation completes in < 10 seconds (Issue #478)
 - [ ] HTML report size is reasonable
 - [ ] Large codebases don't cause timeouts
@@ -187,7 +191,7 @@ def test_integration_with_coverage_py():
     # Given: Real .coverage file from pytest-cov
     # When: Generate reports
     # Then: Reports accurately reflect coverage.py data
-```
+```text
 
 ### Open Questions to Address
 

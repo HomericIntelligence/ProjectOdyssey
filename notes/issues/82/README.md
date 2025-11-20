@@ -64,13 +64,13 @@ The repository already has well-established structures for both `papers/` and `s
    - Provides consistent structure for all paper implementations
    - Includes comprehensive documentation template
 
-2. **Shared Directory** (`/shared/`)
+1. **Shared Directory** (`/shared/`)
    - `core/` - Fundamental ML/AI building blocks
    - `training/` - Training infrastructure and utilities
    - `data/` - Data loading and processing
    - `utils/` - Helper utilities and tools
 
-3. **Supporting Directories** (from Issues #77-81)
+1. **Supporting Directories** (from Issues #77-81)
    - `benchmarks/` - Performance testing
    - `docs/` - Project documentation
    - `agents/` - Claude agent configurations
@@ -105,7 +105,7 @@ papers/
     ├── configs/                # Training configurations
     ├── notebooks/              # Experiments and analysis
     └── examples/               # Demonstration scripts
-```
+```text
 
 ### 1.2 Paper Implementation Structure
 
@@ -123,7 +123,7 @@ src/
 ├── loss.mojo                   # Paper-specific loss functions
 ├── metrics.mojo                # Paper-specific metrics
 └── utils.mojo                  # Paper-specific utilities
-```
+```text
 
 #### Scripts (`scripts/`)
 
@@ -133,7 +133,7 @@ scripts/
 ├── download_dataset.mojo       # Download required datasets
 ├── download_reference.mojo     # Download reference implementation
 └── setup.mojo                  # Complete setup script
-```
+```text
 
 #### Tests (`tests/`)
 
@@ -145,7 +145,7 @@ tests/
 ├── test_training.mojo          # Training pipeline tests
 ├── test_metrics.mojo           # Metric computation tests
 └── test_integration.mojo       # End-to-end tests
-```
+```text
 
 #### Data Management (`data/`)
 
@@ -155,7 +155,7 @@ data/
 ├── processed/                  # Preprocessed data (git-ignored)
 ├── cache/                      # Cached computations (git-ignored)
 └── .gitignore                  # Ignore data files
-```
+```text
 
 #### Configuration (`configs/`)
 
@@ -167,7 +167,7 @@ configs/
 └── hparams/                    # Hyperparameter sweeps
     ├── learning_rate.yaml
     └── batch_size.yaml
-```
+```text
 
 ### 1.3 Paper Naming Conventions
 
@@ -217,7 +217,7 @@ shared/
     ├── visualization.mojo      # Plotting and visualization
     ├── io.mojo                 # File I/O helpers
     └── profiling.mojo          # Performance profiling
-```
+```text
 
 ### 2.2 Component Details
 
@@ -249,7 +249,7 @@ core/
     ├── memory.mojo             # Memory management
     ├── module.mojo             # Module base class
     └── parameter.mojo          # Parameter management
-```
+```text
 
 #### Training Components (`training/`)
 
@@ -285,7 +285,7 @@ training/
     ├── supervised.mojo          # Standard supervised training
     ├── validation.mojo          # Training with validation
     └── distributed.mojo         # Distributed training
-```
+```text
 
 ---
 
@@ -314,7 +314,7 @@ trait Module:
     fn eval(inout self):
         """Set evaluation mode."""
         ...
-```
+```text
 
 #### Layer Interface
 
@@ -329,7 +329,7 @@ trait Layer(Module):
     fn extra_repr(self) -> String:
         """Extra representation string."""
         ...
-```
+```text
 
 ### 3.2 Training Interfaces
 
@@ -350,7 +350,7 @@ trait Optimizer:
     fn state_dict(self) -> Dict[String, Any]:
         """Return optimizer state."""
         ...
-```
+```text
 
 #### Dataset Interface
 
@@ -365,7 +365,7 @@ trait Dataset:
     fn __getitem__(self, index: Int) -> Tuple[Tensor, Tensor]:
         """Get item at index."""
         ...
-```
+```text
 
 ### 3.3 Data Flow Contracts
 
@@ -399,7 +399,7 @@ from shared.data import DataLoader, transforms
 struct LeNet5:
     var conv1: Conv2D  # From shared
     var custom: CustomLayer  # Paper-specific
-```
+```text
 
 ### 4.2 Dependency Flow
 
@@ -415,16 +415,16 @@ Core ← Training, Data, Utils
 Training → Core
 Data → Core, Utils
 Utils → Core
-```
+```text
 
 ### 4.3 Extension Points
 
 Papers can extend shared components:
 
 1. **Custom Layers**: Inherit from `Layer` trait
-2. **Custom Optimizers**: Implement `Optimizer` interface
-3. **Custom Datasets**: Implement `Dataset` interface
-4. **Custom Transforms**: Implement `Transform` interface
+1. **Custom Optimizers**: Implement `Optimizer` interface
+1. **Custom Datasets**: Implement `Dataset` interface
+1. **Custom Transforms**: Implement `Transform` interface
 
 ---
 
@@ -445,21 +445,21 @@ Code should be moved from papers to shared when:
    - Review multiple paper implementations
    - Find common patterns and duplicated code
 
-2. **Design Generic Interface**
+1. **Design Generic Interface**
    - Remove paper-specific logic
    - Create flexible, composable API
 
-3. **Implement in Shared**
+1. **Implement in Shared**
    - Add comprehensive tests
    - Write detailed documentation
    - Include usage examples
 
-4. **Migrate Papers**
+1. **Migrate Papers**
    - Update papers to use shared component
    - Remove duplicated code
    - Test thoroughly
 
-5. **Document Changes**
+1. **Document Changes**
    - Update both READMEs
    - Add migration guide if breaking changes
    - Update examples
@@ -572,17 +572,17 @@ Each paper requires:
    - Model parallel training
    - Pipeline parallelism
 
-2. **Advanced Data Loading**
+1. **Advanced Data Loading**
    - Multi-worker loading
    - Intelligent prefetching
    - Dynamic batching
 
-3. **Model Zoo Integration**
+1. **Model Zoo Integration**
    - Pre-trained weights management
    - Model hub integration
    - Transfer learning utilities
 
-4. **Profiling and Debugging**
+1. **Profiling and Debugging**
    - Performance profiler integration
    - Memory profiler
    - Gradient debugging tools
@@ -594,10 +594,10 @@ Each paper requires:
 This planning document establishes a comprehensive structure for the ML Odyssey repository's `papers/` and `shared/` directories. The design ensures:
 
 1. **Consistency**: All papers follow the same structure
-2. **Reusability**: Common components are shared
-3. **Performance**: Optimized for ML workloads
-4. **Maintainability**: Clear separation of concerns
-5. **Extensibility**: Easy to add new papers and components
+1. **Reusability**: Common components are shared
+1. **Performance**: Optimized for ML workloads
+1. **Maintainability**: Clear separation of concerns
+1. **Extensibility**: Easy to add new papers and components
 
 The established API contracts and integration patterns provide a solid foundation for implementing classic ML research papers in Mojo while maintaining code quality and performance standards.
 
@@ -606,8 +606,8 @@ The established API contracts and integration patterns provide a solid foundatio
 With this planning complete, the implementation phases can proceed:
 
 1. **Test Phase**: Write tests for directory structure validation
-2. **Implementation Phase**: Create the actual directories and files
-3. **Package Phase**: Create distributable packages
-4. **Cleanup Phase**: Refine and optimize based on usage
+1. **Implementation Phase**: Create the actual directories and files
+1. **Package Phase**: Create distributable packages
+1. **Cleanup Phase**: Refine and optimize based on usage
 
 The foundation is now established for a well-organized, high-performance ML research repository.

@@ -49,7 +49,6 @@ Key Features:
 from tensor import Tensor
 from algorithm import vectorize
 
-
 # ============================================================================
 # Base Transform Trait
 # ============================================================================
@@ -64,7 +63,6 @@ trait Transform:
     fn inverse[dtype: DType](self, data: Tensor[dtype]) raises -> Tensor[dtype]:
         """Apply inverse transform (if supported)."""
         raise Error("Transform is not invertible")
-
 
 # ============================================================================
 # Normalization Transforms
@@ -96,7 +94,6 @@ struct Normalize[dtype: DType](Transform):
         """Denormalize data back to original range."""
         ...
 
-
 @value
 struct Standardize[dtype: DType](Transform):
     """Standardize data to zero mean and unit variance."""
@@ -119,7 +116,6 @@ struct Standardize[dtype: DType](Transform):
         """Destandardize: x * std + mean."""
         ...
 
-
 # ============================================================================
 # Type Conversion Transforms
 # ============================================================================
@@ -134,7 +130,6 @@ struct ToFloat32(Transform):
         """Convert to float32."""
         ...
 
-
 @value
 struct ToInt32(Transform):
     """Convert tensor to int32."""
@@ -144,7 +139,6 @@ struct ToInt32(Transform):
     ) raises -> Tensor[DType.int32]:
         """Convert to int32 (truncation)."""
         ...
-
 
 # ============================================================================
 # Shape Manipulation
@@ -164,7 +158,6 @@ struct Reshape(Transform):
     ) raises -> Tensor[dtype]:
         """Reshape tensor to target shape."""
         ...
-
 
 # ============================================================================
 # Composition
@@ -191,7 +184,6 @@ struct Sequential(Transform):
         """Apply inverse transforms in reverse order."""
         ...
 
-
 # ============================================================================
 # Conditional Transforms
 # ============================================================================
@@ -215,26 +207,26 @@ struct ConditionalTransform[T: Transform](Transform):
     ) raises -> Tensor[dtype]:
         """Apply transform if predicate is true."""
         ...
-```
+```text
 
 ### Implementation Details
 
 #### 1. Normalize Implementation
 
-**Algorithm**:
+### Algorithm
 
 ```text
 normalized = (x - x_min) / (x_max - x_min) * (target_max - target_min) + target_min
-```
+```text
 
-**Key Considerations**:
+### Key Considerations
 
 - Handle zero range (when x_min == x_max) by returning midpoint
 - Use SIMD for element-wise operations
 - Support both computed and provided input ranges
 - Store input ranges for inverse operation
 
-**Implementation**:
+### Implementation
 
 ```mojo
 fn __call__(self, data: Tensor[dtype]) raises -> Tensor[dtype]:
@@ -261,9 +253,9 @@ fn __call__(self, data: Tensor[dtype]) raises -> Tensor[dtype]:
 
     vectorize[normalize_simd, simd_width](data.num_elements())
     return result
-```
+```text
 
-**Inverse Implementation**:
+### Inverse Implementation
 
 ```mojo
 fn inverse(self, data: Tensor[dtype]) raises -> Tensor[dtype]:
@@ -283,25 +275,25 @@ fn inverse(self, data: Tensor[dtype]) raises -> Tensor[dtype]:
 
     vectorize[denormalize_simd, simd_width](data.num_elements())
     return result
-```
+```text
 
 #### 2. Standardize Implementation
 
-**Algorithm**:
+### Algorithm
 
 ```text
 standardized = (x - mean) / std
 destandardized = x * std + mean
-```
+```text
 
-**Key Considerations**:
+### Key Considerations
 
 - Handle zero std (constant values) by returning zeros or raising error
 - Use SIMD for element-wise operations
 - Support computed or provided mean/std
 - Simple inverse operation
 
-**Implementation**:
+### Implementation
 
 ```mojo
 fn __call__(self, data: Tensor[dtype]) raises -> Tensor[dtype]:
@@ -333,18 +325,18 @@ fn inverse(self, data: Tensor[dtype]) raises -> Tensor[dtype]:
 
     vectorize[destandardize_simd, simd_width](data.num_elements())
     return result
-```
+```text
 
 #### 3. Type Conversion Implementation
 
-**Key Considerations**:
+### Key Considerations
 
 - Handle precision loss (float to int truncation)
 - Preserve tensor shape
 - Efficient element-wise conversion
 - No SIMD (different types)
 
-**Implementation**:
+### Implementation
 
 ```mojo
 @value
@@ -378,18 +370,18 @@ struct ToInt32(Transform):
             result[i] = int(data[i])
 
         return result
-```
+```text
 
 #### 4. Reshape Implementation
 
-**Key Considerations**:
+### Key Considerations
 
 - Validate shape compatibility (num elements must match)
 - Handle dynamic shapes
 - Preserve data ordering
 - Zero-copy when possible
 
-**Implementation**:
+### Implementation
 
 ```mojo
 fn __call__[dtype: DType](
@@ -412,18 +404,18 @@ fn __call__[dtype: DType](
         result[i] = data[i]
 
     return result
-```
+```text
 
 #### 5. Sequential Composition Implementation
 
-**Key Considerations**:
+### Key Considerations
 
 - Apply transforms in order
 - Thread data through pipeline
 - Support empty transform list
 - Inverse applies transforms in reverse order
 
-**Implementation**:
+### Implementation
 
 ```mojo
 fn __call__[dtype: DType](
@@ -448,17 +440,17 @@ fn inverse[dtype: DType](
         result = self.transforms[i].inverse(result)
 
     return result
-```
+```text
 
 #### 6. Conditional Transform Implementation
 
-**Key Considerations**:
+### Key Considerations
 
 - Evaluate predicate before applying transform
 - Return original data if predicate false
 - Support any transform type via generics
 
-**Implementation**:
+### Implementation
 
 ```mojo
 fn __call__[dtype: DType](
@@ -469,7 +461,7 @@ fn __call__[dtype: DType](
         return self.transform(data)
     else:
         return data
-```
+```text
 
 ### Helper Functions
 
@@ -516,7 +508,7 @@ fn compute_std[dtype: DType](
         variance += diff * diff
     variance /= data.num_elements()
     return sqrt(variance)
-```
+```text
 
 ## SIMD Optimization Strategy
 
@@ -525,14 +517,14 @@ fn compute_std[dtype: DType](
 **High Priority** (embarrassingly parallel):
 
 1. **Normalize**: Element-wise arithmetic operations
-2. **Standardize**: Element-wise subtraction and division
-3. **Inverse operations**: Element-wise arithmetic
+1. **Standardize**: Element-wise subtraction and division
+1. **Inverse operations**: Element-wise arithmetic
 
 **Low Priority** (less beneficial):
 
 1. **Type conversions**: Different types, harder to vectorize
-2. **Reshape**: Memory layout change, not compute-bound
-3. **Composition**: Delegates to component transforms
+1. **Reshape**: Memory layout change, not compute-bound
+1. **Composition**: Delegates to component transforms
 
 ### SIMD Pattern
 
@@ -551,14 +543,14 @@ fn operation_simd[simd_width: Int](idx: Int):
 
 # Vectorize over all elements
 vectorize[operation_simd, simd_width](tensor.num_elements())
-```
+```text
 
 ### SIMD Width Selection
 
 ```mojo
 # Determine optimal SIMD width based on dtype
 alias simd_width = simdwidthof[dtype]()  # Platform-specific optimal width
-```
+```text
 
 ## Batch Handling Strategy
 
@@ -578,7 +570,7 @@ fn handle_batched[dtype: DType](
     else:
         # Process single item
         return self._apply_single(data)
-```
+```text
 
 **For generic transforms**: Most are element-wise, so batching doesn't matter—same operation regardless.
 
@@ -594,61 +586,61 @@ fn __init__(inout self, min_val: Float32, max_val: Float32):
         raise Error("min_val must be < max_val")
     self.min_val = min_val
     self.max_val = max_val
-```
+```text
 
-2. **Shape Incompatibility**: Check before reshape
+1. **Shape Incompatibility**: Check before reshape
 
 ```mojo
 if target_size != data.num_elements():
     raise Error("Cannot reshape from " + str(data.shape) + " to " + str(target_shape))
-```
+```text
 
-3. **Non-Invertible**: Raise error if inverse not supported
+1. **Non-Invertible**: Raise error if inverse not supported
 
 ```mojo
 fn inverse[dtype: DType](self, data: Tensor[dtype]) raises -> Tensor[dtype]:
     raise Error("Reshape is not invertible without original shape")
-```
+```text
 
-4. **Division by Zero**: Handle zero std/range
+1. **Division by Zero**: Handle zero std/range
 
 ```mojo
 if self.std == 0:
     raise Error("Cannot standardize with std=0")
-```
+```text
 
 ## Implementation Workflow
 
 ### Phase 1: Core Transforms (Priority 1)
 
 1. Implement `Normalize` (with inverse)
-2. Implement `Standardize` (with inverse)
-3. Implement helper functions (find_min, find_max, etc.)
-4. Run tests: expect 16 tests to pass
+1. Implement `Standardize` (with inverse)
+1. Implement helper functions (find_min, find_max, etc.)
+1. Run tests: expect 16 tests to pass
 
 **Estimated effort**: 3-4 hours
 
 ### Phase 2: Type Conversions (Priority 2)
 
 1. Implement `ToFloat32`
-2. Implement `ToInt32`
-3. Run tests: expect 6 more tests to pass (22 total)
+1. Implement `ToInt32`
+1. Run tests: expect 6 more tests to pass (22 total)
 
 **Estimated effort**: 1 hour
 
 ### Phase 3: Composition (Priority 3)
 
 1. Implement `Sequential`
-2. Implement `ConditionalTransform`
-3. Run tests: expect 10 more tests to pass (32 total)
+1. Implement `ConditionalTransform`
+1. Run tests: expect 10 more tests to pass (32 total)
 
 **Estimated effort**: 2 hours
 
 ### Phase 4: Advanced Features (Priority 4)
 
 1. Implement `Reshape`
-2. Add inverse transform support to Sequential
-3. Run integration tests: expect 16 more tests to pass (48 total)
+1. Add inverse transform support to Sequential
+1. Run integration tests: expect 16 more tests to pass (48 total)
 
 **Estimated effort**: 2-3 hours
 
@@ -661,18 +653,18 @@ if self.std == 0:
 After each transform implementation:
 
 1. **Run specific tests** for that transform
-2. **Verify expected behavior** with edge cases
-3. **Refactor** if needed for clarity/performance
-4. **Move to next** transform
+1. **Verify expected behavior** with edge cases
+1. **Refactor** if needed for clarity/performance
+1. **Move to next** transform
 
 ### Integration Testing
 
 After all transforms implemented:
 
 1. **Run full test suite** (48 tests)
-2. **Verify all pass**
-3. **Check coverage** (should be > 90%)
-4. **Profile performance** if needed
+1. **Verify all pass**
+1. **Check coverage** (should be > 90%)
+1. **Profile performance** if needed
 
 ## Performance Targets
 
@@ -691,9 +683,9 @@ After all transforms implemented:
 If performance targets not met:
 
 1. **Profile hotspots** with timing code
-2. **Verify SIMD usage** with compiler output
-3. **Check memory allocation** patterns
-4. **Optimize bottlenecks** identified
+1. **Verify SIMD usage** with compiler output
+1. **Check memory allocation** patterns
+1. **Optimize bottlenecks** identified
 
 ## Documentation Requirements
 
@@ -725,7 +717,7 @@ Raises:
 Note:
     Additional notes about behavior, limitations, etc.
 """
-```
+```text
 
 ### Module Documentation
 
@@ -779,76 +771,76 @@ Add comprehensive module docstring covering:
 
 **Lines of Code**: ~530 lines
 
-**Transforms Implemented**:
+### Transforms Implemented
 
 1. **IdentityTransform** - Passthrough transform (returns input unchanged)
    - Implements Transform trait
    - O(1) time and space complexity
    - Useful for conditional pipelines
 
-2. **LambdaTransform** - Element-wise function application
+1. **LambdaTransform** - Element-wise function application
    - Implements Transform trait
    - Accepts `fn (Float32) -> Float32` function
    - O(n) time complexity with iteration over all elements
    - Provides flexible inline transformations
 
-3. **ConditionalTransform** - Predicate-based transform application
+1. **ConditionalTransform** - Predicate-based transform application
    - Implements Transform trait
    - Evaluates predicate `fn (Tensor) -> Bool`
    - Applies wrapped transform only if predicate is true
    - Otherwise returns input unchanged
 
-4. **ClampTransform** - Value limiting to [min, max] range
+1. **ClampTransform** - Value limiting to [min, max] range
    - Implements Transform trait
    - O(n) time complexity with element-wise clamping
    - Validates min_val <= max_val at initialization
    - Handles negative ranges and zero-crossing
 
-5. **DebugTransform** - Inspection and logging
+1. **DebugTransform** - Inspection and logging
    - Implements Transform trait
    - Prints tensor statistics (min, max, mean, element count)
    - Returns input unchanged (passthrough)
    - Useful for pipeline debugging
 
-6. **SequentialTransform** - Transform composition
+1. **SequentialTransform** - Transform composition
    - Implements Transform trait
    - Applies list of transforms in sequence
    - Threads data through pipeline
    - Handles empty transform list (acts as identity)
 
-7. **BatchTransform** - Batch processing
+1. **BatchTransform** - Batch processing
    - Does NOT implement Transform trait (different signature)
    - Applies transform to each tensor in a list
    - Signature: `fn __call__(self, batch: List[Tensor]) -> List[Tensor]`
    - Handles empty lists and different-sized tensors
 
-8. **ToFloat32** - Type conversion to Float32
+1. **ToFloat32** - Type conversion to Float32
    - Implements Transform trait
    - Creates copy with Float32 values
    - Preserves values exactly
 
-9. **ToInt32** - Type conversion to Int32 (truncation)
+1. **ToInt32** - Type conversion to Int32 (truncation)
    - Implements Transform trait
    - Truncates decimal places toward zero
    - Returns Float32 Tensor with truncated int values
 
-**Design Decisions**:
+### Design Decisions
 
 1. **Transform Trait Reuse**: All single-tensor transforms implement the existing `Transform` trait from `shared/data/transforms.mojo`
 
-2. **Type Compatibility**: Since Mojo's current Tensor implementation uses Float32 internally, type conversions return Tensor with converted values
+1. **Type Compatibility**: Since Mojo's current Tensor implementation uses Float32 internally, type conversions return Tensor with converted values
 
-3. **Lambda Functions**: Used function pointers (`fn (Float32) -> Float32`) rather than closures for simplicity
+1. **Lambda Functions**: Used function pointers (`fn (Float32) -> Float32`) rather than closures for simplicity
 
-4. **Conditional Logic**: Predicate functions evaluate entire tensor to decide whether to apply transform
+1. **Conditional Logic**: Predicate functions evaluate entire tensor to decide whether to apply transform
 
-5. **Batch Processing**: BatchTransform has different signature and doesn't implement Transform trait
+1. **Batch Processing**: BatchTransform has different signature and doesn't implement Transform trait
 
-6. **No SIMD**: Element-wise operations use simple loops rather than SIMD (can be optimized later)
+1. **No SIMD**: Element-wise operations use simple loops rather than SIMD (can be optimized later)
 
-7. **Validation**: ClampTransform validates min_val <= max_val at construction time
+1. **Validation**: ClampTransform validates min_val <= max_val at construction time
 
-**Code Quality**:
+### Code Quality
 
 - ✅ All functions use `fn` (not `def`)
 - ✅ All structs use `@value` decorator
@@ -858,14 +850,14 @@ Add comprehensive module docstring covering:
 - ✅ Consistent naming conventions
 - ✅ No magic numbers (parameters are explicit)
 
-**Testing Integration**:
+### Testing Integration
 
 - Works with 42 tests in `test_generic_transforms.mojo`
 - All transforms are unit tested
 - Integration tests verify pipeline composition
 - Edge cases handled (empty tensors, single elements, extreme values)
 
-**Helper Functions**:
+### Helper Functions
 
 - `apply_to_tensor()` - Convenience function for ad-hoc lambda transforms
 - `compose_transforms()` - Convenience function for building pipelines
@@ -875,10 +867,10 @@ Add comprehensive module docstring covering:
 After implementation complete:
 
 1. **Verify all 42 tests pass** - Run test suite with Mojo
-2. **Run code quality checks** (formatting, linting) - Use `mojo format`
-3. **Profile performance** against targets (if needed)
-4. **Create PR** with implementation
-5. **Move to packaging phase** (Issue #421)
+1. **Run code quality checks** (formatting, linting) - Use `mojo format`
+1. **Profile performance** against targets (if needed)
+1. **Create PR** with implementation
+1. **Move to packaging phase** (Issue #421)
 
 ---
 

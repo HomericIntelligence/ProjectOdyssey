@@ -29,8 +29,8 @@ Build a template system for generating paper files with customizable content. Te
 ## Steps
 
 1. Create template files for common paper components
-2. Define variable system for customization
-3. Build rendering engine to generate files from templates
+1. Define variable system for customization
+1. Build rendering engine to generate files from templates
 
 ## Success Criteria
 

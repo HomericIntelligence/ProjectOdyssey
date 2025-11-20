@@ -33,10 +33,10 @@ Implement a code coverage tool that measures test completeness and identifies un
 The project needs a comprehensive code coverage measurement tool to:
 
 1. **Identify untested code** - Show which lines and functions lack test coverage
-2. **Track coverage metrics** - Report coverage percentages at file and overall level
-3. **Enforce quality standards** - Use threshold validation to prevent merging code with insufficient tests
-4. **Visualize coverage** - Provide clear reports highlighting tested vs untested code
-5. **Integrate with CI/CD** - Support automated coverage checks in build pipelines
+1. **Track coverage metrics** - Report coverage percentages at file and overall level
+1. **Enforce quality standards** - Use threshold validation to prevent merging code with insufficient tests
+1. **Visualize coverage** - Provide clear reports highlighting tested vs untested code
+1. **Integrate with CI/CD** - Support automated coverage checks in build pipelines
 
 This tool is essential for maintaining code quality across the ml-odyssey project and ensuring comprehensive test coverage for critical AI research implementations.
 
@@ -47,12 +47,13 @@ This tool is essential for maintaining code quality across the ml-odyssey projec
 The coverage tool consists of three main components working together:
 
 1. **Coverage Collector** - Instruments and tracks code execution during test runs
-2. **Report Generator** - Creates human-readable reports from collected data
-3. **Threshold Checker** - Validates coverage against configured minimums
+1. **Report Generator** - Creates human-readable reports from collected data
+1. **Threshold Checker** - Validates coverage against configured minimums
 
 ### Component Responsibilities
 
 #### 1. Collect Coverage
+
 - Instrument source code to track execution
 - Hook into test execution environment
 - Record which lines are executed
@@ -61,6 +62,7 @@ The coverage tool consists of three main components working together:
 - Minimal performance impact on test execution
 
 #### 2. Generate Report
+
 - Parse collected coverage data
 - Calculate coverage percentages (per-file and overall)
 - Create HTML report with:
@@ -72,6 +74,7 @@ The coverage tool consists of three main components working together:
 - Include overall coverage percentage
 
 #### 3. Check Thresholds
+
 - Load threshold configuration from project file
 - Compare actual coverage to thresholds
 - Support both overall and per-file threshold requirements
@@ -83,25 +86,25 @@ The coverage tool consists of three main components working together:
 
 **Language Selection**: Mojo (with Python integration for subprocess/regex where needed per project guidelines)
 
-**Key Decisions**:
+### Key Decisions
 
 1. **Coverage Tracking Method**
    - Use instrumentation-based coverage (track lines executed)
    - Start with line coverage; branch coverage as future enhancement
    - Store data in JSON format for easy parsing
 
-2. **Report Formats**
+1. **Report Formats**
    - HTML: Rich visualization with syntax highlighting, sortable tables
    - Text: Simple console-friendly output with summary statistics
    - JSON: Machine-readable format for CI/CD integration
 
-3. **Threshold Configuration**
+1. **Threshold Configuration**
    - Support `.coverage.yaml` or similar config file
    - Allow project-wide thresholds (e.g., 80% minimum)
    - Allow per-file thresholds for critical components
    - Support grace periods for newly added files
 
-4. **Integration Points**
+1. **Integration Points**
    - Hook into test runner execution
    - Export data in standard formats (compatible with coverage.py)
    - Support CI/CD tools via exit codes and machine-readable output
@@ -109,12 +112,14 @@ The coverage tool consists of three main components working together:
 ### Implementation Phases
 
 #### Phase 1: Core Collection (Component: 01-collect-coverage)
+
 - Implement coverage data collection mechanism
 - Create coverage tracking infrastructure
 - Store data in standard format
 - Pass all test requirements
 
 #### Phase 2: Report Generation (Component: 02-generate-report)
+
 - Parse coverage data
 - Generate HTML reports with highlighting
 - Create text summaries
@@ -122,6 +127,7 @@ The coverage tool consists of three main components working together:
 - Pass all test requirements
 
 #### Phase 3: Threshold Validation (Component: 03-check-thresholds)
+
 - Implement threshold configuration loading
 - Validate coverage against thresholds
 - Generate validation reports
@@ -129,6 +135,7 @@ The coverage tool consists of three main components working together:
 - Pass all test requirements
 
 #### Phase 4: Integration and Documentation
+
 - Integrate all three components
 - Create usage documentation
 - Provide configuration examples
@@ -160,19 +167,21 @@ The tool should store coverage data in a standard format that includes:
     }
   }
 }
-```
+```text
 
 ### Report Output Examples
 
-**HTML Report Features**:
+### HTML Report Features
+
 - Color-coded source code (green = covered, red = uncovered)
 - Sortable file list by coverage percentage
 - Line numbers and execution counts
 - Overall statistics dashboard
 - Quick navigation to lowest-coverage files
 
-**Text Report Example**:
-```
+### Text Report Example
+
+```text
 Coverage Report
 ===============
 
@@ -185,7 +194,7 @@ File Coverage:
 
 Files Below 80% Threshold:
   src/core/tensor.mojo     : 78.0% (2 lines missing coverage)
-```
+```text
 
 ### Configuration Format
 
@@ -201,7 +210,7 @@ coverage:
   include:
     - src/
     - lib/
-```
+```text
 
 ## References
 
@@ -245,33 +254,33 @@ coverage:
    - Understand expected inputs/outputs for each component
    - Review test specifications from Issue #63
 
-2. **Implement Collect Coverage**
+1. **Implement Collect Coverage**
    - Create coverage instrumentation mechanism
    - Implement data collection during test execution
    - Store data in JSON format
    - Pass all collection tests
 
-3. **Implement Generate Report**
+1. **Implement Generate Report**
    - Parse coverage data
    - Implement HTML report generation
    - Implement text summary generation
    - Calculate statistics and percentages
    - Pass all report generation tests
 
-4. **Implement Check Thresholds**
+1. **Implement Check Thresholds**
    - Load threshold configuration
    - Compare coverage to thresholds
    - Generate validation results
    - Set exit codes appropriately
    - Pass all threshold validation tests
 
-5. **Integration**
+1. **Integration**
    - Ensure all three components work together
    - Test end-to-end coverage workflow
    - Document configuration and usage
    - Create integration tests
 
-6. **Code Quality**
+1. **Code Quality**
    - Follow Mojo best practices
    - Add comprehensive docstrings
    - Use clear, meaningful names
@@ -298,10 +307,10 @@ All implementations must pass corresponding test specifications from Issue #63:
 ### Lessons from Planning
 
 1. **Line Coverage First** - Start with line-level coverage; branch coverage is an enhancement for later
-2. **Clear Visualization** - Color coding (green/red) makes coverage easy to understand
-3. **Reasonable Defaults** - 80% threshold is industry standard and achievable
-4. **Standard Formats** - Using coverage.py format aids tool compatibility
-5. **Minimal Overhead** - Keep instrumentation lightweight to avoid test slowdown
+1. **Clear Visualization** - Color coding (green/red) makes coverage easy to understand
+1. **Reasonable Defaults** - 80% threshold is industry standard and achievable
+1. **Standard Formats** - Using coverage.py format aids tool compatibility
+1. **Minimal Overhead** - Keep instrumentation lightweight to avoid test slowdown
 
 ### Performance Considerations
 
@@ -334,10 +343,10 @@ This is the **Implementation** phase of the 5-phase development workflow:
 When creating a pull request for this implementation:
 
 1. Link to this issue: Use `gh pr create --issue 846`
-2. Reference child component implementations in PR description
-3. Include test results showing all tests passing
-4. Document any design decisions or deviations from plan
-5. Link to related PRs for child components
+1. Reference child component implementations in PR description
+1. Include test results showing all tests passing
+1. Document any design decisions or deviations from plan
+1. Link to related PRs for child components
 
 ## Success Indicators
 

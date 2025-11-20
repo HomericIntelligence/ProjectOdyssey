@@ -29,10 +29,10 @@ None (leaf node)
 ## Steps
 
 1. Implement metric monitoring and comparison
-2. Add patience counter for improvement tracking
-3. Support both minimize and maximize modes
-4. Enable best model restoration on stopping
-5. Provide clear stopping reason in logs
+1. Add patience counter for improvement tracking
+1. Support both minimize and maximize modes
+1. Enable best model restoration on stopping
+1. Provide clear stopping reason in logs
 
 ## Success Criteria
 

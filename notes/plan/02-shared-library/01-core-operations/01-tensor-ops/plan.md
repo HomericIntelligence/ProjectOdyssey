@@ -48,14 +48,14 @@ Note: The original child plans (01-basic-arithmetic, 02-matrix-ops, 03-reduction
    - Define memory layout and ownership model
    - Specify error handling strategy
 
-2. **Test Phase (Issue #219):** (parallel after Plan)
+1. **Test Phase (Issue #219):** (parallel after Plan)
    - Write comprehensive test suite following TDD
    - Create performance benchmarks
    - Test all operations with multiple dtypes
    - Verify broadcasting rules
    - Test edge cases (empty tensors, scalars, overflow)
 
-3. **Implementation Phase (Issue #220):** (parallel after Plan)
+1. **Implementation Phase (Issue #220):** (parallel after Plan)
    - Implement ExStaticTensor and ExTensor structs
    - Implement all creation operations
    - Implement arithmetic operations with broadcasting
@@ -65,14 +65,14 @@ Note: The original child plans (01-basic-arithmetic, 02-matrix-ops, 03-reduction
    - Implement indexing and slicing
    - Apply SIMD optimizations
 
-4. **Package Phase (Issue #221):** (parallel after Plan)
+1. **Package Phase (Issue #221):** (parallel after Plan)
    - Build .mojopkg package
    - Create installation documentation
    - Write API reference documentation
    - Create usage examples and tutorials
    - Generate performance benchmark reports
 
-5. **Cleanup Phase (Issue #222):** (after parallel phases)
+1. **Cleanup Phase (Issue #222):** (after parallel phases)
    - Code review and refactoring
    - Performance profiling and optimization
    - Documentation polish
@@ -94,7 +94,7 @@ Note: The original child plans (01-basic-arithmetic, 02-matrix-ops, 03-reduction
 
 ## Notes
 
-**Key Design Principles:**
+### Key Design Principles:
 
 - **Dual type system:** ExTensor (runtime-flexible dynamic tensor) sharing common trait interface
 - **Tensor calculus foundation:** Operations preserve mathematical semantics (rank preservation, proper broadcasting, contraction)
@@ -102,14 +102,14 @@ Note: The original child plans (01-basic-arithmetic, 02-matrix-ops, 03-reduction
 - **YAGNI approach:** Implement minimal complete API, defer advanced features (autograd, GPU, einsum)
 - **Safety first:** Leverage Mojo's type system for compile-time validation where possible
 
-**Performance Strategy:**
+### Performance Strategy:
 
 - Static tensors enable compile-time shape checking and SIMD vectorization
 - Row-major (C-order) memory layout for cache efficiency
 - Strided memory for zero-copy slicing
 - Operation fusion opportunities (future optimization)
 
-**References:**
+### References:
 
 - [ExTensors Implementation Prompt](/home/user/ml-odyssey/notes/issues/218/extensor-implementation-prompt.md) - Comprehensive design specification
 - [Array API Standard 2024](https://data-apis.org/array-api/2024.12/) - API reference

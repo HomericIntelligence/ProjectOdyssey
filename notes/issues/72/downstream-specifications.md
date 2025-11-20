@@ -25,7 +25,7 @@ fn main() raises:
     
     # Run training
     trainer.fit(model)
-```
+```text
 
 #### 2. Update Shared Library Integration
 
@@ -41,7 +41,7 @@ struct Trainer:
         self.config = config
         self.learning_rate = config.get_float("optimizer.learning_rate")
         self.batch_size = config.get_int("training.batch_size")
-```
+```text
 
 #### 3. Create Config Loading Utilities
 
@@ -54,7 +54,7 @@ fn load_experiment_config(
 ) raises -> Config:
     """Load complete configuration for an experiment."""
     # Implementation from architecture doc
-```
+```text
 
 #### 4. Update CI/CD Pipeline
 
@@ -74,7 +74,7 @@ jobs:
         run: python3 scripts/validate_configs.py
       - name: Test config loading
         run: mojo test tests/configs/
-```
+```text
 
 ### Package Documentation
 
@@ -192,7 +192,7 @@ fn benchmark_config_loading():
         var config = load_config("configs/defaults/training.yaml")
     var elapsed = now() - start
     print("Average load time:", elapsed / 1000)
-```
+```text
 
 #### 2. Optimize Critical Paths
 
@@ -245,7 +245,7 @@ fn benchmark_config_loading():
 
 ### Phase Dependencies
 
-```
+```text
 Issue #72 (Plan) 
     ↓
 Issue #73 (Test) ← Can start after #72
@@ -253,7 +253,7 @@ Issue #74 (Impl) ← Can start after #72
 Issue #75 (Package) ← Can start after #72
     ↓
 Issue #76 (Cleanup) ← Requires #73, #74, #75 complete
-```
+```text
 
 ### Parallel Work Opportunities
 
@@ -268,11 +268,11 @@ After Issue #72 completes:
 1. **Risk**: Config format changes break existing code
    - **Mitigation**: Version configs, maintain backwards compatibility
 
-2. **Risk**: Performance regression with complex configs
+1. **Risk**: Performance regression with complex configs
    - **Mitigation**: Benchmark early, optimize throughout
 
-3. **Risk**: Schema too restrictive for future needs
+1. **Risk**: Schema too restrictive for future needs
    - **Mitigation**: Start permissive, tighten gradually
 
-4. **Risk**: Integration conflicts with ongoing work
+1. **Risk**: Integration conflicts with ongoing work
    - **Mitigation**: Feature flag config usage initially

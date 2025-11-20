@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Test optimizer on simple function
-2. Verify parameter updates
-3. Check convergence
+1. Verify parameter updates
+1. Check convergence
 
 ## Success Criteria
 

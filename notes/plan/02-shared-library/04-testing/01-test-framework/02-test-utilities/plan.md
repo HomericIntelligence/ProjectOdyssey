@@ -30,10 +30,10 @@ None (leaf node)
 ## Steps
 
 1. Create tensor comparison utilities with tolerance
-2. Build assertion helpers for common checks
-3. Implement test data generators
-4. Add mock objects for external dependencies
-5. Provide timing utilities for performance tests
+1. Build assertion helpers for common checks
+1. Implement test data generators
+1. Add mock objects for external dependencies
+1. Provide timing utilities for performance tests
 
 ## Success Criteria
 

@@ -65,7 +65,7 @@ Script validation tests:
 
 ```bash
 pytest scripts/agents/tests/
-```
+```text
 
 ### Run Specific Test File
 
@@ -78,7 +78,7 @@ pytest scripts/agents/tests/test_documentation.py
 
 # Script tests only
 pytest scripts/agents/tests/test_scripts.py
-```
+```text
 
 ### Run Tests by Marker
 
@@ -94,7 +94,7 @@ pytest -m scripts scripts/agents/tests/
 
 # Exclude slow tests
 pytest -m "not slow" scripts/agents/tests/
-```
+```text
 
 ### Run Specific Test Class
 
@@ -107,7 +107,7 @@ pytest scripts/agents/tests/test_integration.py::TestAgentFrontmatter
 
 # Test documentation links
 pytest scripts/agents/tests/test_documentation.py::TestInternalLinks
-```
+```text
 
 ### Run Specific Test
 
@@ -117,7 +117,7 @@ pytest scripts/agents/tests/test_integration.py::TestAgentFrontmatter::test_agen
 
 # Test specific script
 pytest scripts/agents/tests/test_scripts.py::TestValidateAgentsScript::test_help_option
-```
+```text
 
 ### Verbose Output
 
@@ -130,7 +130,7 @@ pytest -s scripts/agents/tests/
 
 # Show detailed failures
 pytest -vv scripts/agents/tests/
-```
+```text
 
 ### Coverage Report
 
@@ -140,7 +140,7 @@ pytest --cov=scripts/agents --cov-report=html scripts/agents/tests/
 
 # View coverage report
 open htmlcov/index.html
-```
+```text
 
 ## Test Organization
 
@@ -148,7 +148,7 @@ open htmlcov/index.html
 
 Tests are organized into classes by functionality:
 
-**Integration Tests**:
+### Integration Tests
 
 - `TestAgentFilesExist` - File existence and readability
 - `TestAgentFrontmatter` - YAML frontmatter validation
@@ -157,7 +157,7 @@ Tests are organized into classes by functionality:
 - `TestAgentStructure` - Required sections
 - `TestEdgeCases` - Edge cases and error handling
 
-**Documentation Tests**:
+### Documentation Tests
 
 - `TestDocumentationFilesExist` - File existence
 - `TestInternalLinks` - Link validation
@@ -167,7 +167,7 @@ Tests are organized into classes by functionality:
 - `TestMarkdownSyntax` - Markdown validation
 - `TestConsistency` - Consistency checks
 
-**Script Tests**:
+### Script Tests
 
 - `TestScriptsExist` - Script existence
 - `TestValidateAgentsScript` - validate_agents.py
@@ -255,7 +255,7 @@ jobs:
       - name: Run tests
         run: |
           pytest scripts/agents/tests/ -v --cov=scripts/agents
-```
+```text
 
 ## Writing New Tests
 
@@ -292,49 +292,49 @@ class TestMyFeature:
         """Test applied to all agent files."""
         # Test logic here
         pass
-```
+```text
 
 ### Best Practices
 
 1. **Use descriptive test names** - Test name should describe what is being tested
-2. **Include docstrings** - Explain what the test validates
-3. **Use fixtures** - Leverage shared fixtures for common setup
-4. **Parametrize** - Use `@pytest.mark.parametrize` for testing multiple inputs
-5. **Clear assertions** - Include descriptive error messages
-6. **Handle edge cases** - Test both success and failure scenarios
-7. **Use markers** - Tag tests appropriately for filtering
+1. **Include docstrings** - Explain what the test validates
+1. **Use fixtures** - Leverage shared fixtures for common setup
+1. **Parametrize** - Use `@pytest.mark.parametrize` for testing multiple inputs
+1. **Clear assertions** - Include descriptive error messages
+1. **Handle edge cases** - Test both success and failure scenarios
+1. **Use markers** - Tag tests appropriately for filtering
 
 ## Troubleshooting
 
 ### Common Issues
 
-**No agents found**:
+### No agents found
 
 ```bash
 # Check that .claude/agents/ exists and contains .md files
 ls -la .claude/agents/
-```
+```text
 
-**Import errors**:
+### Import errors
 
 ```bash
 # Install required dependencies
 pip install pytest pyyaml
-```
+```text
 
-**Fixture not found**:
+### Fixture not found
 
 ```bash
 # Make sure conftest.py is in the tests directory
 ls scripts/agents/tests/conftest.py
-```
+```text
 
-**Tests not discovered**:
+### Tests not discovered
 
 ```bash
 # Run with discovery info
 pytest --collect-only scripts/agents/tests/
-```
+```text
 
 ### Debugging Tests
 
@@ -347,7 +347,7 @@ pytest --lf scripts/agents/tests/
 
 # Show local variables on failure
 pytest -l scripts/agents/tests/
-```
+```text
 
 ## Dependencies
 
@@ -361,16 +361,16 @@ Install with:
 
 ```bash
 pip install pytest pyyaml pytest-cov
-```
+```text
 
 ## Contributing
 
 When adding new agent features:
 
 1. Add corresponding tests to appropriate test file
-2. Update fixtures if new file types are added
-3. Run full test suite before committing
-4. Ensure 100% pass rate (or document expected failures)
+1. Update fixtures if new file types are added
+1. Run full test suite before committing
+1. Ensure 100% pass rate (or document expected failures)
 
 ## License
 

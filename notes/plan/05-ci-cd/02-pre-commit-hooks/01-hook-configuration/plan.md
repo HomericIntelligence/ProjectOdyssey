@@ -30,8 +30,8 @@ Set up the pre-commit framework, create configuration file, define which hooks t
 ## Steps
 
 1. Create Config File
-2. Define Hooks
-3. Install Hooks
+1. Define Hooks
+1. Install Hooks
 
 ## Success Criteria
 

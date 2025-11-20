@@ -31,10 +31,10 @@ None (leaf node)
 ## Steps
 
 1. Write tests for tensor operations (arithmetic, matrix, reductions)
-2. Create tests for activation functions
-3. Build tests for initializers (verify distributions)
-4. Implement tests for metrics (accuracy, loss, confusion matrix)
-5. Add edge case tests (zeros, infinities, NaN, empty)
+1. Create tests for activation functions
+1. Build tests for initializers (verify distributions)
+1. Implement tests for metrics (accuracy, loss, confusion matrix)
+1. Add edge case tests (zeros, infinities, NaN, empty)
 
 ## Success Criteria
 

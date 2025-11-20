@@ -63,9 +63,9 @@ User requests implementation of new research paper.
 Chief Architect:
 
 1. Analyzes paper requirements
-2. Assesses feasibility
-3. Decides to implement
-4. Delegates to Paper Implementation Orchestrator
+1. Assesses feasibility
+1. Decides to implement
+1. Delegates to Paper Implementation Orchestrator
 
 ### Example 2: Cross-Section Conflict
 
@@ -74,9 +74,9 @@ Shared Library Orchestrator and Tooling Orchestrator disagree on API design.
 Chief Architect:
 
 1. Reviews both positions
-2. Analyzes impact on other sections
-3. Makes final decision
-4. Updates architectural guidelines
+1. Analyzes impact on other sections
+1. Makes final decision
+1. Updates architectural guidelines
 
 ## Constraints
 

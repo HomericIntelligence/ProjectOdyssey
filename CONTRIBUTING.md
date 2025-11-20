@@ -23,7 +23,7 @@ We use [Pixi](https://pixi.sh/) for environment management. This ensures everyon
 # Create and activate the development environment
 pixi shell
 
-```
+```text
 
 ### Verify Your Setup
 
@@ -38,7 +38,7 @@ python3 --version
 # Verify pre-commit hooks are installed
 pre-commit install
 
-```
+```text
 
 ## Running Tests
 
@@ -58,7 +58,7 @@ pixi run test --verbose
 # Run tests with coverage
 pixi run test --cov=ml_odyssey --cov-report=html
 
-```
+```text
 
 ## Code Style Guidelines
 
@@ -66,7 +66,7 @@ pixi run test --cov=ml_odyssey --cov-report=html
 
 We use `mojo format` for consistent code formatting. Pre-commit hooks will automatically run this on staged files.
 
-**Key principles for Mojo code**:
+### Key principles for Mojo code
 
 - Prefer `fn` over `def` for better performance and type safety
 - Use `owned` and `borrowed` parameters for explicit memory management
@@ -74,7 +74,7 @@ We use `mojo format` for consistent code formatting. Pre-commit hooks will autom
 - Use `struct` over `class` when possible
 - Add comprehensive docstrings to all public APIs
 
-**Example**:
+### Example
 
 ```mojo
 
@@ -90,7 +90,7 @@ fn add(x: Int32, y: Int32) -> Int32:
     """
     return x + y
 
-```
+```text
 
 ### Python Code Style
 
@@ -101,7 +101,7 @@ For automation scripts that require Python:
 - Write clear docstrings using the Google style
 - Use `black` for code formatting (included in pre-commit)
 
-**Example**:
+### Example
 
 ```python
 
@@ -121,13 +121,13 @@ def calculate_mean(values: list[float]) -> float:
         raise ValueError("Cannot calculate mean of empty list")
     return sum(values) / len(values)
 
-```
+```text
 
 ### Documentation Style
 
 All documentation files follow markdown standards and must pass `markdownlint-cli2` linting.
 
-**Key rules**:
+### Key rules
 
 - Code blocks must have a language specified (` ```python ` not ` ``` `)
 - Code blocks must be surrounded by blank lines (before and after)
@@ -136,7 +136,7 @@ All documentation files follow markdown standards and must pass `markdownlint-cl
 - Lines should not exceed 120 characters
 - Use relative links when possible
 
-**Example**:
+### Example
 
 ```markdown
 
@@ -148,8 +148,7 @@ To install the package:
 
 pip install ml-odyssey
 
-```
-
+```text
 ## Usage
 
 Use the library like this:
@@ -159,9 +158,10 @@ Use the library like this:
 - Step 3: Run
 
 ```text
-(No additional configuration needed - Pixi manages everything)
-```
 
+(No additional configuration needed - Pixi manages everything)
+
+```text
 ### Pre-commit Hooks
 
 Pre-commit hooks automatically check code quality before commits. They run:
@@ -175,19 +175,22 @@ Pre-commit hooks automatically check code quality before commits. They run:
 ```bash
 
 # Install pre-commit hooks (one-time setup)
+
 pre-commit install
 
 # Run hooks on all files
+
 pre-commit run --all-files
 
 # Run hooks on staged files only
+
 pre-commit run
 
 # Skip hooks (use sparingly, only when necessary)
+
 git commit --no-verify
 
-```
-
+```text
 ## Pull Request Process
 
 ### Before You Start
@@ -208,8 +211,7 @@ git commit --no-verify
 
 gh pr create --issue <issue-number>
 
-```
-
+```text
 This automatically links your PR to the issue.
 
 Fill out the PR template with:
@@ -226,16 +228,19 @@ Fill out the PR template with:
 3. Reply to EACH review comment individually:
 
 ```bash
+
 # Get review comment IDs
+
 gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments \
   --jq '.[] | {id: .id, path: .path, body: .body}'
 
 # Reply to a specific comment
+
 gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments/COMMENT_ID/replies \
   --method POST \
   -f body="✅ Fixed - [brief description]"
-```
 
+```text
 Keep responses short and start with ✅ to indicate the issue is resolved.
 
 After making changes, verify CI passes before requesting re-review.
@@ -313,15 +318,14 @@ def test_add_negative_integers():
     """Test adding two negative integers."""
     assert add(-2, -3) == -5
 
-```
-
+```text
 ### Test Coverage
 
 - Aim for high code coverage on core functionality (>80%)
 - Test both happy paths and error cases
 - Include edge cases
 
-## Questions?
+## Questions
 
 If you have questions:
 

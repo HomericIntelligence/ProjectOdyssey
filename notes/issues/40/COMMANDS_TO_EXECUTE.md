@@ -8,7 +8,7 @@ The following commands must be executed to complete the Package phase for the Da
 
 ```bash
 cd /home/mvillmow/ml-odyssey/worktrees/40-pkg-data
-```
+```text
 
 ## Commands (Execute in Order)
 
@@ -17,15 +17,15 @@ cd /home/mvillmow/ml-odyssey/worktrees/40-pkg-data
 ```bash
 chmod +x scripts/build_data_package.sh
 chmod +x scripts/install_verify_data.sh
-```
+```text
 
 ### 2. Build the Package
 
 ```bash
 ./scripts/build_data_package.sh
-```
+```text
 
-**Expected Outcome**:
+### Expected Outcome
 
 - Creates `dist/data-0.1.0.mojopkg` file
 - Displays package file size
@@ -35,9 +35,9 @@ chmod +x scripts/install_verify_data.sh
 
 ```bash
 ./scripts/install_verify_data.sh
-```
+```text
 
-**Expected Outcome**:
+### Expected Outcome
 
 - Tests package installation in temporary directory
 - Verifies all core imports work
@@ -69,13 +69,13 @@ Closes #40"
 
 # Push
 git push origin 40-pkg-data
-```
+```text
 
 ### 5. Create Pull Request
 
 ```bash
 gh pr create --issue 40 --fill
-```
+```text
 
 ## Alternative: Run All at Once
 
@@ -96,17 +96,17 @@ git commit -m "feat(data): create distributable package with installation testin
 Closes #40" && \
 git push origin 40-pkg-data && \
 gh pr create --issue 40 --fill
-```
+```text
 
 ## Verification Before PR
 
 Before creating the PR, verify:
 
 1. `dist/data-0.1.0.mojopkg` exists and is non-zero size
-2. Build script ran without errors
-3. Verification script ran without errors
-4. All files staged for commit
-5. Commit message follows conventional format
+1. Build script ran without errors
+1. Verification script ran without errors
+1. All files staged for commit
+1. Commit message follows conventional format
 
 ## Files to Be Committed
 
@@ -118,23 +118,23 @@ M  notes/issues/40/README.md
 A  notes/issues/40/EXECUTION_GUIDE.md
 A  notes/issues/40/package-build-task.md
 A  notes/issues/40/COMMANDS_TO_EXECUTE.md
-```
+```text
 
 ## Files NOT Committed (in .gitignore)
 
 ```text
 dist/data-0.1.0.mojopkg  # Build artifact, excluded by .gitignore
-```
+```text
 
 ## Success Indicators
 
 You should see:
 
 1. Build script output showing package creation
-2. Verification script output showing successful imports
-3. `git status` showing staged files
-4. `git log` showing commit
-5. `gh pr list` showing new PR linked to issue #40
+1. Verification script output showing successful imports
+1. `git status` showing staged files
+1. `git log` showing commit
+1. `gh pr list` showing new PR linked to issue #40
 
 ## Troubleshooting
 

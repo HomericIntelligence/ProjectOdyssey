@@ -22,11 +22,11 @@ This skill checks the CI/CD status of a pull request to verify all checks are pa
 # Check CI status for a PR
 gh pr checks <pr-number>
 
-# Example output:
+# Example output
 # ✓ build          success  2m 34s
 # ✗ test           failure  1m 12s
 # ○ lint           pending  0m 45s
-```
+```text
 
 ### Detailed Status
 
@@ -39,7 +39,7 @@ gh run view <run-id>
 
 # Get logs for failed check
 gh run view <run-id> --log-failed
-```
+```text
 
 ### Watch CI Progress
 
@@ -53,7 +53,7 @@ while true; do
   gh pr checks <pr-number>
   sleep 30
 done
-```
+```text
 
 ## CI Check Types
 
@@ -81,21 +81,21 @@ Common workflows in ML Odyssey:
 # View pre-commit logs
 gh run view <run-id> --log-failed
 
-# Common issues:
+# Common issues
 # - Trailing whitespace
 # - Missing newline at EOF
 # - Markdown linting errors
 # - mojo format needed
-```
+```text
 
-**Fix:**
+### Fix:
 
 ```bash
 pre-commit run --all-files
 git add .
 git commit --amend --no-edit
 git push --force-with-lease
-```
+```text
 
 ### Test Failures
 
@@ -106,7 +106,7 @@ gh run view <run-id> --log-failed
 # Run tests locally
 pytest tests/
 mojo test tests/
-```
+```text
 
 ### Workflow Validation
 
@@ -116,7 +116,7 @@ gh workflow view <workflow-name>
 
 # Re-run failed workflow
 gh run rerun <run-id>
-```
+```text
 
 ## Error Handling
 
@@ -139,23 +139,23 @@ Checklist:
 gh pr checks <pr-number>      # All checks passing?
 gh pr view <pr-number>         # Up-to-date with base?
 gh pr diff <pr-number>         # Changes look correct?
-```
+```text
 
 ## Examples
 
-**Check PR status:**
+### Check PR status:
 
 ```bash
 gh pr checks 42
-```
+```text
 
-**Watch CI progress:**
+### Watch CI progress:
 
 ```bash
 gh pr checks 42 --watch
-```
+```text
 
-**View failed logs:**
+### View failed logs:
 
 ```bash
 # Get run ID
@@ -163,13 +163,13 @@ gh pr checks 42
 
 # View logs
 gh run view 123456789 --log-failed
-```
+```text
 
-**Rerun failed checks:**
+### Rerun failed checks:
 
 ```bash
 gh run rerun <run-id>
-```
+```text
 
 ## Integration with Other Skills
 
@@ -194,6 +194,6 @@ gh run view <run-id> --log-failed
 
 # Rerun
 gh run rerun <run-id>
-```
+```text
 
 See `.github/workflows/` for complete CI configuration.

@@ -11,14 +11,14 @@ mkdir -p configs/papers/
 mkdir -p configs/experiments/
 mkdir -p configs/schemas/
 mkdir -p configs/templates/
-```
+```text
 
 ### 2. Paper-Specific Directories
 
 ```bash
 mkdir -p configs/papers/lenet5/
 mkdir -p configs/experiments/lenet5/
-```
+```text
 
 ## File Creation Tasks
 
@@ -126,10 +126,10 @@ Create a comprehensive user guide that includes:
 ### YAML Structure Standards
 
 1. **Header Comments**: Every YAML file starts with a descriptive comment block
-2. **Sections**: Logical grouping with clear section headers
-3. **Inline Comments**: Document non-obvious values
-4. **Consistent Indentation**: 2 spaces for YAML files
-5. **Quote Strings**: When containing special characters
+1. **Sections**: Logical grouping with clear section headers
+1. **Inline Comments**: Document non-obvious values
+1. **Consistent Indentation**: 2 spaces for YAML files
+1. **Quote Strings**: When containing special characters
 
 ### Environment Variable Pattern
 
@@ -138,7 +138,7 @@ paths:
   data_dir: "${DATA_DIR:-./data}"
   cache_dir: "${CACHE_DIR:-~/.cache/ml-odyssey}"
   output_dir: "${OUTPUT_DIR:-./output}"
-```
+```text
 
 ### Inheritance Pattern
 
@@ -151,7 +151,7 @@ extends:
 # Override specific values
 training:
   learning_rate: 0.01  # Override default
-```
+```text
 
 ## Integration Requirements
 
@@ -201,16 +201,16 @@ tree configs/
 
 # Validate against schema (if Python jsonschema available)
 python3 scripts/validate_config_schema.py configs/experiments/lenet5/baseline.yaml
-```
+```text
 
 ## Notes for Implementation
 
 1. Start with directory structure creation
-2. Create defaults first (they're referenced by others)
-3. Create paper configs that extend defaults
-4. Create experiments that demonstrate override patterns
-5. Add schemas for validation
-6. Create templates last (after patterns are established)
-7. Write comprehensive README as final step
+1. Create defaults first (they're referenced by others)
+1. Create paper configs that extend defaults
+1. Create experiments that demonstrate override patterns
+1. Add schemas for validation
+1. Create templates last (after patterns are established)
+1. Write comprehensive README as final step
 
 This specification provides clear, actionable tasks for Issue #74 implementation.

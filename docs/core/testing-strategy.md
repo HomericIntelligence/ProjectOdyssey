@@ -13,7 +13,7 @@ refactoring.
 
 ### Why TDD
 
-**Benefits**:
+### Benefits
 
 - **Better Design** - Writing tests first clarifies interfaces
 - **Fewer Bugs** - Catch errors before they reach production
@@ -38,7 +38,7 @@ refactoring.
 - Error handling for expected failures
 - Performance requirements (if specified)
 
-**DON'T Test**:
+### DON'T Test
 
 - Trivial getters/setters
 - Private implementation details
@@ -74,12 +74,12 @@ tests/
 
 ### Test File Naming
 
-**Mojo Tests**:
+### Mojo Tests
 
 - Files: `test_*.mojo` (e.g., `test_layers.mojo`)
 - Functions: `test_<component>_<behavior>` (e.g., `test_sgd_basic_update`)
 
-**Python Tests**:
+### Python Tests
 
 - Files: `test_*.py` (e.g., `test_validation.py`)
 - Classes: `Test<ComponentName>` (e.g., `TestAgentDelegation`)
@@ -91,14 +91,14 @@ tests/
 
 **Purpose**: Test individual functions/components in isolation
 
-**Characteristics**:
+### Characteristics
 
 - Fast (< 1 second per test)
 - No external dependencies
 - Test single function/class
 - Deterministic results
 
-**Example**:
+### Example
 
 ```mojo
 
@@ -123,14 +123,14 @@ fn test_sgd_basic_update():
 
 **Purpose**: Test component interactions and workflows
 
-**Characteristics**:
+### Characteristics
 
 - Test multiple components together
 - End-to-end workflows
 - May use real dependencies
 - Slower than unit tests (seconds to minutes)
 
-**Example**:
+### Example
 
 ```mojo
 
@@ -159,7 +159,7 @@ fn test_training_workflow():
 
 **Purpose**: Validate ML correctness against reference implementations
 
-**Example**:
+### Example
 
 ```mojo
 
@@ -265,7 +265,7 @@ fn test_function_name() raises:
 
 ### Mojo Test Patterns
 
-**Use `fn` for Tests**:
+### Use `fn` for Tests
 
 ```mojo
 
@@ -279,7 +279,7 @@ fn test_tensor_addition() raises:
 
 ```text
 
-**Gradient Checking**:
+### Gradient Checking
 
 ```mojo
 
@@ -508,9 +508,9 @@ fn test_my_feature():
 If a test passes sometimes and fails other times:
 
 1. Check for uninitialized variables
-2. Verify no dependency on test execution order
-3. Check for timing issues (use fixed seeds)
-4. Ensure proper cleanup between tests
+1. Verify no dependency on test execution order
+1. Check for timing issues (use fixed seeds)
+1. Ensure proper cleanup between tests
 
 ## Related Documentation
 
@@ -521,32 +521,32 @@ If a test passes sometimes and fails other times:
 
 ## Summary
 
-**Testing Philosophy**:
+### Testing Philosophy
 
 - TDD is mandatory - write tests first
 - Focus on critical paths, not coverage numbers
 - Test behavior, not implementation
 - Keep tests fast and independent
 
-**TDD Workflow**:
+### TDD Workflow
 
 1. Write failing test (Red)
-2. Implement minimal code (Green)
-3. Refactor for quality (Refactor)
-4. Repeat
+1. Implement minimal code (Green)
+1. Refactor for quality (Refactor)
+1. Repeat
 
-**Test Types**:
+### Test Types
 
 - Unit tests (fast, isolated)
 - Integration tests (workflows)
 - Numerical accuracy tests (validate ML correctness)
 
-**Key Practices**:
+### Key Practices
 
 1. One concept per test
-2. Clear, descriptive names
-3. Test independence
-4. Validate gradients
-5. Test edge cases
+1. Clear, descriptive names
+1. Test independence
+1. Validate gradients
+1. Test edge cases
 
 **Remember**: Tests are specifications that guide implementation and enable confident refactoring. Write tests you trust.

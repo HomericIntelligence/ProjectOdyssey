@@ -62,12 +62,14 @@ Coverage gates ensure code quality by enforcing minimum test coverage standards.
 ### Local Development
 
 ```bash
+
 # Run tests with coverage threshold
+
 pytest --cov=scripts --cov-fail-under=80
 
 # If coverage < 80%, command fails with exit code 1
-```
 
+```text
 ### CI/CD Pipeline
 
 Coverage gates run automatically on all PRs:
@@ -80,6 +82,7 @@ Coverage gates run automatically on all PRs:
 
 **Threshold Failure**:
 ```text
+
 ❌ Coverage: 75.5% (required: 80.0%)
 
 Files below threshold:
@@ -87,18 +90,19 @@ Files below threshold:
   src/models/linear.py: 72.8%
 
 Please add tests to improve coverage.
-```
 
+```text
 **Regression Failure**:
 ```text
+
 ❌ Coverage regression detected!
    Current:  78.5%
    Baseline: 82.0%
    Delta:    -3.5% (max allowed: -2.0%)
 
 Please add tests to restore coverage.
-```
 
+```text
 ## Meeting Coverage Requirements
 
 ### Strategy 1: Incremental Improvement
@@ -119,16 +123,20 @@ Coverage is a metric, not a goal:
 ### Strategy 3: Use Coverage Reports
 
 ```bash
+
 # Generate HTML report
+
 pytest --cov=scripts --cov-report=html
 
 # Open in browser
+
 open htmlcov/index.html
 
 # Find uncovered lines (highlighted in red)
-# Write tests for those lines
-```
 
+# Write tests for those lines
+
+```text
 ## Exceptions
 
 Some code is excluded from coverage requirements:
@@ -142,26 +150,32 @@ Some code is excluded from coverage requirements:
 **Not recommended**, but for emergencies:
 
 ```yaml
+
 # In PR, add label "skip-coverage-check"
+
 # Gates will report but not fail
 
-# Only use for:
-# - Refactoring that temporarily reduces coverage
-# - Generated code updates
-# - Documented technical debt
-```
+# Only use for
 
+# - Refactoring that temporarily reduces coverage
+
+# - Generated code updates
+
+# - Documented technical debt
+
+```text
 ## Updating Thresholds
 
 Thresholds can be adjusted in `pyproject.toml`:
 
 ```toml
+
 [tool.coverage.report]
 fail_under = 80.0  # Increase as coverage improves
-```
 
+```text
 Changes require team discussion and ADR.
-```
+```text
 
 **2. Configuration Reference** (`docs/testing/coverage-config.md`):
 
@@ -173,6 +187,7 @@ Changes require team discussion and ADR.
 Edit `pyproject.toml`:
 
 ```toml
+
 [tool.coverage.report]
 fail_under = 80.0          # Minimum total coverage
 
@@ -183,32 +198,35 @@ omit = [                   # Files to exclude
     "**/*_pb2.py",
     "**/__generated__/*"
 ]
-```
 
+```text
 ## Regression Tolerance
 
 Edit `scripts/check_coverage_regression.py` or pass flag:
 
 ```bash
+
 python scripts/check_coverage_regression.py \
   --max-decrease 2.0      # Maximum % decrease allowed
-```
 
+```text
 ## CI Configuration
 
 Edit `.github/workflows/test.yml`:
 
 ```yaml
+
 - name: Run tests with coverage
   run: |
     pytest --cov=scripts --cov-fail-under=80
-```
 
+```text
 ## Per-Module Thresholds
 
 *Note: Not currently implemented, but can be added if needed*
 
 ```toml
+
 [tool.coverage.paths]
 critical = ["src/core/*"]
 experimental = ["src/experimental/*"]
@@ -217,8 +235,9 @@ experimental = ["src/experimental/*"]
 fail_under = 80            # Default
 critical_modules = 95      # Higher for critical code
 experimental_modules = 60  # Lower for experimental
-```
-```
+
+```text
+```text
 
 **3. Troubleshooting Guide** (`docs/testing/coverage-troubleshooting.md`):
 
@@ -233,8 +252,10 @@ experimental_modules = 60  # Lower for experimental
 
 1. Generate coverage report:
    ```bash
+
    pytest --cov=scripts --cov-report=html
    open htmlcov/index.html
+
    ```
 
 2. Identify low-coverage files (red in report)
@@ -246,7 +267,9 @@ experimental_modules = 60  # Lower for experimental
 
 4. Re-run locally to verify:
    ```bash
+
    pytest --cov=scripts --cov-fail-under=80
+
    ```
 
 ## "Coverage regression" Error
@@ -257,7 +280,9 @@ experimental_modules = 60  # Lower for experimental
 
 1. Check what changed in your PR:
    ```bash
+
    git diff main -- '*.py'
+
    ```
 
 2. Identify if you:
@@ -269,7 +294,9 @@ experimental_modules = 60  # Lower for experimental
 
 4. Verify coverage restored:
    ```bash
+
    pytest --cov=scripts
+
    ```
 
 ## Gates Failing Incorrectly
@@ -300,21 +327,27 @@ experimental_modules = 60  # Lower for experimental
 
 1. Check exclusion patterns in `pyproject.toml`:
    ```toml
+
    [tool.coverage.run]
    omit = [
        "**/*_pb2.py",  # Must match file pattern exactly
    ]
+
    ```
 
 2. Test pattern matching:
    ```bash
+
    coverage debug sys  # Show coverage.py config
+
    ```
 
 3. Verify files are excluded:
    ```bash
+
    coverage report --show-missing
    # Excluded files won't appear in report
+
    ```
 
 ## Performance Issues
@@ -325,20 +358,26 @@ experimental_modules = 60  # Lower for experimental
 
 1. **Parallelize tests**:
    ```bash
+
    pytest --cov=scripts -n auto  # Requires pytest-xdist
+
    ```
 
 2. **Reduce coverage scope**:
    ```toml
+
    [tool.coverage.run]
    source = ["scripts"]  # Only measure specific directories
+
    ```
 
 3. **Skip coverage locally** (when not needed):
    ```bash
+
    pytest  # No --cov flag
+
    ```
-```
+```text
 
 **4. Developer Guidelines** (`docs/testing/writing-tests-for-coverage.md`):
 
@@ -351,19 +390,21 @@ experimental_modules = 60  # Lower for experimental
 
 **Bad** (testing implementation):
 ```python
+
 def test_function_calls_helper():
     """Test that function calls internal helper."""
     # This doesn't test actual behavior
-```
 
+```text
 **Good** (testing behavior):
 ```python
+
 def test_function_returns_correct_result():
     """Test that function produces expected output."""
     result = my_function(input_data)
     assert result == expected_output
-```
 
+```text
 ### 2. Focus on Critical Paths
 
 Priority order for testing:
@@ -375,43 +416,52 @@ Priority order for testing:
 ### 3. Use Coverage Reports to Guide Testing
 
 ```bash
+
 # Generate HTML coverage report
+
 pytest --cov=scripts --cov-report=html
 open htmlcov/index.html
 
 # Identify uncovered lines (red highlighting)
-# Write tests specifically for those lines
-```
 
+# Write tests specifically for those lines
+
+```text
 ### 4. Don't Game Coverage
 
 **Bad** (coverage theater):
 ```python
+
 def test_function_runs():
     """Test that function runs without error."""
     my_function()  # No assertion - meaningless coverage
-```
 
+```text
 **Good** (meaningful test):
 ```python
+
 def test_function_handles_empty_input():
     """Test that function raises ValueError for empty input."""
     with pytest.raises(ValueError, match="Input cannot be empty"):
         my_function([])
-```
 
+```text
 ## Coverage-Driven Development Workflow
 
 1. **Write test first** (TDD):
    ```python
+
    def test_new_feature():
        result = new_feature(input)
        assert result == expected
+
    ```
 
 2. **Run with coverage**:
    ```bash
+
    pytest tests/test_new.py --cov=scripts.new_module
+
    ```
 
 3. **Check coverage report**:
@@ -425,15 +475,17 @@ def test_function_handles_empty_input():
 ### Testing Error Conditions
 
 ```python
+
 def test_handles_invalid_input():
     """Test function raises appropriate error."""
     with pytest.raises(ValueError):
         function_under_test(invalid_input)
-```
 
+```text
 ### Testing Edge Cases
 
 ```python
+
 @pytest.mark.parametrize("input,expected", [
     (0, "zero"),           # Boundary
     (-1, "negative"),      # Below boundary
@@ -442,11 +494,12 @@ def test_handles_invalid_input():
 ])
 def test_edge_cases(input, expected):
     assert function(input) == expected
-```
 
+```text
 ### Testing Branches
 
 ```python
+
 def test_both_branches():
     """Test both branches of conditional."""
     # Test condition True
@@ -456,18 +509,21 @@ def test_both_branches():
     # Test condition False
     result_false = function(condition=False)
     assert result_false == expected_when_false
-```
-```
+
+```text
+```text
 
 ### Deliverable Checklist
 
 Documentation Files:
+
 - [ ] `docs/testing/coverage-gates.md` - Overview and guide
 - [ ] `docs/testing/coverage-config.md` - Configuration reference
 - [ ] `docs/testing/coverage-troubleshooting.md` - Common issues
 - [ ] `docs/testing/writing-tests-for-coverage.md` - Developer guide
 
 Updates:
+
 - [ ] Main `README.md` - Add coverage badge and requirements
 - [ ] `CONTRIBUTING.md` - Add coverage requirements section
 - [ ] `docs/README.md` - Link to coverage documentation
@@ -481,7 +537,7 @@ Add to `README.md`:
 
 <!-- Or if using Codecov -->
 [![codecov](https://codecov.io/gh/mvillmow/ml-odyssey/branch/main/graph/badge.svg)](https://codecov.io/gh/mvillmow/ml-odyssey)
-```
+```text
 
 ### Status
 

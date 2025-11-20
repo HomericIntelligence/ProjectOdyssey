@@ -24,7 +24,7 @@ This skill generates test files and coordinates TDD workflow for ML Odyssey comp
 
 # Example: Generate unit test for tensor operations
 ./scripts/generate_test.sh "tensor_ops" "unit"
-```
+```text
 
 ### 2. Run Tests (Red)
 
@@ -34,7 +34,7 @@ mojo test tests/<test-file>
 
 # Or use Python for test infrastructure
 pytest tests/<test-file>
-```
+```text
 
 ### 3. Implement Code (Green)
 
@@ -85,7 +85,7 @@ fn test_edge_case() raises:
     """Test edge case description."""
     # Test implementation
     pass
-```
+```text
 
 ## Python Test Structure
 
@@ -110,7 +110,7 @@ class TestComponentName:
         """Test edge case."""
         # Implementation
         pass
-```
+```text
 
 ## Test Coverage Requirements
 
@@ -128,23 +128,23 @@ class TestComponentName:
 
 ## Examples
 
-**Generate unit test:**
+### Generate unit test:
 
 ```bash
 ./scripts/generate_test.sh "matrix_multiply" "unit"
-```
+```text
 
-**Generate integration test:**
+### Generate integration test:
 
 ```bash
 ./scripts/generate_test.sh "neural_network" "integration"
-```
+```text
 
-**Run specific test:**
+### Run specific test:
 
 ```bash
 ./scripts/run_test.sh "test_matrix_multiply"
-```
+```text
 
 ## Scripts Available
 
@@ -161,9 +161,9 @@ class TestComponentName:
 ## TDD Principles
 
 1. **Write test first** - Before any implementation
-2. **Red-Green-Refactor** - Fail → Pass → Improve
-3. **Small steps** - One test at a time
-4. **Fast feedback** - Tests should run quickly
-5. **Comprehensive** - Cover edge cases and errors
+1. **Red-Green-Refactor** - Fail → Pass → Improve
+1. **Small steps** - One test at a time
+1. **Fast feedback** - Tests should run quickly
+1. **Comprehensive** - Cover edge cases and errors
 
 See CLAUDE.md for development principles including TDD requirements.

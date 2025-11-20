@@ -31,11 +31,11 @@ Create distributable package artifacts for the Data module that can be installed
 - Sampling strategies (Sampler, SequentialSampler, RandomSampler, WeightedSampler)
 - Transform utilities (Transform, Compose, ToTensor, Normalize, Reshape, Resize, CenterCrop, RandomCrop, RandomHorizontalFlip, RandomRotation)
 
-**Build Command**:
+### Build Command
 
 ```bash
 mojo package shared/data -o dist/data-0.1.0.mojopkg
-```
+```text
 
 ### 2. Installation Verification Script
 
@@ -43,18 +43,18 @@ mojo package shared/data -o dist/data-0.1.0.mojopkg
 
 **Purpose**: Verify package installation works correctly in clean environment
 
-**Tests**:
+### Tests
 
 - Package file exists
 - Installation succeeds
 - Core imports work (Dataset, TensorDataset, BatchLoader, Transform, Compose)
 
-**Usage**:
+### Usage
 
 ```bash
 chmod +x scripts/install_verify_data.sh
 ./scripts/install_verify_data.sh
-```
+```text
 
 ## Build Instructions
 
@@ -76,7 +76,7 @@ ls -lh dist/data-0.1.0.mojopkg
 # Test installation
 chmod +x scripts/install_verify_data.sh
 ./scripts/install_verify_data.sh
-```
+```text
 
 ## Installation Instructions
 
@@ -88,7 +88,7 @@ mojo install dist/data-0.1.0.mojopkg
 
 # Verify installation
 mojo run -c "from data import Dataset, TensorDataset, BatchLoader; print('Data module installed successfully')"
-```
+```text
 
 ## Package Exports (19 total)
 
@@ -137,7 +137,7 @@ shared/data/
 ├── samplers.mojo         # Sampling strategies
 ├── transforms.mojo       # Data transforms
 └── mojo.toml             # Package metadata
-```
+```text
 
 ## Implementation Notes
 
@@ -155,10 +155,10 @@ Initial implementation incorrectly treated Package phase as verification-only. C
 The verification script tests package installation by:
 
 1. Creating temporary directory
-2. Installing package in clean environment
-3. Testing core imports work correctly
-4. Cleaning up temporary files
-5. Reporting success/failure
+1. Installing package in clean environment
+1. Testing core imports work correctly
+1. Cleaning up temporary files
+1. Reporting success/failure
 
 ### Version Information
 

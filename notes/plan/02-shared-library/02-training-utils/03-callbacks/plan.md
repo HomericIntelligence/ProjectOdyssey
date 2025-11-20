@@ -29,8 +29,8 @@ Build a callback system for extending training functionality without modifying c
 ## Steps
 
 1. Implement checkpointing callback for saving and loading model state
-2. Create early stopping callback with configurable patience
-3. Build logging callback for metrics and progress reporting
+1. Create early stopping callback with configurable patience
+1. Build logging callback for metrics and progress reporting
 
 ## Success Criteria
 

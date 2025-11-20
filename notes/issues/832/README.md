@@ -119,10 +119,10 @@ ensure all dependencies are properly configured for seamless deployment across t
 ### Configuration Strategy
 
 1. **Coverage Tool**: Use `coverage.py` (standard Python tool)
-2. **Data Format**: Standard `.coverage` format for tool compatibility
-3. **Storage Location**: Centralized coverage data directory
-4. **Exclusions**: Test files, generated code, vendor directories
-5. **Parallel Runs**: Configure for concurrent test execution support
+1. **Data Format**: Standard `.coverage` format for tool compatibility
+1. **Storage Location**: Centralized coverage data directory
+1. **Exclusions**: Test files, generated code, vendor directories
+1. **Parallel Runs**: Configure for concurrent test execution support
 
 ### Testing the Integration
 
@@ -138,7 +138,7 @@ coverage report
 
 # Test clean environment
 # (create isolated test environment and install)
-```
+```text
 
 ### Performance Considerations
 
@@ -158,15 +158,15 @@ coverage report
 ### Next Steps
 
 1. **Review Completeness**: Verify #830 and #831 deliverables
-2. **Plan Integration**: Document integration architecture
-3. **Implement Integration**: Add coverage hooks to test runner
-4. **Create Configuration**: Write `.coveragerc` file
-5. **Test Integration**: Run full test suite with coverage
-6. **Package**: Create distribution artifacts
-7. **Document**: Write integration and configuration guides
-8. **Validate**: Test in clean environment
-9. **Review**: Code review of integration work
-10. **Close**: Mark issue complete when all criteria met
+1. **Plan Integration**: Document integration architecture
+1. **Implement Integration**: Add coverage hooks to test runner
+1. **Create Configuration**: Write `.coveragerc` file
+1. **Test Integration**: Run full test suite with coverage
+1. **Package**: Create distribution artifacts
+1. **Document**: Write integration and configuration guides
+1. **Validate**: Test in clean environment
+1. **Review**: Code review of integration work
+1. **Close**: Mark issue complete when all criteria met
 
 **Estimated Duration**: 2-3 days
 

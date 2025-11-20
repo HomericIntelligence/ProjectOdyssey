@@ -29,8 +29,8 @@ Build utilities for training machine learning models including a base trainer wi
 ## Steps
 
 1. Create base trainer interface with training and validation loop logic
-2. Implement learning rate schedulers for adaptive learning
-3. Build callback system for checkpointing, early stopping, and logging
+1. Implement learning rate schedulers for adaptive learning
+1. Build callback system for checkpointing, early stopping, and logging
 
 ## Success Criteria
 

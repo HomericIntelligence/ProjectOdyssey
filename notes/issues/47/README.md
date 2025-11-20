@@ -44,7 +44,7 @@ Chose to organize shared library into four logical groupings:
 - `data/` - Data processing (loaders, transforms, datasets)
 - `utils/` - Supporting utilities (logging, metrics, visualization)
 
-**Rationale**:
+### Rationale
 
 - Clear separation of concerns
 - Natural dependency flow (core → training/data → utils)
@@ -58,7 +58,7 @@ Established clear criteria for component placement:
 - **Shared** (`shared/`): Reusable (≥3 papers), generic, stable APIs, foundational
 - **Papers** (`papers/[name]/`): Paper-specific, experimental, specialized, one-off
 
-**Rationale**:
+### Rationale
 
 - Prevents code duplication
 - Maintains shared library quality
@@ -74,9 +74,9 @@ core/       # Foundation (no deps)
 training/   # Depends on: core/
 data/       # Depends on: core/, utils/
 utils/      # Depends on: core/
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Prevents circular dependencies
 - Clear build order
@@ -85,7 +85,7 @@ utils/      # Depends on: core/
 
 ### Design Considerations
 
-#### Why Not More Subdirectories?
+#### Why Not More Subdirectories
 
 Considered but rejected:
 
@@ -96,7 +96,7 @@ Considered but rejected:
 
 **Keeping It Simple**: Four directories provide enough structure without over-engineering.
 
-#### Why These Names?
+#### Why These Names
 
 - `core/` - Industry standard for foundational code
 - `training/` - Clear, descriptive, matches ML terminology
@@ -114,16 +114,16 @@ Design allows for future additions:
 
 ### Documentation Strategy
 
-**Comprehensive README Structure**:
+### Comprehensive README Structure
 
 1. **Purpose** - Why shared/ exists
-2. **Design Principles** - What belongs where
-3. **Directory Structure** - What's in each subdirectory
-4. **Usage Examples** - How papers use shared components
-5. **Development Guidelines** - How to contribute
-6. **Roadmap** - Future plans
+1. **Design Principles** - What belongs where
+1. **Directory Structure** - What's in each subdirectory
+1. **Usage Examples** - How papers use shared components
+1. **Development Guidelines** - How to contribute
+1. **Roadmap** - Future plans
 
-**Key Features**:
+### Key Features
 
 - Decision guidelines with examples
 - Code examples in Mojo
@@ -132,14 +132,14 @@ Design allows for future additions:
 
 ### Alignment with Project Architecture
 
-**Follows Repository Conventions**:
+### Follows Repository Conventions
 
 - Matches papers/ documentation style
 - Uses Mojo as primary language
 - Integrates with 5-phase workflow
 - Compatible with agent hierarchy
 
-**Critical Path Blocker Resolution**:
+### Critical Path Blocker Resolution
 
 This issue (#47) blocks 19 downstream issues:
 
@@ -174,17 +174,17 @@ Shared library will have higher quality bar than paper code:
 After this planning phase completes:
 
 1. **Issues #48-51**: Test, implement, package, cleanup shared directory structure
-2. **Issues #32-46**: Implement subdirectory components in parallel
-3. **Paper Implementations**: Use shared components in papers/lenet5/, etc.
+1. **Issues #32-46**: Implement subdirectory components in parallel
+1. **Paper Implementations**: Use shared components in papers/lenet5/, etc.
 
 ### Coordination with Other Sections
 
-**Dependencies**:
+### Dependencies
 
 - Foundation (#1-31): COMPLETE - provides repository structure
 - Papers (TBD): BLOCKED - needs shared library components
 
-**Coordination Points**:
+### Coordination Points
 
 - Papers will import from shared/
 - Tooling may need shared library access
@@ -220,10 +220,10 @@ None - planning phase complete and ready for review.
 This planning phase is complete and ready for:
 
 1. Chief Architect review
-2. Shared Library Orchestrator approval
-3. PR creation
-4. Merge to main
-5. Unblocking of issues #32-46, #48-51
+1. Shared Library Orchestrator approval
+1. PR creation
+1. Merge to main
+1. Unblocking of issues #32-46, #48-51
 
 ---
 

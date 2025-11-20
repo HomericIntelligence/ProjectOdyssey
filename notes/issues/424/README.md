@@ -63,7 +63,7 @@ All tests already exist and are passing:
    - ✅ RandomErasing (basic, scale parameter)
    - ✅ Composition and pipeline determinism
 
-2. **Text Augmentation Tests** (`test_text_augmentations.mojo`):
+1. **Text Augmentation Tests** (`test_text_augmentations.mojo`):
    - ✅ Helper functions (split_words, join_words)
    - ✅ RandomSwap (basic, probability, edge cases)
    - ✅ RandomDeletion (basic, probability, one-word preservation)
@@ -72,7 +72,7 @@ All tests already exist and are passing:
    - ✅ TextCompose/Pipeline integration
    - ✅ All augmentations together
 
-3. **Generic Transform Tests** (`test_generic_transforms.mojo`):
+1. **Generic Transform Tests** (`test_generic_transforms.mojo`):
    - ✅ IdentityTransform (basic, preserves values, empty)
    - ✅ LambdaTransform (double, add, square, negative values)
    - ✅ ConditionalTransform (always/never apply, size-based, value-based)
@@ -91,25 +91,25 @@ All tests already exist and are passing:
    - Transform composition across different modalities
    - Error handling for incompatible transform chains
 
-2. **Property-Based Tests**:
+1. **Property-Based Tests**:
    - Idempotence properties (applying transform twice)
    - Inverse properties (normalize/denormalize round-trips)
    - Commutative properties (where applicable)
 
-3. **Performance Benchmarks**:
+1. **Performance Benchmarks**:
    - Baseline metrics for each transform type
    - Batch processing throughput
    - Memory usage patterns
 
 ## Test Organization
 
-```
+```text
 tests/shared/data/transforms/
 ├── test_augmentations.mojo          # Image augmentations (14 tests)
 ├── test_text_augmentations.mojo     # Text augmentations (35 tests)
 ├── test_generic_transforms.mojo     # Generic transforms (42 tests)
 └── test_augmentations_master.mojo   # Cross-domain integration (TODO)
-```
+```text
 
 ## References
 
@@ -136,6 +136,7 @@ tests/shared/data/transforms/
 ### Current State
 
 All individual transform tests are implemented and passing:
+
 - 14 image augmentation tests
 - 35 text augmentation tests
 - 42 generic transform tests
@@ -148,12 +149,12 @@ All individual transform tests are implemented and passing:
    - Error handling for incompatible transforms
    - Batch processing across different data types
 
-2. **Add Property-Based Tests**: Verify mathematical properties:
+1. **Add Property-Based Tests**: Verify mathematical properties:
    - Idempotence: `f(f(x)) == f(x)` for certain transforms
    - Inverse: `denormalize(normalize(x)) ≈ x`
    - Commutative: `f(g(x)) == g(f(x))` where applicable
 
-3. **Performance Benchmarking**: Establish baseline metrics for:
+1. **Performance Benchmarking**: Establish baseline metrics for:
    - Individual transform performance
    - Pipeline composition overhead
    - Batch processing throughput
@@ -161,9 +162,9 @@ All individual transform tests are implemented and passing:
 ### Key Testing Patterns
 
 1. **Deterministic Randomness**: All random operations use `TestFixtures.set_seed()` for reproducible tests
-2. **Edge Case Coverage**: Empty inputs, single elements, boundary values
-3. **Semantic Preservation**: Verify augmentations don't corrupt labels or meaning
-4. **Pipeline Testing**: Test transform composition and sequential application
+1. **Edge Case Coverage**: Empty inputs, single elements, boundary values
+1. **Semantic Preservation**: Verify augmentations don't corrupt labels or meaning
+1. **Pipeline Testing**: Test transform composition and sequential application
 
 ---
 

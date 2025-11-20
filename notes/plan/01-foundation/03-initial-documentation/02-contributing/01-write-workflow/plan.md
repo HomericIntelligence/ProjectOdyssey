@@ -29,10 +29,10 @@ None (leaf node)
 ## Steps
 
 1. Write environment setup instructions
-2. Document branching strategy (feature branches, main branch)
-3. Explain development cycle (code, test, commit)
-4. Provide instructions for running tests locally
-5. Include troubleshooting common setup issues
+1. Document branching strategy (feature branches, main branch)
+1. Explain development cycle (code, test, commit)
+1. Provide instructions for running tests locally
+1. Include troubleshooting common setup issues
 
 ## Success Criteria
 

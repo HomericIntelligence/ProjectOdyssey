@@ -81,7 +81,7 @@ Create the integration layer and distribution package that enables developers to
 
 **Status**: Pending (depends on Issues #820, #821 complete)
 
-**Dependencies**:
+### Dependencies
 
 - Issue #820 (Test) must be complete with test cases
 - Issue #821 (Impl) must be complete with test runner implementation
@@ -97,19 +97,19 @@ The Package phase focuses on:
    - Include installation and verification scripts
    - Ensure cross-platform compatibility
 
-2. **Integration with Existing Codebase**
+1. **Integration with Existing Codebase**
    - Connect test runner to paper directory structure
    - Integrate with existing configuration system (Issue #75)
    - Update CI/CD workflows to use test runner
    - Ensure compatibility with current test infrastructure
 
-3. **Ensuring Dependencies Are Properly Configured**
+1. **Ensuring Dependencies Are Properly Configured**
    - Test runner depends on test discovery module
    - Test runner depends on test result reporter module
    - Properly order module initialization
    - Handle missing/optional dependencies gracefully
 
-4. **Verifying Compatibility with Other Components**
+1. **Verifying Compatibility with Other Components**
    - Compatible with paper configuration system
    - Works with existing CI/CD infrastructure
    - Follows project coding standards
@@ -125,15 +125,15 @@ Main executable that coordinates test discovery, execution, and reporting:
 - **Configuration**: Optional test configuration file
 - **Process**:
   1. Validate paper directory exists
-  2. Load test configuration if provided
-  3. Discover all tests using TestDiscoveryModule
-  4. Execute tests in proper order (unit → integration)
-  5. Collect results and metrics
-  6. Generate report using TestReporterModule
-  7. Return exit code based on test results
+  1. Load test configuration if provided
+  1. Discover all tests using TestDiscoveryModule
+  1. Execute tests in proper order (unit → integration)
+  1. Collect results and metrics
+  1. Generate report using TestReporterModule
+  1. Return exit code based on test results
 - **Output**: Structured test report (console + optional JSON)
 
-**CLI Usage**:
+### CLI Usage
 
 ```text
 mojo scripts/run_paper_tests.mojo <paper_name> [options]
@@ -144,14 +144,14 @@ Options:
   --verbose           - Enable verbose output
   --stop-on-failure   - Stop execution on first failure
   --filter <pattern>  - Run only tests matching pattern
-```
+```text
 
-**Example**:
+### Example
 
 ```bash
 mojo scripts/run_paper_tests.mojo lenet5
 mojo scripts/run_paper_tests.mojo lenet5 --config configs/test.yaml --output reports/lenet5.json
-```
+```text
 
 #### 2. Test Discovery Module (`shared/utils/test_discovery.mojo`)
 
@@ -166,14 +166,14 @@ Discovers all test files in a paper directory:
   - Filters by test pattern if provided
   - Handles missing test directories gracefully
 
-**Key Functions**:
+### Key Functions
 
 ```text
 fn discover_tests(paper_dir: Path) -> Vec[TestFile]
 fn discover_unit_tests(paper_dir: Path) -> Vec[TestFile]
 fn discover_integration_tests(paper_dir: Path) -> Vec[TestFile>
 fn filter_tests(tests: Vec[TestFile], pattern: String) -> Vec[TestFile]
-```
+```text
 
 #### 3. Test Result Reporter (`shared/utils/test_reporter.mojo`)
 
@@ -188,7 +188,7 @@ Generates structured test reports:
   - Error details and stack traces
   - Structured JSON output for CI/CD integration
 
-**Report Format**:
+### Report Format
 
 ```text
 ==========================================
@@ -212,9 +212,9 @@ Integration Tests (2 tests):
 Results: 5 passed, 0 failed in 4.68s
 Success Rate: 100%
 ==========================================
-```
+```text
 
-**JSON Output Format**:
+### JSON Output Format
 
 ```json
 {
@@ -236,7 +236,7 @@ Success Rate: 100%
     }
   ]
 }
-```
+```text
 
 #### 4. CI/CD Integration (`.github/workflows/run-paper-tests.yml`)
 
@@ -245,15 +245,15 @@ Automated workflow that runs paper tests on every push/PR:
 - **Triggers**: On push to main, on PR creation
 - **Steps**:
   1. Checkout code
-  2. Setup Mojo environment
-  3. Install test runner distribution
-  4. Discover papers to test
-  5. Run tests for each paper
-  6. Collect results
-  7. Report results to GitHub
-  8. Upload artifacts
+  1. Setup Mojo environment
+  1. Install test runner distribution
+  1. Discover papers to test
+  1. Run tests for each paper
+  1. Collect results
+  1. Report results to GitHub
+  1. Upload artifacts
 
-**Workflow Example**:
+### Workflow Example
 
 ```yaml
 name: Run Paper Tests
@@ -286,7 +286,7 @@ jobs:
         with:
           name: test-results
           path: results/
-```
+```text
 
 #### 5. Paper Template Updates (`papers/_template/examples/run_tests.mojo`)
 
@@ -317,7 +317,7 @@ fn main():
     print("All tests passed!")
     print("Execution time: " + result.duration_seconds + "s")
     return 0
-```
+```text
 
 ### Distribution Package Structure
 
@@ -339,7 +339,7 @@ dist/paper-tests-runner-0.1.0.tar.gz contents:
 ├── examples/
 │   └── run_tests.mojo
 └── MANIFEST.txt
-```
+```text
 
 ### Build and Distribution Process
 
@@ -355,7 +355,7 @@ Creates versioned tarball with all components:
 - Cleans up temporary files
 - Outputs distribution info
 
-**Output**:
+### Output
 
 ```text
 Building paper-tests-runner distribution...
@@ -363,7 +363,7 @@ Building paper-tests-runner distribution...
 ✓ Package created: dist/paper-tests-runner-0.1.0.tar.gz (15KB)
 ✓ Checksum: abc123def456... (SHA256)
 ✓ Ready for distribution
-```
+```text
 
 #### 2. Verification Script (`scripts/verify_paper_tests_install.sh`)
 
@@ -376,7 +376,7 @@ Validates installation completeness:
 - Tests basic functionality
 - Reports validation results
 
-**Output**:
+### Output
 
 ```text
 Verifying paper tests installation...
@@ -386,7 +386,7 @@ Verifying paper tests installation...
 ✓ Executable permissions set
 ✓ Basic functionality test passed
 Installation verified successfully!
-```
+```text
 
 ### Testing Strategy
 
@@ -404,7 +404,7 @@ Installation verified successfully!
 - Exit code correctness
 - CI/CD workflow execution
 
-**Package Verification**:
+### Package Verification
 
 - Distribution tarball integrity
 - Installation script functionality
@@ -443,21 +443,21 @@ Installation verified successfully!
 
 ### Success Metrics
 
-**Functionality**:
+### Functionality
 
 - All paper tests are discovered correctly
 - Tests execute in proper order
 - Results are reported accurately
 - Fast feedback loop (< 5 seconds for typical paper)
 
-**Quality**:
+### Quality
 
 - Distribution package installs cleanly
 - All components are properly integrated
 - Test runner works on all platforms
 - Comprehensive documentation provided
 
-**Usability**:
+### Usability
 
 - Simple CLI interface
 - Clear output and error messages
@@ -467,10 +467,10 @@ Installation verified successfully!
 ### Next Steps (After This PR Merges)
 
 1. **Monitoring**: Track test execution times and patterns
-2. **Optimization**: Identify and fix performance bottlenecks
-3. **Documentation**: Gather feedback and improve guides
-4. **Expansion**: Add test runners for other components
-5. **Cleanup (Issue #823)**: Refactor, optimize, and finalize
+1. **Optimization**: Identify and fix performance bottlenecks
+1. **Documentation**: Gather feedback and improve guides
+1. **Expansion**: Add test runners for other components
+1. **Cleanup (Issue #823)**: Refactor, optimize, and finalize
 
 ### Work Phases
 
@@ -481,21 +481,21 @@ Installation verified successfully!
 - Write integration glue code
 - Document integration points
 
-**Phase 2: Integration**
+### Phase 2: Integration
 
 - Connect test runner to CI/CD
 - Update paper templates
 - Configure CI/CD workflow
 - Document usage patterns
 
-**Phase 3: Validation**
+### Phase 3: Validation
 
 - End-to-end testing
 - Cross-platform verification
 - Performance benchmarking
 - User acceptance testing
 
-**Phase 4: Distribution**
+### Phase 4: Distribution
 
 - Create distribution tarball
 - Generate checksums
@@ -512,13 +512,13 @@ Installation verified successfully!
    - Test discovery and execution coordination
    - Result reporting
 
-2. **`shared/utils/test_discovery.mojo`** (~150 lines)
+1. **`shared/utils/test_discovery.mojo`** (~150 lines)
    - Test file discovery logic
    - Directory traversal
    - Pattern matching for test files
    - Test ordering logic
 
-3. **`shared/utils/test_reporter.mojo`** (~200 lines)
+1. **`shared/utils/test_reporter.mojo`** (~200 lines)
    - Console report generation
    - JSON report generation
    - Formatting and styling
@@ -526,19 +526,19 @@ Installation verified successfully!
 
 ### Configuration and Build Files
 
-4. **`scripts/build_paper_tests_distribution.sh`** (~80 lines)
+1. **`scripts/build_paper_tests_distribution.sh`** (~80 lines)
    - Build script for creating distribution package
    - File validation
    - Tarball creation
    - Checksum generation
 
-5. **`scripts/verify_paper_tests_install.sh`** (~100 lines)
+1. **`scripts/verify_paper_tests_install.sh`** (~100 lines)
    - Installation verification script
    - Structure validation
    - File existence checks
    - Functionality testing
 
-6. **`.github/workflows/run-paper-tests.yml`** (~100 lines)
+1. **`.github/workflows/run-paper-tests.yml`** (~100 lines)
    - CI/CD workflow definition
    - Multi-paper test execution
    - Result collection and reporting
@@ -546,24 +546,24 @@ Installation verified successfully!
 
 ### Documentation Files
 
-7. **`scripts/RUN_PAPER_TESTS.md`** (~150 lines)
+1. **`scripts/RUN_PAPER_TESTS.md`** (~150 lines)
    - Quick start guide
    - CLI reference
    - Common usage patterns
    - Troubleshooting section
 
-8. **`scripts/INTEGRATION.md`** (~120 lines)
+1. **`scripts/INTEGRATION.md`** (~120 lines)
    - Integration architecture overview
    - How to integrate test runner
    - Extension points
    - API reference
 
-9. **`papers/_template/examples/run_tests.mojo`** (~50 lines)
+1. **`papers/_template/examples/run_tests.mojo`** (~50 lines)
    - Example usage in paper context
    - Configuration demonstration
    - Result handling
 
-10. **`INSTALL.md`** (in distribution) (~80 lines)
+1. **`INSTALL.md`** (in distribution) (~80 lines)
     - Installation instructions
     - Dependency requirements
     - Verification steps
@@ -598,11 +598,11 @@ Installation verified successfully!
 After this issue is complete, developers will be able to:
 
 1. **Run paper tests quickly**: Execute tests for a specific paper in seconds
-2. **Get fast feedback**: Know test status without running full suite
-3. **View detailed reports**: See pass/fail counts, execution times, error details
-4. **Integrate with CI/CD**: Automated testing on every push/PR
-5. **Configure tests**: Customize test execution with paper-specific configs
-6. **Extend easily**: Add tests to existing papers with minimal effort
+1. **Get fast feedback**: Know test status without running full suite
+1. **View detailed reports**: See pass/fail counts, execution times, error details
+1. **Integrate with CI/CD**: Automated testing on every push/PR
+1. **Configure tests**: Customize test execution with paper-specific configs
+1. **Extend easily**: Add tests to existing papers with minimal effort
 
 ## Timeline Estimate
 

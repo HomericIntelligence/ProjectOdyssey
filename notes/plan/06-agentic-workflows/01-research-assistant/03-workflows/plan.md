@@ -32,8 +32,8 @@ Create end-to-end workflows that chain together prompt templates and tools to ac
 ## Steps
 
 1. Create paper-to-code workflow with analysis and generation steps
-2. Create code review workflow with analysis and feedback steps
-3. Create debugging workflow with diagnosis and suggestion steps
+1. Create code review workflow with analysis and feedback steps
+1. Create debugging workflow with diagnosis and suggestion steps
 
 ## Success Criteria
 

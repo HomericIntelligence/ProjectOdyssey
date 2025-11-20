@@ -38,14 +38,14 @@ The existing .gitignore file (19 lines) includes basic patterns:
 The .gitignore file will be organized into logical sections for maintainability:
 
 1. **Python-specific patterns** - Virtual environments, bytecode, packaging artifacts
-2. **Mojo/MAX-specific patterns** - Mojo compilation artifacts, MAX engine cache
-3. **ML-specific patterns** - Model checkpoints, training logs, datasets, tensorboard files
-4. **Build artifacts** - General build outputs, distribution files
-5. **IDE and editor files** - VS Code, PyCharm, Vim, Emacs, etc.
-6. **OS-specific files** - macOS, Windows, Linux system files
-7. **Project-specific patterns** - Pixi, logs, worktrees (preserve existing patterns)
+1. **Mojo/MAX-specific patterns** - Mojo compilation artifacts, MAX engine cache
+1. **ML-specific patterns** - Model checkpoints, training logs, datasets, tensorboard files
+1. **Build artifacts** - General build outputs, distribution files
+1. **IDE and editor files** - VS Code, PyCharm, Vim, Emacs, etc.
+1. **OS-specific files** - macOS, Windows, Linux system files
+1. **Project-specific patterns** - Pixi, logs, worktrees (preserve existing patterns)
 
-**Pattern Coverage Strategy**:
+### Pattern Coverage Strategy
 
 - **Comprehensive over minimal** - Include common patterns even if not currently used (future-proofing)
 - **Preserve existing patterns** - Keep all current patterns that are working
@@ -54,21 +54,21 @@ The .gitignore file will be organized into logical sections for maintainability:
 
 ### Rationale
 
-**Why comprehensive patterns?**
+### Why comprehensive patterns?
 
 - ML projects generate many file types (checkpoints, logs, datasets, visualizations)
 - Development involves multiple tools (IDEs, editors, OS utilities)
 - Python and Mojo both generate compilation artifacts
 - Better to ignore too much than accidentally commit large/sensitive files
 
-**Why section-based organization?**
+### Why section-based organization?
 
 - Easier to maintain and update specific categories
 - Team members can quickly find relevant patterns
 - Clear documentation of what is ignored and why
 - Follows industry best practices (GitHub's gitignore templates)
 
-**Why preserve existing patterns?**
+### Why preserve existing patterns?
 
 - Current patterns are working and part of established workflow
 - Pixi environment management is critical to project
@@ -77,7 +77,7 @@ The .gitignore file will be organized into logical sections for maintainability:
 
 ### Alternatives Considered
 
-**Alternative 1: Minimal .gitignore (rejected)**
+### Alternative 1: Minimal .gitignore (rejected)
 
 - Only include patterns for files currently generated
 - **Pros**: Smaller file, less maintenance
@@ -91,7 +91,7 @@ The .gitignore file will be organized into logical sections for maintainability:
 - **Cons**: Harder to maintain, easy to miss patterns, not standard practice
 - **Rejection reason**: Single root .gitignore is industry standard and easier to manage
 
-**Alternative 3: Global .gitignore (rejected)**
+### Alternative 3: Global .gitignore (rejected)
 
 - Use `~/.gitignore_global` for IDE and OS patterns
 - **Pros**: Cleaner repository .gitignore
@@ -100,7 +100,7 @@ The .gitignore file will be organized into logical sections for maintainability:
 
 ### Implementation Pattern
 
-**File Structure**:
+### File Structure
 
 ```text
 # Section Header (e.g., "Python")
@@ -112,9 +112,9 @@ pattern2
 
 # Next Section Header
 ...
-```
+```text
 
-**Pattern Types**:
+### Pattern Types
 
 - **Directory patterns**: End with `/` (e.g., `__pycache__/`)
 - **Extension patterns**: Use wildcard (e.g., `*.pyc`)
@@ -124,10 +124,10 @@ pattern2
 ### Key Technical Decisions
 
 1. **Keep Pixi exception** - `!.pixi/config.toml` pattern preserved because Pixi config should be version-controlled
-2. **Include dataset patterns** - Ignore common dataset directories (`data/`, `datasets/`) to prevent large file commits
-3. **ML framework coverage** - Include patterns for PyTorch, TensorFlow, and other common ML libraries
-4. **Mojo compilation artifacts** - Include `.mojo.ll`, `.mojo.o`, and other Mojo-specific build files
-5. **Test coverage** - Ignore test coverage reports and artifacts (`.coverage`, `htmlcov/`, `.pytest_cache/`)
+1. **Include dataset patterns** - Ignore common dataset directories (`data/`, `datasets/`) to prevent large file commits
+1. **ML framework coverage** - Include patterns for PyTorch, TensorFlow, and other common ML libraries
+1. **Mojo compilation artifacts** - Include `.mojo.ll`, `.mojo.o`, and other Mojo-specific build files
+1. **Test coverage** - Ignore test coverage reports and artifacts (`.coverage`, `htmlcov/`, `.pytest_cache/`)
 
 ## References
 

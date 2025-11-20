@@ -35,7 +35,7 @@ The following components must be implemented to complete this issue:
   - `CoverageCollector` - Central coordinator for all coverage operations
   - `ExecutionCounter` - Count how many times each line executes
 
-**Core Functionality**:
+### Core Functionality
 
 - Track line execution across all source files
 - Record execution counts (not just binary yes/no)
@@ -53,7 +53,7 @@ The following components must be implemented to complete this issue:
   - `collect_coverage_results()` - Gather data after tests
   - `cleanup_coverage()` - Clean up resources
 
-**Core Functionality**:
+### Core Functionality
 
 - Hook into test execution pipeline
 - Automatically collect data for all tests
@@ -69,7 +69,7 @@ The following components must be implemented to complete this issue:
   - `coverage.json` (JSON format for tool compatibility)
   - `coverage_raw.dat` (binary format for performance)
 
-**Core Functionality**:
+### Core Functionality
 
 - Serialize coverage data to disk
 - Support multiple output formats
@@ -89,7 +89,7 @@ The following components must be implemented to complete this issue:
   - `line_threshold` - Minimum lines per file to track
   - `preserve_data` - Keep historical coverage data
 
-**Core Functionality**:
+### Core Functionality
 
 - Load configuration from standard locations
 - Support environment variable overrides
@@ -105,7 +105,7 @@ The following components must be implemented to complete this issue:
   - Coverage percentage per file and overall
   - Most/least covered files
 
-**Core Functionality**:
+### Core Functionality
 
 - Calculate coverage percentages accurately
 - Handle edge cases (files with no lines, all lines executed, etc.)
@@ -179,13 +179,13 @@ All of the following must be satisfied for issue completion:
    - Efficient lookup and iteration
    - Serialize to/from data structures
 
-2. **Implement `FileTracker`**:
+1. **Implement `FileTracker`**:
    - Manage trackers for multiple files
    - Aggregate line coverage statistics
    - Handle file path normalization
    - Support file filtering
 
-3. **Create test cases for data structures**:
+1. **Create test cases for data structures**:
    - Test line tracking accuracy
    - Test file tracker aggregation
    - Test path normalization
@@ -199,13 +199,13 @@ All of the following must be satisfied for issue completion:
    - Merge multiple coverage runs
    - Calculate statistics
 
-2. **Hook into test execution**:
+1. **Hook into test execution**:
    - Detect test framework being used
    - Install hooks before tests run
    - Collect data after each test
    - Aggregate across all tests
 
-3. **Handle errors gracefully**:
+1. **Handle errors gracefully**:
    - Preserve coverage data if tests fail
    - Clean up resources on interruption
    - Report coverage even with test failures
@@ -218,7 +218,7 @@ All of the following must be satisfied for issue completion:
    - Support custom binary format
    - Test round-trip accuracy
 
-2. **Configuration system**:
+1. **Configuration system**:
    - Load from `coverage.ini` or equivalent
    - Support environment variables
    - Validate configuration
@@ -232,13 +232,13 @@ All of the following must be satisfied for issue completion:
    - Test with concurrent execution
    - Validate multi-file projects
 
-2. **Performance verification**:
+1. **Performance verification**:
    - Benchmark collection overhead
    - Benchmark serialization time
    - Profile memory usage
    - Optimize hot paths
 
-3. **Documentation**:
+1. **Documentation**:
    - API documentation with examples
    - Configuration guide
    - Integration instructions
@@ -246,7 +246,7 @@ All of the following must be satisfied for issue completion:
 
 ## Architecture Overview
 
-```
+```text
 Test Execution
       |
       v
@@ -267,7 +267,7 @@ CoverageTestRunner
             +---> coverage.json
             |
             +---> coverage_raw.dat
-```
+```text
 
 ## Integration Points
 
@@ -301,7 +301,8 @@ CoverageTestRunner
 
 **Challenge**: Tracking every line execution could significantly slow tests
 
-**Solution**:
+### Solution
+
 - Use efficient data structures (bit arrays for booleans, compact arrays for counts)
 - Profile-guided optimization to identify bottlenecks
 - Optional line filtering to track only critical paths
@@ -311,7 +312,8 @@ CoverageTestRunner
 
 **Challenge**: Multiple tests running simultaneously could have race conditions
 
-**Solution**:
+### Solution
+
 - Thread-safe data structures or per-thread trackers
 - Proper synchronization for merged results
 - Test isolation (separate coverage per test)
@@ -320,7 +322,8 @@ CoverageTestRunner
 
 **Challenge**: Projects with thousands of files could use significant memory
 
-**Solution**:
+### Solution
+
 - Lazy loading of file trackers
 - Streaming serialization for large datasets
 - File-by-file analysis option
@@ -330,7 +333,8 @@ CoverageTestRunner
 
 **Challenge**: Different tools expect different coverage data formats
 
-**Solution**:
+### Solution
+
 - Implement converter between formats
 - Use standard `.coverage` format as internal
 - Document format mapping
@@ -370,7 +374,8 @@ CoverageTestRunner
 
 **Decision**: Implement line-based coverage first, allow for branch coverage later
 
-**Rationale**:
+### Rationale
+
 - Line coverage is simpler to implement and understand
 - Covers the most common use case
 - Branch coverage can be added as enhancement
@@ -380,7 +385,8 @@ CoverageTestRunner
 
 **Decision**: Use lazy initialization of file trackers
 
-**Rationale**:
+### Rationale
+
 - Only track files that are actually executed
 - Reduces memory for large projects with selective testing
 - Faster startup time
@@ -390,7 +396,8 @@ CoverageTestRunner
 
 **Decision**: Prioritize `.coverage` format, support JSON, optional custom binary
 
-**Rationale**:
+### Rationale
+
 - `.coverage` is standard (compatibility with many tools)
 - JSON for human readability and tool interoperability
 - Custom binary for performance-critical scenarios
@@ -400,7 +407,8 @@ CoverageTestRunner
 
 **Decision**: Support both `coverage.ini` and environment variables
 
-**Rationale**:
+### Rationale
+
 - `coverage.ini` for project-wide settings
 - Environment variables for CI/CD integration
 - Matches standard coverage.py conventions
@@ -416,13 +424,13 @@ CoverageTestRunner
    - Range of line numbers
    - Serialization round-trip
 
-2. **FileTracker tests**:
+1. **FileTracker tests**:
    - Track multiple files
    - Aggregate statistics
    - File path normalization
    - Filtering by pattern
 
-3. **CoverageCollector tests**:
+1. **CoverageCollector tests**:
    - Initialize and finalize
    - Record line executions
    - Calculate statistics
@@ -436,13 +444,13 @@ CoverageTestRunner
    - Measure overhead
    - Validate data completeness
 
-2. **Multi-file projects**:
+1. **Multi-file projects**:
    - Large number of files (1000+)
    - Nested directory structures
    - Mixed file types
    - Complex module organization
 
-3. **Data format tests**:
+1. **Data format tests**:
    - Save and load `.coverage` format
    - Save and load JSON format
    - Verify data fidelity
@@ -456,7 +464,7 @@ CoverageTestRunner
    - Verify < 5% target
    - Profile memory usage
 
-2. **Scalability tests**:
+1. **Scalability tests**:
    - Large number of files
    - Large test suites
    - Long-running tests
@@ -477,7 +485,7 @@ All required components can be implemented independently.
 
 After implementation, the project will have:
 
-```
+```text
 shared/utils/
 ├── coverage.mojo           (NEW - Core coverage system)
 
@@ -488,7 +496,7 @@ tests/shared/
 Configuration:
 ├── coverage.ini            (NEW - Coverage configuration)
 ├── pyproject.toml          (UPDATED - Coverage settings)
-```
+```text
 
 ## Success Metrics
 
@@ -545,18 +553,18 @@ Before closing this issue, verify:
 ### During Implementation
 
 1. Implement core `LineTracker` and `FileTracker` classes
-2. Create `CoverageCollector` coordinator
-3. Integrate with test framework
-4. Implement serialization for each format
-5. Add configuration system
-6. Write comprehensive tests
+1. Create `CoverageCollector` coordinator
+1. Integrate with test framework
+1. Implement serialization for each format
+1. Add configuration system
+1. Write comprehensive tests
 
 ### After Implementation
 
 1. **Issue #847**: Generate coverage reports from collected data
-2. **Issue #848**: Validate coverage against configured thresholds
-3. **Issue #846**: Integration of all coverage components
-4. **Future**: Enhancement to support branch coverage
+1. **Issue #848**: Validate coverage against configured thresholds
+1. **Issue #846**: Integration of all coverage components
+1. **Future**: Enhancement to support branch coverage
 
 ## Implementation Checklist
 

@@ -37,7 +37,7 @@ The core directory will follow a clean, hierarchical structure:
 shared/core/
 ├── __init__.py          # Package initialization
 └── README.md            # Purpose and organization guide
-```
+```text
 
 Future expansions may include subdirectories for:
 
@@ -50,9 +50,9 @@ Future expansions may include subdirectories for:
 The `README.md` will serve as a guide for contributors to understand:
 
 1. **What belongs in core/**: Criteria for adding components
-2. **What doesn't belong**: Paper-specific or specialized functionality
-3. **Organization principles**: How to structure additions
-4. **Usage examples**: How to import and use core components
+1. **What doesn't belong**: Paper-specific or specialized functionality
+1. **Organization principles**: How to structure additions
+1. **Usage examples**: How to import and use core components
 
 ### Package Structure
 

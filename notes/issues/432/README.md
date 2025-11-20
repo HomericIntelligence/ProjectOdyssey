@@ -43,7 +43,7 @@ Refactor and finalize the data utilities module based on learnings from Test, Im
 
 **Current State**: TODO comment in implementation
 
-**Proposed Improvement**:
+### Proposed Improvement
 
 ```mojo
 fn _load_file(self, path: String) raises -> Tensor:
@@ -57,15 +57,19 @@ fn _load_file(self, path: String) raises -> Tensor:
     Supported Workflow:
         1. Preprocess files using Python:
            ```python
+
            import numpy as np
            data = preprocess_images("path/to/images/")
            np.save("processed.npy", data)
+
            ```
 
         2. Load in Mojo:
            ```mojo
+
            var data = load_numpy("processed.npy")
            var dataset = TensorDataset(data, labels)
+
            ```
 
     Args:
@@ -177,7 +181,7 @@ fn _get_file_extension(self, path: String) -> String:
     if len(parts) < 2:
         return ""
     return parts[len(parts) - 1].lower()
-```
+```text
 
 **Impact**: Users get clear, actionable guidance instead of cryptic errors
 
@@ -185,7 +189,7 @@ fn _get_file_extension(self, path: String) -> String:
 
 **Current State**: Ad-hoc validation in each component
 
-**Proposed Consolidation**:
+### Proposed Consolidation
 
 ```mojo
 # shared/data/validation.mojo
@@ -272,7 +276,7 @@ fn validate_batch_size(batch_size: Int, dataset_size: Int) raises:
             "dataset_size (" + str(dataset_size) + "). " +
             "Only one batch will be created."
         )
-```
+```text
 
 **Impact**: Consistent validation and error messages across all components
 
@@ -280,7 +284,7 @@ fn validate_batch_size(batch_size: Int, dataset_size: Int) raises:
 
 **Current State**: Iterator logic could be clearer
 
-**Proposed Refactoring**:
+### Proposed Refactoring
 
 ```mojo
 struct DataLoaderIterator:
@@ -384,13 +388,13 @@ struct DataLoaderIterator:
             samples.append(sample)
 
         return Batch(samples^)
-```
+```text
 
 **Impact**: Clearer logic, easier to maintain and test
 
 ### 4. Performance Optimization
 
-**Batching Performance**:
+### Batching Performance
 
 ```mojo
 fn benchmark_batching():
@@ -447,7 +451,7 @@ fn benchmark_shuffling():
     print("No shuffle: " + format_time(time_no_shuffle))
     print("With shuffle: " + format_time(time_shuffle))
     print("Overhead: " + format_percent((time_shuffle - time_no_shuffle) / time_no_shuffle))
-```
+```text
 
 ## Documentation Improvements
 
@@ -478,7 +482,7 @@ fn __getitem__(self, index: Int) raises -> Tensor:
     """
     validate_index(index, len(self), "dataset")
     return self.data[index]
-```
+```text
 
 ### 2. Performance Characteristics
 
@@ -517,7 +521,7 @@ Document in README:
 | 100,000      | 128        | 782     | High          |
 
 Memory impact = batch_size × sample_size × data_type_size
-```
+```text
 
 ## Known Issues and TODOs
 
@@ -528,7 +532,7 @@ Memory impact = batch_size × sample_size × data_type_size
    - Need Mojo ecosystem support
    - Documented workaround available
 
-2. **Error Message Clarity**:
+1. **Error Message Clarity**:
    - Improve FileDataset error messages ✅ (addressed in refactoring)
    - Add troubleshooting to README ⏳
 
@@ -538,11 +542,11 @@ Memory impact = batch_size × sample_size × data_type_size
    - TensorDataset loads all data
    - Consider streaming for large datasets (future)
 
-2. **Sampler Strategies**:
+1. **Sampler Strategies**:
    - Only sequential and random available
    - Add weighted, stratified samplers (future)
 
-3. **Performance Optimization**:
+1. **Performance Optimization**:
    - Add multi-threading for data loading (future)
    - Prefetching for pipeline efficiency (future)
 
@@ -558,7 +562,8 @@ Memory impact = batch_size × sample_size × data_type_size
 
 ### 1. Edge Case Testing
 
-**Add tests for**:
+### Add tests for
+
 - Empty datasets
 - Single-sample datasets
 - Batch size larger than dataset
@@ -568,7 +573,8 @@ Memory impact = batch_size × sample_size × data_type_size
 
 ### 2. Performance Testing
 
-**Benchmark**:
+### Benchmark
+
 - Batching speed for various sizes
 - Shuffling overhead
 - Memory usage patterns
@@ -576,7 +582,8 @@ Memory impact = batch_size × sample_size × data_type_size
 
 ### 3. Stress Testing
 
-**Test limits**:
+### Test limits
+
 - Very large datasets (100k+ samples)
 - Very large batch sizes (1000+)
 - Many epochs (100+)
@@ -587,26 +594,26 @@ Memory impact = batch_size × sample_size × data_type_size
 ### High Priority (Must Complete)
 
 1. ✅ Improve FileDataset error messages
-2. ✅ Add validation utilities
-3. ⏳ Create comprehensive README
-4. ⏳ Add complexity analysis to docstrings
-5. ⏳ Benchmark performance
+1. ✅ Add validation utilities
+1. ⏳ Create comprehensive README
+1. ⏳ Add complexity analysis to docstrings
+1. ⏳ Benchmark performance
 
 ### Medium Priority (Should Complete)
 
 1. Simplify DataLoader iterator logic
-2. Add performance characteristics to docs
-3. Create troubleshooting guide
-4. Test edge cases comprehensively
-5. Profile memory usage
+1. Add performance characteristics to docs
+1. Create troubleshooting guide
+1. Test edge cases comprehensively
+1. Profile memory usage
 
 ### Low Priority (Nice to Have)
 
 1. Add advanced sampling strategies
-2. Implement streaming support
-3. Add multi-threading
-4. Create visual diagrams
-5. Benchmark against other frameworks
+1. Implement streaming support
+1. Add multi-threading
+1. Create visual diagrams
+1. Benchmark against other frameworks
 
 ## References
 
@@ -629,27 +636,30 @@ Memory impact = batch_size × sample_size × data_type_size
 ### Cleanup Strategy
 
 1. **Start with Error Messages**: Make failures helpful
-2. **Add Validation**: Catch errors early
-3. **Simplify Logic**: Reduce complexity where possible
-4. **Document Performance**: Help users make informed decisions
-5. **Test Thoroughly**: Ensure production readiness
+1. **Add Validation**: Catch errors early
+1. **Simplify Logic**: Reduce complexity where possible
+1. **Document Performance**: Help users make informed decisions
+1. **Test Thoroughly**: Ensure production readiness
 
 ### Quality Metrics
 
-**Code Quality**:
+### Code Quality
+
 - ⏳ All tests passing
 - ⏳ Code coverage ≥ 90%
 - ⏳ No code duplication
 - ⏳ Clear error messages
 - ⏳ Comprehensive docstrings
 
-**Performance**:
+### Performance
+
 - ⏳ Batching benchmarks established
 - ⏳ Shuffling overhead measured
 - ⏳ Memory usage profiled
 - ⏳ Acceptable for typical use cases
 
-**Documentation**:
+### Documentation
+
 - ⏳ README comprehensive
 - ⏳ All methods documented
 - ⏳ Performance characteristics clear

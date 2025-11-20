@@ -27,7 +27,7 @@ git --version
 # Check repository root
 cd /path/to/ml-odyssey
 git rev-parse --show-toplevel  # Should show repository root
-```
+```text
 
 ## Quick Start
 
@@ -42,16 +42,16 @@ python3 tools/setup/install_tools.py
 
 # Verify installation
 python3 tools/setup/verify_tools.py
-```
+```text
 
 The setup script will:
 
 1. Detect your environment (OS, Python, Mojo versions)
-2. Check for required dependencies
-3. Install Python packages (if needed)
-4. Verify Mojo tools are accessible
-5. Create necessary directories
-6. Run validation tests
+1. Check for required dependencies
+1. Install Python packages (if needed)
+1. Verify Mojo tools are accessible
+1. Create necessary directories
+1. Run validation tests
 
 ## Manual Installation
 
@@ -70,7 +70,7 @@ pip install -r requirements.txt
 pip install jinja2>=3.0.0    # Template engine
 pip install pyyaml>=6.0      # YAML parsing
 pip install click>=8.0.0     # CLI framework (optional)
-```
+```text
 
 **Note**: Python dependencies are only needed for Python-based tools (scaffolding, code generation, report generation).
 Mojo tools have no Python dependencies.
@@ -85,7 +85,7 @@ mojo -I tools/ -c "from test_utils import generate_batch"
 
 # Or set MOJO_PATH (if needed)
 export MOJO_PATH=/path/to/ml-odyssey
-```
+```text
 
 ### Step 3: Environment Configuration
 
@@ -108,7 +108,7 @@ export BENCHMARK_DIR=$ML_ODYSSEY_ROOT/benchmarks
 
 # Tool verbosity (0=quiet, 1=normal, 2=verbose)
 export TOOL_VERBOSITY=1
-```
+```text
 
 ### Step 4: Verify Installation
 
@@ -119,7 +119,7 @@ python3 tools/setup/verify_tools.py --verbose
 # Or manually test tools
 python3 tools/paper-scaffold/scaffold.py --help
 mojo tools/benchmarking/model_bench.mojo --help
-```
+```text
 
 ## Tool-Specific Setup
 
@@ -132,7 +132,7 @@ No additional setup required. Uses Python standard library and optional Jinja2 f
 python3 tools/paper-scaffold/scaffold.py \
     --paper "TestPaper" \
     --output /tmp/test_paper/
-```
+```text
 
 ### Test Utilities
 
@@ -143,7 +143,7 @@ Mojo tools require Mojo installation. Verify imports work:
 mojo
 >>> from tools.test_utils import generate_batch
 >>> # Should not error
-```
+```text
 
 ### Benchmarking
 
@@ -155,14 +155,14 @@ mojo tools/benchmarking/model_bench.mojo --help
 
 # Verify report generator
 python3 tools/benchmarking/report_generator.py --help
-```
+```text
 
 For visualization in reports:
 
 ```bash
 # Install optional visualization dependencies
 pip install matplotlib pandas
-```
+```text
 
 ### Code Generation
 
@@ -174,7 +174,7 @@ python3 -c "import jinja2; print(jinja2.__version__)"
 
 # Test code generation
 python3 tools/codegen/mojo_boilerplate.py --help
-```
+```text
 
 ## Platform-Specific Notes
 
@@ -192,7 +192,7 @@ sudo dnf install python3 python3-pip
 
 # Arch
 sudo pacman -S python python-pip
-```
+```text
 
 ### macOS
 
@@ -205,7 +205,7 @@ brew install python@3.11
 # Install Mojo (follow Modular docs)
 curl https://get.modular.com | sh -
 modular install mojo
-```
+```text
 
 ### Windows (WSL2)
 
@@ -217,7 +217,7 @@ sudo apt update
 sudo apt install python3 python3-pip git
 
 # Install Mojo following Modular docs
-```
+```text
 
 ## Troubleshooting
 
@@ -225,7 +225,7 @@ sudo apt install python3 python3-pip git
 
 **Problem**: `ModuleNotFoundError: No module named 'tools'`
 
-**Solution**:
+### Solution
 
 ```bash
 # Option 1: Run from repository root
@@ -234,13 +234,13 @@ python3 tools/paper-scaffold/scaffold.py
 
 # Option 2: Add to PYTHONPATH
 export PYTHONPATH=/path/to/ml-odyssey:$PYTHONPATH
-```
+```text
 
 ### Mojo Import Errors
 
 **Problem**: `Error: could not find module 'test_utils'`
 
-**Solution**:
+### Solution
 
 ```bash
 # Set MOJO_PATH
@@ -248,13 +248,13 @@ export MOJO_PATH=/path/to/ml-odyssey
 
 # Or use -I flag
 mojo -I /path/to/ml-odyssey/tools tools/benchmarking/model_bench.mojo
-```
+```text
 
 ### Permission Errors
 
 **Problem**: `Permission denied` when running scripts
 
-**Solution**:
+### Solution
 
 ```bash
 # Make scripts executable
@@ -262,13 +262,13 @@ chmod +x tools/*/\*.py
 
 # Or run with python3 explicitly
 python3 tools/paper-scaffold/scaffold.py
-```
+```text
 
 ### Missing Dependencies
 
 **Problem**: `ModuleNotFoundError: No module named 'jinja2'`
 
-**Solution**:
+### Solution
 
 ```bash
 # Install missing Python packages
@@ -276,13 +276,13 @@ pip install jinja2 pyyaml
 
 # Or install all requirements
 pip install -r tools/requirements.txt
-```
+```text
 
 ### Mojo Not Found
 
 **Problem**: `mojo: command not found`
 
-**Solution**:
+### Solution
 
 ```bash
 # Install Mojo following official docs
@@ -291,7 +291,7 @@ modular install mojo
 
 # Add to PATH (usually done automatically)
 export PATH=$PATH:~/.modular/bin
-```
+```text
 
 ## Verification
 
@@ -301,9 +301,9 @@ Run the comprehensive verification script:
 
 ```bash
 python3 tools/setup/verify_tools.py --verbose
-```
+```text
 
-**Expected Output**:
+### Expected Output
 
 ```text
 Checking prerequisites...
@@ -323,7 +323,7 @@ Checking tool availability...
 ✓ codegen/ (Python scripts)
 
 All checks passed!
-```
+```text
 
 ### Individual Tool Tests
 
@@ -341,7 +341,7 @@ mojo tools/benchmarking/model_bench.mojo --help
 
 # Code generation (Python)
 python3 tools/codegen/mojo_boilerplate.py --help
-```
+```text
 
 ## Updating Tools
 
@@ -353,7 +353,7 @@ pip install --upgrade -r tools/requirements.txt
 
 # Update specific package
 pip install --upgrade jinja2
-```
+```text
 
 ### Update Mojo
 
@@ -363,7 +363,7 @@ modular update
 
 # Update Mojo
 modular install mojo
-```
+```text
 
 ### Update Tools
 
@@ -375,7 +375,7 @@ git pull origin main
 
 # Re-run verification
 python3 tools/setup/verify_tools.py
-```
+```text
 
 ## Uninstallation
 
@@ -387,7 +387,7 @@ pip uninstall -y jinja2 pyyaml click matplotlib pandas
 
 # Or use requirements file
 pip uninstall -r tools/requirements.txt
-```
+```text
 
 **Note**: Uninstalling won't affect Mojo tools (they have no separate dependencies).
 
@@ -402,16 +402,16 @@ export MOJO_PATH=...
 export PYTHONPATH=...
 export BENCHMARK_DIR=...
 export TOOL_VERBOSITY=...
-```
+```text
 
 ## Next Steps
 
 After installation:
 
 1. **Read Integration Guide**: See [INTEGRATION.md](./INTEGRATION.md) for workflow integration
-2. **Browse Tool Catalog**: See [CATALOG.md](./CATALOG.md) for available tools
-3. **Try Examples**: Run example commands from tool READMEs
-4. **Configure IDE**: Set up IDE integration (optional, see below)
+1. **Browse Tool Catalog**: See [CATALOG.md](./CATALOG.md) for available tools
+1. **Try Examples**: Run example commands from tool READMEs
+1. **Configure IDE**: Set up IDE integration (optional, see below)
 
 ### IDE Integration (Optional)
 
@@ -431,13 +431,13 @@ Add to `.vscode/settings.json`:
     "${workspaceFolder}/tools"
   ]
 }
-```
+```text
 
 #### PyCharm
 
 1. File → Settings → Project → Project Structure
-2. Add `tools/` as "Sources Root"
-3. Apply and OK
+1. Add `tools/` as "Sources Root"
+1. Apply and OK
 
 ## References
 

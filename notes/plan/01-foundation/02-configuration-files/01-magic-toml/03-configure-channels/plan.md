@@ -27,9 +27,9 @@ None (leaf node)
 ## Steps
 
 1. Add channels section to magic.toml
-2. Configure conda-forge channel for general packages
-3. Add Modular channels for Mojo/MAX packages
-4. Set channel priority if needed
+1. Configure conda-forge channel for general packages
+1. Add Modular channels for Mojo/MAX packages
+1. Set channel priority if needed
 
 ## Success Criteria
 

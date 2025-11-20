@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Load list of required files
-2. Check each file exists in expected location
-3. Verify file is not empty
-4. Report missing or misplaced files
+1. Check each file exists in expected location
+1. Verify file is not empty
+1. Report missing or misplaced files
 
 ## Success Criteria
 

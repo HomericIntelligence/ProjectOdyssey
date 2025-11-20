@@ -9,8 +9,8 @@
 The test stubs expect class-based APIs (e.g., `SGD()`, `Linear()`, `Tensor()`), but the actual implementations use:
 
 1. **Functional APIs** for most components (e.g., `sgd_step()`, `relu()`)
-2. **ExTensor library** in `src/extensor/` instead of `shared/core/types/Tensor`
-3. **Partial implementations** - many expected components are not yet implemented
+1. **ExTensor library** in `src/extensor/` instead of `shared/core/types/Tensor`
+1. **Partial implementations** - many expected components are not yet implemented
 
 **Critical Gap**: The test API contracts do NOT match the actual implementation patterns.
 
@@ -28,14 +28,16 @@ The test stubs expect class-based APIs (e.g., `SGD()`, `Linear()`, `Tensor()`), 
 | DType | ✅ Implemented | Built into ExTensor | Part of ExTensor struct |
 | Creation Ops | ✅ Implemented | `src/extensor/extensor.mojo` | `zeros`, `ones`, `full`, `empty`, etc. |
 
-**ExTensor Features**:
+### ExTensor Features
+
 - 150+ operations from Array API Standard 2023.12
 - SIMD-optimized element-wise operations
 - NumPy-style broadcasting
 - Multiple data types (float16/32/64, int8/16/32/64, uint8/16/32/64, bool)
 
-**Files**:
-```
+### Files
+
+```text
 src/extensor/
 ├── extensor.mojo         (23,027 bytes) - Core tensor type
 ├── shape.mojo            (11,220 bytes) - Shape manipulation
@@ -48,7 +50,7 @@ src/extensor/
 ├── elementwise_math.mojo (22,372 bytes) - Exp, log, sqrt, etc.
 ├── comparison.mojo       ( 8,518 bytes) - Equal, less, greater
 └── broadcasting.mojo     ( 6,796 bytes) - Broadcasting utilities
-```
+```text
 
 ### 2. Neural Network Layers ❌ NOT IMPLEMENTED
 
@@ -69,7 +71,8 @@ src/extensor/
 
 **Note**: Activations exist as **functions** in ExTensor (`relu()`, `sigmoid()`, `tanh()`), not as layer classes.
 
-**Available in ExTensor**:
+### Available in ExTensor
+
 - `relu()`, `leaky_relu()`, `prelu()` - ReLU variants
 - `sigmoid()`, `tanh()` - Sigmoid and tanh
 - `softmax()`, `gelu()`, `selu()`, `elu()` - Advanced activations
@@ -98,7 +101,8 @@ src/extensor/
 | AdamW | ❌ Missing | N/A | N/A |
 | RMSprop | ❌ Missing | N/A | N/A |
 
-**SGD Implementation**:
+### SGD Implementation
+
 ```mojo
 fn sgd_step(
     params: ExTensor,
@@ -108,13 +112,14 @@ fn sgd_step(
     weight_decay: Float64 = 0.0,
     velocity: ExTensor = ExTensor()
 ) raises -> ExTensor
-```
+```text
 
-**Tests Expect**:
+### Tests Expect
+
 ```mojo
 var optimizer = SGD(learning_rate=0.01, momentum=0.9)
 optimizer.step(params, grads)
-```
+```text
 
 **Gap**: Tests expect class-based API with state, implementation is stateless functional API.
 
@@ -172,35 +177,35 @@ optimizer.step(params, grads)
    - `Conv2D(in_channels, out_channels, kernel_size, stride, padding)`
    - Need to wrap ExTensor activation functions into layer classes
 
-2. **Optimizer Classes** ❌ MISSING
+1. **Optimizer Classes** ❌ MISSING
    - `SGD` class (wrapping `sgd_step()` function)
    - `Adam` class (not implemented at all)
    - `AdamW` class (not implemented at all)
    - `RMSprop` class (not implemented at all)
 
-3. **Tensor Class Wrapper** ⚠️ API MISMATCH
+1. **Tensor Class Wrapper** ⚠️ API MISMATCH
    - Tests expect `Tensor(List[Float32](...), Shape(...))`
    - Implementation has `ExTensor` with different API
    - Need adapter or alias
 
 ### Medium Priority (Tests Have Workarounds)
 
-4. **Pooling Layers** ❌ MISSING
+1. **Pooling Layers** ❌ MISSING
    - `MaxPool2D(kernel_size, stride, padding)`
    - `AvgPool2D(kernel_size, stride, padding)`
 
-5. **Normalization Layers** ❌ MISSING
+1. **Normalization Layers** ❌ MISSING
    - `BatchNorm`
    - `LayerNorm`
 
-6. **Callbacks** ❌ MISSING
+1. **Callbacks** ❌ MISSING
    - `EarlyStopping`
    - `ModelCheckpoint`
    - `LearningRateScheduler`
 
 ### Low Priority (Advanced Features)
 
-7. **Learning Rate Schedulers** ❌ MISSING
+1. **Learning Rate Schedulers** ❌ MISSING
    - `StepLR`
    - `CosineAnnealingLR`
    - `ReduceLROnPlateau`
@@ -237,7 +242,7 @@ struct SGD:
 
     fn step(inout self, inout params: ExTensor, grads: ExTensor) raises:
         params = sgd_step(params, grads, self.learning_rate, self.momentum, ...)
-```
+```text
 
 ## Summary Statistics
 
@@ -255,15 +260,16 @@ struct SGD:
 ## Next Steps for Issue #1538
 
 1. **Create adapter layer** to bridge functional APIs to class-based APIs
-2. **Implement missing layer classes** (Linear, Conv2D, pooling, normalization)
-3. **Implement missing optimizer classes** (wrap SGD function, add Adam/AdamW/RMSprop)
-4. **Update test stubs** to use `ExTensor` instead of `Tensor` OR create `Tensor` alias
-5. **Uncomment tests** once adapters are in place
-6. **Fix API mismatches** and validate against test contracts
+1. **Implement missing layer classes** (Linear, Conv2D, pooling, normalization)
+1. **Implement missing optimizer classes** (wrap SGD function, add Adam/AdamW/RMSprop)
+1. **Update test stubs** to use `ExTensor` instead of `Tensor` OR create `Tensor` alias
+1. **Uncomment tests** once adapters are in place
+1. **Fix API mismatches** and validate against test contracts
 
 ## Files Requiring Updates
 
-### To Create:
+### To Create
+
 - `shared/core/types/tensor.mojo` - Tensor alias or wrapper
 - `shared/core/layers/linear.mojo` - Linear layer class
 - `shared/core/layers/conv.mojo` - Conv2D layer class
@@ -276,7 +282,8 @@ struct SGD:
 - `shared/training/callbacks/early_stopping.mojo` - Early stopping
 - `shared/training/callbacks/checkpoint.mojo` - Model checkpointing
 
-### To Update:
+### To Update
+
 - `shared/core/__init__.mojo` - Export Tensor, layers, ops
 - `shared/core/types/__init__.mojo` - Export Tensor alias
 - `shared/core/layers/__init__.mojo` - Export layer classes

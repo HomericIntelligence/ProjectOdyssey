@@ -22,13 +22,13 @@ This skill automates the process of addressing PR review feedback by making chan
 # Fetch all review comments
 ./scripts/get_feedback.sh <pr-number>
 
-# This retrieves:
+# This retrieves
 # - Comment ID
 # - File path
 # - Line number
 # - Comment text
 # - Reviewer username
-```
+```text
 
 ### 2. Make Changes
 
@@ -49,7 +49,7 @@ Address each review comment by:
 gh api repos/OWNER/REPO/pulls/PR/comments/COMMENT_ID/replies \
   --method POST \
   -f body="✅ Fixed - Updated logic as suggested"
-```
+```text
 
 ### 4. Verify and Push
 
@@ -63,20 +63,20 @@ git push
 
 # Verify CI passes
 ./scripts/check_ci.sh <pr-number>
-```
+```text
 
 ## Reply Format
 
 Always use concise, clear replies:
 
-**Good replies:**
+### Good replies:
 
 - `✅ Fixed - Updated conftest.py to use real repository root`
 - `✅ Fixed - Removed duplicate test file`
 - `✅ Fixed - Added error handling for edge case`
 - `✅ Done - Renamed variable for clarity`
 
-**Bad replies:**
+### Bad replies:
 
 - "Done" (not specific)
 - Long explanations (keep it brief)
@@ -90,7 +90,7 @@ General comments in PR timeline:
 
 ```bash
 gh pr comment <pr-number> --body "Response"
-```
+```text
 
 ### 2. Review Comment Replies
 
@@ -100,7 +100,7 @@ Inline code review comment replies:
 gh api repos/OWNER/REPO/pulls/PR/comments/COMMENT_ID/replies \
   --method POST \
   -f body="✅ Fixed - description"
-```
+```text
 
 **DO NOT confuse these!** Use the correct API for review comments.
 
@@ -110,13 +110,13 @@ gh api repos/OWNER/REPO/pulls/PR/comments/COMMENT_ID/replies \
 # Complete workflow to fix PR feedback
 ./scripts/fix_all_feedback.sh <pr-number>
 
-# This script:
+# This script
 # 1. Gets all review comments
 # 2. Displays them for review
 # 3. Waits for you to make fixes
 # 4. Helps you reply to each comment
 # 5. Verifies CI status
-```
+```text
 
 ## Error Handling
 
@@ -137,23 +137,23 @@ After addressing feedback:
 
 ## Examples
 
-**Fix all feedback:**
+### Fix all feedback:
 
 ```bash
 ./scripts/fix_all_feedback.sh 42
-```
+```text
 
-**Reply to specific comment:**
+### Reply to specific comment:
 
 ```bash
 ./scripts/reply_to_comment.sh 42 123456 "✅ Fixed - Added validation"
-```
+```text
 
-**Check if all comments addressed:**
+### Check if all comments addressed:
 
 ```bash
 ./scripts/check_feedback_status.sh 42
-```
+```text
 
 ## Scripts Available
 

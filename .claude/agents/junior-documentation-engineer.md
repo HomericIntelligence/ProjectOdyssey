@@ -35,9 +35,9 @@ Level 5 Junior Engineer responsible for simple documentation tasks, formatting, 
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -88,8 +88,8 @@ Level 5 is the lowest level - no delegation.
 When blocked or needing guidance:
 
 1. Escalate to immediate supervisor (relevant Specialist)
-2. If still blocked, Specialist escalates to Design level
-3. If architectural issue, escalates to Orchestrator level
+1. If still blocked, Specialist escalates to Design level
+1. If architectural issue, escalates to Orchestrator level
 
 ## Workflow Phase
 
@@ -141,7 +141,7 @@ Use the `gh-create-pr-linked` skill to create PRs:
 
 ### Minimal Changes Principle
 
-**Make the SMALLEST change that solves the problem.**
+### Make the SMALLEST change that solves the problem.
 
 - ✅ Touch ONLY files directly related to the issue requirements
 - ✅ Make focused changes that directly address the issue
@@ -183,8 +183,8 @@ is linked.
 After creating PR:
 
 1. **Verify** the PR is linked to the issue (check issue page in GitHub)
-2. **Confirm** link appears in issue's "Development" section
-3. **If link missing**: Edit PR description to add "Closes #NUMBER"
+1. **Confirm** link appears in issue's "Development" section
+1. **If link missing**: Edit PR description to add "Closes #NUMBER"
 
 ### PR Requirements
 
@@ -207,13 +207,13 @@ After creating PR:
 
 **Scenario**: Writing Mojo implementation of 2D convolution
 
-**Actions**:
+### Actions
 
 1. Review function specification and interface design
-2. Implement forward pass with proper tensor operations
-3. Add error handling and input validation
-4. Optimize with SIMD where applicable
-5. Write inline documentation
+1. Implement forward pass with proper tensor operations
+1. Add error handling and input validation
+1. Optimize with SIMD where applicable
+1. Write inline documentation
 
 **Outcome**: Working convolution implementation ready for testing
 
@@ -221,13 +221,13 @@ After creating PR:
 
 **Scenario**: Gradient shape mismatch causing training failures
 
-**Actions**:
+### Actions
 
 1. Reproduce bug with minimal test case
-2. Trace tensor dimensions through backward pass
-3. Fix dimension handling in gradient computation
-4. Verify fix with unit tests
-5. Update documentation if needed
+1. Trace tensor dimensions through backward pass
+1. Fix dimension handling in gradient computation
+1. Verify fix with unit tests
+1. Update documentation if needed
 
 **Outcome**: Correct gradient computation with all tests passing
 

@@ -28,11 +28,11 @@ None (leaf node)
 ## Steps
 
 1. Read existing .gitignore or create new file
-2. Add Python-specific ignore patterns
-3. Add Mojo/MAX-specific patterns
-4. Add ML-specific patterns (checkpoints, logs, datasets)
-5. Add IDE and OS-specific patterns
-6. Organize with comments for clarity
+1. Add Python-specific ignore patterns
+1. Add Mojo/MAX-specific patterns
+1. Add ML-specific patterns (checkpoints, logs, datasets)
+1. Add IDE and OS-specific patterns
+1. Organize with comments for clarity
 
 ## Success Criteria
 

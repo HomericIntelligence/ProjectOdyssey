@@ -26,7 +26,7 @@ Testing strategy leverages existing pre-commit infrastructure:
    - `end-of-file-fixer` - Validates file endings
    - `check-added-large-files` - Prevents large commits (max 1MB)
 
-2. **Manual Testing**:
+1. **Manual Testing**:
    - Configuration files tested through actual usage
    - Environment setup validated with pixi/magic
    - Git operations tested with .gitignore/.gitattributes

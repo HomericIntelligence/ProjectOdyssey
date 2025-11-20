@@ -30,8 +30,8 @@ Create a GitHub Actions workflow that runs on every pull request to execute test
 ## Steps
 
 1. Setup Environment
-2. Run Tests
-3. Report Status
+1. Run Tests
+1. Report Status
 
 ## Success Criteria
 

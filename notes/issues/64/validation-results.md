@@ -55,7 +55,7 @@ All agents follow the required markdown structure:
 
 **Status**: ✅ PASSED - All agents follow minimum necessary permissions principle
 
-**Permission Matrix Applied**:
+### Permission Matrix Applied
 
 | Agent Level | Read | Write | Edit | Bash | Grep | Glob | Rationale |
 |-------------|------|-------|------|------|------|------|-----------|
@@ -92,7 +92,7 @@ papers and agent documentation.
 
 **Path Resolution**: All skill paths corrected from `../../.claude/skills/` to `../skills/`
 
-**Placeholder Format**:
+### Placeholder Format
 
 ```markdown
 # [skill_name]
@@ -105,7 +105,7 @@ papers and agent documentation.
 
 ## Planned Capabilities
 - [ ] Core functionality to be implemented
-```
+```text
 
 All skill references in agent files now resolve to valid placeholder files.
 
@@ -115,19 +115,19 @@ All skill references in agent files now resolve to valid placeholder files.
 
 **Status**: ✅ PASSED - All agent references use proper markdown links
 
-**Validation**:
+### Validation
 
 - "Delegates To" sections: All use markdown links `[Agent Name](./agent-file.md)`
 - "Coordinates With" sections: All use markdown links
 - All referenced agents exist as files in `.claude/agents/`
 
-**Sample References**:
+### Sample References
 
 ```markdown
 [Implementation Specialist](./implementation-specialist.md)
 [Test Engineer](./test-engineer.md)
 [Chief Architect](./chief-architect.md)
-```
+```text
 
 ---
 
@@ -143,7 +143,7 @@ All orchestrators and design agents now include comprehensive error handling:
 - Failure Modes: Defined for partial, complete, and blocking failures
 - Loop Detection: Break after 3 identical delegation attempts
 
-**Agents with Error Handling**:
+### Agents with Error Handling
 
 - Level 0: chief-architect
 - Level 1: 6 orchestrators (foundation, shared-library, tooling, papers, cicd, agentic-workflows)
@@ -157,7 +157,7 @@ All orchestrators and design agents now include comprehensive error handling:
 
 Skip-level delegation guidance added to address performance concerns:
 
-**When to Skip**:
+### When to Skip
 
 - Simple bug fixes (< 50 lines)
 - Boilerplate generation
@@ -165,7 +165,7 @@ Skip-level delegation guidance added to address performance concerns:
 - Established patterns
 - Trivial changes (< 20 lines)
 
-**When NOT to Skip**:
+### When NOT to Skip
 
 - New architectural patterns
 - Cross-module integration
@@ -173,7 +173,7 @@ Skip-level delegation guidance added to address performance concerns:
 - Performance-critical paths
 - Public API changes
 
-**Agents with Skip-Level Guidance**:
+### Agents with Skip-Level Guidance
 
 - Level 0: 1 (chief-architect)
 - Level 1: 6 orchestrators
@@ -186,7 +186,7 @@ Skip-level delegation guidance added to address performance concerns:
 
 **Total Warnings**: 46 (non-blocking, mostly aesthetic)
 
-**Breakdown**:
+### Breakdown
 
 - Missing Examples sections: 18 agents
   - **Status**: Intentional - examples moved to separate documentation per review feedback
@@ -248,7 +248,7 @@ Skip-level delegation guidance added to address performance concerns:
 ├── junior-implementation-engineer.md (L5)
 ├── junior-test-engineer.md (L5)
 └── junior-documentation-engineer.md (L5)
-```
+```text
 
 ### Templates (6 files)
 
@@ -260,7 +260,7 @@ agents/templates/
 ├── level-3-component-specialist.md
 ├── level-4-implementation-engineer.md
 └── level-5-junior-engineer.md
-```
+```text
 
 ### Skills Placeholders (25 files)
 
@@ -293,7 +293,7 @@ agents/templates/
     ├── suggest-optimizations/
     ├── train-model/
     └── validate-inputs/
-```
+```text
 
 ---
 

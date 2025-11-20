@@ -28,12 +28,12 @@ Based on the plan, dependencies should be organized into logical categories:
    - Mojo language requirements
    - Essential for Mojo development
 
-2. **Python Dependencies**
+1. **Python Dependencies**
    - Python interpreter version
    - Required for interoperability
    - ML library support
 
-3. **ML Research Libraries**
+1. **ML Research Libraries**
    - Common ML libraries (NumPy, etc.)
    - Only essential dependencies
    - Support for paper reproduction
@@ -42,12 +42,14 @@ Based on the plan, dependencies should be organized into logical categories:
 
 **Decision**: Follow YAGNI principle - avoid over-specifying versions unless necessary for compatibility.
 
-**Rationale**:
+### Rationale
+
 - Allows flexibility for updates
 - Reduces maintenance burden
 - Specifies constraints only when required for stability
 
-**Approach**:
+### Approach
+
 - Use minimum version constraints where needed
 - Document reasoning for any version locks
 - Prefer version ranges over exact versions
@@ -55,13 +57,14 @@ Based on the plan, dependencies should be organized into logical categories:
 ### Documentation Requirements
 
 Each dependency should include:
+
 - Clear comments explaining purpose
 - Version constraint rationale (if applicable)
 - Category grouping for organization
 
 ### Dependencies Organization
 
-**Structure**:
+### Structure
 
 ```toml
 [dependencies]
@@ -73,9 +76,10 @@ python = ">=3.10"
 
 # ML libraries
 # (only essential ones)
-```
+```text
 
-**Key Principles**:
+### Key Principles
+
 - Group related dependencies
 - Use comments to separate sections
 - Alphabetize within groups for readability

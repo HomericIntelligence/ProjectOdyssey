@@ -28,9 +28,9 @@ None (leaf node)
 ## Steps
 
 1. Implement sum reduction with axis and keepdims support
-2. Create mean reduction with proper count normalization
-3. Build max reduction for maximum value extraction
-4. Implement min reduction for minimum value extraction
+1. Create mean reduction with proper count normalization
+1. Build max reduction for maximum value extraction
+1. Implement min reduction for minimum value extraction
 
 ## Success Criteria
 

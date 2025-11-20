@@ -43,20 +43,23 @@ Implementation
 
 ### Architecture Decisions
 
-**TextTransform Trait**:
+### TextTransform Trait
+
 - Separate trait from `Transform` (which works with Tensor)
 - Works with String input/output
 - Follows same composable pattern as image transforms
 
-**Implementation Approach**:
+### Implementation Approach
+
 1. **Keep It Simple**: Basic word-level operations using string split/join
-2. **No Complex Dependencies**: Hardcode synonym dictionary, use simple vocabulary
-3. **Probability-Based**: Apply augmentation with configurable probability
-4. **Deterministic**: Support seeded randomness for reproducibility
+1. **No Complex Dependencies**: Hardcode synonym dictionary, use simple vocabulary
+1. **Probability-Based**: Apply augmentation with configurable probability
+1. **Deterministic**: Support seeded randomness for reproducibility
 
 ### Simplification Decisions
 
 Given Mojo's current constraints:
+
 - **Text representation**: Use String directly (no tokenization)
 - **Synonym replacement**: Simple dictionary/mapping (not embeddings)
 - **Word operations**: Split on spaces, operate, rejoin
@@ -66,9 +69,9 @@ Given Mojo's current constraints:
 ### Implementation Order
 
 1. **RandomSwap** (simplest) - Swap adjacent word pairs
-2. **RandomDeletion** (simple) - Delete words with probability
-3. **RandomInsertion** (moderate) - Insert from vocabulary
-4. **RandomSynonymReplacement** (most complex) - Dictionary lookup
+1. **RandomDeletion** (simple) - Delete words with probability
+1. **RandomInsertion** (moderate) - Insert from vocabulary
+1. **RandomSynonymReplacement** (most complex) - Dictionary lookup
 
 ### File Structure
 
@@ -77,25 +80,28 @@ Create: `/home/user/ml-odyssey/shared/data/text_transforms.mojo`
 ### Key Design Patterns
 
 **Probability Application** (from image augmentations):
+
 ```mojo
 var rand_val = float(random_si64(0, 1000000)) / 1000000.0
 if rand_val >= self.p:
     return text  # Don't apply
-```
+```text
 
-**String Operations**:
+### String Operations
+
 ```mojo
 # Split into words
 var words = text.split(" ")
 
 # Operate on words
-# ...
+# 
 
 # Rejoin
 var result = " ".join(words)
-```
+```text
 
-**Validation**:
+### Validation
+
 - Ensure at least one word remains after deletion
 - Handle empty strings gracefully
 - Preserve special characters where appropriate
@@ -111,13 +117,15 @@ var result = " ".join(words)
 
 ### Mojo String API
 
-**Successes**:
+### Successes
+
 - ✅ `String.split()` method works perfectly for tokenization
 - ✅ String concatenation with `+` operator works well
 - ✅ `len(String)` works for length checks
 - ✅ List[String] operations work as expected
 
-**Challenges**:
+### Challenges
+
 - ⚠️ No built-in `join()` method - implemented manual concatenation
 - ⚠️ Character-by-character iteration may not work as expected
 - ✅ **Solution**: Use `split()` instead of manual character iteration
@@ -125,6 +133,7 @@ var result = " ".join(words)
 ### TextTransform Trait Design
 
 Created separate `TextTransform` trait (parallel to `Transform` for Tensor):
+
 - Works with String input/output instead of Tensor
 - Follows same composable pattern as image transforms
 - Created `TextCompose` (alias `TextPipeline`) for chaining transformations
@@ -133,9 +142,9 @@ Created separate `TextTransform` trait (parallel to `Transform` for Tensor):
 ### Implementation Decisions
 
 1. **split_words()**: Uses `String.split(" ")` with filtering for empty strings
-2. **join_words()**: Manual concatenation with space delimiter
-3. **Randomness**: Uses `random_si64(0, 1000000) / 1000000.0` for probabilities (same as image augmentations)
-4. **Probability check**: `if rand_val >= self.p: return text` pattern (consistent)
+1. **join_words()**: Manual concatenation with space delimiter
+1. **Randomness**: Uses `random_si64(0, 1000000) / 1000000.0` for probabilities (same as image augmentations)
+1. **Probability check**: `if rand_val >= self.p: return text` pattern (consistent)
 
 ### Files Created
 
@@ -172,7 +181,7 @@ Created separate `TextTransform` trait (parallel to `Transform` for Tensor):
    - **Fix**: Changed to `result = t(result)`
    - **Impact**: This prevented the TextCompose pipeline from functioning correctly
 
-2. **Low-Precision Random Number Generation**
+1. **Low-Precision Random Number Generation**
    - **Issue**: Using `float(random_si64(0, 1000000)) / 1000000.0` gives only ~1 million possible values
    - **Fix**: Created `random_float()` helper using 1 billion possible values: `float(random_si64(0, 1000000000)) / 1000000000.0`
    - **Replaced**: 10 instances across both files:
@@ -180,20 +189,21 @@ Created separate `TextTransform` trait (parallel to `Transform` for Tensor):
      - transforms.mojo: RandomHorizontalFlip, RandomVerticalFlip, RandomRotation, RandomErasing (6 instances)
    - **Impact**: Better probability distribution for augmentation thresholds
 
-3. **Image Dimension Inference**
+1. **Image Dimension Inference**
    - **Issue**: Repeated dimension calculation code in multiple image transforms
    - **Solution**: Created `infer_image_dimensions()` helper in transforms.mojo
    - **Simplified**: CenterCrop, RandomCrop, RandomHorizontalFlip, RandomVerticalFlip, RandomRotation, RandomErasing (6 transforms)
    - **Impact**: Reduced code duplication, improved maintainability
 
-4. **Module Documentation**
+1. **Module Documentation**
    - **Added**: Important limitations section to transforms.mojo docstring:
      - Square image assumption (H = W)
      - RGB default (3 channels)
      - Flattened tensor layout
      - Future enhancement path
 
-**Verification Results**:
+### Verification Results
+
 - ✅ 0 low-precision random calls remaining
 - ✅ 0 trait object dereferencing errors
 - ✅ 12 uses of `random_float()` helper (2 definitions + 10 calls)
@@ -202,20 +212,23 @@ Created separate `TextTransform` trait (parallel to `Transform` for Tensor):
 ### Status
 
 **Implementation Phase**: ✅ Complete
+
 - All four text augmentations implemented
 - Comprehensive test suite created (35 tests)
 - Documentation updated
 - Code follows established patterns
 
 **Code Review Phase**: ✅ Complete
+
 - Critical trait object dereferencing fixed
 - Low-precision randomness improved
 - Code duplication reduced with helpers
 - Module limitations documented
 
-**Next Steps**:
+### Next Steps
+
 1. Run tests to verify compilation
-2. Format code with `mojo format`
-3. Fix any remaining compilation errors
-4. Create PR for review
+1. Format code with `mojo format`
+1. Fix any remaining compilation errors
+1. Create PR for review
 

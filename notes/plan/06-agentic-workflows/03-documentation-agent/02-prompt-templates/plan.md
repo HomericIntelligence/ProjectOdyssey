@@ -32,8 +32,8 @@ Create structured prompt templates for the documentation agent's different docum
 ## Steps
 
 1. Create API documenter template with docstring generation
-2. Create README generator template with structured sections
-3. Create tutorial writer template with step-by-step guidance
+1. Create README generator template with structured sections
+1. Create tutorial writer template with step-by-step guidance
 
 ## Success Criteria
 

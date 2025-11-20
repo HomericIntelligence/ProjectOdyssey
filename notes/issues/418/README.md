@@ -31,7 +31,7 @@ Design and document generic data transformation utilities that work across modal
 
 **Decision**: Use callable objects (structs with `__call__` method) instead of plain functions.
 
-**Rationale**:
+### Rationale
 
 - Allows stateful transforms that can cache parameters (mean, std, ranges)
 - Supports inverse transforms through additional methods (`inverse()`)
@@ -39,7 +39,7 @@ Design and document generic data transformation utilities that work across modal
 - Provides better type safety with Mojo's struct system
 - Allows for parameter validation at initialization time
 
-**Interface Pattern**:
+### Interface Pattern
 
 ```mojo
 struct Transform:
@@ -52,13 +52,13 @@ struct Transform:
     fn inverse(self, data: Tensor) -> Tensor:
         """Apply inverse transform if reversible."""
         ...
-```
+```text
 
 ### 2. Composition Pattern
 
 **Decision**: Implement Sequential composition pattern with pipe operator support.
 
-**Rationale**:
+### Rationale
 
 - Sequential pattern is intuitive and matches PyTorch/TorchVision conventions
 - Pipe operator (`|`) provides ergonomic chaining syntax
@@ -66,7 +66,7 @@ struct Transform:
 - Allows for transform optimization through fusion
 - Easy to debug and inspect individual steps
 
-**Pattern**:
+### Pattern
 
 ```mojo
 # Sequential composition
@@ -78,13 +78,13 @@ var pipeline = Sequential(
 
 # Pipe operator (syntactic sugar)
 var pipeline = Normalize() | Standardize() | ToFloat32()
-```
+```text
 
 ### 3. Batch Handling Strategy
 
 **Decision**: Support both batched and unbatched data through shape inference.
 
-**Rationale**:
+### Rationale
 
 - Eliminates need for separate batch and single-item APIs
 - Automatically detects batch dimension from tensor shape
@@ -92,7 +92,7 @@ var pipeline = Normalize() | Standardize() | ToFloat32()
 - Reduces code duplication and API surface area
 - Performance impact minimal with compile-time optimizations
 
-**Implementation**:
+### Implementation
 
 - Check tensor rank to infer batch presence
 - Apply transforms along appropriate dimensions
@@ -102,7 +102,7 @@ var pipeline = Normalize() | Standardize() | ToFloat32()
 
 **Decision**: Provide optional inverse transforms through explicit `inverse()` method.
 
-**Rationale**:
+### Rationale
 
 - Not all transforms are reversible (e.g., clipping, quantization)
 - Explicit method makes reversibility clear at call site
@@ -110,7 +110,7 @@ var pipeline = Normalize() | Standardize() | ToFloat32()
 - Enables round-trip testing for reversible transforms
 - Supports denormalization and other inverse operations
 
-**Guidelines**:
+### Guidelines
 
 - Implement `inverse()` only for mathematically reversible transforms
 - Document which transforms support inversion
@@ -120,7 +120,7 @@ var pipeline = Normalize() | Standardize() | ToFloat32()
 
 **Decision**: Validate parameters at initialization time, not at call time.
 
-**Rationale**:
+### Rationale
 
 - Catches errors early in pipeline construction
 - Avoids runtime overhead during data processing
@@ -132,7 +132,7 @@ var pipeline = Normalize() | Standardize() | ToFloat32()
 
 **Decision**: Use Mojo's type system and parametric polymorphism for type safety.
 
-**Rationale**:
+### Rationale
 
 - Compile-time type checking prevents runtime errors
 - Generic transforms work with various tensor element types
@@ -140,7 +140,7 @@ var pipeline = Normalize() | Standardize() | ToFloat32()
 - Better performance than dynamic typing
 - Clear API contracts through type signatures
 
-**Pattern**:
+### Pattern
 
 ```mojo
 struct Normalize[dtype: DType]:
@@ -149,13 +149,13 @@ struct Normalize[dtype: DType]:
 
     fn __call__(self, data: Tensor[dtype]) -> Tensor[dtype]:
         ...
-```
+```text
 
 ### 7. Conditional Transform Strategy
 
 **Decision**: Use predicate functions for conditional application.
 
-**Rationale**:
+### Rationale
 
 - Flexible: supports arbitrary conditions based on data properties
 - Composable: predicates can be combined with boolean logic
@@ -163,7 +163,7 @@ struct Normalize[dtype: DType]:
 - Explicit: condition logic visible at pipeline construction
 - Efficient: predicate evaluation can be optimized
 
-**Pattern**:
+### Pattern
 
 ```mojo
 fn when[T: Transform](condition: fn(Tensor) -> Bool, transform: T) -> ConditionalTransform[T]:
@@ -172,13 +172,13 @@ fn when[T: Transform](condition: fn(Tensor) -> Bool, transform: T) -> Conditiona
 
 # Usage
 var pipeline = Normalize() | when(is_image, ToRGB()) | Standardize()
-```
+```text
 
 ### 8. Memory Management
 
 **Decision**: Follow Mojo's ownership model with explicit `owned` and `borrowed` parameters.
 
-**Rationale**:
+### Rationale
 
 - Prevents memory leaks and use-after-free errors
 - Enables zero-copy optimizations where possible
@@ -186,7 +186,7 @@ var pipeline = Normalize() | when(is_image, ToRGB()) | Standardize()
 - Supports in-place transforms when beneficial
 - Allows compiler to optimize memory layout
 
-**Guidelines**:
+### Guidelines
 
 - Use `borrowed` for read-only transforms
 - Use `owned` for in-place or consuming transforms
@@ -197,7 +197,7 @@ var pipeline = Normalize() | when(is_image, ToRGB()) | Standardize()
 
 **Decision**: Use Result types and explicit error handling for transform failures.
 
-**Rationale**:
+### Rationale
 
 - Makes error conditions explicit in API
 - Allows for graceful degradation in pipelines
@@ -209,7 +209,7 @@ var pipeline = Normalize() | when(is_image, ToRGB()) | Standardize()
 
 **Decision**: Implement performance-critical transforms with SIMD vectorization.
 
-**Rationale**:
+### Rationale
 
 - Normalization and standardization are embarrassingly parallel
 - SIMD provides significant speedups for element-wise operations
@@ -217,7 +217,7 @@ var pipeline = Normalize() | when(is_image, ToRGB()) | Standardize()
 - Enables GPU-like performance on CPU
 - Critical for real-time preprocessing pipelines
 
-**Implementation**:
+### Implementation
 
 - Use `SIMD[dtype, width]` for vectorized operations
 - Target platform-specific vector widths
@@ -254,19 +254,19 @@ var pipeline = Normalize() | when(is_image, ToRGB()) | Standardize()
    - Inverse transform tests
    - Edge case handling (empty tensors, single elements, etc.)
 
-2. **Implementation Phase (#420)**: Can begin after planning phase completes. Focus on:
+1. **Implementation Phase (#420)**: Can begin after planning phase completes. Focus on:
    - Core transform structs (Normalize, Standardize, type conversions)
    - Sequential composition implementation
    - Batch inference logic
    - SIMD vectorization for performance-critical operations
 
-3. **Packaging Phase (#421)**: Can begin after planning phase completes. Focus on:
+1. **Packaging Phase (#421)**: Can begin after planning phase completes. Focus on:
    - Public API surface definition
    - Module organization and exports
    - Integration with existing data-utils components
    - Documentation generation
 
-4. **Cleanup Phase (#422)**: Begins after Test, Implementation, and Packaging phases complete. Focus on:
+1. **Cleanup Phase (#422)**: Begins after Test, Implementation, and Packaging phases complete. Focus on:
    - Refactoring based on test feedback
    - Performance optimization
    - Documentation polish
@@ -275,10 +275,10 @@ var pipeline = Normalize() | when(is_image, ToRGB()) | Standardize()
 ### Key Architectural Patterns
 
 1. **Transform Base Interface**: All transforms implement `__call__` and optionally `inverse()`
-2. **Sequential Composition**: Primary composition pattern, supports pipe operator
-3. **Type Safety**: Generic transforms parameterized by `DType`
-4. **Memory Safety**: Explicit ownership with `owned`/`borrowed`
-5. **SIMD Optimization**: Performance-critical paths use vectorization
+1. **Sequential Composition**: Primary composition pattern, supports pipe operator
+1. **Type Safety**: Generic transforms parameterized by `DType`
+1. **Memory Safety**: Explicit ownership with `owned`/`borrowed`
+1. **SIMD Optimization**: Performance-critical paths use vectorization
 
 ### Open Questions
 

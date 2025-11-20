@@ -34,21 +34,25 @@ As specified in the issue description.
 ## Implementation Notes
 
 ## Overview
+
 Create a prompt template for analyzing research papers and extracting key information like problem statement, methodology, architecture, results, and implementation details. The template uses structured XML tags and few-shot examples.
 
 ## Cleanup Objectives
+
 - Refactor code for optimal quality and maintainability
 - Remove technical debt and temporary workarounds
 - Ensure comprehensive documentation
 - Perform final validation and optimization
 
 ## Cleanup Tasks
+
 - Code review and refactoring
 - Documentation finalization
 - Performance optimization
 - Final testing and validation
 
 ## Success Criteria
+
 - [ ] Template extracts all key paper sections
 - [ ] Output uses consistent XML structure
 - [ ] Few-shot examples demonstrate expected quality
@@ -56,6 +60,7 @@ Create a prompt template for analyzing research papers and extracting key inform
 - [ ] Analysis includes implementation-relevant details
 
 ## Notes
+
 Focus on extracting information useful for implementation: problem formulation, mathematical foundations, architecture details, hyperparameters, and training procedures. Use XML tags like <problem>, <method>, <architecture>, <results>.
 
 ## Status

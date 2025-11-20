@@ -106,7 +106,7 @@ Implement logging callback for tracking and reporting training progress. This in
 
 ### 10. Performance Considerations
 
-**Decision**:
+### Decision
 
 - Buffer console output to reduce I/O calls
 - Async file writing to avoid blocking training loop

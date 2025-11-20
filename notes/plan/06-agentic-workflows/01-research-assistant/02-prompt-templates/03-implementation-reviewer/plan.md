@@ -30,9 +30,9 @@ None (implementation level)
 ## Steps
 
 1. Define review criteria and checklist
-2. Create structured feedback format
-3. Add few-shot review examples
-4. Include improvement suggestion patterns
+1. Create structured feedback format
+1. Add few-shot review examples
+1. Include improvement suggestion patterns
 
 ## Success Criteria
 

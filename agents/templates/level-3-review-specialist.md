@@ -11,17 +11,17 @@ model: sonnet
 
 This template creates a Level 3 review specialist - an expert in a specific review domain.
 
-**Steps to Create a New Specialist**:
+### Steps to Create a New Specialist
 
 1. **Replace ALL [PLACEHOLDER] text** with domain-specific content
-2. **Define clear boundaries** in "Scope" section (what IS and ISN'T covered)
-3. **Customize responsibilities** (keep 4-6 main areas)
-4. **Update delegation table** with related specialists
-5. **Create 3-4 example reviews** showing common issues in your domain
-6. **Customize checklist items** for your review focus
-7. **Update success criteria** to match your specialist's goals
+1. **Define clear boundaries** in "Scope" section (what IS and ISN'T covered)
+1. **Customize responsibilities** (keep 4-6 main areas)
+1. **Update delegation table** with related specialists
+1. **Create 3-4 example reviews** showing common issues in your domain
+1. **Customize checklist items** for your review focus
+1. **Update success criteria** to match your specialist's goals
 
-**Key Principles**:
+### Key Principles
 
 - **Narrow focus**: Each specialist has ONE clear domain
 - **No overlap**: Define what you DON'T review (delegate to others)
@@ -29,7 +29,7 @@ This template creates a Level 3 review specialist - an expert in a specific revi
 - **Severity levels**: Use CRITICAL (🔴), MAJOR (🟠), MINOR (🟡), EXCELLENT (✅)
 - **Example-driven**: Show code examples with issues and fixes
 
-**Common Level 3 Specialist Types**:
+### Common Level 3 Specialist Types
 
 - Code quality (implementation, security, performance, safety)
 - Language-specific (Mojo patterns, Python best practices)
@@ -51,7 +51,7 @@ Level 3 specialist responsible for reviewing [DOMAIN AREA - e.g., "code security
 - **Languages**: [LANGUAGES COVERED - e.g., "Mojo and Python", "Any language", "Mojo-specific"]
 - **Boundaries**: [CLEAR BOUNDARIES - what this specialist does NOT review, delegated to others]
 
-**What This Specialist Reviews**:
+### What This Specialist Reviews
 
 - [SPECIFIC ASPECT 1 - e.g., "Input validation and sanitization"]
 - [SPECIFIC ASPECT 2 - e.g., "Authentication and authorization logic"]
@@ -136,7 +136,7 @@ Level 3 specialist responsible for reviewing [DOMAIN AREA - e.g., "code security
 2. Understand the change purpose and scope
 3. Identify [DOMAIN-SPECIFIC PATTERNS - e.g., "security-sensitive operations"]
 4. Assess overall [DOMAIN ASPECT - e.g., "security posture"]
-```
+```text
 
 ### Phase 2: Detailed Review
 
@@ -146,7 +146,7 @@ Level 3 specialist responsible for reviewing [DOMAIN AREA - e.g., "code security
 7. Evaluate [ASPECT 2]
 8. Identify [PATTERN TYPE] usage
 9. Assess [ASPECT 3]
-```
+```text
 
 ### Phase 3: [Domain-Specific] Assessment
 
@@ -155,7 +155,7 @@ Level 3 specialist responsible for reviewing [DOMAIN AREA - e.g., "code security
 11. Check for [ISSUE TYPE 1]
 12. Assess [QUALITY ASPECT]
 13. Verify [COMPLIANCE ASPECT]
-```
+```text
 
 ### Phase 4: Feedback Generation
 
@@ -164,7 +164,7 @@ Level 3 specialist responsible for reviewing [DOMAIN AREA - e.g., "code security
 15. Provide specific, actionable feedback
 16. Suggest improvements with examples
 17. Highlight exemplary [DOMAIN PATTERNS]
-```
+```text
 
 ## Review Checklist
 
@@ -215,15 +215,15 @@ Level 3 specialist responsible for reviewing [DOMAIN AREA - e.g., "code security
 
 ### Example 1: [Issue Type 1 - e.g., "Critical Security Vulnerability"]
 
-**Code**:
+### Code
 
 ```text
 [CODE WITH ISSUE]
 [EXAMPLE: Unsafe input handling, logic error, poor design, etc.]
 [3-15 LINES OF CODE]
-```
+```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 🔴 CRITICAL: [Brief description of critical issue]
@@ -238,11 +238,12 @@ Level 3 specialist responsible for reviewing [DOMAIN AREA - e.g., "code security
 **Fix**:
 
 ```mojo
+
 [CORRECTED CODE]
 [SHOW THE PROPER IMPLEMENTATION]
 [INCLUDE COMMENTS EXPLAINING KEY CHANGES]
-```
 
+```text
 **Additional Context**: [Optional: Related concerns, references, etc.]
 
 ### Example 2: [Issue Type 2 - e.g., "Insufficient Error Handling"]
@@ -250,32 +251,35 @@ Level 3 specialist responsible for reviewing [DOMAIN AREA - e.g., "code security
 **Code**:
 
 ```text
+
 [CODE WITH ISSUE]
 [EXAMPLE: Missing validation, poor error handling, etc.]
 [5-15 LINES OF CODE]
-```
 
+```text
 **Review Feedback**:
 
 ```text
+
 🟠 MAJOR: [Brief description of major issue]
 
-**Issues**:
-1. [Issue 1]
-2. [Issue 2]
-3. [Issue 3]
-4. [Issue 4]
+### Issues
 
-**Recommended**:
+1. [Issue 1]
+1. [Issue 2]
+1. [Issue 3]
+1. [Issue 4]
+
+### Recommended
 
 ```mojo
 [IMPROVED CODE]
 [SHOW BETTER IMPLEMENTATION]
 [INCLUDE DOCUMENTATION/COMMENTS]
 [SHOW ERROR HANDLING]
-```
+```text
 
-**Benefits**:
+### Benefits
 
 - [Benefit 1]
 - [Benefit 2]
@@ -285,15 +289,15 @@ Level 3 specialist responsible for reviewing [DOMAIN AREA - e.g., "code security
 
 ### Example 3: [Issue Type 3 - e.g., "Suboptimal Implementation"]
 
-**Code**:
+### Code
 
 ```text
 [CODE WITH MINOR ISSUE]
 [EXAMPLE: Code duplication, poor naming, etc.]
 [10-20 LINES OF CODE SHOWING DUPLICATION OR POOR PATTERN]
-```
+```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 🟡 MINOR: [Brief description of minor issue]
@@ -301,15 +305,15 @@ Level 3 specialist responsible for reviewing [DOMAIN AREA - e.g., "code security
 **Issue**: [Explanation of the suboptimal pattern]
 
 **Recommendation**: [Suggestion for improvement]
-```
+```text
 
 ```mojo
 [REFACTORED CODE]
 [SHOW BETTER DESIGN/PATTERN]
 [DEMONSTRATE IMPROVEMENT]
-```
+```text
 
-**Benefits**:
+### Benefits
 
 - [Benefit 1]
 - [Benefit 2]
@@ -317,15 +321,15 @@ Level 3 specialist responsible for reviewing [DOMAIN AREA - e.g., "code security
 
 ### Example 4: [Exemplary Code - Positive Feedback]
 
-**Code**:
+### Code
 
 ```text
 [EXCELLENT CODE EXAMPLE]
 [SHOW BEST PRACTICES IN YOUR DOMAIN]
 [10-25 LINES DEMONSTRATING EXCELLENCE]
-```
+```text
 
-**Review Feedback**:
+### Review Feedback
 
 ```text
 ✅ EXCELLENT: [Brief description of what makes this code exemplary]

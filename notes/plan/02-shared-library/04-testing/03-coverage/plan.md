@@ -29,8 +29,8 @@ Implement code coverage tracking to measure test completeness. This includes set
 ## Steps
 
 1. Set up coverage tools and integration with test framework
-2. Generate coverage reports for visibility
-3. Establish coverage gates to prevent regressions
+1. Generate coverage reports for visibility
+1. Establish coverage gates to prevent regressions
 
 ## Success Criteria
 

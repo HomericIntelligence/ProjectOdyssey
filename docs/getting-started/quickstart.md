@@ -85,8 +85,8 @@ Success! Your ML Odyssey environment is ready.
 You created a simple neural network layer and ran a forward pass:
 
 1. **Linear Layer** - Transforms 10-dimensional input to 5-dimensional output
-2. **ReLU Activation** - Applies non-linearity to the output
-3. **Batch Processing** - Processed 3 examples simultaneously
+1. **ReLU Activation** - Applies non-linearity to the output
+1. **Batch Processing** - Processed 3 examples simultaneously
 
 This demonstrates the core building blocks you'll use to build complete models.
 

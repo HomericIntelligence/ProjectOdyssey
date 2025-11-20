@@ -29,8 +29,8 @@ Implement learning rate scheduling strategies to dynamically adjust learning rat
 ## Steps
 
 1. Implement step scheduler with configurable decay steps
-2. Create cosine scheduler for smooth learning rate annealing
-3. Build warmup scheduler for stable training initialization
+1. Create cosine scheduler for smooth learning rate annealing
+1. Build warmup scheduler for stable training initialization
 
 ## Success Criteria
 

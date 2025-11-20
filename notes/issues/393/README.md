@@ -28,12 +28,14 @@ Design and document a data shuffling component that randomizes sample order acro
 
 **Decision**: Use Mojo's RNG with configurable seed support.
 
-**Rationale**:
+### Rationale
+
 - Ensures reproducibility across runs when using the same seed
 - Allows for deterministic debugging and validation
 - Provides foundation for distributed training consistency
 
-**Implementation Notes**:
+### Implementation Notes
+
 - Seed should be configurable at initialization
 - Default seed should be documented for repeatability
 
@@ -41,12 +43,14 @@ Design and document a data shuffling component that randomizes sample order acro
 
 **Decision**: Generate new shuffle order each epoch using epoch-based seed derivation.
 
-**Rationale**:
+### Rationale
+
 - Prevents model from memorizing sample order
 - Provides varied training sequences for better generalization
 - Maintains reproducibility when base seed is fixed
 
-**Implementation Approach**:
+### Implementation Approach
+
 - Derive per-epoch seed from base seed + epoch number
 - Ensures different epochs produce different orders
 - Maintains reproducibility for specific base seed + epoch combinations
@@ -55,12 +59,14 @@ Design and document a data shuffling component that randomizes sample order acro
 
 **Decision**: Provide shuffle enable/disable flag, defaulting to disabled for validation/test sets.
 
-**Rationale**:
+### Rationale
+
 - Validation/test sets should maintain consistent order for fair evaluation
 - Training sets benefit from randomization
 - Explicit flag provides clear control and prevents errors
 
-**API Design**:
+### API Design
+
 - Boolean `shuffle` parameter in data loader configuration
 - Clear documentation of when to enable/disable
 - Separate handling for train vs. validation/test modes
@@ -69,12 +75,14 @@ Design and document a data shuffling component that randomizes sample order acro
 
 **Decision**: Ensure shuffle produces consistent results across distributed workers.
 
-**Rationale**:
+### Rationale
+
 - Each worker must see samples in the same global order
 - Prevents data duplication or gaps in distributed scenarios
 - Critical for correct gradient aggregation
 
-**Considerations**:
+### Considerations
+
 - Workers must use synchronized seeds
 - Index shuffling must be deterministic across workers
 - Need coordination mechanism for distributed setups
@@ -83,13 +91,15 @@ Design and document a data shuffling component that randomizes sample order acro
 
 **Decision**: Shuffle indices rather than actual data samples.
 
-**Rationale**:
+### Rationale
+
 - More memory efficient (indices are small)
 - Allows lazy loading of actual samples
 - Decouples shuffle from data loading logic
 - Enables efficient distributed data partitioning
 
-**Benefits**:
+### Benefits
+
 - Minimal memory overhead
 - Compatible with large datasets
 - Flexible for various data loading strategies
@@ -117,7 +127,7 @@ fn shuffle_indices(
     Returns:
         Shuffled indices (or original if disabled)
     """
-```
+```text
 
 ### Configuration Parameters
 
@@ -129,8 +139,8 @@ fn shuffle_indices(
 ### Reproducibility Guarantees
 
 1. **Same seed + same epoch = same shuffle**: Given identical `seed` and `epoch` values, the shuffle produces identical index ordering
-2. **Different epochs = different shuffle**: For the same `seed` but different `epoch` values, shuffle produces different orderings
-3. **Disabled shuffle = original order**: When `enabled=False`, returns indices unchanged
+1. **Different epochs = different shuffle**: For the same `seed` but different `epoch` values, shuffle produces different orderings
+1. **Disabled shuffle = original order**: When `enabled=False`, returns indices unchanged
 
 ## Architecture
 
@@ -143,7 +153,7 @@ shuffling/
 └── tests/
     ├── test_shuffle.mojo     # Shuffle functionality tests
     └── test_reproducibility.mojo  # Seed/epoch reproducibility tests
-```
+```text
 
 ### Key Components
 
@@ -152,12 +162,12 @@ shuffling/
    - Epoch-based seed derivation: `derived_seed = base_seed + epoch * large_prime`
    - Efficient in-place index shuffling
 
-2. **RNG Wrapper**
+1. **RNG Wrapper**
    - Encapsulates Mojo's random number generator
    - Provides seedable interface
    - Ensures deterministic behavior
 
-3. **Configuration Interface**
+1. **Configuration Interface**
    - Shuffle enable/disable controls
    - Seed management
    - Epoch tracking
@@ -183,7 +193,7 @@ Apply Fisher-Yates shuffle
     |
     v
 Output: Shuffled indices
-```
+```text
 
 ## Integration Points
 
@@ -210,17 +220,17 @@ Output: Shuffled indices
    - Verify no duplicate indices
    - Verify order is different from input (when enabled)
 
-2. **Reproducibility**
+1. **Reproducibility**
    - Same seed + epoch produces identical results
    - Different seeds produce different results
    - Different epochs produce different results
 
-3. **Edge Cases**
+1. **Edge Cases**
    - Empty index list
    - Single-element list
    - Very large index lists
 
-4. **Disable Flag**
+1. **Disable Flag**
    - Disabled shuffle returns original order
    - Enabled shuffle modifies order
 
@@ -231,7 +241,7 @@ Output: Shuffled indices
    - Epoch transitions produce new shuffle orders
    - Validation mode respects shuffle=False
 
-2. **Multi-Epoch Consistency**
+1. **Multi-Epoch Consistency**
    - Same configuration produces different orders per epoch
    - Reproducible across multiple runs with same seed
 
@@ -299,9 +309,9 @@ Output: Shuffled indices
 ### Open Questions
 
 1. Which specific RNG algorithm should Mojo use (platform-specific or portable)?
-2. What is the optimal prime number for epoch-seed derivation?
-3. Should shuffle support custom shuffle algorithms (beyond Fisher-Yates)?
-4. How to handle very large datasets that don't fit in memory?
+1. What is the optimal prime number for epoch-seed derivation?
+1. Should shuffle support custom shuffle algorithms (beyond Fisher-Yates)?
+1. How to handle very large datasets that don't fit in memory?
 
 ### Future Enhancements
 

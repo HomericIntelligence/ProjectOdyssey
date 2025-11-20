@@ -70,9 +70,9 @@ scripts/
 └── install_verify.sh           # Installation verification script
 
 README.md                       # Distribution README with install instructions
-```
+```text
 
-**For Tooling/Benchmarks**:
+### For Tooling/Benchmarks
 
 ```text
 dist/
@@ -84,9 +84,9 @@ dist/
 scripts/benchmarks/
 ├── run_benchmark.sh            # Executable benchmark scripts
 └── README.md                   # Usage instructions
-```
+```text
 
-**For Documentation**:
+### For Documentation
 
 ```text
 site/                           # Built static site (HTML/CSS/JS)
@@ -101,7 +101,7 @@ site/                           # Built static site (HTML/CSS/JS)
 
 dist/
 └── docs-offline-0.1.0.zip      # Offline documentation archive
-```
+```text
 
 ## What Package Phase is NOT
 
@@ -136,7 +136,7 @@ These activities, while useful, do NOT constitute Package phase completion:
 - ❌ Listing files that exist in the module
 - ❌ Confirming success criteria are met (without artifacts)
 
-**Example of INCORRECT Package Phase**:
+### Example of INCORRECT Package Phase
 
 ```text
 Issue #40: [Package] Data Module
@@ -148,7 +148,7 @@ Deliverables:
 ✅ Documented that module is "production-ready"
 
 PR #1594: "docs(data): complete package phase verification"
-```
+```text
 
 This is WRONG because:
 
@@ -157,7 +157,7 @@ This is WRONG because:
 - No installation testing performed
 - Only documentation created
 
-**Example of CORRECT Package Phase**:
+### Example of CORRECT Package Phase
 
 ```text
 Issue #40: [Package] Data Module
@@ -176,7 +176,7 @@ Files changed:
 + scripts/install_verify_data.sh
 + INSTALL.md
 M shared/data/mojo.toml
-```
+```text
 
 ## Package Phase Workflow
 
@@ -196,7 +196,7 @@ license = "BSD-3-Clause"
 
 [dependencies]
 # List required packages
-```
+```text
 
 #### 2. Build Binary Package
 
@@ -208,7 +208,7 @@ mojo package shared/data -o dist/data-0.1.0.mojopkg
 
 # Verify package was created
 ls -lh dist/data-0.1.0.mojopkg
-```
+```text
 
 For tooling (create archive):
 
@@ -222,7 +222,7 @@ tar -czf dist/benchmarks-0.1.0.tar.gz \
 
 # Verify archive
 tar -tzf dist/benchmarks-0.1.0.tar.gz
-```
+```text
 
 #### 3. Test Installation
 
@@ -252,14 +252,14 @@ cd -
 rm -rf "$TEMP_DIR"
 
 echo "Data package verification complete!"
-```
+```text
 
 Run verification:
 
 ```bash
 chmod +x scripts/install_verify_data.sh
 ./scripts/install_verify_data.sh
-```
+```text
 
 #### 4. Create CI/CD Workflow
 
@@ -303,7 +303,7 @@ jobs:
         with:
           name: packages
           path: dist/*.mojopkg
-```
+```text
 
 #### 5. Document Distribution
 
@@ -317,24 +317,27 @@ Create `INSTALL.md`:
 ### Data Module
 
 ```bash
-mojo install dist/data-0.1.0.mojopkg
-```
 
+mojo install dist/data-0.1.0.mojopkg
+
+```text
 ### Training Module
 
 ```bash
-mojo install dist/training-0.1.0.mojopkg
-```
 
+mojo install dist/training-0.1.0.mojopkg
+
+```text
 ## Verification
 
 Test your installation:
 
 ```bash
+
 mojo run -c "from data import Dataset; print('Data module works!')"
 mojo run -c "from training import Optimizer; print('Training module works!')"
-```
 
+```text
 ## Package Phase Checklist
 
 Use this checklist to verify Package phase is truly complete:
@@ -386,26 +389,31 @@ Use this checklist to verify Package phase is truly complete:
 **Wrong**:
 
 ```text
+
 PR Title: "docs(training): complete package phase verification"
 
 Changes:
+
 - Added notes/issues/35/README.md
 - Updated README to say "package is ready"
 - Verified __init__.mojo exports
-```
 
+```text
 **Right**:
 
 ```text
+
 PR Title: "feat(training): create distributable package"
 
 Changes:
+
 + dist/training-0.1.0.mojopkg
 + scripts/install_verify_training.sh
 + INSTALL.md
-M shared/training/mojo.toml
-```
 
+M shared/training/mojo.toml
+
+```text
 ### Anti-Pattern 2: Assuming Existing Structure is "Packaged"
 
 **Wrong**:
@@ -421,18 +429,24 @@ M shared/training/mojo.toml
 **Wrong**:
 
 ```bash
-# Just build the package
-mojo package shared/data -o dist/data-0.1.0.mojopkg
-# PR created without testing
-```
 
+# Just build the package
+
+mojo package shared/data -o dist/data-0.1.0.mojopkg
+
+# PR created without testing
+
+```text
 **Right**:
 
 ```bash
+
 # Build package
+
 mojo package shared/data -o dist/data-0.1.0.mojopkg
 
 # Test in clean environment
+
 TEMP_DIR=$(mktemp -d)
 cd "$TEMP_DIR"
 mojo install /path/to/dist/data-0.1.0.mojopkg
@@ -440,8 +454,8 @@ mojo run -c "from data import Dataset"  # Verify import works
 cd - && rm -rf "$TEMP_DIR"
 
 # Now PR can be created
-```
 
+```text
 ## Examples by Component Type
 
 ### Example 1: Training Module Package
@@ -453,6 +467,7 @@ cd - && rm -rf "$TEMP_DIR"
 1. Create `shared/training/mojo.toml`:
 
 ```toml
+
 [project]
 name = "ml-odyssey-training"
 version = "0.1.0"
@@ -462,37 +477,43 @@ license = "BSD-3-Clause"
 
 [dependencies]
 ml-odyssey-utils = "0.1.0"
-```
 
+```text
 1. Build package:
 
 ```bash
-mojo package shared/training -o dist/training-0.1.0.mojopkg
-```
 
+mojo package shared/training -o dist/training-0.1.0.mojopkg
+
+```text
 1. Create verification script:
 
 ```bash
+
 #!/bin/bash
+
 # scripts/install_verify_training.sh
+
 set -e
 TEMP_DIR=$(mktemp -d)
 cd "$TEMP_DIR"
 mojo install /path/to/dist/training-0.1.0.mojopkg
 mojo run -c "from training import Optimizer; print('Training module OK')"
 cd - && rm -rf "$TEMP_DIR"
-```
 
+```text
 1. Test installation:
 
 ```bash
+
 chmod +x scripts/install_verify_training.sh
 ./scripts/install_verify_training.sh
-```
 
+```text
 1. Create PR with artifacts:
 
 ```text
+
 feat(training): create distributable package
 
 - Built dist/training-0.1.0.mojopkg binary package
@@ -501,8 +522,8 @@ feat(training): create distributable package
 - Added mojo.toml configuration
 
 Closes #35
-```
 
+```text
 ### Example 2: Benchmarks Tooling Package
 
 **Component**: `benchmarks/` + `scripts/benchmarks/`
@@ -512,48 +533,54 @@ Closes #35
 1. Create distribution archive:
 
 ```bash
+
 tar -czf dist/benchmarks-0.1.0.tar.gz \
     scripts/benchmarks/ \
     benchmarks/ \
     README.md \
     LICENSE
-```
 
+```text
 1. Create CI/CD workflow `.github/workflows/benchmark.yml`:
 
 ```yaml
+
 name: Run Benchmarks
 
 on:
   push:
     branches: [main]
   schedule:
+
     - cron: '0 0 * * 0'  # Weekly
 
 jobs:
   benchmark:
     runs-on: ubuntu-latest
     steps:
+
       - uses: actions/checkout@v3
       - name: Setup Mojo
         uses: modular/setup-mojo@v1
       - name: Run benchmarks
         run: ./scripts/benchmarks/run_all.sh
-```
 
+```text
 1. Test archive extraction:
 
 ```bash
+
 TEMP_DIR=$(mktemp -d)
 cd "$TEMP_DIR"
 tar -xzf /path/to/dist/benchmarks-0.1.0.tar.gz
 ./scripts/benchmarks/run_all.sh  # Verify works
 cd - && rm -rf "$TEMP_DIR"
-```
 
+```text
 1. Create PR:
 
 ```text
+
 feat(benchmarks): create distributable package and CI workflow
 
 - Created dist/benchmarks-0.1.0.tar.gz distribution archive
@@ -562,8 +589,8 @@ feat(benchmarks): create distributable package and CI workflow
 - Scripts include README with usage instructions
 
 Closes #55
-```
 
+```text
 ### Example 3: Documentation Package
 
 **Component**: `docs/`
@@ -573,13 +600,16 @@ Closes #55
 1. Build static site:
 
 ```bash
-mkdocs build
-# Produces site/ directory
-```
 
+mkdocs build
+
+# Produces site/ directory
+
+```text
 1. Create GitHub Pages workflow `.github/workflows/docs.yml`:
 
 ```yaml
+
 name: Deploy Documentation
 
 on:
@@ -590,29 +620,33 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
       - run: pip install mkdocs-material
       - run: mkdocs gh-deploy --force
-```
 
+```text
 1. Create offline archive:
 
 ```bash
-zip -r dist/docs-offline-0.1.0.zip site/
-```
 
+zip -r dist/docs-offline-0.1.0.zip site/
+
+```text
 1. Test deployment:
 
 ```bash
-mkdocs serve  # Test locally at http://127.0.0.1:8000
-```
 
+mkdocs serve  # Test locally at http://127.0.0.1:8000
+
+```text
 1. Create PR:
 
 ```text
+
 feat(docs): build static site and configure GitHub Pages deployment
 
 - Built static site in site/ directory
@@ -621,8 +655,8 @@ feat(docs): build static site and configure GitHub Pages deployment
 - Tested local serving and deployment
 
 Closes #60
-```
 
+```text
 ## Agent Responsibilities
 
 ### Level 3: Component Specialists

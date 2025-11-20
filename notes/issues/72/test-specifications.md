@@ -23,7 +23,7 @@ fn test_load_experiment_config():
     """Test loading experiment configuration."""
     var config = load_config("configs/experiments/lenet5/baseline.yaml")
     assert config.has("extends")
-```
+```text
 
 ### 2. Configuration Merging Tests
 
@@ -52,7 +52,7 @@ fn test_three_level_merge():
     
     # Experiment overrides all
     assert merged.get_bool("data.augmentation.enabled") == True
-```
+```text
 
 ### 3. Validation Tests
 
@@ -87,7 +87,7 @@ fn test_validate_out_of_range():
     except:
         raised = True
     assert raised
-```
+```text
 
 ### 4. Environment Variable Tests
 
@@ -108,7 +108,7 @@ fn test_env_var_with_default():
     # Load and substitute
     # Verify default used
     pass
-```
+```text
 
 ### 5. Schema Validation Tests
 
@@ -139,7 +139,7 @@ def test_model_schema():
     
     # Should validate without errors
     jsonschema.validate(config, schema)
-```
+```text
 
 ## Integration Tests Required
 
@@ -160,7 +160,7 @@ fn test_load_complete_experiment_config():
     # Values should be correctly merged
     assert config.get_string("model.name") == "LeNet-5"
     assert config.get_float("training.learning_rate") > 0
-```
+```text
 
 ### 2. Paper Implementation Integration
 
@@ -172,7 +172,7 @@ fn test_lenet5_loads_config():
     
     var model = create_model("configs/papers/lenet5/model.yaml")
     assert model is not None
-```
+```text
 
 ## Property-Based Tests
 
@@ -189,7 +189,7 @@ fn test_validation_completeness():
     # Generate random configs
     # Ensure validation catches all issues
     pass
-```
+```text
 
 ## Test Coverage Requirements
 
@@ -222,7 +222,7 @@ mojo test --coverage tests/configs/
 
 # Python schema tests
 pytest tests/configs/test_schemas.py
-```
+```text
 
 ## Success Criteria for Issue #73
 

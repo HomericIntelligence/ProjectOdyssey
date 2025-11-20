@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Apply regression thresholds to comparisons
-2. Identify metrics that exceed thresholds
-3. Assess regression severity
-4. Generate regression report
+1. Identify metrics that exceed thresholds
+1. Assess regression severity
+1. Generate regression report
 
 ## Success Criteria
 

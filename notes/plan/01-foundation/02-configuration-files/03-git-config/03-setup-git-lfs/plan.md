@@ -29,10 +29,10 @@ None (leaf node)
 ## Steps
 
 1. Initialize Git LFS in the repository
-2. Configure LFS tracking for model files (.pt, .pth, .onnx, etc.)
-3. Configure LFS tracking for dataset files
-4. Configure LFS tracking for checkpoint files
-5. Document LFS setup for contributors
+1. Configure LFS tracking for model files (.pt, .pth, .onnx, etc.)
+1. Configure LFS tracking for dataset files
+1. Configure LFS tracking for checkpoint files
+1. Document LFS setup for contributors
 
 ## Success Criteria
 

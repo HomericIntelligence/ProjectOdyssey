@@ -29,10 +29,10 @@ None (leaf node)
 ## Steps
 
 1. Define PR requirements (tests, documentation, style)
-2. Explain the review process and what reviewers look for
-3. Provide guidelines for writing good PR descriptions
-4. Document how to address review feedback
-5. Include PR checklist and examples
+1. Explain the review process and what reviewers look for
+1. Provide guidelines for writing good PR descriptions
+1. Document how to address review feedback
+1. Include PR checklist and examples
 
 ## Success Criteria
 

@@ -15,7 +15,7 @@ This skill generates Architecture Decision Records (ADRs) for technical decision
 - Documenting design trade-offs
 - Recording rationale for future reference
 
-## What is an ADR?
+## What is an ADR
 
 An ADR documents:
 
@@ -78,7 +78,7 @@ Description and why not chosen.
 
 - Links to related docs
 - Evidence or research
-```
+```text
 
 ## Usage
 
@@ -88,9 +88,9 @@ Description and why not chosen.
 # Create new ADR
 ./scripts/create_adr.sh "Language Selection for Tooling"
 
-# This creates:
+# This creates
 # notes/review/adr/ADR-XXX-language-selection-tooling.md
-```
+```text
 
 ### Number Assignment
 
@@ -104,7 +104,7 @@ ADRs are numbered sequentially:
 # Script automatically finds next number
 ./scripts/create_adr.sh "Decision Title"
 # Creates: ADR-003-decision-title.md
-```
+```text
 
 ## ADR Examples
 
@@ -149,7 +149,7 @@ Rejected: Poor performance for ML workloads
 
 ### Mojo for Everything
 Rejected: Current limitations in subprocess/regex
-```
+```text
 
 ### Example 2: Testing Strategy
 
@@ -179,37 +179,37 @@ Adopt TDD (write tests before implementation) for all new code.
 ### Negative
 - Slower initial development
 - Learning curve for team
-```
+```text
 
 ## ADR Workflow
 
 ### 1. Identify Decision
 
 ```bash
-# Questions that need ADRs:
-# - What language/framework to use?
-# - How to structure the code?
-# - What architecture pattern?
-# - How to handle errors?
-# - What testing strategy?
-```
+# Questions that need ADRs
+# - What language/framework to use
+# - How to structure the code
+# - What architecture pattern
+# - How to handle errors
+# - What testing strategy
+```text
 
 ### 2. Research Alternatives
 
 ```bash
-# Gather evidence:
+# Gather evidence
 # - Performance benchmarks
 # - Community feedback
 # - Documentation quality
 # - Team experience
-```
+```text
 
 ### 3. Create ADR
 
 ```bash
 ./scripts/create_adr.sh "Decision Title"
 # Edit the generated template
-```
+```text
 
 ### 4. Review and Approve
 
@@ -217,7 +217,7 @@ Adopt TDD (write tests before implementation) for all new code.
 # Get team review
 # Update status to "Accepted"
 # Commit to repository
-```
+```text
 
 ## ADR Status Lifecycle
 
@@ -236,7 +236,7 @@ notes/review/adr/
 ├── ADR-002-testing-strategy.md
 ├── ADR-003-package-structure.md
 └── README.md (index of all ADRs)
-```
+```text
 
 ## Error Handling
 
@@ -247,23 +247,23 @@ notes/review/adr/
 
 ## Examples
 
-**Create ADR:**
+### Create ADR:
 
 ```bash
 ./scripts/create_adr.sh "Mojo Memory Management Strategy"
-```
+```text
 
-**List all ADRs:**
+### List all ADRs:
 
 ```bash
 ./scripts/list_adrs.sh
-```
+```text
 
-**Update ADR status:**
+### Update ADR status:
 
 ```bash
 ./scripts/update_adr_status.sh ADR-001 "Superseded"
-```
+```text
 
 ## Scripts Available
 
@@ -279,10 +279,10 @@ notes/review/adr/
 ## Best Practices
 
 1. **Keep focused** - One decision per ADR
-2. **Be specific** - Clear, actionable decisions
-3. **Document alternatives** - Show what was considered
-4. **Update status** - Keep status current
-5. **Link evidence** - Include benchmarks, research
-6. **Review regularly** - Revisit as technology evolves
+1. **Be specific** - Clear, actionable decisions
+1. **Document alternatives** - Show what was considered
+1. **Update status** - Keep status current
+1. **Link evidence** - Include benchmarks, research
+1. **Review regularly** - Revisit as technology evolves
 
 See existing ADRs in `/notes/review/adr/` for examples.

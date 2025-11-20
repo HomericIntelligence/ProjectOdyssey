@@ -27,9 +27,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Determine which values need to be collected
-2. Display prompts with helpful descriptions
-3. Collect and validate user input
-4. Re-prompt on invalid input with error explanation
+1. Display prompts with helpful descriptions
+1. Collect and validate user input
+1. Re-prompt on invalid input with error explanation
 
 ## Success Criteria
 

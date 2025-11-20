@@ -6,7 +6,7 @@
 
 ```http
 GET /repos/{owner}/{repo}/pulls/{pull_number}/comments
-```
+```text
 
 Returns all review comments on a pull request.
 
@@ -14,7 +14,7 @@ Returns all review comments on a pull request.
 
 ```http
 POST /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies
-```
+```text
 
 Creates a reply to a review comment.
 
@@ -59,7 +59,7 @@ gh api repos/OWNER/REPO/pulls/PR/comments | \
 # 5. Check CI status
 sleep 30  # Wait for CI to start
 gh pr checks PR
-```
+```text
 
 ## Response Templates
 
@@ -67,25 +67,25 @@ gh pr checks PR
 
 ```text
 ✅ Fixed - [concise description of change]
-```
+```text
 
 ### Need Clarification
 
 ```text
 ❓ Question - [specific question about the request]
-```
+```text
 
 ### Won't Fix (with reason)
 
 ```text
 ⚠️ Skipped - [brief reason why not applicable]
-```
+```text
 
 ### In Progress
 
 ```text
 🔄 Working on it - [expected completion]
-```
+```text
 
 ## Common Errors
 
@@ -109,11 +109,11 @@ gh pr checks PR
 ## Best Practices
 
 1. **Reply to ALL comments individually** - Don't batch responses
-2. **Be concise** - Keep replies to 1 line when possible
-3. **Use emojis for status** - ✅ Fixed, ❓ Question, ⚠️ Skipped
-4. **Verify replies posted** - Always check that replies succeeded
-5. **Check CI after pushing** - Ensure fixes don't break anything
-6. **Don't assume local pre-commit matches CI** - Always verify
+1. **Be concise** - Keep replies to 1 line when possible
+1. **Use emojis for status** - ✅ Fixed, ❓ Question, ⚠️ Skipped
+1. **Verify replies posted** - Always check that replies succeeded
+1. **Check CI after pushing** - Ensure fixes don't break anything
+1. **Don't assume local pre-commit matches CI** - Always verify
 
 ## Verification Checklist
 
@@ -130,8 +130,8 @@ After replying to comments:
 If replies don't appear:
 
 1. Check the API response for errors
-2. Verify comment ID is correct
-3. Check that PR number is correct
-4. Ensure using `/replies` endpoint
-5. Check `gh auth status`
-6. Try viewing comment in GitHub UI
+1. Verify comment ID is correct
+1. Check that PR number is correct
+1. Ensure using `/replies` endpoint
+1. Check `gh auth status`
+1. Try viewing comment in GitHub UI

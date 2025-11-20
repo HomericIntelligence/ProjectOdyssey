@@ -37,33 +37,35 @@ This testing phase should cover:
    - Test Windows detection (should warn/fail as unsupported)
    - Test unknown/unsupported platforms
 
-2. **Architecture Detection Tests**
+1. **Architecture Detection Tests**
    - Test x86_64/AMD64 detection
    - Test ARM64/aarch64 detection
    - Test unknown architectures (should warn/fail)
 
-3. **OS Version Tests**
+1. **OS Version Tests**
    - Test version extraction for Linux distributions
    - Test macOS version detection
    - Test compatibility assessment logic
 
-4. **Integration Tests**
+1. **Integration Tests**
    - Test complete platform detection workflow
    - Test structured data output format
    - Test consistent identifier naming
 
-5. **Error Handling Tests**
+1. **Error Handling Tests**
    - Test behavior on unsupported platforms
    - Test clear error messages
    - Test graceful degradation
 
 Testing approach:
+
 - Use mocking to simulate different platforms
 - Create fixtures for each supported platform/architecture combination
 - Follow TDD: write tests before implementation
 - Ensure tests are fast and reliable (no external dependencies)
 
 Expected test structure:
+
 - `test_platform_detection.py` - Main test suite
 - `test_architecture_detection.py` - Architecture-specific tests
 - `test_version_detection.py` - OS version tests

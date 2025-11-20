@@ -29,8 +29,8 @@ Implement the main training loop that iterates over epochs and batches, performs
 ## Steps
 
 1. Implement Epoch Loop
-2. Implement Batch Loop
-3. Add Logging
+1. Implement Batch Loop
+1. Add Logging
 
 ## Success Criteria
 

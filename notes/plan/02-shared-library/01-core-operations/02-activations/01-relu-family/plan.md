@@ -27,9 +27,9 @@ None (leaf node)
 ## Steps
 
 1. Implement standard ReLU activation
-2. Create Leaky ReLU with configurable leak parameter
-3. Build PReLU with learnable slope parameter
-4. Ensure proper gradient computation for backpropagation
+1. Create Leaky ReLU with configurable leak parameter
+1. Build PReLU with learnable slope parameter
+1. Ensure proper gradient computation for backpropagation
 
 ## Success Criteria
 

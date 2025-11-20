@@ -32,9 +32,9 @@ None (top-level)
 ## Steps
 
 1. Create paper scaffolding tools to automate new paper setup
-2. Build testing infrastructure for running and validating tests
-3. Develop setup scripts for environment and dependency management
-4. Implement validation tools for quality assurance
+1. Build testing infrastructure for running and validating tests
+1. Develop setup scripts for environment and dependency management
+1. Implement validation tools for quality assurance
 
 ## Success Criteria
 

@@ -26,7 +26,7 @@ Overview section implemented in `/home/user/ml-odyssey/README.md:1-25`:
 # ML Odyssey
 
 A Mojo-based AI Research Platform for reproducing classic machine learning papers.
-```
+```text
 
 Clear statement of project purpose and approach.
 

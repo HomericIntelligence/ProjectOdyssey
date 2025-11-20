@@ -25,7 +25,7 @@ Generate visual diagrams of agent hierarchy.
 
 # Generate mermaid diagram
 ./scripts/generate_mermaid_diagram.sh > agents/hierarchy.mmd
-```
+```text
 
 ## Diagram Format
 
@@ -41,7 +41,7 @@ Chief Architect (L0)
 │   └── Tensor Module Design (L2)
 │       └── Tensor Specialist (L3)
 └── ...
-```
+```text
 
 ## Mermaid Format
 
@@ -50,7 +50,7 @@ graph TD
     A[Chief Architect L0] --> B[Foundation Orchestrator L1]
     B --> C[Repository Design L2]
     C --> D[Directory Specialist L3]
-```
+```text
 
 ## Use Cases
 

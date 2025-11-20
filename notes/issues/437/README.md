@@ -25,6 +25,7 @@ Refactor and finalize the testing framework setup based on learnings from Test, 
 ### Existing Infrastructure Quality
 
 **conftest.mojo** (337 lines):
+
 - **Strengths**:
   - Comprehensive assertion functions
   - Well-documented with docstrings
@@ -37,6 +38,7 @@ Refactor and finalize the testing framework setup based on learnings from Test, 
   - Consider if all utilities are actually used
 
 **helpers/assertions.mojo** (365 lines):
+
 - **Strengths**:
   - Comprehensive ExTensor-specific assertions
   - Handles edge cases (NaN, infinity, contiguity)
@@ -47,10 +49,12 @@ Refactor and finalize the testing framework setup based on learnings from Test, 
   - Check for any redundancy with conftest.mojo
 
 **helpers/fixtures.mojo** (17 lines):
+
 - **Status**: Mostly TODO placeholders
 - **Decision Needed**: Implement or remove placeholders
 
 **helpers/utils.mojo** (14 lines):
+
 - **Status**: Mostly TODO placeholders
 - **Decision Needed**: Implement or remove placeholders
 
@@ -58,14 +62,16 @@ Refactor and finalize the testing framework setup based on learnings from Test, 
 
 ### 1. Code Quality Review
 
-**Checklist**:
+### Checklist
+
 - [ ] Remove unused code and imports
 - [ ] Resolve or track all TODO items
 - [ ] Ensure consistent code style (mojo format)
 - [ ] Verify all functions have docstrings
 - [ ] Check for redundant functionality
 
-**Actions**:
+### Actions
+
 ```mojo
 // Example: Resolve placeholder implementations
 
@@ -87,17 +93,19 @@ fn measure_time[func: fn () raises -> None]() raises -> Float64:
 
 // Option 2: Keep TODO if time module not available yet
 // (document in tracking issue #1538)
-```
+```text
 
 ### 2. Documentation Accuracy
 
-**Review Areas**:
+### Review Areas
+
 - [ ] All docstrings match current implementations
 - [ ] README files reflect actual usage
 - [ ] CI documentation matches actual workflows
 - [ ] Examples are accurate and tested
 
-**Actions**:
+### Actions
+
 - Update docstrings if implementations changed
 - Verify code examples in documentation work
 - Remove outdated instructions
@@ -105,34 +113,40 @@ fn measure_time[func: fn () raises -> None]() raises -> Float64:
 
 ### 3. TODO Resolution
 
-**Current TODOs in conftest.mojo**:
-1. Lines 160-181: Tensor fixture methods (depends on Tensor implementation)
-2. Line 259: measure_time() implementation (depends on Mojo time module)
-3. Line 279: measure_throughput() implementation (depends on measure_time)
+### Current TODOs in conftest.mojo
 
-**Resolution Strategy**:
+1. Lines 160-181: Tensor fixture methods (depends on Tensor implementation)
+1. Line 259: measure_time() implementation (depends on Mojo time module)
+1. Line 279: measure_throughput() implementation (depends on measure_time)
+
+### Resolution Strategy
+
 - **If dependency available**: Implement the TODO
 - **If dependency not ready**: Keep TODO with issue reference (e.g., `#1538`)
 - **If not needed**: Remove the placeholder
 
-**Current TODOs in helpers/**:
+### Current TODOs in helpers/
+
 - `fixtures.mojo`: All placeholder (lines 7-15)
 - `utils.mojo`: All placeholder (lines 7-12)
 
-**Resolution Strategy**:
+### Resolution Strategy
+
 - Review usage: Are these actually needed?
 - If needed: Implement in this phase
 - If not needed: Remove placeholders or convert to actual TODOs with issue tracking
 
 ### 4. Test Infrastructure Health
 
-**Health Metrics**:
+### Health Metrics
+
 - [ ] All 91+ tests still pass after cleanup
 - [ ] No performance regressions in test execution
 - [ ] Import paths work correctly
 - [ ] CI builds pass consistently
 
-**Verification**:
+### Verification
+
 ```bash
 # Run full test suite
 ./scripts/run_tests.sh  # If implemented
@@ -142,17 +156,19 @@ find tests -name "test_*.mojo" -exec mojo test {} \;
 
 # Check CI
 git push  # Verify CI passes
-```
+```text
 
 ### 5. Technical Debt Items
 
-**Potential Debt**:
-1. **Duplicate assertions**: Check if conftest.mojo and helpers/assertions.mojo duplicate functionality
-2. **Unused utilities**: Identify utilities that are defined but never used
-3. **Inconsistent patterns**: Ensure all test utilities follow same conventions
-4. **Missing tests**: Are the test utilities themselves tested?
+### Potential Debt
 
-**Resolution**:
+1. **Duplicate assertions**: Check if conftest.mojo and helpers/assertions.mojo duplicate functionality
+1. **Unused utilities**: Identify utilities that are defined but never used
+1. **Inconsistent patterns**: Ensure all test utilities follow same conventions
+1. **Missing tests**: Are the test utilities themselves tested?
+
+### Resolution
+
 - Merge duplicate functionality
 - Remove unused code
 - Standardize patterns
@@ -161,28 +177,32 @@ git push  # Verify CI passes
 ## Cleanup Tasks
 
 ### Phase 1: Analysis
+
 1. Identify all TODOs in test infrastructure
-2. Find unused code (functions, imports)
-3. Check for duplicate functionality
-4. Review all docstrings for accuracy
+1. Find unused code (functions, imports)
+1. Check for duplicate functionality
+1. Review all docstrings for accuracy
 
 ### Phase 2: Resolution
+
 1. Implement or remove TODO placeholders
-2. Remove unused code
-3. Merge duplicate functionality
-4. Update docstrings
+1. Remove unused code
+1. Merge duplicate functionality
+1. Update docstrings
 
 ### Phase 3: Verification
+
 1. Run full test suite
-2. Verify CI passes
-3. Check documentation accuracy
-4. Validate import paths
+1. Verify CI passes
+1. Check documentation accuracy
+1. Validate import paths
 
 ### Phase 4: Documentation
+
 1. Update issue notes with cleanup decisions
-2. Document any technical debt that couldn't be resolved
-3. Create tracking issues for deferred work
-4. Update team documentation
+1. Document any technical debt that couldn't be resolved
+1. Create tracking issues for deferred work
+1. Update team documentation
 
 ## References
 
@@ -204,35 +224,44 @@ git push  # Verify CI passes
 
 (To be filled during cleanup phase)
 
-**Code Quality Issues Found**:
+### Code Quality Issues Found
+
 - TBD
 
-**TODOs Resolved**:
+### TODOs Resolved
+
 - TBD
 
 **TODOs Deferred** (with issue tracking):
+
 - TBD
 
-**Code Removed**:
+### Code Removed
+
 - TBD
 
-**Documentation Updated**:
+### Documentation Updated
+
 - TBD
 
 ### Lessons Learned
 
-**What Worked Well**:
+### What Worked Well
+
 - TBD
 
-**What Could Be Improved**:
+### What Could Be Improved
+
 - TBD
 
-**Recommendations for Future Work**:
+### Recommendations for Future Work
+
 - TBD
 
 ### Final State
 
 After cleanup, the testing infrastructure should be:
+
 - Clean and maintainable
 - Well-documented
 - Free of unused code

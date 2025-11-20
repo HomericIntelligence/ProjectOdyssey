@@ -27,9 +27,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Traverse repository directory structure
-2. Match files against test patterns
-3. Collect test file information and metadata
-4. Return organized list of discovered tests
+1. Match files against test patterns
+1. Collect test file information and metadata
+1. Return organized list of discovered tests
 
 ## Success Criteria
 

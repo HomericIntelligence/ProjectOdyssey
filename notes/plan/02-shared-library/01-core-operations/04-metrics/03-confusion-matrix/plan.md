@@ -29,9 +29,9 @@ None (leaf node)
 ## Steps
 
 1. Implement confusion matrix accumulation
-2. Add normalization options for easier interpretation
-3. Support incremental updates for large datasets
-4. Provide helpers to extract precision, recall, F1 per class
+1. Add normalization options for easier interpretation
+1. Support incremental updates for large datasets
+1. Provide helpers to extract precision, recall, F1 per class
 
 ## Success Criteria
 

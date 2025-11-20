@@ -32,13 +32,15 @@ Design and document the test execution engine that runs discovered tests with pr
 
 **Decision**: Each test runs in a separate subprocess with its own environment.
 
-**Rationale**:
+### Rationale
+
 - Prevents side effects between tests (environment variables, global state, file system changes)
 - Enables true parallel execution without shared state concerns
 - Allows per-test resource limits (memory, CPU time)
 - Captures complete output without cross-contamination
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - In-process execution: Rejected due to state contamination risks
 - Docker containers: Rejected as too heavyweight for unit tests
 - Virtual environments: Rejected as insufficient for isolation (shared process space)
@@ -47,13 +49,15 @@ Design and document the test execution engine that runs discovered tests with pr
 
 **Decision**: Use subprocess pipes to capture stdout and stderr separately.
 
-**Rationale**:
+### Rationale
+
 - Preserves distinction between normal output and error messages
 - Enables real-time streaming for long-running tests
 - Compatible with both Mojo and Python subprocess execution
 - Standard approach with robust library support
 
-**Alternatives Considered**:
+### Alternatives Considered
+
 - File-based capture: Rejected due to filesystem I/O overhead
 - Combined stdout/stderr: Rejected as loses diagnostic information
 - TTY emulation: Rejected as unnecessary complexity for test output
@@ -62,13 +66,15 @@ Design and document the test execution engine that runs discovered tests with pr
 
 **Decision**: Implement graceful degradation with continue-on-failure as default behavior.
 
-**Rationale**:
+### Rationale
+
 - Maximizes test coverage visibility (see all failures, not just the first)
 - Aligns with CI/CD best practices
 - Provides option for fail-fast when needed (debugging specific issues)
 - Captures and reports errors without losing subsequent test results
 
-**Error Categories**:
+### Error Categories
+
 - Test failures (assertions): Record and continue
 - Test errors (exceptions): Record and continue
 - Timeout errors: Kill process, record, continue
@@ -78,13 +84,15 @@ Design and document the test execution engine that runs discovered tests with pr
 
 **Decision**: Use high-resolution monotonic clock for timing measurements.
 
-**Rationale**:
+### Rationale
+
 - Immune to system clock adjustments
 - Provides microsecond precision for performance analysis
 - Available in both Python (time.monotonic) and system calls for Mojo
 - Standard approach for benchmark timing
 
-**Metrics to Track**:
+### Metrics to Track
+
 - Per-test execution time
 - Setup/teardown time (if applicable)
 - Total suite execution time
@@ -94,13 +102,15 @@ Design and document the test execution engine that runs discovered tests with pr
 
 **Decision**: Implement test runner in Python with subprocess-based execution for both languages.
 
-**Rationale**:
+### Rationale
+
 - Python's subprocess module provides robust output capture (Mojo v0.25.7 limitation)
 - Enables consistent handling of both test types
 - Documented in ADR-001 as acceptable use case for Python
 - Test runner is automation tooling, not ML/AI implementation
 
-**Execution Modes**:
+### Execution Modes
+
 - Mojo tests: Execute with `mojo test <file>` or `mojo run <file>`
 - Python tests: Execute with `python -m pytest <file>` or `python <file>`
 - Auto-detect based on file extension (.mojo, .🔥, .py)
@@ -109,13 +119,15 @@ Design and document the test execution engine that runs discovered tests with pr
 
 **Decision**: Use process-based parallelism with configurable worker pool size.
 
-**Rationale**:
+### Rationale
+
 - Maximizes CPU utilization on multi-core systems
 - Test isolation naturally supports parallel execution
 - Python's multiprocessing or concurrent.futures provides robust implementation
 - Configurable workers allow tuning for different environments
 
-**Configuration Options**:
+### Configuration Options
+
 - `--workers N`: Number of parallel workers (default: CPU count)
 - `--workers 1`: Sequential execution (for debugging)
 - `--workers auto`: Auto-detect based on CPU count
@@ -124,12 +136,14 @@ Design and document the test execution engine that runs discovered tests with pr
 
 **Decision**: Implement per-test timeout with configurable default and per-test overrides.
 
-**Rationale**:
+### Rationale
+
 - Prevents hanging tests from blocking suite execution
 - Enables early detection of infinite loops or deadlocks
 - Configurable to accommodate legitimately slow tests
 
-**Implementation**:
+### Implementation
+
 - Default timeout: 60 seconds (configurable)
 - Per-test override via test metadata or naming convention
 - Timeout kills test process and reports as "TIMEOUT" status
@@ -139,12 +153,14 @@ Design and document the test execution engine that runs discovered tests with pr
 
 **Decision**: Provide `-x` / `--exitfirst` flag (pytest-style) for fail-fast behavior.
 
-**Rationale**:
+### Rationale
+
 - Useful for debugging (stop immediately when issue found)
 - Reduces wasted CI time when early test fails
 - Aligns with common testing tool conventions (pytest, unittest)
 
-**Behavior**:
+### Behavior
+
 - Default: Run all tests, report all failures
 - With `-x`: Stop execution after first failure, report partial results
 - Exit code reflects failure status in both modes
@@ -161,14 +177,14 @@ test_runner/
 ├── timer.py            # Execution time tracking
 ├── parallel.py         # Parallel execution coordination
 └── config.py           # Configuration schema and parsing
-```
+```text
 
 ### Execution Flow
 
 1. **Input**: Receive list of discovered tests from test discovery phase
-2. **Configuration**: Parse execution options (parallelism, timeout, fail-fast)
-3. **Setup**: Initialize worker pool (if parallel execution enabled)
-4. **Execution Loop**:
+1. **Configuration**: Parse execution options (parallelism, timeout, fail-fast)
+1. **Setup**: Initialize worker pool (if parallel execution enabled)
+1. **Execution Loop**:
    - For each test:
      - Spawn isolated subprocess
      - Start timer
@@ -177,8 +193,8 @@ test_runner/
      - Collect result (pass/fail/error/timeout)
      - Record execution time
    - If fail-fast enabled and test fails: Break loop
-5. **Aggregation**: Collect all test results
-6. **Output**: Return structured results for reporting phase
+1. **Aggregation**: Collect all test results
+1. **Output**: Return structured results for reporting phase
 
 ### API Design
 
@@ -198,14 +214,12 @@ class TestExecutor:
         """Execute a single test in isolation."""
         pass
 
-
 class ExecutionConfig:
     """Configuration for test execution."""
     workers: int = None  # None = auto-detect
     timeout: float = 60.0  # seconds
     exit_first: bool = False
     capture_output: bool = True
-
 
 class TestResult:
     """Result of a single test execution."""
@@ -216,7 +230,6 @@ class TestResult:
     execution_time: float
     error_message: Optional[str]
 
-
 class ExecutionResults:
     """Aggregated results from test execution."""
     total_tests: int
@@ -226,7 +239,7 @@ class ExecutionResults:
     timeouts: int
     total_time: float
     results: List[TestResult]
-```
+```text
 
 ## References
 

@@ -30,7 +30,7 @@ The training utilities are organized into three major subsystems with 13 total c
 
 ### Dependencies
 
-**Inputs Required**:
+### Inputs Required
 
 - Core operations for forward and backward passes
 - Model architectures to train
@@ -42,7 +42,7 @@ The training utilities are organized into three major subsystems with 13 total c
 
 ### File Structure
 
-```
+```text
 shared/training/
 ├── __init__.mojo
 ├── base/
@@ -57,7 +57,7 @@ shared/training/
     ├── checkpointing.mojo
     ├── early_stopping.mojo
     └── logging_callback.mojo
-```
+```text
 
 ### Key Interfaces
 
@@ -67,7 +67,7 @@ trait Trainer:
     fn validate(self, val_loader: DataLoader) -> Dict
     fn save_checkpoint(self, path: String) -> None
     fn load_checkpoint(self, path: String) -> None
-```
+```text
 
 ## Implementation Phases
 
@@ -80,14 +80,14 @@ trait Trainer:
 ## Child Components
 
 1. [Trainer Interface](../../plan/02-shared-library/02-training-utils/01-base-trainer/01-trainer-interface/plan.md)
-2. [Training Loop](../../plan/02-shared-library/02-training-utils/01-base-trainer/02-training-loop/plan.md)
-3. [Validation Loop](../../plan/02-shared-library/02-training-utils/01-base-trainer/03-validation-loop/plan.md)
-4. [Step Scheduler](../../plan/02-shared-library/02-training-utils/02-lr-schedulers/01-step-scheduler/plan.md)
-5. [Cosine Scheduler](../../plan/02-shared-library/02-training-utils/02-lr-schedulers/02-cosine-scheduler/plan.md)
-6. [Warmup Scheduler](../../plan/02-shared-library/02-training-utils/02-lr-schedulers/03-warmup-scheduler/plan.md)
-7. [Checkpointing](../../plan/02-shared-library/02-training-utils/03-callbacks/01-checkpointing/plan.md)
-8. [Early Stopping](../../plan/02-shared-library/02-training-utils/03-callbacks/02-early-stopping/plan.md)
-9. [Logging Callback](../../plan/02-shared-library/02-training-utils/03-callbacks/03-logging-callback/plan.md)
+1. [Training Loop](../../plan/02-shared-library/02-training-utils/01-base-trainer/02-training-loop/plan.md)
+1. [Validation Loop](../../plan/02-shared-library/02-training-utils/01-base-trainer/03-validation-loop/plan.md)
+1. [Step Scheduler](../../plan/02-shared-library/02-training-utils/02-lr-schedulers/01-step-scheduler/plan.md)
+1. [Cosine Scheduler](../../plan/02-shared-library/02-training-utils/02-lr-schedulers/02-cosine-scheduler/plan.md)
+1. [Warmup Scheduler](../../plan/02-shared-library/02-training-utils/02-lr-schedulers/03-warmup-scheduler/plan.md)
+1. [Checkpointing](../../plan/02-shared-library/02-training-utils/03-callbacks/01-checkpointing/plan.md)
+1. [Early Stopping](../../plan/02-shared-library/02-training-utils/03-callbacks/02-early-stopping/plan.md)
+1. [Logging Callback](../../plan/02-shared-library/02-training-utils/03-callbacks/03-logging-callback/plan.md)
 
 ## Success Criteria
 

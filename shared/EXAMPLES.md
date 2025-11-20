@@ -7,17 +7,17 @@ This document provides comprehensive usage examples for the ML Odyssey shared li
 ## Table of Contents
 
 1. [Quickstart (5 Minutes)](#quickstart-5-minutes)
-2. [Basic Neural Network](#basic-neural-network)
-3. [Convolutional Neural Network](#convolutional-neural-network)
-4. [Training with Validation](#training-with-validation)
-5. [Custom Training Loop](#custom-training-loop)
-6. [Data Loading](#data-loading)
-7. [Learning Rate Scheduling](#learning-rate-scheduling)
-8. [Callbacks and Monitoring](#callbacks-and-monitoring)
-9. [Model Checkpointing](#model-checkpointing)
-10. [Multiple Metrics](#multiple-metrics)
-11. [Complete Example: MNIST Classifier](#complete-example-mnist-classifier)
-12. [Advanced Patterns](#advanced-patterns)
+1. [Basic Neural Network](#basic-neural-network)
+1. [Convolutional Neural Network](#convolutional-neural-network)
+1. [Training with Validation](#training-with-validation)
+1. [Custom Training Loop](#custom-training-loop)
+1. [Data Loading](#data-loading)
+1. [Learning Rate Scheduling](#learning-rate-scheduling)
+1. [Callbacks and Monitoring](#callbacks-and-monitoring)
+1. [Model Checkpointing](#model-checkpointing)
+1. [Multiple Metrics](#multiple-metrics)
+1. [Complete Example: MNIST Classifier](#complete-example-mnist-classifier)
+1. [Advanced Patterns](#advanced-patterns)
 
 ## Quickstart (5 Minutes)
 
@@ -29,7 +29,7 @@ Get started with the shared library in 5 minutes:
 cd ml-odyssey
 mojo package shared --install
 mojo run scripts/verify_installation.mojo
-```
+```text
 
 ### 2. Hello World Model (2 minutes)
 
@@ -51,7 +51,7 @@ fn main():
 
     print("Model created successfully!")
     print("Parameters:", model.num_parameters())
-```
+```text
 
 Run it: `mojo run hello_ml.mojo`
 
@@ -92,7 +92,7 @@ fn main():
         logger.info(f"Epoch {epoch}: Loss = {loss:.4f}")
 
     logger.info("Training complete!")
-```
+```text
 
 **That's it!** You now have:
 
@@ -149,7 +149,7 @@ fn basic_network_example():
         optimizer.step(model.parameters(), grads)
 
         print("Epoch", epoch, "Loss:", loss.item())
-```
+```text
 
 ## Convolutional Neural Network
 
@@ -191,7 +191,7 @@ fn cnn_example():
     )
 
     print("CNN created with", model.num_parameters(), "parameters")
-```
+```text
 
 ## Training with Validation
 
@@ -269,7 +269,7 @@ fn training_with_validation():
         print("  Train Loss:", train_loss.compute(), "Acc:", train_acc.compute())
         print("  Val Loss:", val_loss.compute(), "Acc:", val_acc.compute())
         print("  LR:", optimizer.get_lr())
-```
+```text
 
 ## Custom Training Loop
 
@@ -353,7 +353,7 @@ fn custom_training_loop(
             optimizer.set_lr(optimizer.get_lr() * 0.1)
 
         print("Epoch", epoch, "Train Acc:", train_acc.compute(), "Val Acc:", val_accuracy)
-```
+```text
 
 ## Data Loading
 
@@ -417,7 +417,7 @@ fn data_loading_example():
         # batch.inputs: Tensor of shape (batch_size, channels, height, width)
         # batch.targets: Tensor of shape (batch_size,)
         print("Batch shape:", batch.inputs.shape())
-```
+```text
 
 ## Learning Rate Scheduling
 
@@ -478,7 +478,7 @@ fn lr_scheduling_example():
             main_scheduler.step()
 
         print("Epoch", epoch, "LR:", optimizer4.get_lr())
-```
+```text
 
 ## Callbacks and Monitoring
 
@@ -547,7 +547,7 @@ fn callbacks_example():
         if early_stop.should_stop:
             print("Early stopping triggered at epoch", epoch)
             break
-```
+```text
 
 ## Model Checkpointing
 
@@ -605,7 +605,7 @@ fn checkpointing_example():
         for epoch in range(start_epoch, total_epochs):
             # Training...
             pass
-```
+```text
 
 ## Multiple Metrics
 
@@ -675,7 +675,7 @@ fn multiple_metrics_example():
         # Print confusion matrix
         print("  Confusion Matrix:")
         print(val_confusion.compute())
-```
+```text
 
 ## Complete Example: MNIST Classifier
 
@@ -897,7 +897,7 @@ fn mnist_classifier_complete():
         test_acc.update(outputs, batch.targets)
 
     print("Final Test Accuracy:", test_acc.compute())
-```
+```text
 
 ## Advanced Patterns
 
@@ -951,7 +951,7 @@ struct ResidualBlock(Module):
         if self.use_projection:
             params.extend(self.projection.value().parameters())
         return params
-```
+```text
 
 ### Custom Optimizers
 
@@ -984,7 +984,7 @@ struct CustomOptimizer(Optimizer):
         """Compute adaptive learning rate based on gradient statistics."""
         var grad_norm = compute_norm(grad)
         return self.learning_rate / (1.0 + grad_norm)
-```
+```text
 
 ### Custom Loss Functions
 
@@ -1022,7 +1022,6 @@ fn focal_loss(
 
     return loss.mean()
 
-
 fn contrastive_loss(
     embeddings1: Tensor,
     embeddings2: Tensor,
@@ -1051,7 +1050,7 @@ fn contrastive_loss(
     var loss_dissimilar = (1 - labels) * pow(max(margin - distances, 0), 2)
 
     return (loss_similar + loss_dissimilar).mean()
-```
+```text
 
 ### Custom Data Transforms
 
@@ -1084,7 +1083,6 @@ struct MixUp(Transform):
 
         return Batch(mixed_inputs, mixed_targets, batch.indices)
 
-
 struct CutOut(Transform):
     """CutOut augmentation - randomly mask regions."""
     var mask_size: Int
@@ -1112,7 +1110,7 @@ struct CutOut(Transform):
         var output = x.copy()
         output[:, y1:y2, x1:x2] = 0.0
         return output
-```
+```text
 
 ### Model Ensemble
 
@@ -1162,7 +1160,7 @@ struct ModelEnsemble:
         var std = compute_std(outputs)
 
         return (mean, std)
-```
+```text
 
 ### Gradient Accumulation
 
@@ -1217,7 +1215,7 @@ fn train_with_gradient_accumulation(
             accumulated_grads = initialize_grads(model)
 
     return total_loss / Float32(num_batches)
-```
+```text
 
 ### Mixed Precision Training
 
@@ -1271,7 +1269,7 @@ struct MixedPrecisionTrainer:
             self.scaler.update()
 
         return loss.item()
-```
+```text
 
 ### Advanced Debugging
 
@@ -1333,30 +1331,30 @@ struct TrainingDebugger:
         for i, param in enumerate(model.parameters()):
             var param_norm = compute_norm(param)
             self.logger.debug(f"Param[{i}]: norm={param_norm:.6f}")
-```
+```text
 
 ## Best Practices Summary
 
 ### Performance Tips
 
 1. **Use SIMD**: Leverage vectorization for element-wise operations
-2. **Batch Operations**: Process data in batches for efficiency
-3. **Release Builds**: Use `mojo build --release` for production
-4. **Profile First**: Measure before optimizing
+1. **Batch Operations**: Process data in batches for efficiency
+1. **Release Builds**: Use `mojo build --release` for production
+1. **Profile First**: Measure before optimizing
 
 ### Code Organization
 
 1. **Separate Concerns**: Keep model, training, data separate
-2. **Config Files**: Use YAML/JSON for hyperparameters
-3. **Logging**: Log everything important
-4. **Reproducibility**: Always set random seeds
+1. **Config Files**: Use YAML/JSON for hyperparameters
+1. **Logging**: Log everything important
+1. **Reproducibility**: Always set random seeds
 
 ### Common Pitfalls
 
 1. **Forgetting to Call train()/eval()**: Set model modes correctly
-2. **Not Resetting Metrics**: Reset between epochs
-3. **Wrong Learning Rates**: Start conservative
-4. **Ignoring Validation**: Always validate during training
+1. **Not Resetting Metrics**: Reset between epochs
+1. **Wrong Learning Rates**: Start conservative
+1. **Ignoring Validation**: Always validate during training
 
 ## Next Steps
 

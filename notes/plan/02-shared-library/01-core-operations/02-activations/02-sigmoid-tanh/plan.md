@@ -27,9 +27,9 @@ None (leaf node)
 ## Steps
 
 1. Implement sigmoid with numerical stability (clip large values)
-2. Create tanh with stable computation
-3. Ensure proper gradient computation
-4. Handle edge cases (very large/small inputs)
+1. Create tanh with stable computation
+1. Ensure proper gradient computation
+1. Handle edge cases (very large/small inputs)
 
 ## Success Criteria
 

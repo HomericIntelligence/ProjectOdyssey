@@ -36,11 +36,11 @@ Create additional supporting directories that provide infrastructure for the rep
 ## Steps
 
 1. Create benchmarks directory for performance testing code
-2. Create docs directory for comprehensive documentation
-3. Create agents directory for AI agent configurations
-4. Create tools directory for development utilities
-5. Create configs directory for configuration files
-6. Create .claude/skills/ directory for reusable capabilities
+1. Create docs directory for comprehensive documentation
+1. Create agents directory for AI agent configurations
+1. Create tools directory for development utilities
+1. Create configs directory for configuration files
+1. Create .claude/skills/ directory for reusable capabilities
 
 ## Success Criteria
 

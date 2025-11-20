@@ -31,8 +31,8 @@ Configure the documentation agent with clear documentation standards, quality cr
 ## Steps
 
 1. Create configuration file with basic structure
-2. Define documentation standards and quality criteria
-3. Configure available tools for documentation generation
+1. Define documentation standards and quality criteria
+1. Configure available tools for documentation generation
 
 ## Success Criteria
 

@@ -28,9 +28,9 @@ None (Level 4 - implementation level)
 ## Steps
 
 1. Read dependency specifications from project files
-2. Install dependencies using appropriate package manager
-3. Verify installations succeeded
-4. Log results and any errors
+1. Install dependencies using appropriate package manager
+1. Verify installations succeeded
+1. Log results and any errors
 
 ## Success Criteria
 

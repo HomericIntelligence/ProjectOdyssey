@@ -32,9 +32,9 @@ Or: None (leaf node) for level 4 components
 ## Steps
 
 1. First step
-2. Second step
-3. Third step
-4. Continue as needed
+1. Second step
+1. Third step
+1. Continue as needed
 
 ## Success Criteria
 

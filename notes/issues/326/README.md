@@ -79,7 +79,7 @@ struct StepLR(LRScheduler):
         var num_steps = epoch // self.step_size
         var decay_factor = self.gamma ** num_steps
         return self.base_lr * decay_factor
-```
+```text
 
 ## Implementation Decisions
 
@@ -87,7 +87,8 @@ struct StepLR(LRScheduler):
 
 **Decision**: Scheduler doesn't track current epoch internally
 
-**Rationale**:
+### Rationale
+
 - Simpler implementation - no mutable state
 - More flexible - can query LR for any epoch
 - Easier testing - no need to step through epochs sequentially
@@ -99,7 +100,8 @@ struct StepLR(LRScheduler):
 
 **Decision**: Use `@value` struct decorator
 
-**Rationale**:
+### Rationale
+
 - Generates efficient copy/move constructors
 - Mojo best practice for value types
 - Schedulers are small and copy-cheap
@@ -108,7 +110,8 @@ struct StepLR(LRScheduler):
 
 **Decision**: Return base_lr if step_size <= 0
 
-**Rationale**:
+### Rationale
+
 - Defensive programming - avoid division by zero
 - Graceful degradation - training can continue
 - Explicit error handling deferred to validation layer
@@ -119,7 +122,8 @@ struct StepLR(LRScheduler):
 
 **Decision**: Use Float64 for all floating point values
 
-**Rationale**:
+### Rationale
+
 - Higher precision for small learning rates
 - Consistent with Mojo math library
 - Negligible memory/performance impact (only 3 values)
@@ -128,7 +132,8 @@ struct StepLR(LRScheduler):
 
 **Decision**: Use `**` operator for exponentiation
 
-**Rationale**:
+### Rationale
+
 - Clearer than manual multiplication loop
 - Standard Mojo syntax
 - Compiler optimizes for integer exponents
@@ -143,7 +148,7 @@ from shared.training.base import LRScheduler
 
 # Standard library
 # (none required - uses only built-in operators)
-```
+```text
 
 ### Trait Implementation
 
@@ -153,17 +158,19 @@ Implements `LRScheduler` trait:
 trait LRScheduler:
     fn get_lr(self, epoch: Int, batch: Int = 0) -> Float64:
         ...
-```
+```text
 
 **Compliance**: ✅ Full compliance with interface
 
 ### Error Handling
 
 Current implementation:
+
 - Returns base_lr for invalid step_size (defensive)
 - No explicit validation on construction
 
 **Improvement opportunity** (deferred to cleanup):
+
 - Add parameter validation in `__init__`
 - Raise errors for invalid parameters
 
@@ -195,7 +202,7 @@ for epoch in range(1000):
     var lr = scheduler.get_lr(epoch)  # ~100 nanoseconds per call
 
 # Total overhead: ~0.1 milliseconds per training run
-```
+```text
 
 ## Integration Points
 
@@ -208,7 +215,7 @@ var scheduler: LRScheduler = StepLR(...)
 # Works with any code expecting LRScheduler
 fn train(scheduler: LRScheduler):
     var lr = scheduler.get_lr(epoch=0)
-```
+```text
 
 ### With Training Loop
 
@@ -217,7 +224,7 @@ fn train(scheduler: LRScheduler):
 fn train_one_epoch(scheduler: LRScheduler):
     var lr = scheduler.get_lr(current_epoch)
     optimizer.set_lr(lr)
-```
+```text
 
 ### With Optimizer
 
@@ -225,7 +232,7 @@ fn train_one_epoch(scheduler: LRScheduler):
 # Scheduler computes, training loop applies
 var lr = scheduler.get_lr(epoch)
 optimizer.set_lr(lr)
-```
+```text
 
 ## Testing Verification
 
@@ -273,13 +280,16 @@ All tests from issue #325 pass:
 
 ## Files
 
-**Implementation**:
+### Implementation
+
 - `shared/training/schedulers.mojo` - Lines 16-78 (StepLR struct)
 
-**Tests**:
+### Tests
+
 - `tests/shared/training/test_step_scheduler.mojo` - 354 lines
 
-**Documentation**:
+### Documentation
+
 - `shared/training/README.md` - Usage examples
 
 ## Implementation Status

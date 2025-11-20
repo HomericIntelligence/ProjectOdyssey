@@ -27,10 +27,10 @@ None (leaf node)
 ## Steps
 
 1. Research available code of conduct templates
-2. Review Contributor Covenant as primary option
-3. Evaluate template completeness and community acceptance
-4. Select Contributor Covenant or another appropriate template
-5. Document choice and rationale
+1. Review Contributor Covenant as primary option
+1. Evaluate template completeness and community acceptance
+1. Select Contributor Covenant or another appropriate template
+1. Document choice and rationale
 
 ## Success Criteria
 

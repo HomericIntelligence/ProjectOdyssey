@@ -32,7 +32,7 @@ mojo package shared/data/transforms.mojo -o transforms.mojopkg
 
 # Optional: Package entire data module
 mojo package shared/data/ -o data.mojopkg
-```
+```text
 
 ### Package Output
 
@@ -42,16 +42,19 @@ mojo package shared/data/ -o data.mojopkg
 
 ### Distribution Strategy
 
-**Option 1: Local Installation**
+### Option 1: Local Installation
+
 - Copy `.mojopkg` to project's `shared/` directory
 - Import directly: `from shared.data.transforms import RandomHorizontalFlip`
 
-**Option 2: Shared Library**
+### Option 2: Shared Library
+
 - Place in common library path (e.g., `/usr/local/lib/mojo/`)
 - Add to `MOJO_LIBRARY_PATH` environment variable
 - Import from any project
 
 **Option 3: Package Repository** (future)
+
 - Publish to package repository (when Mojo package management matures)
 - Install via package manager: `mojo install ml-odyssey-transforms`
 
@@ -65,7 +68,7 @@ mojo package shared/data/ -o data.mojopkg
 
 ### Installation Steps
 
-**Method 1: Direct Import (Development)**
+### Method 1: Direct Import (Development)
 
 ```mojo
 # No installation needed - import from source
@@ -79,9 +82,9 @@ from shared.data.transforms import (
     Pipeline,
     Compose,
 )
-```
+```text
 
-**Method 2: Package Installation (Production)**
+### Method 2: Package Installation (Production)
 
 ```bash
 # Build package
@@ -92,7 +95,7 @@ cp transforms.mojopkg /path/to/your/project/lib/
 
 # Import from package
 from lib.transforms import RandomHorizontalFlip
-```
+```text
 
 ## API Reference
 
@@ -105,7 +108,7 @@ trait Transform:
     fn __call__(self, data: Tensor) raises -> Tensor:
         """Apply the transform to data."""
         ...
-```
+```text
 
 ### Composition Transforms
 
@@ -128,12 +131,14 @@ struct Compose(Transform):
 
 # Alias for more intuitive naming
 alias Pipeline = Compose
-```
+```text
 
-**Parameters**:
+### Parameters
+
 - `transforms: List[Transform]` - List of transforms to apply in order
 
-**Example**:
+### Example
+
 ```mojo
 var transforms = List[Transform](capacity=3)
 transforms.append(RandomHorizontalFlip(0.5))
@@ -142,7 +147,7 @@ transforms.append(CenterCrop((224, 224)))
 var pipeline = Pipeline(transforms^)
 
 var augmented = pipeline(image)
-```
+```text
 
 ### Tensor Transforms
 
@@ -156,7 +161,7 @@ struct ToTensor(Transform):
     fn __call__(self, data: Tensor) raises -> Tensor:
         """Convert to tensor (passthrough for already-tensor data)."""
         ...
-```
+```text
 
 #### Normalize
 
@@ -171,20 +176,22 @@ struct Normalize(Transform):
     fn __init__(out self, mean: Float64 = 0.0, std: Float64 = 1.0):
         """Create normalize transform."""
         ...
-```
+```text
 
 **Formula**: `(x - mean) / std`
 
-**Parameters**:
+### Parameters
+
 - `mean: Float64` - Mean to subtract (default: 0.0)
 - `std: Float64` - Standard deviation to divide by (default: 1.0)
 
-**Example**:
+### Example
+
 ```mojo
 # ImageNet normalization
 var normalize = Normalize(0.485, 0.229)
 var normalized = normalize(image)
-```
+```text
 
 #### Reshape
 
@@ -198,16 +205,18 @@ struct Reshape(Transform):
     fn __init__(out self, owned target_shape: List[Int]):
         """Create reshape transform."""
         ...
-```
+```text
 
-**Parameters**:
+### Parameters
+
 - `target_shape: List[Int]` - Target shape for tensor
 
-**Example**:
+### Example
+
 ```mojo
 var reshape = Reshape(List[Int](28, 28, 1))
 var reshaped = reshape(flattened_data)
-```
+```text
 
 ### Image Transforms
 
@@ -224,19 +233,21 @@ struct Resize(Transform):
     fn __init__(out self, size: Tuple[Int, Int], interpolation: String = "bilinear"):
         """Create resize transform."""
         ...
-```
+```text
 
-**Parameters**:
+### Parameters
+
 - `size: Tuple[Int, Int]` - Target (height, width)
 - `interpolation: String` - Interpolation method (default: "bilinear")
 
 **Note**: Current implementation uses nearest-neighbor. Bilinear/bicubic interpolation planned for future versions.
 
-**Example**:
+### Example
+
 ```mojo
 var resize = Resize((224, 224))
 var resized = resize(image)
-```
+```text
 
 #### CenterCrop
 
@@ -250,21 +261,24 @@ struct CenterCrop(Transform):
     fn __init__(out self, size: Tuple[Int, Int]):
         """Create center crop transform."""
         ...
-```
+```text
 
-**Parameters**:
+### Parameters
+
 - `size: Tuple[Int, Int]` - Target (height, width) of crop
 
-**Assumptions**:
+### Assumptions
+
 - Square images (H = W)
 - RGB format (3 channels)
 - Flattened (H, W, C) layout
 
-**Example**:
+### Example
+
 ```mojo
 var crop = CenterCrop((224, 224))
 var cropped = crop(image)
-```
+```text
 
 #### RandomCrop
 
@@ -279,28 +293,32 @@ struct RandomCrop(Transform):
     fn __init__(out self, size: Tuple[Int, Int], padding: Optional[Int] = None):
         """Create random crop transform."""
         ...
-```
+```text
 
-**Parameters**:
+### Parameters
+
 - `size: Tuple[Int, Int]` - Target (height, width) of crop
 - `padding: Optional[Int]` - Optional padding before cropping
 
-**Padding Behavior**:
+### Padding Behavior
+
 - Conceptual padding (no memory allocation)
 - Allows crops extending beyond image bounds
 - Out-of-bounds pixels filled with 0.0 (black)
 
-**Assumptions**:
+### Assumptions
+
 - Square images (H = W)
 - RGB format (3 channels)
 - Flattened (H, W, C) layout
 
-**Example**:
+### Example
+
 ```mojo
 # Crop 32x32 from 28x28 image with 4-pixel padding
 var crop = RandomCrop((32, 32), 4)
 var cropped = crop(image)
-```
+```text
 
 ### Geometric Augmentations
 
@@ -316,21 +334,25 @@ struct RandomHorizontalFlip(Transform):
     fn __init__(out self, p: Float64 = 0.5):
         """Create random horizontal flip transform."""
         ...
-```
+```text
 
-**Parameters**:
+### Parameters
+
 - `p: Float64` - Probability of flipping (default: 0.5)
 
-**Behavior**:
+### Behavior
+
 - Reverses width dimension (left ↔ right)
 - Preserves height and channel order
 
-**Assumptions**:
+### Assumptions
+
 - Square images (H = W)
 - RGB format (3 channels)
 - Flattened (H, W, C) layout
 
-**Example**:
+### Example
+
 ```mojo
 # 50% chance of horizontal flip
 var flip = RandomHorizontalFlip(0.5)
@@ -338,7 +360,7 @@ var flipped = flip(image)
 
 # Always flip (useful for testing)
 var always_flip = RandomHorizontalFlip(1.0)
-```
+```text
 
 #### RandomVerticalFlip
 
@@ -352,25 +374,29 @@ struct RandomVerticalFlip(Transform):
     fn __init__(out self, p: Float64 = 0.5):
         """Create random vertical flip transform."""
         ...
-```
+```text
 
-**Parameters**:
+### Parameters
+
 - `p: Float64` - Probability of flipping (default: 0.5)
 
-**Behavior**:
+### Behavior
+
 - Reverses height dimension (top ↔ bottom)
 - Preserves width and channel order
 
-**Assumptions**:
+### Assumptions
+
 - Square images (H = W)
 - RGB format (3 channels)
 - Flattened (H, W, C) layout
 
-**Example**:
+### Example
+
 ```mojo
 var flip = RandomVerticalFlip(0.5)
 var flipped = flip(image)
-```
+```text
 
 #### RandomRotation
 
@@ -385,23 +411,27 @@ struct RandomRotation(Transform):
     fn __init__(out self, degrees: Tuple[Float64, Float64], fill_value: Float64 = 0.0):
         """Create random rotation transform."""
         ...
-```
+```text
 
-**Parameters**:
+### Parameters
+
 - `degrees: Tuple[Float64, Float64]` - Range of rotation degrees (min, max)
 - `fill_value: Float64` - Value to fill empty pixels after rotation (default: 0.0)
 
-**Algorithm**:
+### Algorithm
+
 - Rotation around image center
 - Nearest-neighbor sampling
 - Inverse rotation matrix for source pixel lookup
 
-**Assumptions**:
+### Assumptions
+
 - Square images (H = W)
 - RGB format (3 channels)
 - Flattened (H, W, C) layout
 
-**Example**:
+### Example
+
 ```mojo
 # Random rotation between -30 and +30 degrees
 var rotate = RandomRotation((30.0, 30.0))
@@ -409,7 +439,7 @@ var rotated = rotate(image)
 
 # Fixed 15-degree rotation
 var fixed_rotate = RandomRotation((15.0, 15.0))
-```
+```text
 
 ### Occlusion Augmentations
 
@@ -434,29 +464,33 @@ struct RandomErasing(Transform):
     ):
         """Create random erasing transform."""
         ...
-```
+```text
 
-**Parameters**:
+### Parameters
+
 - `p: Float64` - Probability of applying erasing (default: 0.5)
 - `scale: Tuple[Float64, Float64]` - Range of erased area fraction (default: 0.02 to 0.33)
 - `ratio: Tuple[Float64, Float64]` - Range of aspect ratio (default: 0.3 to 3.3)
 - `value: Float64` - Pixel value to fill erased region with (default: 0.0)
 
-**Algorithm**:
+### Algorithm
+
 1. Probability check decides whether to apply erasing
-2. Calculate target erased area based on scale parameter
-3. Determine rectangle dimensions based on aspect ratio
-4. Randomly position rectangle within image bounds
-5. Set all pixels in rectangle to fill value
+1. Calculate target erased area based on scale parameter
+1. Determine rectangle dimensions based on aspect ratio
+1. Randomly position rectangle within image bounds
+1. Set all pixels in rectangle to fill value
 
 **Reference**: "Random Erasing Data Augmentation" (Zhong et al., 2017)
 
-**Assumptions**:
+### Assumptions
+
 - Square images (H = W)
 - RGB format (3 channels)
 - Flattened (H, W, C) layout
 
-**Example**:
+### Example
+
 ```mojo
 # Default cutout augmentation
 var erase = RandomErasing(0.5, (0.02, 0.33))
@@ -464,7 +498,7 @@ var erased = erase(image)
 
 # Larger erased regions (10-20% of image)
 var large_erase = RandomErasing(1.0, (0.1, 0.2))
-```
+```text
 
 ## Integration Guide
 
@@ -478,7 +512,7 @@ fn augment_image(image: Tensor) raises -> Tensor:
     """Apply horizontal flip augmentation."""
     var flip = RandomHorizontalFlip(0.5)
     return flip(image)
-```
+```text
 
 ### Pipeline Composition
 
@@ -517,7 +551,7 @@ fn augment_batch(images: List[Tensor]) raises -> List[Tensor]:
         augmented.append(pipeline(image[]))
 
     return augmented^
-```
+```text
 
 ### Training Pipeline Example
 
@@ -562,7 +596,7 @@ fn create_validation_pipeline() -> Pipeline:
     transforms.append(Normalize(0.5, 0.5))
 
     return Pipeline(transforms^)
-```
+```text
 
 ## Common Use Cases
 
@@ -586,7 +620,7 @@ fn cifar10_augmentation() -> Pipeline:
     transforms.append(Normalize(0.5, 0.5))
 
     return Pipeline(transforms^)
-```
+```text
 
 ### ImageNet Augmentation
 
@@ -611,7 +645,7 @@ fn imagenet_augmentation() -> Pipeline:
     transforms.append(Normalize(0.485, 0.229))
 
     return Pipeline(transforms^)
-```
+```text
 
 ### Lightweight Augmentation
 
@@ -627,7 +661,7 @@ fn lightweight_augmentation() -> Pipeline:
     transforms.append(Normalize(0.5, 0.5))
 
     return Pipeline(transforms^)
-```
+```text
 
 ## Performance Considerations
 
@@ -640,19 +674,21 @@ fn lightweight_augmentation() -> Pipeline:
 ### Optimization Opportunities
 
 1. **SIMD Vectorization**: Element-wise operations can be vectorized
-2. **Memory Pooling**: Reuse intermediate buffers
-3. **Batch Processing**: Process multiple images in parallel
-4. **In-Place Operations**: Modify tensors directly (future enhancement)
+1. **Memory Pooling**: Reuse intermediate buffers
+1. **Batch Processing**: Process multiple images in parallel
+1. **In-Place Operations**: Modify tensors directly (future enhancement)
 
 ### Benchmarks
 
 **Single Transform** (28x28x3 image):
+
 - RandomHorizontalFlip: ~0.1 ms
 - RandomRotation: ~0.5 ms
 - RandomCrop: ~0.2 ms
 - RandomErasing: ~0.3 ms
 
 **Pipeline** (4 transforms, 28x28x3 image):
+
 - Total: ~1.1 ms
 - Throughput: ~900 images/second (single-threaded)
 
@@ -663,19 +699,19 @@ Note: Benchmarks are approximate and depend on hardware.
 ### Current Implementation
 
 1. **Square Images Only**: Assumes H = W for dimension inference
-2. **RGB Format**: Assumes 3 channels (some transforms)
-3. **No Shape Metadata**: Mojo Tensor API doesn't expose shape
-4. **Nearest-Neighbor Sampling**: Resize and Rotation use simple interpolation
-5. **Flattened Layout**: Assumes (H, W, C) flattened layout
+1. **RGB Format**: Assumes 3 channels (some transforms)
+1. **No Shape Metadata**: Mojo Tensor API doesn't expose shape
+1. **Nearest-Neighbor Sampling**: Resize and Rotation use simple interpolation
+1. **Flattened Layout**: Assumes (H, W, C) flattened layout
 
 ### Future Enhancements
 
 1. **Non-Square Images**: Support arbitrary (H, W) dimensions
-2. **Flexible Channel Count**: Support grayscale, RGBA, etc.
-3. **Better Interpolation**: Bilinear, bicubic for Resize and Rotation
-4. **In-Place Transforms**: Reduce memory overhead
-5. **SIMD Optimization**: Vectorized operations for performance
-6. **Shape Metadata**: Proper tensor shape tracking
+1. **Flexible Channel Count**: Support grayscale, RGBA, etc.
+1. **Better Interpolation**: Bilinear, bicubic for Resize and Rotation
+1. **In-Place Transforms**: Reduce memory overhead
+1. **SIMD Optimization**: Vectorized operations for performance
+1. **Shape Metadata**: Proper tensor shape tracking
 
 ## Testing
 
@@ -685,8 +721,8 @@ All transforms have comprehensive test coverage (14 tests total):
 # Run augmentation tests
 mojo test tests/shared/data/transforms/test_augmentations.mojo
 
-# Expected output:
-# Running augmentation tests...
+# Expected output
+# Running augmentation tests
 #   ✓ test_random_augmentation_deterministic
 #   ✓ test_random_augmentation_varies
 #   ✓ test_random_rotation_range
@@ -702,8 +738,8 @@ mojo test tests/shared/data/transforms/test_augmentations.mojo
 #   ✓ test_compose_random_augmentations
 #   ✓ test_augmentation_determinism_in_pipeline
 #
-# ✓ All 14 augmentation tests passed!
-```
+# ✓ All 14 augmentation tests passed
+```text
 
 ## References
 
@@ -729,6 +765,7 @@ mojo test tests/shared/data/transforms/test_augmentations.mojo
 **Package Phase**: COMPLETE ✓
 
 All deliverables have been documented:
+
 - Packaging process documented
 - Installation instructions provided
 - API reference complete (12 transforms)

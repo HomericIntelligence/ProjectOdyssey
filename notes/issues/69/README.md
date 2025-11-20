@@ -13,13 +13,13 @@ Implement the Tools system according to the specifications from Issue #67, creat
 - Clear distinction from scripts/ directory
 - Design principles: KISS, YAGNI, Composability
 
-**Current State**:
+### Current State
 
 - Basic directory structure exists from planning phase
 - Category READMEs contain placeholder documentation
 - No actual tool implementations yet
 
-**Parallel Work**:
+### Parallel Work
 
 - Issue #68 (Test) - Creating test suite for tools
 - Issue #70 (Package) - Packaging tools for distribution
@@ -31,15 +31,15 @@ Implement the Tools system according to the specifications from Issue #67, creat
    - Basic CLI scaffolding tool (Python - justified by regex needs)
    - Minimal paper template set
 
-2. **Testing Utilities** (`tools/test-utils/`)
+1. **Testing Utilities** (`tools/test-utils/`)
    - Basic test data generator (Mojo - performance critical)
    - Simple test fixture examples (Mojo - type safety)
 
-3. **Benchmarking Tools** (`tools/benchmarking/`)
+1. **Benchmarking Tools** (`tools/benchmarking/`)
    - Simple inference benchmark (Mojo - required for accurate ML measurement)
    - Basic benchmark runner
 
-4. **Code Generation** (`tools/codegen/`)
+1. **Code Generation** (`tools/codegen/`)
    - Basic Mojo struct generator (Python - templating/regex)
    - Simple layer template generator
 
@@ -47,22 +47,22 @@ Implement the Tools system according to the specifications from Issue #67, creat
 
 ### Phase 1: Component Breakdown and Design
 
-**As Implementation Specialist, I will**:
+### As Implementation Specialist, I will
 
 1. Break down each tool category into implementable functions/classes
-2. Design class structures and function signatures
-3. Plan implementation approach following Mojo best practices
-4. Create detailed specifications for delegation
+1. Design class structures and function signatures
+1. Plan implementation approach following Mojo best practices
+1. Create detailed specifications for delegation
 
 ### Phase 2: Tool Implementation (via Delegation)
 
-**Delegation Strategy**:
+### Delegation Strategy
 
 - **Senior Implementation Engineer**: Complex generators, benchmark framework
 - **Implementation Engineer**: Standard CLI tools, data generators
 - **Junior Implementation Engineer**: Templates, boilerplate, examples
 
-**Language Selection Per ADR-001**:
+### Language Selection Per ADR-001
 
 - **Mojo (Required)**: Benchmarking, test data generation, ML fixtures
 - **Python (Allowed)**: Template processing, CLI with regex, code generation
@@ -71,9 +71,9 @@ Implement the Tools system according to the specifications from Issue #67, creat
 ### Phase 3: Integration and Validation
 
 1. Integrate all implemented components
-2. Verify against planning specifications
-3. Ensure proper documentation
-4. Coordinate with Test Specialist for validation
+1. Verify against planning specifications
+1. Ensure proper documentation
+1. Coordinate with Test Specialist for validation
 
 ## Component Breakdown
 
@@ -83,26 +83,26 @@ Implement the Tools system according to the specifications from Issue #67, creat
 
 #### Components
 
-**A. Template System**
+### A. Template System
 
 - Function: `load_template(template_name: str) -> str`
 - Function: `render_template(template: str, variables: Dict[str, str]) -> str`
 - Delegate to: Implementation Engineer
 
-**B. Directory Generator**
+### B. Directory Generator
 
 - Function: `create_paper_structure(paper_name: str, output_dir: Path) -> None`
 - Function: `generate_file_from_template(template: str, output_path: Path, vars: Dict) -> None`
 - Delegate to: Implementation Engineer
 
-**C. CLI Interface**
+### C. CLI Interface
 
 - Function: `parse_arguments() -> Namespace`
 - Function: `validate_inputs(args: Namespace) -> bool`
 - Function: `main() -> int`
 - Delegate to: Implementation Engineer
 
-**D. Templates**
+### D. Templates
 
 - Paper README template
 - Model implementation stub template
@@ -211,45 +211,45 @@ Implement the Tools system according to the specifications from Issue #67, creat
 
 ### Completed Implementation (2025-11-16)
 
-**Tools Implemented**:
+### Tools Implemented
 
 1. ✅ **Code Generation** (Python):
    - `mojo_boilerplate.py` - Struct and layer generators
    - `training_template.py` - Training loop generator
    - Both tested and working
 
-2. ✅ **Paper Scaffolding** (Python):
+1. ✅ **Paper Scaffolding** (Python):
    - `scaffold.py` - CLI for generating paper structure
    - 4 templates (README, model, train, test)
    - Template system with variable substitution
    - Tested successfully
 
-3. ✅ **Test Utilities** (Mojo):
+1. ✅ **Test Utilities** (Mojo):
    - `data_generators.mojo` - TensorGenerator struct
    - `fixtures.mojo` - SimpleCNN and LinearModel fixtures
    - Type-safe, performance-optimized
 
-4. ✅ **Benchmarking** (Mojo):
+1. ✅ **Benchmarking** (Mojo):
    - `benchmark.mojo` - ModelBenchmark framework
    - `runner.mojo` - Benchmark suite runner
    - Accurate ML performance measurement
 
 ### Design Decisions
 
-**Following YAGNI**:
+### Following YAGNI
 
 - ✅ Implemented minimal viable versions (10-20% of planned features)
 - ✅ Each category has at least one working tool
 - ✅ Focus on core functionality without over-engineering
 
-**Following KISS**:
+### Following KISS
 
 - ✅ Single-purpose tools with clear interfaces
 - ✅ Minimal dependencies (standard library only)
 - ✅ Clear error messages and help text
 - ✅ Simple template system (no Jinja2 dependency)
 
-**Following Mojo Best Practices**:
+### Following Mojo Best Practices
 
 - ✅ Used `fn` for performance-critical code
 - ✅ Used `struct` for value semantics
@@ -258,13 +258,13 @@ Implement the Tools system according to the specifications from Issue #67, creat
 
 ### Language Selection Adherence
 
-**Python Tools (Per ADR-001)**:
+### Python Tools (Per ADR-001)
 
 - ✅ All Python tools have justification headers
 - ✅ Documented conversion blockers (regex, template processing)
 - ✅ Clear technical reasons for Python usage
 
-**Mojo Tools (Required)**:
+### Mojo Tools (Required)
 
 - ✅ All ML-related utilities in Mojo
 - ✅ Performance-critical code in Mojo
@@ -272,33 +272,33 @@ Implement the Tools system according to the specifications from Issue #67, creat
 
 ### Testing Results
 
-**Code Generation Tools**:
+### Code Generation Tools
 
 - ✅ Struct generation: PASS
 - ✅ Layer generation (Linear, Conv2D): PASS
 - ✅ Training template generation: PASS
 
-**Paper Scaffolding**:
+### Paper Scaffolding
 
 - ✅ Directory structure creation: PASS
 - ✅ Template rendering: PASS
 - ✅ File generation: PASS
 - ✅ All templates properly substituted: PASS
 
-**Mojo Tools**:
+### Mojo Tools
 
 - ⚠️ Compilation tests pending (requires Mojo environment)
 - ℹ️ Will be validated in Issue #68 (Test phase)
 
 ### Coordination Points
 
-**With Test Specialist (Issue #68)**:
+### With Test Specialist (Issue #68)
 
 - Test utilities ready for integration testing
 - Fixtures available for test development
 - Data generators available for test data needs
 
-**With Package Specialist (Issue #70)**:
+### With Package Specialist (Issue #70)
 
 - All tools in standard locations
 - Python scripts executable
@@ -307,9 +307,9 @@ Implement the Tools system according to the specifications from Issue #67, creat
 ### Resolved Decisions
 
 1. ✅ Template format: Simple string substitution (no Jinja2)
-2. ✅ Benchmark output: Text output (JSON planned for future)
-3. ✅ Code generation scope: Minimal (struct, layer, training loop)
-4. ✅ Test data: Basic generators (random, zeros, ones)
+1. ✅ Benchmark output: Text output (JSON planned for future)
+1. ✅ Code generation scope: Minimal (struct, layer, training loop)
+1. ✅ Test data: Basic generators (random, zeros, ones)
 
 ## References
 
@@ -329,13 +329,13 @@ Implement the Tools system according to the specifications from Issue #67, creat
 - 4 Mojo tools (test-utils: 2, benchmarking: 2)
 - 4 Updated READMEs (one per category)
 
-**Documentation Updated**:
+### Documentation Updated
 
 - ✅ All category READMEs with usage examples
 - ✅ Main tools/README.md with implementation status
 - ✅ This issue README with comprehensive notes
 
-**Language Selection**:
+### Language Selection
 
 - ✅ Python: 4 files (justified per ADR-001)
 - ✅ Mojo: 4 files (ML/performance-critical)
@@ -344,27 +344,27 @@ Implement the Tools system according to the specifications from Issue #67, creat
 ### Key Achievements
 
 1. **Complete Tool Coverage**: All 4 planned categories implemented
-2. **Working Tools**: All Python tools tested successfully
-3. **YAGNI Compliance**: Minimal but functional implementations
-4. **ADR-001 Adherence**: Proper language selection with justifications
-5. **Clear Documentation**: Each tool has usage examples
+1. **Working Tools**: All Python tools tested successfully
+1. **YAGNI Compliance**: Minimal but functional implementations
+1. **ADR-001 Adherence**: Proper language selection with justifications
+1. **Clear Documentation**: Each tool has usage examples
 
 ### Next Steps (Post-Implementation)
 
 1. ✅ Validation testing in Issue #68 (Test phase)
-2. ✅ Package integration in Issue #70 (Package phase)
-3. ℹ️ Mojo compilation testing when environment ready
-4. ℹ️ Future enhancements based on actual usage patterns
+1. ✅ Package integration in Issue #70 (Package phase)
+1. ℹ️ Mojo compilation testing when environment ready
+1. ℹ️ Future enhancements based on actual usage patterns
 
 ### Lessons Learned
 
-**What Worked Well**:
+### What Worked Well
 
 - Simple template system is sufficient (YAGNI validated)
 - Clear separation of Python (automation) vs Mojo (ML)
 - Starting with minimal implementations enabled fast delivery
 
-**Future Improvements**:
+### Future Improvements
 
 - Consider Jinja2 for more complex templates (if needed)
 - Add JSON output for benchmark results (CI/CD integration)

@@ -133,7 +133,7 @@ Files in reports should be sorted by coverage percentage:
 2. training_loop.mojo       - 72% coverage (needs improvement)
 3. data_loader.mojo         - 95% coverage (nearly complete)
 4. utils.mojo               - 100% coverage (complete)
-```
+```text
 
 This sorting immediately highlights problem areas for developers.
 
@@ -170,7 +170,7 @@ Top Gap Areas:
   1. lenet5_model.mojo (55% uncovered)
   2. training_loop.mojo (28% uncovered)
   3. data_loader.mojo (5% uncovered)
-```
+```text
 
 ### Build Process
 
@@ -179,11 +179,11 @@ Top Gap Areas:
 The build script should:
 
 1. Verify all coverage components exist
-2. Validate configuration files
-3. Create versioned tarball: `coverage-reports-X.Y.Z.tar.gz`
-4. Generate SHA256 checksum for verification
-5. Create installation instructions
-6. List package contents
+1. Validate configuration files
+1. Create versioned tarball: `coverage-reports-X.Y.Z.tar.gz`
+1. Generate SHA256 checksum for verification
+1. Create installation instructions
+1. List package contents
 
 #### Distribution Package Contents
 
@@ -212,7 +212,7 @@ coverage-reports-1.0.0/
 │   ├── generate_reports.sh
 │   └── verify_installation.sh
 └── README.md
-```
+```text
 
 ### Installation Process
 
@@ -221,11 +221,11 @@ coverage-reports-1.0.0/
 The verification script should:
 
 1. Check all required directories exist
-2. Validate Mojo module files can be imported
-3. Verify template files are intact
-4. Test basic report generation
-5. Confirm configuration loading works
-6. Check CI/CD integration points
+1. Validate Mojo module files can be imported
+1. Verify template files are intact
+1. Test basic report generation
+1. Confirm configuration loading works
+1. Check CI/CD integration points
 
 ### CI/CD Integration
 
@@ -251,7 +251,7 @@ jobs:
         with:
           name: coverage-reports
           path: coverage/
-```
+```text
 
 ### Configuration Options
 
@@ -282,7 +282,7 @@ thresholds:
   critical: 50
   warning: 75
   target: 90
-```
+```text
 
 ### Documentation Structure
 
@@ -341,7 +341,7 @@ Integration testing should verify:
 
 **Blocks**: Issue #838 (Cleanup phase) - cannot start until Package phase complete
 
-**Blocked By**:
+### Blocked By
 
 - Plan phase completion (Issue #835 or similar)
 - Test phase completion (Issue #836 or similar)
@@ -393,10 +393,10 @@ This issue is appropriate for:
 This packaging phase follows the established pattern:
 
 1. **Integrate existing implementation** with repository systems
-2. **Create distributable artifacts** (tarball, scripts, docs)
-3. **Ensure deployment readiness** (install/verify scripts)
-4. **Document integration points** for team adoption
-5. **Verify end-to-end functionality** through CI/CD
+1. **Create distributable artifacts** (tarball, scripts, docs)
+1. **Ensure deployment readiness** (install/verify scripts)
+1. **Document integration points** for team adoption
+1. **Verify end-to-end functionality** through CI/CD
 
 ### Minimal Changes Principle
 
@@ -415,8 +415,8 @@ Focus strictly on packaging and integration:
 When reviewing this issue, verify:
 
 1. Distribution packages contain all necessary components
-2. Installation and verification scripts work reliably
-3. CI/CD integration follows repository patterns
-4. Documentation is clear and complete
-5. All public APIs are documented with examples
-6. Configuration system is flexible and well-documented
+1. Installation and verification scripts work reliably
+1. CI/CD integration follows repository patterns
+1. Documentation is clear and complete
+1. All public APIs are documented with examples
+1. Configuration system is flexible and well-documented

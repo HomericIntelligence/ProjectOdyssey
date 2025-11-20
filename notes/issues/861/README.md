@@ -45,37 +45,37 @@ This testing phase should cover:
    - Test specific version download
    - Test latest version download
 
-2. **Checksum Verification Tests**
+1. **Checksum Verification Tests**
    - Test successful checksum verification
    - Test checksum mismatch detection
    - Test missing checksum handling
    - Test invalid checksum format
 
-3. **Network Error Handling Tests**
+1. **Network Error Handling Tests**
    - Test timeout handling (connection timeout, read timeout)
    - Test connection failures (DNS, network unreachable)
    - Test HTTP errors (404, 403, 500)
    - Test partial download failures
    - Test retry logic
 
-4. **Progress Tracking Tests**
+1. **Progress Tracking Tests**
    - Test progress callback invocation
    - Test progress percentage accuracy
    - Test download speed calculation
    - Test ETA estimation
 
-5. **Download Resumption Tests**
+1. **Download Resumption Tests**
    - Test resume after partial download
    - Test resume with corrupted partial file
    - Test resume with changed remote file
 
-6. **Integration Tests**
+1. **Integration Tests**
    - Test complete download workflow
    - Test fallback from Magic to direct download
    - Test URL construction for different platforms
    - Test temporary file cleanup
 
-7. **Error Message Tests**
+1. **Error Message Tests**
    - Test clear error messages for network failures
    - Test actionable messages for checksum failures
    - Test disk space error messages

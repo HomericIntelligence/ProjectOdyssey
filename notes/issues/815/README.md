@@ -45,9 +45,9 @@ running functional tests.
 ### TDD Workflow
 
 1. Write tests (Issue #815) ← **Current phase**
-2. Run tests (expect failures - no implementation yet)
-3. Implement validation logic (Issue #816) to make tests pass
-4. Refactor and polish (Issue #1246)
+1. Run tests (expect failures - no implementation yet)
+1. Implement validation logic (Issue #816) to make tests pass
+1. Refactor and polish (Issue #1246)
 
 ### Test Categories
 
@@ -124,7 +124,7 @@ tests/
     ├── test_validation_report      # Report generation tests
     ├── test_error_handling         # Error scenarios
     └── test_integration           # End-to-end tests
-```
+```text
 
 ### Test Fixtures
 
@@ -170,12 +170,14 @@ Reusable test fixtures for consistent test setup:
 
 **Status**: Ready to start (depends on Issue #814 Plan complete)
 
-**Dependencies**:
+### Dependencies
+
 - Issue #814 (Plan) should be complete or available for reference
 - Can proceed in parallel with Issue #816 (Implementation)
 - Coordinates with Issue #816 for TDD workflow
 
-**Key Testing Principles**:
+### Key Testing Principles
+
 - Write tests BEFORE implementation (TDD approach)
 - Tests should fail initially (no implementation yet)
 - Each test should be independent and isolated
@@ -183,19 +185,22 @@ Reusable test fixtures for consistent test setup:
 - Parametrize tests for multiple scenarios
 - Clear assertion messages for debugging
 
-**Test File Naming Convention**:
+### Test File Naming Convention
+
 - Use descriptive names: `test_directory_validation.py`
 - One test file per major component or function
 - Keep test files in appropriate test directory
 - Follow pytest discovery conventions
 
-**Coordination with Implementation (Issue #816)**:
+### Coordination with Implementation (Issue #816)
+
 - Implementation team uses tests to drive development
 - Iterate on test refinement based on implementation feedback
 - Update tests if requirements change during development
 - Ensure comprehensive coverage before cleanup phase
 
-**TDD Checklist**:
+### TDD Checklist
+
 - [ ] Tests written and discoverable by pytest
 - [ ] Tests fail initially (RED phase)
 - [ ] Tests are clear and well-documented
@@ -210,7 +215,7 @@ Reusable test fixtures for consistent test setup:
 
 ```bash
 pytest tests/ -k "validation" -v
-```
+```text
 
 ### Run Specific Test Category
 
@@ -218,45 +223,45 @@ pytest tests/ -k "validation" -v
 pytest tests/test_structure_validation.py::TestDirectoryValidation -v
 pytest tests/test_structure_validation.py::TestFileValidation -v
 pytest tests/test_structure_validation.py::TestNamingConventions -v
-```
+```text
 
 ### Run with Coverage Report
 
 ```bash
 pytest tests/ -k "validation" --cov=validate_structure --cov-report=html
-```
+```text
 
 ### Run in TDD Mode (Watch for Changes)
 
 ```bash
 pytest-watch tests/test_structure_validation.py -v
-```
+```text
 
 ## Next Steps
 
 ### Implementation Phase (Issue #816)
 
 1. Implement validation logic to make tests pass
-2. Run tests iteratively during development
-3. Fix failing tests by implementing functionality
-4. Ensure all tests pass before code review
+1. Run tests iteratively during development
+1. Fix failing tests by implementing functionality
+1. Ensure all tests pass before code review
 
 ### Integration Phase
 
 1. Integrate validation into paper setup workflow
-2. Add validation checks to CI/CD pipeline
-3. Test with real paper directories
+1. Add validation checks to CI/CD pipeline
+1. Test with real paper directories
 
 ### Cleanup Phase (Issue #1246)
 
 1. Review test coverage and add missing tests
-2. Refactor test code to remove duplication
-3. Add performance optimizations if needed
-4. Document test patterns for future use
+1. Refactor test code to remove duplication
+1. Add performance optimizations if needed
+1. Document test patterns for future use
 
 ## Workflow
 
-**Workflow Dependencies**:
+### Workflow Dependencies
 
 - Requires: #814 (Plan) complete for reference
 - Recommended: Review planning specifications before writing tests
@@ -265,7 +270,7 @@ pytest-watch tests/test_structure_validation.py -v
 
 **Estimated Duration**: 1-2 days
 
-**Parallel Work**:
+### Parallel Work
 
 - Tests can be written while implementation is in progress
 - Implementation can run while tests are being refined
@@ -277,7 +282,8 @@ pytest-watch tests/test_structure_validation.py -v
 
 **CI Workflow**: Tests will run automatically in GitHub Actions
 
-**Expected Behavior**:
+### Expected Behavior
+
 - Tests fail initially (RED - no implementation yet)
 - Failures are expected during initial commit
 - Implementation phase makes tests pass
@@ -287,17 +293,17 @@ pytest-watch tests/test_structure_validation.py -v
 ### High Priority Tests
 
 1. **Directory existence validation** - Core requirement
-2. **File existence validation** - Core requirement
-3. **Naming convention checking** - Quality assurance
-4. **Report generation** - User-facing deliverable
-5. **Error handling** - Robustness
+1. **File existence validation** - Core requirement
+1. **Naming convention checking** - Quality assurance
+1. **Report generation** - User-facing deliverable
+1. **Error handling** - Robustness
 
 ### Medium Priority Tests
 
-6. **Helpful suggestions** - User experience
-7. **Multiple issue detection** - Completeness
-8. **Performance** - Scalability
-9. **Cross-platform support** - Compatibility
+1. **Helpful suggestions** - User experience
+1. **Multiple issue detection** - Completeness
+1. **Performance** - Scalability
+1. **Cross-platform support** - Compatibility
 
 ### Edge Case Tests
 
@@ -318,7 +324,7 @@ methodology. Tests will be written first, run (expecting failures), and then use
 the implementation in Issue #816. The tests serve as executable specifications that ensure
 the validation logic meets all requirements.
 
-**Key Points**:
+### Key Points
 
 - ✅ Tests follow TDD principles (write before implementation)
 - ✅ Comprehensive coverage of validation scenarios

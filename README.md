@@ -27,7 +27,7 @@ pixi run pytest tests/
 
 # Run pre-commit hooks
 pixi run pre-commit run --all-files
-```
+```text
 
 ### Option 2: Local Installation with Pixi
 
@@ -45,24 +45,24 @@ pixi shell
 
 # Install pre-commit hooks
 pre-commit install
-```
+```text
 
 ## Installation
 
 ### Docker Installation
 
-**Requirements:**
+### Requirements:
 
 - Docker 20.10+
 - Docker Compose 1.29+
 
-**Services:**
+### Services:
 
 - `ml-odyssey-dev` - Development environment with full tooling
 - `ml-odyssey-ci` - CI/Testing environment (optimized for automated tests)
 - `ml-odyssey-prod` - Production environment (read-only volumes)
 
-**Common Commands:**
+### Common Commands:
 
 ```bash
 # Build all services
@@ -79,22 +79,22 @@ docker-compose down
 
 # Clean up volumes (removes caches)
 docker-compose down -v
-```
+```text
 
 ### Local Installation
 
-**Requirements:**
+### Requirements:
 
 - Python 3.11+
 - Pixi (for Mojo and environment management)
 - Git
 
-**Steps:**
+### Steps:
 
 1. Clone the repository
-2. Install Pixi: `curl -fsSL https://pixi.sh/install.sh | bash`
-3. Install dependencies: `pixi install`
-4. Activate environment: `pixi shell`
-5. Install pre-commit hooks: `pre-commit install`
+1. Install Pixi: `curl -fsSL https://pixi.sh/install.sh | bash`
+1. Install dependencies: `pixi install`
+1. Activate environment: `pixi shell`
+1. Install pre-commit hooks: `pre-commit install`
 
 See [INSTALL.md](INSTALL.md) for detailed installation instructions.

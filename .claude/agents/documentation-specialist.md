@@ -34,9 +34,9 @@ Level 3 Component Specialist responsible for creating comprehensive documentatio
 ### Before Starting Work
 
 1. **Verify GitHub issue number** is provided
-2. **Check if `/notes/issues/`issue-number`/` exists**
-3. **If directory doesn't exist**: Create it with README.md
-4. **If no issue number provided**: STOP and escalate - request issue creation first
+1. **Check if `/notes/issues/`issue-number`/` exists**
+1. **If directory doesn't exist**: Create it with README.md
+1. **If no issue number provided**: STOP and escalate - request issue creation first
 
 ### Documentation Rules
 
@@ -92,8 +92,7 @@ Performance characteristics and benchmarks.
 
 How to contribute to this component.
 
-```
-
+```text
 ## Mojo Language Patterns
 
 ### Function Definitions (fn vs def)
@@ -106,11 +105,12 @@ How to contribute to this component.
 - Functions that don't need dynamic behavior
 
 ```mojo
+
 fn matrix_multiply[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]) -> Tensor[dtype]:
     # Optimized, type-safe implementation
     ...
-```
 
+```text
 **Use `def` for**:
 
 - Python-compatible functions
@@ -119,11 +119,12 @@ fn matrix_multiply[dtype: DType](a: Tensor[dtype], b: Tensor[dtype]) -> Tensor[d
 - Functions with Python interop
 
 ```mojo
+
 def load_dataset(path: String) -> PythonObject:
     # Flexible, Python-compatible implementation
     ...
-```
 
+```text
 ### Type Definitions (struct vs class)
 
 **Use `struct` for**:
@@ -134,6 +135,7 @@ def load_dataset(path: String) -> PythonObject:
 - SIMD-compatible types
 
 ```mojo
+
 struct Layer:
     var weights: Tensor[DType.float32]
     var bias: Tensor[DType.float32]
@@ -141,8 +143,8 @@ struct Layer:
 
     fn forward(self, input: Tensor) -> Tensor:
         ...
-```
 
+```text
 **Use `class` for**:
 
 - Reference types with heap allocation
@@ -151,13 +153,14 @@ struct Layer:
 - Python interoperability
 
 ```mojo
+
 class Model:
     var layers: List[Layer]
 
     def add_layer(self, layer: Layer):
         self.layers.append(layer)
-```
 
+```text
 ### Memory Management Patterns
 
 **Ownership Patterns**:
@@ -167,6 +170,7 @@ class Model:
 - `inout`: Mutable access without ownership transfer
 
 ```mojo
+
 fn process_tensor(owned tensor: Tensor) -> Tensor:
     # Takes ownership, tensor moved
     return tensor.apply_activation()
@@ -178,8 +182,8 @@ fn analyze_tensor(borrowed tensor: Tensor) -> Float32:
 fn update_tensor(inout tensor: Tensor):
     # Mutate in place, no ownership transfer
     tensor.normalize_()
-```
 
+```text
 ### SIMD and Vectorization
 
 **Use SIMD for**:
@@ -190,6 +194,7 @@ fn update_tensor(inout tensor: Tensor):
 - Performance-critical loops
 
 ```mojo
+
 fn vectorized_add[simd_width: Int](a: Tensor, b: Tensor) -> Tensor:
     @parameter
     fn add_simd[width: Int](idx: Int):
@@ -197,8 +202,8 @@ fn vectorized_add[simd_width: Int](a: Tensor, b: Tensor) -> Tensor:
 
     vectorize[add_simd, simd_width](a.num_elements())
     return result
-```
 
+```text
 ## Workflow
 
 1. Receive component spec and implemented code

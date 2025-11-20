@@ -27,7 +27,7 @@ Chief Architect (L0)
     → Design Agent (L2)
       → Specialist (L3)
         → Engineer (L4)
-```
+```text
 
 ### Escalation Paths
 
@@ -37,7 +37,7 @@ Verify agents can escalate to correct superiors:
 Engineer (L4)
   → Specialist (L3)
     → Design Agent (L2)
-```
+```text
 
 ### Circular References
 
@@ -46,7 +46,7 @@ Detect circular delegation:
 ```text
 ❌ Agent A → Agent B → Agent A
 ✅ Proper tree structure
-```
+```text
 
 ## Usage
 
@@ -56,12 +56,12 @@ Detect circular delegation:
 # Test all delegation patterns
 python3 tests/agents/test_delegation.py .claude/agents/
 
-# Example output:
+# Example output
 # ✅ No circular dependencies
 # ✅ All delegation targets exist
 # ✅ Escalation paths valid
 # ✅ Hierarchy levels correct
-```
+```text
 
 ### Test Specific Agent
 
@@ -69,12 +69,12 @@ python3 tests/agents/test_delegation.py .claude/agents/
 # Test delegation from specific agent
 ./scripts/test_agent_delegation.sh implementation-specialist
 
-# Shows:
+# Shows
 # - Who this agent delegates to
 # - Who this agent escalates to
 # - Delegation chain depth
 # - Potential issues
-```
+```text
 
 ### Visualize Delegation
 
@@ -82,14 +82,14 @@ python3 tests/agents/test_delegation.py .claude/agents/
 # Generate delegation tree
 ./scripts/visualize_delegation.sh
 
-# Output:
+# Output
 # Chief Architect (L0)
 # ├── Foundation Orchestrator (L1)
 # │   ├── Repository Design Agent (L2)
 # │   │   ├── Directory Specialist (L3)
 # │   │   └── Config Specialist (L3)
-# └── ...
-```
+# └──
+```text
 
 ## Validation Rules
 
@@ -105,7 +105,7 @@ delegates_to: ["level-3-agent"]  # Lower level
 # ❌ Wrong
 level: 3
 delegates_to: ["level-2-agent"]  # Higher level
-```
+```text
 
 ### 2. Escalation Direction
 
@@ -119,7 +119,7 @@ escalates_to: ["level-2-agent"]  # Higher level
 # ❌ Wrong
 level: 3
 escalates_to: ["level-4-agent"]  # Lower level
-```
+```text
 
 ### 3. No Circular Delegation
 
@@ -130,7 +130,7 @@ Agent A → Agent B → Agent C → Agent A
 # ✅ Tree structure
 Agent A → Agent B
 Agent A → Agent C
-```
+```text
 
 ### 4. Valid References
 
@@ -142,7 +142,7 @@ delegates_to: ["existing-agent"]
 
 # ❌ Wrong
 delegates_to: ["nonexistent-agent"]
-```
+```text
 
 ## Test Categories
 
@@ -169,29 +169,29 @@ delegates_to: ["nonexistent-agent"]
 
 ## Examples
 
-**Test all delegation:**
+### Test all delegation:
 
 ```bash
 python3 tests/agents/test_delegation.py .claude/agents/
-```
+```text
 
-**Test specific agent:**
+### Test specific agent:
 
 ```bash
 ./scripts/test_agent_delegation.sh implementation-specialist
-```
+```text
 
-**Visualize hierarchy:**
+### Visualize hierarchy:
 
 ```bash
 ./scripts/visualize_delegation.sh > delegation_tree.txt
-```
+```text
 
-**Find circular dependencies:**
+### Find circular dependencies:
 
 ```bash
 ./scripts/find_circular_delegation.sh
-```
+```text
 
 ## Error Messages
 
@@ -200,7 +200,7 @@ python3 tests/agents/test_delegation.py .claude/agents/
 ```text
 ❌ Circular delegation detected:
   implementation-specialist → senior-engineer → implementation-specialist
-```
+```text
 
 **Fix:** Break circular reference by restructuring delegation
 
@@ -210,7 +210,7 @@ python3 tests/agents/test_delegation.py .claude/agents/
 ❌ Invalid delegation:
   Agent 'specialist' (L3) delegates to 'orchestrator' (L1)
   Delegation must be to lower levels
-```
+```text
 
 **Fix:** Delegate to appropriate level or escalate instead
 
@@ -219,7 +219,7 @@ python3 tests/agents/test_delegation.py .claude/agents/
 ```text
 ❌ Delegation target not found:
   Agent 'specialist' delegates to 'nonexistent-engineer'
-```
+```text
 
 **Fix:** Create target agent or fix reference name
 
@@ -235,7 +235,7 @@ python3 tests/agents/test_delegation.py .claude/agents/
 ```yaml
 - name: Test Agent Delegation
   run: python3 tests/agents/test_delegation.py .claude/agents/
-```
+```text
 
 ## Common Issues
 
@@ -244,7 +244,7 @@ python3 tests/agents/test_delegation.py .claude/agents/
 ```text
 ⚠️  Skip-level delegation detected:
   L2 agent delegates to L4 agent (skips L3)
-```
+```text
 
 **Resolution:** Document skip-level delegation in agent description
 
@@ -253,7 +253,7 @@ python3 tests/agents/test_delegation.py .claude/agents/
 ```text
 ⚠️  Orphaned agent: 'helper-agent'
   No agent delegates to this agent
-```
+```text
 
 **Resolution:** Add delegation or remove if unused
 
@@ -261,16 +261,16 @@ python3 tests/agents/test_delegation.py .claude/agents/
 
 ```text
 ⚠️  No escalation path for: 'specialist'
-```
+```text
 
 **Resolution:** Add `escalates_to` field
 
 ## Best Practices
 
 1. **Test after changes** - Always test after modifying hierarchy
-2. **Visual verification** - Use visualization to understand structure
-3. **Document exceptions** - Document skip-level delegation
-4. **Keep hierarchy simple** - Avoid overly complex patterns
-5. **Validate in CI** - Ensure tests run automatically
+1. **Visual verification** - Use visualization to understand structure
+1. **Document exceptions** - Document skip-level delegation
+1. **Keep hierarchy simple** - Avoid overly complex patterns
+1. **Validate in CI** - Ensure tests run automatically
 
 See `/agents/delegation-rules.md` for complete delegation guidelines.

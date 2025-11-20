@@ -21,7 +21,7 @@ code review findings. Each fix addresses a critical security or reliability issu
 
 **Lines**: 321-351
 
-**Problem**:
+### Problem
 
 The current implementation has a fallback that writes directly to the target file instead of using
 atomic rename, defeating the entire purpose of atomic writes and risking data corruption.
@@ -33,16 +33,16 @@ atomic rename, defeating the entire purpose of atomic writes and risking data co
 # For now, we just write directly (non-atomic fallback)
 with open(filepath, "w") as f:
     f.write(content)
-```
+```text
 
-**Solution**:
+### Solution
 
 Implement proper atomic write using Python interop for `os.rename()` since Mojo v0.25.7 lacks this
 functionality.
 
 **Status**: ✅ Implemented
 
-**Changes Made**:
+### Changes Made
 
 - Modified `safe_write_file()` to use Python interop for `os.rename()`
 - Added fallback to non-atomic write if Python interop fails
@@ -63,7 +63,7 @@ functionality.
 
 **Lines**: 431-461
 
-**Problem**:
+### Problem
 
 The `join_path()` function performs no validation on path components, allowing malicious code to use
 ".." to escape intended directories.
@@ -72,15 +72,15 @@ The `join_path()` function performs no validation on path components, allowing m
 fn join_path(base: String, path: String) -> String:
     # ... no validation of path components
     return clean_base + "/" + clean_path
-```
+```text
 
-**Solution**:
+### Solution
 
 Add validation to reject path components containing ".." or starting with "/".
 
 **Status**: ✅ Implemented
 
-**Changes Made**:
+### Changes Made
 
 - Added validation checks before joining paths
 - Raises Error on ".." detection (path traversal)
@@ -103,7 +103,7 @@ Add validation to reject path components containing ".." or starting with "/".
 
 **Lines**: 159-236
 
-**Problem**:
+### Problem
 
 The current implementation silently returns default values when type mismatches occur instead of
 raising errors. This can cause subtle bugs where wrong types are requested.
@@ -115,16 +115,16 @@ fn get_int(self, key: String, default: Int = 0) -> Int:
         if val.value_type == "int":
             return val.int_val
     return default  # Silent failure on type mismatch
-```
+```text
 
-**Solution**:
+### Solution
 
 Add runtime type checking with clear error messages when type mismatches occur (keeping default
 parameter for missing keys).
 
 **Status**: ✅ Implemented
 
-**Changes Made**:
+### Changes Made
 
 - Updated all 5 getter methods: `get_string()`, `get_int()`, `get_float()`, `get_bool()`, `get_list()`
 - Separated logic: missing key → default, wrong type → error
@@ -146,7 +146,7 @@ parameter for missing keys).
 
 **Lines**: 397-495
 
-**Problem**:
+### Problem
 
 The current implementation performs no validation on loaded config files, allowing malformed or
 malicious configs to cause issues.
@@ -160,9 +160,9 @@ fn from_yaml(filepath: String) raises -> Config:
             var content = f.read()
             # No validation of content
             # ...
-```
+```text
 
-**Solution**:
+### Solution
 
 Add basic validation:
 
@@ -173,7 +173,7 @@ Add basic validation:
 
 **Status**: ✅ Implemented
 
-**Changes Made**:
+### Changes Made
 
 - Added empty file check to `from_yaml()` after reading content
 - Added empty file check to `from_json()` after reading content
@@ -190,16 +190,20 @@ Add basic validation:
 ### Design Decisions
 
 1. **Python Interop for os.rename()**: Since Mojo v0.25.7 lacks `os.rename()`, we use Python interop
+
 to call it. This is documented as a temporary measure until Mojo stdlib adds this functionality.
 
-2. **Path Validation Approach**: We reject ".." and absolute paths in `join_path()` to prevent
+1. **Path Validation Approach**: We reject ".." and absolute paths in `join_path()` to prevent
+
 traversal. More sophisticated validation (canonicalization, symlink resolution) deferred to future
 when Mojo has full pathlib support.
 
-3. **Type Safety Trade-off**: We maintain the `default` parameter for missing keys (common use case)
+1. **Type Safety Trade-off**: We maintain the `default` parameter for missing keys (common use case)
+
 but raise errors for type mismatches (bug indicator).
 
-4. **Validation Scope**: Basic validation only (empty files, basic structure) since Mojo lacks regex
+1. **Validation Scope**: Basic validation only (empty files, basic structure) since Mojo lacks regex
+
 and full parsing libraries. Advanced schema validation deferred to cleanup phase.
 
 ### Testing Strategy
@@ -207,8 +211,8 @@ and full parsing libraries. Advanced schema validation deferred to cleanup phase
 Each fix will be tested:
 
 1. Unit tests for the specific function
-2. Integration tests for affected workflows
-3. Security tests for attack vectors
+1. Integration tests for affected workflows
+1. Security tests for attack vectors
 
 ### Performance Impact
 
@@ -248,7 +252,7 @@ Changes:
 
 Addresses: Code Review Critical Issue #1 (I/O Module)
 Related: Issue #44
-```
+```text
 
 **Commit**: [hash]
 
@@ -267,7 +271,7 @@ Changes:
 
 Addresses: Code Review Critical Issue #3 (I/O Module)
 Related: Issue #44
-```
+```text
 
 **Commit**: [hash]
 
@@ -287,7 +291,7 @@ Changes:
 
 Addresses: Code Review Critical Issue #1 (Config Module)
 Related: Issue #44
-```
+```text
 
 **Commit**: [hash]
 
@@ -307,7 +311,7 @@ Changes:
 
 Addresses: Code Review Critical Issue #2 (Config Module)
 Related: Issue #44
-```
+```text
 
 **Commit**: [hash]
 
@@ -322,7 +326,7 @@ All 4 critical fixes implemented successfully:
 - ✅ ConfigValue type safety (correctness)
 - ✅ Config file validation (robustness)
 
-**Total Changes**:
+### Total Changes
 
 - 2 files modified (io.mojo, config.mojo)
 - 4 functions enhanced

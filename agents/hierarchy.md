@@ -63,7 +63,7 @@
             │  • Junior Test Engineer              │
             │  • Junior Documentation Engineer     │
             └──────────────────────────────────────┘
-```
+```text
 
 ## Level Summaries
 
@@ -175,7 +175,7 @@ Component Specification (Level 3)
 Function Implementation (Level 4)
     ↓
 Boilerplate Generation (Level 5)
-```
+```text
 
 ### Bottom-Up (Status Reporting)
 
@@ -191,7 +191,7 @@ Section Status (Level 2)
 Project Health (Level 1)
     ↑
 Strategic Alignment (Level 0)
-```
+```text
 
 ## Agent Count Estimates
 
@@ -250,10 +250,10 @@ Strategic Alignment (Level 0)
 ## Coordination Rules
 
 1. **Delegate Down**: When task is too detailed for current level
-2. **Escalate Up**: When decision exceeds current authority
-3. **Coordinate Laterally**: When sharing resources or dependencies
-4. **Report Status**: Keep superior informed of progress
-5. **Document Decisions**: Capture rationale for future reference
+1. **Escalate Up**: When decision exceeds current authority
+1. **Coordinate Laterally**: When sharing resources or dependencies
+1. **Report Status**: Keep superior informed of progress
+1. **Document Decisions**: Capture rationale for future reference
 
 ## See Also
 

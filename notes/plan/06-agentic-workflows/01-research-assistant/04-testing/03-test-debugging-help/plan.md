@@ -29,9 +29,9 @@ None (implementation level)
 ## Steps
 
 1. Create test cases with sample bugs
-2. Write tests for debugging workflow
-3. Validate diagnosis accuracy
-4. Verify fix suggestions are correct
+1. Write tests for debugging workflow
+1. Validate diagnosis accuracy
+1. Verify fix suggestions are correct
 
 ## Success Criteria
 

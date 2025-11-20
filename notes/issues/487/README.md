@@ -54,7 +54,7 @@ grep -r "fail_under\|max-decrease\|coverage.*threshold" \
   scripts/
 
 # Ensure single source of truth
-```
+```text
 
 Consolidate to `pyproject.toml` and environment variables:
 
@@ -70,7 +70,7 @@ omit = [
     "**/*_pb2.py",
     "**/__generated__/*"
 ]
-```
+```text
 
 **2. Validate Thresholds**
 
@@ -80,17 +80,18 @@ Test thresholds against actual coverage:
 # Get current coverage
 pytest --cov=scripts --cov-report=term
 
-# Example output:
+# Example output
 # TOTAL    80.5%
 
 # If well above threshold (e.g., 90%), consider increasing
-# If below threshold (e.g., 75%), consider:
+# If below threshold (e.g., 75%), consider
 #   - Temporarily lowering threshold
 #   - Adding tests to meet threshold
 #   - Documenting why threshold can't be met
-```
+```text
 
-**Decision Points**:
+### Decision Points
+
 - Is 80% threshold appropriate? Too high? Too low?
 - Is 2% regression tolerance reasonable?
 - Should we have different thresholds for different modules?
@@ -120,7 +121,7 @@ Remove duplication and optimize:
         --baseline main-coverage.xml \
         --max-decrease 2.0
     fi
-```
+```text
 
 **4. Documentation Review**
 
@@ -137,7 +138,7 @@ done
 
 # Check all links
 markdown-link-check docs/**/*.md
-```
+```text
 
 **5. Remove Temporary Workarounds**
 
@@ -152,7 +153,7 @@ grep -r "TODO\|FIXME\|HACK" \
 
 # Find commented-out code
 grep -A 3 "^#.*coverage\|^#.*threshold" pyproject.toml
-```
+```text
 
 **6. Performance Validation**
 
@@ -166,31 +167,35 @@ time pytest tests/
 time pytest --cov=scripts --cov-fail-under=80
 
 # Calculate overhead
-```
+```text
 
 Target: Gates should add < 20% overhead to test execution
 
 ### Refactoring Checklist
 
-**Configuration**:
+### Configuration
+
 - [ ] Single source of truth for thresholds
 - [ ] Exclusion patterns well-organized
 - [ ] Comments explain each setting
 - [ ] No duplicate configuration
 
-**CI Workflows**:
+### CI Workflows
+
 - [ ] Coverage steps consolidated
 - [ ] No unnecessary duplication
 - [ ] Optimized for performance
 - [ ] Clear failure messages
 
-**Scripts**:
+### Scripts
+
 - [ ] `check_coverage_regression.py` clean and documented
 - [ ] No debugging code
 - [ ] Proper error handling
 - [ ] Clear help messages
 
-**Documentation**:
+### Documentation
+
 - [ ] All guides accurate
 - [ ] Examples tested and working
 - [ ] Links validated
@@ -198,7 +203,7 @@ Target: Gates should add < 20% overhead to test execution
 
 ### Validation Checklist
 
-**Threshold Enforcement**:
+### Threshold Enforcement
 
 ```bash
 # Test with low coverage (should fail)
@@ -212,9 +217,9 @@ pytest --cov=scripts --cov-fail-under=50
 # Test with actual threshold
 pytest --cov=scripts --cov-fail-under=80
 # Expected: Pass if coverage >= 80%, fail otherwise
-```
+```text
 
-**Regression Detection**:
+### Regression Detection
 
 ```bash
 # Test regression detection
@@ -223,24 +228,24 @@ python scripts/check_coverage_regression.py \
   --baseline coverage-baseline.xml \
   --max-decrease 2.0
 
-# Test with various scenarios:
+# Test with various scenarios
 # 1. Coverage increased (should pass)
 # 2. Small decrease < 2% (should pass with warning)
 # 3. Large decrease > 2% (should fail)
-```
+```text
 
-**CI Integration**:
+### CI Integration
 
 ```bash
 # Test locally with act
 act -j test-with-coverage
 
-# Verify:
+# Verify
 # - Coverage collected
 # - Threshold checked
 # - Regression checked (if PR)
 # - Artifacts uploaded
-```
+```text
 
 ### Lessons Learned Template
 
@@ -336,11 +341,11 @@ Document in `/notes/issues/487/lessons-learned.md`:
 - Proceed to Coverage Master (Issue #488-492)
 - Monitor gate effectiveness
 - Gather team feedback on threshold appropriateness
-```
+```text
 
 ### Final Validation
 
-**Pre-completion checklist**:
+### Pre-completion checklist
 
 1. **Configuration Validated**:
    ```bash
@@ -349,23 +354,28 @@ Document in `/notes/issues/487/lessons-learned.md`:
 
    # Test threshold works
    pytest --cov=scripts --cov-fail-under=80
+
    ```
 
 2. **CI Gates Work**:
    ```bash
+
    # Simulate CI locally
    act -j test-with-coverage
 
    # Verify all steps pass/fail appropriately
+
    ```
 
 3. **Documentation Accurate**:
    ```bash
+
    # Test all examples
    bash -x docs/testing/coverage-examples.md
 
    # Check all links
    markdown-link-check docs/**/*.md
+
    ```
 
 4. **Performance Acceptable**:

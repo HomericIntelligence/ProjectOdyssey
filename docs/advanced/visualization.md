@@ -53,6 +53,7 @@ def plot_loss_curves(history: dict, output_path: str):
 Plot classification accuracy, precision, recall, and F1-score:
 
 ```python
+
 ```python
 
 def plot_metrics(metrics: dict, output_path: str):
@@ -113,6 +114,7 @@ def visualize_architecture(model, input_shape: tuple, output_path: str):
 Inspect weight distributions across layers:
 
 ```python
+
 ```python
 
 def plot_weight_distributions(model, output_path: str):
@@ -173,6 +175,7 @@ def plot_activation_maps(model, sample_input, layer_idx: int, output_path: str):
 Display raw training samples and their labels:
 
 ```python
+
 ```python
 
 def plot_dataset_samples(dataset, num_samples: int = 16, output_path: str = "samples.png"):
@@ -226,6 +229,7 @@ def plot_augmentation_comparison(original, augmented_list, output_path: str):
 Primary plotting library for static visualizations:
 
 ```python
+
 ```python
 
 import matplotlib.pyplot as plt
@@ -245,6 +249,7 @@ Array operations for preparing data:
 import numpy as np
 
 # Normalize images for visualization
+
 normalized = (image - image.min()) / (image.max() - image.min())
 
 ```text
@@ -254,6 +259,7 @@ normalized = (image - image.min()) / (image.max() - image.min())
 For real-time monitoring in Mojo projects:
 
 ```python
+
 ```python
 
 def log_metrics(step: int, metrics: dict, log_dir: str = "./logs"):

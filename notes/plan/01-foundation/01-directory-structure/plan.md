@@ -30,8 +30,8 @@ Create the complete directory structure for the Mojo AI Research Repository, inc
 ## Steps
 
 1. Create papers directory structure with template and documentation
-2. Create shared directory with all subdirectories for reusable components
-3. Create supporting directories for benchmarks, docs, agents, tools, and configs
+1. Create shared directory with all subdirectories for reusable components
+1. Create supporting directories for benchmarks, docs, agents, tools, and configs
 
 ## Success Criteria
 

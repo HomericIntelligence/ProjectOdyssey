@@ -33,9 +33,9 @@ Create an AI code review agent that analyzes implementations for correctness, pe
 ## Steps
 
 1. Configure agent with review criteria and tools
-2. Create prompt templates for correctness, performance, and style reviews
-3. Implement workflows for PR review and quality checks
-4. Write comprehensive tests for all review capabilities
+1. Create prompt templates for correctness, performance, and style reviews
+1. Implement workflows for PR review and quality checks
+1. Write comprehensive tests for all review capabilities
 
 ## Success Criteria
 

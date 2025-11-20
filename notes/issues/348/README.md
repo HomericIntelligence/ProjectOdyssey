@@ -31,14 +31,14 @@ without improvement, saving time and computing resources.
 
 **Decision**: Implement as a stateful callback with hook methods for epoch-level events.
 
-**Rationale**:
+### Rationale
 
 - Follows the established callback pattern from parent component design
 - Maintains clean separation from core training logic
 - Allows easy composition with other callbacks (checkpointing, logging)
 - Stateful design enables tracking of best metric, patience counter, and best weights
 
-**Key Components**:
+### Key Components
 
 - Metric tracker (stores best value and epoch)
 - Patience counter (tracks epochs without improvement)
@@ -49,14 +49,14 @@ without improvement, saving time and computing resources.
 
 **Decision**: Monitor metrics at epoch boundaries using validation results.
 
-**Rationale**:
+### Rationale
 
 - Validation metrics are computed once per epoch
 - Epoch-level granularity provides stable signal (less noisy than batch-level)
 - Aligns with typical early stopping usage in research papers
 - Simplifies implementation and state management
 
-**Hook Points**:
+### Hook Points
 
 - `on_validation_end(epoch, metrics)` - Primary hook for metric monitoring
 - `on_train_begin()` - Initialize state
@@ -66,23 +66,23 @@ without improvement, saving time and computing resources.
 
 **Decision**: Use configurable minimum delta threshold with mode-aware comparison.
 
-**Parameters**:
+### Parameters
 
 - `metric`: String name of metric to monitor (e.g., "val_loss", "val_accuracy")
 - `mode`: Enum ("minimize" or "maximize") - whether lower/higher is better
 - `min_delta`: Float threshold for considering improvement (default: 0.0)
 - `patience`: Int number of epochs without improvement before stopping (default: 10)
 
-**Logic**:
+### Logic
 
 ```text
 if mode == "minimize":
     improved = (current_metric < best_metric - min_delta)
 else:  # maximize
     improved = (current_metric > best_metric + min_delta)
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Min delta prevents stopping due to noise in validation metrics
 - Mode parameter makes the callback applicable to any metric type
@@ -92,17 +92,17 @@ else:  # maximize
 
 **Decision**: Optional best model restoration via configuration flag.
 
-**Parameters**:
+### Parameters
 
 - `restore_best_weights`: Bool flag (default: True)
 
-**Mechanism**:
+### Mechanism
 
 - When improvement detected, store deep copy of model weights
 - On early stopping trigger, restore weights from best epoch
 - Only cache weights when restoration is enabled (memory efficiency)
 
-**Rationale**:
+### Rationale
 
 - Common use case is training until validation plateaus, then using best weights
 - Optional to support cases where final weights are preferred
@@ -112,14 +112,14 @@ else:  # maximize
 
 **Decision**: Emit structured logging at key events with metadata export.
 
-**Log Events**:
+### Log Events
 
 - Improvement detected: "Epoch {epoch}: {metric} improved from {old_val} to {new_val}"
 - Patience increment: "Epoch {epoch}: No improvement ({counter}/{patience})"
 - Early stopping triggered: "Early stopping triggered at epoch {epoch}. Best {metric}: {best_val} at epoch {best_epoch}"
 - Best weights restored: "Restored model weights from epoch {best_epoch}"
 
-**Metadata Output**:
+### Metadata Output
 
 ```python
 {
@@ -130,9 +130,9 @@ else:  # maximize
     "patience_used": int,
     "patience_limit": int
 }
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Clear logging helps users understand stopping decisions
 - Metadata enables reproducibility and analysis
@@ -140,14 +140,14 @@ else:  # maximize
 
 ### 6. Edge Cases and Error Handling
 
-**Decisions**:
+### Decisions
 
 - **Missing metric**: Raise clear error if monitored metric not in validation results
 - **Invalid mode**: Validate mode parameter in constructor (only "minimize" or "maximize")
 - **Negative patience**: Validate patience > 0 in constructor
 - **No validation**: Skip monitoring if `on_validation_end` not called (warn once)
 
-**Rationale**:
+### Rationale
 
 - Fail fast with clear errors rather than silent failures
 - Validation at construction time prevents runtime surprises
@@ -157,7 +157,7 @@ else:  # maximize
 
 **Decision**: Use Mojo structs with owned/borrowed parameters following project patterns.
 
-**Key Patterns**:
+### Key Patterns
 
 ```mojo
 struct EarlyStoppingCallback(Callback):
@@ -197,9 +197,9 @@ struct EarlyStoppingCallback(Callback):
     fn get_metadata(self) -> Dict[String, Variant]:
         # Return structured metadata
         pass
-```
+```text
 
-**Rationale**:
+### Rationale
 
 - Struct-based design for value semantics and performance
 - Owned strings and state for clear ownership
@@ -259,21 +259,21 @@ Notes from cleanup and finalization will be added here
 
 ### Common Patterns from ML Frameworks
 
-**Keras EarlyStopping**:
+### Keras EarlyStopping
 
 - Monitors single metric with mode and min_delta
 - Patience counter for consecutive epochs without improvement
 - Optional restore_best_weights flag
 - Baseline parameter for minimum acceptable value
 
-**PyTorch Lightning EarlyStopping**:
+### PyTorch Lightning EarlyStopping
 
 - Similar to Keras with additional features
 - Strict mode (stop on first metric increase for minimize)
 - Check_on_train_epoch_end for training metric monitoring
 - Divergence threshold for detecting training instabilities
 
-**Design Takeaways**:
+### Design Takeaways
 
 - Core interface (metric, mode, patience, min_delta) is well-established
 - Best weights restoration is a standard feature
@@ -315,6 +315,6 @@ fn train(inout self, epochs: Int, callbacks: List[Callback]):
 
     for callback in callbacks:
         callback.on_train_end()
-```
+```text
 
 This design ensures clean separation between callback logic and trainer implementation.

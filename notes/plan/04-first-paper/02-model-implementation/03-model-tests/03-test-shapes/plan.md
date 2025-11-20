@@ -25,8 +25,8 @@ None (leaf node)
 ## Steps
 
 1. Test shapes after each layer
-2. Verify shape transformations
-3. Test with different input sizes
+1. Verify shape transformations
+1. Test with different input sizes
 
 ## Success Criteria
 

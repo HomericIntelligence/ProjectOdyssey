@@ -29,8 +29,8 @@ Establish a comprehensive testing framework for the shared library. This include
 ## Steps
 
 1. Set up test framework with utilities and fixtures
-2. Write unit tests for core operations, training utilities, and data utilities
-3. Configure coverage tracking with reporting and quality gates
+1. Write unit tests for core operations, training utilities, and data utilities
+1. Configure coverage tracking with reporting and quality gates
 
 ## Success Criteria
 

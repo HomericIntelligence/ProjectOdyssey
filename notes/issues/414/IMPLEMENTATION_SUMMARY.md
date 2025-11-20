@@ -9,11 +9,12 @@
 ## Objectives
 
 Implement text augmentation techniques for NLP data augmentation:
+
 1. Synonym replacement
-2. Random insertion
-3. Random swap
-4. Random deletion
-5. Composable pipeline support
+1. Random insertion
+1. Random swap
+1. Random deletion
+1. Composable pipeline support
 
 ## Deliverables
 
@@ -28,7 +29,7 @@ Implement text augmentation techniques for NLP data augmentation:
    - `RandomSynonymReplacement` - Replace with synonyms
    - `TextCompose`/`TextPipeline` - Sequential composition
 
-2. **Tests**: `/home/user/ml-odyssey/tests/shared/data/transforms/test_text_augmentations.mojo` (603 lines)
+1. **Tests**: `/home/user/ml-odyssey/tests/shared/data/transforms/test_text_augmentations.mojo` (603 lines)
    - 35 comprehensive tests covering all augmentations
    - Helper function tests
    - Probability-based application tests
@@ -37,7 +38,7 @@ Implement text augmentation techniques for NLP data augmentation:
    - Pipeline composition tests
    - Integration tests
 
-3. **Documentation**:
+1. **Documentation**:
    - `/home/user/ml-odyssey/notes/issues/414/README.md` - Test phase documentation
    - `/home/user/ml-odyssey/notes/issues/415/README.md` - Implementation phase documentation
    - `/home/user/ml-odyssey/notes/issues/414/IMPLEMENTATION_SUMMARY.md` - This file
@@ -47,30 +48,34 @@ Implement text augmentation techniques for NLP data augmentation:
 ### TextTransform Trait
 
 Created a separate trait for text transformations (parallel to `Transform` for Tensor):
+
 - **Input/Output**: String (not Tensor)
 - **Pattern**: Follows same composable design as image transforms
 - **Rationale**: Type mismatch prevents reusing existing `Transform` trait
 
 ### String Operations
 
-**Mojo API Usage**:
+### Mojo API Usage
+
 - `String.split(" ")` - Built-in method for tokenization
 - Manual join with string concatenation (no built-in join)
 - `len(String)` for length checks
 - List[String] for word collections
 
-**Avoided**:
+### Avoided
+
 - Character-by-character iteration (inconsistent API)
 - Python interop (against project principles)
 
 ### Randomness
 
 Consistent with image augmentations:
+
 ```mojo
 var rand_val = float(random_si64(0, 1000000)) / 1000000.0
 if rand_val >= self.p:
     return text  // Don't apply
-```
+```text
 
 ## Implementation Approach
 
@@ -103,16 +108,17 @@ if rand_val >= self.p:
 ### Test Categories (35 tests total)
 
 1. **Helper Functions** (6 tests) - split_words, join_words
-2. **RandomSwap** (5 tests) - basic, probability, edge cases, determinism
-3. **RandomDeletion** (6 tests) - basic, probability, preservation, edge cases, determinism
-4. **RandomInsertion** (5 tests) - basic, probability, edge cases, determinism
-5. **RandomSynonymReplacement** (5 tests) - basic, probability, no matches, edge cases, determinism
-6. **Pipeline/Composition** (3 tests) - sequential, determinism, alias
-7. **Integration** (2 tests) - all augmentations, word count preservation
+1. **RandomSwap** (5 tests) - basic, probability, edge cases, determinism
+1. **RandomDeletion** (6 tests) - basic, probability, preservation, edge cases, determinism
+1. **RandomInsertion** (5 tests) - basic, probability, edge cases, determinism
+1. **RandomSynonymReplacement** (5 tests) - basic, probability, no matches, edge cases, determinism
+1. **Pipeline/Composition** (3 tests) - sequential, determinism, alias
+1. **Integration** (2 tests) - all augmentations, word count preservation
 
 ### Test Patterns
 
 Following established image augmentation patterns:
+
 - **Probability testing**: p=0.0 (never), p=1.0 (always), p=0.5 (sometimes)
 - **Determinism**: Seeded random for reproducibility
 - **Edge cases**: Empty strings, single words, empty collections
@@ -137,11 +143,12 @@ transforms.append(RandomDeletion(0.2))
 
 var pipeline = TextPipeline(transforms)
 var augmented = pipeline(text)
-```
+```text
 
 ### Determinism
 
 All augmentations support seeded randomness for reproducibility:
+
 ```mojo
 TestFixtures.set_seed()
 var result1 = augmentation(text)
@@ -150,7 +157,7 @@ TestFixtures.set_seed()
 var result2 = augmentation(text)
 
 // result1 == result2 (deterministic)
-```
+```text
 
 ## Limitations
 
@@ -189,9 +196,9 @@ var result2 = augmentation(text)
 ### Follows Established Patterns
 
 1. **Trait-based design**: `TextTransform` mirrors `Transform`
-2. **Composition pattern**: `TextCompose` mirrors `Compose`
-3. **Probability pattern**: Same as image augmentations
-4. **Test patterns**: Consistent with `test_augmentations.mojo`
+1. **Composition pattern**: `TextCompose` mirrors `Compose`
+1. **Probability pattern**: Same as image augmentations
+1. **Test patterns**: Consistent with `test_augmentations.mojo`
 
 ### Compatible with Data Pipeline
 
@@ -204,7 +211,7 @@ var text_pipeline = TextPipeline(text_transforms)
 
 // Can be applied in data loader
 var augmented_text = text_pipeline(original_text)
-```
+```text
 
 ## Performance Considerations
 
@@ -226,6 +233,7 @@ var augmented_text = text_pipeline(original_text)
 ### Unit Tests
 
 Each augmentation tested independently:
+
 - Correct behavior
 - Probability adherence
 - Edge case handling
@@ -234,6 +242,7 @@ Each augmentation tested independently:
 ### Integration Tests
 
 Multiple augmentations combined:
+
 - Pipeline composition
 - Sequential application
 - Combined effects
@@ -242,6 +251,7 @@ Multiple augmentations combined:
 ### Edge Cases
 
 Thorough edge case coverage:
+
 - Empty strings
 - Single words
 - Empty vocabularies
@@ -251,12 +261,12 @@ Thorough edge case coverage:
 ## Next Steps
 
 1. **Verify compilation**: Run tests to ensure code compiles
-2. **Fix errors**: Address any Mojo API issues
-3. **Format code**: Run `mojo format` on all files
-4. **Create PR**: Link to issues #414 and #415
-5. **CI validation**: Ensure all tests pass in CI
-6. **Code review**: Address feedback
-7. **Merge**: Complete implementation phase
+1. **Fix errors**: Address any Mojo API issues
+1. **Format code**: Run `mojo format` on all files
+1. **Create PR**: Link to issues #414 and #415
+1. **CI validation**: Ensure all tests pass in CI
+1. **Code review**: Address feedback
+1. **Merge**: Complete implementation phase
 
 ## Conclusion
 

@@ -51,7 +51,7 @@ Review report configuration across files:
 grep -r "cov-report" pyproject.toml .coveragerc tox.ini setup.cfg
 
 # Consolidate to single location (pyproject.toml)
-```
+```text
 
 Ensure single source of truth:
 
@@ -75,7 +75,7 @@ skip_covered = false
 # HTML-specific settings here
 directory = "htmlcov"
 title = "ML Odyssey Coverage Report"
-```
+```text
 
 **2. Remove Temporary Solutions**
 
@@ -90,7 +90,7 @@ ls scripts/*_temp* scripts/*_test*
 
 # Find commented-out code
 grep -A 3 "^#.*cov" pyproject.toml
-```
+```text
 
 **3. Performance Validation**
 
@@ -104,7 +104,7 @@ time pytest tests/
 time pytest --cov=scripts --cov-report=html --cov-report=term
 
 # Calculate overhead
-```
+```text
 
 Target from Issue #478: < 10 seconds for report generation
 
@@ -121,7 +121,7 @@ markdown-link-check docs/testing/coverage-*.md
 
 # Validate code examples
 pytest --collect-only  # Ensure examples are valid
-```
+```text
 
 **5. Artifact Cleanup**
 
@@ -137,29 +137,33 @@ coverage.xml
 
 # CI artifacts (local testing)
 .pytest_cache/
-```
+```text
 
 ### Refactoring Checklist
 
-**Configuration**:
+### Configuration
+
 - [ ] Single source of truth for coverage config
 - [ ] No duplicate or conflicting settings
 - [ ] All settings have comments explaining purpose
 - [ ] Tested and validated
 
-**Scripts**:
+### Scripts
+
 - [ ] Remove debugging scripts
 - [ ] Remove temporary utilities
 - [ ] Keep only production-ready code
 - [ ] All scripts have docstrings
 
-**Documentation**:
+### Documentation
+
 - [ ] All guides are accurate
 - [ ] Examples work as documented
 - [ ] Links are valid
 - [ ] Troubleshooting reflects real issues
 
-**CI Workflow**:
+### CI Workflow
+
 - [ ] Optimized coverage collection
 - [ ] Artifact upload working
 - [ ] No unnecessary steps
@@ -202,16 +206,20 @@ Document in `/notes/issues/482/lessons-learned.md`:
 
 **Pattern 1: Layered Reporting**
 ```toml
+
 # Fast feedback: Console (skip fully covered)
+
 --cov-report=term-missing:skip-covered
 
 # Deep dive: HTML (full detail)
+
 --cov-report=html
 
 # CI integration: XML
---cov-report=xml
-```
 
+--cov-report=xml
+
+```text
 **Pattern 2: Progressive Enhancement**
 - Start with minimal config (term report)
 - Add HTML when needed
@@ -252,11 +260,11 @@ Document in `/notes/issues/482/lessons-learned.md`:
 - Proceed to Coverage Gates (Issue #483-487)
 - Monitor coverage trends after gates implemented
 - Revisit configuration if needs change
-```
+```text
 
 ### Final Validation
 
-**Pre-completion checklist**:
+### Pre-completion checklist
 
 1. **Configuration Clean**:
    ```bash
@@ -265,10 +273,12 @@ Document in `/notes/issues/482/lessons-learned.md`:
 
    # Test coverage collection
    pytest --cov=scripts --cov-report=term
+
    ```
 
 2. **Reports Generate**:
    ```bash
+
    # Console report
    pytest --cov=scripts --cov-report=term-missing
 
@@ -279,15 +289,18 @@ Document in `/notes/issues/482/lessons-learned.md`:
    # XML report
    pytest --cov=scripts --cov-report=xml
    ls coverage.xml
+
    ```
 
 3. **Documentation Accurate**:
    ```bash
+
    # Verify examples
    bash -x docs/testing/coverage-examples.md
 
    # Check links
    markdown-link-check docs/**/*.md
+
    ```
 
 4. **Performance Acceptable**:

@@ -4,14 +4,15 @@
 
 **No tests created** - Git LFS is intentionally not configured yet.
 
-**Why No Tests:**
+### Why No Tests:
+
 Git LFS is deferred until Section 04 (First Paper) when large files are introduced:
 
 1. **No large files exist** - Foundation phase has no model weights or datasets
-2. **Premature testing** - Can't test LFS without LFS-tracked files
-3. **Future testing** - Will validate when LFS is activated in Section 04
+1. **Premature testing** - Can't test LFS without LFS-tracked files
+1. **Future testing** - Will validate when LFS is activated in Section 04
 
-**Future Test Plan (When LFS is Activated):**
+### Future Test Plan (When LFS is Activated):
 
 ```bash
 # Test 1: Verify LFS is installed
@@ -29,9 +30,9 @@ git lfs track
 # Test 4: Check LFS status
 git lfs status
 # Expected: Status of LFS-tracked files
-```
+```text
 
-**Success Criteria:**
+### Success Criteria:
 
 - ✅ Test plan documented for future implementation
 - ✅ Testing deferred until LFS is needed
@@ -39,7 +40,7 @@ git lfs status
 
 **Status:** COMPLETE (no tests needed yet, plan documented)
 
-**References:**
+### References:
 
 - LFS not yet configured - see issue #138 for deferral rationale
 - Tests will be added when LFS is activated in Section 04
