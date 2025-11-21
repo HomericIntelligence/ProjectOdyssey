@@ -41,7 +41,7 @@ Create type-safe gradient container structs to replace tuple return types, follo
 
 ### Solution Architecture
 
-**File**: `/home/mvillmow/ml-odyssey/shared/core/gradient_types.mojo`
+**File**: `shared/core/gradient_types.mojo`
 
 Two struct types for different return arities:
 
@@ -191,7 +191,7 @@ All 6 test functions in `test_backward.mojo` updated:
 ## References
 
 - Mojo Language: Struct Types (https://docs.modular.com/mojo/manual/lifecycle.html)
-- Zero-Cost Abstractions: (https://en.wikipedia.org/wiki/Zero-cost_abstraction)
+- Zero-Cost Abstractions: (https://en.cppreference.com/w/cpp/language/Zero-overhead_principle)
 - Comparison with PyTorch tuple returns: https://pytorch.org/docs/stable/generated/torch.autograd.backward.html
 
 ## Related Issues
