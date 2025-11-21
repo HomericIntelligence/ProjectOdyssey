@@ -1,0 +1,1009 @@
+"""ResNet-18 Model for CIFAR-10 Classification
+
+ResNet-18 architecture adapted for CIFAR-10 dataset (32x32 RGB images).
+
+Architecture:
+    ResNet-18 uses residual blocks with skip connections to enable training
+    very deep networks. The key innovation is identity mapping that allows
+    gradients to flow directly through the network.
+
+    Input (32×32×3) →
+
+    Initial Block:
+        Conv2D(64, 3×3, stride=1, pad=1) → BatchNorm → ReLU
+
+    Stage 1 (64 channels, no downsampling):
+        ResBlock(64→64) → ResBlock(64→64)
+
+    Stage 2 (128 channels, downsample):
+        ResBlock(64→128, stride=2) → ResBlock(128→128)
+
+    Stage 3 (256 channels, downsample):
+        ResBlock(128→256, stride=2) → ResBlock(256→256)
+
+    Stage 4 (512 channels, downsample):
+        ResBlock(256→512, stride=2) → ResBlock(512→512)
+
+    Global Average Pool (4×4 → 1×1) →
+    Flatten (512) →
+    Linear(512 → 10)
+
+    Each ResBlock:
+        x → Conv3×3 → BN → ReLU → Conv3×3 → BN → (+x) → ReLU
+        If stride=2 or channels change:
+            x → Conv1×1(stride) → BN → (+) → ReLU  (projection shortcut)
+
+Key Innovation:
+    - Skip connections (residual learning)
+    - Identity mapping enables gradient flow
+    - Batch normalization after each convolution
+    - Solves vanishing gradient problem in deep networks
+
+References:
+    - He, K., Zhang, X., Ren, S., & Sun, J. (2015).
+      Deep residual learning for image recognition.
+      arXiv preprint arXiv:1512.03385.
+    - CIFAR-10 Dataset: https://www.cs.toronto.edu/~kriz/cifar.html
+"""
+
+from shared.core import ExTensor, zeros, ones
+from shared.core.conv import conv2d, conv2d_backward
+from shared.core.pooling import avgpool2d, avgpool2d_backward
+from shared.core.linear import linear, linear_backward
+from shared.core.activation import relu, relu_backward
+from shared.core.normalization import batch_norm2d
+from shared.core.initializers import he_uniform
+from shared.core.arithmetic import add  # For skip connections
+from shared.training.optimizers import sgd_momentum_update_inplace
+from collections.vector import DynamicVector
+from weights import save_tensor, load_tensor
+
+
+struct ResNet18:
+    """ResNet-18 model for CIFAR-10 classification.
+
+    Adapted for 32×32 input (vs 224×224 in original paper):
+    - Use 3×3 initial conv instead of 7×7
+    - Remove initial max pooling
+    - Keep 4 residual stages with 2 blocks each
+
+    Total layers: 1 (initial) + 8 (residual blocks) × 2 + 1 (FC) = 18 layers
+
+    Attributes:
+        num_classes: Number of output classes (10 for CIFAR-10)
+
+        # Initial convolution (6 params including BN)
+        conv1_kernel, conv1_bias: (64, 3, 3, 3)
+        bn1_gamma, bn1_beta, bn1_running_mean, bn1_running_var: (64,)
+
+        # Stage 1: 2 blocks, 64 channels (16 params, no projection)
+        # Stage 2: 2 blocks, 128 channels (20 params, block1 has projection)
+        # Stage 3: 2 blocks, 256 channels (20 params, block1 has projection)
+        # Stage 4: 2 blocks, 512 channels (20 params, block1 has projection)
+
+        # Fully connected (2 params)
+        fc_weights, fc_bias: (num_classes, 512)
+
+        Total trainable params: 6 + 16 + 20 + 20 + 20 + 2 = 84 parameters
+    """
+
+    var num_classes: Int
+
+    # Initial conv + BN (6 params)
+    var conv1_kernel: ExTensor
+    var conv1_bias: ExTensor
+    var bn1_gamma: ExTensor
+    var bn1_beta: ExTensor
+    var bn1_running_mean: ExTensor
+    var bn1_running_var: ExTensor
+
+    # ========== Stage 1 (64 channels): 2 blocks, no projection ==========
+    # Block 1 (8 params)
+    var s1b1_conv1_kernel: ExTensor
+    var s1b1_conv1_bias: ExTensor
+    var s1b1_bn1_gamma: ExTensor
+    var s1b1_bn1_beta: ExTensor
+    var s1b1_bn1_running_mean: ExTensor
+    var s1b1_bn1_running_var: ExTensor
+    var s1b1_conv2_kernel: ExTensor
+    var s1b1_conv2_bias: ExTensor
+    var s1b1_bn2_gamma: ExTensor
+    var s1b1_bn2_beta: ExTensor
+    var s1b1_bn2_running_mean: ExTensor
+    var s1b1_bn2_running_var: ExTensor
+
+    # Block 2 (8 params)
+    var s1b2_conv1_kernel: ExTensor
+    var s1b2_conv1_bias: ExTensor
+    var s1b2_bn1_gamma: ExTensor
+    var s1b2_bn1_beta: ExTensor
+    var s1b2_bn1_running_mean: ExTensor
+    var s1b2_bn1_running_var: ExTensor
+    var s1b2_conv2_kernel: ExTensor
+    var s1b2_conv2_bias: ExTensor
+    var s1b2_bn2_gamma: ExTensor
+    var s1b2_bn2_beta: ExTensor
+    var s1b2_bn2_running_mean: ExTensor
+    var s1b2_bn2_running_var: ExTensor
+
+    # ========== Stage 2 (128 channels): 2 blocks, block1 has projection ==========
+    # Block 1 (12 params: 8 main + 4 projection)
+    var s2b1_conv1_kernel: ExTensor
+    var s2b1_conv1_bias: ExTensor
+    var s2b1_bn1_gamma: ExTensor
+    var s2b1_bn1_beta: ExTensor
+    var s2b1_bn1_running_mean: ExTensor
+    var s2b1_bn1_running_var: ExTensor
+    var s2b1_conv2_kernel: ExTensor
+    var s2b1_conv2_bias: ExTensor
+    var s2b1_bn2_gamma: ExTensor
+    var s2b1_bn2_beta: ExTensor
+    var s2b1_bn2_running_mean: ExTensor
+    var s2b1_bn2_running_var: ExTensor
+    # Projection shortcut (4 params)
+    var s2b1_proj_kernel: ExTensor
+    var s2b1_proj_bias: ExTensor
+    var s2b1_proj_bn_gamma: ExTensor
+    var s2b1_proj_bn_beta: ExTensor
+    var s2b1_proj_bn_running_mean: ExTensor
+    var s2b1_proj_bn_running_var: ExTensor
+
+    # Block 2 (8 params)
+    var s2b2_conv1_kernel: ExTensor
+    var s2b2_conv1_bias: ExTensor
+    var s2b2_bn1_gamma: ExTensor
+    var s2b2_bn1_beta: ExTensor
+    var s2b2_bn1_running_mean: ExTensor
+    var s2b2_bn1_running_var: ExTensor
+    var s2b2_conv2_kernel: ExTensor
+    var s2b2_conv2_bias: ExTensor
+    var s2b2_bn2_gamma: ExTensor
+    var s2b2_bn2_beta: ExTensor
+    var s2b2_bn2_running_mean: ExTensor
+    var s2b2_bn2_running_var: ExTensor
+
+    # ========== Stage 3 (256 channels): 2 blocks, block1 has projection ==========
+    # Block 1 (12 params: 8 main + 4 projection)
+    var s3b1_conv1_kernel: ExTensor
+    var s3b1_conv1_bias: ExTensor
+    var s3b1_bn1_gamma: ExTensor
+    var s3b1_bn1_beta: ExTensor
+    var s3b1_bn1_running_mean: ExTensor
+    var s3b1_bn1_running_var: ExTensor
+    var s3b1_conv2_kernel: ExTensor
+    var s3b1_conv2_bias: ExTensor
+    var s3b1_bn2_gamma: ExTensor
+    var s3b1_bn2_beta: ExTensor
+    var s3b1_bn2_running_mean: ExTensor
+    var s3b1_bn2_running_var: ExTensor
+    # Projection shortcut (4 params)
+    var s3b1_proj_kernel: ExTensor
+    var s3b1_proj_bias: ExTensor
+    var s3b1_proj_bn_gamma: ExTensor
+    var s3b1_proj_bn_beta: ExTensor
+    var s3b1_proj_bn_running_mean: ExTensor
+    var s3b1_proj_bn_running_var: ExTensor
+
+    # Block 2 (8 params)
+    var s3b2_conv1_kernel: ExTensor
+    var s3b2_conv1_bias: ExTensor
+    var s3b2_bn1_gamma: ExTensor
+    var s3b2_bn1_beta: ExTensor
+    var s3b2_bn1_running_mean: ExTensor
+    var s3b2_bn1_running_var: ExTensor
+    var s3b2_conv2_kernel: ExTensor
+    var s3b2_conv2_bias: ExTensor
+    var s3b2_bn2_gamma: ExTensor
+    var s3b2_bn2_beta: ExTensor
+    var s3b2_bn2_running_mean: ExTensor
+    var s3b2_bn2_running_var: ExTensor
+
+    # ========== Stage 4 (512 channels): 2 blocks, block1 has projection ==========
+    # Block 1 (12 params: 8 main + 4 projection)
+    var s4b1_conv1_kernel: ExTensor
+    var s4b1_conv1_bias: ExTensor
+    var s4b1_bn1_gamma: ExTensor
+    var s4b1_bn1_beta: ExTensor
+    var s4b1_bn1_running_mean: ExTensor
+    var s4b1_bn1_running_var: ExTensor
+    var s4b1_conv2_kernel: ExTensor
+    var s4b1_conv2_bias: ExTensor
+    var s4b1_bn2_gamma: ExTensor
+    var s4b1_bn2_beta: ExTensor
+    var s4b1_bn2_running_mean: ExTensor
+    var s4b1_bn2_running_var: ExTensor
+    # Projection shortcut (4 params)
+    var s4b1_proj_kernel: ExTensor
+    var s4b1_proj_bias: ExTensor
+    var s4b1_proj_bn_gamma: ExTensor
+    var s4b1_proj_bn_beta: ExTensor
+    var s4b1_proj_bn_running_mean: ExTensor
+    var s4b1_proj_bn_running_var: ExTensor
+
+    # Block 2 (8 params)
+    var s4b2_conv1_kernel: ExTensor
+    var s4b2_conv1_bias: ExTensor
+    var s4b2_bn1_gamma: ExTensor
+    var s4b2_bn1_beta: ExTensor
+    var s4b2_bn1_running_mean: ExTensor
+    var s4b2_bn1_running_var: ExTensor
+    var s4b2_conv2_kernel: ExTensor
+    var s4b2_conv2_bias: ExTensor
+    var s4b2_bn2_gamma: ExTensor
+    var s4b2_bn2_beta: ExTensor
+    var s4b2_bn2_running_mean: ExTensor
+    var s4b2_bn2_running_var: ExTensor
+
+    # FC layer (2 params)
+    var fc_weights: ExTensor
+    var fc_bias: ExTensor
+
+    fn __init__(inout self, num_classes: Int = 10) raises:
+        """Initialize ResNet-18 model with random weights.
+
+        Args:
+            num_classes: Number of output classes (default: 10 for CIFAR-10)
+        """
+        self.num_classes = num_classes
+
+        # ========== Initial conv: 3 → 64 channels, 3×3 kernel ==========
+        var conv1_shape = DynamicVector[Int](4)
+        conv1_shape.push_back(64)   # out_channels
+        conv1_shape.push_back(3)    # in_channels (RGB)
+        conv1_shape.push_back(3)    # kernel_height
+        conv1_shape.push_back(3)    # kernel_width
+        self.conv1_kernel = he_uniform(conv1_shape, DType.float32)
+
+        var conv1_bias_shape = DynamicVector[Int](1)
+        conv1_bias_shape.push_back(64)
+        self.conv1_bias = zeros(conv1_bias_shape, DType.float32)
+
+        var bn1_shape = DynamicVector[Int](1)
+        bn1_shape.push_back(64)
+        self.bn1_gamma = ones(bn1_shape, DType.float32)
+        self.bn1_beta = zeros(bn1_shape, DType.float32)
+        self.bn1_running_mean = zeros(bn1_shape, DType.float32)
+        self.bn1_running_var = ones(bn1_shape, DType.float32)
+
+        # ========== Stage 1: 64 → 64 (no projection) ==========
+        # Block 1
+        var s1_shape = DynamicVector[Int](4)
+        s1_shape.push_back(64); s1_shape.push_back(64)
+        s1_shape.push_back(3); s1_shape.push_back(3)
+
+        var s1_bias_shape = DynamicVector[Int](1)
+        s1_bias_shape.push_back(64)
+
+        var s1_bn_shape = DynamicVector[Int](1)
+        s1_bn_shape.push_back(64)
+
+        self.s1b1_conv1_kernel = he_uniform(s1_shape, DType.float32)
+        self.s1b1_conv1_bias = zeros(s1_bias_shape, DType.float32)
+        self.s1b1_bn1_gamma = ones(s1_bn_shape, DType.float32)
+        self.s1b1_bn1_beta = zeros(s1_bn_shape, DType.float32)
+        self.s1b1_bn1_running_mean = zeros(s1_bn_shape, DType.float32)
+        self.s1b1_bn1_running_var = ones(s1_bn_shape, DType.float32)
+
+        self.s1b1_conv2_kernel = he_uniform(s1_shape, DType.float32)
+        self.s1b1_conv2_bias = zeros(s1_bias_shape, DType.float32)
+        self.s1b1_bn2_gamma = ones(s1_bn_shape, DType.float32)
+        self.s1b1_bn2_beta = zeros(s1_bn_shape, DType.float32)
+        self.s1b1_bn2_running_mean = zeros(s1_bn_shape, DType.float32)
+        self.s1b1_bn2_running_var = ones(s1_bn_shape, DType.float32)
+
+        # Block 2
+        self.s1b2_conv1_kernel = he_uniform(s1_shape, DType.float32)
+        self.s1b2_conv1_bias = zeros(s1_bias_shape, DType.float32)
+        self.s1b2_bn1_gamma = ones(s1_bn_shape, DType.float32)
+        self.s1b2_bn1_beta = zeros(s1_bn_shape, DType.float32)
+        self.s1b2_bn1_running_mean = zeros(s1_bn_shape, DType.float32)
+        self.s1b2_bn1_running_var = ones(s1_bn_shape, DType.float32)
+
+        self.s1b2_conv2_kernel = he_uniform(s1_shape, DType.float32)
+        self.s1b2_conv2_bias = zeros(s1_bias_shape, DType.float32)
+        self.s1b2_bn2_gamma = ones(s1_bn_shape, DType.float32)
+        self.s1b2_bn2_beta = zeros(s1_bn_shape, DType.float32)
+        self.s1b2_bn2_running_mean = zeros(s1_bn_shape, DType.float32)
+        self.s1b2_bn2_running_var = ones(s1_bn_shape, DType.float32)
+
+        # ========== Stage 2: 64 → 128 → 128 (block1 has projection) ==========
+        # Block 1 (stride=2 for first conv)
+        var s2b1_conv1_shape = DynamicVector[Int](4)
+        s2b1_conv1_shape.push_back(128); s2b1_conv1_shape.push_back(64)
+        s2b1_conv1_shape.push_back(3); s2b1_conv1_shape.push_back(3)
+
+        var s2b1_conv2_shape = DynamicVector[Int](4)
+        s2b1_conv2_shape.push_back(128); s2b1_conv2_shape.push_back(128)
+        s2b1_conv2_shape.push_back(3); s2b1_conv2_shape.push_back(3)
+
+        var s2_bias_shape = DynamicVector[Int](1)
+        s2_bias_shape.push_back(128)
+
+        var s2_bn_shape = DynamicVector[Int](1)
+        s2_bn_shape.push_back(128)
+
+        self.s2b1_conv1_kernel = he_uniform(s2b1_conv1_shape, DType.float32)
+        self.s2b1_conv1_bias = zeros(s2_bias_shape, DType.float32)
+        self.s2b1_bn1_gamma = ones(s2_bn_shape, DType.float32)
+        self.s2b1_bn1_beta = zeros(s2_bn_shape, DType.float32)
+        self.s2b1_bn1_running_mean = zeros(s2_bn_shape, DType.float32)
+        self.s2b1_bn1_running_var = ones(s2_bn_shape, DType.float32)
+
+        self.s2b1_conv2_kernel = he_uniform(s2b1_conv2_shape, DType.float32)
+        self.s2b1_conv2_bias = zeros(s2_bias_shape, DType.float32)
+        self.s2b1_bn2_gamma = ones(s2_bn_shape, DType.float32)
+        self.s2b1_bn2_beta = zeros(s2_bn_shape, DType.float32)
+        self.s2b1_bn2_running_mean = zeros(s2_bn_shape, DType.float32)
+        self.s2b1_bn2_running_var = ones(s2_bn_shape, DType.float32)
+
+        # Projection shortcut: 1×1 conv, 64→128, stride=2
+        var s2b1_proj_shape = DynamicVector[Int](4)
+        s2b1_proj_shape.push_back(128); s2b1_proj_shape.push_back(64)
+        s2b1_proj_shape.push_back(1); s2b1_proj_shape.push_back(1)
+
+        self.s2b1_proj_kernel = he_uniform(s2b1_proj_shape, DType.float32)
+        self.s2b1_proj_bias = zeros(s2_bias_shape, DType.float32)
+        self.s2b1_proj_bn_gamma = ones(s2_bn_shape, DType.float32)
+        self.s2b1_proj_bn_beta = zeros(s2_bn_shape, DType.float32)
+        self.s2b1_proj_bn_running_mean = zeros(s2_bn_shape, DType.float32)
+        self.s2b1_proj_bn_running_var = ones(s2_bn_shape, DType.float32)
+
+        # Block 2
+        self.s2b2_conv1_kernel = he_uniform(s2b1_conv2_shape, DType.float32)
+        self.s2b2_conv1_bias = zeros(s2_bias_shape, DType.float32)
+        self.s2b2_bn1_gamma = ones(s2_bn_shape, DType.float32)
+        self.s2b2_bn1_beta = zeros(s2_bn_shape, DType.float32)
+        self.s2b2_bn1_running_mean = zeros(s2_bn_shape, DType.float32)
+        self.s2b2_bn1_running_var = ones(s2_bn_shape, DType.float32)
+
+        self.s2b2_conv2_kernel = he_uniform(s2b1_conv2_shape, DType.float32)
+        self.s2b2_conv2_bias = zeros(s2_bias_shape, DType.float32)
+        self.s2b2_bn2_gamma = ones(s2_bn_shape, DType.float32)
+        self.s2b2_bn2_beta = zeros(s2_bn_shape, DType.float32)
+        self.s2b2_bn2_running_mean = zeros(s2_bn_shape, DType.float32)
+        self.s2b2_bn2_running_var = ones(s2_bn_shape, DType.float32)
+
+        # ========== Stage 3: 128 → 256 → 256 (block1 has projection) ==========
+        # Block 1 (stride=2 for first conv)
+        var s3b1_conv1_shape = DynamicVector[Int](4)
+        s3b1_conv1_shape.push_back(256); s3b1_conv1_shape.push_back(128)
+        s3b1_conv1_shape.push_back(3); s3b1_conv1_shape.push_back(3)
+
+        var s3b1_conv2_shape = DynamicVector[Int](4)
+        s3b1_conv2_shape.push_back(256); s3b1_conv2_shape.push_back(256)
+        s3b1_conv2_shape.push_back(3); s3b1_conv2_shape.push_back(3)
+
+        var s3_bias_shape = DynamicVector[Int](1)
+        s3_bias_shape.push_back(256)
+
+        var s3_bn_shape = DynamicVector[Int](1)
+        s3_bn_shape.push_back(256)
+
+        self.s3b1_conv1_kernel = he_uniform(s3b1_conv1_shape, DType.float32)
+        self.s3b1_conv1_bias = zeros(s3_bias_shape, DType.float32)
+        self.s3b1_bn1_gamma = ones(s3_bn_shape, DType.float32)
+        self.s3b1_bn1_beta = zeros(s3_bn_shape, DType.float32)
+        self.s3b1_bn1_running_mean = zeros(s3_bn_shape, DType.float32)
+        self.s3b1_bn1_running_var = ones(s3_bn_shape, DType.float32)
+
+        self.s3b1_conv2_kernel = he_uniform(s3b1_conv2_shape, DType.float32)
+        self.s3b1_conv2_bias = zeros(s3_bias_shape, DType.float32)
+        self.s3b1_bn2_gamma = ones(s3_bn_shape, DType.float32)
+        self.s3b1_bn2_beta = zeros(s3_bn_shape, DType.float32)
+        self.s3b1_bn2_running_mean = zeros(s3_bn_shape, DType.float32)
+        self.s3b1_bn2_running_var = ones(s3_bn_shape, DType.float32)
+
+        # Projection shortcut: 1×1 conv, 128→256, stride=2
+        var s3b1_proj_shape = DynamicVector[Int](4)
+        s3b1_proj_shape.push_back(256); s3b1_proj_shape.push_back(128)
+        s3b1_proj_shape.push_back(1); s3b1_proj_shape.push_back(1)
+
+        self.s3b1_proj_kernel = he_uniform(s3b1_proj_shape, DType.float32)
+        self.s3b1_proj_bias = zeros(s3_bias_shape, DType.float32)
+        self.s3b1_proj_bn_gamma = ones(s3_bn_shape, DType.float32)
+        self.s3b1_proj_bn_beta = zeros(s3_bn_shape, DType.float32)
+        self.s3b1_proj_bn_running_mean = zeros(s3_bn_shape, DType.float32)
+        self.s3b1_proj_bn_running_var = ones(s3_bn_shape, DType.float32)
+
+        # Block 2
+        self.s3b2_conv1_kernel = he_uniform(s3b1_conv2_shape, DType.float32)
+        self.s3b2_conv1_bias = zeros(s3_bias_shape, DType.float32)
+        self.s3b2_bn1_gamma = ones(s3_bn_shape, DType.float32)
+        self.s3b2_bn1_beta = zeros(s3_bn_shape, DType.float32)
+        self.s3b2_bn1_running_mean = zeros(s3_bn_shape, DType.float32)
+        self.s3b2_bn1_running_var = ones(s3_bn_shape, DType.float32)
+
+        self.s3b2_conv2_kernel = he_uniform(s3b1_conv2_shape, DType.float32)
+        self.s3b2_conv2_bias = zeros(s3_bias_shape, DType.float32)
+        self.s3b2_bn2_gamma = ones(s3_bn_shape, DType.float32)
+        self.s3b2_bn2_beta = zeros(s3_bn_shape, DType.float32)
+        self.s3b2_bn2_running_mean = zeros(s3_bn_shape, DType.float32)
+        self.s3b2_bn2_running_var = ones(s3_bn_shape, DType.float32)
+
+        # ========== Stage 4: 256 → 512 → 512 (block1 has projection) ==========
+        # Block 1 (stride=2 for first conv)
+        var s4b1_conv1_shape = DynamicVector[Int](4)
+        s4b1_conv1_shape.push_back(512); s4b1_conv1_shape.push_back(256)
+        s4b1_conv1_shape.push_back(3); s4b1_conv1_shape.push_back(3)
+
+        var s4b1_conv2_shape = DynamicVector[Int](4)
+        s4b1_conv2_shape.push_back(512); s4b1_conv2_shape.push_back(512)
+        s4b1_conv2_shape.push_back(3); s4b1_conv2_shape.push_back(3)
+
+        var s4_bias_shape = DynamicVector[Int](1)
+        s4_bias_shape.push_back(512)
+
+        var s4_bn_shape = DynamicVector[Int](1)
+        s4_bn_shape.push_back(512)
+
+        self.s4b1_conv1_kernel = he_uniform(s4b1_conv1_shape, DType.float32)
+        self.s4b1_conv1_bias = zeros(s4_bias_shape, DType.float32)
+        self.s4b1_bn1_gamma = ones(s4_bn_shape, DType.float32)
+        self.s4b1_bn1_beta = zeros(s4_bn_shape, DType.float32)
+        self.s4b1_bn1_running_mean = zeros(s4_bn_shape, DType.float32)
+        self.s4b1_bn1_running_var = ones(s4_bn_shape, DType.float32)
+
+        self.s4b1_conv2_kernel = he_uniform(s4b1_conv2_shape, DType.float32)
+        self.s4b1_conv2_bias = zeros(s4_bias_shape, DType.float32)
+        self.s4b1_bn2_gamma = ones(s4_bn_shape, DType.float32)
+        self.s4b1_bn2_beta = zeros(s4_bn_shape, DType.float32)
+        self.s4b1_bn2_running_mean = zeros(s4_bn_shape, DType.float32)
+        self.s4b1_bn2_running_var = ones(s4_bn_shape, DType.float32)
+
+        # Projection shortcut: 1×1 conv, 256→512, stride=2
+        var s4b1_proj_shape = DynamicVector[Int](4)
+        s4b1_proj_shape.push_back(512); s4b1_proj_shape.push_back(256)
+        s4b1_proj_shape.push_back(1); s4b1_proj_shape.push_back(1)
+
+        self.s4b1_proj_kernel = he_uniform(s4b1_proj_shape, DType.float32)
+        self.s4b1_proj_bias = zeros(s4_bias_shape, DType.float32)
+        self.s4b1_proj_bn_gamma = ones(s4_bn_shape, DType.float32)
+        self.s4b1_proj_bn_beta = zeros(s4_bn_shape, DType.float32)
+        self.s4b1_proj_bn_running_mean = zeros(s4_bn_shape, DType.float32)
+        self.s4b1_proj_bn_running_var = ones(s4_bn_shape, DType.float32)
+
+        # Block 2
+        self.s4b2_conv1_kernel = he_uniform(s4b1_conv2_shape, DType.float32)
+        self.s4b2_conv1_bias = zeros(s4_bias_shape, DType.float32)
+        self.s4b2_bn1_gamma = ones(s4_bn_shape, DType.float32)
+        self.s4b2_bn1_beta = zeros(s4_bn_shape, DType.float32)
+        self.s4b2_bn1_running_mean = zeros(s4_bn_shape, DType.float32)
+        self.s4b2_bn1_running_var = ones(s4_bn_shape, DType.float32)
+
+        self.s4b2_conv2_kernel = he_uniform(s4b1_conv2_shape, DType.float32)
+        self.s4b2_conv2_bias = zeros(s4_bias_shape, DType.float32)
+        self.s4b2_bn2_gamma = ones(s4_bn_shape, DType.float32)
+        self.s4b2_bn2_beta = zeros(s4_bn_shape, DType.float32)
+        self.s4b2_bn2_running_mean = zeros(s4_bn_shape, DType.float32)
+        self.s4b2_bn2_running_var = ones(s4_bn_shape, DType.float32)
+
+        # ========== FC layer: 512 → num_classes ==========
+        var fc_shape = DynamicVector[Int](2)
+        fc_shape.push_back(num_classes)
+        fc_shape.push_back(512)
+        self.fc_weights = he_uniform(fc_shape, DType.float32)
+
+        var fc_bias_shape = DynamicVector[Int](1)
+        fc_bias_shape.push_back(num_classes)
+        self.fc_bias = zeros(fc_bias_shape, DType.float32)
+
+    fn forward(inout self, borrowed input: ExTensor, training: Bool = True) raises -> ExTensor:
+        """Forward pass through ResNet-18.
+
+        Args:
+            input: Input tensor of shape (batch, 3, 32, 32)
+            training: Whether in training mode (updates BN running stats)
+
+        Returns:
+            Output logits of shape (batch, num_classes)
+
+        Forward pass flow:
+            Input (batch, 3, 32, 32) →
+            Conv1+BN+ReLU → (batch, 64, 32, 32) →
+            Stage1 → (batch, 64, 32, 32) →
+            Stage2 → (batch, 128, 16, 16) →
+            Stage3 → (batch, 256, 8, 8) →
+            Stage4 → (batch, 512, 4, 4) →
+            GAP → (batch, 512, 1, 1) →
+            Flatten → (batch, 512) →
+            FC → (batch, num_classes)
+        """
+        # ========== Initial conv + BN + ReLU ==========
+        var conv1 = conv2d(input, self.conv1_kernel, self.conv1_bias, stride=1, padding=1)
+        var bn1_result = batch_norm2d(
+            conv1, self.bn1_gamma, self.bn1_beta,
+            self.bn1_running_mean, self.bn1_running_var,
+            training=training
+        )
+        var bn1 = bn1_result[0]
+        self.bn1_running_mean = bn1_result[1]
+        self.bn1_running_var = bn1_result[2]
+        var relu1 = relu(bn1)
+
+        # ========== Stage 1, Block 1 (identity shortcut) ==========
+        var s1b1_conv1 = conv2d(relu1, self.s1b1_conv1_kernel, self.s1b1_conv1_bias, stride=1, padding=1)
+        var s1b1_bn1_result = batch_norm2d(
+            s1b1_conv1, self.s1b1_bn1_gamma, self.s1b1_bn1_beta,
+            self.s1b1_bn1_running_mean, self.s1b1_bn1_running_var,
+            training=training
+        )
+        var s1b1_bn1 = s1b1_bn1_result[0]
+        self.s1b1_bn1_running_mean = s1b1_bn1_result[1]
+        self.s1b1_bn1_running_var = s1b1_bn1_result[2]
+        var s1b1_relu1 = relu(s1b1_bn1)
+
+        var s1b1_conv2 = conv2d(s1b1_relu1, self.s1b1_conv2_kernel, self.s1b1_conv2_bias, stride=1, padding=1)
+        var s1b1_bn2_result = batch_norm2d(
+            s1b1_conv2, self.s1b1_bn2_gamma, self.s1b1_bn2_beta,
+            self.s1b1_bn2_running_mean, self.s1b1_bn2_running_var,
+            training=training
+        )
+        var s1b1_bn2 = s1b1_bn2_result[0]
+        self.s1b1_bn2_running_mean = s1b1_bn2_result[1]
+        self.s1b1_bn2_running_var = s1b1_bn2_result[2]
+
+        var s1b1_skip = add(s1b1_bn2, relu1)
+        var s1b1_out = relu(s1b1_skip)
+
+        # ========== Stage 1, Block 2 (identity shortcut) ==========
+        var s1b2_conv1 = conv2d(s1b1_out, self.s1b2_conv1_kernel, self.s1b2_conv1_bias, stride=1, padding=1)
+        var s1b2_bn1_result = batch_norm2d(
+            s1b2_conv1, self.s1b2_bn1_gamma, self.s1b2_bn1_beta,
+            self.s1b2_bn1_running_mean, self.s1b2_bn1_running_var,
+            training=training
+        )
+        var s1b2_bn1 = s1b2_bn1_result[0]
+        self.s1b2_bn1_running_mean = s1b2_bn1_result[1]
+        self.s1b2_bn1_running_var = s1b2_bn1_result[2]
+        var s1b2_relu1 = relu(s1b2_bn1)
+
+        var s1b2_conv2 = conv2d(s1b2_relu1, self.s1b2_conv2_kernel, self.s1b2_conv2_bias, stride=1, padding=1)
+        var s1b2_bn2_result = batch_norm2d(
+            s1b2_conv2, self.s1b2_bn2_gamma, self.s1b2_bn2_beta,
+            self.s1b2_bn2_running_mean, self.s1b2_bn2_running_var,
+            training=training
+        )
+        var s1b2_bn2 = s1b2_bn2_result[0]
+        self.s1b2_bn2_running_mean = s1b2_bn2_result[1]
+        self.s1b2_bn2_running_var = s1b2_bn2_result[2]
+
+        var s1b2_skip = add(s1b2_bn2, s1b1_out)
+        var s1b2_out = relu(s1b2_skip)
+
+        # ========== Stage 2, Block 1 (projection shortcut, stride=2) ==========
+        var s2b1_conv1 = conv2d(s1b2_out, self.s2b1_conv1_kernel, self.s2b1_conv1_bias, stride=2, padding=1)
+        var s2b1_bn1_result = batch_norm2d(
+            s2b1_conv1, self.s2b1_bn1_gamma, self.s2b1_bn1_beta,
+            self.s2b1_bn1_running_mean, self.s2b1_bn1_running_var,
+            training=training
+        )
+        var s2b1_bn1 = s2b1_bn1_result[0]
+        self.s2b1_bn1_running_mean = s2b1_bn1_result[1]
+        self.s2b1_bn1_running_var = s2b1_bn1_result[2]
+        var s2b1_relu1 = relu(s2b1_bn1)
+
+        var s2b1_conv2 = conv2d(s2b1_relu1, self.s2b1_conv2_kernel, self.s2b1_conv2_bias, stride=1, padding=1)
+        var s2b1_bn2_result = batch_norm2d(
+            s2b1_conv2, self.s2b1_bn2_gamma, self.s2b1_bn2_beta,
+            self.s2b1_bn2_running_mean, self.s2b1_bn2_running_var,
+            training=training
+        )
+        var s2b1_bn2 = s2b1_bn2_result[0]
+        self.s2b1_bn2_running_mean = s2b1_bn2_result[1]
+        self.s2b1_bn2_running_var = s2b1_bn2_result[2]
+
+        # Projection shortcut: 1×1 conv, stride=2
+        var s2b1_proj_conv = conv2d(s1b2_out, self.s2b1_proj_kernel, self.s2b1_proj_bias, stride=2, padding=0)
+        var s2b1_proj_bn_result = batch_norm2d(
+            s2b1_proj_conv, self.s2b1_proj_bn_gamma, self.s2b1_proj_bn_beta,
+            self.s2b1_proj_bn_running_mean, self.s2b1_proj_bn_running_var,
+            training=training
+        )
+        var s2b1_proj_bn = s2b1_proj_bn_result[0]
+        self.s2b1_proj_bn_running_mean = s2b1_proj_bn_result[1]
+        self.s2b1_proj_bn_running_var = s2b1_proj_bn_result[2]
+
+        var s2b1_skip = add(s2b1_bn2, s2b1_proj_bn)
+        var s2b1_out = relu(s2b1_skip)
+
+        # ========== Stage 2, Block 2 (identity shortcut) ==========
+        var s2b2_conv1 = conv2d(s2b1_out, self.s2b2_conv1_kernel, self.s2b2_conv1_bias, stride=1, padding=1)
+        var s2b2_bn1_result = batch_norm2d(
+            s2b2_conv1, self.s2b2_bn1_gamma, self.s2b2_bn1_beta,
+            self.s2b2_bn1_running_mean, self.s2b2_bn1_running_var,
+            training=training
+        )
+        var s2b2_bn1 = s2b2_bn1_result[0]
+        self.s2b2_bn1_running_mean = s2b2_bn1_result[1]
+        self.s2b2_bn1_running_var = s2b2_bn1_result[2]
+        var s2b2_relu1 = relu(s2b2_bn1)
+
+        var s2b2_conv2 = conv2d(s2b2_relu1, self.s2b2_conv2_kernel, self.s2b2_conv2_bias, stride=1, padding=1)
+        var s2b2_bn2_result = batch_norm2d(
+            s2b2_conv2, self.s2b2_bn2_gamma, self.s2b2_bn2_beta,
+            self.s2b2_bn2_running_mean, self.s2b2_bn2_running_var,
+            training=training
+        )
+        var s2b2_bn2 = s2b2_bn2_result[0]
+        self.s2b2_bn2_running_mean = s2b2_bn2_result[1]
+        self.s2b2_bn2_running_var = s2b2_bn2_result[2]
+
+        var s2b2_skip = add(s2b2_bn2, s2b1_out)
+        var s2b2_out = relu(s2b2_skip)
+
+        # ========== Stage 3, Block 1 (projection shortcut, stride=2) ==========
+        var s3b1_conv1 = conv2d(s2b2_out, self.s3b1_conv1_kernel, self.s3b1_conv1_bias, stride=2, padding=1)
+        var s3b1_bn1_result = batch_norm2d(
+            s3b1_conv1, self.s3b1_bn1_gamma, self.s3b1_bn1_beta,
+            self.s3b1_bn1_running_mean, self.s3b1_bn1_running_var,
+            training=training
+        )
+        var s3b1_bn1 = s3b1_bn1_result[0]
+        self.s3b1_bn1_running_mean = s3b1_bn1_result[1]
+        self.s3b1_bn1_running_var = s3b1_bn1_result[2]
+        var s3b1_relu1 = relu(s3b1_bn1)
+
+        var s3b1_conv2 = conv2d(s3b1_relu1, self.s3b1_conv2_kernel, self.s3b1_conv2_bias, stride=1, padding=1)
+        var s3b1_bn2_result = batch_norm2d(
+            s3b1_conv2, self.s3b1_bn2_gamma, self.s3b1_bn2_beta,
+            self.s3b1_bn2_running_mean, self.s3b1_bn2_running_var,
+            training=training
+        )
+        var s3b1_bn2 = s3b1_bn2_result[0]
+        self.s3b1_bn2_running_mean = s3b1_bn2_result[1]
+        self.s3b1_bn2_running_var = s3b1_bn2_result[2]
+
+        # Projection shortcut: 1×1 conv, stride=2
+        var s3b1_proj_conv = conv2d(s2b2_out, self.s3b1_proj_kernel, self.s3b1_proj_bias, stride=2, padding=0)
+        var s3b1_proj_bn_result = batch_norm2d(
+            s3b1_proj_conv, self.s3b1_proj_bn_gamma, self.s3b1_proj_bn_beta,
+            self.s3b1_proj_bn_running_mean, self.s3b1_proj_bn_running_var,
+            training=training
+        )
+        var s3b1_proj_bn = s3b1_proj_bn_result[0]
+        self.s3b1_proj_bn_running_mean = s3b1_proj_bn_result[1]
+        self.s3b1_proj_bn_running_var = s3b1_proj_bn_result[2]
+
+        var s3b1_skip = add(s3b1_bn2, s3b1_proj_bn)
+        var s3b1_out = relu(s3b1_skip)
+
+        # ========== Stage 3, Block 2 (identity shortcut) ==========
+        var s3b2_conv1 = conv2d(s3b1_out, self.s3b2_conv1_kernel, self.s3b2_conv1_bias, stride=1, padding=1)
+        var s3b2_bn1_result = batch_norm2d(
+            s3b2_conv1, self.s3b2_bn1_gamma, self.s3b2_bn1_beta,
+            self.s3b2_bn1_running_mean, self.s3b2_bn1_running_var,
+            training=training
+        )
+        var s3b2_bn1 = s3b2_bn1_result[0]
+        self.s3b2_bn1_running_mean = s3b2_bn1_result[1]
+        self.s3b2_bn1_running_var = s3b2_bn1_result[2]
+        var s3b2_relu1 = relu(s3b2_bn1)
+
+        var s3b2_conv2 = conv2d(s3b2_relu1, self.s3b2_conv2_kernel, self.s3b2_conv2_bias, stride=1, padding=1)
+        var s3b2_bn2_result = batch_norm2d(
+            s3b2_conv2, self.s3b2_bn2_gamma, self.s3b2_bn2_beta,
+            self.s3b2_bn2_running_mean, self.s3b2_bn2_running_var,
+            training=training
+        )
+        var s3b2_bn2 = s3b2_bn2_result[0]
+        self.s3b2_bn2_running_mean = s3b2_bn2_result[1]
+        self.s3b2_bn2_running_var = s3b2_bn2_result[2]
+
+        var s3b2_skip = add(s3b2_bn2, s3b1_out)
+        var s3b2_out = relu(s3b2_skip)
+
+        # ========== Stage 4, Block 1 (projection shortcut, stride=2) ==========
+        var s4b1_conv1 = conv2d(s3b2_out, self.s4b1_conv1_kernel, self.s4b1_conv1_bias, stride=2, padding=1)
+        var s4b1_bn1_result = batch_norm2d(
+            s4b1_conv1, self.s4b1_bn1_gamma, self.s4b1_bn1_beta,
+            self.s4b1_bn1_running_mean, self.s4b1_bn1_running_var,
+            training=training
+        )
+        var s4b1_bn1 = s4b1_bn1_result[0]
+        self.s4b1_bn1_running_mean = s4b1_bn1_result[1]
+        self.s4b1_bn1_running_var = s4b1_bn1_result[2]
+        var s4b1_relu1 = relu(s4b1_bn1)
+
+        var s4b1_conv2 = conv2d(s4b1_relu1, self.s4b1_conv2_kernel, self.s4b1_conv2_bias, stride=1, padding=1)
+        var s4b1_bn2_result = batch_norm2d(
+            s4b1_conv2, self.s4b1_bn2_gamma, self.s4b1_bn2_beta,
+            self.s4b1_bn2_running_mean, self.s4b1_bn2_running_var,
+            training=training
+        )
+        var s4b1_bn2 = s4b1_bn2_result[0]
+        self.s4b1_bn2_running_mean = s4b1_bn2_result[1]
+        self.s4b1_bn2_running_var = s4b1_bn2_result[2]
+
+        # Projection shortcut: 1×1 conv, stride=2
+        var s4b1_proj_conv = conv2d(s3b2_out, self.s4b1_proj_kernel, self.s4b1_proj_bias, stride=2, padding=0)
+        var s4b1_proj_bn_result = batch_norm2d(
+            s4b1_proj_conv, self.s4b1_proj_bn_gamma, self.s4b1_proj_bn_beta,
+            self.s4b1_proj_bn_running_mean, self.s4b1_proj_bn_running_var,
+            training=training
+        )
+        var s4b1_proj_bn = s4b1_proj_bn_result[0]
+        self.s4b1_proj_bn_running_mean = s4b1_proj_bn_result[1]
+        self.s4b1_proj_bn_running_var = s4b1_proj_bn_result[2]
+
+        var s4b1_skip = add(s4b1_bn2, s4b1_proj_bn)
+        var s4b1_out = relu(s4b1_skip)
+
+        # ========== Stage 4, Block 2 (identity shortcut) ==========
+        var s4b2_conv1 = conv2d(s4b1_out, self.s4b2_conv1_kernel, self.s4b2_conv1_bias, stride=1, padding=1)
+        var s4b2_bn1_result = batch_norm2d(
+            s4b2_conv1, self.s4b2_bn1_gamma, self.s4b2_bn1_beta,
+            self.s4b2_bn1_running_mean, self.s4b2_bn1_running_var,
+            training=training
+        )
+        var s4b2_bn1 = s4b2_bn1_result[0]
+        self.s4b2_bn1_running_mean = s4b2_bn1_result[1]
+        self.s4b2_bn1_running_var = s4b2_bn1_result[2]
+        var s4b2_relu1 = relu(s4b2_bn1)
+
+        var s4b2_conv2 = conv2d(s4b2_relu1, self.s4b2_conv2_kernel, self.s4b2_conv2_bias, stride=1, padding=1)
+        var s4b2_bn2_result = batch_norm2d(
+            s4b2_conv2, self.s4b2_bn2_gamma, self.s4b2_bn2_beta,
+            self.s4b2_bn2_running_mean, self.s4b2_bn2_running_var,
+            training=training
+        )
+        var s4b2_bn2 = s4b2_bn2_result[0]
+        self.s4b2_bn2_running_mean = s4b2_bn2_result[1]
+        self.s4b2_bn2_running_var = s4b2_bn2_result[2]
+
+        var s4b2_skip = add(s4b2_bn2, s4b1_out)
+        var s4b2_out = relu(s4b2_skip)
+
+        # ========== Global Average Pooling: (batch, 512, 4, 4) → (batch, 512, 1, 1) ==========
+        var gap = avgpool2d(s4b2_out, kernel_size=4, stride=1, padding=0)
+
+        # ========== Flatten: (batch, 512, 1, 1) → (batch, 512) ==========
+        var gap_shape = gap.shape()
+        var batch_size = gap_shape[0]
+        var flatten_shape = DynamicVector[Int](2)
+        flatten_shape.push_back(batch_size)
+        flatten_shape.push_back(512)
+        var flattened = gap.reshape(flatten_shape)
+
+        # ========== FC layer: (batch, 512) → (batch, num_classes) ==========
+        var logits = linear(flattened, self.fc_weights, self.fc_bias)
+
+        return logits
+
+    fn predict(inout self, borrowed input: ExTensor) raises -> Int:
+        """Predict class for a single input.
+
+        Args:
+            input: Input tensor of shape (1, 3, 32, 32)
+
+        Returns:
+            Predicted class index (0 to num_classes-1)
+        """
+        var logits = self.forward(input, training=False)
+
+        # Find argmax
+        var logits_shape = logits.shape()
+        var max_idx = 0
+        var max_val = logits[0]
+
+        for i in range(1, logits_shape[1]):
+            if logits[i] > max_val:
+                max_val = logits[i]
+                max_idx = i
+
+        return max_idx
+
+    fn save_weights(borrowed self, weights_dir: String) raises:
+        """Save model weights to directory.
+
+        Args:
+            weights_dir: Directory to save weight files
+
+        Note:
+            Running stats (running_mean, running_var) are not saved as they
+            are recomputed during training from scratch.
+        """
+        # Initial conv + BN
+        save_tensor(self.conv1_kernel, "conv1_kernel", weights_dir + "/conv1_kernel.weights")
+        save_tensor(self.conv1_bias, "conv1_bias", weights_dir + "/conv1_bias.weights")
+        save_tensor(self.bn1_gamma, "bn1_gamma", weights_dir + "/bn1_gamma.weights")
+        save_tensor(self.bn1_beta, "bn1_beta", weights_dir + "/bn1_beta.weights")
+
+        # Stage 1
+        save_tensor(self.s1b1_conv1_kernel, "s1b1_conv1_kernel", weights_dir + "/s1b1_conv1_kernel.weights")
+        save_tensor(self.s1b1_conv1_bias, "s1b1_conv1_bias", weights_dir + "/s1b1_conv1_bias.weights")
+        save_tensor(self.s1b1_bn1_gamma, "s1b1_bn1_gamma", weights_dir + "/s1b1_bn1_gamma.weights")
+        save_tensor(self.s1b1_bn1_beta, "s1b1_bn1_beta", weights_dir + "/s1b1_bn1_beta.weights")
+        save_tensor(self.s1b1_conv2_kernel, "s1b1_conv2_kernel", weights_dir + "/s1b1_conv2_kernel.weights")
+        save_tensor(self.s1b1_conv2_bias, "s1b1_conv2_bias", weights_dir + "/s1b1_conv2_bias.weights")
+        save_tensor(self.s1b1_bn2_gamma, "s1b1_bn2_gamma", weights_dir + "/s1b1_bn2_gamma.weights")
+        save_tensor(self.s1b1_bn2_beta, "s1b1_bn2_beta", weights_dir + "/s1b1_bn2_beta.weights")
+
+        save_tensor(self.s1b2_conv1_kernel, "s1b2_conv1_kernel", weights_dir + "/s1b2_conv1_kernel.weights")
+        save_tensor(self.s1b2_conv1_bias, "s1b2_conv1_bias", weights_dir + "/s1b2_conv1_bias.weights")
+        save_tensor(self.s1b2_bn1_gamma, "s1b2_bn1_gamma", weights_dir + "/s1b2_bn1_gamma.weights")
+        save_tensor(self.s1b2_bn1_beta, "s1b2_bn1_beta", weights_dir + "/s1b2_bn1_beta.weights")
+        save_tensor(self.s1b2_conv2_kernel, "s1b2_conv2_kernel", weights_dir + "/s1b2_conv2_kernel.weights")
+        save_tensor(self.s1b2_conv2_bias, "s1b2_conv2_bias", weights_dir + "/s1b2_conv2_bias.weights")
+        save_tensor(self.s1b2_bn2_gamma, "s1b2_bn2_gamma", weights_dir + "/s1b2_bn2_gamma.weights")
+        save_tensor(self.s1b2_bn2_beta, "s1b2_bn2_beta", weights_dir + "/s1b2_bn2_beta.weights")
+
+        # Stage 2
+        save_tensor(self.s2b1_conv1_kernel, "s2b1_conv1_kernel", weights_dir + "/s2b1_conv1_kernel.weights")
+        save_tensor(self.s2b1_conv1_bias, "s2b1_conv1_bias", weights_dir + "/s2b1_conv1_bias.weights")
+        save_tensor(self.s2b1_bn1_gamma, "s2b1_bn1_gamma", weights_dir + "/s2b1_bn1_gamma.weights")
+        save_tensor(self.s2b1_bn1_beta, "s2b1_bn1_beta", weights_dir + "/s2b1_bn1_beta.weights")
+        save_tensor(self.s2b1_conv2_kernel, "s2b1_conv2_kernel", weights_dir + "/s2b1_conv2_kernel.weights")
+        save_tensor(self.s2b1_conv2_bias, "s2b1_conv2_bias", weights_dir + "/s2b1_conv2_bias.weights")
+        save_tensor(self.s2b1_bn2_gamma, "s2b1_bn2_gamma", weights_dir + "/s2b1_bn2_gamma.weights")
+        save_tensor(self.s2b1_bn2_beta, "s2b1_bn2_beta", weights_dir + "/s2b1_bn2_beta.weights")
+        save_tensor(self.s2b1_proj_kernel, "s2b1_proj_kernel", weights_dir + "/s2b1_proj_kernel.weights")
+        save_tensor(self.s2b1_proj_bias, "s2b1_proj_bias", weights_dir + "/s2b1_proj_bias.weights")
+        save_tensor(self.s2b1_proj_bn_gamma, "s2b1_proj_bn_gamma", weights_dir + "/s2b1_proj_bn_gamma.weights")
+        save_tensor(self.s2b1_proj_bn_beta, "s2b1_proj_bn_beta", weights_dir + "/s2b1_proj_bn_beta.weights")
+
+        save_tensor(self.s2b2_conv1_kernel, "s2b2_conv1_kernel", weights_dir + "/s2b2_conv1_kernel.weights")
+        save_tensor(self.s2b2_conv1_bias, "s2b2_conv1_bias", weights_dir + "/s2b2_conv1_bias.weights")
+        save_tensor(self.s2b2_bn1_gamma, "s2b2_bn1_gamma", weights_dir + "/s2b2_bn1_gamma.weights")
+        save_tensor(self.s2b2_bn1_beta, "s2b2_bn1_beta", weights_dir + "/s2b2_bn1_beta.weights")
+        save_tensor(self.s2b2_conv2_kernel, "s2b2_conv2_kernel", weights_dir + "/s2b2_conv2_kernel.weights")
+        save_tensor(self.s2b2_conv2_bias, "s2b2_conv2_bias", weights_dir + "/s2b2_conv2_bias.weights")
+        save_tensor(self.s2b2_bn2_gamma, "s2b2_bn2_gamma", weights_dir + "/s2b2_bn2_gamma.weights")
+        save_tensor(self.s2b2_bn2_beta, "s2b2_bn2_beta", weights_dir + "/s2b2_bn2_beta.weights")
+
+        # Stage 3
+        save_tensor(self.s3b1_conv1_kernel, "s3b1_conv1_kernel", weights_dir + "/s3b1_conv1_kernel.weights")
+        save_tensor(self.s3b1_conv1_bias, "s3b1_conv1_bias", weights_dir + "/s3b1_conv1_bias.weights")
+        save_tensor(self.s3b1_bn1_gamma, "s3b1_bn1_gamma", weights_dir + "/s3b1_bn1_gamma.weights")
+        save_tensor(self.s3b1_bn1_beta, "s3b1_bn1_beta", weights_dir + "/s3b1_bn1_beta.weights")
+        save_tensor(self.s3b1_conv2_kernel, "s3b1_conv2_kernel", weights_dir + "/s3b1_conv2_kernel.weights")
+        save_tensor(self.s3b1_conv2_bias, "s3b1_conv2_bias", weights_dir + "/s3b1_conv2_bias.weights")
+        save_tensor(self.s3b1_bn2_gamma, "s3b1_bn2_gamma", weights_dir + "/s3b1_bn2_gamma.weights")
+        save_tensor(self.s3b1_bn2_beta, "s3b1_bn2_beta", weights_dir + "/s3b1_bn2_beta.weights")
+        save_tensor(self.s3b1_proj_kernel, "s3b1_proj_kernel", weights_dir + "/s3b1_proj_kernel.weights")
+        save_tensor(self.s3b1_proj_bias, "s3b1_proj_bias", weights_dir + "/s3b1_proj_bias.weights")
+        save_tensor(self.s3b1_proj_bn_gamma, "s3b1_proj_bn_gamma", weights_dir + "/s3b1_proj_bn_gamma.weights")
+        save_tensor(self.s3b1_proj_bn_beta, "s3b1_proj_bn_beta", weights_dir + "/s3b1_proj_bn_beta.weights")
+
+        save_tensor(self.s3b2_conv1_kernel, "s3b2_conv1_kernel", weights_dir + "/s3b2_conv1_kernel.weights")
+        save_tensor(self.s3b2_conv1_bias, "s3b2_conv1_bias", weights_dir + "/s3b2_conv1_bias.weights")
+        save_tensor(self.s3b2_bn1_gamma, "s3b2_bn1_gamma", weights_dir + "/s3b2_bn1_gamma.weights")
+        save_tensor(self.s3b2_bn1_beta, "s3b2_bn1_beta", weights_dir + "/s3b2_bn1_beta.weights")
+        save_tensor(self.s3b2_conv2_kernel, "s3b2_conv2_kernel", weights_dir + "/s3b2_conv2_kernel.weights")
+        save_tensor(self.s3b2_conv2_bias, "s3b2_conv2_bias", weights_dir + "/s3b2_conv2_bias.weights")
+        save_tensor(self.s3b2_bn2_gamma, "s3b2_bn2_gamma", weights_dir + "/s3b2_bn2_gamma.weights")
+        save_tensor(self.s3b2_bn2_beta, "s3b2_bn2_beta", weights_dir + "/s3b2_bn2_beta.weights")
+
+        # Stage 4
+        save_tensor(self.s4b1_conv1_kernel, "s4b1_conv1_kernel", weights_dir + "/s4b1_conv1_kernel.weights")
+        save_tensor(self.s4b1_conv1_bias, "s4b1_conv1_bias", weights_dir + "/s4b1_conv1_bias.weights")
+        save_tensor(self.s4b1_bn1_gamma, "s4b1_bn1_gamma", weights_dir + "/s4b1_bn1_gamma.weights")
+        save_tensor(self.s4b1_bn1_beta, "s4b1_bn1_beta", weights_dir + "/s4b1_bn1_beta.weights")
+        save_tensor(self.s4b1_conv2_kernel, "s4b1_conv2_kernel", weights_dir + "/s4b1_conv2_kernel.weights")
+        save_tensor(self.s4b1_conv2_bias, "s4b1_conv2_bias", weights_dir + "/s4b1_conv2_bias.weights")
+        save_tensor(self.s4b1_bn2_gamma, "s4b1_bn2_gamma", weights_dir + "/s4b1_bn2_gamma.weights")
+        save_tensor(self.s4b1_bn2_beta, "s4b1_bn2_beta", weights_dir + "/s4b1_bn2_beta.weights")
+        save_tensor(self.s4b1_proj_kernel, "s4b1_proj_kernel", weights_dir + "/s4b1_proj_kernel.weights")
+        save_tensor(self.s4b1_proj_bias, "s4b1_proj_bias", weights_dir + "/s4b1_proj_bias.weights")
+        save_tensor(self.s4b1_proj_bn_gamma, "s4b1_proj_bn_gamma", weights_dir + "/s4b1_proj_bn_gamma.weights")
+        save_tensor(self.s4b1_proj_bn_beta, "s4b1_proj_bn_beta", weights_dir + "/s4b1_proj_bn_beta.weights")
+
+        save_tensor(self.s4b2_conv1_kernel, "s4b2_conv1_kernel", weights_dir + "/s4b2_conv1_kernel.weights")
+        save_tensor(self.s4b2_conv1_bias, "s4b2_conv1_bias", weights_dir + "/s4b2_conv1_bias.weights")
+        save_tensor(self.s4b2_bn1_gamma, "s4b2_bn1_gamma", weights_dir + "/s4b2_bn1_gamma.weights")
+        save_tensor(self.s4b2_bn1_beta, "s4b2_bn1_beta", weights_dir + "/s4b2_bn1_beta.weights")
+        save_tensor(self.s4b2_conv2_kernel, "s4b2_conv2_kernel", weights_dir + "/s4b2_conv2_kernel.weights")
+        save_tensor(self.s4b2_conv2_bias, "s4b2_conv2_bias", weights_dir + "/s4b2_conv2_bias.weights")
+        save_tensor(self.s4b2_bn2_gamma, "s4b2_bn2_gamma", weights_dir + "/s4b2_bn2_gamma.weights")
+        save_tensor(self.s4b2_bn2_beta, "s4b2_bn2_beta", weights_dir + "/s4b2_bn2_beta.weights")
+
+        # FC layer
+        save_tensor(self.fc_weights, "fc_weights", weights_dir + "/fc_weights.weights")
+        save_tensor(self.fc_bias, "fc_bias", weights_dir + "/fc_bias.weights")
+
+    fn load_weights(inout self, weights_dir: String) raises:
+        """Load model weights from directory.
+
+        Args:
+            weights_dir: Directory containing weight files
+
+        Note:
+            Running stats (running_mean, running_var) are initialized to defaults
+            and will be updated during first forward pass.
+        """
+        # Initial conv + BN
+        self.conv1_kernel = load_tensor(weights_dir + "/conv1_kernel.weights")
+        self.conv1_bias = load_tensor(weights_dir + "/conv1_bias.weights")
+        self.bn1_gamma = load_tensor(weights_dir + "/bn1_gamma.weights")
+        self.bn1_beta = load_tensor(weights_dir + "/bn1_beta.weights")
+
+        # Stage 1
+        self.s1b1_conv1_kernel = load_tensor(weights_dir + "/s1b1_conv1_kernel.weights")
+        self.s1b1_conv1_bias = load_tensor(weights_dir + "/s1b1_conv1_bias.weights")
+        self.s1b1_bn1_gamma = load_tensor(weights_dir + "/s1b1_bn1_gamma.weights")
+        self.s1b1_bn1_beta = load_tensor(weights_dir + "/s1b1_bn1_beta.weights")
+        self.s1b1_conv2_kernel = load_tensor(weights_dir + "/s1b1_conv2_kernel.weights")
+        self.s1b1_conv2_bias = load_tensor(weights_dir + "/s1b1_conv2_bias.weights")
+        self.s1b1_bn2_gamma = load_tensor(weights_dir + "/s1b1_bn2_gamma.weights")
+        self.s1b1_bn2_beta = load_tensor(weights_dir + "/s1b1_bn2_beta.weights")
+
+        self.s1b2_conv1_kernel = load_tensor(weights_dir + "/s1b2_conv1_kernel.weights")
+        self.s1b2_conv1_bias = load_tensor(weights_dir + "/s1b2_conv1_bias.weights")
+        self.s1b2_bn1_gamma = load_tensor(weights_dir + "/s1b2_bn1_gamma.weights")
+        self.s1b2_bn1_beta = load_tensor(weights_dir + "/s1b2_bn1_beta.weights")
+        self.s1b2_conv2_kernel = load_tensor(weights_dir + "/s1b2_conv2_kernel.weights")
+        self.s1b2_conv2_bias = load_tensor(weights_dir + "/s1b2_conv2_bias.weights")
+        self.s1b2_bn2_gamma = load_tensor(weights_dir + "/s1b2_bn2_gamma.weights")
+        self.s1b2_bn2_beta = load_tensor(weights_dir + "/s1b2_bn2_beta.weights")
+
+        # Stage 2
+        self.s2b1_conv1_kernel = load_tensor(weights_dir + "/s2b1_conv1_kernel.weights")
+        self.s2b1_conv1_bias = load_tensor(weights_dir + "/s2b1_conv1_bias.weights")
+        self.s2b1_bn1_gamma = load_tensor(weights_dir + "/s2b1_bn1_gamma.weights")
+        self.s2b1_bn1_beta = load_tensor(weights_dir + "/s2b1_bn1_beta.weights")
+        self.s2b1_conv2_kernel = load_tensor(weights_dir + "/s2b1_conv2_kernel.weights")
+        self.s2b1_conv2_bias = load_tensor(weights_dir + "/s2b1_conv2_bias.weights")
+        self.s2b1_bn2_gamma = load_tensor(weights_dir + "/s2b1_bn2_gamma.weights")
+        self.s2b1_bn2_beta = load_tensor(weights_dir + "/s2b1_bn2_beta.weights")
+        self.s2b1_proj_kernel = load_tensor(weights_dir + "/s2b1_proj_kernel.weights")
+        self.s2b1_proj_bias = load_tensor(weights_dir + "/s2b1_proj_bias.weights")
+        self.s2b1_proj_bn_gamma = load_tensor(weights_dir + "/s2b1_proj_bn_gamma.weights")
+        self.s2b1_proj_bn_beta = load_tensor(weights_dir + "/s2b1_proj_bn_beta.weights")
+
+        self.s2b2_conv1_kernel = load_tensor(weights_dir + "/s2b2_conv1_kernel.weights")
+        self.s2b2_conv1_bias = load_tensor(weights_dir + "/s2b2_conv1_bias.weights")
+        self.s2b2_bn1_gamma = load_tensor(weights_dir + "/s2b2_bn1_gamma.weights")
+        self.s2b2_bn1_beta = load_tensor(weights_dir + "/s2b2_bn1_beta.weights")
+        self.s2b2_conv2_kernel = load_tensor(weights_dir + "/s2b2_conv2_kernel.weights")
+        self.s2b2_conv2_bias = load_tensor(weights_dir + "/s2b2_conv2_bias.weights")
+        self.s2b2_bn2_gamma = load_tensor(weights_dir + "/s2b2_bn2_gamma.weights")
+        self.s2b2_bn2_beta = load_tensor(weights_dir + "/s2b2_bn2_beta.weights")
+
+        # Stage 3
+        self.s3b1_conv1_kernel = load_tensor(weights_dir + "/s3b1_conv1_kernel.weights")
+        self.s3b1_conv1_bias = load_tensor(weights_dir + "/s3b1_conv1_bias.weights")
+        self.s3b1_bn1_gamma = load_tensor(weights_dir + "/s3b1_bn1_gamma.weights")
+        self.s3b1_bn1_beta = load_tensor(weights_dir + "/s3b1_bn1_beta.weights")
+        self.s3b1_conv2_kernel = load_tensor(weights_dir + "/s3b1_conv2_kernel.weights")
+        self.s3b1_conv2_bias = load_tensor(weights_dir + "/s3b1_conv2_bias.weights")
+        self.s3b1_bn2_gamma = load_tensor(weights_dir + "/s3b1_bn2_gamma.weights")
+        self.s3b1_bn2_beta = load_tensor(weights_dir + "/s3b1_bn2_beta.weights")
+        self.s3b1_proj_kernel = load_tensor(weights_dir + "/s3b1_proj_kernel.weights")
+        self.s3b1_proj_bias = load_tensor(weights_dir + "/s3b1_proj_bias.weights")
+        self.s3b1_proj_bn_gamma = load_tensor(weights_dir + "/s3b1_proj_bn_gamma.weights")
+        self.s3b1_proj_bn_beta = load_tensor(weights_dir + "/s3b1_proj_bn_beta.weights")
+
+        self.s3b2_conv1_kernel = load_tensor(weights_dir + "/s3b2_conv1_kernel.weights")
+        self.s3b2_conv1_bias = load_tensor(weights_dir + "/s3b2_conv1_bias.weights")
+        self.s3b2_bn1_gamma = load_tensor(weights_dir + "/s3b2_bn1_gamma.weights")
+        self.s3b2_bn1_beta = load_tensor(weights_dir + "/s3b2_bn1_beta.weights")
+        self.s3b2_conv2_kernel = load_tensor(weights_dir + "/s3b2_conv2_kernel.weights")
+        self.s3b2_conv2_bias = load_tensor(weights_dir + "/s3b2_conv2_bias.weights")
+        self.s3b2_bn2_gamma = load_tensor(weights_dir + "/s3b2_bn2_gamma.weights")
+        self.s3b2_bn2_beta = load_tensor(weights_dir + "/s3b2_bn2_beta.weights")
+
+        # Stage 4
+        self.s4b1_conv1_kernel = load_tensor(weights_dir + "/s4b1_conv1_kernel.weights")
+        self.s4b1_conv1_bias = load_tensor(weights_dir + "/s4b1_conv1_bias.weights")
+        self.s4b1_bn1_gamma = load_tensor(weights_dir + "/s4b1_bn1_gamma.weights")
+        self.s4b1_bn1_beta = load_tensor(weights_dir + "/s4b1_bn1_beta.weights")
+        self.s4b1_conv2_kernel = load_tensor(weights_dir + "/s4b1_conv2_kernel.weights")
+        self.s4b1_conv2_bias = load_tensor(weights_dir + "/s4b1_conv2_bias.weights")
+        self.s4b1_bn2_gamma = load_tensor(weights_dir + "/s4b1_bn2_gamma.weights")
+        self.s4b1_bn2_beta = load_tensor(weights_dir + "/s4b1_bn2_beta.weights")
+        self.s4b1_proj_kernel = load_tensor(weights_dir + "/s4b1_proj_kernel.weights")
+        self.s4b1_proj_bias = load_tensor(weights_dir + "/s4b1_proj_bias.weights")
+        self.s4b1_proj_bn_gamma = load_tensor(weights_dir + "/s4b1_proj_bn_gamma.weights")
+        self.s4b1_proj_bn_beta = load_tensor(weights_dir + "/s4b1_proj_bn_beta.weights")
+
+        self.s4b2_conv1_kernel = load_tensor(weights_dir + "/s4b2_conv1_kernel.weights")
+        self.s4b2_conv1_bias = load_tensor(weights_dir + "/s4b2_conv1_bias.weights")
+        self.s4b2_bn1_gamma = load_tensor(weights_dir + "/s4b2_bn1_gamma.weights")
+        self.s4b2_bn1_beta = load_tensor(weights_dir + "/s4b2_bn1_beta.weights")
+        self.s4b2_conv2_kernel = load_tensor(weights_dir + "/s4b2_conv2_kernel.weights")
+        self.s4b2_conv2_bias = load_tensor(weights_dir + "/s4b2_conv2_bias.weights")
+        self.s4b2_bn2_gamma = load_tensor(weights_dir + "/s4b2_bn2_gamma.weights")
+        self.s4b2_bn2_beta = load_tensor(weights_dir + "/s4b2_bn2_beta.weights")
+
+        # FC layer
+        self.fc_weights = load_tensor(weights_dir + "/fc_weights.weights")
+        self.fc_bias = load_tensor(weights_dir + "/fc_bias.weights")
