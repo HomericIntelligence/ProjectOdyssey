@@ -16,11 +16,12 @@ from tests.shared.conftest import (
     assert_shape_equal,
     TestFixtures,
 )
-from shared.core.extensor import ExTensor, zeros, ones, zeros_like
+from shared.core.extensor import ExTensor, zeros, ones, zeros_like, ones_like
 from shared.core.linear import linear, linear_backward
 from shared.core.conv import conv2d, conv2d_backward
 from shared.core.pooling import maxpool2d, maxpool2d_backward, avgpool2d, avgpool2d_backward
 from shared.core.loss import cross_entropy, cross_entropy_backward
+from tests.helpers.gradient_checking import check_gradient, compute_numerical_gradient, assert_gradients_close
 from collections.vector import DynamicVector
 
 
@@ -400,6 +401,48 @@ fn test_cross_entropy_backward_shapes() raises:
     assert_equal(gl_shape[1], num_classes)
 
 
+fn test_cross_entropy_backward_gradient() raises:
+    """Test cross-entropy backward with numerical gradient checking."""
+    var batch = 2
+    var num_classes = 3
+
+    var logits_shape = DynamicVector[Int](2)
+    logits_shape[0] = batch
+    logits_shape[1] = num_classes
+    var logits = zeros(logits_shape, DType.float32)
+
+    # Initialize with non-uniform values
+    logits._data.bitcast[Float32]()[0] = 0.5
+    logits._data.bitcast[Float32]()[1] = -0.3
+    logits._data.bitcast[Float32]()[2] = 1.2
+    logits._data.bitcast[Float32]()[3] = -0.8
+    logits._data.bitcast[Float32]()[4] = 0.1
+    logits._data.bitcast[Float32]()[5] = 0.7
+
+    var targets_shape = DynamicVector[Int](2)
+    targets_shape[0] = batch
+    targets_shape[1] = num_classes
+    var targets = zeros(targets_shape, DType.float32)
+
+    # Set one-hot targets: [1, 0, 0] and [0, 1, 0]
+    targets._data.bitcast[Float32]()[0] = 1.0  # Batch 0, class 0
+    targets._data.bitcast[Float32]()[4] = 1.0  # Batch 1, class 1
+
+    # Forward function wrapper
+    fn forward(inp: ExTensor) raises -> ExTensor:
+        return cross_entropy(inp, targets)
+
+    # Backward function wrapper
+    fn backward(grad_out: ExTensor, inp: ExTensor) raises -> ExTensor:
+        return cross_entropy_backward(grad_out, inp, targets)
+
+    var loss = forward(logits)
+    var grad_output = ones_like(loss)
+
+    # Numerical gradient checking
+    check_gradient(forward, backward, logits, grad_output, rtol=1e-3, atol=1e-6)
+
+
 # ============================================================================
 # Main Test Runner
 # ============================================================================
@@ -443,5 +486,8 @@ fn main() raises:
     # Cross-entropy backward tests
     test_cross_entropy_backward_shapes()
     print("✓ test_cross_entropy_backward_shapes")
+
+    test_cross_entropy_backward_gradient()
+    print("✓ test_cross_entropy_backward_gradient")
 
     print("\nAll backward pass tests passed!")
