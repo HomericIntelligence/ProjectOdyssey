@@ -233,6 +233,13 @@ fn conv2d_backward(
 
     # Compute grad_input
     # For each input position, sum contributions from all output positions it affected
+    #
+    # Derivation:
+    #   Forward: in_h = oh * stride - padding + kh
+    #   Backward: For input position ih, find (oh, kh) pairs where ih = oh * stride - padding + kh
+    #   Solving: kh = ih - (oh * stride - padding) = ih - oh * stride + padding
+    #
+    # This correctly handles all stride values including stride > 1
     for b in range(batch):
         for ic in range(in_channels):
             for ih in range(in_height):
@@ -241,11 +248,11 @@ fn conv2d_backward(
 
                     # This input position (ih, iw) contributed to output positions (oh, ow)
                     # where: ih = oh * stride - padding + kh
-                    # So: kh = ih - oh * stride + padding
-                    # For each output position
+                    # Solving for kh: kh = ih - oh * stride + padding
                     for oh in range(out_height):
                         for ow in range(out_width):
-                            # Compute kernel offsets
+                            # Compute kernel offsets that would access this input position
+                            # from this output position in the forward pass
                             var kh = ih - oh * stride + padding
                             var kw = iw - ow * stride + padding
 

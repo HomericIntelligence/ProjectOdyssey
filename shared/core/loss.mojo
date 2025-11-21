@@ -212,7 +212,7 @@ fn mean_squared_error_backward(
 
 
 fn cross_entropy(
-    logits: ExTensor, targets: ExTensor, axis: Int = -1
+    logits: ExTensor, targets: ExTensor, axis: Int = -1, epsilon: Float64 = 1e-7
 ) raises -> ExTensor:
     """Cross-entropy loss for multi-class classification.
 
@@ -225,6 +225,7 @@ fn cross_entropy(
         logits: Raw model outputs (before softmax), shape (batch_size, num_classes)
         targets: One-hot encoded ground truth, same shape as logits
         axis: Axis along which to compute softmax (default: -1, last axis)
+        epsilon: Small constant for numerical stability in log operations (default: 1e-7)
 
     Returns:
         Loss tensor, shape depends on reduction
@@ -242,6 +243,10 @@ fn cross_entropy(
     Note:
         For efficiency, this does NOT compute softmax explicitly.
         Instead, it uses: CE = -sum(targets * (logits - log_sum_exp(logits)))
+
+    Numerical Stability:
+        - Uses log-sum-exp trick to prevent overflow/underflow
+        - Adds epsilon to log argument to prevent log(0)
     """
     if logits.dtype() != targets.dtype():
         raise Error("Logits and targets must have the same dtype")
@@ -269,8 +274,13 @@ fn cross_entropy(
     # Step 4: Sum exp values along class axis
     var sum_exp = sum(exp_logits, axis=axis, keepdims=True)
 
-    # Step 5: Compute log_sum_exp = max + log(sum_exp)
-    var log_sum_exp = add(max_logits, log(sum_exp))
+    # Step 5: Compute log_sum_exp = max + log(sum_exp + epsilon)
+    # Add epsilon for numerical stability to prevent log(0)
+    var epsilon_tensor = ExTensor(sum_exp.shape(), sum_exp.dtype())
+    for i in range(epsilon_tensor.numel()):
+        epsilon_tensor._set_float64(i, epsilon)
+    var sum_exp_stable = add(sum_exp, epsilon_tensor)
+    var log_sum_exp = add(max_logits, log(sum_exp_stable))
 
     # Step 6: Compute log probabilities: log(p) = logits - log_sum_exp
     var log_probs = subtract(logits, log_sum_exp)
@@ -285,7 +295,7 @@ fn cross_entropy(
 
 
 fn cross_entropy_backward(
-    grad_output: ExTensor, logits: ExTensor, targets: ExTensor
+    grad_output: ExTensor, logits: ExTensor, targets: ExTensor, epsilon: Float64 = 1e-7
 ) raises -> ExTensor:
     """Backward pass for cross-entropy loss.
 

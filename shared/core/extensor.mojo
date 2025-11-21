@@ -103,8 +103,18 @@ struct ExTensor:
         self._data = UnsafePointer[UInt8].alloc(self._numel * dtype_size)
 
     fn __del__(owned self):
-        """Destructor to free allocated memory."""
+        """Destructor to free allocated memory.
+
+        Only frees memory if this tensor owns the data (not a view).
+        Views share data with another tensor and should not free it.
+
+        Note:
+            Currently, all tensors own their data since views are not yet implemented.
+            _is_view is always False in the current implementation.
+        """
         if not self._is_view:
+            # Free the allocated memory
+            # Since _data is always allocated in __init__, this is safe
             self._data.free()
 
     fn _get_dtype_size(self) -> Int:
