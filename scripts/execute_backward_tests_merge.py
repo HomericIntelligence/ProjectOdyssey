@@ -23,16 +23,7 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-# Get repository root dynamically (secure - no hardcoded paths)
-def get_repo_root() -> Path:
-    """Get the git repository root directory."""
-    result = subprocess.run(
-        ["git", "rev-parse", "--show-toplevel"],
-        capture_output=True,
-        text=True,
-        check=True
-    )
-    return Path(result.stdout.strip())
+from common import get_repo_root
 
 REPO_ROOT = get_repo_root()
 WORKTREE_PATH = REPO_ROOT / "worktrees" / "backward-tests"

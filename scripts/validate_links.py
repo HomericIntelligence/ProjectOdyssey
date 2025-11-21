@@ -19,18 +19,14 @@ from pathlib import Path
 from typing import List, Tuple, Dict
 from urllib.parse import urlparse
 
+from common import get_repo_root
+
 # Setup logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(
     level=logging.INFO,
     format='%(levelname)s: %(message)s'
 )
-
-
-def get_repo_root() -> Path:
-    """Get repository root directory"""
-    script_dir = Path(__file__).parent
-    return script_dir.parent
 
 
 def find_markdown_files(directory: Path) -> List[Path]:
