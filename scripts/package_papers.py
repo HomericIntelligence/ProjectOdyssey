@@ -16,37 +16,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-
-def get_repo_root() -> Path:
-    """
-    Determine the repository root directory.
-
-    Returns:
-        Path to the repository root directory
-
-    Raises:
-        RuntimeError: If repository root cannot be determined
-    """
-    current = Path(__file__).resolve()
-
-    # Walk up the directory tree
-    for parent in [current] + list(current.parents):
-        # Check for .git directory
-        if (parent / ".git").exists():
-            return parent
-        # Check for characteristic files/directories
-        if (parent / "scripts").exists() and (parent / "pixi.toml").exists():
-            return parent
-
-    # Fallback: assume script is in scripts/
-    script_dir = Path(__file__).resolve().parent
-    if script_dir.name == "scripts":
-        return script_dir.parent
-
-    raise RuntimeError(
-        "Could not determine repository root. "
-        "Please run this script from within the repository."
-    )
+from common import get_repo_root
 
 
 def create_papers_tarball(repo_root: Path, output_dir: Optional[Path] = None) -> Path:

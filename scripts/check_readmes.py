@@ -17,6 +17,8 @@ import re
 from pathlib import Path
 from typing import List, Tuple, Dict, Optional
 
+from common import get_repo_root
+
 # Required sections for different README types
 REQUIRED_SECTIONS = {
     "default": [
@@ -43,12 +45,6 @@ MARKDOWN_CHECKS = [
     ("blank_lines_lists", r"[^\n]\n[-*]", "Lists must have blank line before"),
     ("blank_lines_headings", r"[^\n]\n#{1,6} ", "Headings must have blank line before"),
 ]
-
-
-def get_repo_root() -> Path:
-    """Get repository root directory"""
-    script_dir = Path(__file__).parent
-    return script_dir.parent
 
 
 def find_readmes(directory: Path) -> List[Path]:

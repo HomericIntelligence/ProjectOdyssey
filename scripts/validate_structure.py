@@ -17,6 +17,8 @@ import sys
 from pathlib import Path
 from typing import List, Tuple, Dict
 
+from common import get_repo_root
+
 # Required top-level directories
 REQUIRED_DIRECTORIES = [
     "benchmarks",
@@ -59,13 +61,6 @@ REQUIRED_SUBDIRS = {
     "tests": ["foundation", "shared", "agents", "tools"],
     ".claude": ["agents"],
 }
-
-
-def get_repo_root() -> Path:
-    """Get repository root directory"""
-    # Assume script is in scripts/ subdirectory
-    script_dir = Path(__file__).parent
-    return script_dir.parent
 
 
 def check_directory_exists(base_path: Path, dir_name: str) -> Tuple[bool, str]:
