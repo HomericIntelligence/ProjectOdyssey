@@ -27,6 +27,12 @@ fn matmul(a: ExTensor, b: ExTensor) raises -> ExTensor:
         - 1D @ 2D: a.shape = (k,), b.shape = (k, n) -> result.shape = (n,)
         - ND tensors: batched matrix multiplication
 
+    Preconditions:
+        - a and b must have compatible dimensions
+        - a and b must have the same dtype
+        - Parameters are borrowed immutably - safe for aliased inputs (a and b can be the same tensor)
+        - Result is always a new tensor - no in-place modification
+
     Examples:
         var a = zeros(DynamicVector[Int](3, 4), DType.float32)
         var b = zeros(DynamicVector[Int](4, 5), DType.float32)
@@ -35,6 +41,10 @@ fn matmul(a: ExTensor, b: ExTensor) raises -> ExTensor:
         var W = zeros(DynamicVector[Int](10, 5), DType.float32)
         var x = zeros(DynamicVector[Int](5), DType.float32)
         var y = matmul(W, x)  # Shape (10,) - matrix @ vector
+
+    Note:
+        This function always allocates a new result tensor. Input tensors are only read,
+        never modified, so aliasing between a and b is safe.
     """
     # Check dtype compatibility
     if a.dtype() != b.dtype():
