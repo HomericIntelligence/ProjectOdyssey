@@ -9,7 +9,9 @@
 
 ## Executive Summary
 
-The gradient checking retrofit represents **exceptional test engineering** with 37 comprehensive tests validating all 35 backward passes using the gold-standard finite difference method. The implementation is mathematically sound, well-organized, and production-ready.
+The gradient checking retrofit represents **exceptional test engineering** with 37 comprehensive tests validating all
+35 backward passes using the gold-standard finite difference method. The implementation is mathematically sound,
+well-organized, and production-ready.
 
 ### Overall Scores
 
@@ -33,6 +35,7 @@ The gradient checking retrofit represents **exceptional test engineering** with 
 ### Critical Findings
 
 **3 Critical Issues** identified requiring immediate fix:
+
 1. Sigmoid/Tanh backward wrappers capture state instead of recomputing
 2. Softmax/ELU backward wrappers have same issue
 3. Dropout mask regeneration may not be idempotent
@@ -51,6 +54,7 @@ The gradient checking retrofit represents **exceptional test engineering** with 
 **Focus**: Code quality, patterns, integration
 
 #### Strengths
+
 - ✅ Comprehensive coverage (37 tests, 35 operations)
 - ✅ Consistent testing patterns across all files
 - ✅ Non-uniform test data (critical for catching bugs)
@@ -64,6 +68,7 @@ The gradient checking retrofit represents **exceptional test engineering** with 
 **Issue #1: Sigmoid/Tanh Backward Captured State**
 
 ```mojo
+
 // INCORRECT (current implementation)
 fn test_sigmoid_backward_gradient() raises:
     var x = zeros(shape, DType.float32)
@@ -71,17 +76,21 @@ fn test_sigmoid_backward_gradient() raises:
 
     fn backward_fn(grad: ExTensor, _: ExTensor) raises -> ExTensor:
         return sigmoid_backward(grad, y)  // Uses captured y
-```
+
+```text
 
 **Problem**: Backward wrapper captures pre-computed output instead of recomputing from input. If implementation changes to use input directly, tests won't catch it.
 
 **Fix**:
+
 ```mojo
+
 // CORRECT
 fn backward_fn(grad: ExTensor, inp: ExTensor) raises -> ExTensor:
     var out = sigmoid(inp)  // Recompute inside wrapper
     return sigmoid_backward(grad, out)
-```
+
+```text
 
 **Locations**:
 - test_activations.mojo:261-266 (sigmoid_backward)
@@ -92,12 +101,14 @@ fn backward_fn(grad: ExTensor, inp: ExTensor) raises -> ExTensor:
 **Issue #2: Dropout Mask Regeneration**
 
 ```mojo
+
 var (output, mask) = dropout(x, p=0.3, training=True, seed=42)  // First mask
 
 fn backward(...):
     var (_, generated_mask) = dropout(inp, p=0.3, training=True, seed=42)  // Second mask
     return dropout_backward(grad, generated_mask, p=0.3)
-```
+
+```text
 
 **Problem**: Two successive calls with same seed may not generate identical masks if seed state changes.
 
@@ -115,6 +126,7 @@ Standard: `rtol=1e-3, atol=1e-6` (0.1% relative error)
 **Issue #4: Missing Gradient Checks**
 
 Operations without numerical gradient checking:
+
 - dot_backward
 - outer_backward
 - sin_backward
@@ -123,8 +135,10 @@ Operations without numerical gradient checking:
 **Issue #5: Linear Backward Test Uses Zero Bias**
 
 ```mojo
+
 var bias = zeros(bias_shape, DType.float32)  // Zero bias!
-```
+
+```text
 
 **Problem**: Won't catch bugs in bias gradient computation.
 
@@ -146,6 +160,7 @@ var bias = zeros(bias_shape, DType.float32)  // Zero bias!
 **Focus**: Numerical methods, tolerances, edge cases
 
 #### Strengths
+
 - ✅ Correct use of central difference method
 - ✅ Appropriate O(ε²) error characteristics
 - ✅ Comprehensive backward pass coverage
@@ -157,14 +172,18 @@ var bias = zeros(bias_shape, DType.float32)  // Zero bias!
 **Issue #1: Default Tolerances Too Tight**
 
 Current defaults in `gradient_checking.mojo`:
+
 ```mojo
+
 rtol: Float64 = 1e-4,  // Too tight for Float32
 atol: Float64 = 1e-7   // Too tight for Float32
-```
+
+```text
 
 **Mathematical Analysis**:
 
 For Float32 with epsilon=1e-5:
+
 - Machine epsilon: ~1.2e-7
 - Roundoff error: ~2.4e-7 per operation
 - Accumulated error (100 ops): ~7.6e-6
@@ -175,17 +194,23 @@ For Float32 with epsilon=1e-5:
 **Current Workaround**: Tests override defaults with rtol=1e-3, atol=1e-6 (correct values).
 
 **Fix**: Update defaults to match what tests actually use:
+
 ```mojo
+
 rtol: Float64 = 1e-3,  // Appropriate for Float32
 atol: Float64 = 1e-6   // Appropriate for Float32
-```
+
+```text
 
 **Issue #2: Discontinuous Gradient Handling**
 
 Testing ReLU at exactly x=0:
+
 ```mojo
+
 x._data.bitcast[Float32]()[1] = 0.0  // Problematic!
-```
+
+```text
 
 **Problem**: Central difference at discontinuity gives wrong result.
 - ReLU gradient at x=0: 0 (by convention)
@@ -193,9 +218,12 @@ x._data.bitcast[Float32]()[1] = 0.0  // Problematic!
 - Error: 50%
 
 **Fix**: Test near discontinuity, not at it:
+
 ```mojo
+
 x._data.bitcast[Float32]()[1] = 1e-4  // Safe
-```
+
+```text
 
 **Issue #3: Potential Log(0) Risk**
 
@@ -209,24 +237,29 @@ Cross-entropy uses log(softmax(logits)). With numerical perturbation, softmax co
 **Optimal for Float32**: ~1e-4 to 1e-5
 
 Current epsilon is **slightly too small** but acceptable. Optimal epsilon:
-```
+
+```text
+
 ε_optimal ≈ ∛(3 × machine_epsilon × max_function_value)
 ε_optimal ≈ ∛(3.6e-7) ≈ 7e-3 (for high derivatives)
 ε_optimal ≈ 1e-4 (for moderate derivatives)
-```
+
+```text
 
 **Recommendation**: Document rationale for epsilon=1e-5, or adjust to 1e-4.
 
 #### Tolerance Recommendations
 
-```
+```text
+
 Operation Type          | Recommended Tolerance
 ------------------------|----------------------
 Simple (add, relu)      | rtol=1e-3, atol=1e-6
 Matrix (linear, matmul) | rtol=1e-3, atol=1e-6
 Complex (conv2d, pool)  | rtol=1e-2, atol=1e-5
 Discontinuous (relu@0)  | rtol=5e-3, atol=1e-5
-```
+
+```text
 
 ---
 
@@ -236,6 +269,7 @@ Discontinuous (relu@0)  | rtol=5e-3, atol=1e-5
 **Focus**: Coverage, organization, maintainability
 
 #### Strengths
+
 - ✅ 97% coverage (35/38 backward passes)
 - ✅ Gold-standard numerical validation
 - ✅ Excellent file organization
@@ -268,7 +302,8 @@ Discontinuous (relu@0)  | rtol=5e-3, atol=1e-5
 
 #### Test Organization Score: 10/10
 
-```
+```text
+
 tests/shared/core/
 ├── test_activations.mojo          (10 backward passes)
 ├── test_elementwise.mojo          (7 backward passes)
@@ -277,7 +312,8 @@ tests/shared/core/
 ├── test_matrix.mojo               (3 backward passes)
 ├── test_dropout.mojo              (2 backward passes)
 └── test_backward.mojo             (6 backward passes)
-```
+
+```text
 
 Excellent logical grouping, clear separation of concerns, minimal duplication.
 
@@ -295,6 +331,7 @@ Excellent logical grouping, clear separation of concerns, minimal duplication.
 **Focus**: Completeness, clarity, accuracy, usefulness
 
 #### Strengths
+
 - ✅ Comprehensive module-by-module coverage
 - ✅ Clear explanation of gradient checking concept
 - ✅ Excellent pattern templates with examples
@@ -514,6 +551,7 @@ The gradient checking implementation is **production-ready after fixing the 3 cr
 ### After Merge
 
 Continue with Priority 2 improvements over next 2-3 weeks:
+
 - Add missing gradient checks (dot, outer, sin, cos)
 - Fix discontinuous gradient tests
 - Investigate conv2d tolerance
@@ -526,6 +564,7 @@ Continue with Priority 2 improvements over next 2-3 weeks:
 The gradient checking retrofit is **exceptional work** that significantly improves the codebase quality from 77.5/100 to 83.5/100. With 100% backward pass coverage using the gold-standard finite difference method, this provides strong confidence in the mathematical correctness of all gradient computations.
 
 The implementation follows best practices:
+
 - Comprehensive test coverage (97%)
 - Gold-standard validation method
 - Well-organized and maintainable

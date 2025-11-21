@@ -7,7 +7,9 @@
 
 ## Executive Summary
 
-Successfully implemented **comprehensive numerical gradient checking** across all 35 backward pass operations in the ML Odyssey codebase. This provides gold-standard validation that all analytical gradients are mathematically correct using finite difference approximations.
+Successfully implemented **comprehensive numerical gradient checking** across all 35 backward pass operations in the
+ML Odyssey codebase. This provides gold-standard validation that all analytical gradients are mathematically correct
+using finite difference approximations.
 
 **Impact**:
 
@@ -27,13 +29,16 @@ Successfully implemented **comprehensive numerical gradient checking** across al
 
 ## What is Numerical Gradient Checking?
 
-Numerical gradient checking is the **gold standard** for validating backward pass implementations. It compares analytical gradients (computed by your backward pass) against numerical gradients (computed using finite differences).
+Numerical gradient checking is the **gold standard** for validating backward pass implementations. It compares
+analytical gradients (computed by your backward pass) against numerical gradients (computed using finite differences).
 
 **Method**: Central difference approximation
 
-```
+```text
+
 numerical_gradient = (f(x + ε) - f(x - ε)) / (2ε)
-```
+
+```text
 
 **Why it matters**:
 
@@ -199,34 +204,42 @@ numerical_gradient = (f(x + ε) - f(x - ε)) / (2ε)
 ### Pattern Used (Consistent Across All Tests)
 
 ```mojo
+
 from tests.helpers.gradient_checking import check_gradient
 
 fn test_operation_backward_gradient() raises:
     """Test operation backward with numerical gradient checking."""
 
     # 1. Create input with non-uniform values (critical!)
+
     var input_shape = DynamicVector[Int](...)
     var x = zeros(input_shape, DType.float32)
 
     # Initialize with non-uniform values
+
     for i in range(x.numel()):
         x._data.bitcast[Float32]()[i] = Float32(i) * scale + offset
 
     # 2. Define forward function wrapper
+
     fn forward(inp: ExTensor) raises -> ExTensor:
         return operation(inp, additional_params...)
 
     # 3. Define backward function wrapper
+
     fn backward(grad_out: ExTensor, inp: ExTensor) raises -> ExTensor:
         return operation_backward(grad_out, inp, additional_params...)
 
     # 4. Run forward pass
+
     var output = forward(x)
     var grad_output = ones_like(output)
 
     # 5. Validate with numerical gradient checking
+
     check_gradient(forward, backward, x, grad_output, rtol=1e-3, atol=1e-6)
-```
+
+```text
 
 ### Key Principles
 
@@ -372,9 +385,11 @@ All commits passed:
 **Solution**: Always initialize test tensors with non-uniform values:
 
 ```mojo
+
 for i in range(x.numel()):
     x._data.bitcast[Float32]()[i] = Float32(i) * 0.1 - 1.2
-```
+
+```text
 
 ### 2. Test Both Operands for Binary Operations
 
@@ -401,8 +416,10 @@ for i in range(x.numel()):
 **Solution**: Add dedicated broadcasting tests:
 
 ```mojo
+
 test_add_backward_broadcast_gradient  // Tests [3] + [2,3] broadcasting
-```
+
+```text
 
 ### 5. Gradient Checking Catches Real Bugs
 
