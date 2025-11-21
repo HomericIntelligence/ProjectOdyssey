@@ -1,7 +1,9 @@
 # Gradient Checking Retrofit Survey
 
 ## Overview
-This document surveys all backward passes in the codebase to identify which ones have numerical gradient checking coverage and which ones need it.
+
+This document surveys all backward passes in the codebase to identify which ones have numerical gradient checking
+coverage and which ones need it.
 
 ## Summary
 
@@ -47,6 +49,7 @@ This document surveys all backward passes in the codebase to identify which ones
 ## Status Breakdown
 
 ### Already Complete (8 backward passes)
+
 1. relu_backward - test_activations.mojo
 2. leaky_relu_backward - test_activations.mojo
 3. prelu_backward - test_activations.mojo
@@ -63,17 +66,20 @@ This document surveys all backward passes in the codebase to identify which ones
 ### Need Gradient Checking (25 backward passes)
 
 #### Activations (3)
+
 - gelu_backward - test_activations.mojo
 - swish_backward - test_activations.mojo
 - mish_backward - test_activations.mojo
 
 #### Arithmetic (4)
+
 - add_backward - test_arithmetic_backward.mojo
 - subtract_backward - test_arithmetic_backward.mojo
 - multiply_backward - test_arithmetic_backward.mojo
 - divide_backward - test_arithmetic_backward.mojo
 
 #### Elementwise (7)
+
 - exp_backward - test_elementwise.mojo
 - log_backward - test_elementwise.mojo
 - sqrt_backward - test_elementwise.mojo
@@ -83,14 +89,17 @@ This document surveys all backward passes in the codebase to identify which ones
 - log2_backward - test_elementwise.mojo
 
 #### Dropout (2)
+
 - dropout_backward - test_dropout.mojo
 - dropout2d_backward - test_dropout.mojo
 
 #### Matrix (2)
+
 - matmul_backward - test_matrix.mojo
 - transpose_backward - test_matrix.mojo
 
 #### Reduction (4) - NO TEST FILE YET
+
 - sum_backward - NEEDS NEW FILE
 - mean_backward - NEEDS NEW FILE
 - max_reduce_backward - NEEDS NEW FILE
@@ -114,6 +123,7 @@ This document surveys all backward passes in the codebase to identify which ones
 6. Create new test_reduction.mojo with gradient checking for all 4 reduction ops
 
 All modifications should follow the established pattern:
+
 - Use non-uniform test data
 - Use rtol=1e-3, atol=1e-6 tolerances (adjusted as needed)
 - Use the check_gradient helper function
