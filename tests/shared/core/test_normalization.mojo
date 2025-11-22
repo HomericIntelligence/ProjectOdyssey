@@ -6,6 +6,7 @@ Tests cover:
 - Running statistics updates
 - Numerical correctness
 - Shape validation
+- Backward passes with gradient checking (COMPREHENSIVE)
 
 All tests use pure functional API.
 """
@@ -17,8 +18,14 @@ from tests.shared.conftest import (
     assert_shape_equal,
     TestFixtures,
 )
-from shared.core.extensor import ExTensor, zeros, ones
-from shared.core.normalization import batch_norm2d, layer_norm
+from tests.helpers.gradient_checking import (
+    compute_numerical_gradient,
+    assert_gradients_close,
+)
+from shared.core.extensor import ExTensor, zeros, ones, zeros_like, ones_like
+from shared.core.normalization import batch_norm2d, batch_norm2d_backward, layer_norm
+from shared.core.arithmetic import add, subtract, multiply
+from shared.core.reduction import sum as reduce_sum
 from collections.vector import DynamicVector
 
 
@@ -230,6 +237,159 @@ fn test_batch_norm2d_zero_variance() raises:
 
 
 # ============================================================================
+# Batch Normalization Backward Pass Tests (GRADIENT CHECKING)
+# ============================================================================
+
+
+fn test_batch_norm2d_backward_gradient_input() raises:
+    """Test batch_norm2d_backward gradient w.r.t. input using numerical validation.
+
+    CRITICAL TEST: Validates mathematical correctness of batch norm backpropagation.
+    Uses central finite differences for gold-standard gradient validation.
+    """
+    # Small tensor for gradient checking (computational cost is O(n²))
+    var shape = DynamicVector[Int](4)
+    shape[0] = 2  # batch
+    shape[1] = 2  # channels
+    shape[2] = 2  # height
+    shape[3] = 2  # width
+
+    # Create test input with varying values
+    var x = zeros(shape, DType.float32)
+    for i in range(16):
+        x._data.bitcast[Float32]()[i] = Float32(i) * 0.1
+
+    # Parameters
+    var param_shape = DynamicVector[Int](1)
+    param_shape[0] = 2
+    var gamma = ones(param_shape, DType.float32)
+    gamma._data.bitcast[Float32]()[0] = 1.5
+    gamma._data.bitcast[Float32]()[1] = 2.0
+
+    var beta = zeros(param_shape, DType.float32)
+    var running_mean = zeros(param_shape, DType.float32)
+    var running_var = ones(param_shape, DType.float32)
+
+    # Forward pass
+    var (output, _, _) = batch_norm2d(
+        x, gamma, beta, running_mean, running_var,
+        training=True, epsilon=1e-5
+    )
+
+    # Upstream gradient (typically from loss)
+    var grad_output = ones_like(output)
+
+    # Backward pass
+    var (grad_input, grad_gamma, grad_beta) = batch_norm2d_backward(
+        grad_output, x, gamma, running_mean, running_var,
+        training=True, epsilon=1e-5
+    )
+
+    # Numerical gradient via finite differences
+    fn forward_for_grad(inp: ExTensor) raises -> ExTensor:
+        var (out, _, _) = batch_norm2d(
+            inp, gamma, beta, running_mean, running_var,
+            training=True, epsilon=1e-5
+        )
+        # Sum output to get scalar (gradient checking requires scalar loss)
+        return reduce_sum(out, axis=-1, keepdims=False)
+
+    var numerical_grad = compute_numerical_gradient(forward_for_grad, x, epsilon=1e-4)
+
+    # Validate analytical gradient matches numerical gradient
+    # Looser tolerance for batch norm (complex operation with many intermediate steps)
+    assert_gradients_close(grad_input, numerical_grad, rtol=1e-2, atol=1e-5,
+                          message="Batch norm gradient w.r.t. input")
+
+    print("✓ Batch norm backward gradient (input) validated numerically")
+
+
+fn test_batch_norm2d_backward_training_vs_inference() raises:
+    """Test that batch_norm2d_backward behaves differently in training vs inference.
+
+    Training mode: Gradients flow through batch statistics
+    Inference mode: Gradients bypass statistics (use running stats)
+    """
+    var shape = DynamicVector[Int](4)
+    shape[0] = 2  # batch
+    shape[1] = 1  # channels
+    shape[2] = 2  # height
+    shape[3] = 2  # width
+
+    var x = zeros(shape, DType.float32)
+    for i in range(8):
+        x._data.bitcast[Float32]()[i] = Float32(i)
+
+    var param_shape = DynamicVector[Int](1)
+    param_shape[0] = 1
+    var gamma = ones(param_shape, DType.float32)
+    gamma._data.bitcast[Float32]()[0] = 2.0
+
+    var beta = zeros(param_shape, DType.float32)
+    var running_mean = zeros(param_shape, DType.float32)
+    var running_var = ones(param_shape, DType.float32)
+
+    # Forward passes
+    var (out_train, _, _) = batch_norm2d(x, gamma, beta, running_mean, running_var, training=True)
+    var (out_infer, _, _) = batch_norm2d(x, gamma, beta, running_mean, running_var, training=False)
+
+    var grad_output = ones_like(out_train)
+
+    # Backward passes
+    var (grad_train, _, _) = batch_norm2d_backward(
+        grad_output, x, gamma, running_mean, running_var, training=True
+    )
+    var (grad_infer, _, _) = batch_norm2d_backward(
+        grad_output, x, gamma, running_mean, running_var, training=False
+    )
+
+    # Gradients should differ between training and inference modes
+    var diff_found = False
+    for i in range(8):
+        var diff = abs(grad_train._data.bitcast[Float32]()[i] -
+                      grad_infer._data.bitcast[Float32]()[i])
+        if diff > 1e-5:
+            diff_found = True
+            break
+
+    assert_true(diff_found, "Training and inference gradients should differ")
+    print("✓ Batch norm backward: training vs inference modes differ correctly")
+
+
+fn test_batch_norm2d_backward_shapes() raises:
+    """Test that batch_norm2d_backward returns correct gradient shapes."""
+    var shape = DynamicVector[Int](4)
+    shape[0] = 3  # batch
+    shape[1] = 4  # channels
+    shape[2] = 5  # height
+    shape[3] = 5  # width
+
+    var x = ones(shape, DType.float32)
+    var grad_output = ones(shape, DType.float32)
+
+    var param_shape = DynamicVector[Int](1)
+    param_shape[0] = 4
+    var gamma = ones(param_shape, DType.float32)
+    var running_mean = zeros(param_shape, DType.float32)
+    var running_var = ones(param_shape, DType.float32)
+
+    var (grad_input, grad_gamma, grad_beta) = batch_norm2d_backward(
+        grad_output, x, gamma, running_mean, running_var, training=True
+    )
+
+    # Validate shapes
+    assert_shape_equal(grad_input, x, "grad_input should match input shape")
+    assert_shape_equal(grad_gamma, gamma, "grad_gamma should match gamma shape")
+    assert_shape_equal(grad_beta, gamma, "grad_beta should match beta shape")
+
+    # Check specific dimensions
+    assert_equal(grad_input.shape()[0], 3, "batch dimension")
+    assert_equal(grad_input.shape()[1], 4, "channels dimension")
+    assert_equal(grad_gamma.shape()[0], 4, "gamma channels")
+    assert_equal(grad_beta.shape()[0], 4, "beta channels")
+
+
+# ============================================================================
 # Layer Normalization Tests
 # ============================================================================
 
@@ -417,6 +577,16 @@ fn main() raises:
 
     test_batch_norm2d_zero_variance()
     print("✓ test_batch_norm2d_zero_variance")
+
+    # Batch normalization backward pass tests (gradient checking)
+    test_batch_norm2d_backward_gradient_input()
+    print("✓ test_batch_norm2d_backward_gradient_input")
+
+    test_batch_norm2d_backward_training_vs_inference()
+    print("✓ test_batch_norm2d_backward_training_vs_inference")
+
+    test_batch_norm2d_backward_shapes()
+    print("✓ test_batch_norm2d_backward_shapes")
 
     # Layer normalization tests
     test_layer_norm_shapes_2d()
