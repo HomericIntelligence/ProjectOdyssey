@@ -21,6 +21,7 @@ Reference:
 
 from shared.core.extensor import ExTensor
 from shared.core.arithmetic import subtract, multiply, add, divide, power
+from shared.core.arithmetic_simd import subtract_simd, multiply_simd, add_simd, divide_simd
 from shared.core.elementwise import sqrt
 from shared.core.extensor import full_like, ones_like
 from math import pow
@@ -96,52 +97,52 @@ fn adam_step(
 
     # Apply weight decay (L2 regularization) if specified
     if weight_decay > 0.0:
-        # grad = grad + weight_decay * params
+        # grad = grad + weight_decay * params (SIMD optimized)
         var wd_tensor = full_like(params, weight_decay)
-        var decay_term = multiply(wd_tensor, params)
-        effective_gradients = add(gradients, decay_term)
+        var decay_term = multiply_simd(wd_tensor, params)
+        effective_gradients = add_simd(gradients, decay_term)
 
-    # Update biased first moment estimate
+    # Update biased first moment estimate (SIMD optimized)
     # m = beta1 * m + (1 - beta1) * grad
     var beta1_tensor = full_like(m, beta1)
     var one_minus_beta1 = full_like(m, 1.0 - beta1)
 
-    var m_decay = multiply(beta1_tensor, m)
-    var grad_term = multiply(one_minus_beta1, effective_gradients)
-    var new_m = add(m_decay, grad_term)
+    var m_decay = multiply_simd(beta1_tensor, m)
+    var grad_term = multiply_simd(one_minus_beta1, effective_gradients)
+    var new_m = add_simd(m_decay, grad_term)
 
-    # Update biased second moment estimate
+    # Update biased second moment estimate (SIMD optimized)
     # v = beta2 * v + (1 - beta2) * grad^2
     var beta2_tensor = full_like(v, beta2)
     var one_minus_beta2 = full_like(v, 1.0 - beta2)
 
-    var v_decay = multiply(beta2_tensor, v)
-    var grad_squared = multiply(effective_gradients, effective_gradients)
-    var grad_squared_term = multiply(one_minus_beta2, grad_squared)
-    var new_v = add(v_decay, grad_squared_term)
+    var v_decay = multiply_simd(beta2_tensor, v)
+    var grad_squared = multiply_simd(effective_gradients, effective_gradients)
+    var grad_squared_term = multiply_simd(one_minus_beta2, grad_squared)
+    var new_v = add_simd(v_decay, grad_squared_term)
 
-    # Compute bias-corrected first moment
+    # Compute bias-corrected first moment (SIMD optimized)
     # m_hat = m / (1 - beta1^t)
     var bias_correction1 = 1.0 - pow(beta1, Float64(t))
     var bc1_tensor = full_like(new_m, bias_correction1)
-    var m_hat = divide(new_m, bc1_tensor)
+    var m_hat = divide_simd(new_m, bc1_tensor)
 
-    # Compute bias-corrected second moment
+    # Compute bias-corrected second moment (SIMD optimized)
     # v_hat = v / (1 - beta2^t)
     var bias_correction2 = 1.0 - pow(beta2, Float64(t))
     var bc2_tensor = full_like(new_v, bias_correction2)
-    var v_hat = divide(new_v, bc2_tensor)
+    var v_hat = divide_simd(new_v, bc2_tensor)
 
-    # Compute parameter update
+    # Compute parameter update (SIMD optimized)
     # params = params - lr * m_hat / (sqrt(v_hat) + epsilon)
     var v_hat_sqrt = sqrt(v_hat)
     var epsilon_tensor = full_like(v_hat_sqrt, epsilon)
-    var denominator = add(v_hat_sqrt, epsilon_tensor)
-    var update_direction = divide(m_hat, denominator)
+    var denominator = add_simd(v_hat_sqrt, epsilon_tensor)
+    var update_direction = divide_simd(m_hat, denominator)
 
     var lr_tensor = full_like(params, learning_rate)
-    var update = multiply(lr_tensor, update_direction)
-    var new_params = subtract(params, update)
+    var update = multiply_simd(lr_tensor, update_direction)
+    var new_params = subtract_simd(params, update)
 
     # Return new state (pure functional)
     return (new_params, new_m, new_v)

@@ -16,6 +16,7 @@ With weight decay (L2 regularization):
 
 from shared.core.extensor import ExTensor
 from shared.core.arithmetic import subtract, multiply, add
+from shared.core.arithmetic_simd import subtract_simd, multiply_simd, add_simd
 from shared.core.extensor import full_like
 
 
@@ -81,10 +82,10 @@ fn sgd_step(
 
     # Apply weight decay (L2 regularization) if specified
     if weight_decay > 0.0:
-        # grad = grad + weight_decay * params
+        # grad = grad + weight_decay * params (SIMD optimized)
         var wd_tensor = full_like(params, weight_decay)
-        var decay_term = multiply(wd_tensor, params)
-        effective_gradients = add(gradients, decay_term)
+        var decay_term = multiply_simd(wd_tensor, params)
+        effective_gradients = add_simd(gradients, decay_term)
 
     var new_velocity = velocity  # Default: no change to velocity
 
@@ -93,18 +94,18 @@ fn sgd_step(
         if velocity.numel() == 0:
             raise Error("Velocity buffer required when using momentum (use zeros_like(params))")
 
-        # velocity = momentum * velocity + gradients
+        # velocity = momentum * velocity + gradients (SIMD optimized)
         var momentum_tensor = full_like(velocity, momentum)
-        var scaled_velocity = multiply(momentum_tensor, velocity)
-        new_velocity = add(scaled_velocity, effective_gradients)
+        var scaled_velocity = multiply_simd(momentum_tensor, velocity)
+        new_velocity = add_simd(scaled_velocity, effective_gradients)
 
         # Use velocity for update
         effective_gradients = new_velocity
 
-    # Standard SGD update: params = params - lr * gradients
+    # Standard SGD update: params = params - lr * gradients (SIMD optimized)
     var lr_tensor = full_like(params, learning_rate)
-    var update = multiply(lr_tensor, effective_gradients)
-    var new_params = subtract(params, update)
+    var update = multiply_simd(lr_tensor, effective_gradients)
+    var new_params = subtract_simd(params, update)
 
     # Return both new params and new velocity (pure functional)
     return (new_params, new_velocity)
@@ -141,11 +142,11 @@ fn sgd_step_simple(
     if params.dtype() != gradients.dtype():
         raise Error("Parameters and gradients must have the same dtype")
 
-    # params = params - lr * gradients
+    # params = params - lr * gradients (SIMD optimized)
     var lr_tensor = full_like(params, learning_rate)
-    var update = multiply(lr_tensor, gradients)
+    var update = multiply_simd(lr_tensor, gradients)
 
-    return subtract(params, update)
+    return subtract_simd(params, update)
 
 
 fn sgd_momentum_update_inplace(
