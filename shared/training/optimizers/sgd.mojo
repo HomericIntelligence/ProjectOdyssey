@@ -153,8 +153,8 @@ fn sgd_momentum_update_inplace(
     mut param: ExTensor,
     grad: ExTensor,
     mut velocity: ExTensor,
-    lr: Float32,
-    momentum: Float32
+    lr: Float64,
+    momentum: Float64
 ) raises:
     """SGD parameter update with momentum (in-place mutation).
 
@@ -191,6 +191,7 @@ fn sgd_momentum_update_inplace(
         - Velocity tensor must be pre-allocated (use zeros_like)
         - Both param and velocity are modified directly
         - This is the AlexNet/ResNet standard momentum formulation
+        - Supports float32 and float64 dtypes
     """
     var numel = param.numel()
 
@@ -200,16 +201,31 @@ fn sgd_momentum_update_inplace(
     if param.shape() != velocity.shape():
         raise Error("Parameter and velocity must have the same shape")
 
-    if param.dtype() != DType.float32:
-        raise Error("sgd_momentum_update_inplace only supports float32")
+    # Dispatch based on dtype
+    if param.dtype() == DType.float32:
+        var param_data = param._data.bitcast[Float32]()
+        var grad_data = grad._data.bitcast[Float32]()
+        var velocity_data = velocity._data.bitcast[Float32]()
 
-    var param_data = param._data.bitcast[Float32]()
-    var grad_data = grad._data.bitcast[Float32]()
-    var velocity_data = velocity._data.bitcast[Float32]()
+        var lr_f32 = Float32(lr)
+        var momentum_f32 = Float32(momentum)
 
-    # Update velocity and parameters in-place
-    for i in range(numel):
-        # velocity = momentum * velocity - lr * grad
-        velocity_data[i] = momentum * velocity_data[i] - lr * grad_data[i]
-        # param = param + velocity
-        param_data[i] += velocity_data[i]
+        # Update velocity and parameters in-place
+        for i in range(numel):
+            # velocity = momentum * velocity - lr * grad
+            velocity_data[i] = momentum_f32 * velocity_data[i] - lr_f32 * grad_data[i]
+            # param = param + velocity
+            param_data[i] += velocity_data[i]
+    elif param.dtype() == DType.float64:
+        var param_data = param._data.bitcast[Float64]()
+        var grad_data = grad._data.bitcast[Float64]()
+        var velocity_data = velocity._data.bitcast[Float64]()
+
+        # Update velocity and parameters in-place
+        for i in range(numel):
+            # velocity = momentum * velocity - lr * grad
+            velocity_data[i] = momentum * velocity_data[i] - lr * grad_data[i]
+            # param = param + velocity
+            param_data[i] += velocity_data[i]
+    else:
+        raise Error("sgd_momentum_update_inplace only supports float32 and float64")
