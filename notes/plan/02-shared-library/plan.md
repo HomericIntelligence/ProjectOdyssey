@@ -14,6 +14,7 @@ None (top-level)
 - [02-training-utils/plan.md](02-training-utils/plan.md)
 - [03-data-utils/plan.md](03-data-utils/plan.md)
 - [04-testing/plan.md](04-testing/plan.md)
+- [05-autograd/plan.md](05-autograd/plan.md)
 
 ## Inputs
 
@@ -24,6 +25,7 @@ None (top-level)
 ## Outputs
 
 - Complete library of tensor operations, activations, and initializers
+- Automatic differentiation framework (autograd) for gradient computation
 - Training utilities including base trainer, schedulers, and callbacks
 - Data utilities for loading, batching, and augmentation
 - Comprehensive testing framework with full coverage
@@ -31,6 +33,7 @@ None (top-level)
 ## Steps
 
 1. Implement core mathematical operations including tensor ops, activations, initializers, and metrics
+1. Build automatic differentiation framework (autograd) for gradient computation
 1. Build training utilities with base trainer, learning rate schedulers, and callback system
 1. Create data utilities for dataset handling, data loading, and augmentations
 1. Establish testing framework with unit tests and coverage reporting
@@ -38,6 +41,7 @@ None (top-level)
 ## Success Criteria
 
 - [ ] All core operations work correctly with proper tensor handling
+- [ ] Autograd framework automatically computes gradients correctly
 - [ ] Training utilities support standard ML training workflows
 - [ ] Data utilities can handle various dataset types and transformations
 - [ ] Testing framework achieves high coverage across all components
