@@ -102,11 +102,11 @@ fn conv2d(
     var out_width = (in_width + 2 * padding - kW) // stride + 1
 
     # Create output tensor
-    var out_shape = List[Int](4)
-    out_shape[0] = batch
-    out_shape[1] = out_channels
-    out_shape[2] = out_height
-    out_shape[3] = out_width
+    var out_shape = List[Int]()
+    out_shape.append(batch)
+    out_shape.append(out_channels)
+    out_shape.append(out_height)
+    out_shape.append(out_width)
     var output = zeros(out_shape, x.dtype())
 
     # Direct convolution algorithm
@@ -179,8 +179,8 @@ fn conv2d_no_bias(
     # Create zero bias
     var k_shape = kernel.shape()
     var out_channels = k_shape[0]
-    var bias_shape = List[Int](1)
-    bias_shape[0] = out_channels
+    var bias_shape = List[Int]()
+    bias_shape.append(out_channels)
     var bias = zeros(bias_shape, x.dtype())
 
     return conv2d(x, kernel, bias, stride, padding)
@@ -333,8 +333,8 @@ fn conv2d_backward(
                     grad_kernel._data.bitcast[Float32]()[grad_k_idx] = grad_sum
 
     # Compute grad_bias: sum over batch, height, width
-    var grad_bias_shape = List[Int](1)
-    grad_bias_shape[0] = out_channels
+    var grad_bias_shape = List[Int]()
+    grad_bias_shape.append(out_channels)
     var grad_bias = zeros(grad_bias_shape, grad_output.dtype())
 
     for oc in range(out_channels):

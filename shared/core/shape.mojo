@@ -214,8 +214,8 @@ fn flatten(tensor: ExTensor) raises -> ExTensor:
         var b = flatten(a)  # Shape (12,)
     """
     var numel = tensor.numel()
-    var shape_1d = List[Int](1)
-    shape_1d[0] = numel
+    var shape_1d = List[Int]()
+    shape_1d.append(numel)
 
     return reshape(tensor, shape_1d)
 

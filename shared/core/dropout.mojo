@@ -156,11 +156,11 @@ fn dropout2d(
         return (x, ones_mask)
 
     # Training mode: create channel-level mask
-    var mask_shape = List[Int](4)
-    mask_shape[0] = batch
-    mask_shape[1] = channels
-    mask_shape[2] = 1
-    mask_shape[3] = 1
+    var mask_shape = List[Int]()
+    mask_shape.append(batch)
+    mask_shape.append(channels)
+    mask_shape.append(1)
+    mask_shape.append(1)
     var channel_mask = zeros(mask_shape, x.dtype())
 
     # Generate random mask at channel level
