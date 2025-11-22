@@ -149,9 +149,9 @@ fn sgd_step_simple(
 
 
 fn sgd_momentum_update_inplace(
-    inout param: ExTensor,
+    mut param: ExTensor,
     grad: ExTensor,
-    inout velocity: ExTensor,
+    mut velocity: ExTensor,
     lr: Float32,
     momentum: Float32
 ) raises:
