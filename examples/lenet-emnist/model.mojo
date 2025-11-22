@@ -104,7 +104,7 @@ struct LeNet5:
         fc1_shape.append(256)
         var fc1_fan_in = 256
         var fc1_fan_out = 120
-        self.fc1_weights = xavier_uniform(fc1_fan_in, fc1_fan_out, fc1_shape, dtype=DType.float32)
+        self.fc1_weights = kaiming_uniform(fc1_fan_in, fc1_fan_out, fc1_shape, dtype=DType.float32)
         var fc1_bias_shape = List[Int]()
         fc1_bias_shape.append(120)
         self.fc1_bias = zeros(fc1_bias_shape, DType.float32)
@@ -115,7 +115,7 @@ struct LeNet5:
         fc2_shape.append(120)
         var fc2_fan_in = 120
         var fc2_fan_out = 84
-        self.fc2_weights = xavier_uniform(fc2_fan_in, fc2_fan_out, fc2_shape, dtype=DType.float32)
+        self.fc2_weights = kaiming_uniform(fc2_fan_in, fc2_fan_out, fc2_shape, dtype=DType.float32)
         var fc2_bias_shape = List[Int]()
         fc2_bias_shape.append(84)
         self.fc2_bias = zeros(fc2_bias_shape, DType.float32)
@@ -126,7 +126,7 @@ struct LeNet5:
         fc3_shape.append(84)
         var fc3_fan_in = 84
         var fc3_fan_out = num_classes
-        self.fc3_weights = xavier_uniform(fc3_fan_in, fc3_fan_out, fc3_shape, dtype=DType.float32)
+        self.fc3_weights = kaiming_uniform(fc3_fan_in, fc3_fan_out, fc3_shape, dtype=DType.float32)
         var fc3_bias_shape = List[Int]()
         fc3_bias_shape.append(num_classes)
         self.fc3_bias = zeros(fc3_bias_shape, DType.float32)
@@ -230,35 +230,16 @@ struct LeNet5:
             Error: If weight files are missing or have incompatible shapes
         """
         # Load each parameter from its file
-        var result1 = load_tensor(weights_dir + "/conv1_kernel.weights")
-        self.conv1_kernel = result1.tensor^
-
-        var result2 = load_tensor(weights_dir + "/conv1_bias.weights")
-        self.conv1_bias = result2.tensor^
-
-        var result3 = load_tensor(weights_dir + "/conv2_kernel.weights")
-        self.conv2_kernel = result3.tensor^
-
-        var result4 = load_tensor(weights_dir + "/conv2_bias.weights")
-        self.conv2_bias = result4.tensor^
-
-        var result5 = load_tensor(weights_dir + "/fc1_weights.weights")
-        self.fc1_weights = result5.tensor^
-
-        var result6 = load_tensor(weights_dir + "/fc1_bias.weights")
-        self.fc1_bias = result6.tensor^
-
-        var result7 = load_tensor(weights_dir + "/fc2_weights.weights")
-        self.fc2_weights = result7.tensor^
-
-        var result8 = load_tensor(weights_dir + "/fc2_bias.weights")
-        self.fc2_bias = result8.tensor^
-
-        var result9 = load_tensor(weights_dir + "/fc3_weights.weights")
-        self.fc3_weights = result9.tensor^
-
-        var result10 = load_tensor(weights_dir + "/fc3_bias.weights")
-        self.fc3_bias = result10.tensor^
+        self.conv1_kernel = load_tensor(weights_dir + "/conv1_kernel.weights")
+        self.conv1_bias = load_tensor(weights_dir + "/conv1_bias.weights")
+        self.conv2_kernel = load_tensor(weights_dir + "/conv2_kernel.weights")
+        self.conv2_bias = load_tensor(weights_dir + "/conv2_bias.weights")
+        self.fc1_weights = load_tensor(weights_dir + "/fc1_weights.weights")
+        self.fc1_bias = load_tensor(weights_dir + "/fc1_bias.weights")
+        self.fc2_weights = load_tensor(weights_dir + "/fc2_weights.weights")
+        self.fc2_bias = load_tensor(weights_dir + "/fc2_bias.weights")
+        self.fc3_weights = load_tensor(weights_dir + "/fc3_weights.weights")
+        self.fc3_bias = load_tensor(weights_dir + "/fc3_bias.weights")
 
     fn update_parameters(mut self, learning_rate: Float32,
                         grad_conv1_kernel: ExTensor,

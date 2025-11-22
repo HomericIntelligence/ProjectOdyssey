@@ -29,9 +29,13 @@ struct LoadedTensor:
     var name: String
     var tensor: ExTensor
 
-    fn __init__(out self, name: String, owned tensor: ExTensor):
+    fn __init__(out self, name: String, var tensor: ExTensor):
         self.name = name
         self.tensor = tensor^
+
+    fn __moveinit__(out self, owned other: Self):
+        self.name = other.name^
+        self.tensor = other.tensor^
 
 
 fn bytes_to_hex(data: UnsafePointer[UInt8], num_bytes: Int) -> String:
@@ -57,7 +61,7 @@ fn bytes_to_hex(data: UnsafePointer[UInt8], num_bytes: Int) -> String:
     return result
 
 
-fn hex_to_bytes(hex_str: String, output: UnsafePointer[UInt8]) raises:
+fn hex_to_bytes(hex_str: String, output: UnsafePointer[UInt8, origin=MutAnyOrigin]) raises:
     """Convert hexadecimal string to bytes.
 
     Args:
@@ -72,9 +76,11 @@ fn hex_to_bytes(hex_str: String, output: UnsafePointer[UInt8]) raises:
         raise Error("Hex string must have even length")
 
     for i in range(0, length, 2):
-        var high = _hex_char_to_int(hex_str[i])
-        var low = _hex_char_to_int(hex_str[i + 1])
-        output[i // 2] = UInt8((high << 4) | low)
+        var high = _hex_char_to_int(String(hex_str[i]))
+        var low = _hex_char_to_int(String(hex_str[i + 1]))
+        var offset = i // 2
+        var ptr = output + offset
+        ptr[] = UInt8((high << 4) | low)
 
 
 fn _hex_char_to_int(c: String) raises -> Int:
@@ -136,14 +142,14 @@ fn save_tensor(tensor: ExTensor, name: String, filepath: String) raises:
         _ = f.write(hex_data + "\n")
 
 
-fn load_tensor(filepath: String) raises -> LoadedTensor:
+fn load_tensor(filepath: String) raises -> ExTensor:
     """Load tensor from file.
 
     Args:
         filepath: Input file path
 
     Returns:
-        LoadedTensor with name and tensor
+        ExTensor loaded from file
 
     Raises:
         Error: If file format is invalid
@@ -158,9 +164,9 @@ fn load_tensor(filepath: String) raises -> LoadedTensor:
     if len(lines) < 3:
         raise Error("Invalid weight file format")
 
-    var name = lines[0]
-    var metadata = lines[1]
-    var hex_data = lines[2]
+    var name = String(lines[0])
+    var metadata = String(lines[1])
+    var hex_data = String(lines[2])
 
     # Parse metadata
     var meta_parts = metadata.split(" ")
@@ -168,7 +174,7 @@ fn load_tensor(filepath: String) raises -> LoadedTensor:
         raise Error("Invalid metadata format")
 
     var dtype_str = meta_parts[0]
-    var dtype = _parse_dtype(dtype_str)
+    var dtype = _parse_dtype(String(dtype_str))
 
     # Parse shape
     var shape = List[Int]()
@@ -183,7 +189,7 @@ fn load_tensor(filepath: String) raises -> LoadedTensor:
     var total_bytes = tensor.numel() * dtype_size
     hex_to_bytes(hex_data, tensor._data)
 
-    return LoadedTensor(name, tensor^)
+    return tensor^
 
 
 fn _get_dtype_size(dtype: DType) -> Int:

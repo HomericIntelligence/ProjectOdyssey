@@ -52,7 +52,7 @@ fn parse_args() raises -> TrainConfig:
     """
     var epochs = 10
     var batch_size = 32
-    var learning_rate = Float32(0.01)
+    var learning_rate = Float32(0.001)
     var data_dir = String("datasets/emnist")
     var weights_dir = String("lenet5_weights")
 
