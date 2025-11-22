@@ -37,9 +37,18 @@ except ImportError:
     HAS_NUMPY = False
     np = None
 
-# EMNIST download URLs
-EMNIST_BASE_URL = "http://www.itl.nist.gov/iaui/vip/cs_links/EMNIST"
-EMNIST_GZIP_URL = f"{EMNIST_BASE_URL}/gzip.zip"
+# EMNIST download URLs (with fallbacks)
+# Primary URL (NIST official - may have availability issues)
+EMNIST_PRIMARY_URL = "http://www.itl.nist.gov/iaui/vip/cs_links/EMNIST/gzip.zip"
+
+# Fallback mirrors (if primary fails)
+EMNIST_FALLBACK_URLS = [
+    "http://biometrics.nist.gov/cs_links/EMNIST/gzip.zip",
+    # Add more mirrors as they become available
+]
+
+# All URLs to try in order
+EMNIST_URLS = [EMNIST_PRIMARY_URL] + EMNIST_FALLBACK_URLS
 
 # Available splits
 EMNIST_SPLITS = [
@@ -53,7 +62,16 @@ EMNIST_SPLITS = [
 
 
 def download_file(url: str, output_path: Path) -> None:
-    """Download file using wget or curl."""
+    """
+    Download file using wget or curl.
+
+    Args:
+        url: URL to download from
+        output_path: Path to save downloaded file
+
+    Raises:
+        RuntimeError: If download fails
+    """
     print(f"Downloading {url}...")
 
     # Try wget first
@@ -212,10 +230,34 @@ def main():
             print(f"Verification failed: {e}")
             print("Re-downloading dataset...")
 
-    # Download gzip.zip
+    # Download gzip.zip (try all URLs until one works)
     gzip_zip = args.output_dir / "gzip.zip"
+    download_success = False
+    last_error = None
+
+    for url in EMNIST_URLS:
+        try:
+            download_file(url, gzip_zip)
+            download_success = True
+            break
+        except Exception as e:
+            last_error = e
+            print(f"Failed to download from {url}: {e}")
+            print("Trying next mirror...")
+            continue
+
+    if not download_success:
+        print(f"Error: All download URLs failed.", file=sys.stderr)
+        print(f"Last error: {last_error}", file=sys.stderr)
+        print(f"\nTroubleshooting:", file=sys.stderr)
+        print(f"  1. Check your internet connection", file=sys.stderr)
+        print(f"  2. Verify wget or curl is installed", file=sys.stderr)
+        print(f"  3. Try downloading manually from:", file=sys.stderr)
+        for url in EMNIST_URLS:
+            print(f"     - {url}", file=sys.stderr)
+        return 1
+
     try:
-        download_file(EMNIST_GZIP_URL, gzip_zip)
         extract_gzip(gzip_zip, args.output_dir)
 
         # Verify dataset
