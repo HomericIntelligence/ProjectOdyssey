@@ -3,7 +3,7 @@
 Implements element-wise arithmetic operations following NumPy-style broadcasting.
 """
 
-from collections.vector import DynamicVector
+from collections import List
 from .extensor import ExTensor
 from .broadcasting import broadcast_shapes, compute_broadcast_strides
 from .gradient_types import GradientPair
@@ -51,6 +51,18 @@ fn _broadcast_binary[
     for i in range(len(result_shape)):
         total_elems *= result_shape[i]
 
+    # Precompute row-major strides for result shape
+    var result_strides = List[Int]()
+    var stride = 1
+    for i in range(len(result_shape) - 1, -1, -1):
+        result_strides.append(stride)
+        stride *= result_shape[i]
+
+    # Reverse to get correct order (left-to-right)
+    var result_strides_final = List[Int]()
+    for i in range(len(result_strides) - 1, -1, -1):
+        result_strides_final.append(result_strides[i])
+
     # Get typed pointers for zero-overhead access
     var a_ptr = a._data.bitcast[Scalar[dtype]]()
     var b_ptr = b._data.bitcast[Scalar[dtype]]()
@@ -62,14 +74,10 @@ fn _broadcast_binary[
         var idx_b = 0
         var temp_idx = result_idx
 
-        # Compute source indices for a and b using broadcast strides
-        for dim in range(len(result_shape) - 1, -1, -1):
-            var stride_prod = 1
-            for d in range(dim + 1, len(result_shape)):
-                stride_prod *= result_shape[d]
-
-            var coord = temp_idx // stride_prod
-            temp_idx = temp_idx % stride_prod
+        # Convert flat index to multi-dimensional coordinates, then compute source indices
+        for dim in range(len(result_shape)):
+            var coord = temp_idx // result_strides_final[dim]
+            temp_idx = temp_idx % result_strides_final[dim]
 
             idx_a += coord * strides_a[dim]
             idx_b += coord * strides_b[dim]

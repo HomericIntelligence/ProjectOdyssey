@@ -26,13 +26,13 @@ from math import exp
 
 # EMNIST Balanced class mapping (47 classes)
 # 0-9: digits, 10-35: uppercase letters, 36-46: lowercase letters (select)
-var CLASS_NAMES = [
+alias CLASS_NAMES = List[String](
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",  # 0-9
     "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",  # 10-19
     "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",  # 20-29
     "U", "V", "W", "X", "Y", "Z",                      # 30-35
     "a", "b", "d", "e", "f", "g", "h", "n", "q", "r", "t"  # 36-46 (select lowercase)
-]
+)
 
 
 struct InferenceConfig:
@@ -71,7 +71,7 @@ fn parse_args() raises -> InferenceConfig:
     """Parse command line arguments.
 
     Returns:
-        InferenceConfig with parsed arguments
+        InferenceConfig with parsed arguments.
     """
     var weights_dir = String("lenet5_weights")
     var data_dir = String("datasets/emnist")
@@ -90,11 +90,11 @@ fn infer_single(mut model: LeNet5, image: ExTensor) raises -> PredictionResult:
     """Run inference on a single image.
 
     Args:
-        model: Trained LeNet-5 model
-        image: Input image of shape (1, 1, 28, 28)
+        model: Trained LeNet-5 model.
+        image: Input image of shape (1, 1, 28, 28).
 
     Returns:
-        PredictionResult with predicted class and confidence
+        PredictionResult with predicted class and confidence.
     """
     var logits = model.forward(image)
 
@@ -128,44 +128,51 @@ fn evaluate_test_set(
     """Evaluate model on entire test set.
 
     Args:
-        model: Trained LeNet-5 model
-        images: Test images of shape (num_samples, 1, 28, 28)
-        labels: Test labels of shape (num_samples,)
+        model: Trained LeNet-5 model.
+        images: Test images of shape (num_samples, 1, 28, 28).
+        labels: Test labels of shape (num_samples,).
 
     Returns:
-        EvaluationResult with accuracy and counts
+        EvaluationResult with accuracy and counts.
     """
     var num_samples = images.shape()[0]
     var correct = 0
 
     print("Evaluating on", num_samples, "test samples...")
 
-    # TODO: Process in batches when slicing is fully supported
-    # For now, evaluate on first 1000 samples
-    var eval_samples = min(1000, num_samples)
+    # Evaluate in batches to avoid memory issues
+    var eval_batch_size = 32
+    var num_eval_batches = (num_samples + eval_batch_size - 1) // eval_batch_size
 
-    for i in range(eval_samples):
-        # TODO: Extract single sample when slicing works
-        # For now, we'll use the entire dataset (inefficient but demonstrates structure)
-        var pred_class = model.predict(images)
-        var labels_data = labels._data  # uint8
-        var true_label = Int(labels_data[i])
+    for batch_idx in range(num_eval_batches):
+        var start_idx = batch_idx * eval_batch_size
+        var end_idx = min(start_idx + eval_batch_size, num_samples)
 
-        if pred_class == true_label:
-            correct += 1
+        # Extract batch slice
+        var batch_images = images.slice(start_idx, end_idx, axis=0)
+        var batch_labels = labels.slice(start_idx, end_idx, axis=0)
 
-        # Print progress every 100 samples
-        if (i + 1) % 100 == 0:
-            var current_acc = Float32(correct) / Float32(i + 1)
-            print("  Processed [", i + 1, "/", eval_samples, "] - Accuracy: ", current_acc * 100.0, "%")
+        # Process each sample in the batch
+        var actual_batch_size = end_idx - start_idx
+        for i in range(actual_batch_size):
+            # Extract single sample from batch
+            var sample = batch_images.slice(i, i + 1, axis=0)
+            var pred_class = model.predict(sample)
 
-        # Break after first iteration for demonstration
-        # Remove when slicing is implemented
-        break
+            # Get true label (integer from uint8 tensor)
+            var true_label = Int(batch_labels[i])
 
-    var accuracy = Float32(correct) / Float32(eval_samples)
+            if pred_class == true_label:
+                correct += 1
 
-    return EvaluationResult(accuracy, correct, eval_samples)
+        # Print progress every 100 batches
+        if (batch_idx + 1) % 100 == 0:
+            var current_acc = Float32(correct) / Float32(end_idx)
+            print("  Processed [", end_idx, "/", num_samples, "] - Accuracy: ", current_acc * 100.0, "%")
+
+    var accuracy = Float32(correct) / Float32(num_samples)
+
+    return EvaluationResult(accuracy, correct, num_samples)
 
 
 fn main() raises:
