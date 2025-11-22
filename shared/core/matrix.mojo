@@ -66,8 +66,8 @@ fn matmul(a: ExTensor, b: ExTensor) raises -> ExTensor:
             raise Error("Incompatible dimensions for matmul: matrix (" + String(m) + ", " + String(k) + ") @ vector (" + String(n) + ")")
 
         # Result is a vector of shape (m,)
-        var result_shape = List[Int](1)
-        result_shape[0] = m
+        var result_shape = List[Int]()
+        result_shape.append(m)
         var result = ExTensor(result_shape, a.dtype())
 
         # Compute: result[i] = sum(a[i, j] * b[j] for j in range(k))
@@ -91,8 +91,8 @@ fn matmul(a: ExTensor, b: ExTensor) raises -> ExTensor:
             raise Error("Incompatible dimensions for matmul: vector (" + String(m) + ") @ matrix (" + String(k) + ", " + String(n) + ")")
 
         # Result is a vector of shape (n,)
-        var result_shape = List[Int](1)
-        result_shape[0] = n
+        var result_shape = List[Int]()
+        result_shape.append(n)
         var result = ExTensor(result_shape, a.dtype())
 
         # Compute: result[j] = sum(a[i] * b[i, j] for i in range(m))
@@ -309,9 +309,9 @@ fn outer(a: ExTensor, b: ExTensor) raises -> ExTensor:
         raise Error("Cannot compute outer product with different dtypes")
 
     # Output shape is (len(a), len(b))
-    var result_shape = List[Int](2)
-    result_shape[0] = a.shape()[0]
-    result_shape[1] = b.shape()[0]
+    var result_shape = List[Int]()
+    result_shape.append(a.shape()[0])
+    result_shape.append(b.shape()[0])
 
     var result = ExTensor(result_shape, a.dtype())
 
@@ -384,9 +384,9 @@ fn matmul_backward(grad_output: ExTensor, a: ExTensor, b: ExTensor) raises -> Gr
         # grad_b (k,) = A^T (k, m) @ grad_output (m,)
 
         # grad_a: Outer product of grad_output and b
-        var grad_a_shape = List[Int](2)
-        grad_a_shape[0] = a_shape[0]  # m
-        grad_a_shape[1] = a_shape[1]  # k
+        var grad_a_shape = List[Int]()
+        grad_a_shape.append(a_shape[0])  # m
+        grad_a_shape.append(a_shape[1])  # k
         var grad_a = ExTensor(grad_a_shape, a.dtype())
 
         var m = a_shape[0]
@@ -415,9 +415,9 @@ fn matmul_backward(grad_output: ExTensor, a: ExTensor, b: ExTensor) raises -> Gr
         var grad_a = matmul(b, grad_output)  # (k, n) @ (n,) -> (k,)
 
         # grad_b: Outer product of a and grad_output
-        var grad_b_shape = List[Int](2)
-        grad_b_shape[0] = b_shape[0]  # k
-        grad_b_shape[1] = b_shape[1]  # n
+        var grad_b_shape = List[Int]()
+        grad_b_shape.append(b_shape[0])  # k
+        grad_b_shape.append(b_shape[1])  # n
         var grad_b = ExTensor(grad_b_shape, b.dtype())
 
         var k = b_shape[0]

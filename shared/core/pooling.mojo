@@ -70,11 +70,11 @@ fn maxpool2d(
     var out_width = (in_width + 2 * padding - kernel_size) // actual_stride + 1
 
     # Create output tensor
-    var out_shape = List[Int](4)
-    out_shape[0] = batch
-    out_shape[1] = channels
-    out_shape[2] = out_height
-    out_shape[3] = out_width
+    var out_shape = List[Int]()
+    out_shape.append(batch)
+    out_shape.append(channels)
+    out_shape.append(out_height)
+    out_shape.append(out_width)
     var output = zeros(out_shape, x.dtype())
 
     # Direct max pooling algorithm
@@ -167,11 +167,11 @@ fn avgpool2d(
     var out_width = (in_width + 2 * padding - kernel_size) // actual_stride + 1
 
     # Create output tensor
-    var out_shape = List[Int](4)
-    out_shape[0] = batch
-    out_shape[1] = channels
-    out_shape[2] = out_height
-    out_shape[3] = out_width
+    var out_shape = List[Int]()
+    out_shape.append(batch)
+    out_shape.append(channels)
+    out_shape.append(out_height)
+    out_shape.append(out_width)
     var output = zeros(out_shape, x.dtype())
 
     # Direct average pooling algorithm
@@ -250,11 +250,11 @@ fn global_avgpool2d(x: ExTensor, method: String = "direct") raises -> ExTensor:
     var width = x_shape[3]
 
     # Create output tensor (B, C, 1, 1)
-    var out_shape = List[Int](4)
-    out_shape[0] = batch
-    out_shape[1] = channels
-    out_shape[2] = 1
-    out_shape[3] = 1
+    var out_shape = List[Int]()
+    out_shape.append(batch)
+    out_shape.append(channels)
+    out_shape.append(1)
+    out_shape.append(1)
     var output = zeros(out_shape, x.dtype())
 
     # Compute global average for each channel
