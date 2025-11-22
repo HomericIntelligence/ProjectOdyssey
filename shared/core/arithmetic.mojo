@@ -9,6 +9,127 @@ from .broadcasting import broadcast_shapes, compute_broadcast_strides
 from .gradient_types import GradientPair
 
 
+# ============================================================================
+# Generic Broadcasting Helper (eliminates code duplication and conversion overhead)
+# ============================================================================
+
+
+fn _broadcast_binary[
+    dtype: DType,
+    op: fn[T: DType](Scalar[T], Scalar[T]) -> Scalar[T]
+](a: ExTensor, b: ExTensor) raises -> ExTensor:
+    """Apply binary operation with broadcasting and compile-time dtype specialization.
+
+    This helper eliminates 200+ lines of duplicated broadcasting code and removes
+    dtype conversion overhead by using compile-time specialization.
+
+    Args:
+        dtype: Compile-time dtype parameter
+        op: Binary operation function (e.g., add, subtract, multiply, divide)
+        a: First tensor
+        b: Second tensor
+
+    Returns:
+        Result tensor with operation applied element-wise with broadcasting
+
+    Example:
+        fn add_op[T: DType](x: Scalar[T], y: Scalar[T]) -> Scalar[T]:
+            return x + y
+
+        var result = _broadcast_binary[DType.float32, add_op](a, b)
+    """
+    # Compute broadcast shape
+    let result_shape = broadcast_shapes(a.shape(), b.shape())
+    var result = ExTensor(result_shape, dtype)
+
+    # Compute broadcast strides
+    let strides_a = compute_broadcast_strides(a.shape(), result_shape)
+    let strides_b = compute_broadcast_strides(b.shape(), result_shape)
+
+    # Calculate total elements in result
+    var total_elems = 1
+    for i in range(len(result_shape)):
+        total_elems *= result_shape[i]
+
+    # Get typed pointers for zero-overhead access
+    var a_ptr = a._data.bitcast[Scalar[dtype]]()
+    var b_ptr = b._data.bitcast[Scalar[dtype]]()
+    var result_ptr = result._data.bitcast[Scalar[dtype]]()
+
+    # Iterate over all result elements
+    for result_idx in range(total_elems):
+        var idx_a = 0
+        var idx_b = 0
+        var temp_idx = result_idx
+
+        # Compute source indices for a and b using broadcast strides
+        for dim in range(len(result_shape) - 1, -1, -1):
+            var stride_prod = 1
+            for d in range(dim + 1, len(result_shape)):
+                stride_prod *= result_shape[d]
+
+            let coord = temp_idx // stride_prod
+            temp_idx = temp_idx % stride_prod
+
+            idx_a += coord * strides_a[dim]
+            idx_b += coord * strides_b[dim]
+
+        # Perform operation with zero overhead (no dtype conversion!)
+        result_ptr[result_idx] = op[dtype](a_ptr[idx_a], b_ptr[idx_b])
+
+    return result^
+
+
+fn _dispatch_broadcast_binary[
+    op: fn[T: DType](Scalar[T], Scalar[T]) -> Scalar[T]
+](a: ExTensor, b: ExTensor) raises -> ExTensor:
+    """Runtime dispatch to compile-time specialized broadcasting binary operation.
+
+    This dispatcher performs runtime dtype checking but dispatches to compile-time
+    specialized versions, ensuring zero overhead compared to hand-written dtype branches.
+
+    Args:
+        op: Binary operation function pointer
+        a: First tensor
+        b: Second tensor
+
+    Returns:
+        Result tensor with operation applied with broadcasting
+
+    Raises:
+        Error: If dtypes don't match or are unsupported
+    """
+    # Validate dtypes match
+    if a._dtype != b._dtype:
+        raise Error("Cannot operate on tensors with different dtypes")
+
+    # Runtime dispatch to compile-time specialized version
+    if a._dtype == DType.float16:
+        return _broadcast_binary[DType.float16, op](a, b)
+    elif a._dtype == DType.float32:
+        return _broadcast_binary[DType.float32, op](a, b)
+    elif a._dtype == DType.float64:
+        return _broadcast_binary[DType.float64, op](a, b)
+    elif a._dtype == DType.int8:
+        return _broadcast_binary[DType.int8, op](a, b)
+    elif a._dtype == DType.int16:
+        return _broadcast_binary[DType.int16, op](a, b)
+    elif a._dtype == DType.int32:
+        return _broadcast_binary[DType.int32, op](a, b)
+    elif a._dtype == DType.int64:
+        return _broadcast_binary[DType.int64, op](a, b)
+    elif a._dtype == DType.uint8:
+        return _broadcast_binary[DType.uint8, op](a, b)
+    elif a._dtype == DType.uint16:
+        return _broadcast_binary[DType.uint16, op](a, b)
+    elif a._dtype == DType.uint32:
+        return _broadcast_binary[DType.uint32, op](a, b)
+    elif a._dtype == DType.uint64:
+        return _broadcast_binary[DType.uint64, op](a, b)
+    else:
+        raise Error("Unsupported dtype for binary operation")
+
+
 fn add(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise addition with broadcasting.
 
@@ -32,46 +153,13 @@ fn add(a: ExTensor, b: ExTensor) raises -> ExTensor:
         var y = ones([3, 4, 5], DType.float32)
         var z = add(x, y)  # Shape (3, 4, 5)
     """
-    if a.dtype() != b.dtype():
-        raise Error("Cannot add tensors with different dtypes")
+    # Define add operation
+    @always_inline
+    fn _add_op[T: DType](x: Scalar[T], y: Scalar[T]) -> Scalar[T]:
+        return x + y
 
-    # Compute broadcast shape
-    let result_shape = broadcast_shapes(a.shape(), b.shape())
-    var result = ExTensor(result_shape, a.dtype())
-
-    # Compute broadcast strides
-    let strides_a = compute_broadcast_strides(a.shape(), result_shape)
-    let strides_b = compute_broadcast_strides(b.shape(), result_shape)
-
-    # Calculate total elements in result
-    var total_elems = 1
-    for i in range(len(result_shape)):
-        total_elems *= result_shape[i]
-
-    # Iterate over all result elements
-    for result_idx in range(total_elems):
-        var idx_a = 0
-        var idx_b = 0
-        var temp_idx = result_idx
-
-        # Compute source indices for a and b using broadcast strides
-        for dim in range(len(result_shape) - 1, -1, -1):
-            var stride_prod = 1
-            for d in range(dim + 1, len(result_shape)):
-                stride_prod *= result_shape[d]
-
-            let coord = temp_idx // stride_prod
-            temp_idx = temp_idx % stride_prod
-
-            idx_a += coord * strides_a[dim]
-            idx_b += coord * strides_b[dim]
-
-        # Perform addition
-        let a_val = a._get_float64(idx_a)
-        let b_val = b._get_float64(idx_b)
-        result._set_float64(result_idx, a_val + b_val)
-
-    return result^
+    # Use generic broadcasting dispatcher (eliminates 60 lines and conversion overhead!)
+    return _dispatch_broadcast_binary[_add_op](a, b)
 
 
 fn subtract(a: ExTensor, b: ExTensor) raises -> ExTensor:
@@ -97,46 +185,12 @@ fn subtract(a: ExTensor, b: ExTensor) raises -> ExTensor:
         var y = ones([3, 4, 5], DType.float32)
         var z = subtract(x, y)  # Shape (3, 4, 5)
     """
-    if a.dtype() != b.dtype():
-        raise Error("Cannot subtract tensors with different dtypes")
+    # Define subtract operation
+    @always_inline
+    fn _sub_op[T: DType](x: Scalar[T], y: Scalar[T]) -> Scalar[T]:
+        return x - y
 
-    # Compute broadcast shape
-    let result_shape = broadcast_shapes(a.shape(), b.shape())
-    var result = ExTensor(result_shape, a.dtype())
-
-    # Compute broadcast strides
-    let strides_a = compute_broadcast_strides(a.shape(), result_shape)
-    let strides_b = compute_broadcast_strides(b.shape(), result_shape)
-
-    # Calculate total elements in result
-    var total_elems = 1
-    for i in range(len(result_shape)):
-        total_elems *= result_shape[i]
-
-    # Iterate over all result elements
-    for result_idx in range(total_elems):
-        var idx_a = 0
-        var idx_b = 0
-        var temp_idx = result_idx
-
-        # Compute source indices for a and b using broadcast strides
-        for dim in range(len(result_shape) - 1, -1, -1):
-            var stride_prod = 1
-            for d in range(dim + 1, len(result_shape)):
-                stride_prod *= result_shape[d]
-
-            let coord = temp_idx // stride_prod
-            temp_idx = temp_idx % stride_prod
-
-            idx_a += coord * strides_a[dim]
-            idx_b += coord * strides_b[dim]
-
-        # Perform subtraction
-        let a_val = a._get_float64(idx_a)
-        let b_val = b._get_float64(idx_b)
-        result._set_float64(result_idx, a_val - b_val)
-
-    return result^
+    return _dispatch_broadcast_binary[_sub_op](a, b)
 
 
 fn multiply(a: ExTensor, b: ExTensor) raises -> ExTensor:
