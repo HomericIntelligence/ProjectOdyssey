@@ -12,6 +12,18 @@ Example:
 
     # Load checkpoint
     var loaded = load_checkpoint("checkpoint.pt")
+
+FIXME: Placeholder tests in tests/shared/fixtures/test_io_helpers.mojo require:
+- create_temp_dir() (line 26)
+- cleanup_temp_dir() (line 65)
+- create_mock_config() (line 131)
+- create_mock_checkpoint() (line 174)
+- create_mock_text_file() (line 209)
+- get_test_data_path() (line 238)
+- file_exists() (line 288)
+- dir_exists() (line 316)
+All implementations marked with "WARNING: NOT YET IMPLEMENTED - Placeholder interface only."
+See Issue #49 for details
 """
 
 from python import Python

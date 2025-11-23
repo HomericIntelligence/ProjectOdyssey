@@ -1,9 +1,3 @@
-# Shared Library
+# Shared Library.Md
 
-## Modules
-
-Description of modules.
-
-## API
-
-Function signatures.
+Content here.

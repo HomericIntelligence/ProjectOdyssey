@@ -1,11 +1,3 @@
-# Testing Strategy
+# Testing Strategy.Md
 
-## Test Types
-
-- Unit tests
-- Integration tests
-- End-to-end tests
-
-## Coverage
-
-Coverage requirements.
+Content here.

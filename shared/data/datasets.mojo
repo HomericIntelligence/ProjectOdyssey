@@ -48,8 +48,8 @@ trait Dataset:
 # ============================================================================
 
 
-@value
-struct ExTensorDataset(Dataset):
+@fieldwise_init
+struct ExTensorDataset(Dataset, Copyable, Movable):
     """Dataset wrapping tensors for in-memory data.
 
     Stores data and labels as tensors and provides indexed access.
@@ -114,8 +114,8 @@ struct ExTensorDataset(Dataset):
 # ============================================================================
 
 
-@value
-struct FileDataset(Dataset):
+@fieldwise_init
+struct FileDataset(Dataset, Copyable, Movable):
     """Dataset for loading data from files.
 
     Lazily loads data from disk as needed, suitable for large datasets

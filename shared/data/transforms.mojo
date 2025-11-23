@@ -90,8 +90,8 @@ trait Transform:
 # ============================================================================
 
 
-@value
-struct Compose(Transform):
+@fieldwise_init
+struct Compose(Transform, Copyable, Movable):
     """Compose multiple transforms sequentially.
 
     Applies transforms in order, passing output of each to the next.
@@ -146,8 +146,8 @@ alias Pipeline = Compose
 # ============================================================================
 
 
-@value
-struct ToExTensor(Transform):
+@fieldwise_init
+struct ToExTensor(Transform, Copyable, Movable):
     """Convert data to tensor format.
 
     Ensures data is in tensor format with appropriate dtype.
@@ -169,8 +169,8 @@ struct ToExTensor(Transform):
         return data
 
 
-@value
-struct Normalize(Transform):
+@fieldwise_init
+struct Normalize(Transform, Copyable, Movable):
     """Normalize tensor with mean and standard deviation.
 
     Applies: (x - mean) / std
@@ -219,8 +219,8 @@ struct Normalize(Transform):
         return ExTensor(normalized^)
 
 
-@value
-struct Reshape(Transform):
+@fieldwise_init
+struct Reshape(Transform, Copyable, Movable):
     """Reshape tensor to target shape.
 
     Changes tensor dimensions while preserving total elements.
@@ -280,8 +280,8 @@ struct Reshape(Transform):
 # ============================================================================
 
 
-@value
-struct Resize(Transform):
+@fieldwise_init
+struct Resize(Transform, Copyable, Movable):
     """Resize image to target size.
 
     Resizes spatial dimensions of image tensors.
@@ -339,8 +339,8 @@ struct Resize(Transform):
         return ExTensor(resized^)
 
 
-@value
-struct CenterCrop(Transform):
+@fieldwise_init
+struct CenterCrop(Transform, Copyable, Movable):
     """Crop the center of an image.
 
     Extracts a center crop of specified size.
@@ -402,8 +402,8 @@ struct CenterCrop(Transform):
         return ExTensor(cropped^)
 
 
-@value
-struct RandomCrop(Transform):
+@fieldwise_init
+struct RandomCrop(Transform, Copyable, Movable):
     """Random crop from an image.
 
     Extracts a random crop of specified size.
@@ -498,8 +498,8 @@ struct RandomCrop(Transform):
         return ExTensor(cropped^)
 
 
-@value
-struct RandomHorizontalFlip(Transform):
+@fieldwise_init
+struct RandomHorizontalFlip(Transform, Copyable, Movable):
     """Randomly flip image horizontally.
 
     Flips with specified probability.
@@ -562,8 +562,8 @@ struct RandomHorizontalFlip(Transform):
         return ExTensor(flipped^)
 
 
-@value
-struct RandomVerticalFlip(Transform):
+@fieldwise_init
+struct RandomVerticalFlip(Transform, Copyable, Movable):
     """Randomly flip image vertically.
 
     Flips with specified probability.
@@ -626,8 +626,8 @@ struct RandomVerticalFlip(Transform):
         return ExTensor(flipped^)
 
 
-@value
-struct RandomRotation(Transform):
+@fieldwise_init
+struct RandomRotation(Transform, Copyable, Movable):
     """Randomly rotate image.
 
     Rotates within specified degree range.
@@ -725,8 +725,8 @@ struct RandomRotation(Transform):
         return ExTensor(rotated^)
 
 
-@value
-struct RandomErasing(Transform):
+@fieldwise_init
+struct RandomErasing(Transform, Copyable, Movable):
     """Randomly erase rectangular regions in images (Cutout augmentation).
 
     Randomly selects a rectangle region and erases it by setting pixels to a fill value.

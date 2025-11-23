@@ -1,6 +1,6 @@
 ---
 name: mojo-language-review-specialist
-description: "Use when: Reviewing Mojo-specific code for language idioms, ownership patterns (owned/borrowed/inout), SIMD usage, compile-time optimizations, or struct/class usage."
+description: "Use when: Reviewing Mojo-specific code for language idioms, parameter conventions (read/mut/var/ref), SIMD usage, compile-time optimizations, struct initialization patterns (@fieldwise_init, traits), or deprecated syntax (inout→mut, @value→@fieldwise_init, DynamicVector→List)."
 tools: Read,Grep,Glob
 model: sonnet
 ---
@@ -25,13 +25,15 @@ Focuses exclusively on Mojo language idioms, ownership semantics, compile-time f
 
 ## Responsibilities
 
-### 1. Ownership and Borrowing
+### 1. Parameter Conventions and Syntax
 
-- Review ownership patterns (owned, borrowed, inout)
+- **Review parameter conventions** (read, mut, var, ref) - NOT deprecated "inout"
+- **Check for deprecated syntax**: inout→mut, @value→@fieldwise_init, DynamicVector→List
 - Verify correct lifetime management
 - Check for unnecessary copies
-- Validate move semantics usage
+- Validate move semantics usage (ownership transfer with `^`)
 - Ensure reference safety
+- **Validate struct initialization**: @fieldwise_init with explicit (Copyable, Movable) traits
 
 ### 2. Function Definitions
 
@@ -170,13 +172,16 @@ See [CLAUDE.md](../../CLAUDE.md#documentation-rules) for complete documentation 
 
 ## Review Checklist
 
-### Ownership and Borrowing
+### Parameter Conventions and Syntax
 
-- [ ] Function parameters use appropriate ownership (owned/borrowed/inout)
+- [ ] Function parameters use appropriate conventions (read/mut/var/ref) - **NOT deprecated "inout"**
+- [ ] No deprecated `inout` keyword (use `mut` for mutable parameters)
+- [ ] No deprecated `@value` decorator (use `@fieldwise_init` + traits)
+- [ ] No `DynamicVector` usage (use `List` instead)
+- [ ] Tuple return types use `Tuple[T1, T2]` not `-> (T1, T2)`
+- [ ] Structs have explicit trait conformances: `(Copyable, Movable)`
 - [ ] No unnecessary copies of large value types
-- [ ] Borrowed references don't escape their scope
-- [ ] Move semantics used for transferring ownership
-- [ ] Inout used appropriately for mutations
+- [ ] Move semantics used for transferring ownership (`^` operator)
 - [ ] No dangling references or lifetime violations
 
 ### Function Declarations
@@ -392,6 +397,77 @@ fn matrix_multiply(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
 
 ```text
 
+## Deprecated Syntax Detection (CRITICAL)
+
+**PRIORITY**: Flag ALL deprecated syntax patterns for immediate fix.
+
+### ❌ DEPRECATED: `inout` keyword
+
+**Wrong**:
+```mojo
+fn __init__(inout self, value: Int):
+fn modify(inout self):
+```
+
+**Correct**:
+```mojo
+fn __init__(mut self, value: Int):
+fn modify(mut self):
+```
+
+**Fix**: Global find-replace `inout` → `mut`
+
+### ❌ DEPRECATED: `@value` decorator
+
+**Wrong**:
+```mojo
+@value
+struct Transform:
+    var name: String
+```
+
+**Correct**:
+```mojo
+@fieldwise_init
+struct Transform(Copyable, Movable):
+    var name: String
+```
+
+**Fix**: Replace decorator + add explicit trait conformances
+
+### ❌ NON-EXISTENT: `DynamicVector`
+
+**Wrong**:
+```mojo
+from collections.vector import DynamicVector
+var values = DynamicVector[Int](10)
+values.push_back(42)
+```
+
+**Correct**:
+```mojo
+var values = List[Int](10)
+values.append(42)
+```
+
+**Fix**: Replace type + update method calls (.push_back → .append)
+
+### ❌ INVALID: Tuple return syntax
+
+**Wrong**:
+```mojo
+fn compute() -> (Float32, Float32):
+    return (1.0, 2.0)
+```
+
+**Correct**:
+```mojo
+fn compute() -> Tuple[Float32, Float32]:
+    return Tuple[Float32, Float32](1.0, 2.0)
+```
+
+**Fix**: Use `Tuple[T1, T2]` type syntax
+
 ## Common Issues to Flag
 
 ### Critical Issues
@@ -421,30 +497,43 @@ fn matrix_multiply(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
 - Style guide violations
 - Missing move constructors (performance, not correctness)
 
-## Mojo Best Practices Reference
+## Mojo Best Practices Reference (v0.25.7+)
 
-### Ownership Rules
+### Parameter Conventions
 
-### Use `owned`
+**CRITICAL**: Use current Mojo v0.25.7+ syntax. See [CLAUDE.md](../../CLAUDE.md#mojo-syntax-standards-v0257) for complete reference.
 
-- Taking ownership of a value
-- Storing in a struct field
-- Consuming the parameter
-- Transferring ownership
-
-### Use `borrowed`
+### Use `read` (default - implicit)
 
 - Read-only access (most common)
 - Temporary inspection
 - No ownership transfer
 - Zero-copy access
+- **Example**: `fn process(data: ExTensor):`
 
-### Use `inout`
+### Use `mut` (replaces deprecated "inout")
 
 - Mutating the parameter
 - In-place modifications
 - Caller expects changes
 - Exclusive mutable access
+- **Example**: `fn modify(mut data: ExTensor):`
+- **NEVER use deprecated `inout` keyword**
+
+### Use `var` (takes ownership)
+
+- Taking ownership of a value
+- Consuming the parameter
+- Transferring ownership
+- Caller loses access after call
+- **Example**: `fn consume(var data: ExTensor):`
+- Use with `^` operator: `consume(data^)`
+
+### Use `ref` (parametric reference - advanced)
+
+- Generalized reference with parametric mutability
+- Can be mutable or immutable based on parameter
+- **Example**: `fn generic_ref[mutability: Bool](ref [mutability] data: ExTensor):`
 
 ### fn vs def Guidelines
 

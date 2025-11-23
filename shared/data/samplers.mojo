@@ -35,8 +35,8 @@ trait Sampler:
 # ============================================================================
 
 
-@value
-struct SequentialSampler(Sampler):
+@fieldwise_init
+struct SequentialSampler(Sampler, Copyable, Movable):
     """Samples elements sequentially in order.
 
     Always returns indices in the same order: 0, 1, 2, ..., n-1.
@@ -88,8 +88,8 @@ struct SequentialSampler(Sampler):
 # ============================================================================
 
 
-@value
-struct RandomSampler(Sampler):
+@fieldwise_init
+struct RandomSampler(Sampler, Copyable, Movable):
     """Samples elements randomly without replacement.
 
     Generates a random permutation of indices for each iteration.
@@ -169,8 +169,8 @@ struct RandomSampler(Sampler):
 # ============================================================================
 
 
-@value
-struct WeightedSampler(Sampler):
+@fieldwise_init
+struct WeightedSampler(Sampler, Copyable, Movable):
     """Samples elements according to given weights.
 
     Each sample is drawn with probability proportional to its weight.

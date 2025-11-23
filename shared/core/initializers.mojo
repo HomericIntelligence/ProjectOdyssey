@@ -12,6 +12,10 @@ Mathematical foundations:
 Type support:
 - All initializers: float16, float32, float64
 
+Naming conventions:
+- kaiming_uniform/kaiming_normal: Standard names
+- he_uniform/he_normal: Aliases (Kaiming He is the author)
+
 Issues covered:
 - #258-260: Xavier/Glorot initialization (uniform and normal variants)
 - #268-272: Uniform/Normal basic distributions
@@ -574,3 +578,30 @@ fn constant(shape: List[Int], value: Float64, dtype: DType = DType.float32) rais
         raise Error("constant: only float16, float32, and float64 dtypes supported")
 
     return result^
+
+
+# ============================================================================
+# Aliases for Compatibility
+# ============================================================================
+
+
+fn he_uniform(fan_in: Int, fan_out: Int, shape: List[Int], fan_mode: String = "fan_in", dtype: DType = DType.float32, seed_val: Int = -1) raises -> ExTensor:
+    """Alias for kaiming_uniform.
+
+    He and Kaiming refer to the same initialization method (Kaiming He is the author).
+    This alias provides compatibility with code that uses 'he_uniform' naming.
+
+    See kaiming_uniform() for full documentation.
+    """
+    return kaiming_uniform(fan_in, fan_out, shape, fan_mode, dtype, seed_val)
+
+
+fn he_normal(fan_in: Int, fan_out: Int, shape: List[Int], fan_mode: String = "fan_in", dtype: DType = DType.float32, seed_val: Int = -1) raises -> ExTensor:
+    """Alias for kaiming_normal.
+
+    He and Kaiming refer to the same initialization method (Kaiming He is the author).
+    This alias provides compatibility with code that uses 'he_normal' naming.
+
+    See kaiming_normal() for full documentation.
+    """
+    return kaiming_normal(fan_in, fan_out, shape, fan_mode, dtype, seed_val)

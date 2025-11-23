@@ -62,7 +62,7 @@ struct FP4_E2M1(Stringable, Representable):
     """
     var value: UInt8  # Only lower 4 bits are used
 
-    fn __init__(inout self, value: UInt8 = 0):
+    fn __init__(mut self, value: UInt8 = 0):
         """Initialize FP4_E2M1 from raw 4-bit value.
 
         Args:

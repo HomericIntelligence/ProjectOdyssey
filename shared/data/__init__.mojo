@@ -27,6 +27,14 @@ Example:
         inputs = batch.data
         targets = batch.labels
         # ... training code
+
+FIXME: Placeholder import tests in tests/shared/test_imports.mojo require:
+- test_data_imports (line 160+)
+- test_data_datasets_imports (line 170+)
+- test_data_loaders_imports (line 180+)
+- test_data_transforms_imports (line 195+)
+All tests marked as "(placeholder)" and require uncommented imports as Issue #49 progresses.
+See Issue #49 for details
 """
 
 # Package version

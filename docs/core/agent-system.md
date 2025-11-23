@@ -1,14 +1,3 @@
-# Agent System
+# Agent System.Md
 
-## Architecture
-
-System architecture.
-
-## Agents
-
-- Agent 1
-- Agent 2
-
-## Workflow
-
-How agents work together.
+Content here.

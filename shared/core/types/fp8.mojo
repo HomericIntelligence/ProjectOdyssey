@@ -34,7 +34,7 @@ struct FP8(Stringable, Representable):
     """
     var value: UInt8
 
-    fn __init__(inout self, value: UInt8 = 0):
+    fn __init__(mut self, value: UInt8 = 0):
         """Initialize FP8 from raw UInt8 bits.
 
         Args:

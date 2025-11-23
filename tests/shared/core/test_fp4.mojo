@@ -52,14 +52,14 @@ fn test_fp4_e2m1_representable_values() raises:
     # exp=3, mantissa=0: 4.0
     # exp=3, mantissa=1: 6.0
 
-    var values = DynamicVector[Float32](7)
-    values.push_back(0.0)
-    values.push_back(1.0)
-    values.push_back(1.5)
-    values.push_back(2.0)
-    values.push_back(3.0)
-    values.push_back(4.0)
-    values.push_back(6.0)
+    var values = List[Float32](7)
+    values.append(0.0)
+    values.append(1.0)
+    values.append(1.5)
+    values.append(2.0)
+    values.append(3.0)
+    values.append(4.0)
+    values.append(6.0)
 
     for i in range(len(values)):
         var val = values[i]

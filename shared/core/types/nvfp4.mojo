@@ -66,7 +66,7 @@ struct E4M3Scale(Stringable, Representable):
     """
     var value: UInt8  # Only lower 7 bits are used
 
-    fn __init__(inout self, value: UInt8 = 0x38):
+    fn __init__(mut self, value: UInt8 = 0x38):
         """Initialize E4M3 scale from raw 7-bit value.
 
         Args:
@@ -211,7 +211,7 @@ struct NVFP4(Stringable, Representable):
     var value: FP4_E2M1
     var scale: E4M3Scale
 
-    fn __init__(inout self, value: FP4_E2M1 = FP4_E2M1(), scale: E4M3Scale = E4M3Scale()):
+    fn __init__(mut self, value: FP4_E2M1 = FP4_E2M1(), scale: E4M3Scale = E4M3Scale()):
         """Initialize NVFP4 from E2M1 value and E4M3 scale.
 
         Args:
@@ -567,12 +567,12 @@ struct NVFP4Block(Stringable, Representable):
     var data: SIMD[DType.uint8, 8]  # 16 E2M1 values (2 per byte)
     var scale: E4M3Scale  # Shared E4M3 scale
 
-    fn __init__(inout self):
+    fn __init__(mut self):
         """Initialize NVFP4Block with zeros."""
         self.data = SIMD[DType.uint8, 8](0)
         self.scale = E4M3Scale(0x38)  # Scale = 1.0
 
-    fn __init__(inout self, data: SIMD[DType.uint8, 8], scale: E4M3Scale):
+    fn __init__(mut self, data: SIMD[DType.uint8, 8], scale: E4M3Scale):
         """Initialize NVFP4Block from packed data and scale.
 
         Args:
@@ -681,7 +681,7 @@ struct NVFP4Block(Stringable, Representable):
 
         return NVFP4(fp4_val, self.scale)
 
-    fn set(inout self, index: Int, value: NVFP4) raises:
+    fn set(mut self, index: Int, value: NVFP4) raises:
         """Set NVFP4 value at index (0-15).
 
         Args:

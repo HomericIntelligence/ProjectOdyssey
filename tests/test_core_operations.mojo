@@ -16,7 +16,6 @@ Testing strategy:
 """
 
 from testing import assert_true, assert_false, assert_equal, assert_almost_equal
-from collections.vector import DynamicVector
 from math import abs
 from shared.core import (
     ExTensor,
@@ -39,7 +38,7 @@ fn test_initializers_with_activations() raises:
     """Test that initializers work correctly with activation functions."""
     print("Testing initializers with activations...")
 
-    var shape = DynamicVector[Int](100, 100)
+    var shape = List[Int](100, 100)
     var fan_in = 100
     var fan_out = 100
 
@@ -78,17 +77,17 @@ fn test_forward_pass_with_metrics() raises:
     print("Testing forward pass with metrics...")
 
     # Initialize a simple 2-layer network
-    var w1_shape = DynamicVector[Int](4, 3)  # 3 inputs, 4 hidden
-    var w2_shape = DynamicVector[Int](3, 4)  # 4 hidden, 3 outputs
+    var w1_shape = List[Int](4, 3)  # 3 inputs, 4 hidden
+    var w2_shape = List[Int](3, 4)  # 4 hidden, 3 outputs
 
     var w1 = kaiming_uniform(3, 4, w1_shape, seed_val=1)
-    var b1 = constant(DynamicVector[Int](4), 0.0)
+    var b1 = constant(List[Int](4), 0.0)
 
     var w2 = xavier_uniform(4, 3, w2_shape, seed_val=2)
-    var b2 = constant(DynamicVector[Int](3), 0.0)
+    var b2 = constant(List[Int](3), 0.0)
 
     # Create fake input (batch_size=5, features=3)
-    var input_shape = DynamicVector[Int](5, 3)
+    var input_shape = List[Int](5, 3)
     var input = normal(input_shape, mean=0.0, std=1.0, seed_val=3)
 
     # Forward pass: input @ w1.T + b1
@@ -100,7 +99,7 @@ fn test_forward_pass_with_metrics() raises:
     var predictions = softmax(output)
 
     # Create fake labels
-    var labels = ExTensor(DynamicVector[Int](5), DType.int32)
+    var labels = ExTensor(List[Int](5), DType.int32)
     labels._data.bitcast[Int32]()[0] = 0
     labels._data.bitcast[Int32]()[1] = 1
     labels._data.bitcast[Int32]()[2] = 2
@@ -130,8 +129,8 @@ fn test_training_loop_simulation() raises:
     var batch_size = 4
 
     # Initialize weights
-    var w1 = kaiming_uniform(input_dim, hidden_dim, DynamicVector[Int](hidden_dim, input_dim), seed_val=1)
-    var w2 = xavier_uniform(hidden_dim, output_dim, DynamicVector[Int](output_dim, hidden_dim), seed_val=2)
+    var w1 = kaiming_uniform(input_dim, hidden_dim, List[Int](hidden_dim, input_dim), seed_val=1)
+    var w2 = xavier_uniform(hidden_dim, output_dim, List[Int](output_dim, hidden_dim), seed_val=2)
 
     # Setup metrics
     var accuracy = AccuracyMetric()
@@ -151,8 +150,8 @@ fn test_training_loop_simulation() raises:
         # Simulate batches
         for batch_idx in range(num_batches):
             # Create fake batch
-            var input = normal(DynamicVector[Int](batch_size, input_dim), seed_val=epoch * 100 + batch_idx)
-            var labels = ExTensor(DynamicVector[Int](batch_size), DType.int32)
+            var input = normal(List[Int](batch_size, input_dim), seed_val=epoch * 100 + batch_idx)
+            var labels = ExTensor(List[Int](batch_size), DType.int32)
 
             for i in range(batch_size):
                 labels._data.bitcast[Int32]()[i] = Int32((i + batch_idx) % output_dim)
@@ -179,9 +178,9 @@ fn test_training_loop_simulation() raises:
         print("  Epoch " + String(epoch) + ": loss=" + String(epoch_avg_loss) + ", acc=" + String(epoch_acc))
 
         # Log metrics
-        var epoch_metrics = DynamicVector[MetricResult]()
-        epoch_metrics.push_back(MetricResult("accuracy", epoch_acc))
-        epoch_metrics.push_back(MetricResult("loss", Float64(epoch_avg_loss)))
+        var epoch_metrics = List[MetricResult]()
+        epoch_metrics.append(MetricResult("accuracy", epoch_acc))
+        epoch_metrics.append(MetricResult("loss", Float64(epoch_avg_loss)))
         logger.log_epoch(epoch, epoch_metrics)
 
     # Verify training logged correctly
@@ -197,8 +196,8 @@ fn test_dtype_consistency_across_components() raises:
     """Test that all components handle multiple dtypes consistently."""
     print("Testing dtype consistency across components...")
 
-    var shape = DynamicVector[Int](10, 10)
-    var dtypes = DynamicVector[DType](DType.float32, DType.float64)
+    var shape = List[Int](10, 10)
+    var dtypes = List[DType](DType.float32, DType.float64)
 
     for dt_idx in range(2):
         var dt = dtypes[dt_idx]
@@ -218,7 +217,7 @@ fn test_seed_reproducibility_across_components() raises:
     """Test that seeding works consistently across all components."""
     print("Testing seed reproducibility across components...")
 
-    var shape = DynamicVector[Int](20, 20)
+    var shape = List[Int](20, 20)
     var seed = 42
 
     # Initialize with same seed twice
@@ -257,7 +256,7 @@ fn test_batch_processing_pipeline() raises:
     var num_classes = 3
 
     # Initialize network
-    var weights = kaiming_uniform(num_features, num_classes, DynamicVector[Int](num_classes, num_features), seed_val=1)
+    var weights = kaiming_uniform(num_features, num_classes, List[Int](num_classes, num_features), seed_val=1)
 
     # Setup metrics
     var accuracy = AccuracyMetric()
@@ -267,8 +266,8 @@ fn test_batch_processing_pipeline() raises:
     var num_batches = 10
     for batch_idx in range(num_batches):
         # Generate batch
-        var input = normal(DynamicVector[Int](batch_size, num_features), seed_val=batch_idx)
-        var labels = ExTensor(DynamicVector[Int](batch_size), DType.int32)
+        var input = normal(List[Int](batch_size, num_features), seed_val=batch_idx)
+        var labels = ExTensor(List[Int](batch_size), DType.int32)
 
         for i in range(batch_size):
             labels._data.bitcast[Int32]()[i] = Int32(i % num_classes)
@@ -305,17 +304,17 @@ fn test_multi_layer_network_integration() raises:
     print("Testing multi-layer network integration...")
 
     # 3-layer network: 784 -> 256 -> 128 -> 10 (MNIST-like)
-    var layer_sizes = DynamicVector[Int](784, 256, 128, 10)
+    var layer_sizes = List[Int](784, 256, 128, 10)
 
     # Initialize all layers with appropriate methods
-    var w1 = kaiming_uniform(784, 256, DynamicVector[Int](256, 784), seed_val=1)
-    var b1 = constant(DynamicVector[Int](256), 0.0)
+    var w1 = kaiming_uniform(784, 256, List[Int](256, 784), seed_val=1)
+    var b1 = constant(List[Int](256), 0.0)
 
-    var w2 = kaiming_uniform(256, 128, DynamicVector[Int](128, 256), seed_val=2)
-    var b2 = constant(DynamicVector[Int](128), 0.0)
+    var w2 = kaiming_uniform(256, 128, List[Int](128, 256), seed_val=2)
+    var b2 = constant(List[Int](128), 0.0)
 
-    var w3 = xavier_uniform(128, 10, DynamicVector[Int](10, 128), seed_val=3)
-    var b3 = constant(DynamicVector[Int](10), 0.0)
+    var w3 = xavier_uniform(128, 10, List[Int](10, 128), seed_val=3)
+    var b3 = constant(List[Int](10), 0.0)
 
     # Verify all weights initialized
     assert_equal(w1.size(), 784 * 256, "Layer 1 weights")
@@ -323,8 +322,8 @@ fn test_multi_layer_network_integration() raises:
     assert_equal(w3.size(), 128 * 10, "Layer 3 weights")
 
     # Create fake mini-batch (batch_size=4)
-    var input = normal(DynamicVector[Int](4, 784), seed_val=42)
-    var labels = ExTensor(DynamicVector[Int](4), DType.int32)
+    var input = normal(List[Int](4, 784), seed_val=42)
+    var labels = ExTensor(List[Int](4), DType.int32)
     labels._data.bitcast[Int32]()[0] = 7
     labels._data.bitcast[Int32]()[1] = 2
     labels._data.bitcast[Int32]()[2] = 1
@@ -363,8 +362,8 @@ fn test_error_handling_across_components() raises:
     print("Testing error handling across components...")
 
     # Test mismatched shapes in metric updates
-    var preds = ExTensor(DynamicVector[Int](5), DType.int32)
-    var labels = ExTensor(DynamicVector[Int](3), DType.int32)  # Mismatched size
+    var preds = ExTensor(List[Int](5), DType.int32)
+    var labels = ExTensor(List[Int](3), DType.int32)  # Mismatched size
 
     var accuracy = AccuracyMetric()
 

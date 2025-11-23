@@ -37,7 +37,7 @@ struct UInt8(Stringable, Representable):
     # Constructors
     # ===----------------------------------------------------------------------===#
 
-    fn __init__(inout self, value: UInt8):
+    fn __init__(mut self, value: UInt8):
         """Initialize from UInt8 value.
 
         Args:
@@ -45,7 +45,7 @@ struct UInt8(Stringable, Representable):
         """
         self.value = value
 
-    fn __init__(inout self, value: Int):
+    fn __init__(mut self, value: Int):
         """Initialize from Int value with clamping.
 
         Args:
@@ -315,11 +315,11 @@ struct UInt16(Stringable, Representable):
 
     var value: UInt16
 
-    fn __init__(inout self, value: UInt16):
+    fn __init__(mut self, value: UInt16):
         """Initialize from UInt16 value."""
         self.value = value
 
-    fn __init__(inout self, value: Int):
+    fn __init__(mut self, value: Int):
         """Initialize from Int value with clamping."""
         self.value = Self._clamp_uint16(value)
 
@@ -416,11 +416,11 @@ struct UInt32(Stringable, Representable):
 
     var value: UInt32
 
-    fn __init__(inout self, value: UInt32):
+    fn __init__(mut self, value: UInt32):
         """Initialize from UInt32 value."""
         self.value = value
 
-    fn __init__(inout self, value: Int):
+    fn __init__(mut self, value: Int):
         """Initialize from Int value with clamping."""
         self.value = Self._clamp_uint32(value)
 
@@ -517,11 +517,11 @@ struct UInt64(Stringable, Representable):
 
     var value: UInt64
 
-    fn __init__(inout self, value: UInt64):
+    fn __init__(mut self, value: UInt64):
         """Initialize from UInt64 value."""
         self.value = value
 
-    fn __init__(inout self, value: Int):
+    fn __init__(mut self, value: Int):
         """Initialize from Int value with clamping."""
         self.value = Self._clamp_uint64(value)
 
