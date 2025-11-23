@@ -42,6 +42,14 @@ Example:
     # Forward pass (pure functional)
     var h1 = linear(x, weights, bias)
     var a1 = relu(h1)
+
+FIXME: Placeholder import tests in tests/shared/test_imports.mojo require:
+- test_core_imports (line 17)
+- test_core_layers_imports (line 31)
+- test_core_activations_imports (line 46)
+- test_core_types_imports (line 60)
+All tests marked as "(placeholder - awaiting implementation)" and require module
+imports to be uncommented as Issue #49 progresses. See Issue #49 for details
 """
 
 # Package version
@@ -234,6 +242,8 @@ from .initializers import (
     xavier_normal,
     kaiming_uniform,
     kaiming_normal,
+    he_uniform,
+    he_normal,
     uniform,
     normal,
     constant,

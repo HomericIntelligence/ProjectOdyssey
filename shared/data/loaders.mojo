@@ -14,8 +14,8 @@ from .samplers import Sampler, SequentialSampler, RandomSampler
 # ============================================================================
 
 
-@value
-struct Batch:
+@fieldwise_init
+struct Batch(Copyable, Movable):
     """Container for a batch of samples.
 
     Holds data and labels for a batch, along with batch metadata.
@@ -50,8 +50,8 @@ struct Batch:
 # ============================================================================
 
 
-@value
-struct BaseLoader:
+@fieldwise_init
+struct BaseLoader(Copyable, Movable):
     """Base data loader with core functionality.
 
     Provides the foundation for all data loading operations.
@@ -102,8 +102,8 @@ struct BaseLoader:
 # ============================================================================
 
 
-@value
-struct BatchLoader(BaseLoader):
+@fieldwise_init
+struct BatchLoader(BaseLoader, Copyable, Movable):
     """Data loader with batching and optional shuffling.
 
     Loads data in batches, optionally shuffling the order of samples.

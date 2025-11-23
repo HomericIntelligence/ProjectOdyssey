@@ -35,8 +35,8 @@ from shared.data.transforms import Transform
 # ============================================================================
 
 
-@value
-struct IdentityTransform(Transform):
+@fieldwise_init
+struct IdentityTransform(Transform, Copyable, Movable):
     """Identity transform - returns input unchanged.
 
     Useful as a placeholder or for conditional pipelines where
@@ -67,8 +67,8 @@ struct IdentityTransform(Transform):
 # ============================================================================
 
 
-@value
-struct LambdaTransform(Transform):
+@fieldwise_init
+struct LambdaTransform(Transform, Copyable, Movable):
     """Apply a function element-wise to tensor values.
 
     Provides flexible inline transformations without defining
@@ -120,8 +120,8 @@ struct LambdaTransform(Transform):
 # ============================================================================
 
 
-@value
-struct ConditionalTransform(Transform):
+@fieldwise_init
+struct ConditionalTransform(Transform, Copyable, Movable):
     """Apply transform only if predicate is true.
 
     Evaluates a predicate function on the input tensor. If true,
@@ -175,8 +175,8 @@ struct ConditionalTransform(Transform):
 # ============================================================================
 
 
-@value
-struct ClampTransform(Transform):
+@fieldwise_init
+struct ClampTransform(Transform, Copyable, Movable):
     """Clamp tensor values to specified range [min_val, max_val].
 
     Limits all values to be within the specified range. Values below
@@ -239,8 +239,8 @@ struct ClampTransform(Transform):
 # ============================================================================
 
 
-@value
-struct DebugTransform(Transform):
+@fieldwise_init
+struct DebugTransform(Transform, Copyable, Movable):
     """Debug transform for logging/inspection.
 
     Prints tensor information (shape, statistics) for debugging
@@ -305,8 +305,8 @@ struct DebugTransform(Transform):
 # ============================================================================
 
 
-@value
-struct SequentialTransform(Transform):
+@fieldwise_init
+struct SequentialTransform(Transform, Copyable, Movable):
     """Apply transforms sequentially in order.
 
     Chains multiple transforms together, applying them in sequence.
@@ -357,8 +357,8 @@ struct SequentialTransform(Transform):
 # ============================================================================
 
 
-@value
-struct BatchTransform:
+@fieldwise_init
+struct BatchTransform(Copyable, Movable):
     """Apply transform to a batch of tensors.
 
     Applies the same transform to each tensor in a list,
@@ -408,8 +408,8 @@ struct BatchTransform:
 # ============================================================================
 
 
-@value
-struct ToFloat32(Transform):
+@fieldwise_init
+struct ToFloat32(Transform, Copyable, Movable):
     """Convert tensor to Float32 dtype.
 
     Converts all elements to Float32. If already Float32,
@@ -442,8 +442,8 @@ struct ToFloat32(Transform):
         return ExTensor(result_values^)
 
 
-@value
-struct ToInt32(Transform):
+@fieldwise_init
+struct ToInt32(Transform, Copyable, Movable):
     """Convert tensor to Int32 dtype (truncation).
 
     Converts all elements to Int32 by truncating decimal places.

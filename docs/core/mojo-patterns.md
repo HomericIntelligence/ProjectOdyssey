@@ -1,10 +1,3 @@
-# Mojo Patterns
+# Mojo Patterns.Md
 
-## Memory Management
-
-```mojo
-fn example():
-    pass
-```
-
-More patterns.
+Content here.

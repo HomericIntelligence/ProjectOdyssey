@@ -35,6 +35,21 @@ Example:
     for epoch in range(100):
         loss = train_epoch(model, optimizer, train_loader)
         print("Epoch", epoch, "Loss:", loss)
+
+FIXME: Placeholder tests in tests/shared/integration/test_packaging.mojo require:
+- test_subpackage_accessibility (line 28)
+- test_root_level_imports (line 49)
+- test_module_level_imports (line 65)
+- test_nested_imports (line 74)
+- test_core_training_integration (line 88)
+- test_core_data_integration (line 108)
+- test_training_data_integration (line 124)
+- test_complete_training_workflow (line 145)
+- test_paper_implementation_pattern (line 181)
+- test_public_api_exports (line 218)
+- test_no_private_exports (line 237)
+- test_deprecated_imports (line 254)
+See Issue #49 for details
 """
 
 # Package version

@@ -169,6 +169,171 @@ Relevant links:
 
 See `/agents/README.md` for complete agent documentation and `/agents/hierarchy.md` for visual hierarchy.
 
+### Mojo Syntax Standards (v0.25.7+)
+
+**CRITICAL**: Always use current Mojo syntax. The following patterns are DEPRECATED or INCORRECT:
+
+#### ❌ DEPRECATED: `inout` keyword → ✅ USE: `mut`
+
+**WRONG**:
+```mojo
+fn __init__(inout self, value: Int):
+    self.value = value
+
+fn modify(inout self):
+    self.value += 1
+```
+
+**CORRECT**:
+```mojo
+fn __init__(mut self, value: Int):
+    self.value = value
+
+fn modify(mut self):
+    self.value += 1
+```
+
+#### ❌ DEPRECATED: `@value` decorator → ✅ USE: `@fieldwise_init` + traits
+
+**WRONG**:
+```mojo
+@value
+struct Transform:
+    var name: String
+```
+
+**CORRECT**:
+```mojo
+@fieldwise_init
+struct Transform(Copyable, Movable):
+    var name: String
+```
+
+#### ❌ NON-EXISTENT: `DynamicVector` → ✅ USE: `List`
+
+**WRONG**:
+```mojo
+from collections.vector import DynamicVector
+
+var values = DynamicVector[Int](10)
+values.push_back(42)
+```
+
+**CORRECT**:
+```mojo
+var values = List[Int](10)
+values.append(42)
+```
+
+#### ❌ INVALID: Tuple return syntax `-> (T1, T2)` → ✅ USE: `Tuple[T1, T2]`
+
+**WRONG**:
+```mojo
+fn compute() -> (Float32, Float32):
+    return (1.0, 2.0)
+```
+
+**CORRECT**:
+```mojo
+fn compute() -> Tuple[Float32, Float32]:
+    return Tuple[Float32, Float32](1.0, 2.0)
+```
+
+#### ✅ CORRECT: Parameter Conventions
+
+**Mojo v0.25.7+ parameter types**:
+
+1. **`read`** (default) - Immutable reference:
+```mojo
+fn process(data: ExTensor):  # read is implicit
+    print(data.shape)
+```
+
+2. **`mut`** - Mutable reference (replaces `inout`):
+```mojo
+fn modify(mut data: ExTensor):
+    data._fill_zero()
+```
+
+3. **`var`** - Owned value (takes ownership):
+```mojo
+fn consume(var data: ExTensor):
+    data += 1  # Owns the data, caller loses access
+```
+
+4. **`ref`** - Parametric reference (advanced):
+```mojo
+fn generic_ref[mutability: Bool](ref [mutability] data: ExTensor):
+    # Can be mutable or immutable based on parameter
+```
+
+#### ✅ CORRECT: Struct Initialization Patterns
+
+**With `@fieldwise_init` (recommended for simple structs)**:
+```mojo
+@fieldwise_init
+struct Point(Copyable, Movable):
+    var x: Float32
+    var y: Float32
+
+var p = Point(1.0, 2.0)  # Auto-generated constructor
+```
+
+**Manual constructor (for complex initialization)**:
+```mojo
+struct Tensor(Copyable, Movable):
+    var data: DTypePointer[DType.float32]
+    var shape: List[Int]
+
+    fn __init__(mut self, shape: List[Int]):
+        self.shape = shape
+        var size = 1
+        for dim in shape:
+            size *= dim
+        self.data = DTypePointer[DType.float32].alloc(size)
+```
+
+#### ✅ CORRECT: Common Mojo Patterns
+
+**Loop with mutable references**:
+```mojo
+var list = List[Int](1, 2, 3)
+for ref item in list:  # Use 'ref' to mutate
+    item = item * 2
+```
+
+**Ownership transfer with `^`**:
+```mojo
+fn take_ownership(var data: String):
+    print(data)
+
+var message = "Hello"
+take_ownership(message^)  # Transfer ownership
+# message is no longer accessible here
+```
+
+**Trait conformance**:
+```mojo
+struct MyType(Copyable, Movable, Stringable):
+    var value: Int
+
+    fn __str__(self) -> String:
+        return str(self.value)
+```
+
+#### Quick Reference: Migration Checklist
+
+When reviewing or writing Mojo code:
+
+- [ ] Replace all `inout` with `mut`
+- [ ] Replace all `@value` with `@fieldwise_init` + `(Copyable, Movable)`
+- [ ] Replace all `DynamicVector` with `List`
+- [ ] Replace all `-> (Type1, Type2)` with `-> Tuple[Type1, Type2]`
+- [ ] Use `read` (default), `mut`, `var`, or `ref` for parameter conventions
+- [ ] Add explicit trait conformances: `(Copyable, Movable)` at minimum
+
+**Reference**: [Mojo Manual - Types](https://docs.modular.com/mojo/manual/types) | [Value Ownership](https://docs.modular.com/mojo/manual/values/ownership)
+
 ## Environment Setup
 
 This project uses Pixi for environment management:

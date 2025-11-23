@@ -1,12 +1,3 @@
-# Project Structure
+# Project Structure.Md
 
-## Directory Layout
-
-```text
-ml-odyssey/
-├── shared/
-├── papers/
-└── tests/
-```
-
-More content.
+Content here.

@@ -230,6 +230,20 @@ struct ExTensor(Movable):
         """
         return self._numel
 
+    fn num_elements(self) -> Int:
+        """Return the total number of elements in the tensor.
+
+        This is an alias for numel() for API compatibility.
+
+        Returns:
+            The product of all dimension sizes
+
+        Examples:
+            var t = zeros(List[Int](3, 4), DType.float32)
+            print(t.num_elements())  # 12
+        """
+        return self._numel
+
     fn dim(self) -> Int:
         """Return the number of dimensions (rank) of the tensor.
 

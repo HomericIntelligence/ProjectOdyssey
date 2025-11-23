@@ -2,6 +2,16 @@
 
 Provides common tensor creation utilities for tests, including
 random tensors, sequential tensors, and special value tensors.
+
+FIXME: Multiple placeholder fixture functions require implementation:
+- random_tensor(shape, dtype) -> ExTensor
+- sequential_tensor(shape, dtype) -> ExTensor
+- nan_tensor(shape) -> ExTensor
+- inf_tensor(shape) -> ExTensor
+- ones_like(tensor) -> ExTensor
+- zeros_like(tensor) -> ExTensor
+These will be implemented once ExTensor is fully functional.
+See Issue #49 for details
 """
 
 # TODO: Implement fixture functions once ExTensor is fully functional
