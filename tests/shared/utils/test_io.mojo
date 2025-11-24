@@ -415,3 +415,43 @@ fn test_resume_training_from_checkpoint():
     # Verify: optimizer state is restored
     # Verify: training continues smoothly
     pass
+
+
+fn main() raises:
+    """Run all tests."""
+    test_save_checkpoint()
+    test_load_checkpoint()
+    test_checkpoint_roundtrip()
+    test_save_checkpoint_with_metadata()
+    test_save_checkpoint_atomic()
+    test_serialize_tensor()
+    test_deserialize_tensor()
+    test_tensor_roundtrip()
+    test_serialize_large_tensor()
+    test_serialize_tensor_formats()
+    test_atomic_write()
+    test_write_with_backup()
+    test_safe_remove()
+    test_create_directory_safe()
+    test_file_exists_check()
+    test_write_binary_file()
+    test_read_binary_file()
+    test_binary_file_roundtrip()
+    test_read_binary_in_chunks()
+    test_write_text_file()
+    test_read_text_file()
+    test_read_text_lines()
+    test_append_to_text_file()
+    test_resolve_path()
+    test_join_paths()
+    test_split_path()
+    test_get_file_extension()
+    test_list_directory()
+    test_load_nonexistent_file()
+    test_save_to_readonly_directory()
+    test_load_corrupted_checkpoint()
+    test_disk_full_error()
+    test_save_compressed_checkpoint()
+    test_compression_formats()
+    test_checkpoint_integration_training()
+    test_resume_training_from_checkpoint()

@@ -272,3 +272,30 @@ fn test_logger_integration_training():
     # - Batch updates
     # - Training complete
     pass
+
+
+fn main() raises:
+    """Run all tests."""
+    test_log_level_hierarchy()
+    test_log_level_filtering()
+    test_set_global_log_level()
+    test_simple_formatter()
+    test_timestamp_formatter()
+    test_detailed_formatter()
+    test_colored_output()
+    test_console_handler()
+    test_file_handler()
+    test_rotating_file_handler()
+    test_multiple_handlers()
+    test_log_training_start()
+    test_log_epoch_metrics()
+    test_log_batch_progress()
+    test_log_checkpoint_saved()
+    test_log_early_stopping()
+    test_create_default_logger()
+    test_create_logger_with_name()
+    test_logger_singleton()
+    test_configure_logger_from_dict()
+    test_log_with_invalid_level()
+    test_file_handler_permission_error()
+    test_logger_integration_training()

@@ -397,3 +397,40 @@ fn test_config_from_cli_args():
     # Create config from args
     # Verify config values match CLI inputs
     pass
+
+
+fn main() raises:
+    """Run all tests."""
+    test_load_yaml_config()
+    test_load_json_config()
+    test_load_nested_config()
+    test_load_config_with_lists()
+    test_load_nonexistent_file()
+    test_load_malformed_yaml()
+    test_validate_required_fields()
+    test_validate_field_types()
+    test_validate_numeric_ranges()
+    test_validate_enum_values()
+    test_validate_mutually_exclusive_fields()
+    test_merge_with_defaults()
+    test_merge_nested_configs()
+    test_merge_preserves_types()
+    test_merge_multiple_sources()
+    test_substitute_env_vars()
+    test_substitute_with_defaults()
+    test_substitute_missing_env_var()
+    test_substitute_multiple_env_vars()
+    test_access_config_fields()
+    test_access_nested_fields()
+    test_access_missing_field()
+    test_get_with_default()
+    test_set_config_field()
+    test_save_config_to_yaml()
+    test_save_config_to_json()
+    test_roundtrip_yaml()
+    test_serialize_nested_config()
+    test_load_training_config_template()
+    test_load_model_config_template()
+    test_override_template_values()
+    test_config_integration_training()
+    test_config_from_cli_args()
