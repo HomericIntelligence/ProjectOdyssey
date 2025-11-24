@@ -41,7 +41,7 @@ fn parse_args() raises -> Tuple[String, String]:
 
 
 fn evaluate_model(
-    inout model: AlexNet,
+    mut model: AlexNet,
     borrowed test_images: ExTensor,
     borrowed test_labels: ExTensor
 ) raises -> Tuple[Float32, Float32]:

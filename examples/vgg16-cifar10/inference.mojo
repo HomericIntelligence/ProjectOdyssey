@@ -11,7 +11,7 @@ from data_loader import load_cifar10_batch
 from model import VGG16
 
 
-fn compute_test_accuracy(inout model: VGG16, test_images: ExTensor, test_labels: ExTensor) raises -> Float32:
+fn compute_test_accuracy(mut model: VGG16, test_images: ExTensor, test_labels: ExTensor) raises -> Float32:
     """Compute accuracy on test set.
 
     Args:

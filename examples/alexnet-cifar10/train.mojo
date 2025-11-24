@@ -61,12 +61,12 @@ fn parse_args() raises -> Tuple[Int, Int, Float32, Float32, String, String]:
 
 
 fn compute_gradients(
-    inout model: AlexNet,
+    mut model: AlexNet,
     borrowed input: ExTensor,
     borrowed labels: ExTensor,
     learning_rate: Float32,
     momentum: Float32,
-    inout velocities: List[ExTensor]
+    mut velocities: List[ExTensor]
 ) raises -> Float32:
     """Compute gradients and update parameters for one batch.
 
@@ -271,7 +271,7 @@ fn compute_gradients(
 
 
 fn train_epoch(
-    inout model: AlexNet,
+    mut model: AlexNet,
     borrowed train_images: ExTensor,
     borrowed train_labels: ExTensor,
     batch_size: Int,
@@ -279,7 +279,7 @@ fn train_epoch(
     momentum: Float32,
     epoch: Int,
     total_epochs: Int,
-    inout velocities: List[ExTensor]
+    mut velocities: List[ExTensor]
 ) raises -> Float32:
     """Train for one epoch.
 
@@ -332,7 +332,7 @@ fn train_epoch(
 
 
 fn evaluate(
-    inout model: AlexNet,
+    mut model: AlexNet,
     borrowed test_images: ExTensor,
     borrowed test_labels: ExTensor
 ) raises -> Float32:

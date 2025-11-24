@@ -149,7 +149,7 @@ fn load_idx_images_rgb(filepath: String) raises -> ExTensor:
     return images^
 
 
-fn normalize_images_rgb(inout images: ExTensor) raises -> ExTensor:
+fn normalize_images_rgb(mut images: ExTensor) raises -> ExTensor:
     """Normalize uint8 RGB images to float32 with ImageNet normalization.
 
     Args:
@@ -268,8 +268,8 @@ fn load_cifar10_test(data_dir: String) raises -> Tuple[ExTensor, ExTensor]:
 
 
 fn _copy_batch_data(
-    inout dest_images: ExTensor,
-    inout dest_labels: ExTensor,
+    mut dest_images: ExTensor,
+    mut dest_labels: ExTensor,
     src_images: ExTensor,
     src_labels: ExTensor,
     offset: Int

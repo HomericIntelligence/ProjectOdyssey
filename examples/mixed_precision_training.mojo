@@ -41,7 +41,7 @@ fn simulate_backward_pass(output: ExTensor, target: ExTensor) raises -> ExTensor
     return output - target
 
 
-fn simple_optimizer_step(inout master_params: ExTensor,
+fn simple_optimizer_step(mut master_params: ExTensor,
                          gradients: ExTensor,
                          learning_rate: Float64) raises:
     """Simple SGD update: params = params - lr * grads."""
