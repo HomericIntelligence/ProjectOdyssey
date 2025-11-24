@@ -1004,8 +1004,8 @@ fn mish(tensor: ExTensor) raises -> ExTensor:
     var zeros = full(tensor._shape, 0.0, tensor._dtype)
     var x_pos = clip(tensor, 0.0, 1e10)  # max(0, x)
     var x_abs = abs_fn(tensor)  # |x|
-    var neg_x_abs = multiply(x_abs, full(x_abs._shape, -1.0, x_abs._dtype))  # -|x|
-    var exp_neg_abs = exp(neg_x_abs)  # exp(-|x|)
+    var neg_x_abs: ExTensor = multiply(x_abs, full(x_abs._shape, -1.0, x_abs._dtype))  # -|x|
+    var exp_neg_abs: ExTensor = exp(neg_x_abs)  # exp(-|x|)
     var one_plus_exp = add(exp_neg_abs, full(exp_neg_abs._shape, 1.0, exp_neg_abs._dtype))
     var log_term = log(one_plus_exp)
     var softplus = add(x_pos, log_term)  # max(0,x) + log(1 + exp(-|x|))
@@ -1164,8 +1164,8 @@ fn mish_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
 
     var x_pos = clip(x, 0.0, 1e10)  # max(0, x)
     var x_abs = abs_fn(x)  # |x|
-    var neg_x_abs = multiply(x_abs, full(x_abs._shape, -1.0, x_abs._dtype))  # -|x|
-    var exp_neg_abs = exp(neg_x_abs)  # exp(-|x|)
+    var neg_x_abs: ExTensor = multiply(x_abs, full(x_abs._shape, -1.0, x_abs._dtype))  # -|x|
+    var exp_neg_abs: ExTensor = exp(neg_x_abs)  # exp(-|x|)
     var one_plus_exp = add(exp_neg_abs, full(exp_neg_abs._shape, 1.0, exp_neg_abs._dtype))
     var log_term = log(one_plus_exp)
     var softplus = add(x_pos, log_term)  # max(0,x) + log(1 + exp(-|x|))

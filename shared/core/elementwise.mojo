@@ -25,11 +25,10 @@ from memory import UnsafePointer
 @always_inline
 fn _abs_op[T: DType](x: Scalar[T]) -> Scalar[T]:
     """Absolute value operation."""
-    @parameter
-    if T == DType.float16 or T == DType.float32:
-        return Scalar[T](abs(Float32(x)))
+    if x >= Scalar[T](0):
+        return x
     else:
-        return Scalar[T](abs(Float64(x)))
+        return -x
 
 
 fn abs(tensor: ExTensor) raises -> ExTensor:

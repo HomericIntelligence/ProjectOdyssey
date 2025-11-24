@@ -27,9 +27,9 @@ struct Batch(Copyable, Movable):
 
     fn __init__(
         mut self,
-        owned data: ExTensor,
-        owned labels: ExTensor,
-        owned indices: List[Int],
+        var data: ExTensor,
+        var labels: ExTensor,
+        var indices: List[Int],
     ):
         """Create a batch.
 
@@ -61,7 +61,7 @@ struct BaseLoader(Copyable, Movable):
 
     fn __init__(
         mut self,
-        owned dataset: Dataset,
+        var dataset: Dataset,
         batch_size: Int = 1,
         drop_last: Bool = False,
     ) raises:
@@ -112,11 +112,11 @@ struct BatchLoader(Copyable, Movable):
 
     fn __init__(
         mut self,
-        owned dataset: Dataset,
+        var dataset: Dataset,
         batch_size: Int = 32,
         shuffle: Bool = False,
         drop_last: Bool = False,
-        owned sampler: Optional[Sampler] = None,
+        var sampler: Optional[Sampler] = None,
     ) raises:
         """Create batch loader.
 

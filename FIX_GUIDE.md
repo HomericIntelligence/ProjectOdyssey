@@ -27,7 +27,7 @@ error: __init__ method must return Self type with 'out' argument
 struct MyStruct:
     var field1: Type1
     var field2: Type2
-    
+
     fn __init__(mut self, arg1: Type1, arg2: Type2):
         self.field1 = arg1
         self.field2 = arg2
@@ -38,7 +38,7 @@ struct MyStruct:
 struct MyStruct:
     var field1: Type1
     var field2: Type2
-    
+
     fn __init__(mut self, arg1: Type1, arg2: Type2) -> Self:
         return Self(field1=arg1, field2=arg2)
 ```
@@ -280,7 +280,7 @@ struct MyStruct(Copyable, Movable):
 ```mojo
 struct StubDataset:
     """Minimal stub dataset for testing Dataset interface requirements."""
-    
+
     var size: Int
     var data: List[Float32]
 ```
@@ -290,7 +290,7 @@ struct StubDataset:
 @fieldwise_init
 struct StubDataset(Copyable, Movable):
     """Minimal stub dataset for testing Dataset interface requirements."""
-    
+
     var size: Int
     var data: List[Float32]
 ```

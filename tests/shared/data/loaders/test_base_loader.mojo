@@ -37,7 +37,7 @@ struct StubBatch:
     fn __init__(mut self, capacity: Int):
         self.batch_size = capacity
 
-    fn __moveinit__(mut self, owned existing: Self):
+    fn __moveinit__(mut self, var existing: Self):
         """Move initializer."""
         self.batch_size = existing.batch_size
 

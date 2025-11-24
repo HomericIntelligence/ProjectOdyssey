@@ -169,7 +169,7 @@ fn test_zeros_like() raises:
     assert_equal(y.shape()[1], 3)
 
     # Check dtype matches
-    assert_equal(y.dtype(), DType.float32)
+    assert_dtype_equal(y.dtype(), DType.float32)
 
     # Check all values are zero
     for i in range(6):
@@ -191,7 +191,7 @@ fn test_ones_like() raises:
     assert_equal(y.shape()[2], 2)
 
     # Check dtype matches
-    assert_equal(y.dtype(), DType.float64)
+    assert_dtype_equal(y.dtype(), DType.float64)
 
     # Check all values are one
     for i in range(8):
@@ -211,7 +211,7 @@ fn test_full_like() raises:
     assert_equal(y.shape()[1], 2)
 
     # Check dtype matches
-    assert_equal(y.dtype(), DType.float32)
+    assert_dtype_equal(y.dtype(), DType.float32)
 
     # Check all values are 7.5
     for i in range(6):
@@ -244,13 +244,13 @@ fn test_tensor_dtype() raises:
     shape.append(5)
 
     var t_f32 = zeros(shape, DType.float32)
-    assert_equal(t_f32.dtype(), DType.float32)
+    assert_dtype_equal(t_f32.dtype(), DType.float32)
 
     var t_f64 = zeros(shape, DType.float64)
-    assert_equal(t_f64.dtype(), DType.float64)
+    assert_dtype_equal(t_f64.dtype(), DType.float64)
 
     var t_i32 = zeros(shape, DType.int32)
-    assert_equal(t_i32.dtype(), DType.int32)
+    assert_dtype_equal(t_i32.dtype(), DType.int32)
 
 
 fn test_tensor_numel() raises:
@@ -308,17 +308,17 @@ fn test_float_dtypes() raises:
 
     # float16
     var t_f16 = zeros(shape, DType.float16)
-    assert_equal(t_f16.dtype(), DType.float16)
+    assert_dtype_equal(t_f16.dtype(), DType.float16)
     assert_equal(t_f16.numel(), 3)
 
     # float32
     var t_f32 = zeros(shape, DType.float32)
-    assert_equal(t_f32.dtype(), DType.float32)
+    assert_dtype_equal(t_f32.dtype(), DType.float32)
     assert_equal(t_f32.numel(), 3)
 
     # float64
     var t_f64 = zeros(shape, DType.float64)
-    assert_equal(t_f64.dtype(), DType.float64)
+    assert_dtype_equal(t_f64.dtype(), DType.float64)
     assert_equal(t_f64.numel(), 3)
 
 
@@ -329,22 +329,22 @@ fn test_int_dtypes() raises:
 
     # int8
     var t_i8 = zeros(shape, DType.int8)
-    assert_equal(t_i8.dtype(), DType.int8)
+    assert_dtype_equal(t_i8.dtype(), DType.int8)
     assert_equal(t_i8.numel(), 3)
 
     # int16
     var t_i16 = zeros(shape, DType.int16)
-    assert_equal(t_i16.dtype(), DType.int16)
+    assert_dtype_equal(t_i16.dtype(), DType.int16)
     assert_equal(t_i16.numel(), 3)
 
     # int32
     var t_i32 = zeros(shape, DType.int32)
-    assert_equal(t_i32.dtype(), DType.int32)
+    assert_dtype_equal(t_i32.dtype(), DType.int32)
     assert_equal(t_i32.numel(), 3)
 
     # int64
     var t_i64 = zeros(shape, DType.int64)
-    assert_equal(t_i64.dtype(), DType.int64)
+    assert_dtype_equal(t_i64.dtype(), DType.int64)
     assert_equal(t_i64.numel(), 3)
 
 
@@ -355,22 +355,22 @@ fn test_uint_dtypes() raises:
 
     # uint8
     var t_u8 = zeros(shape, DType.uint8)
-    assert_equal(t_u8.dtype(), DType.uint8)
+    assert_dtype_equal(t_u8.dtype(), DType.uint8)
     assert_equal(t_u8.numel(), 3)
 
     # uint16
     var t_u16 = zeros(shape, DType.uint16)
-    assert_equal(t_u16.dtype(), DType.uint16)
+    assert_dtype_equal(t_u16.dtype(), DType.uint16)
     assert_equal(t_u16.numel(), 3)
 
     # uint32
     var t_u32 = zeros(shape, DType.uint32)
-    assert_equal(t_u32.dtype(), DType.uint32)
+    assert_dtype_equal(t_u32.dtype(), DType.uint32)
     assert_equal(t_u32.numel(), 3)
 
     # uint64
     var t_u64 = zeros(shape, DType.uint64)
-    assert_equal(t_u64.dtype(), DType.uint64)
+    assert_dtype_equal(t_u64.dtype(), DType.uint64)
     assert_equal(t_u64.numel(), 3)
 
 

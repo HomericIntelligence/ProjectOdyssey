@@ -122,8 +122,8 @@ struct FileDataset(Dataset, Copyable, Movable):
 
     fn __init__(
         mut self,
-        owned file_paths: List[String],
-        owned labels: List[Int],
+        var file_paths: List[String],
+        var labels: List[Int],
         `cache`: Bool = False,
     ) raises:
         """Create dataset from file paths.

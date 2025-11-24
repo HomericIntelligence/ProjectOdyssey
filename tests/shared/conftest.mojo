@@ -99,6 +99,44 @@ fn assert_almost_equal(
         raise Error(error_msg)
 
 
+fn assert_almost_equal(
+    a: Float64, b: Float64, tolerance: Float64 = 1e-6, message: String = ""
+) raises:
+    """Assert floating point near-equality for Float64.
+
+    Args:
+        a: First value.
+        b: Second value.
+        tolerance: Maximum allowed difference.
+        message: Optional error message.
+
+    Raises:
+        Error if |a - b| > tolerance.
+    """
+    var diff = abs(a - b)
+    if diff > tolerance:
+        var error_msg = message if message else (
+            String(a) + " !≈ " + String(b) + " (diff: " + String(diff) + ")"
+        )
+        raise Error(error_msg)
+
+
+fn assert_dtype_equal(a: DType, b: DType, message: String = "") raises:
+    """Assert exact equality of DType values.
+
+    Args:
+        a: First DType.
+        b: Second DType.
+        message: Optional error message.
+
+    Raises:
+        Error if a != b.
+    """
+    if a != b:
+        var error_msg = message if message else "DTypes are not equal"
+        raise Error(error_msg)
+
+
 fn assert_greater(a: Float32, b: Float32, message: String = "") raises:
     """Assert a > b.
 
