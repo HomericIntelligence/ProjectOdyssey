@@ -51,8 +51,8 @@ struct MultiHeadAttention(Module):
         Returns:
             Output tensor, shape [batch, seq_len, embed_dim].
         """
-        var batch_size = x.shape[0]
-        var seq_len = x.shape[1]
+        var batch_size = x.shape()[0]
+        var seq_len = x.shape()[1]
 
         # Project to Q, K, V
         var q = self.q_proj.forward(x)
@@ -94,10 +94,10 @@ fn main() raises:
 
     # Test with sample input
     var input = Tensor.randn(32, 100, 512)  # [batch, seq_len, embed_dim]
-    print("Input shape:", input.shape)
+    print("Input shape:", input.shape())
 
     var output = attention.forward(input)
-    print("Output shape:", output.shape)
+    print("Output shape:", output.shape())
     print("Expected: same as input [32, 100, 512]")
 
     # Show parameter count

@@ -36,8 +36,8 @@ struct FocalLoss:
         Returns:
             Scalar loss value.
         """
-        var batch_size = predictions.shape[0]
-        var num_classes = predictions.shape[1]
+        var batch_size = predictions.shape()[0]
+        var num_classes = predictions.shape()[1]
 
         # Get predicted probabilities for true class
         var p_t = Tensor.zeros(batch_size, DType.float32)
@@ -68,8 +68,8 @@ fn main() raises:
     ])
     var targets = Tensor([2.0, 0.0, 1.0])
 
-    print("Predictions shape:", predictions.shape)
-    print("Targets shape:", targets.shape)
+    print("Predictions shape:", predictions.shape())
+    print("Targets shape:", targets.shape())
 
     var loss = loss_fn(predictions, targets)
     print("Focal loss:", loss)

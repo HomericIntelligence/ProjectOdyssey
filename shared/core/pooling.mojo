@@ -49,7 +49,7 @@ fn maxpool2d(
         raise Error("Only 'direct' method is currently supported for maxpool2d")
 
     # Get input dimensions
-    var x_shape = x.shape
+    var x_shape = x.shape()
     if len(x_shape) != 4:
         raise Error("Input must be 4D tensor (batch, channels, height, width)")
 
@@ -142,7 +142,7 @@ fn avgpool2d(
         raise Error("Only 'direct' method is currently supported for avgpool2d")
 
     # Get input dimensions
-    var x_shape = x.shape
+    var x_shape = x.shape()
     if len(x_shape) != 4:
         raise Error("Input must be 4D tensor (batch, channels, height, width)")
 
@@ -228,7 +228,7 @@ fn global_avgpool2d(x: ExTensor, method: String = "direct") raises -> ExTensor:
         raise Error("Only 'direct' method is currently supported for global_avgpool2d")
 
     # Get input dimensions
-    var x_shape = x.shape
+    var x_shape = x.shape()
     if len(x_shape) != 4:
         raise Error("Input must be 4D tensor (batch, channels, height, width)")
 
@@ -310,8 +310,8 @@ fn maxpool2d_backward(
         raise Error("Only 'direct' method is currently supported for maxpool2d_backward")
 
     # Get dimensions
-    var x_shape = x.shape
-    var grad_out_shape = grad_output.shape
+    var x_shape = x.shape()
+    var grad_out_shape = grad_output.shape()
 
     var batch = x_shape[0]
     var channels = x_shape[1]
@@ -407,8 +407,8 @@ fn avgpool2d_backward(
         raise Error("Only 'direct' method is currently supported for avgpool2d_backward")
 
     # Get dimensions
-    var x_shape = x.shape
-    var grad_out_shape = grad_output.shape
+    var x_shape = x.shape()
+    var grad_out_shape = grad_output.shape()
 
     var batch = x_shape[0]
     var channels = x_shape[1]
@@ -496,7 +496,7 @@ fn global_avgpool2d_backward(
         raise Error("Only 'direct' method is currently supported for global_avgpool2d_backward")
 
     # Get dimensions
-    var x_shape = x.shape
+    var x_shape = x.shape()
 
     var batch = x_shape[0]
     var channels = x_shape[1]

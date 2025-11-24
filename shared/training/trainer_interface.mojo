@@ -234,7 +234,7 @@ struct DataBatch(Copyable, Movable):
         """
         self.data = data^
         self.labels = labels^
-        self.batch_size = self.data.shape[0]
+        self.batch_size = self.data.shape()[0]
 
 
 struct DataLoader(Copyable, Movable):
@@ -261,7 +261,7 @@ struct DataLoader(Copyable, Movable):
         self.data = data^
         self.labels = labels^
         self.batch_size = batch_size
-        self.num_samples = self.data.shape[0]
+        self.num_samples = self.data.shape()[0]
         self.num_batches = (self.num_samples + batch_size - 1) // batch_size
         self.current_batch = 0
 
@@ -296,7 +296,7 @@ struct DataLoader(Copyable, Movable):
         # Extract batch slice
         var batch_data_shape = List[Int]()
         batch_data_shape.append(actual_batch_size)
-        batch_data_shape.append(self.data.shape[0])
+        batch_data_shape.append(self.data.shape()[0])
         var batch_data = ExTensor(batch_data_shape, self.data.dtype)
 
         var batch_labels_shape = List[Int]()

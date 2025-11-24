@@ -27,9 +27,9 @@ fn test_resize_basic():
     # var resize = Resize(224, 224)
     # var result = resize(image)
     #
-    # assert_equal(result.shape[0], 224)
-    # assert_equal(result.shape[1], 224)
-    # assert_equal(result.shape[2], 3)  # Channels preserved
+    # assert_equal(result.shape()[0], 224)
+    # assert_equal(result.shape()[1], 224)
+    # assert_equal(result.shape()[2], 3)  # Channels preserved
     pass
 
 
@@ -43,8 +43,8 @@ fn test_resize_upscaling():
     # var resize = Resize(224, 224)
     # var result = resize(image)
     #
-    # assert_equal(result.shape[0], 224)
-    # assert_equal(result.shape[1], 224)
+    # assert_equal(result.shape()[0], 224)
+    # assert_equal(result.shape()[1], 224)
     pass
 
 
@@ -58,8 +58,8 @@ fn test_resize_aspect_ratio():
     # var resize = Resize(height=224, width=320)
     # var result = resize(image)
     #
-    # assert_equal(result.shape[0], 224)
-    # assert_equal(result.shape[1], 320)
+    # assert_equal(result.shape()[0], 224)
+    # assert_equal(result.shape()[1], 320)
     pass
 
 
@@ -97,8 +97,8 @@ fn test_center_crop():
     # var crop = CenterCrop(50, 50)
     # var result = crop(image)
     #
-    # assert_equal(result.shape[0], 50)
-    # assert_equal(result.shape[1], 50)
+    # assert_equal(result.shape()[0], 50)
+    # assert_equal(result.shape()[1], 50)
     #
     # # Center pixel should be from center of original
     # # Original center is at (50, 50)
@@ -137,8 +137,8 @@ fn test_random_crop_padding():
     # var crop = RandomCrop(32, 32, padding=4)  # Pad by 4 pixels
     # var result = crop(image)
     #
-    # assert_equal(result.shape[0], 32)
-    # assert_equal(result.shape[1], 32)
+    # assert_equal(result.shape()[0], 32)
+    # assert_equal(result.shape()[1], 32)
     pass
 
 

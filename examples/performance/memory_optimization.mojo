@@ -89,7 +89,7 @@ fn main() raises:
     var input = Tensor.randn(32, 3, 224, 224)
     print("Processing batch with reused buffer...")
     var output = conv.forward(input)
-    print("Output shape:", output.shape)
+    print("Output shape:", output.shape())
     print("Buffer reused - no allocations!")
 
     print("\n" + "=" * 50)

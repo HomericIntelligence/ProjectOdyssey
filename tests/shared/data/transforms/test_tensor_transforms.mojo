@@ -27,8 +27,8 @@ fn test_reshape_basic():
     # var reshape = Reshape(28, 28)
     # var result = reshape(data)
     #
-    # assert_equal(result.shape[0], 28)
-    # assert_equal(result.shape[1], 28)
+    # assert_equal(result.shape()[0], 28)
+    # assert_equal(result.shape()[1], 28)
     # assert_equal(result.numel(), 784)
     pass
 
@@ -43,8 +43,8 @@ fn test_reshape_flatten():
     # var flatten = Flatten()
     # var result = flatten(data)
     #
-    # assert_equal(len(result.shape), 1)
-    # assert_equal(result.shape[0], 28*28*3)
+    # assert_equal(len(result.shape()), 1)
+    # assert_equal(result.shape()[0], 28*28*3)
     pass
 
 
@@ -58,8 +58,8 @@ fn test_reshape_add_dimension():
     # var unsqueeze = Unsqueeze(dim=-1)  # Add dimension at end
     # var result = unsqueeze(data)
     #
-    # assert_equal(len(result.shape), 3)
-    # assert_equal(result.shape[2], 1)
+    # assert_equal(len(result.shape()), 3)
+    # assert_equal(result.shape()[2], 1)
     pass
 
 
@@ -73,9 +73,9 @@ fn test_reshape_remove_dimension():
     # var squeeze = Squeeze(dim=-1)
     # var result = squeeze(data)
     #
-    # assert_equal(len(result.shape), 2)
-    # assert_equal(result.shape[0], 28)
-    # assert_equal(result.shape[1], 28)
+    # assert_equal(len(result.shape()), 2)
+    # assert_equal(result.shape()[0], 28)
+    # assert_equal(result.shape()[1], 28)
     pass
 
 
@@ -163,8 +163,8 @@ fn test_transpose_2d():
     # var transpose = Transpose()
     # var result = transpose(data)
     #
-    # assert_equal(result.shape[0], 4)
-    # assert_equal(result.shape[1], 3)
+    # assert_equal(result.shape()[0], 4)
+    # assert_equal(result.shape()[1], 3)
     # assert_equal(result[0, 0], data[0, 0])
     # assert_equal(result[1, 0], data[0, 1])
     pass
@@ -180,9 +180,9 @@ fn test_permute_dimensions():
     # var permute = Permute([2, 0, 1])  # To CHW format
     # var result = permute(data)
     #
-    # assert_equal(result.shape[0], 3)   # Channels
-    # assert_equal(result.shape[1], 28)  # Height
-    # assert_equal(result.shape[2], 28)  # Width
+    # assert_equal(result.shape()[0], 3)   # Channels
+    # assert_equal(result.shape()[1], 28)  # Height
+    # assert_equal(result.shape()[2], 28)  # Width
     pass
 
 
@@ -196,9 +196,9 @@ fn test_channel_first_to_last():
     # var convert = ChannelFirstToLast()
     # var result = convert(data)
     #
-    # assert_equal(result.shape[0], 28)  # Height
-    # assert_equal(result.shape[1], 28)  # Width
-    # assert_equal(result.shape[2], 3)   # Channels
+    # assert_equal(result.shape()[0], 28)  # Height
+    # assert_equal(result.shape()[1], 28)  # Width
+    # assert_equal(result.shape()[2], 3)   # Channels
     pass
 
 

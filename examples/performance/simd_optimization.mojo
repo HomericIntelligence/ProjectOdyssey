@@ -42,9 +42,9 @@ fn batch_norm_simd(inout input: Tensor, borrowed mean: Tensor, borrowed var: Ten
 
 fn matmul_simd(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
     """Optimized matrix multiplication with SIMD."""
-    var m = a.shape[0]
-    var n = b.shape[1]
-    var k = a.shape[1]
+    var m = a.shape()[0]
+    var n = b.shape()[1]
+    var k = a.shape()[1]
 
     var result = Tensor.zeros(m, n, DType.float32)
 
@@ -86,7 +86,7 @@ fn main() raises:
     var input_data = Tensor.randn(128, 256)
     var mean = Tensor.zeros(256, DType.float32)
     var variance = Tensor.ones(256, DType.float32)
-    print("Normalizing tensor of shape", input_data.shape, "...")
+    print("Normalizing tensor of shape", input_data.shape(), "...")
     batch_norm_simd(input_data, mean, variance)
     print("SIMD batch norm complete!")
 
@@ -94,9 +94,9 @@ fn main() raises:
     print("\n3. SIMD Matrix Multiplication")
     var a = Tensor.randn(100, 200)
     var b = Tensor.randn(200, 150)
-    print("Multiplying", a.shape, "@", b.shape, "...")
+    print("Multiplying", a.shape(), "@", b.shape(), "...")
     var c = matmul_simd(a, b)
-    print("Result shape:", c.shape)
+    print("Result shape:", c.shape())
     print("SIMD matmul complete!")
 
     print("\n" + "=" * 50)

@@ -263,7 +263,7 @@ struct TensorMetadata(Copyable, Movable):
     fn __init__(out self):
         """Create empty metadata."""
         self.dtype = ""
-        self.shape = List[Int]()
+        self.shape() = List[Int]()
         self.size_bytes = 0
 
 
@@ -296,7 +296,7 @@ fn serialize_tensor(name: String, data: List[String]) -> SerializedTensor:
 
     # Set metadata
     serialized.metadata.dtype = "string"  # Simplified for now
-    serialized.metadata.shape.append(len(data))
+    serialized.metadata.shape().append(len(data))
     serialized.metadata.size_bytes = (
         0  # Will be calculated based on actual data
     )

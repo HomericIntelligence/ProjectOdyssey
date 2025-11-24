@@ -40,7 +40,7 @@ struct Batch(Copyable, Movable):
         self.data = data^
         self.labels = labels^
         self.indices = indices^
-        self.batch_size = self.data.shape[0]
+        self.batch_size = self.data.shape()[0]
 
 
 # ============================================================================
@@ -223,7 +223,7 @@ struct BatchLoader(Copyable, Movable):
         # Currently handling the common case of scalar/1D tensors
 
         var batch_size = len(tensors)
-        var first_shape = tensors[0].shape
+        var first_shape = tensors[0].shape()
 
         # Handle 1D tensors (most common case for labels and simple data)
         if len(first_shape) == 1:
@@ -233,13 +233,13 @@ struct BatchLoader(Copyable, Movable):
             # Collect all values from each tensor
             for tensor in tensors:
                 # Verify shape compatibility
-                if len(tensor[].shape) != len(first_shape):
+                if len(tensor[].shape()) != len(first_shape):
                     raise Error("All tensors must have same number of dimensions")
-                if tensor[].shape[0] != first_shape[0]:
+                if tensor[].shape()[0] != first_shape[0]:
                     raise Error("All tensors must have same shape")
 
                 # Copy values from this tensor
-                for i in range(tensor[].shape[0]):
+                for i in range(tensor[].shape()[0]):
                     all_values.append(Float32(tensor[][i]))
 
             # Create and return the stacked tensor

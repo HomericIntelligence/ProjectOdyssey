@@ -63,12 +63,12 @@ struct ExTensorDataset(Dataset, Copyable, Movable):
 
         Raises:.            Error if data and labels have different first dimensions.
         """
-        if data.shape[0] != labels.shape[0]:
+        if data.shape()[0] != labels.shape()[0]:
             raise Error("Data and labels must have same number of samples")
 
         self.data = data^
         self.labels = labels^
-        self._len = self.data.shape[0]
+        self._len = self.data.shape()[0]
 
     fn __len__(self) -> Int:
         """Return number of samples."""
