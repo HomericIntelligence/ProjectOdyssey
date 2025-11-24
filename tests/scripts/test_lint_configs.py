@@ -76,15 +76,15 @@ class TestFormattingChecks:
         yaml_file = temp_dir / "correct_indent.yaml"
         yaml_file.write_text("""training:
   epochs: 10
+  batch_size: 32
   optimizer:
     name: adam
     learning_rate: 0.001
 """)
         result = linter.lint_file(yaml_file)
         assert result is True
-        # Should not have formatting warnings
-        formatting_warnings = [w for w in linter.warnings if "indent" in w.lower()]
-        assert len(formatting_warnings) == 0
+        # Should not have any warnings (all required keys present, correct formatting)
+        assert len(linter.warnings) == 0
 
     def test_tab_characters(self, linter, temp_dir):
         """Test detection of tab characters."""
@@ -210,8 +210,8 @@ training:
   epochs: 10
 """)
         linter.lint_file(yaml_file)
-        # Should have suggestion about large batch size
-        batch_warnings = [s for s in linter.suggestions if "batch" in s.lower()]
+        # Should have warning about large batch size (in warnings, not suggestions)
+        batch_warnings = [w for w in linter.warnings if "batch" in w.lower()]
         assert len(batch_warnings) > 0
 
     def test_learning_rate_out_of_range(self, linter, temp_dir):

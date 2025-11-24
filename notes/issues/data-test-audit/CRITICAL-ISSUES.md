@@ -351,25 +351,25 @@ run_all_tests.mojo (38 tests)
 
 ### Day 1 Afternoon (1.5 hours)
 
-4. ✓ Fix ExTensor move semantics
+1. ✓ Fix ExTensor move semantics
 2. ✓ Implement ExTensor.num_elements()
 3. ✓ Verify 8-10 additional tests pass
 
 ### Day 1 Late Afternoon (1.5 hours)
 
-7. ✓ Fix inheritance → composition
+1. ✓ Fix inheritance → composition
 2. ✓ Fix dynamic traits → generics
 3. ✓ Verify loader tests pass
 
 ### Day 2 Morning (1 hour)
 
-10. ✓ Fix deprecated keywords
+1. ✓ Fix deprecated keywords
 2. ✓ Add test main() functions
 3. ✓ All 23 test files pass
 
 ### Day 2 Afternoon (30 min)
 
-13. ✓ Run comprehensive suite
+1. ✓ Run comprehensive suite
 2. ✓ Verify all 38 tests pass
 3. ✓ Add to CI/CD pipeline
 

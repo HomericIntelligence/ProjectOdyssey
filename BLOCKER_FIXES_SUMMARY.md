@@ -6,11 +6,13 @@ This document summarizes the fixes applied to resolve 2 CRITICAL BLOCKERS and 1 
 
 **File**: `.github/workflows/test-gradients.yml` (line 37-39)
 
-**Problem**: Workflow was looking for tests in `tests/gradient_checking/*.mojo` which doesn't exist. The actual file is at `tests/shared/core/test_gradient_checking.mojo`.
+**Problem**: Workflow was looking for tests in `tests/gradient_checking/*.mojo` which doesn't exist.
+The actual file is at `tests/shared/core/test_gradient_checking.mojo`.
 
 **Impact**: CRITICAL - Gradient tests were not running at all in CI (would pass green without executing).
 
 **Fix Applied**:
+
 ```yaml
 # Before (BROKEN):
 - name: Run gradient checking tests
@@ -37,6 +39,7 @@ This document summarizes the fixes applied to resolve 2 CRITICAL BLOCKERS and 1 
 ## Fix 2: List Initialization Pattern (CRITICAL)
 
 **Problem**: Multiple test files used incorrect List initialization:
+
 ```mojo
 var shape = List[Int]()
 shape[0] = 4  # ERROR: Can't assign to non-existent index!
@@ -48,6 +51,7 @@ This causes "index out of bounds" runtime errors.
 **Impact**: CRITICAL - Tests crash at runtime with index errors.
 
 **Fix Pattern**:
+
 ```mojo
 # Before (BROKEN):
 var shape = List[Int]()
@@ -98,6 +102,7 @@ The following files still need fixes (459 total occurrences across 25 files):
 **Automated Fix Available**: Script at `/home/mvillmow/ml-odyssey/fix_list_initialization.py`
 
 To fix all remaining files:
+
 ```bash
 python3 fix_list_initialization.py
 ```
@@ -115,6 +120,7 @@ python3 fix_list_initialization.py
 **Impact**: MINOR - Dead code, no functional impact.
 
 **Fix Applied**:
+
 ```yaml
 # Before:
 done
@@ -133,6 +139,7 @@ exit $EXIT_CODE
 ## Summary
 
 ### Files Modified
+
 - `.github/workflows/test-gradients.yml` - ✅ Fixed gradient test path
 - `.github/workflows/integration-tests.yml` - ✅ Removed unreachable code (2 locations)
 - `tests/shared/training/test_optimizers.mojo` - ✅ Fixed 5 List initialization issues
@@ -140,16 +147,19 @@ exit $EXIT_CODE
 - `tests/shared/core/test_gradient_checking.mojo` - ✅ Fixed 10 List initialization issues
 
 ### Total Fixes
+
 - **Critical blocker #1**: Fixed (1 file, 1 workflow)
 - **Critical blocker #2**: Partially fixed (3 critical files, 26 total occurrences)
 - **Optional cleanup**: Fixed (1 file, 2 locations)
 
 ### Next Steps
+
 1. Run `python3 fix_list_initialization.py` to fix remaining test files
 2. Verify all tests pass locally: `mojo test tests/shared/core/test_gradient_checking.mojo`
 3. Commit changes and push to trigger CI
 
 ### Verification Commands
+
 ```bash
 # Test gradient checking (most critical)
 pixi run mojo tests/shared/core/test_gradient_checking.mojo

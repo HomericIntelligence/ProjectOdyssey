@@ -91,7 +91,8 @@ def check_required_sections(
 
     for section in required_sections:
         # Match heading at various levels (##, ###, etc.)
-        pattern = rf'^#{1,6}\s+{re.escape(section)}\s*$'
+        # Note: Double braces {{}} are needed in f-strings to create literal braces for regex
+        pattern = rf'^#{{1,6}}\s+{re.escape(section)}\s*$'
         if not re.search(pattern, content, re.MULTILINE):
             missing.append(section)
             if file_path:

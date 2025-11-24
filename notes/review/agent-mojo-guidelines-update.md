@@ -83,6 +83,7 @@ struct MetricResult(Copyable, Movable):
 **Why**: Structs used in List, parameters, or return values must explicitly implement Copyable & Movable.
 
 **When Required**:
+
 - Struct stored in `List[StructType]`
 - Struct passed as function parameter
 - Struct returned from function
@@ -256,6 +257,7 @@ from memory import UnsafePointer, Pointer
 ```
 
 **Module Changes**:
+
 - `DType`: `sys` → `memory`
 - `simdwidthof`: `sys` → `sys.info`
 - `Pointer`: Import alongside `UnsafePointer`
@@ -277,6 +279,7 @@ from math import abs, round, max, min, pow
 ```
 
 **Builtins** (no import needed):
+
 - `Tuple`
 - `abs`, `round`
 - `max`, `min`
@@ -306,6 +309,7 @@ var result = matmul(a, b)
 ```
 
 **Removed Methods**:
+
 - `ExTensor.from_scalar()` → `full()`
 - `tensor.sum()` → `tensor_sum()`
 - `tensor.matmul()` → `matmul()`
@@ -386,6 +390,7 @@ var value = ptr.bitcast[Type]()[]  # Note: [] not [0]
 ```
 
 **Changes**:
+
 1. Use `Pointer` type, not `UnsafePointer` for address_of
 2. Array access: `[]` not `[0]`
 
@@ -400,12 +405,14 @@ var value = ptr.bitcast[Type]()[]  # Note: [] not [0]
 ⚠️ **Check whether shape is property or method in context**
 
 **In most files** (after automated fix):
+
 ```mojo
 var s = tensor.shape  # Property access
 var dim = tensor.shape[0]  # Index property
 ```
 
 **In matrix.mojo and extensor.mojo**:
+
 ```mojo
 var s = tensor.shape()  # Method call
 var dim = tensor.shape()[0]  # Index method result
@@ -414,6 +421,7 @@ var dim = tensor.shape()[0]  # Index method result
 **Why**: Inconsistent - extensor.mojo defines it as method, but many files use it as property.
 
 **Agent Action**:
+
 1. Check file context
 2. If in doubt, try `.shape()` first (method call)
 3. If error "expects 0 parameters", use `.shape` (property)
@@ -571,6 +579,7 @@ Add these checks to `.pre-commit-config.yaml`:
 ```
 
 **Check script should flag**:
+
 1. `fn __init__(mut self`
 2. `@value`
 3. `str(`
@@ -612,12 +621,14 @@ When Mojo updates again:
 ## Files to Update
 
 **Agent Configuration Files**: Update all agent YAML frontmatter with these guidelines:
+
 - `.claude/agents/**/*.md`
 - Especially: implementation-engineer, implementation-specialist, mojo-language-review-specialist
 
 **Add to CLAUDE.md**: Link to this document in Mojo syntax section.
 
 **Skills to Update**:
+
 - `mojo-format` skill
 - `mojo-memory-check` skill
 - Any code generation skills
@@ -625,6 +636,7 @@ When Mojo updates again:
 ---
 
 **Next Actions**:
+
 1. Update `.clinerules` with link to this document
 2. Update `CLAUDE.md` Mojo syntax section
 3. Update agent configurations

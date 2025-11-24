@@ -7,9 +7,11 @@ Fixed 60+ import errors caused by Mojo v0.25.7 stdlib reorganization. All fixes 
 ## Changes Made
 
 ### 1. DType Import Migration (16 files)
+
 Changed `from sys import DType` to `from memory import DType`
 
 **Files Fixed:**
+
 - tests/shared/core/legacy/test_shape.mojo
 - tests/shared/core/legacy/test_utility.mojo
 - tests/shared/core/legacy/test_comparison_ops.mojo
@@ -28,9 +30,11 @@ Changed `from sys import DType` to `from memory import DType`
 - tests/shared/training/test_trainer_interface_bugs.mojo
 
 ### 2. Tuple Import Removal (12 files)
+
 Removed `from collections import Tuple` (Tuple is now a builtin)
 
 **Files Fixed:**
+
 - shared/utils/profiling.mojo
 - shared/utils/io.mojo
 - shared/utils/visualization.mojo
@@ -47,9 +51,11 @@ Removed `from collections import Tuple` (Tuple is now a builtin)
 ### 3. Math Function Import Fixes (15 files)
 
 #### 3.1 abs() Function Migration
+
 Removed `from math import abs` and updated all usages from `math_abs()` to `abs()`
 
 **Files Fixed:**
+
 - tests/helpers/assertions.mojo (7 occurrences of math_abs replaced)
 - shared/testing/gradient_checker.mojo (4 occurrences of math_abs replaced)
 - shared/core/elementwise.mojo (2 occurrences in _abs_op function)
@@ -64,15 +70,18 @@ Removed `from math import abs` and updated all usages from `math_abs()` to `abs(
 - tests/shared/core/legacy/test_initializers.mojo
 
 #### 3.2 round() Function Migration
+
 Removed `from math import round` and updated all usages from `math_round()` to `round()`
 
 **Files Fixed:**
+
 - shared/core/elementwise.mojo (2 occurrences in _round_op function)
 - tests/training/test_loss_tracker.mojo (removed abs, kept sqrt)
 
 ## Verification
 
 All import statements have been verified as fixed:
+
 - ✅ No remaining `from sys import DType` statements
 - ✅ No remaining `from collections import Tuple` statements
 - ✅ No remaining `from math import abs` statements (without alias)

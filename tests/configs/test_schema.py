@@ -290,15 +290,17 @@ def test_training_schema_validates_enums():
 
 
 @pytest.mark.skipif(not HAS_JSONSCHEMA, reason="jsonschema not installed")
-def test_model_schema_requires_name():
-    """Test model schema requires model name.
+def test_model_schema_validates_field_types():
+    """Test model schema validates field types.
 
-    Verifies required model fields are enforced.
+    Verifies that when fields are present, they have correct types.
+    Note: No fields are required since configs use inheritance via 'extends'.
     """
     schema = load_yaml_file("configs/schemas/model.schema.yaml")
 
-    # Config missing name should fail
+    # Config with wrong type for extends should fail
     invalid_config = {
+        "extends": 123,  # Should be string, not int
         "num_classes": 10
     }
 

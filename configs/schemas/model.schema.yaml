@@ -1,20 +1,51 @@
 # JSON Schema for Model Configuration Validation
 # Last updated: 2024-11-14
+# Updated: 2025-11-23 - Support config inheritance and nested structure
 
 $schema: "http://json-schema.org/draft-07/schema#"
 title: "Model Configuration Schema"
 type: object
-required: ["name", "input_shape", "num_classes", "layers"]
+# No required fields at top level since configs use inheritance via 'extends'
 
 properties:
-  name:
+  # Config inheritance support
+  extends:
     type: string
-    description: "Model name"
+    description: "Path to parent config to extend"
 
-  paper:
-    type: string
-    description: "Paper reference"
+  # Model configuration (nested structure)
+  model:
+    type: object
+    properties:
+      name:
+        type: string
+        description: "Model name"
 
+      dtype:
+        type: string
+        enum: ["float32", "float64", "float16", "bfloat16"]
+        description: "Data type for model parameters"
+
+      init_method:
+        type: string
+        enum: ["xavier", "kaiming", "normal", "uniform", "zeros", "ones"]
+        description: "Weight initialization method"
+
+      dropout:
+        type: number
+        minimum: 0
+        maximum: 1
+        description: "Dropout rate"
+
+      batch_norm:
+        type: boolean
+        description: "Whether to use batch normalization"
+
+      architecture:
+        type: object
+        description: "Architecture-specific layer definitions"
+
+  # Top-level fields for paper-specific configs
   input_shape:
     type: array
     items:
@@ -22,11 +53,17 @@ properties:
       minimum: 1
     description: "Input tensor shape"
 
-  num_classes:
+  output_classes:
     type: integer
     minimum: 1
     description: "Number of output classes"
 
+  num_classes:
+    type: integer
+    minimum: 1
+    description: "Number of output classes (alternative name)"
+
+  # Legacy layers field (for backward compatibility)
   layers:
     type: array
     items:
@@ -120,6 +157,7 @@ properties:
         type: number
         minimum: 0
 
+  # Loss configuration (top-level)
   loss:
     type: object
     properties:
@@ -130,3 +168,10 @@ properties:
         type: number
         minimum: 0
         maximum: 1
+
+  # Metrics configuration (top-level)
+  metrics:
+    type: array
+    items:
+      type: string
+    description: "List of metrics to track"

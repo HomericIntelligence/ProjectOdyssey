@@ -25,6 +25,11 @@ from typing import List, Tuple, Set
 SKIP_URLS = {
     "http://www.itl.nist.gov/iaui/vip/cs_links/EMNIST",  # NIST has server issues
     "https://www.nist.gov/itl/products-and-services/emnist-dataset",  # NIST has server issues
+    # Test and example URLs
+    "https://example.com",  # Used in test files
+    "http://example.com",  # Used in test files
+    "https://arxiv.org/abs/1234.5678",  # Example URL in documentation
+    "https://github.com/user/repo.git",  # Example in comments
 }
 
 # URL pattern to match HTTP/HTTPS URLs

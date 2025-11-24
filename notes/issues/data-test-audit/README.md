@@ -479,24 +479,24 @@ These passing tests show that core abstractions work but concrete implementation
 
 ### Priority 2 (Implementation Issues)
 
-4. Add `num_elements()` method to ExTensor or update all callers
+1. Add `num_elements()` method to ExTensor or update all callers
 2. Fix ExTensor initialization to include dtype parameter
 3. Remove `owned` keyword deprecation
 
 ### Priority 3 (Type System)
 
-7. Implement `str()` function or string conversion utilities
+1. Implement `str()` function or string conversion utilities
 2. Fix trait storage in List (ensure traits are Copyable/Movable)
 3. Fix struct inheritance → use composition pattern
 
 ### Priority 4 (Test Infrastructure)
 
-10. Add main() functions to wrapper test files
+1. Add main() functions to wrapper test files
 2. Ensure all imports are correct (no missing tensor module)
 
 ### Priority 5 (Edge Cases)
 
-12. Fix string parameter ordering in functions
+1. Fix string parameter ordering in functions
 2. Fix type inference issues in samplers
 3. Fix StringSlice conversion in text transforms
 4. Fix optional parameter handling
