@@ -19,7 +19,7 @@ from python import Python
 # ============================================================================
 
 
-struct ConfigValue(Copyable, Movable):
+struct ConfigValue(Copyable, Movable, ImplicitlyCopyable):
     """Union type to hold different configuration value types.
 
     Supports common types needed for ML configurations: integers, floats,
@@ -96,7 +96,7 @@ struct ConfigValue(Copyable, Movable):
 # ============================================================================
 
 
-struct Config(Copyable, Movable):
+struct Config(Copyable, Movable, ImplicitlyCopyable):
     """Configuration container with nested access and validation.
 
     Stores configuration as key-value pairs with support for nested.
@@ -105,7 +105,7 @@ struct Config(Copyable, Movable):
 
     var data: Dict[String, ConfigValue]
 
-    fn __init__(mut self):
+    fn __init__(out self):
         """Create empty configuration."""
         self.data = Dict[String, ConfigValue]()
 
@@ -336,11 +336,11 @@ struct Config(Copyable, Movable):
 
         # Copy all from self
         for item in self.data.items():
-            result.data[item[].key] = item[].value
+            result.data[item.key] = item.value
 
         # Override with other
         for item in other.data.items():
-            result.data[item[].key] = item[].value
+            result.data[item.key] = item.value
 
         return result
 
@@ -413,9 +413,9 @@ struct Config(Copyable, Movable):
                 "Value for key '"
                 + key
                 + "' is out of range ["
-                + str(min_val)
+                + String(min_val)
                 + ", "
-                + str(max_val)
+                + String(max_val)
                 + "]"
             )
 
@@ -517,7 +517,7 @@ struct Config(Copyable, Movable):
                                 except:
                                     config.set(key, value_str)
         except e:
-            raise Error("Failed to load YAML file: " + str(e))
+            raise Error("Failed to load YAML file: " + String(e))
 
         return config
 
@@ -580,7 +580,7 @@ struct Config(Copyable, Movable):
                                 except:
                                     config.set(key, value_str)
         except e:
-            raise Error("Failed to load JSON file: " + str(e))
+            raise Error("Failed to load JSON file: " + String(e))
 
         return config
 
@@ -596,8 +596,8 @@ struct Config(Copyable, Movable):
         try:
             with open(filepath, "w") as f:
                 for item in self.data.items():
-                    var key = item[].key
-                    var val = item[].value
+                    var key = item.key
+                    var val = item.value
 
                     if val.value_type == "int":
                         _ = f.write(key + ": " + str(val.int_val) + "\n")
@@ -615,7 +615,7 @@ struct Config(Copyable, Movable):
                                 _ = f.write(", ")
                         _ = f.write("]\n")
         except e:
-            raise Error("Failed to save YAML file: " + str(e))
+            raise Error("Failed to save YAML file: " + String(e))
 
     fn to_json(self, filepath: String) raises:
         """Save configuration to JSON file.
@@ -634,8 +634,8 @@ struct Config(Copyable, Movable):
                 var total = len(self.data)
 
                 for item in self.data.items():
-                    var key = item[].key
-                    var val = item[].value
+                    var key = item.key
+                    var val = item.value
 
                     _ = f.write('  "' + key + '": ')
 
@@ -663,7 +663,7 @@ struct Config(Copyable, Movable):
 
                 _ = f.write("}\n")
         except e:
-            raise Error("Failed to save JSON file: " + str(e))
+            raise Error("Failed to save JSON file: " + String(e))
 
     fn substitute_env_vars(self) -> Config:
         """Substitute environment variables in config values.
@@ -677,8 +677,8 @@ struct Config(Copyable, Movable):
         var result = Config()
 
         for item in self.data.items():
-            var key = item[].key
-            var val = item[].value
+            var key = item.key
+            var val = item.value
 
             if val.value_type == "string":
                 var str_val = val.str_val
@@ -859,13 +859,13 @@ fn merge_configs(base: Config, override: Config) -> Config:
 # ============================================================================
 
 
-struct ConfigValidator:
+struct ConfigValidator(Copyable, Movable, ImplicitlyCopyable):
     """Validator for configuration values."""
 
     var required_keys: List[String]
     var allowed_keys: Dict[String, String]  # key -> type name
 
-    fn __init__(mut self):
+    fn __init__(out self):
         """Create empty validator."""
         self.required_keys = List[String]()
         self.allowed_keys = Dict[String, String]()
