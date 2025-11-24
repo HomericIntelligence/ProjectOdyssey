@@ -115,8 +115,10 @@ struct ExTensor(Copyable, Movable):
         # Calculate row-major strides (in elements, not bytes)
         self._strides = List[Int]()
         var stride = 1
-        for _ in range(len(self._shape) - 1, -1, -1):
-            self._strides.append(0)  # Preallocate
+        # Pre-allocate strides list with correct forward iteration
+        for i in range(len(self._shape)):
+            self._strides.append(0)
+        # Now fill strides in backward order
         for i in range(len(self._shape) - 1, -1, -1):
             self._strides[i] = stride
             stride *= self._shape[i]
@@ -327,8 +329,10 @@ struct ExTensor(Copyable, Movable):
         # Recalculate strides for new shape
         result._strides = List[Int]()
         var stride = 1
-        for _ in range(len(new_shape) - 1, -1, -1):
+        # Pre-allocate strides list with correct forward iteration
+        for i in range(len(new_shape)):
             result._strides.append(0)
+        # Now fill strides in backward order
         for i in range(len(new_shape) - 1, -1, -1):
             result._strides[i] = stride
             stride *= new_shape[i]
@@ -1363,7 +1367,10 @@ struct ExTensor(Copyable, Movable):
         var total_bytes = num_blocks * 17  # 17 bytes per MXFP4Block
 
         # Create output tensor as flattened uint8 array
-        var result = ExTensor(List[Int](), DType.uint8)
+        # Note: Need to specify shape for allocation (1D tensor of total_bytes)
+        var output_shape = List[Int]()
+        output_shape.append(total_bytes)
+        var result = ExTensor(output_shape, DType.uint8)
 
         # Store original size before padding (fixes DATA-001)
         result._original_numel_quantized = self._numel
@@ -1450,8 +1457,10 @@ struct ExTensor(Copyable, Movable):
             # Fallback to padded size for backwards compatibility
             output_size = padded_output_size
 
-        # Create output tensor
-        var result = ExTensor(List[Int](), DType.float32)
+        # Create output tensor with proper shape
+        var output_shape = List[Int]()
+        output_shape.append(padded_output_size)
+        var result = ExTensor(output_shape, DType.float32)
 
         # Decode each block
         for block_idx in range(num_blocks):
@@ -1563,7 +1572,10 @@ struct ExTensor(Copyable, Movable):
         var total_bytes = num_blocks * 9  # 9 bytes per NVFP4Block
 
         # Create output tensor as flattened uint8 array
-        var result = ExTensor(List[Int](), DType.uint8)
+        # Note: Need to specify shape for allocation (1D tensor of total_bytes)
+        var output_shape = List[Int]()
+        output_shape.append(total_bytes)
+        var result = ExTensor(output_shape, DType.uint8)
 
         # Store original size before padding (fixes DATA-001)
         result._original_numel_quantized = self._numel
@@ -1650,8 +1662,10 @@ struct ExTensor(Copyable, Movable):
             # Fallback to padded size for backwards compatibility
             output_size = padded_output_size
 
-        # Create output tensor
-        var result = ExTensor(List[Int](), DType.float32)
+        # Create output tensor with proper shape
+        var output_shape = List[Int]()
+        output_shape.append(padded_output_size)
+        var result = ExTensor(output_shape, DType.float32)
 
         # Decode each block
         for block_idx in range(num_blocks):

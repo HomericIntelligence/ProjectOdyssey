@@ -339,7 +339,7 @@ mojo check shared/core/matrix.mojo
 
 ### Documentation
 
-5. `notes/review/comprehensive-code-review-2025-01.md` - Complete review report
+1. `notes/review/comprehensive-code-review-2025-01.md` - Complete review report
 2. `notes/review/code-review-fixes-2025-01.md` - This implementation summary
 
 ---

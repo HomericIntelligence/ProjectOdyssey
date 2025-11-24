@@ -17,11 +17,13 @@ After rebasing against main, discovered 1,143 compilation errors due to Mojo v0.
 **Pattern**: Mojo v0.25.7+ renamed `inout` to `mut` for mutable parameters.
 
 **Error**:
+
 ```
 error: use of unknown declaration 'inout'
 ```
 
 **Fix**:
+
 ```mojo
 // WRONG (deprecated):
 fn modify(inout self):
@@ -43,6 +45,7 @@ fn process(mut data: ExTensor):
 **Pattern**: Constructor methods must use `out` parameter convention.
 
 **Error**:
+
 ```
 error: __init__ method must return Self type with 'out' argument
     fn __init__(mut self):
@@ -50,6 +53,7 @@ error: __init__ method must return Self type with 'out' argument
 ```
 
 **Fix**:
+
 ```mojo
 // WRONG:
 fn __init__(mut self):
@@ -73,11 +77,13 @@ fn __init__(out self, value: Int):
 **Pattern**: DType moved from `sys` to `memory` module.
 
 **Error**:
+
 ```
 error: package 'sys' does not contain 'DType'
 ```
 
 **Fix**:
+
 ```mojo
 // WRONG:
 from sys import DType
@@ -95,6 +101,7 @@ from memory import DType
 **Pattern**: Common functions moved to builtins, no import required.
 
 **Removed Imports**:
+
 - `from collections import Tuple` → Tuple is now builtin
 - `from math import abs, round` → abs, round are now builtins
 - `from math import max, min` → max, min are now builtins (3 files)
@@ -111,11 +118,13 @@ from memory import DType
 **Pattern**: simdwidthof moved from `sys` to `sys.info`.
 
 **Error**:
+
 ```
 error: package 'sys' does not contain 'simdwidthof'
 ```
 
 **Fix**:
+
 ```mojo
 // WRONG:
 from sys import simdwidthof
@@ -133,11 +142,13 @@ from sys.info import simdwidthof
 **Pattern**: `str()` function deprecated, use `String()` constructor.
 
 **Error**:
+
 ```
 error: use of unknown declaration 'str'
 ```
 
 **Fix**:
+
 ```mojo
 // WRONG:
 var s = str(value)
@@ -161,11 +172,13 @@ var msg = "Count: " + String(count)
 **Pattern**: `@value` decorator replaced with `@fieldwise_init` + explicit traits.
 
 **Error**:
+
 ```
 error: use of unknown declaration '@value'
 ```
 
 **Fix**:
+
 ```mojo
 // WRONG:
 @value
@@ -189,6 +202,7 @@ struct Transform(Copyable, Movable):
 **Pattern**: Structs used in List/parameters must explicitly declare Copyable & Movable.
 
 **Error**:
+
 ```
 error: cannot bind type 'TypeName' to trait 'Copyable & Movable'
     var list_var: List[TypeName]
@@ -196,6 +210,7 @@ error: cannot bind type 'TypeName' to trait 'Copyable & Movable'
 ```
 
 **Fix**:
+
 ```mojo
 // WRONG:
 struct MetricResult:
@@ -207,11 +222,13 @@ struct MetricResult(Copyable, Movable):
 ```
 
 **Affected Patterns**:
+
 - Struct stored in `List[StructType]`
 - Struct passed as function parameter
 - Struct returned from function
 
 **Files Affected**: 10 files (28 structs total)
+
 - shared/training/metrics/
 - shared/autograd/
 - shared/utils/
@@ -226,11 +243,13 @@ struct MetricResult(Copyable, Movable):
 **Pattern**: Cannot have both `@fieldwise_init` decorator and manual `__init__` method.
 
 **Error**:
+
 ```
 error: 'StructName' has an explicitly declared fieldwise initializer
 ```
 
 **Fix**:
+
 ```mojo
 // WRONG:
 @fieldwise_init
@@ -261,6 +280,7 @@ struct Dataset(Copyable, Movable):
 **Pattern**: ExTensor, List[T] no longer implicitly copyable - need explicit transfer or copy.
 
 **Error**:
+
 ```
 error: value of type 'ExTensor' cannot be implicitly copied,
        it does not conform to 'ImplicitlyCopyable'
@@ -269,6 +289,7 @@ error: value of type 'ExTensor' cannot be implicitly copied,
 **Fixes**:
 
 **Pattern 1: Ownership Transfer (most common)**
+
 ```mojo
 // WRONG:
 var copy = some_tensor
@@ -282,6 +303,7 @@ return result^
 ```
 
 **Pattern 2: Explicit Copy (when copy needed)**
+
 ```mojo
 // WRONG:
 var copy = some_list
@@ -301,11 +323,13 @@ var copy = List[Int](some_list)
 **Pattern**: `UnsafePointer.address_of()` removed, use `Pointer.address_of()`.
 
 **Error**:
+
 ```
 error: 'UnsafePointer[?, ?, address_space=?]' value has no attribute 'address_of'
 ```
 
 **Fix**:
+
 ```mojo
 // WRONG:
 var ptr = UnsafePointer.address_of(variable)
@@ -332,6 +356,7 @@ var value = ptr.bitcast[Type]()[]
 **Errors & Fixes**:
 
 **1. ExTensor.from_scalar() removed (8 errors)**
+
 ```mojo
 // WRONG:
 var result = ExTensor.from_scalar(value, dtype)
@@ -342,6 +367,7 @@ var result = full(tensor._shape, value, tensor._dtype)
 ```
 
 **2. ExTensor.sum() removed (4 errors)**
+
 ```mojo
 // WRONG:
 var total = tensor.sum()
@@ -352,6 +378,7 @@ var total = tensor_sum(tensor)
 ```
 
 **3. ExTensor.matmul() removed (8 errors)**
+
 ```mojo
 // WRONG:
 var result = a.matmul(b)
@@ -362,6 +389,7 @@ var result = matmul(a, b)
 ```
 
 **4. ExTensor() constructor requires arguments (1 error)**
+
 ```mojo
 // WRONG:
 self.tensor = ExTensor()
@@ -379,11 +407,13 @@ self.tensor = ExTensor(List[Float32](), DType.float32)
 **Pattern**: Float64 class methods removed, use arithmetic expressions.
 
 **Error**:
+
 ```
 error: 'Float64' has no attribute 'nan'
 ```
 
 **Fix**:
+
 ```mojo
 // WRONG:
 var nan_val = Float64.nan
@@ -407,11 +437,13 @@ var infinity = Float64(1.0) / Float64(0.0)  # +Inf
 **Pattern**: Initialization functions now require explicit dtype parameter.
 
 **Error**:
+
 ```
 error: missing parameter 'dtype'
 ```
 
 **Fix**:
+
 ```mojo
 // WRONG:
 var tensor = zeros(shape)
@@ -435,6 +467,7 @@ var tensor = full(shape, value, DType.float32)
 **Pattern**: `shape` changed from method to property in many files, but remains a method in extensor.mojo.
 
 **Error**:
+
 ```
 error: 'shape' expects 0 parameters, but 1 was specified
 ```
@@ -442,6 +475,7 @@ error: 'shape' expects 0 parameters, but 1 was specified
 **Complexity**: Mixed usage - some files needed `.shape()`, others `.shape`
 
 **Fix 1 (When shape is property)**:
+
 ```mojo
 // WRONG:
 var s = tensor.shape()
@@ -453,6 +487,7 @@ var dim0 = tensor.shape[0]
 ```
 
 **Fix 2 (When shape is method - matrix.mojo)**:
+
 ```mojo
 // WRONG:
 var s = tensor.shape
@@ -476,6 +511,7 @@ var dim0 = tensor.shape()[0]
 **Pattern**: Cannot use method reference in closure context.
 
 **Error**:
+
 ```
 error: cannot emit closure for method 'shape'
 ```
@@ -483,6 +519,7 @@ error: cannot emit closure for method 'shape'
 **Root Cause**: Trying to access `.shape` as property when it's defined as method.
 
 **Fix**: Call method explicitly:
+
 ```mojo
 // WRONG:
 var s = tensor.shape  # Tries to create closure
@@ -500,12 +537,14 @@ var s = tensor.shape()  # Explicit call
 **Pattern**: Mixed generic and explicit types in SIMD operations.
 
 **Error**:
+
 ```
 error: invalid call to '__add__': failed to infer parameter 'dtype',
        it inferred to two different values: 'T' and 'DType.float32'
 ```
 
 **Fix**: Use consistent types or restructure:
+
 ```mojo
 // WRONG:
 return Scalar[T](1.0) / (Scalar[T](1.0) + exp(-Float32(x)))
@@ -534,11 +573,13 @@ else:
 **Pattern**: Mojo does not support struct inheritance.
 
 **Error**:
+
 ```
 error: inheriting from structs is not allowed
 ```
 
 **Fix**: Use composition instead:
+
 ```mojo
 // WRONG:
 struct BatchLoader(BaseLoader, Copyable, Movable):
@@ -564,11 +605,13 @@ struct BatchLoader(Copyable, Movable):
 **Pattern**: Cannot store trait types in fields - must use compile-time generics.
 
 **Error**:
+
 ```
 error: dynamic traits not supported yet, please use a compile time generic instead
 ```
 
 **Fix**:
+
 ```mojo
 // WRONG:
 struct Container:
@@ -592,6 +635,7 @@ struct Container[T: Transform]:  # Compile-time generic
 **Pattern**: Loss functions renamed for consistency.
 
 **Fixes**:
+
 - `mse_loss` → `mean_squared_error`
 - `bce_loss` → `binary_cross_entropy`
 
@@ -604,11 +648,13 @@ struct Container[T: Transform]:  # Compile-time generic
 **Pattern**: DType doesn't implement Comparable, can't use assert_equal.
 
 **Error**:
+
 ```
 error: no matching function in call to 'assert_equal'
 ```
 
 **Fix**:
+
 ```mojo
 // WRONG:
 assert_equal(tensor.dtype, DType.float32, "message")
@@ -629,11 +675,13 @@ if tensor.dtype() != DType.float32:
 **Pattern**: len() needs explicit type when called on method results.
 
 **Error**:
+
 ```
 error: no matching function in call to 'len'
 ```
 
 **Fix**:
+
 ```mojo
 // WRONG:
 if len(tensor.shape()) == 2:
@@ -663,7 +711,7 @@ if len(shape_vec) == 2:
 
 ### Critical (Always Apply)
 
-1. ✅ **Use `out self` in __init__**, never `mut self`
+1. ✅ **Use `out self` in **init****, never `mut self`
 2. ✅ **Use `String()` not `str()`**
 3. ✅ **Use `mut` not `inout`** for parameters
 4. ✅ **Add explicit traits**: `(Copyable, Movable)` to all structs
@@ -677,50 +725,57 @@ if len(shape_vec) == 2:
 
 ### High Priority (Common Patterns)
 
-9. ✅ **ExTensor API changes**:
+1. ✅ **ExTensor API changes**:
    - Use `full()` not `ExTensor.from_scalar()`
    - Use `tensor_sum()` not `.sum()`
    - Use `matmul()` not `.matmul()`
-10. ✅ **Explicit dtype parameters** for zeros(), ones(), full()
-11. ✅ **Don't import builtins**: Tuple, abs, round, max, min
-12. ✅ **Use `@fieldwise_init`** with traits, not `@value`
-13. ✅ **No mixed auto/manual init**: Remove `@fieldwise_init` if manual `__init__` exists
+2. ✅ **Explicit dtype parameters** for zeros(), ones(), full()
+3. ✅ **Don't import builtins**: Tuple, abs, round, max, min
+4. ✅ **Use `@fieldwise_init`** with traits, not `@value`
+5. ✅ **No mixed auto/manual init**: Remove `@fieldwise_init` if manual `__init__` exists
 
 ### Medium Priority (Context-Dependent)
 
-14. ⚠️ **shape property vs method**: Check file context
-15. ⚠️ **SIMD type consistency**: Don't mix generic and explicit types
-16. ⚠️ **len() type resolution**: Assign to variable first
-17. ⚠️ **Pointer API**: Use `Pointer.address_of()` and `[]` syntax
+1. ⚠️ **shape property vs method**: Check file context
+2. ⚠️ **SIMD type consistency**: Don't mix generic and explicit types
+3. ⚠️ **len() type resolution**: Assign to variable first
+4. ⚠️ **Pointer API**: Use `Pointer.address_of()` and `[]` syntax
 
 ## Files Changed (By Category)
 
 ### Core Infrastructure (15 files)
+
 - shared/core/extensor.mojo, activation.mojo, arithmetic_simd.mojo
 - shared/core/matrix.mojo, broadcasting.mojo, bfloat16.mojo
 - shared/core/types/ (7 files)
 - shared/core/pooling.mojo, conv.mojo, dropout.mojo, etc.
 
 ### Training & Metrics (14 files)
+
 - shared/training/metrics/ (4 files)
 - shared/training/optimizers/ (3 files)
 - shared/training/trainer, callbacks, mixed_precision
 
 ### Data Module (7 files)
+
 - shared/data/datasets.mojo, loaders.mojo, samplers.mojo
 - shared/data/transforms.mojo, text_transforms.mojo, generic_transforms.mojo
 - shared/data/batch_utils.mojo
 
 ### Autograd (4 files)
+
 - shared/autograd/variable.mojo, tape.mojo, optimizers.mojo, functional.mojo
 
 ### Utils (4 files)
+
 - shared/utils/random.mojo, profiling.mojo, logging.mojo, io.mojo, visualization.mojo
 
 ### Tests (31 files)
+
 - All test files updated for API changes
 
 ### Examples (41 files)
+
 - All example files updated
 
 ## Lessons Learned

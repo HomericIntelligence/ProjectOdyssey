@@ -518,20 +518,20 @@ fn main():
 
 ### Phase 2: Fix Type System (1-2 hours)
 
-6. Add dtype to ExTensor constructors (30 min)
+1. Add dtype to ExTensor constructors (30 min)
 2. Implement num_elements() method (30 min)
 3. Fix struct inheritance with composition (15 min)
 4. Fix type mismatches in samplers (20 min)
 
 ### Phase 3: Fix Utilities (30-45 min)
 
-10. Implement string conversion functions (20 min)
+1. Implement string conversion functions (20 min)
 2. Fix StringSlice conversions (10 min)
 3. Fix optional value access (5 min)
 
 ### Phase 4: Test Infrastructure (30-45 min)
 
-13. Add main() functions to wrapper tests (20 min)
+1. Add main() functions to wrapper tests (20 min)
 2. Run all tests to verify fixes (15 min)
 
 ---

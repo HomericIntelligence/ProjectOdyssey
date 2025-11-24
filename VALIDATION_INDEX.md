@@ -155,7 +155,7 @@
 
 ### Phase 2: Function Implementations (Enables Training)
 
-6. Implement he_uniform() and xavier_uniform()
+1. Implement he_uniform() and xavier_uniform()
 2. Implement cross_entropy_loss()
 3. Implement load_cifar10_train_batches()
 
@@ -163,7 +163,7 @@
 
 ### Phase 3: Cleanup (Enables Tests/Inference)
 
-9. Replace f-strings with string concatenation
+1. Replace f-strings with string concatenation
 2. Fix str() usage
 
 **Estimated Time**: 30 minutes
@@ -174,7 +174,8 @@
 2. **Shared Library Bottleneck**: Multiple architectures depend on same 8 broken modules
 3. **Cascade Dependencies**: Must fix core issues in order (tuple syntax blocks everything)
 4. **Easy Fixes Available**: F-string and str() replacements are straightforward
-5. **Architecture Variation**: Architectures fail differently (AlexNet/VGG use dropout; ResNet/DenseNet/GoogLeNet/MobileNetV1 use normalization)
+5. **Architecture Variation**: Architectures fail differently (AlexNet/VGG use dropout;
+   ResNet/DenseNet/GoogLeNet/MobileNetV1 use normalization)
 
 ## Next Steps
 
