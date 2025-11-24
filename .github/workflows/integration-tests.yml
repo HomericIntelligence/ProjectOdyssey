@@ -67,6 +67,9 @@ jobs:
 
       - name: Run integration test suite - ${{ matrix.test-suite }}
         run: |
+          # Set repository root for Mojo imports
+          REPO_ROOT="$(pwd)"
+
           echo "Running integration tests for: ${{ matrix.test-suite }}"
           mkdir -p test-results
 
@@ -80,7 +83,7 @@ jobs:
                 for file in tests/integration/*.mojo; do
                   if [ -f "$file" ]; then
                     echo "Running $file..."
-                    pixi run mojo -I . "$file" || EXIT_CODE=$?
+                    pixi run mojo -I "$REPO_ROOT" -I . "$file" || EXIT_CODE=$?
                   fi
                 done
                 exit $EXIT_CODE
@@ -114,7 +117,7 @@ jobs:
                 for file in tests/shared/integration/*.mojo; do
                   if [ -f "$file" ]; then
                     echo "Running $file..."
-                    pixi run mojo -I . "$file" || EXIT_CODE=$?
+                    pixi run mojo -I "$REPO_ROOT" -I . "$file" || EXIT_CODE=$?
                   fi
                 done
                 exit $EXIT_CODE
