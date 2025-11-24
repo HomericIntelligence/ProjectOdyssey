@@ -15,7 +15,7 @@ All functions are designed for use in test setup/teardown.
 
 from pathlib import Path
 from sys import argv
-from time import now
+from python import Python
 
 
 # ============================================================================
@@ -23,7 +23,7 @@ from time import now
 # ============================================================================
 
 
-fn create_temp_dir(prefix: String = "ml_odyssey_test_") -> String:
+fn create_temp_dir(prefix: String = "ml_odyssey_test_") raises -> String:
     """Create temporary directory for testing.
     WARNING: NOT YET IMPLEMENTED - Placeholder interface only.
 
@@ -47,7 +47,8 @@ fn create_temp_dir(prefix: String = "ml_odyssey_test_") -> String:
         in test teardown or try/finally block.
     """
     # Generate unique directory name with timestamp
-    var timestamp = Int(now())
+    var time_module = Python.import_module("time")
+    var timestamp = Int(time_module.time())
     var dir_name = prefix + String(timestamp)
 
     # Use /tmp on Unix-like systems
@@ -256,7 +257,7 @@ fn get_test_data_path(filename: String) -> String:
 
     Note:
         Assumes test data is stored in tests/shared/fixtures/ subdirectories.
-        Create subdirectories as needed: images/, tensors/, models/, reference/
+        Create subdirectories as needed: `images/`, `tensors/`, `models/`, `reference/`.
     """
     # Get test fixtures directory
     # TODO: Implement proper path resolution relative to test file
