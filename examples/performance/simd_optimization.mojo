@@ -9,7 +9,7 @@ See documentation: docs/advanced/performance.md
 """
 
 from algorithm import vectorize
-from sys.info import simdwidthof
+from sys import simdwidthof
 from shared.core.types import Tensor
 
 
