@@ -187,7 +187,7 @@ Root causes identified: Mojo language syntax changes, deprecated decorators, mis
 - **Blocked By**: None
 - **Blocks**: simd_example.mojo, simd_optimization.mojo, performance examples
 - **Est. Time**: 1 hour
-- **Reference**: <https://docs.modular.com/mojo/manual/parametric-types#simd>
+- **Reference**: <https://docs.modular.com/mojo/manual/parameters/>
 
 ### [ ] Task 2.4: Verify Module and Linear Classes
 

@@ -743,10 +743,9 @@ When implementing these improvements:
 
 ## Resources
 
-- [Mojo SIMD Documentation](https://docs.modular.com/mojo/manual/simd/)
-- [Mojo GPU Programming](https://docs.modular.com/mojo/manual/gpu/)
+- [Mojo Documentation](https://docs.modular.com/mojo/)
 - [Array API Standard](https://data-apis.org/array-api/latest/)
-- [Mojo Parametric Types](https://docs.modular.com/mojo/manual/parameters/)
+- [Mojo Parameters](https://docs.modular.com/mojo/manual/parameters/)
 
 **Maintainer:** ML Odyssey Team
 **Last Updated:** 2025-11-22
