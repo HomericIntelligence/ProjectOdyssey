@@ -23,7 +23,7 @@ alias CLASS_NAMES = ["airplane", "automobile", "bird", "cat", "deer", "dog", "fr
 
 
 fn evaluate_model(
-    inout model: MobileNetV1,
+    mut model: MobileNetV1,
     images: ExTensor,
     labels: ExTensor,
     batch_size: Int = 100,

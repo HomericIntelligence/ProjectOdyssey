@@ -13,7 +13,7 @@ from sys.info import simdwidthof
 from shared.core.types import Tensor
 
 
-fn relu_simd(inout tensor: Tensor):
+fn relu_simd(mut tensor: Tensor):
     """ReLU activation using SIMD."""
     alias simd_width = simdwidthof[DType.float32]()
 

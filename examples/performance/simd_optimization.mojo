@@ -13,7 +13,7 @@ from sys.info import simdwidthof
 from shared.core.types import Tensor
 
 
-fn relu_simd(inout tensor: Tensor):
+fn relu_simd(mut tensor: Tensor):
     """ReLU activation with SIMD."""
     alias simd_width = simdwidthof[DType.float32]()
 
@@ -25,7 +25,7 @@ fn relu_simd(inout tensor: Tensor):
     vectorize[simd_width, vectorized_relu](tensor.size())
 
 
-fn batch_norm_simd(inout input: Tensor, borrowed mean: Tensor, borrowed var: Tensor):
+fn batch_norm_simd(mut input: Tensor, borrowed mean: Tensor, borrowed var: Tensor):
     """Batch normalization with SIMD."""
     alias width = simdwidthof[DType.float32]()
 

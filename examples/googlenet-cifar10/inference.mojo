@@ -38,7 +38,7 @@ alias CLASS_NAMES = [
 
 
 fn evaluate_model(
-    inout model: GoogLeNet,
+    mut model: GoogLeNet,
     images: ExTensor,
     labels: ExTensor,
     batch_size: Int = 100,

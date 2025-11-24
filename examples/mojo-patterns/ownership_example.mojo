@@ -19,7 +19,7 @@ fn compute_loss(borrowed predictions: Tensor, borrowed targets: Tensor) -> Float
 
 
 # Owned: take ownership (move semantics)
-fn consume_tensor(owned tensor: Tensor) -> Float64:
+fn consume_tensor(var tensor: Tensor) -> Float64:
     """Take ownership and consume tensor."""
     var result = tensor.sum()
     # tensor is destroyed here
@@ -27,7 +27,7 @@ fn consume_tensor(owned tensor: Tensor) -> Float64:
 
 
 # Inout: mutable reference (modify in place)
-fn update_weights(inout weights: Tensor, borrowed gradients: Tensor, lr: Float64):
+fn update_weights(mut weights: Tensor, borrowed gradients: Tensor, lr: Float64):
     """Update weights in place."""
     weights -= lr * gradients  # Modifies original
 

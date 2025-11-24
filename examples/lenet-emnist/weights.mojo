@@ -29,9 +29,9 @@ struct LoadedTensor:
     var name: String
     var tensor: ExTensor
 
-    fn __init__(out self, name: String, var tensor: ExTensor):
+    fn __init__(out self, name: String, owned tensor: ExTensor):
         self.name = name
-        self.tensor = tensor^
+        self.tensor = tensor
 
     fn __moveinit__(mut self, owned other: Self):
         self.name = other.name^
@@ -61,7 +61,7 @@ fn bytes_to_hex(data: UnsafePointer[UInt8], num_bytes: Int) -> String:
     return result
 
 
-fn hex_to_bytes(hex_str: String, output: UnsafePointer[UInt8, origin=MutAnyOrigin]) raises:
+fn hex_to_bytes(hex_str: String, mut output: UnsafePointer[UInt8]) raises:
     """Convert hexadecimal string to bytes.
 
     Args:

@@ -60,7 +60,7 @@ fn compute_learning_rate(initial_lr: Float32, epoch: Int) -> Float32:
 
 
 fn train_epoch(
-    inout model: MobileNetV1,
+    mut model: MobileNetV1,
     train_images: ExTensor,
     train_labels: ExTensor,
     batch_size: Int,
@@ -125,7 +125,7 @@ fn train_epoch(
 
 
 fn validate(
-    inout model: MobileNetV1,
+    mut model: MobileNetV1,
     val_images: ExTensor,
     val_labels: ExTensor,
     batch_size: Int,

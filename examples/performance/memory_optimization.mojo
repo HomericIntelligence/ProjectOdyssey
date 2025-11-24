@@ -21,13 +21,13 @@ fn bad_update(weights: Tensor, grad: Tensor, lr: Float64) -> Tensor:
 
 
 # Good: In-place update
-fn good_update(inout weights: Tensor, borrowed grad: Tensor, lr: Float64):
+fn good_update(mut weights: Tensor, borrowed grad: Tensor, lr: Float64):
     """Efficient in-place update."""
     weights -= lr * grad  # No allocation
 
 
 # Best: Fused in-place operation with SIMD
-fn best_update(inout weights: Tensor, borrowed grad: Tensor, lr: Float64):
+fn best_update(mut weights: Tensor, borrowed grad: Tensor, lr: Float64):
     """Fused in-place update with SIMD."""
     alias width = simdwidthof[DType.float32]()
 

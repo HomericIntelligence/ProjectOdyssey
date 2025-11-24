@@ -26,11 +26,11 @@ trait Module:
 trait Optimizer:
     """Base trait for optimizers."""
 
-    fn step(self, inout parameters: List[Tensor]):
+    fn step(self, mut parameters: List[Tensor]):
         """Update parameters."""
         ...
 
-    fn zero_grad(self, inout parameters: List[Tensor]):
+    fn zero_grad(self, mut parameters: List[Tensor]):
         """Zero gradients."""
         for i in range(len(parameters)):
             parameters[i].grad = Tensor.zeros_like(parameters[i])
@@ -63,7 +63,7 @@ struct Adam(Optimizer):
         self.beta1 = beta1
         self.beta2 = beta2
 
-    fn step(self, inout parameters: List[Tensor]):
+    fn step(self, mut parameters: List[Tensor]):
         # Adam update logic
         for i in range(len(parameters)):
             # Update with momentum and adaptive learning rate

@@ -34,7 +34,7 @@ from model import ResNet18
 from data_loader import load_cifar10_train, load_cifar10_test
 
 
-fn compute_accuracy(model: inout ResNet18, images: ExTensor, labels: ExTensor) raises -> Float32:
+fn compute_accuracy(model: mut ResNet18, images: ExTensor, labels: ExTensor) raises -> Float32:
     """Compute classification accuracy on a dataset.
 
     Args:
@@ -90,13 +90,13 @@ fn compute_accuracy(model: inout ResNet18, images: ExTensor, labels: ExTensor) r
 
 
 fn train_epoch(
-    inout model: ResNet18,
+    mut model: ResNet18,
     train_images: ExTensor,
     train_labels: ExTensor,
     batch_size: Int,
     learning_rate: Float32,
     momentum: Float32,
-    inout velocities: List[ExTensor],
+    mut velocities: List[ExTensor],
 ) raises -> Float32:
     """Train for one epoch with manual backpropagation through all 18 layers.
 

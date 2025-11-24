@@ -38,7 +38,7 @@ alias CLASS_NAMES = [
 
 
 fn evaluate_model(
-    inout model: ResNet18,
+    mut model: ResNet18,
     images: ExTensor,
     labels: ExTensor,
     batch_size: Int = 100,
