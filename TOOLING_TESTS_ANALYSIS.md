@@ -8,14 +8,14 @@
 
 ## Test Execution Summary
 
-```
+```text
 Total Tests: 97
 Passed: 97 (100%)
 Failed: 0 (0%)
 Errors: 0 (0%)
 Execution Time: 0.58 seconds
 Average Time Per Test: 0.006 seconds
-```
+```text
 
 ---
 

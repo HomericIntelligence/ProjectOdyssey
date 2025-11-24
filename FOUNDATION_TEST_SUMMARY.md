@@ -191,7 +191,7 @@ pytest tests/foundation/ -v --tb=short
 
    ```bash
    pytest tests/foundation/ -v
-   ```
+   ```text
 
 3. Expected result: 156 passed, 10 skipped (0 failures)
 

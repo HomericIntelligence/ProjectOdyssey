@@ -38,13 +38,13 @@ Replaced all `shell=True` calls with safe argument list versions:
 
 ```python
 subprocess.run("git checkout main", shell=True)
-```
+```text
 
 **After**:
 
 ```python
 subprocess.run(["git", "checkout", "main"])
-```
+```text
 
 ### Changes Made
 
@@ -79,7 +79,7 @@ Added pre-commit hook to prevent future `shell=True` usage:
       language: system
       files: \.py$
       pass_filenames: true
-```
+```text
 
 ### Verification
 
@@ -87,7 +87,7 @@ Added pre-commit hook to prevent future `shell=True` usage:
 # Confirm all shell=True removed from Python files
 grep -r "shell=True" --include="*.py" .
 # Result: No matches found ✅
-```
+```text
 
 ---
 
@@ -130,14 +130,14 @@ result = subprocess.run(
     check=True
 )
 repo_root = Path(result.stdout.strip())
-```
+```text
 
 **Bash**:
 
 ```bash
 # Get repository root dynamically
 REPO_ROOT="$(git rev-parse --show-toplevel)"
-```
+```text
 
 ### Changes Made
 
@@ -195,7 +195,7 @@ for package, description in packages:
     try:
         mod = __import__(package)
         version = getattr(mod, '__version__', 'unknown')
-```
+```text
 
 **After**:
 
@@ -213,7 +213,7 @@ for package, description in packages:
     try:
         mod = __import__(package)
         version = getattr(mod, '__version__', 'unknown')
-```
+```text
 
 ### Security Improvement
 
@@ -242,7 +242,7 @@ for package, description in packages:
 ```bash
 grep -r "except:" --include="*.py" --include="*.mojo" . | wc -l
 # Result: 80+ instances
-```
+```text
 
 ### Locations
 
@@ -310,7 +310,7 @@ grep -r "except:" --include="*.py" --include="*.mojo" . | wc -l
 # Verify no shell=True in Python files
 grep -r "shell=True" --include="*.py" .
 # Expected: No matches ✅
-```
+```text
 
 ### Hardcoded Paths Fix
 
@@ -318,7 +318,7 @@ grep -r "shell=True" --include="*.py" .
 # Verify no hardcoded user paths in scripts
 grep -r "/home/mvillmow" --include="*.py" --include="*.sh" scripts/ tools/ *.py *.sh 2>/dev/null
 # Expected: Only in comments/documentation, not in code ✅
-```
+```text
 
 ### Pre-commit Hook
 
@@ -332,7 +332,7 @@ git add test.py
 git commit -m "test"
 # Expected: Hook blocks commit ✅
 rm test.py
-```
+```text
 
 ---
 

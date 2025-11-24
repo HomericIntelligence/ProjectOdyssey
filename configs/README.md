@@ -93,14 +93,14 @@ Format: `${VAR_NAME:-default_value}`
    ```bash
    mkdir -p configs/papers/my_paper
    mkdir -p configs/experiments/my_paper
-   ```
+   ```text
 
 1. Copy templates
 
    ```bash
    cp configs/templates/paper.yaml configs/papers/my_paper/model.yaml
    cp configs/templates/experiment.yaml configs/experiments/my_paper/baseline.yaml
-   ```
+   ```text
 
 1. Edit configurations with paper-specific values
 
@@ -108,7 +108,7 @@ Format: `${VAR_NAME:-default_value}`
 
    ```mojo
    var config = load_experiment_config("my_paper", "baseline")
-   ```
+   ```text
 
 ## Configuration Format
 
@@ -208,7 +208,7 @@ python scripts/lint_configs.py -v configs/
 
    # Edit with paper-specific values
    vim configs/papers/resnet/model.yaml
-   ```
+   ```text
 
 1. **For a new experiment:**
 
@@ -218,7 +218,7 @@ python scripts/lint_configs.py -v configs/
 
    # Edit to override specific values
    vim configs/experiments/resnet/improved.yaml
-   ```
+   ```text
 
 ### Performance Tips
 

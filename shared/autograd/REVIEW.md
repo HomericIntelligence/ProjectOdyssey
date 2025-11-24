@@ -16,7 +16,7 @@ var lr_tensor = ExTensor(DynamicVector[Int](1), DType.float32)
 lr_tensor._set_float64(0, learning_rate)
 w = subtract(w, multiply(lr_tensor, grad_w_sum))
 b = subtract(b, multiply(lr_tensor, grad_b_sum))
-```
+```text
 
 **Impact**: Confusing for users. The optimizer exists but the example doesn't demonstrate it.
 
@@ -28,14 +28,14 @@ b = subtract(b, multiply(lr_tensor, grad_b_sum))
 
 ```mojo
 fn step(self, inout parameters: DynamicVector[Variable]) raises:
-```
+```text
 
 **Example uses**:
 
 ```mojo
 var w = ExTensor(...)  # Not a Variable!
 var b = ExTensor(...)  # Not a Variable!
-```
+```text
 
 **Impact**: Can't actually use the optimizer with the functional API.
 
@@ -52,7 +52,7 @@ var update = multiply(lr_tensor, grad)
 
 # Ideal:
 var update = multiply_scalar(grad, learning_rate)
-```
+```text
 
 **Impact**: Lots of boilerplate in every training loop.
 
@@ -69,7 +69,7 @@ grad_w_sum._set_float64(0, grad_w_val)
 
 # Ideal:
 var grad_w_sum = sum(grad_w_expanded)  # Already exists!
-```
+```text
 
 **Impact**: Examples are unnecessarily verbose.
 
@@ -83,7 +83,7 @@ var grad_w_sum = sum(grad_w_expanded)  # Already exists!
 var momentum: Float64
 # TODO: Add velocity storage for momentum
 # var velocities: DynamicVector[ExTensor]
-```
+```text
 
 **Impact**: Misleading API - users think momentum works but it doesn't.
 
@@ -98,7 +98,7 @@ var lr_tensor = ExTensor(grad.shape(), grad.dtype())
 for j in range(lr_tensor.numel()):
     lr_tensor._set_float64(j, self.learning_rate)
 var update = multiply(lr_tensor, grad)
-```
+```text
 
 **Better**: Use scalar multiplication (once we add it).
 
@@ -146,7 +146,7 @@ fn multiply_scalar(tensor: ExTensor, scalar: Float64) raises -> ExTensor:
         let val = tensor._get_float64(i)
         result._set_float64(i, val * scalar)
     return result
-```
+```text
 
 ### Solution 2: Unified API Approach
 
@@ -159,14 +159,14 @@ fn step_tensors(
     gradients: DynamicVector[ExTensor]
 ) raises:
     """Update raw tensors using gradients."""
-```
+```text
 
 **Option B**: Update examples to use Variables
 
 ```mojo
 var w = Variable(w_data, requires_grad=True)
 var b = Variable(b_data, requires_grad=True)
-```
+```text
 
 **Recommendation**: Option A is more practical for functional API.
 
@@ -187,7 +187,7 @@ fn apply_gradients(
     for i in range(len(parameters)):
         let update = multiply_scalar(gradients[i], learning_rate)
         parameters[i] = subtract(parameters[i], update)
-```
+```text
 
 ### Solution 4: Fix the Example
 
@@ -210,7 +210,7 @@ apply_gradients(params, grads, learning_rate)
 # Extract updated values
 w = params[0]
 b = params[1]
-```
+```text
 
 ## Impact Analysis
 

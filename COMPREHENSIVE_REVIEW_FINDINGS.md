@@ -793,7 +793,7 @@ The following review areas require GitHub issue creation before agents can proce
      --title "[Review] Comprehensive Platform Review - FP4/FP8 Implementation" \
      --body "See COMPREHENSIVE_REVIEW_FINDINGS.md for details" \
      --label "code-review,critical"
-   ```
+   ```text
 
 2. **Fix P0 algorithm bugs** (ALGO-001, ALGO-002):
    - Assign to: Senior Implementation Engineer

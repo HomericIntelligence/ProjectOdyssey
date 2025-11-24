@@ -182,7 +182,7 @@ fn __init__(inout self, value: Int):
 
 fn modify(inout self):
     self.value += 1
-```
+```text
 
 **CORRECT**:
 
@@ -192,7 +192,7 @@ fn __init__(mut self, value: Int):
 
 fn modify(mut self):
     self.value += 1
-```
+```text
 
 #### ❌ DEPRECATED: `@value` decorator → ✅ USE: `@fieldwise_init` + traits
 
@@ -202,7 +202,7 @@ fn modify(mut self):
 @value
 struct Transform:
     var name: String
-```
+```text
 
 **CORRECT**:
 
@@ -210,7 +210,7 @@ struct Transform:
 @fieldwise_init
 struct Transform(Copyable, Movable):
     var name: String
-```
+```text
 
 #### ❌ NON-EXISTENT: `DynamicVector` → ✅ USE: `List`
 
@@ -221,14 +221,14 @@ from collections.vector import DynamicVector
 
 var values = DynamicVector[Int](10)
 values.push_back(42)
-```
+```text
 
 **CORRECT**:
 
 ```mojo
 var values = List[Int](10)
 values.append(42)
-```
+```text
 
 #### ❌ INVALID: Tuple return syntax `-> (T1, T2)` → ✅ USE: `Tuple[T1, T2]`
 
@@ -237,14 +237,14 @@ values.append(42)
 ```mojo
 fn compute() -> (Float32, Float32):
     return (1.0, 2.0)
-```
+```text
 
 **CORRECT**:
 
 ```mojo
 fn compute() -> Tuple[Float32, Float32]:
     return Tuple[Float32, Float32](1.0, 2.0)
-```
+```text
 
 #### ✅ CORRECT: Parameter Conventions
 
@@ -255,28 +255,28 @@ fn compute() -> Tuple[Float32, Float32]:
 ```mojo
 fn process(data: ExTensor):  # read is implicit
     print(data.shape)
-```
+```text
 
 1. **`mut`** - Mutable reference (replaces `inout`):
 
 ```mojo
 fn modify(mut data: ExTensor):
     data._fill_zero()
-```
+```text
 
 1. **`var`** - Owned value (takes ownership):
 
 ```mojo
 fn consume(var data: ExTensor):
     data += 1  # Owns the data, caller loses access
-```
+```text
 
 1. **`ref`** - Parametric reference (advanced):
 
 ```mojo
 fn generic_ref[mutability: Bool](ref [mutability] data: ExTensor):
     # Can be mutable or immutable based on parameter
-```
+```text
 
 #### ✅ CORRECT: Struct Initialization Patterns
 
@@ -289,7 +289,7 @@ struct Point(Copyable, Movable):
     var y: Float32
 
 var p = Point(1.0, 2.0)  # Auto-generated constructor
-```
+```text
 
 **Manual constructor (for complex initialization)**:
 
@@ -304,7 +304,7 @@ struct Tensor(Copyable, Movable):
         for dim in shape:
             size *= dim
         self.data = DTypePointer[DType.float32].alloc(size)
-```
+```text
 
 #### ✅ CORRECT: Common Mojo Patterns
 
@@ -314,7 +314,7 @@ struct Tensor(Copyable, Movable):
 var list = List[Int](1, 2, 3)
 for ref item in list:  # Use 'ref' to mutate
     item = item * 2
-```
+```text
 
 **Ownership transfer with `^`**:
 
@@ -325,7 +325,7 @@ fn take_ownership(var data: String):
 var message = "Hello"
 take_ownership(message^)  # Transfer ownership
 # message is no longer accessible here
-```
+```text
 
 **Trait conformance**:
 
@@ -335,7 +335,7 @@ struct MyType(Copyable, Movable, Stringable):
 
     fn __str__(self) -> String:
         return str(self.value)
-```
+```text
 
 #### Quick Reference: Migration Checklist
 

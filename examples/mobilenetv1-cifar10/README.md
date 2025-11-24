@@ -18,7 +18,7 @@ This example shows how to build, train, and run inference with the MobileNetV1 a
 
 ```bash
 python examples/mobilenetv1-cifar10/download_cifar10.py
-```
+```text
 
 This downloads CIFAR-10 (50,000 training + 10,000 test samples) to `datasets/cifar10/`.
 
@@ -26,13 +26,13 @@ This downloads CIFAR-10 (50,000 training + 10,000 test samples) to `datasets/cif
 
 ```bash
 mojo run examples/mobilenetv1-cifar10/train.mojo --epochs 200 --batch-size 128 --lr 0.01
-```
+```text
 
 ### 3. Run Inference
 
 ```bash
 mojo run examples/mobilenetv1-cifar10/inference.mojo --weights-dir mobilenetv1_weights
-```
+```text
 
 ## Key Innovation: Depthwise Separable Convolutions
 
@@ -48,7 +48,7 @@ Filters: (K × K × C_in × C_out)
 Output: (H × W × C_out)
 
 Operations: H × W × C_in × C_out × K × K
-```
+```text
 
 **Example**: 32×32 input with 64 channels, 3×3 filters, 128 output channels:
 
@@ -72,7 +72,7 @@ Stage 2: Pointwise Convolution (channel mixing)
     Operations: H × W × C_in × C_out
 
 Total: H × W × C_in × (K² + C_out)
-```
+```text
 
 **Same Example**:
 
@@ -89,7 +89,7 @@ Standard:   H × W × C_in × C_out × K²
 Depthwise:  H × W × C_in × (K² + C_out)
 
 Reduction = (K² + C_out) / (C_out × K²) ≈ 1/C_out + 1/K²
-```
+```text
 
 For typical values (C_out=128, K=3):
 
@@ -139,7 +139,7 @@ Global Average Pool (1×1 → 1×1)
 Linear(1024 → 10)
     ↓
 Output (10 classes)
-```
+```text
 
 ### Adaptations for CIFAR-10
 
@@ -222,7 +222,7 @@ examples/mobilenetv1-cifar10/
 ├── data_loader.mojo       # CIFAR-10 binary format loading (symlink to resnet18)
 ├── weights.mojo           # Hex-based weight serialization
 └── download_cifar10.py    # Python script to download dataset (symlink to resnet18)
-```
+```text
 
 ## Implementation Status
 
@@ -285,7 +285,7 @@ For depthwise convolution with input `x` (shape: [B, C, H, W]):
    ```text
    For each channel c in C:
        output[:, c, :, :] = conv2d(input[:, c:c+1, :, :], kernel_c)
-   ```
+   ```text
 
 2. **Parameters**: K × K × C (vs standard conv: K × K × C × C_out)
 
@@ -297,7 +297,7 @@ For depthwise convolution with input `x` (shape: [B, C, H, W]):
 
    ```text
    output = conv2d(input, weights_1x1, kernel_size=1)
-   ```
+   ```text
 
 2. **Parameters**: 1 × 1 × C_in × C_out
 
@@ -321,7 +321,7 @@ Applied after both depthwise and pointwise convolutions:
 ```text
 x_norm = (x - mean) / sqrt(var + eps)
 y = gamma * x_norm + beta
-```
+```text
 
 ### Learning Rate Scheduling
 
@@ -370,7 +370,7 @@ mojo run examples/mobilenetv1-cifar10/train.mojo \
     --momentum 0.9 \
     --data-dir datasets/cifar10 \
     --weights-dir mobilenetv1_weights
-```
+```text
 
 **Arguments**:
 
@@ -387,7 +387,7 @@ mojo run examples/mobilenetv1-cifar10/train.mojo \
 mojo run examples/mobilenetv1-cifar10/inference.mojo \
     --weights-dir mobilenetv1_weights \
     --data-dir datasets/cifar10
-```
+```text
 
 **Arguments**:
 

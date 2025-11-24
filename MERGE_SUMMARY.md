@@ -94,19 +94,19 @@ Closes #1857
 Co-Authored-By: Claude <noreply@anthropic.com>
 EOF
 )"
-```
+```text
 
 ### Alternative: Use Python Script
 
 ```bash
 python3 scripts/execute_backward_tests_merge.py
-```
+```text
 
 Or run in auto mode (no prompts):
 
 ```bash
 python3 scripts/execute_backward_tests_merge.py --auto
-```
+```text
 
 ### Expected Result
 
@@ -132,7 +132,7 @@ After merge completes:
 
    # Verify test files exist
    ls -lh tests/shared/core/test_*_backward.mojo tests/shared/core/test_loss.mojo
-   ```
+   ```text
 
 ## Conflict Analysis
 
@@ -168,7 +168,7 @@ for file in test_arithmetic_backward test_loss test_matrix_backward test_reducti
     echo "❌ ${file}.mojo MISSING"
   fi
 done
-```
+```text
 
 ### 2. Check File Sizes
 
@@ -187,7 +187,7 @@ git log --oneline -1
 
 # Should show 2 parents
 git log --graph --oneline -5
-```
+```text
 
 ### 4. Check Documentation
 
@@ -195,7 +195,7 @@ git log --graph --oneline -5
 # Should exist after merge
 ls notes/issues/backward-tests-arithmetic/README.md
 ls notes/issues/test-loss/README.md
-```
+```text
 
 ## Next Steps After Merge
 
@@ -203,13 +203,13 @@ ls notes/issues/test-loss/README.md
 
    ```bash
    git show HEAD
-   ```
+   ```text
 
 2. **Push to remote**:
 
    ```bash
    git push origin main
-   ```
+   ```text
 
 3. **Monitor CI**:
    - Tests won't compile yet (expected - upstream blockers documented)
@@ -224,14 +224,14 @@ ls notes/issues/test-loss/README.md
    # Or create manually
    gh pr create --title "Add comprehensive backward gradient tests" \
                 --body "Closes #1857"
-   ```
+   ```text
 
 5. **Cleanup worktree** (optional):
 
    ```bash
    # Only after successful merge and push
    git worktree remove worktrees/backward-tests
-   ```
+   ```text
 
 ## Success Criteria
 
@@ -252,7 +252,7 @@ git merge --abort
 
 # Or reset after completed merge
 git reset --hard HEAD~1  # DANGER: Only if not pushed!
-```
+```text
 
 ## Files Modified/Added
 
@@ -290,21 +290,21 @@ cd /home/mvillmow/ml-odyssey
 git checkout main
 git merge --no-ff backward-tests
 # Git will prompt for commit message - use the detailed message above
-```
+```text
 
 **Option 2: Automated Script**
 
 ```bash
 cd /home/mvillmow/ml-odyssey
 python3 scripts/execute_backward_tests_merge.py
-```
+```text
 
 **Option 3: Fully Automated**
 
 ```bash
 cd /home/mvillmow/ml-odyssey
 python3 scripts/execute_backward_tests_merge.py --auto
-```
+```text
 
 ---
 

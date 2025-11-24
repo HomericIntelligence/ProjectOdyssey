@@ -586,7 +586,7 @@ rm -rf /home/mvillmow/ml-odyssey/docs/extensor/
 
    ```bash
    pytest tests/foundation/docs/test_doc_structure.py -v
-   ```
+   ```text
 
 3. **Track**: All 156 tests should pass after fix
 

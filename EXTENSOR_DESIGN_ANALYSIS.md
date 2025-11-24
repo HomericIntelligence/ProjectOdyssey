@@ -209,7 +209,7 @@ var (grad_a, grad_b) = add_backward(grad_output, shape_a, shape_b)
    alias MAX_CLIP = 20.0
    var clipped = clip(x, -MAX_CLIP, MAX_CLIP)
    return 1.0 / (1.0 + exp(-clipped))
-   ```
+   ```text
 
 1. **Softmax Log-Sum-Exp Trick**: Handles logits > 1000
    ```mojo
@@ -218,12 +218,12 @@ var (grad_a, grad_b) = add_backward(grad_output, shape_a, shape_b)
    var exp_x = exp(shifted)
    var sum_exp = sum(exp_x, axis=axis)
    return divide(exp_x, sum_exp)
-   ```
+   ```text
 
 1. **GELU Tanh Approximation**: Used in BERT/GPT
    ```mojo
    # Approximation: 0.5*x*(1 + tanh(sqrt(2/pi)*(x + 0.044715*x^3)))
-   ```
+   ```text
 
 1. **Float16 High-Precision Intermediates**: Compute in Float32, cast back
    ```mojo
@@ -232,7 +232,7 @@ var (grad_a, grad_b) = add_backward(grad_output, shape_a, shape_b)
        var result_f32 = compute_in_float32(x_f32)
        # Downcast back to float16
        return cast_to_float16(result_f32)
-   ```
+   ```text
 
 ### 2.4 Weight Initializers ✅ NEW
 

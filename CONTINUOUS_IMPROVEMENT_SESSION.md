@@ -73,7 +73,7 @@ fix(security): remove command injection and hardcoded paths (Wave 1)
 - Replaced hardcoded paths with dynamic git root detection (5 files)
 - Added whitelist validation for dynamic imports
 - Added pre-commit hook to prevent shell=True regression
-```
+```text
 
 ### 2. Wave 3: Documentation Fixes (166b33e)
 
@@ -84,7 +84,7 @@ docs: Wave 3 documentation fixes - links, content, placeholders
 - Rewrote INSTALL.md to match ML Odyssey project scope
 - Added conduct enforcement email to CODE_OF_CONDUCT.md
 - Removed 8 dist/.gitkeep references from historical docs
-```
+```text
 
 ### 3. Commit 1: get_repo_root Duplication (fcd061e)
 
@@ -95,7 +95,7 @@ fix(scripts): remove get_repo_root() duplication (#1869)
 - All scripts now import from scripts/common.py
 - Reduced code duplication by ~40 lines
 - Improved maintainability (DRY principle)
-```
+```text
 
 ### 4. Commit 2: Version Infrastructure (d05a568)
 
@@ -106,7 +106,7 @@ feat(shared): add centralized version module and update script (#1605)
 - Created shared/version.mojo (Mojo version module)
 - Created scripts/update_version.py (automated updates)
 - Provides type-safe version access for all Mojo code
-```
+```text
 
 ### 5. Commit 3: Documentation Structure (THIS COMMIT)
 
@@ -117,7 +117,7 @@ docs: add documentation structure for continuous improvement
 - Documented deferred work with clear problem/solution/status
 - Organized issues by wave and priority
 - Created CONTINUOUS_IMPROVEMENT_SESSION.md summary
-```
+```text
 
 ## Implementation Statistics
 

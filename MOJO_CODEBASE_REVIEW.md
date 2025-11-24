@@ -71,7 +71,7 @@ struct ExTensor:
     var _dtype: DType
     var _numel: Int
     var _is_view: Bool
-```
+```text
 
 **Alignment with Mojo Manual:**
 > ✅ "All data types—including basic types such as String and Int—are defined as structs. No types are built
@@ -113,14 +113,14 @@ fn consume_tensor(owned tensor: Tensor) -> Float64:
 # Inout: mutable reference
 fn update_weights(inout weights: Tensor, borrowed gradients: Tensor, lr: Float64):
     weights -= lr * gradients  # Modifies original
-```
+```text
 
 **Memory Management** (shared/core/extensor.mojo:65):
 
 ```mojo
 var _data: UnsafePointer[UInt8]  # Raw byte storage
 var _is_view: Bool               # Track shared vs owned data
-```
+```text
 
 **Alignment with Mojo Manual:**
 > ✅ "Mojo's ownership system ensures that only one variable 'owns' a specific value at a given time...while
@@ -155,7 +155,7 @@ trait Callback:
 trait LRScheduler:
     """Base trait for learning rate schedulers."""
     # Methods defined here
-```
+```text
 
 **Trait Usage** (examples/mojo-patterns/trait_example.mojo:14-24):
 
@@ -170,7 +170,7 @@ trait Module:
     fn parameters(inout self) -> List[Tensor]:
         """Get trainable parameters."""
         ...
-```
+```text
 
 **Alignment with Mojo Manual:**
 > ✅ "Zero-cost traits allow defining shared behaviors that types implement, providing static typing without
@@ -188,7 +188,7 @@ trait Module:
    trait Parameterized:
        fn parameters(self) -> List[ExTensor]: ...
        fn gradients(self) -> List[ExTensor]: ...
-   ```
+   ```text
 
 2. **Consider trait composition** for complex behaviors
 
@@ -215,7 +215,7 @@ fn add(a: ExTensor, b: ExTensor) raises -> ExTensor:
         raise Error("Cannot add tensors with different dtypes")
     # ... implementation
     return result^
-```
+```text
 
 **Pure Functional Pattern** (shared/training/optimizers/adam.mojo:29):
 
@@ -235,7 +235,7 @@ fn adam_step(
     """Pure functional Adam step - returns new state."""
     # ... implementation
     return (new_params, new_m, new_v)
-```
+```text
 
 **Alignment with Mojo Manual:**
 > ✅ "The language uses `fn` for compiled functions and `def` for dynamic functions."
@@ -278,7 +278,7 @@ for result_idx in range(total_elems):
     let a_val = a._get_float64(idx_a)
     let b_val = b._get_float64(idx_b)
     result._set_float64(result_idx, a_val + b_val)
-```
+```text
 
 #### Recommended SIMD Implementation
 
@@ -307,7 +307,7 @@ fn add_simd(a: ExTensor, b: ExTensor) raises -> ExTensor:
 
     vectorize[simd_width, vectorized_add](a.numel())
     return result^
-```
+```text
 
 **Alignment with Mojo Manual:**
 > ⚠️ "Mojo includes SIMD types for vectorized CPU code... for parallel tensor operations."
@@ -355,7 +355,7 @@ fn elementwise_unary[
         out_ptr[i] = op[dtype](in_ptr[i])  # Compile-time specialized call
 
     return result
-```
+```text
 
 **Parametric Operation Definitions** (shared/core/elementwise.mojo:28-34):
 
@@ -368,7 +368,7 @@ fn _abs_op[T: DType](x: Scalar[T]) -> Scalar[T]:
         return Scalar[T](math_abs(Float32(x)))
     else:
         return Scalar[T](math_abs(Float64(x)))
-```
+```text
 
 **@parameter for Safety Checks** (shared/core/numerical_safety.mojo):
 
@@ -379,7 +379,7 @@ fn check_for_inf[enable_checks: Bool = True](tensor: ExTensor) raises:
     if enable_checks:
         # Runtime checks only if enabled at compile time
         # ... implementation
-```
+```text
 
 **@parameter for SIMD** (shared/core/elementwise.mojo):
 
@@ -388,7 +388,7 @@ fn check_for_inf[enable_checks: Bool = True](tensor: ExTensor) raises:
 fn vectorized_exp[width: Int](idx: Int):
     # Compile-time SIMD width specialization
     # ... implementation
-```
+```text
 
 #### Alignment with Mojo Manual
 
@@ -421,7 +421,7 @@ struct TypedTensor[dtype: DType, //]:
         self._data = UnsafePointer[Scalar[dtype]].alloc(self._numel)
 
 # Usage: TypedTensor[DType.float32](shape) - cleaner than ExTensor
-```
+```text
 
 **2. Fixed-Size Tensors for Common Patterns**
 
@@ -455,7 +455,7 @@ struct FixedTensor[rows: Int, cols: Int, dtype: DType]:
         self._data[row * cols + col] = value
 
 # Usage: alias Kernel3x3 = FixedTensor[3, 3, DType.float32]
-```
+```text
 
 **3. Trait-Constrained Parameters**
 
@@ -475,7 +475,7 @@ struct GenericContainer[ElementType: Copyable & Movable]:
     fn append(inout self, owned value: ElementType):
         """Trait bounds ensure value can be moved."""
         # ... implementation
-```
+```text
 
 **4. Infer-Only Parameters for Cleaner APIs**
 
@@ -490,7 +490,7 @@ fn create_tensor[dtype: DType, //](
     - NOT allowed: create_tensor(dtype=DType.float32, shape=shape)
     """
     return TypedTensor[dtype](shape)
-```
+```text
 
 **Alignment with Mojo Manual:**
 > ✅ "Mojo's parameterization system enables the compiler to generate unique type/function versions based
@@ -560,7 +560,7 @@ fn matmul_gpu(a: ExTensor, b: ExTensor) raises -> ExTensor:
 
     # Transfer back to CPU
     return c_gpu.to_tensor()
-```
+```text
 
 **Recommendations:**
 
@@ -601,7 +601,7 @@ var result = ExTensor(result_shape, a.dtype())
 # Compute broadcast strides
 let strides_a = compute_broadcast_strides(a.shape(), result_shape)
 let strides_b = compute_broadcast_strides(b.shape(), result_shape)
-```
+```text
 
 **ExTensor Documentation** (shared/core/extensor.mojo:6-10):
 
@@ -612,7 +612,7 @@ Compliance:
 - Implements Array API Standard 2023.12 specification
 - Provides 150+ operations across all API categories
 """
-```
+```text
 
 **Alignment with Mojo Manual:**
 > ✅ Mojo's documentation emphasizes compatibility with Python ecosystem and array standards.
@@ -681,7 +681,7 @@ fn adam_step(
         This is a pure function - it returns new state rather than mutating.
         Caller must capture all three return values and update their variables.
     """
-```
+```text
 
 **Module Documentation** (shared/training/optimizers/adam.mojo:1-20):
 
@@ -697,7 +697,7 @@ Reference:
     Kingma, D. P., & Ba, J. (2014). Adam: A method for stochastic optimization.
     arXiv preprint arXiv:1412.6980.
 """
-```
+```text
 
 **Recommendation:** Excellent documentation. Maintain this standard.
 
@@ -717,7 +717,7 @@ Reference:
 
 **Test Organization:**
 
-```
+```text
 tests/
 ├── shared/
 │   ├── core/          # Core tensor operations
@@ -725,7 +725,7 @@ tests/
 │   ├── data/          # Data loading and transforms
 │   ├── integration/   # End-to-end tests
 │   └── benchmarks/    # Performance benchmarks
-```
+```text
 
 **Test Example** (tests/shared/core/test_arithmetic.mojo:42-54):
 
@@ -742,7 +742,7 @@ fn test_add_shapes() raises:
 
     assert_equal(result.shape()[0], 4)
     assert_equal(result.shape()[1], 10)
-```
+```text
 
 **Recommendations:**
 

@@ -514,7 +514,7 @@ From strategic sampling:
    gh issue list --repo mvillmow/ml-odyssey --limit 1000 \
      --json number,title,state,labels \
      --jq '.[] | select(.number >= 1255 and .number <= 1356)'
-   ```
+   ```text
 
 1. **Categorize by State**:
    - Count OPEN vs CLOSED

@@ -47,7 +47,7 @@ mojo run examples/typed_tensor_demo.mojo
 # - Type safety demonstration
 # - Performance comparison (10-30% improvement)
 # - Use case recommendations
-```
+```text
 
 ### CI Integration
 
@@ -82,7 +82,7 @@ fn update_weights(params: ExTensor, gradients: ExTensor, lr: Float64) -> ExTenso
     var lr_tensor = full_like(params, lr)
     var update = multiply(lr_tensor, gradients)
     return subtract(params, update)
-```
+```text
 
 #### After (SIMD)
 
@@ -94,7 +94,7 @@ fn update_weights(params: ExTensor, gradients: ExTensor, lr: Float64) -> ExTenso
     var lr_tensor = full_like(params, lr)
     var update = multiply_simd(lr_tensor, gradients)  # 4x faster!
     return subtract_simd(params, update)
-```
+```text
 
 **Migration Checklist:**
 
@@ -110,7 +110,7 @@ fn update_weights(params: ExTensor, gradients: ExTensor, lr: Float64) -> ExTenso
 
 ```bash
 mojo run -D ENABLE_PROFILING examples/resnet18-cifar10/train.mojo
-```
+```text
 
 ### Phase 2.2: Convert Model Weights to TypedTensor
 
@@ -136,7 +136,7 @@ struct ResNet18:
         self.conv1_bias = zeros([64], DType.float32)
         self.fc_weights = he_uniform([10, 512], DType.float32)
         self.fc_bias = zeros([10], DType.float32)
-```
+```text
 
 #### After (TypedTensor)
 
@@ -156,7 +156,7 @@ struct ResNet18:
         self.conv1_bias = typed_zeros[DType.float32]([64])
         self.fc_weights = he_uniform_typed[DType.float32]([10, 512])
         self.fc_bias = typed_zeros[DType.float32]([10])
-```
+```text
 
 **Migration Steps:**
 
@@ -164,26 +164,26 @@ struct ResNet18:
 
    ```mojo
    from shared.core.typed_tensor import TypedTensor, zeros, ones
-   ```
+   ```text
 
 2. **Update field declarations:**
 
    ```mojo
    var weights: TypedTensor[DType.float32]  # Instead of ExTensor
-   ```
+   ```text
 
 3. **Update initialization:**
 
    ```mojo
    self.weights = zeros[DType.float32](shape)  # Instead of zeros(shape, DType.float32)
-   ```
+   ```text
 
 4. **Update operations:**
 
    ```mojo
    from shared.core.typed_tensor import add, multiply
    var output = add(weights, bias)  # Compile-time specialized
-   ```
+   ```text
 
 5. **Benchmark before/after:**
 
@@ -195,7 +195,7 @@ struct ResNet18:
    mojo run examples/resnet18-cifar10/train.mojo --benchmark
 
    # Compare epoch times
-   ```
+   ```text
 
 **Expected Benefits:**
 
@@ -217,7 +217,7 @@ fn conv2d_3x3(input: ExTensor, kernel: ExTensor) -> ExTensor:
     if kernel.shape()[2] != 3 or kernel.shape()[3] != 3:
         raise Error("Expected 3x3 kernel")
     # ... implementation
-```
+```text
 
 #### After (Fixed)
 
@@ -232,7 +232,7 @@ fn conv2d_3x3_fixed(
     # Compiler can unroll all loops
     # 30-50% faster for small kernels
     # ... implementation
-```
+```text
 
 **Use Cases:**
 
@@ -244,7 +244,7 @@ fn conv2d_3x3_fixed(
    sobel_x[0, 0] = -1.0; sobel_x[0, 2] = 1.0
    sobel_x[1, 0] = -2.0; sobel_x[1, 2] = 2.0
    sobel_x[2, 0] = -1.0; sobel_x[2, 2] = 1.0
-   ```
+   ```text
 
 2. **BatchNorm Parameters:**
 
@@ -252,14 +252,14 @@ fn conv2d_3x3_fixed(
    alias BatchNormParams = FixedTensor[1, 256, DType.float32]
    var gamma = BatchNormParams(1.0)  # All ones
    var beta = BatchNormParams(0.0)   # All zeros
-   ```
+   ```text
 
 3. **Small Weight Matrices:**
 
    ```mojo
    alias EmbeddingWeights = FixedTensor[512, 128, DType.float32]
    var embeddings = EmbeddingWeights()
-   ```
+   ```text
 
 ### Phase 2.4: Add Gradient Checking to CI
 
@@ -348,7 +348,7 @@ struct LinearLayer(Differentiable, Parameterized, Serializable):
         """Load weights from file."""
         self.weights = read_tensor_typed[DType.float32](path + "/weights.bin")
         self.bias = read_tensor_typed[DType.float32](path + "/bias.bin")
-```
+```text
 
 **Benefits:**
 
@@ -390,7 +390,7 @@ fn benchmark_training_epoch():
     print(f"Speedup: {speedup:.2f}x ({(speedup - 1) * 100:.1f}% faster)")
 
     # Expected: 30-50% speedup (1.3-1.5x)
-```
+```text
 
 **Performance Tracking:**
 
@@ -420,7 +420,7 @@ Create `PERFORMANCE_LOG.md`:
 - LeNet training: 6.5s/epoch (35% improvement) ✓
 
 **Target: 30-50% overall improvement ✅ ACHIEVED**
-```
+```text
 
 ### Phase 3.3: Document Lessons Learned
 
@@ -542,7 +542,7 @@ The integration was successful! All goals achieved:
 
 The parametric types and SIMD optimizations are production-ready
 and provide significant value with minimal risk.
-```
+```text
 
 ---
 
@@ -587,7 +587,7 @@ and provide significant value with minimal risk.
    mojo run benchmarks/bench_simd.mojo
    mojo test tests/shared/core/test_gradient_checking.mojo
    mojo run examples/typed_tensor_demo.mojo
-   ```
+   ```text
 
 2. **Review CI status:**
    - Check `.github/workflows/test-gradients.yml` runs

@@ -54,7 +54,7 @@ fn add_simd(a: ExTensor, b: ExTensor) raises -> ExTensor:
         result_ptr.store[width=width](idx, a_vec + b_vec)
 
     vectorize[vectorized_add, simd_width](size)
-```
+```text
 
 **Performance Gains:**
 
@@ -72,7 +72,7 @@ from shared.core.arithmetic_simd import add_simd, multiply_simd
 var a = ones([1024, 1024], DType.float32)
 var b = ones([1024, 1024], DType.float32)
 var c = add_simd(a, b)  # 4x faster than scalar add
-```
+```text
 
 ---
 
@@ -96,7 +96,7 @@ struct TypedTensor[dtype: DType, //]:
     var _data: UnsafePointer[Scalar[dtype]]  # No type erasure!
     var _shape: DynamicVector[Int]
     var _numel: Int
-```
+```text
 
 **Type Safety:**
 
@@ -104,7 +104,7 @@ struct TypedTensor[dtype: DType, //]:
 var a = TypedTensor[DType.float32]([3, 4])  # Compile-time float32
 var b = TypedTensor[DType.float64]([3, 4])  # Compile-time float64
 // var c = add(a, b)  # Compile error: type mismatch!
-```
+```text
 
 **Helper Functions:**
 
@@ -112,7 +112,7 @@ var b = TypedTensor[DType.float64]([3, 4])  # Compile-time float64
 fn zeros[dtype: DType, //](shape: DynamicVector[Int]) -> TypedTensor[dtype]
 fn ones[dtype: DType, //](shape: DynamicVector[Int]) -> TypedTensor[dtype]
 fn full[dtype: DType, //](shape: DynamicVector[Int], value: Scalar[dtype]) -> TypedTensor[dtype]
-```
+```text
 
 **Performance Improvement:**
 
@@ -146,7 +146,7 @@ struct FixedTensor[rows: Int, cols: Int, dtype: DType]:
     - 20-50% faster than dynamic tensors
     """
     var _data: SIMD[dtype, rows * cols]  # Stack-allocated!
-```
+```text
 
 **Compile-Time Operations:**
 
@@ -169,7 +169,7 @@ fn matmul[M: Int, N: Int, K: Int, dtype: DType, //](
             result[i, j] = sum
 
     return result^
-```
+```text
 
 **Type Aliases for Common Sizes:**
 
@@ -178,7 +178,7 @@ alias Kernel3x3_f32 = FixedTensor[3, 3, DType.float32]
 alias Kernel5x5_f32 = FixedTensor[5, 5, DType.float32]
 alias Mat4x4_f64 = FixedTensor[4, 4, DType.float64]
 alias Bias128_f32 = FixedTensor[1, 128, DType.float32]
-```
+```text
 
 **Usage Example:**
 
@@ -189,7 +189,7 @@ var kernel = Kernel3x3()
 kernel[1, 1] = 1.0  # Compile-time bounds check
 
 // kernel[3, 3] = 1.0  # Compile error: out of bounds!
-```
+```text
 
 ---
 
@@ -216,7 +216,7 @@ fn check_gradients(
 
     Returns True if |numerical - analytical| < tolerance
     """
-```
+```text
 
 **Usage in Tests:**
 
@@ -232,7 +232,7 @@ fn test_relu_gradient() raises:
     var input = randn([3, 4], DType.float32)
     var passed = check_gradients(forward, backward, input)
     assert_true(passed, "ReLU gradient check failed")
-```
+```text
 
 **Verbose Mode:**
 
@@ -248,7 +248,7 @@ var passed = check_gradients_verbose(
 # 0     | 1.000      | 0.999     | 0.001 | PASS
 # 1     | 0.000      | 0.001     | 0.001 | PASS
 # ...
-```
+```text
 
 **Benefits:**
 
@@ -280,7 +280,7 @@ trait Differentiable:
     fn backward(self, grad_output: ExTensor) raises -> ExTensor:
         """Compute input gradient from output gradient."""
         ...
-```
+```text
 
 #### 2. Parameterized Trait
 
@@ -299,7 +299,7 @@ trait Parameterized:
     fn zero_grad(inout self) raises:
         """Reset all gradients to zero."""
         ...
-```
+```text
 
 #### 3. Serializable Trait
 
@@ -314,7 +314,7 @@ trait Serializable:
     fn load(inout self, path: String) raises:
         """Load state from file."""
         ...
-```
+```text
 
 #### 4. Composable Trait
 
@@ -325,7 +325,7 @@ trait Composable:
     fn compose[T: Composable](self, other: T) raises -> ComposedOp:
         """Chain this component with another."""
         ...
-```
+```text
 
 #### 5. Trainable Trait
 
@@ -344,7 +344,7 @@ trait Trainable:
     fn is_training(self) -> Bool:
         """Check current mode."""
         ...
-```
+```text
 
 **Usage Example:**
 
@@ -367,7 +367,7 @@ struct MyLayer(Differentiable, Parameterized, Serializable):
     fn save(self, path: String):
         # Save weights and bias
         ...
-```
+```text
 
 **Benefits:**
 
@@ -390,7 +390,7 @@ from .gradient_checker import (
     check_gradients_verbose,
     relative_error
 )
-```
+```text
 
 ---
 
@@ -446,7 +446,7 @@ var c = add(a, b)
 
 # New (SIMD, 4x faster for float32)
 var c = add_simd(a, b)  # Automatic fallback for different shapes
-```
+```text
 
 ### 2. Using TypedTensor
 
@@ -460,7 +460,7 @@ var bias = ones[DType.float32]([128])
 # Forward pass (all dtype-specialized)
 var output = matmul(input, weights)
 output = add(output, bias)
-```
+```text
 
 ### 3. Using FixedTensor
 
@@ -475,7 +475,7 @@ kernel[2, 2] = -1.0
 
 # Matrix multiplication (fully unrolled)
 var result = matmul(kernel, input_patch)
-```
+```text
 
 ### 4. Using Gradient Checking
 
@@ -492,7 +492,7 @@ fn test_my_layer_gradient() raises:
     var input = randn([3, 4], DType.float32)
     var passed = check_gradients(forward, backward, input)
     assert_true(passed, "Gradient check failed")
-```
+```text
 
 ### 5. Using Traits
 
@@ -512,7 +512,7 @@ struct CustomLayer(Differentiable, Parameterized):
 
     fn parameters(self) -> List[ExTensor]:
         return [self.weights]
-```
+```text
 
 ---
 
@@ -531,7 +531,7 @@ fn test_simd_correctness() raises:
 
     var max_diff = max_absolute_difference(scalar_result, simd_result)
     assert_true(max_diff < 1e-6, "SIMD and scalar differ")
-```
+```text
 
 ### 2. Parametric Types
 
@@ -544,7 +544,7 @@ fn test_typed_tensor_type_safety() raises:
 
     // var d = zeros[DType.float64]([3, 4])
     // var e = add(a, d)  # Should NOT compile (type error)
-```
+```text
 
 ### 3. Gradient Checking
 
@@ -554,7 +554,7 @@ fn test_all_backward_passes() raises:
     for layer in [relu, sigmoid, tanh, softmax, conv2d, batch_norm]:
         var passed = check_gradients(layer.forward, layer.backward, test_input)
         assert_true(passed, f"{layer.name} gradient check failed")
-```
+```text
 
 ---
 

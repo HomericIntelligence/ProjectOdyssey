@@ -18,7 +18,7 @@ This example shows how to build, train, and run inference with the DenseNet-121 
 
 ```bash
 python examples/densenet121-cifar10/download_cifar10.py
-```
+```text
 
 This downloads CIFAR-10 (50,000 training + 10,000 test samples) to `datasets/cifar10/`.
 
@@ -26,13 +26,13 @@ This downloads CIFAR-10 (50,000 training + 10,000 test samples) to `datasets/cif
 
 ```bash
 mojo run examples/densenet121-cifar10/train.mojo --epochs 200 --batch-size 64 --lr 0.01
-```
+```text
 
 ### 3. Run Inference
 
 ```bash
 mojo run examples/densenet121-cifar10/inference.mojo --weights-dir densenet121_weights
-```
+```text
 
 ## Key Innovation: Dense Connectivity
 
@@ -44,7 +44,7 @@ Traditional CNNs have sequential connections:
 
 ```text
 Layer 1 → Layer 2 → Layer 3 → Layer 4 → ...
-```
+```text
 
 DenseNet has dense connections:
 
@@ -54,7 +54,7 @@ Layer 1 ──┬─→ Layer 2 ──┬─→ Layer 3 ──┬─→ Layer 4
           ├─────────────┼─────────────┼─→ ...
           │             │             │
           └─────────────┴─────────────┴─→ ...
-```
+```text
 
 Each layer receives inputs from ALL previous layers in the dense block!
 
@@ -76,7 +76,7 @@ Layer 3: concat([x_0, x_1, x_2]) → BN → ReLU → Conv3×3 → output (x_3)
 Layer L: concat([x_0, x_1, ..., x_{L-1}]) → BN → ReLU → Conv3×3 → output (x_L)
     ↓
 Output: concat([x_0, x_1, x_2, ..., x_L])
-```
+```text
 
 **Key Insights**:
 
@@ -105,7 +105,7 @@ To reduce computation, DenseNet uses **bottleneck layers** (1×1 convolutions be
 Input (many channels)
     ↓
 BN → ReLU → Conv1×1 (4k outputs) → BN → ReLU → Conv3×3 (k outputs)
-```
+```text
 
 This reduces the number of input channels to the expensive 3×3 convolution.
 
@@ -119,7 +119,7 @@ Input (c channels, H×W)
 BN → Conv1×1 (c/2 outputs) → AvgPool2×2
     ↓
 Output (c/2 channels, H/2×W/2)
-```
+```text
 
 Compression factor: θ = 0.5 (reduce channels by half)
 
@@ -172,7 +172,7 @@ Global Average Pool (4×4 → 1×1)
 Linear(1024 → 10)
     ↓
 Output (10 classes)
-```
+```text
 
 ### Adaptations for CIFAR-10
 
@@ -267,7 +267,7 @@ examples/densenet121-cifar10/
 ├── data_loader.mojo       # CIFAR-10 binary format loading (symlink to resnet18)
 ├── weights.mojo           # Hex-based weight serialization
 └── download_cifar10.py    # Python script to download dataset (symlink to resnet18)
-```
+```text
 
 ## Implementation Status
 
@@ -333,13 +333,13 @@ where:
   c_0 = initial channels
   k = growth rate
   ℓ = layer index
-```
+```text
 
 Forward pass:
 
 ```text
 x_ℓ = H_ℓ([x_0, x_1, ..., x_{ℓ-1}])
-```
+```text
 
 Where H_ℓ is the composite function: BN → ReLU → Conv1×1 → BN → ReLU → Conv3×3
 
@@ -349,7 +349,7 @@ Concatenation backward:
 
 ```text
 grad_input = [grad_x_0, grad_x_1, ..., grad_x_{ℓ-1}]
-```
+```text
 
 Each layer receives gradients from ALL subsequent layers!
 
@@ -374,7 +374,7 @@ Applied after every convolution (bottleneck and 3×3):
 ```text
 x_norm = (x - mean) / sqrt(var + eps)
 y = gamma * x_norm + beta
-```
+```text
 
 ### Learning Rate Scheduling
 
@@ -416,7 +416,7 @@ mojo run examples/densenet121-cifar10/train.mojo \
     --momentum 0.9 \
     --data-dir datasets/cifar10 \
     --weights-dir densenet121_weights
-```
+```text
 
 **Arguments**:
 
@@ -433,7 +433,7 @@ mojo run examples/densenet121-cifar10/train.mojo \
 mojo run examples/densenet121-cifar10/inference.mojo \
     --weights-dir densenet121_weights \
     --data-dir datasets/cifar10
-```
+```text
 
 **Arguments**:
 

@@ -18,7 +18,7 @@ This example shows how to build, train, and run inference with the ResNet-18 arc
 
 ```bash
 python examples/resnet18-cifar10/download_cifar10.py
-```
+```text
 
 This downloads CIFAR-10 (50,000 training + 10,000 test samples) to `datasets/cifar10/`.
 
@@ -28,14 +28,14 @@ This downloads CIFAR-10 (50,000 training + 10,000 test samples) to `datasets/cif
 # NOTE: Training requires batch_norm2d_backward implementation
 # See GAP_ANALYSIS.md for details
 mojo run examples/resnet18-cifar10/train.mojo --epochs 200 --batch-size 128 --lr 0.01
-```
+```text
 
 ### 3. Run Inference
 
 ```bash
 # Evaluate on test set (once weights are available)
 mojo run examples/resnet18-cifar10/inference.mojo --weights-dir resnet18_weights
-```
+```text
 
 ## Key Innovation: Residual Learning
 
@@ -59,7 +59,7 @@ Conv 3×3 → BN
    ReLU
     ↓
 Output
-```
+```text
 
 **Key Insight**: Instead of learning H(x), learn F(x) = H(x) - x, then compute H(x) = F(x) + x
 
@@ -88,7 +88,7 @@ Conv 3×3 → BN
    ReLU
     ↓
 Output
-```
+```text
 
 ## Model Architecture
 
@@ -121,7 +121,7 @@ Flatten
 Linear(512 → 10)
     ↓
 Output (10 classes)
-```
+```text
 
 ### Adaptations for CIFAR-10
 
@@ -205,7 +205,7 @@ examples/resnet18-cifar10/
 ├── download_cifar10.py    # Python script to download dataset
 ├── run_example.sh         # Complete workflow script
 └── GAP_ANALYSIS.md        # Implementation gap analysis
-```
+```text
 
 ## Implementation Status
 
@@ -271,7 +271,7 @@ dL/dx = dL/dH * dH/dx
       = dL/dH * d(F(x) + x)/dx
       = dL/dH * (dF/dx + I)
       = dL/dH * dF/dx + dL/dH    (identity term prevents vanishing)
-```
+```text
 
 The identity term `dL/dH` ensures gradients always flow, even if `dF/dx ≈ 0`.
 
@@ -288,7 +288,7 @@ Formula:
 ```text
 x_norm = (x - mean) / sqrt(var + eps)
 y = gamma * x_norm + beta
-```
+```text
 
 During training:
 
@@ -343,7 +343,7 @@ mojo run examples/resnet18-cifar10/train.mojo \
     --momentum 0.9 \
     --data-dir datasets/cifar10 \
     --weights-dir resnet18_weights
-```
+```text
 
 **Arguments**:
 
@@ -361,7 +361,7 @@ mojo run examples/resnet18-cifar10/train.mojo \
 mojo run examples/resnet18-cifar10/inference.mojo \
     --weights-dir resnet18_weights \
     --data-dir datasets/cifar10
-```
+```text
 
 **Arguments**:
 

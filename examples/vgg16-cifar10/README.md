@@ -19,7 +19,7 @@ architecture on the CIFAR-10 dataset.
 
 ```bash
 python examples/vgg16-cifar10/download_cifar10.py
-```
+```text
 
 This downloads the CIFAR-10 dataset (50,000 training samples, 10,000 test samples, 10 classes) to `datasets/cifar10/`.
 
@@ -27,14 +27,14 @@ This downloads the CIFAR-10 dataset (50,000 training samples, 10,000 test sample
 
 ```bash
 mojo run examples/vgg16-cifar10/train.mojo --epochs 200 --batch-size 128 --lr 0.01
-```
+```text
 
 ### 3. Run Inference
 
 ```bash
 # Evaluate on test set
 mojo run examples/vgg16-cifar10/inference.mojo --weights-dir vgg16_weights
-```
+```text
 
 ## Key Innovation: Depth
 
@@ -99,7 +99,7 @@ Linear (512 → 512) → ReLU → Dropout(0.5)
 Linear (512 → 10)
     ↓
 Output (10 classes)
-```
+```text
 
 ### Parameters
 
@@ -155,7 +155,7 @@ examples/vgg16-cifar10/
 ├── download_cifar10.py    # Python script to download dataset
 ├── run_example.sh         # Complete workflow script
 └── GAP_ANALYSIS.md        # Implementation gap analysis
-```
+```text
 
 ## Usage Details
 
@@ -169,7 +169,7 @@ mojo run examples/vgg16-cifar10/train.mojo \
     --momentum 0.9 \
     --data-dir datasets/cifar10 \
     --weights-dir vgg16_weights
-```
+```text
 
 **Arguments**:
 
@@ -187,7 +187,7 @@ mojo run examples/vgg16-cifar10/train.mojo \
 mojo run examples/vgg16-cifar10/inference.mojo \
     --weights-dir vgg16_weights \
     --data-dir datasets/cifar10
-```
+```text
 
 **Arguments**:
 

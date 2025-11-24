@@ -100,7 +100,7 @@ Added maintainer email address: `ml-odyssey-conduct@protonmail.com`
 ```markdown
 Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders
 responsible for enforcement at ml-odyssey-conduct@protonmail.com.
-```
+```text
 
 ### Email Selection Rationale
 
@@ -139,7 +139,7 @@ Removed all references to `dist/.gitkeep` from historical documentation:
 ```bash
 grep -r "dist/.gitkeep" --include="*.md" .
 # No results found
-```
+```text
 
 All references successfully removed.
 
@@ -227,7 +227,7 @@ M  notes/issues/784/README.md                  # Fixed ADR-001 link path
 M  notes/issues/789/README.md                  # Fixed ADR-001 link path + title
 M  notes/issues/794/README.md                  # Fixed ADR-001 link path
 A  WAVE_3_DOCUMENTATION_FIXES.md               # This summary document
-```
+```text
 
 ## Commit Message
 
@@ -260,7 +260,7 @@ Issue #1604: Removed dist/.gitkeep references
 - Files: PACKAGE_IMPLEMENTATION_SUMMARY.md, notes/issues/40/{COMMANDS_TO_EXECUTE,EXECUTION_GUIDE}.md
 
 All links verified working, content accurate, no broken references remain.
-```
+```text
 
 ## Next Steps
 

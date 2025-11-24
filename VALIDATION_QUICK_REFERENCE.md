@@ -148,7 +148,7 @@
 
 ### By Category
 
-```
+```text
 Python Tests                    97/97  ████████████████████ 100% ✅
 Foundation (Structure)          100/100 ███████████████████ 100% ✅
 Foundation (Docs)              54/54   ██████████████████  100% ✅
@@ -158,7 +158,7 @@ CIFAR-10 (All 6 archs)         0/23    ░░░░░░░░░░░░░�
 Benchmarks                     0/9     ░░░░░░░░░░░░░░░░░    0% ⊘
 ─────────────────────────────────────────────────────────────────
 TOTAL                          234     85.0% ⚠️
-```
+```text
 
 ### Top Failing Modules
 
@@ -283,21 +283,21 @@ After Phase 1:
 mojo build -I . shared/core/dropout.mojo
 mojo build -I . shared/core/normalization.mojo
 mojo build -I . examples/lenet-emnist/model.mojo
-```
+```text
 
 After Phase 2:
 
 ```bash
 mojo build -I . examples/alexnet-cifar10/model.mojo
 mojo build -I . examples/*/train.mojo
-```
+```text
 
 Final validation:
 
 ```bash
 pytest tests/foundation/ -v  # Should be 156/156
 mojo build -I . examples/**/*.mojo  # All should compile
-```
+```text
 
 ---
 

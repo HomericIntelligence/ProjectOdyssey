@@ -10,7 +10,7 @@
 
 Two tests fail because there are extra directories in `/docs/`:
 
-```
+```text
 /home/mvillmow/ml-odyssey/docs/
 ├── getting-started/ .................. ✓ Expected
 ├── core/ ............................ ✓ Expected
@@ -19,7 +19,7 @@ Two tests fail because there are extra directories in `/docs/`:
 ├── integration/ ..................... ✓ Expected
 ├── backward-passes/ ................. ✗ UNEXPECTED
 └── extensor/ ........................ ✗ UNEXPECTED
-```
+```text
 
 ### Failing Tests
 
@@ -35,7 +35,7 @@ Two tests fail because there are extra directories in `/docs/`:
 ```bash
 rm -rf /home/mvillmow/ml-odyssey/docs/backward-passes/
 rm -rf /home/mvillmow/ml-odyssey/docs/extensor/
-```
+```text
 
 **Note**: `backward-passes/` has restricted permissions (700). Check contents before deleting.
 
@@ -47,33 +47,33 @@ rm -rf /home/mvillmow/ml-odyssey/docs/extensor/
 # - backward-passes/ → advanced/gradient-computation.md
 # - extensor/ → advanced/tensor-extensions.md
 # - or move to core/ if foundational
-```
+```text
 
 ## Verify the Fix
 
 ```bash
 cd /home/mvillmow/ml-odyssey
 pytest tests/foundation/docs/test_doc_structure.py -v
-```
+```text
 
 Expected result:
 
-```
+```text
 ===== 24 passed in 0.06s =====
 (14 passed from structure tests, 10 skipped from tier completion tests)
-```
+```text
 
 Or run all foundation tests:
 
 ```bash
 pytest tests/foundation/ -v --tb=short
-```
+```text
 
 Expected result:
 
-```
+```text
 ===== 156 passed, 10 skipped in ~0.5s =====
-```
+```text
 
 ## Files to Modify
 
@@ -88,7 +88,7 @@ To enable 5 skipped tests in tier 1, create:
 
 ```bash
 touch /home/mvillmow/ml-odyssey/docs/getting-started/first-paper.md
-```
+```text
 
 Add content:
 
@@ -98,7 +98,7 @@ Add content:
 ## LeNet-5: A Classic CNN Implementation
 
 [Add tutorial content]
-```
+```text
 
 This will enable:
 

@@ -24,7 +24,7 @@ Added float64 (double precision) support to `sgd_momentum_update_inplace()` in `
 for i in range(numel):
     velocity_data[i] = momentum * velocity_data[i] - lr * grad_data[i]
     param_data[i] += velocity_data[i]
-```
+```text
 
 **Problem:** Uses scalar loops instead of SIMD vectorization
 
@@ -50,7 +50,7 @@ fn vectorized_update[width: Int](idx: Int):
     param_data.store[width=width](idx, param_vec)
 
 vectorize[vectorized_update, simd_width](numel)
-```
+```text
 
 **Impact:** Would provide 2-4x speedup (similar to other SIMD operations in codebase)
 
@@ -79,7 +79,7 @@ vectorize[vectorized_update, simd_width](numel)
 ```mojo
 if param.dtype() != grad.dtype() or param.dtype() != velocity.dtype():
     raise Error("param, grad, and velocity must all have the same dtype")
-```
+```text
 
 **Impact:** Better error messages, catches user errors earlier
 
@@ -112,7 +112,7 @@ fn _sgd_momentum_update_impl[
 
     # SIMD loop here
     ...
-```
+```text
 
 Then call with:
 
@@ -121,7 +121,7 @@ if param.dtype() == DType.float32:
     _sgd_momentum_update_impl[DType.float32](param, grad, velocity, lr, momentum, numel)
 elif param.dtype() == DType.float64:
     _sgd_momentum_update_impl[DType.float64](param, grad, velocity, lr, momentum, numel)
-```
+```text
 
 **Impact:** Reduces code duplication, easier to maintain, but adds complexity
 

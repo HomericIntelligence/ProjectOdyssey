@@ -11,7 +11,7 @@ Stack trace:
 #13 train::compute_gradients at line 127
 
 tcmalloc: allocation failed - out of memory
-```
+```text
 
 ## Root Cause Analysis
 
@@ -40,7 +40,7 @@ var result = ExTensor(dummy_shape, self._dtype)  # <- ALLOCATES MEMORY
 
 # Share data pointer with parent (overwrites the dummy allocation)
 result._data = self._data  # <- ORPHANS THE DUMMY ALLOCATION
-```
+```text
 
 The comment even admitted it: "will be orphaned when we overwrite _data".
 
@@ -80,7 +80,7 @@ var result = ExTensor(dummy_shape, self._dtype)
 # Update shape, strides...
 
 result._data = self._data
-```
+```text
 
 **After:**
 
@@ -94,7 +94,7 @@ var result = ExTensor(new_shape, self._dtype)
 result._data.free()
 result._data = self._data
 result._is_view = True
-```
+```text
 
 ### slice() Fix (lines 336-352)
 
@@ -136,7 +136,7 @@ Computing cross-entropy 1,000 times...
 === Test 4: Training Loop Simulation ===
 Simulating 100 training batches...
   SUCCESS: 100 batches completed without memory issues
-```
+```text
 
 ## Impact
 
@@ -170,7 +170,7 @@ Before merging:
 result._data.free()          # Free the allocated buffer
 result._data = self._data    # Point to parent's buffer
 result._is_view = True       # Mark as view so destructor doesn't free parent's buffer
-```
+```text
 
 This ensures:
 

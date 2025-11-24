@@ -407,14 +407,14 @@ fn matrix_multiply(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
 ```mojo
 fn __init__(inout self, value: Int):
 fn modify(inout self):
-```
+```text
 
 **Correct**:
 
 ```mojo
 fn __init__(mut self, value: Int):
 fn modify(mut self):
-```
+```text
 
 **Fix**: Global find-replace `inout` → `mut`
 
@@ -426,7 +426,7 @@ fn modify(mut self):
 @value
 struct Transform:
     var name: String
-```
+```text
 
 **Correct**:
 
@@ -434,7 +434,7 @@ struct Transform:
 @fieldwise_init
 struct Transform(Copyable, Movable):
     var name: String
-```
+```text
 
 **Fix**: Replace decorator + add explicit trait conformances
 
@@ -446,14 +446,14 @@ struct Transform(Copyable, Movable):
 from collections.vector import DynamicVector
 var values = DynamicVector[Int](10)
 values.push_back(42)
-```
+```text
 
 **Correct**:
 
 ```mojo
 var values = List[Int](10)
 values.append(42)
-```
+```text
 
 **Fix**: Replace type + update method calls (.push_back → .append)
 
@@ -464,14 +464,14 @@ values.append(42)
 ```mojo
 fn compute() -> (Float32, Float32):
     return (1.0, 2.0)
-```
+```text
 
 **Correct**:
 
 ```mojo
 fn compute() -> Tuple[Float32, Float32]:
     return Tuple[Float32, Float32](1.0, 2.0)
-```
+```text
 
 **Fix**: Use `Tuple[T1, T2]` type syntax
 

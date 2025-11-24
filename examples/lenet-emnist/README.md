@@ -20,7 +20,7 @@ achieving 81% test accuracy on EMNIST Balanced (47 classes).
 
 ```bash
 python scripts/download_emnist.py --split balanced
-```
+```text
 
 This downloads the EMNIST Balanced split (131,600 training samples, 18,800 test samples, 47 classes) to
 `datasets/emnist/`.
@@ -29,7 +29,7 @@ This downloads the EMNIST Balanced split (131,600 training samples, 18,800 test 
 
 ```bash
 pixi run mojo run -I . examples/lenet-emnist/train.mojo --epochs 10 --batch-size 32 --lr 0.01
-```
+```text
 
 **Note**: Use `pixi run mojo` (not just `mojo`) since Mojo is installed via pixi. The `-I .` flag includes the
 current directory in the module search path.
@@ -41,7 +41,7 @@ current directory in the module search path.
 pixi run mojo run -I . examples/lenet-emnist/inference.mojo \
     --weights-dir lenet5_weights \
     --data-dir datasets/emnist
-```
+```text
 
 ## Dataset Information
 
@@ -100,7 +100,7 @@ Linear (120 → 84) + ReLU
 Linear (84 → 47)
     ↓
 Output (47 classes)
-```
+```text
 
 ### Parameters
 
@@ -124,7 +124,7 @@ examples/lenet-emnist/
 ├── data_loader.mojo    # IDX file format loading
 ├── weights.mojo        # Hex-based weight serialization
 └── run_example.sh      # Complete workflow script
-```
+```text
 
 ## Usage Details
 
@@ -137,7 +137,7 @@ pixi run mojo run -I . examples/lenet-emnist/train.mojo \
     --lr 0.01 \
     --data-dir datasets/emnist \
     --weights-dir lenet5_weights
-```
+```text
 
 **Arguments**:
 
@@ -154,7 +154,7 @@ pixi run mojo run -I . examples/lenet-emnist/train.mojo \
 pixi run mojo run -I . examples/lenet-emnist/inference.mojo \
     --weights-dir lenet5_weights \
     --data-dir datasets/emnist
-```
+```text
 
 **Important**: The `-I .` flag is **required** to include the current directory in Mojo's module search path. Without it, Mojo cannot find the `shared/` library modules.
 

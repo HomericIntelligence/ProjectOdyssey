@@ -649,7 +649,7 @@ git push -u origin 202-cleanup-refactor
    git checkout main
    git pull
    git worktree add worktrees/issue-64-impl-agents -b 64-impl-agents
-   ```
+   ```text
 
 1. **Descriptive Branch Names**: Match issue number and purpose
 
@@ -657,13 +657,13 @@ git push -u origin 202-cleanup-refactor
    62-plan-agents
    63-test-agents
    64-impl-agents
-   ```
+   ```text
 
 1. **Push Immediately**: Set upstream on first push
 
    ```bash
    git push -u origin 64-impl-agents
-   ```
+   ```text
 
 ### Coordination
 
@@ -681,13 +681,13 @@ git push -u origin 202-cleanup-refactor
 
    ```bash
    git worktree remove worktrees/issue-63-test-agents
-   ```
+   ```text
 
 1. **Prune Regularly**: Remove stale worktree references
 
    ```bash
    git worktree prune
-   ```
+   ```text
 
 1. **Document Removal**: Note in issue when worktree removed
 

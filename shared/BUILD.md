@@ -291,7 +291,7 @@ mojo build shared --shared -o build/libml_odyssey_shared.so
 
    ```bash
    mojo package shared -j auto
-   ```
+   ```text
 
 1. **Incremental builds**: Mojo caches compiled modules
 
@@ -299,7 +299,7 @@ mojo build shared --shared -o build/libml_odyssey_shared.so
 
    ```bash
    mojo package shared  # Fast, no optimizations
-   ```
+   ```text
 
 ### Build Times (Approximate)
 
@@ -459,20 +459,20 @@ jobs:
    mojo package shared --install
    # Make changes
    mojo package shared --install  # Fast rebuild
-   ```
+   ```text
 
 1. **Test frequently**: Run tests after each significant change
 
    ```bash
    mojo test tests/shared/
-   ```
+   ```text
 
 1. **Release validation**: Build release mode before commits
 
    ```bash
    mojo package shared --release
    mojo test tests/shared/
-   ```
+   ```text
 
 ### Version Management
 
