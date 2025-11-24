@@ -245,19 +245,19 @@ Tests run automatically in CI:
 
    ```bash
    mojo test tests/test_feature.mojo  # Fails
-   ```
+   ```text
 
 1. **Implement minimal code** (Green)
 
    ```bash
    mojo test tests/test_feature.mojo  # Passes
-   ```
+   ```text
 
 1. **Refactor** (Refactor)
 
    ```bash
    mojo test tests/test_feature.mojo  # Still passes
-   ```
+   ```text
 
 ## Examples
 

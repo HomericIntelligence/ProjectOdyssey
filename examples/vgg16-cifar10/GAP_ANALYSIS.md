@@ -79,7 +79,7 @@ var (grad_relu5_2, grad_conv5_3_k, grad_conv5_3_b) = conv2d_backward(grad_conv5_
 
 # Block 1 backward (2 conv + 1 pool)
 # ... similar to Block 2
-```
+```text
 
 **Why Needed**: Manual backpropagation is required as we're not using autograd
 
@@ -145,7 +145,7 @@ fn extract_batch(
                     batch._data[dst_offset] = data._data[src_offset]
 
     return batch
-```
+```text
 
 **Why Needed**: Training requires processing data in mini-batches
 
@@ -219,7 +219,7 @@ fn initialize_velocities(borrowed model: VGG16) raises -> DynamicVector[ExTensor
     velocities.push_back(zeros_like(model.fc3_bias))
 
     return velocities
-```
+```text
 
 **Why Needed**: SGD with momentum requires velocity state for each parameter
 
@@ -258,7 +258,7 @@ fn update_all_parameters(
     sgd_momentum_update_inplace(model.conv1_1_kernel, grad_params[0], velocities[0], learning_rate, momentum)
     sgd_momentum_update_inplace(model.conv1_1_bias, grad_params[1], velocities[1], learning_rate, momentum)
     # ... continue for all 32 parameters
-```
+```text
 
 **Why Needed**: Parameters need to be updated after computing gradients
 
@@ -288,7 +288,7 @@ During forward pass, store all intermediate activations needed for backprop:
 # - FC layer outputs (3 tensors)
 # - Dropout masks (2 tensors)
 # Total: ~36 tensors to store per batch
-```
+```text
 
 **Why Needed**: Backward functions require forward activations
 
@@ -321,7 +321,7 @@ var (bn_out, running_mean, running_var) = batch_norm2d(
     conv_out, gamma, beta, running_mean, running_var, training=True
 )
 var relu_out = relu(bn_out)
-```
+```text
 
 **Why Useful**:
 
@@ -351,7 +351,7 @@ from shared.data import RandomCrop, RandomHorizontalFlip, Compose
 
 # In training loop, before forward pass:
 var augmented_batch = apply_augmentation(batch_images)  # Random crop + flip
-```
+```text
 
 **Why Useful**:
 
@@ -386,7 +386,7 @@ fn clip_gradients(inout grads: DynamicVector[ExTensor], max_norm: Float32) raise
         var clip_coef = max_norm / (total_norm + 1e-6)
         for i in range(grads.size):
             grads[i] = grads[i] * clip_coef
-```
+```text
 
 **Why Useful**:
 

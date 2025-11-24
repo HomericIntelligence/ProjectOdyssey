@@ -85,7 +85,7 @@ fn batch_norm2d_backward(
                by Reducing Internal Covariate Shift", 2015
                https://arxiv.org/abs/1502.03167
     """
-```
+```text
 
 **Implementation Complexity**: High
 

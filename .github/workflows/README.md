@@ -420,7 +420,7 @@ All workflows use the modern Pixi setup:
   with:
     pixi-version: latest
     cache: true
-```
+```text
 
 This replaces the older `modular` CLI approach with Pixi's conda-compatible package management.
 
@@ -438,7 +438,7 @@ strategy:
         pattern: "test_*.mojo"
       - name: "Group 2"
         path: "path/to/tests"
-```
+```text
 
 ### PR Comments with Results
 
@@ -451,7 +451,7 @@ Test workflows automatically comment on PRs:
   with:
     script: |
       # Update or create bot comment with test results
-```
+```text
 
 Each workflow checks for existing bot comments and updates them to avoid duplicate comments.
 
@@ -473,7 +473,7 @@ Jobs use `needs` and `if` conditions to manage dependencies:
 test-report:
   needs: test-mojo-comprehensive
   if: always()  # Run even if upstream fails
-```
+```text
 
 The `always()` condition allows report generation even when tests fail.
 
@@ -568,7 +568,7 @@ on:
     paths:
       - 'scripts/**/*.py'  # Only run script validation when scripts change
       - '.github/workflows/script-validation.yml'
-```
+```text
 
 ---
 
@@ -632,7 +632,7 @@ gh run view <run-id>
 
 # Download artifacts
 gh run download <run-id> -n artifact-name
-```
+```text
 
 ### Trigger Workflow Manually
 
@@ -642,7 +642,7 @@ gh workflow run script-validation.yml
 
 # With branch specification
 gh workflow run script-validation.yml --ref main
-```
+```text
 
 ### Check Workflow Status
 
@@ -652,7 +652,7 @@ gh workflow list
 
 # View specific workflow status
 gh workflow view script-validation.yml
-```
+```text
 
 ---
 

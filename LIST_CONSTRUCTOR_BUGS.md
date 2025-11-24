@@ -40,7 +40,7 @@ The pattern `var list = List[Int](n)` followed by `list[i] = value` is **unsafe*
 var list = List[Int]()
 for i in range(n):
     list.append(value)
-```
+```text
 
 ### Pattern 2: Initialize then assign
 
@@ -50,7 +50,7 @@ for _ in range(n):
     list.append(0)  # Initialize with placeholder
 for i in range(n):
     list[i] = actual_value  # Now safe to index
-```
+```text
 
 ### Pattern 3: Build without indexing
 
@@ -58,7 +58,7 @@ for i in range(n):
 var list = List[Int]()
 for item in items:
     list.append(compute_value(item))  # Append directly
-```
+```text
 
 ## Unsafe Patterns (DO NOT USE)
 
@@ -67,14 +67,14 @@ for item in items:
 ```mojo
 var list = List[Int](n)  # BAD: May not have n elements!
 list[0] = value  # BAD: May crash!
-```
+```text
 
 ### Anti-pattern 2: Index without append
 
 ```mojo
 var list = List[Int]()
 list[0] = value  # BAD: List is empty!
-```
+```text
 
 ## Priority for Fixing
 

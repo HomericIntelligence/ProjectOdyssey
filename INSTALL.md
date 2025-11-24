@@ -25,19 +25,19 @@ The easiest and most consistent way to get started:
 ```bash
 git clone https://github.com/mvillmow/ml-odyssey.git
 cd ml-odyssey
-```
+```text
 
 1. Build and start the development environment:
 
 ```bash
 docker-compose up -d ml-odyssey-dev
-```
+```text
 
 1. Enter the development container:
 
 ```bash
 docker-compose exec ml-odyssey-dev bash
-```
+```text
 
 1. Verify installation:
 
@@ -50,7 +50,7 @@ pixi run pytest tests/
 
 # Run pre-commit hooks
 pixi run pre-commit run --all-files
-```
+```text
 
 **Docker Services**:
 
@@ -75,7 +75,7 @@ docker-compose down
 
 # Clean up volumes (removes caches)
 docker-compose down -v
-```
+```text
 
 ### Option 2: Local Installation with Pixi
 
@@ -96,31 +96,31 @@ For native development without Docker:
 ```bash
 git clone https://github.com/mvillmow/ml-odyssey.git
 cd ml-odyssey
-```
+```text
 
 1. Install Pixi:
 
 ```bash
 curl -fsSL https://pixi.sh/install.sh | bash
-```
+```text
 
 1. Install project dependencies:
 
 ```bash
 pixi install
-```
+```text
 
 1. Activate the Pixi environment:
 
 ```bash
 pixi shell
-```
+```text
 
 1. Install pre-commit hooks:
 
 ```bash
 pre-commit install
-```
+```text
 
 1. Verify installation:
 
@@ -133,7 +133,7 @@ pytest tests/
 
 # Run pre-commit hooks
 pre-commit run --all-files
-```
+```text
 
 ## Development Workflow
 
@@ -148,7 +148,7 @@ pytest tests/test_example.py
 
 # Run tests with coverage
 pytest --cov=src tests/
-```
+```text
 
 ### Code Quality Checks
 
@@ -161,7 +161,7 @@ pre-commit run mojo-format --all-files
 
 # Format Mojo code
 mojo format src/**/*.mojo
-```
+```text
 
 ### Working with GitHub Issues
 
@@ -176,7 +176,7 @@ python3 scripts/create_issues.py --section 01-foundation
 
 # Resume interrupted issue creation
 python3 scripts/create_issues.py --resume
-```
+```text
 
 ## Troubleshooting
 
@@ -278,7 +278,7 @@ docker-compose build --no-cache
 
 # Restart services
 docker-compose down && docker-compose up -d
-```
+```text
 
 ### Local Upgrade
 
@@ -291,7 +291,7 @@ pixi install
 
 # Update pre-commit hooks
 pre-commit autoupdate
-```
+```text
 
 ## Uninstallation
 
@@ -306,7 +306,7 @@ docker-compose down -v
 
 # Remove images (optional)
 docker rmi ml-odyssey:dev ml-odyssey:ci ml-odyssey:prod
-```
+```text
 
 ### Local Uninstallation
 
@@ -319,7 +319,7 @@ pre-commit uninstall
 
 # Remove repository (optional)
 cd .. && rm -rf ml-odyssey
-```
+```text
 
 ## Additional Resources
 

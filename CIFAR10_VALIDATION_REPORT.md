@@ -290,7 +290,7 @@ All six CIFAR-10 model implementations fail compilation with consistent, systema
 
 ```mojo
 print("Output shape: (" + str(logits.shape()[0]) + ", " + str(logits.shape()[1]) + ")")
-```
+```text
 
 ---
 
@@ -430,13 +430,13 @@ Once Priority 1 fixes are applied:
    mojo build -I . shared/core/dropout.mojo
    mojo build -I . shared/core/normalization.mojo
    mojo build -I . shared/core/pooling.mojo
-   ```
+   ```text
 
 2. **Recompile data utilities**
 
    ```bash
    mojo build -I . shared/data/batch_utils.mojo
-   ```
+   ```text
 
 3. **Recompile each architecture in order of complexity**
 
@@ -447,7 +447,7 @@ Once Priority 1 fixes are applied:
    mojo build -I . examples/googlenet-cifar10/model.mojo
    mojo build -I . examples/mobilenetv1-cifar10/model.mojo
    mojo build -I . examples/vgg16-cifar10/model.mojo
-   ```
+   ```text
 
 4. **Run per-architecture tests** (if test_model.mojo files exist)
    - ResNet18, DenseNet121, GoogLeNet, MobileNetV1 have test files
@@ -474,7 +474,7 @@ Once Priority 1 fixes are applied:
 
 ## Appendix: Error Location Map
 
-```
+```text
 shared/core/
 ├── dropout.mojo:22 - Tuple return (ExTensor, ExTensor)
 ├── normalization.mojo:23 - Tuple return (ExTensor, ExTensor, ExTensor)
@@ -493,4 +493,4 @@ examples/*/
 ├── train.mojo - F-string errors, tuple returns, missing functions
 ├── inference.mojo - F-string errors, tuple returns, DynamicVector
 └── test_model.mojo (where present) - F-string, DynamicVector, inout self
-```
+```text

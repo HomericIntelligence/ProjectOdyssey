@@ -11,7 +11,7 @@ addressing the LeNet-5 EMNIST example and general best practices.
 
 ```text
 Memory (bytes) = num_elements × bytes_per_element
-```
+```text
 
 Where:
 
@@ -29,19 +29,19 @@ Single EMNIST image: `(1, 28, 28)` with `float32`
 
 ```text
 Memory = 1 × 28 × 28 × 4 bytes = 3,136 bytes ≈ 3.1 KB
-```
+```text
 
 Batch of 32 images:
 
 ```text
 Memory = 32 × 1 × 28 × 28 × 4 bytes = 100,352 bytes ≈ 98 KB
-```
+```text
 
 Full training set (112,800 images):
 
 ```text
 Memory = 112,800 × 1 × 28 × 28 × 4 bytes = 353,894,400 bytes ≈ 337 MB
-```
+```text
 
 ## LeNet-5 Memory Requirements
 
@@ -72,7 +72,7 @@ LeNet-5 parameters (~61,706 parameters with `float32`):
 
 ```text
 Parameters = 61,706 × 4 bytes = 246,824 bytes ≈ 241 KB
-```
+```text
 
 ### Full Training Iteration Memory
 
@@ -80,7 +80,7 @@ For batch size `B`:
 
 ```text
 Total ≈ (B × 53 KB) + 241 KB + dataset_memory
-```
+```text
 
 ## Memory Limits and Safety
 
@@ -96,7 +96,7 @@ Any attempt to create a tensor exceeding `MAX_TENSOR_BYTES` will raise an error:
 ```text
 Error: Tensor too large: 1500000000 bytes exceeds maximum 2000000000 bytes.
 Consider using smaller batch sizes.
-```
+```text
 
 ### Calculating Maximum Batch Size
 
@@ -117,7 +117,7 @@ var max_batch = calculate_max_batch_size(
     max_memory_bytes=500_000_000  # 500 MB limit
 )
 print("Maximum batch size:", max_batch)  # ~159,439 samples
-```
+```text
 
 ## Recommended Batch Sizes
 
@@ -150,7 +150,7 @@ If you encounter an error like:
 ```text
 Error: Tensor too large: 1500000000 bytes exceeds maximum 2000000000 bytes.
 Consider using smaller batch sizes.
-```
+```text
 
 **Solutions**:
 
@@ -164,7 +164,7 @@ If you see:
 
 ```text
 Warning: Large tensor allocation: 600000000 bytes
-```
+```text
 
 **Actions**:
 
@@ -181,7 +181,7 @@ Warning: Large tensor allocation: 600000000 bytes
 ```mojo
 # ❌ BAD: Processes all 112,800 samples
 var output = model.forward(all_training_data)
-```
+```text
 
 **DO** use mini-batches with slicing:
 
@@ -192,7 +192,7 @@ for batch_idx in range(num_batches):
     var end = min(start + 32, num_samples)
     var batch = train_images.slice(start, end, axis=0)
     var output = model.forward(batch)
-```
+```text
 
 ### 2. Calculate Batch Size Programmatically
 
@@ -205,7 +205,7 @@ sample_shape.append(28)
 
 var max_batch = calculate_max_batch_size(sample_shape, DType.float32)
 var batch_size = min(max_batch, 256)  # Cap at 256 for training stability
-```
+```text
 
 ### 3. Use Views for Slicing
 
@@ -214,7 +214,7 @@ The `slice()` method creates memory-efficient views:
 ```mojo
 # Creates a view (shares memory, zero copy)
 var batch = dataset.slice(0, 32, axis=0)
-```
+```text
 
 This avoids copying data, saving both time and memory.
 
@@ -231,7 +231,7 @@ var batch_memory = batch_size * bytes_per_sample
 print("Batch memory requirement:", batch_memory, "bytes")
 if batch_memory > 100_000_000:  # 100 MB
     print("⚠️  Large batch - consider reducing size")
-```
+```text
 
 ## Platform-Specific Considerations
 
@@ -307,4 +307,4 @@ batch_sizes = {
 # Memory limits
 MAX_TENSOR_BYTES = 2_000_000_000  # 2 GB
 WARN_TENSOR_BYTES = 500_000_000   # 500 MB
-```
+```text

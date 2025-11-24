@@ -539,7 +539,7 @@ if check_gradients_finite(unscaled_grads):
 else:
     # Skip step and reduce scale
     scaler.backoff()
-```
+```text
 
 ### Performance Benefits
 
@@ -579,7 +579,7 @@ if a < b:
 # Check for special values
 if bf16.is_finite():
     print("Value is finite")
-```
+```text
 
 **BFloat16 Properties:**
 

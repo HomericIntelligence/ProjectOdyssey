@@ -49,7 +49,7 @@ if inferred_dim != -1:
 else:
     for i in range(new_len):
         final_shape[i] = new_shape[i]       # CRASH: list has wrong size
-```
+```text
 
 **After** (FIXED):
 
@@ -67,7 +67,7 @@ if inferred_dim != -1:
 else:
     for i in range(new_len):
         final_shape.append(new_shape[i])       # SAFE: append to list
-```
+```text
 
 **Impact**: Fixes crashes in `reshape()` with both explicit shapes and -1 inference.
 
@@ -87,7 +87,7 @@ for i in range(ndim):
     if i != actual_dim:
         new_shape[j] = old_shape[i]  # CRASH: list has wrong size
         j += 1
-```
+```text
 
 **After** (FIXED):
 
@@ -97,7 +97,7 @@ var new_shape = List[Int]()
 for i in range(ndim):
     if i != actual_dim:
         new_shape.append(old_shape[i])  # SAFE: append to list
-```
+```text
 
 **Impact**: Fixes crashes when squeezing a specific dimension.
 
@@ -117,7 +117,7 @@ for i in range(ndim):
     if old_shape[i] != 1:
         new_shape[j] = old_shape[i]  # CRASH: list has wrong size
         j += 1
-```
+```text
 
 **After** (FIXED):
 
@@ -127,7 +127,7 @@ var new_shape = List[Int]()
 for i in range(ndim):
     if old_shape[i] != 1:
         new_shape.append(old_shape[i])  # SAFE: append to list
-```
+```text
 
 **Impact**: Fixes crashes when squeezing all size-1 dimensions.
 
@@ -149,7 +149,7 @@ for i in range(new_ndim):
     else:
         new_shape[i] = old_shape[j]   # CRASH: list has wrong size
         j += 1
-```
+```text
 
 **After** (FIXED):
 
@@ -163,7 +163,7 @@ for i in range(new_ndim):
     else:
         new_shape.append(old_shape[j])  # SAFE: append to list
         j += 1
-```
+```text
 
 **Impact**: Fixes crashes when adding dimensions with `unsqueeze()`.
 
@@ -183,7 +183,7 @@ for i in range(ndim):
         result_shape[i] = concat_size  # CRASH: list has wrong size
     else:
         result_shape[i] = ref_shape[i] # CRASH: list has wrong size
-```
+```text
 
 **After** (FIXED):
 
@@ -195,7 +195,7 @@ for i in range(ndim):
         result_shape.append(concat_size)  # SAFE: append to list
     else:
         result_shape.append(ref_shape[i]) # SAFE: append to list
-```
+```text
 
 **Impact**: Fixes crashes when concatenating tensors.
 
@@ -215,7 +215,7 @@ var num_classes = shape_vec[1]
 
 var result_shape = List[Int](batch_size)  # WRONG SIZE
 var result = ExTensor(result_shape, DType.int32)
-```
+```text
 
 **After** (FIXED):
 
@@ -226,7 +226,7 @@ var num_classes = shape_vec[1]
 var result_shape = List[Int]()
 result_shape.append(batch_size)
 var result = ExTensor(result_shape, DType.int32)
-```
+```text
 
 **Impact**: Fixes crashes in `top1_accuracy()` and `topk_accuracy()` when computing argmax.
 
@@ -242,7 +242,7 @@ var result = ExTensor(result_shape, DType.int32)
 # Compute per-class accuracies
 var result_shape = List[Int](num_classes)  # WRONG SIZE
 var result = ExTensor(result_shape, DType.float64)
-```
+```text
 
 **After** (FIXED):
 
@@ -251,7 +251,7 @@ var result = ExTensor(result_shape, DType.float64)
 var result_shape = List[Int]()
 result_shape.append(num_classes)
 var result = ExTensor(result_shape, DType.float64)
-```
+```text
 
 **Impact**: Fixes crashes when computing per-class accuracy metrics.
 
@@ -271,7 +271,7 @@ var num_classes = shape_vec[1]
 
 var result_shape = List[Int](batch_size)  # WRONG SIZE
 var result = ExTensor(result_shape, DType.int32)
-```
+```text
 
 **After** (FIXED):
 
@@ -282,7 +282,7 @@ var num_classes = shape_vec[1]
 var result_shape = List[Int]()
 result_shape.append(batch_size)
 var result = ExTensor(result_shape, DType.int32)
-```
+```text
 
 **Impact**: Fixes crashes in `ConfusionMatrix.update()` when processing logits.
 
@@ -303,7 +303,7 @@ var batch_data = ExTensor(batch_data_shape, self.data.dtype)
 
 var batch_labels_shape = List[Int](actual_batch_size)
 var batch_labels = ExTensor(batch_labels_shape, self.labels.dtype)
-```
+```text
 
 **After** (FIXED):
 
@@ -317,7 +317,7 @@ var batch_data = ExTensor(batch_data_shape, self.data.dtype)
 var batch_labels_shape = List[Int]()
 batch_labels_shape.append(actual_batch_size)
 var batch_labels = ExTensor(batch_labels_shape, self.labels.dtype)
-```
+```text
 
 **Impact**: Fixes crashes when iterating over batches in training loops.
 
@@ -367,14 +367,14 @@ The following test files were created to demonstrate the bugs and verify fixes:
 ```mojo
 var list = List[Int](n)  # Creates list with UNDEFINED size
 list[0] = value          # CRASHES!
-```
+```text
 
 ### Correct Pattern (ALWAYS use)
 
 ```mojo
 var list = List[Int]()   # Create empty list
 list.append(value)       # Safely append
-```
+```text
 
 ---
 

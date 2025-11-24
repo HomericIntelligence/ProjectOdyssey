@@ -277,7 +277,7 @@ fn forward(input: ExTensor) raises -> (ExTensor, ExTensor):
 // fn func(...) raises -> (Int, Float32):
 //                         ~~~^~~~~~~~~~
 // candidate not viable: failed to infer parameter 'element_types' of parent struct 'Tuple'
-```
+```text
 
 **Files Affected**:
 
@@ -301,7 +301,7 @@ fn forward(input: ExTensor) raises -> (ExTensor, ExTensor):
 ```mojo
 fn forward(input: ExTensor) raises -> Tuple[ExTensor, ExTensor]:
     return Tuple(output, mask)
-```
+```text
 
 1. **Use struct wrapper**:
 
@@ -312,14 +312,14 @@ struct ForwardResult:
 
 fn forward(input: ExTensor) raises -> ForwardResult:
     return ForwardResult(output, mask)
-```
+```text
 
 1. **Return single value** (for simple cases):
 
 ```mojo
 fn forward(input: ExTensor) raises -> ExTensor:
     return output  // Modify test logic to compute mask separately
-```
+```text
 
 **Estimated Fix Time**: 2-3 hours (affects 12 files)
 
@@ -345,7 +345,7 @@ fn forward(inout self, borrowed input: ExTensor) raises -> ExTensor:
     pass
 
 // ERROR: expected ')' in argument list
-```
+```text
 
 **Files Affected**:
 
@@ -367,14 +367,14 @@ fn __init__(inout self, input_channels: Int, output_channels: Int):
 
 fn forward(inout self, borrowed input: ExTensor) raises -> ExTensor:
     pass
-```
+```text
 
 Actually, if the issue is the syntax entirely, use proper Mojo method syntax:
 
 ```mojo
 fn __init__(inout self, ...)
 fn forward(self, borrowed input: ExTensor) -> ExTensor
-```
+```text
 
 **Estimated Fix Time**: 3-4 hours (100+ instances across 20 files)
 
@@ -398,7 +398,7 @@ from collections.vector import DynamicVector
 // Later usage fails:
 var indices: DynamicVector[Int]
 // ERROR: use of unknown declaration 'DynamicVector'
-```
+```text
 
 **Files Affected**:
 
@@ -419,7 +419,7 @@ var indices: DynamicVector[Int]
 var shape: List[Int] = List[Int]()
 shape.append(h)
 shape.append(w)
-```
+```text
 
 1. **Implement custom vector type**:
 
@@ -427,13 +427,13 @@ shape.append(w)
 struct DynamicVector[T]:
     var _data: List[T]
     # ... custom implementation
-```
+```text
 
 1. **Use tuple/fixed-size arrays**:
 
 ```mojo
 var shape: SIMD[DType.int32, 2] = SIMD[DType.int32, 2](h, w)
-```
+```text
 
 **Estimated Fix Time**: 1-2 hours (replace all occurrences with List[Int])
 
@@ -458,7 +458,7 @@ fn copy_weights(model: LeNet5) raises -> List[ExTensor]:
 fn compute_gradients() raises -> List[ExTensor]:
     // ERROR: same issue
     grads: List[ExTensor] = List[ExTensor]()
-```
+```text
 
 **Files Affected**:
 
@@ -480,7 +480,7 @@ struct WeightSnapshot:
 
 fn copy_weights(model: LeNet5) raises -> WeightSnapshot:
     return WeightSnapshot(model.conv1_kernel, model.conv1_bias)
-```
+```text
 
 1. **Process immediately instead of collecting**:
 
@@ -489,7 +489,7 @@ fn analyze_weights(model: LeNet5) raises -> WeightAnalysis:
     # Compute stats for each weight individually
     # Return analysis struct with stats (not tensors)
     return WeightAnalysis(mean=..., std=..., ...)
-```
+```text
 
 1. **Add Copyable/Movable to ExTensor**:
 
@@ -497,7 +497,7 @@ fn analyze_weights(model: LeNet5) raises -> WeightAnalysis:
 @value  # Makes struct Copyable/Movable
 struct ExTensor:
     # ... existing code ...
-```
+```text
 
 **Estimated Fix Time**: 1-2 hours (2 functions need refactoring)
 
@@ -518,7 +518,7 @@ Weight initialization functions not implemented in shared/core/initializers.mojo
 fn initialize_weights_he() raises:
     var weights = initializers.he_uniform(fan_in=64, fan_out=64)
     // ERROR: module 'initializers' does not contain 'he_uniform'
-```
+```text
 
 **Functions Missing**:
 
@@ -545,7 +545,7 @@ fn xavier_uniform(fan_in: Int, fan_out: Int) raises -> ExTensor:
     var limit = sqrt(6.0 / (fan_in + fan_out))
     # Create tensor with uniform distribution [-limit, limit]
     return ExTensor.uniform(-limit, limit, shape=(fan_out, fan_in))
-```
+```text
 
 **Estimated Fix Time**: 1-2 hours (both functions ~50 lines each)
 
@@ -566,7 +566,7 @@ Cross-entropy loss function not implemented:
 fn training_step() raises:
     var loss_value = loss.cross_entropy_loss(logits, targets)
     // ERROR: module 'loss' does not contain 'cross_entropy_loss'
-```
+```text
 
 **Functions Missing**:
 
@@ -594,7 +594,7 @@ fn cross_entropy_loss(logits: ExTensor, targets: ExTensor) raises -> Float32:
 fn cross_entropy_loss_backward(logits: ExTensor, targets: ExTensor) raises -> ExTensor:
     var probs = softmax(logits)
     return probs - targets
-```
+```text
 
 **Estimated Fix Time**: 2 hours (function + gradient computation + numerical stability)
 
@@ -617,7 +617,7 @@ print(f"Output shape: ({logits.shape()[0]}, {logits.shape()[1]})")
 print(f"Training samples: {train_images.shape()[0]}")
 
 // ERROR: cannot parse f-string syntax
-```
+```text
 
 **Files Affected**:
 
@@ -639,7 +639,7 @@ print("Output shape: (" + str(logits.shape()[0]) + ", " + str(logits.shape()[1])
 // Or build string first
 var shape_str = "Output shape: (" + str(logits.shape()[0]) + ", " + str(logits.shape()[1]) + ")"
 print(shape_str)
-```
+```text
 
 **Estimated Fix Time**: 1 hour (20-30 instances across 4 files)
 
@@ -664,7 +664,7 @@ fn forward(self, input: ExTensor) -> ExTensor:
 
 // Also: deprecated syntax warnings
 fn forward(self, owned input: ExTensor) -> ExTensor:  # "owned" is deprecated for parameters
-```
+```text
 
 **Examples**:
 
@@ -688,7 +688,7 @@ fn forward(self, input: ExTensor) -> ExTensor:
 fn forward(self, input: ExTensor) -> ExTensor:
     """Computes forward pass through `layer`."""
     pass
-```
+```text
 
 **Estimated Fix Time**: 1-2 hours (automated with regex replacement)
 
@@ -704,7 +704,7 @@ fn forward(self, input: ExTensor) -> ExTensor:
 **Description**:
 Two extra directories exist in `/docs/` that break the 5-tier documentation structure:
 
-```
+```text
 /docs/
 ├── getting-started/       ✓ (Tier 1)
 ├── core/                  ✓ (Tier 2)
@@ -713,7 +713,7 @@ Two extra directories exist in `/docs/` that break the 5-tier documentation stru
 ├── integration/           ✓ (Tier 5)
 ├── backward-passes/       ✗ (Unexpected)
 ├── extensor/              ✗ (Unexpected)
-```
+```text
 
 **Test Impact**: 2 test failures in `test_doc_structure.py`
 
@@ -722,7 +722,7 @@ Two extra directories exist in `/docs/` that break the 5-tier documentation stru
 ```bash
 rm -rf /home/mvillmow/ml-odyssey/docs/backward-passes/
 rm -rf /home/mvillmow/ml-odyssey/docs/extensor/
-```
+```text
 
 OR move to appropriate tier if content should be preserved.
 
@@ -745,7 +745,7 @@ The `str()` built-in function is not available in Mojo `fn` context:
 // FAILS: use of unknown declaration 'str'
 var shape_str = str(tensor.shape()[0])
 print("Shape: " + shape_str)
-```
+```text
 
 **Workaround**: Use string conversion methods specific to the type.
 
@@ -782,7 +782,7 @@ print("Shape: " + shape_str)
 
 ### Quick Reference List
 
-```
+```text
 Core Module Implementations (15):
 ├── shared/core/layers.mojo                    [FIXME]
 ├── shared/core/activation.mojo                [FIXME]
@@ -808,7 +808,7 @@ Paper Examples (10):
 ├── papers/*/src/model.mojo                    [STUB]
 ├── papers/*/src/train.mojo                    [STUB]
 └── ... (8 more)
-```
+```text
 
 ---
 
@@ -973,7 +973,7 @@ Phase 2: Function Implementations
 Phase 3: Architecture Fixes
     ↓
 Phase 4: Testing & Validation
-```
+```text
 
 **Critical Path**: Phase 1.1 → Phase 1.2 → Phase 1.3 → Phase 2 (must complete in order)
 
@@ -1016,7 +1016,7 @@ mojo build -I . examples/*/inference.mojo
 # Phase 4 completion
 pytest tests/foundation/ -v
 mojo test examples/**/*.mojo
-```
+```text
 
 ---
 

@@ -38,7 +38,7 @@ You want to add a new activation function (GELU) to the shared library.
 
 ```text
 I want to add GELU activation to the shared library. Can you help me plan this?
-```
+```text
 
 ### Agent Selection
 
@@ -49,7 +49,7 @@ context.
 
 ```text
 Use the shared library orchestrator to plan adding GELU activation to the shared library.
-```
+```text
 
 ### Expected Agent Response
 
@@ -81,7 +81,7 @@ Would you like me to:
 a) Create the GitHub issue and detailed plan?
 b) Delegate to Architecture Design Agent for detailed design?
 c) Both (recommended)?
-```
+```text
 
 ### Follow-up Steps
 
@@ -89,13 +89,13 @@ c) Both (recommended)?
 
 ```text
 Yes, please create the issue and delegate to the design agent.
-```
+```text
 
 **Option 2**: Request more details first
 
 ```text
 Before creating the issue, can you show me the proposed API and file structure?
-```
+```text
 
 ### Expected Outputs
 
@@ -121,7 +121,7 @@ You have a design spec for BatchNorm2D and want to implement it.
 
 ```text
 I have the design spec for BatchNorm2D in issue #150. Let's implement it following the 5-phase workflow.
-```
+```text
 
 ### Agent Selection
 
@@ -131,7 +131,7 @@ I have the design spec for BatchNorm2D in issue #150. Let's implement it followi
 
 ```text
 Use the implementation specialist to coordinate BatchNorm2D implementation from issue #150.
-```
+```text
 
 ### Expected Agent Response
 
@@ -165,13 +165,13 @@ Phase 2-4 (Parallel):
 git worktree add worktrees/issue-151-test-batchnorm -b 151-test-batchnorm
 git worktree add worktrees/issue-152-impl-batchnorm -b 152-impl-batchnorm
 git worktree add worktrees/issue-153-pkg-batchnorm -b 153-pkg-batchnorm
-```
+```text
 
 Ready to proceed?
 
 ```text
 [User agrees]
-```
+```text
 
 ### Follow-up Steps
 
@@ -179,7 +179,7 @@ Ready to proceed?
 
 ```text
 Yes, let's start with the test phase. Use the test engineer to write tests for BatchNorm2D.
-```
+```text
 
 **Step 2**: Monitor parallel execution
 
@@ -191,13 +191,13 @@ Senior Implementation Engineer is implementing _normalize_simd in issue #152.
 Documentation Engineer is drafting API docs in issue #153.
 
 I'll notify you when all phases are ready for cleanup.
-```
+```text
 
 **Step 3**: Coordinate integration
 
 ```text
 What's the status of the parallel work?
-```
+```text
 
 ### Expected Outputs
 
@@ -224,7 +224,7 @@ You submitted PR #300 adding a Dropout layer and need a review.
 
 ```text
 I've submitted PR #300 with a Dropout layer implementation. Can you review it?
-```
+```text
 
 ### Agent Selection
 
@@ -234,7 +234,7 @@ I've submitted PR #300 with a Dropout layer implementation. Can you review it?
 
 ```text
 Use the code review orchestrator to review PR #300.
-```
+```text
 
 ### Expected Agent Response
 
@@ -258,7 +258,7 @@ I'll delegate to these specialists:
 5. Security Review Specialist - Random number generation security
 
 **Timeline:** Reviews will complete in parallel, expect feedback within 2-4 hours.
-```
+```text
 
 ### Follow-up Steps
 
@@ -290,7 +290,7 @@ All reviews complete. Here's the consolidated feedback:
 - ✅ No other security concerns
 
 **Summary:** 2 required changes, 1 recommended improvement. Please address feedback.
-```
+```text
 
 **Step 2**: Address feedback
 
@@ -302,7 +302,7 @@ I've addressed all the feedback:
 - Made random seed configurable
 
 Ready for re-review?
-```
+```text
 
 **Step 3**: Re-review and approval
 
@@ -317,7 +317,7 @@ All specialists have re-reviewed and approved:
 - Security Review Specialist: ✅ Approved
 
 **Recommendation:** Ready to merge.
-```
+```text
 
 ### Expected Outputs
 
@@ -344,7 +344,7 @@ You want to implement a Conv2D layer using test-driven development.
 
 ```text
 I want to implement Conv2D using TDD. Let's write tests first.
-```
+```text
 
 ### Agent Selection
 
@@ -354,7 +354,7 @@ I want to implement Conv2D using TDD. Let's write tests first.
 
 ```text
 Use the test specialist to plan TDD for Conv2D implementation.
-```
+```text
 
 ### Expected Agent Response
 
@@ -395,7 +395,7 @@ Excellent! TDD is the right approach for Conv2D. Let me create a comprehensive t
 **Delegation:** Test Engineer will implement tests.
 
 Ready to start?
-```
+```text
 
 ### Follow-up Steps
 
@@ -403,7 +403,7 @@ Ready to start?
 
 ```text
 Yes, let's write the tests. Use the test engineer to implement the test plan.
-```
+```text
 
 ```text
 Test Engineer:
@@ -441,19 +441,19 @@ All tests currently FAIL (no implementation yet).
 This is expected for TDD!
 
 Next: Implement Conv2D to make tests pass.
-```
+```text
 
 **Step 2**: Implement to pass tests
 
 ```text
 Use the implementation engineer to implement Conv2D to pass the tests.
-```
+```text
 
 **Step 3**: Refactor and optimize
 
 ```text
 Tests are passing! Now use the senior implementation engineer to add SIMD optimization.
-```
+```text
 
 ### Expected Outputs
 
@@ -480,7 +480,7 @@ You need to document the newly implemented BatchNorm2D layer.
 
 ```text
 I need comprehensive documentation for the BatchNorm2D layer we just implemented.
-```
+```text
 
 ### Agent Selection
 
@@ -490,7 +490,7 @@ I need comprehensive documentation for the BatchNorm2D layer we just implemented
 
 ```text
 Use the documentation specialist to create docs for BatchNorm2D.
-```
+```text
 
 ### Expected Agent Response
 
@@ -524,7 +524,7 @@ I'll create comprehensive documentation for BatchNorm2D. Let me plan the docs st
 **Timeline:** 2-3 days for complete documentation.
 
 Ready to proceed?
-```
+```text
 
 ### Follow-up Steps
 
@@ -532,7 +532,7 @@ Ready to proceed?
 
 ```text
 Yes, start with the API reference. Use the documentation engineer to write it.
-```
+```text
 
 ```text
 Documentation Engineer:
@@ -569,7 +569,7 @@ BatchNorm2D(
     eps: Float32 = 1e-5,
     momentum: Float32 = 0.1
 )
-```
+```text
 
 [... full API docs ...]
 
@@ -577,19 +577,19 @@ Would you like me to continue with usage examples?
 
 ```text
 [End of API docs]
-```
+```text
 
 **Step 2**: Add usage examples
 
 ```text
 Yes, add comprehensive usage examples.
-```
+```text
 
 **Step 3**: Update code docstrings
 
 ```text
 Finally, update the docstrings in the batchnorm.mojo source file.
-```
+```text
 
 ### Expected Outputs
 
@@ -616,7 +616,7 @@ Conv2D produces incorrect output for rectangular kernels (3x5).
 
 ```text
 Bug: Conv2D fails with rectangular kernels. 3x5 kernel produces wrong output shape.
-```
+```text
 
 ### Agent Selection
 
@@ -626,7 +626,7 @@ Bug: Conv2D fails with rectangular kernels. 3x5 kernel produces wrong output sha
 
 ```text
 Use the implementation specialist to analyze and fix the Conv2D rectangular kernel bug.
-```
+```text
 
 ### Expected Agent Response
 
@@ -658,7 +658,7 @@ I'll analyze the rectangular kernel bug. Let me investigate...
 - Test Engineer: Verify fix works
 
 Ready to proceed?
-```
+```text
 
 ### Follow-up Steps
 
@@ -666,7 +666,7 @@ Ready to proceed?
 
 ```text
 Yes, start with a failing test. Use the test engineer to add a test for rectangular kernels.
-```
+```text
 
 ```text
 Test Engineer:
@@ -686,13 +686,13 @@ fn test_conv2d_rectangular_kernel():
     assert_equal(output.shape[3], 24)  # Currently FAILS ❌
 
 Test result: FAILED (as expected)
-```
+```text
 
 **Step 2**: Apply the fix
 
 ```text
 Good. Now use the implementation engineer to fix the bug.
-```
+```text
 
 ```text
 Implementation Engineer:
@@ -720,13 +720,13 @@ for ky in range(self.kernel_height):  # Was: kernel_size
 Test result: PASSED ✅
 
 All existing tests still pass ✅
-```
+```text
 
 **Step 3**: Cleanup and finalize
 
 ```text
 Great! Add edge case tests and update documentation.
-```
+```text
 
 ### Expected Outputs
 
@@ -753,7 +753,7 @@ Conv2D forward pass is slower than expected. Need 2x speedup.
 
 ```text
 Conv2D is too slow. Can we optimize it to be 2x faster?
-```
+```text
 
 ### Agent Selection
 
@@ -763,7 +763,7 @@ Conv2D is too slow. Can we optimize it to be 2x faster?
 
 ```text
 Use the performance specialist to optimize Conv2D forward pass for 2x speedup.
-```
+```text
 
 ### Expected Agent Response
 
@@ -798,7 +798,7 @@ I'll analyze Conv2D performance and create an optimization plan.
 **Timeline:** 1-2 weeks
 
 Ready to proceed?
-```
+```text
 
 ### Follow-up Steps
 
@@ -806,7 +806,7 @@ Ready to proceed?
 
 ```text
 Yes, start with baseline benchmarks. Use the performance engineer to profile current performance.
-```
+```text
 
 ```text
 Performance Engineer:
@@ -819,13 +819,13 @@ Benchmark Results (32x3x224x224 input, 64x3x3x3 kernel):
 - SIMD utilization: 45%
 
 Baseline established. Ready for optimization.
-```
+```text
 
 **Step 2**: Optimize SIMD
 
 ```text
 Good. Now optimize the SIMD vectorization.
-```
+```text
 
 ```text
 Performance Engineer:
@@ -852,13 +852,13 @@ Benchmark Results:
 - SIMD utilization: 87%
 
 All tests still pass ✅
-```
+```text
 
 **Step 3**: Add cache tiling
 
 ```text
 Great progress! Now add cache tiling to hit the 2x target.
-```
+```text
 
 ```text
 Performance Engineer:
@@ -879,7 +879,7 @@ Benchmark Results:
 TARGET ACHIEVED: 2.18x speedup (target was 2.0x)
 
 All tests still pass ✅
-```
+```text
 
 ### Expected Outputs
 
@@ -904,13 +904,13 @@ All tests still pass ✅
 
 ```text
 Use the [section] orchestrator to plan [new feature/component].
-```
+```text
 
 **Don't start with engineers:**
 
 ```text
 ❌ Use the implementation engineer to add GELU activation.
-```
+```text
 
 ### Pattern 2: Delegating Complex Work
 
@@ -918,13 +918,13 @@ Use the [section] orchestrator to plan [new feature/component].
 
 ```text
 ✅ Use the implementation specialist to coordinate SIMD optimization.
-```
+```text
 
 **Don't skip levels:**
 
 ```text
 ❌ Use the junior engineer to optimize SIMD code.
-```
+```text
 
 ### Pattern 3: Following 5-Phase Workflow
 
@@ -936,7 +936,7 @@ Use the [section] orchestrator to plan [new feature/component].
 3. Implementation → Write code
 4. Package → Write docs
 5. Cleanup → Refactor and polish
-```
+```text
 
 **Don't skip phases:**
 
@@ -944,7 +944,7 @@ Use the [section] orchestrator to plan [new feature/component].
 ❌ Implement without planning
 ❌ Document after everything is done
 ❌ Skip cleanup phase
-```
+```text
 
 ### Pattern 4: Creating GitHub Issues
 
@@ -954,13 +954,13 @@ Use the [section] orchestrator to plan [new feature/component].
 ✅ Create issue #XXX for [component/feature]
 ✅ Link PRs to issues
 ✅ Update issue status
-```
+```text
 
 **Don't work without issues:**
 
 ```text
 ❌ Just implement without tracking
-```
+```text
 
 ### Pattern 5: Parallel Work
 
@@ -970,13 +970,13 @@ Use the [section] orchestrator to plan [new feature/component].
 git worktree add worktrees/issue-X-test -b X-test
 git worktree add worktrees/issue-Y-impl -b Y-impl
 git worktree add worktrees/issue-Z-pkg -b Z-pkg
-```
+```text
 
 **Don't do parallel work in one branch:**
 
 ```text
 ❌ Mixing test/impl/docs in single branch
-```
+```text
 
 ## Troubleshooting
 
@@ -992,7 +992,7 @@ Use the [agent name] to [task].
 
 # Example:
 Use the test specialist to plan tests for Conv2D.
-```
+```text
 
 ### Issue: Agent delegates to wrong level
 
@@ -1006,7 +1006,7 @@ Use the senior implementation engineer for SIMD optimization.
 
 # Or let specialist decide:
 Use the implementation specialist to delegate this work appropriately.
-```
+```text
 
 ### Issue: Work not following 5-phase workflow
 
@@ -1022,7 +1022,7 @@ Let's follow the 5-phase workflow:
 3. Then Implementation phase (parallel with Test)
 4. Then Package phase (documentation)
 5. Finally Cleanup phase
-```
+```text
 
 ### Issue: No GitHub issues created
 
@@ -1036,7 +1036,7 @@ Before we start, create a GitHub issue for this work.
 
 # Or:
 Use the [orchestrator] to plan this and create the necessary GitHub issues.
-```
+```text
 
 ### Issue: Changes too broad (not minimal)
 
@@ -1050,7 +1050,7 @@ Apply the minimal changes principle - only fix the bug, don't refactor.
 
 # Or:
 What's the smallest change that fixes this issue?
-```
+```text
 
 ## Related Resources
 

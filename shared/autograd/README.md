@@ -35,7 +35,7 @@ tape.backward()
 # Access gradients
 print(x.grad)  # ∂loss/∂x
 print(y.grad)  # ∂loss/∂y
-```
+```text
 
 ## Components
 
@@ -62,7 +62,7 @@ x.zero_grad()
 
 # Detach from computation graph
 var y = x.detach()  # y shares data but doesn't track gradients
-```
+```text
 
 **Key Methods:**
 
@@ -96,7 +96,7 @@ tape.disable()
 
 # Clear tape (free memory)
 tape.clear()
-```
+```text
 
 **Key Methods:**
 
@@ -134,7 +134,7 @@ for epoch in range(num_epochs):
 
     # Reset gradients
     optimizer.zero_grad(model_parameters)
-```
+```text
 
 **Key Methods:**
 
@@ -201,7 +201,7 @@ var loss = mean_squared_error(predictions, targets)
 
 # Multi-class classification
 var loss = cross_entropy(logits, targets_onehot)
-```
+```text
 
 Each loss function has a corresponding `_backward` function for gradient computation.
 
@@ -263,7 +263,7 @@ for epoch in range(num_epochs):
     # Print progress
     if epoch % 10 == 0:
         print("Epoch:", epoch, "Loss:", loss)
-```
+```text
 
 ## Current Status
 

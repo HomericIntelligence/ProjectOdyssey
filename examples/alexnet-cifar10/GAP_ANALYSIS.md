@@ -54,7 +54,7 @@ fn normalize_rgb(
     Returns:
         Normalized tensor: (pixel / 255.0 - mean) / std
     """
-```
+```text
 
 **Why Needed**: CIFAR-10 uses RGB images that require per-channel normalization with ImageNet statistics:
 
@@ -98,7 +98,7 @@ fn sgd_momentum_update(
         velocity = momentum * velocity - lr * grad
         param = param + velocity
     """
-```
+```text
 
 **Why Needed**: AlexNet training requires momentum for convergence (momentum=0.9 is standard)
 
@@ -124,7 +124,7 @@ fn sgd_momentum_update(
 # IDX Format for RGB images:
 # [magic(4B)][count(4B)][channels(4B)][rows(4B)][cols(4B)][pixel_data...]
 # Magic number: 2052 (custom extension, vs 2051 for grayscale)
-```
+```text
 
 **Why Needed**: Standard IDX format is for grayscale (2D), need 3D support for RGB
 
@@ -170,7 +170,7 @@ fn step_lr_schedule(
         lr = initial_lr * (gamma ** (epoch // step_size))
         For AlexNet: lr *= 0.1 every 30 epochs
     """
-```
+```text
 
 **Why Useful**: Improves convergence for long training runs (100 epochs)
 
@@ -191,7 +191,7 @@ fn step_lr_schedule(
 ```mojo
 fn random_horizontal_flip(image: ExTensor, p: Float32 = 0.5) raises -> ExTensor
 fn random_crop(image: ExTensor, size: (Int, Int), padding: Int = 4) raises -> ExTensor
-```
+```text
 
 **Why Useful**: Improves generalization, can boost accuracy by 3-5%
 
@@ -514,7 +514,7 @@ These components are fully functional and ready to use:
        var img = create_test_rgb_image()  # (1, 3, 32, 32)
        var normalized = normalize_rgb(img, (0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
        # Verify channel means are close to 0 and stds close to 1
-   ```
+   ```text
 
 2. **Test SGD momentum**:
 
@@ -525,7 +525,7 @@ These components are fully functional and ready to use:
        var velocity = zeros([10, 10])
        sgd_momentum_update(param, grad, velocity, lr=0.01, momentum=0.9)
        # Verify velocity = -0.01 and param updated correctly
-   ```
+   ```text
 
 3. **Test IDX RGB loading**:
 
@@ -535,7 +535,7 @@ These components are fully functional and ready to use:
        images, labels = load_cifar10_batch("datasets/cifar10", "test_batch")
        assert images.shape == (10000, 3, 32, 32)
        assert labels.shape == (10000,)
-   ```
+   ```text
 
 ### Integration Tests
 

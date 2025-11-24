@@ -190,7 +190,7 @@ All 4 example files need FIXME markers and corrections:
 ```bash
 # After fixes, test with:
 pixi run mojo run -I . examples/getting-started/mlp_training_example.mojo 2>&1 | head -50
-```
+```text
 
 Each example should:
 

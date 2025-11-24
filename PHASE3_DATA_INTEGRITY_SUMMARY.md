@@ -87,7 +87,7 @@ elif self._dtype == DType.float64:
 else:
     # Defensive re-validation (fixes DATA-003)
     raise Error("Invalid dtype for conversion")
-```
+```text
 
 ### #1912 (DATA-004): Unsafe Bitcasts Without Bounds Checks
 
@@ -116,7 +116,7 @@ for i in range(self._numel):
     if i >= self._numel:
         raise Error("Index out of bounds during bitcast")
     # ... rest of conversion logic
-```
+```text
 
 ### #1913 (DATA-005): Document FP16→FP32 Conversion
 
@@ -143,7 +143,7 @@ for i in range(self._numel):
 Note:
     FP16 inputs are converted to FP32 before quantization.
     This ensures consistent results regardless of input precision.
-```
+```text
 
 ## File Modifications
 
@@ -266,7 +266,7 @@ Run tests with:
 
 ```bash
 mojo tests/test_data_integrity.mojo
-```
+```text
 
 ### Critical Test Cases
 

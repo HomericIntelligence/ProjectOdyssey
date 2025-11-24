@@ -14,7 +14,7 @@
 
 ```mojo
 var _refcount: UnsafePointer[Int]  # Shared reference count (fixes MOJO-003)
-```
+```text
 
 ### 2. Updated `__init__` to Allocate Refcount (Lines 136-138)
 
@@ -24,7 +24,7 @@ var _refcount: UnsafePointer[Int]  # Shared reference count (fixes MOJO-003)
 # Allocate and initialize reference count (fixes MOJO-003, MOJO-006)
 self._refcount = UnsafePointer[Int].alloc(1)
 self._refcount[] = 1  # Start with 1 reference
-```
+```text
 
 ### 3. Added `__copyinit__` Method (Lines 140-160)
 
@@ -52,7 +52,7 @@ fn __copyinit__(out self, existing: Self):
     # Increment reference count (shared ownership)
     if not self._is_view and self._refcount:
         self._refcount[] += 1
-```
+```text
 
 ### 4. Updated `__del__` Destructor (Lines 162-176)
 
@@ -74,7 +74,7 @@ fn __del__(deinit self):
         if self._refcount[] == 0:
             self._data.free()
             self._refcount.free()
-```
+```text
 
 ### 5. Fixed `reshape` Method (Lines 282-328)
 
@@ -87,7 +87,7 @@ var result = ExTensor(new_shape, self._dtype)
 result._data.free()  # UNSAFE: Memory leak risk
 result._data = self._data
 result._is_view = True
-```
+```text
 
 **After**: Safe copy-based approach with reference counting
 
@@ -108,7 +108,7 @@ for _ in range(len(new_shape) - 1, -1, -1):
 for i in range(len(new_shape) - 1, -1, -1):
     result._strides[i] = stride
     stride *= new_shape[i]
-```
+```text
 
 ### 6. Fixed `slice` Method (Lines 330-407)
 
@@ -121,7 +121,7 @@ var result = ExTensor(new_shape, self._dtype)
 result._data.free()
 result._data = self._data.offset(offset_bytes)
 result._is_view = True
-```
+```text
 
 **After**: Safe copy-based approach with reference counting
 
@@ -141,7 +141,7 @@ for i in range(len(self._shape)):
 result._data = self._data.offset(offset_bytes)
 
 # Strides remain the same (already copied by __copyinit__)
-```
+```text
 
 ### 7. Updated Struct Docstring (Lines 43-64)
 
@@ -160,7 +160,7 @@ to safely share data. Memory is freed only when the last reference is destroyed.
 
 Fixes: #1904 (MOJO-001), #1905 (MOJO-002), #1906 (MOJO-003),
        #1907 (MOJO-004), #1908 (MOJO-005)
-```
+```text
 
 ---
 
@@ -237,19 +237,19 @@ To verify the implementation:
 
    ```bash
    mojo test_memory_safety.mojo
-   ```
+   ```text
 
 2. **Run existing tests**:
 
    ```bash
    mojo test shared/core/test_extensor.mojo
-   ```
+   ```text
 
 3. **Memory leak check** (if Valgrind available):
 
    ```bash
    valgrind --leak-check=full mojo test_memory_safety.mojo
-   ```
+   ```text
 
 ---
 

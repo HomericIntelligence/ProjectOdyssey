@@ -141,7 +141,7 @@ tape.record_mean(z_id, loss_id)
 
 # Automatic backward
 tape.backward(loss)
-```
+```text
 
 ### Phase 4: Full Autograd (ASPIRATIONAL)
 

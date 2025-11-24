@@ -125,7 +125,7 @@ Tools will be added incrementally as needed. Each tool will include:
    ├── <tool>.[py|mojo]
    ├── tests/
    └── examples/
-   ```
+   ```text
 
 1. **Document**: Write clear usage documentation
 1. **Test**: Add comprehensive test coverage

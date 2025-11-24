@@ -753,7 +753,7 @@ mojo run tests/integration/test_all_architectures.mojo
    # Then run integration tests
    cd /home/user/ml-odyssey
    mojo run tests/integration/test_all_architectures.mojo
-   ```
+   ```text
 
    - **Why**: Verify all implementations actually work
    - **Expected**: All models should initialize and run forward pass
@@ -783,7 +783,7 @@ mojo run tests/integration/test_all_architectures.mojo
        # Use SIMD for per-channel convolution
        # Parallelize across channels
        # Use vectorized ops
-   ```
+   ```text
 
    - **Why**: MobileNetV1 should be fast (that's the point!)
    - **Impact**: Could achieve 5-10× speedup
@@ -798,7 +798,7 @@ mojo run tests/integration/test_all_architectures.mojo
    fn load_weights(inout model, dir: String):
        # Load hex files
        # Verify shapes match
-   ```
+   ```text
 
    - **Why**: Needed to persist trained models
    - **Impact**: Enables checkpointing and inference
@@ -811,7 +811,7 @@ mojo run tests/integration/test_all_architectures.mojo
        # Don't store all intermediate features
        # Mark checkpoints (e.g., end of each dense block)
        # Recompute in backward pass
-   ```
+   ```text
 
    - **Why**: DenseNet requires too much memory
    - **Impact**: Enables training with reasonable batch sizes

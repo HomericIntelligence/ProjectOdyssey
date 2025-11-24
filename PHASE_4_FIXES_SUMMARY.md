@@ -168,7 +168,7 @@ npx markdownlint-cli2 BROADCAST_CRASH_FIX.md
 
 # Or all markdown files:
 npx markdownlint-cli2 --fix "**/*.md"
-```
+```text
 
 ---
 

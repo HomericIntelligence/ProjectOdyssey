@@ -19,7 +19,7 @@ architecture on the CIFAR-10 dataset.
 
 ```bash
 python examples/alexnet-cifar10/download_cifar10.py
-```
+```text
 
 This downloads the CIFAR-10 dataset (50,000 training samples, 10,000 test samples, 10 classes) to `datasets/cifar10/`.
 
@@ -27,14 +27,14 @@ This downloads the CIFAR-10 dataset (50,000 training samples, 10,000 test sample
 
 ```bash
 mojo run examples/alexnet-cifar10/train.mojo --epochs 100 --batch-size 128 --lr 0.01
-```
+```text
 
 ### 3. Run Inference
 
 ```bash
 # Evaluate on test set
 mojo run examples/alexnet-cifar10/inference.mojo --weights-dir alexnet_weights
-```
+```text
 
 ## Dataset Information
 
@@ -102,7 +102,7 @@ Linear (4096 → 4096) + ReLU + Dropout(0.5)
 Linear (4096 → 10)
     ↓
 Output (10 classes)
-```
+```text
 
 ### Parameters
 
@@ -132,7 +132,7 @@ examples/alexnet-cifar10/
 ├── weights.mojo           # Hex-based weight serialization (reused)
 ├── download_cifar10.py    # Python script to download dataset
 └── run_example.sh         # Complete workflow script
-```
+```text
 
 ## Usage Details
 
@@ -146,7 +146,7 @@ mojo run examples/alexnet-cifar10/train.mojo \
     --momentum 0.9 \
     --data-dir datasets/cifar10 \
     --weights-dir alexnet_weights
-```
+```text
 
 **Arguments**:
 
@@ -164,7 +164,7 @@ mojo run examples/alexnet-cifar10/train.mojo \
 mojo run examples/alexnet-cifar10/inference.mojo \
     --weights-dir alexnet_weights \
     --data-dir datasets/cifar10
-```
+```text
 
 **Arguments**:
 
@@ -243,7 +243,7 @@ var transforms = Compose([
 
 # Apply to training images
 var augmented = transforms(images)
-```
+```text
 
 **Benefits**:
 

@@ -18,7 +18,7 @@ This example shows how to build, train, and run inference with the GoogLeNet (In
 
 ```bash
 python examples/googlenet-cifar10/download_cifar10.py
-```
+```text
 
 This downloads CIFAR-10 (50,000 training + 10,000 test samples) to `datasets/cifar10/`.
 
@@ -26,13 +26,13 @@ This downloads CIFAR-10 (50,000 training + 10,000 test samples) to `datasets/cif
 
 ```bash
 mojo run examples/googlenet-cifar10/train.mojo --epochs 200 --batch-size 128 --lr 0.01
-```
+```text
 
 ### 3. Run Inference
 
 ```bash
 mojo run examples/googlenet-cifar10/inference.mojo --weights-dir googlenet_weights
-```
+```text
 
 ## Key Innovation: Inception Module
 
@@ -56,7 +56,7 @@ Traditional CNNs use a single kernel size per layer. Inception modules process t
                   Concatenate (depthwise)
                       ↓
                    Output
-```
+```text
 
 **Key Insights**:
 
@@ -133,7 +133,7 @@ Dropout(0.4)
 Linear(1024 → 10)
     ↓
 Output (10 classes)
-```
+```text
 
 ### Adaptations for CIFAR-10
 
@@ -220,7 +220,7 @@ examples/googlenet-cifar10/
 ├── data_loader.mojo       # CIFAR-10 binary format loading (symlink to resnet18)
 ├── weights.mojo           # Hex-based weight serialization
 └── download_cifar10.py    # Python script to download dataset (symlink to resnet18)
-```
+```text
 
 ## Implementation Status
 
@@ -308,7 +308,7 @@ Applied after every convolution (same as ResNet):
 ```text
 x_norm = (x - mean) / sqrt(var + eps)
 y = gamma * x_norm + beta
-```
+```text
 
 During training:
 
@@ -365,7 +365,7 @@ mojo run examples/googlenet-cifar10/train.mojo \
     --momentum 0.9 \
     --data-dir datasets/cifar10 \
     --weights-dir googlenet_weights
-```
+```text
 
 **Arguments**:
 
@@ -382,7 +382,7 @@ mojo run examples/googlenet-cifar10/train.mojo \
 mojo run examples/googlenet-cifar10/inference.mojo \
     --weights-dir googlenet_weights \
     --data-dir datasets/cifar10
-```
+```text
 
 **Arguments**:
 

@@ -224,7 +224,7 @@ worktrees/backward-tests/
 ├── tests/shared/core/test_arithmetic_backward.mojo (NEW - 12 tests)
 ├── tests/shared/core/test_loss.mojo (NEW - 9 tests)
 └── notes/issues/*/README.md (DOCUMENTATION)
-```
+```text
 
 ### Week 2 Files
 
@@ -242,7 +242,7 @@ worktrees/backward-tests/
 ├── tests/shared/core/test_matrix_backward.mojo (NEW - 6 tests)
 ├── tests/shared/core/test_reduction_backward.mojo (NEW - 13 tests)
 └── [4 documentation files]
-```
+```text
 
 ### Total Deliverables
 

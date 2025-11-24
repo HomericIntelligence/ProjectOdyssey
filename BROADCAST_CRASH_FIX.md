@@ -18,10 +18,10 @@
 
 ### Stack Trace
 
-```
+```text
 #4 shared::core::arithmetic::add() at arithmetic.mojo:159:18
 #5 _broadcast_binary() at arithmetic.mojo:78:43
-```
+```text
 
 ### Crash Location
 
@@ -49,7 +49,7 @@ for dim in range(len(result_shape) - 1, -1, -1):
 
     idx_a += coord * strides_a[dim]
     idx_b += coord * strides_b[dim]
-```
+```text
 
 ### Why It Failed
 
@@ -57,19 +57,19 @@ When broadcasting `(3,)` to `(2, 3)`:
 
 **Expected behavior:**
 
-```
+```text
 result_idx=3 -> coordinates [1, 0] -> bias_idx = 1*0 + 0*1 = 0 ✓
 result_idx=4 -> coordinates [1, 1] -> bias_idx = 1*0 + 1*1 = 1 ✓
 result_idx=5 -> coordinates [1, 2] -> bias_idx = 1*0 + 2*1 = 2 ✓
-```
+```text
 
 **Actual buggy behavior:**
 
-```
+```text
 result_idx=3 -> bias_idx = 3 ✗ (out of bounds!)
 result_idx=4 -> bias_idx = 4 ✗ (out of bounds!)
 result_idx=5 -> bias_idx = 5 ✗ (out of bounds!)
-```
+```text
 
 **Problem:** Processing dimensions right-to-left caused `stride_prod=1` for the rightmost dimension, making
 `coord = temp_idx`, which led to accumulating the entire flat index instead of extracting per-dimension
@@ -117,7 +117,7 @@ for result_idx in range(total_elems):
 
     # Perform operation with zero overhead (no dtype conversion!)
     result_ptr[result_idx] = op[dtype](a_ptr[idx_a], b_ptr[idx_b])
-```
+```text
 
 ### Why This Works
 
@@ -129,7 +129,7 @@ for result_idx in range(total_elems):
 
 **Example for result_idx=3:**
 
-```
+```text
 result_strides = [3, 1]
 coord[0] = 3 // 3 = 1,  temp_idx = 3 % 3 = 0
 coord[1] = 0 // 1 = 0,  temp_idx = 0 % 1 = 0
@@ -137,7 +137,7 @@ coordinates = [1, 0] ✓
 
 bias_strides = [0, 1]
 bias_idx = 1*0 + 0*1 = 0 ✓ (within bounds 0-2)
-```
+```text
 
 ## Verification
 
@@ -175,7 +175,7 @@ Results:
   Accuracy: 0.0 %
 
 Inference complete!
-```
+```text
 
 **Note:** 0% accuracy is due to a separate evaluation loop issue (breaks after first iteration), not the
 broadcasting fix.

@@ -253,31 +253,31 @@ Reference **FOUNDATION_TEST_QUICK_FIX.md**
 ```bash
 cd /home/mvillmow/ml-odyssey
 pytest tests/foundation/ -v --tb=short
-```
+```text
 
 ### Run Only Structure Tests
 
 ```bash
 pytest tests/foundation/test_*.py -v --tb=short
-```
+```text
 
 ### Run Only Documentation Tests
 
 ```bash
 pytest tests/foundation/docs/test_*.py -v --tb=short
-```
+```text
 
 ### Run Specific Test File
 
 ```bash
 pytest tests/foundation/docs/test_doc_structure.py -v
-```
+```text
 
 ### Expected Results AFTER Fixing Issues
 
-```
+```text
 ====== 156 passed, 10 skipped in ~0.5s ======
-```
+```text
 
 ---
 

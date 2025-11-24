@@ -60,7 +60,7 @@ fn add_simd[dtype: DType](a: ExTensor, b: ExTensor) raises -> ExTensor:
 
     vectorize[simd_width, vectorized_add](a.numel())
     return result^
-```
+```text
 
 **Files to Update:**
 
@@ -83,7 +83,7 @@ fn add(a: ExTensor, b: ExTensor) raises -> ExTensor:
 
     # Fall back to broadcasting for different shapes
     # ... existing broadcasting implementation
-```
+```text
 
 #### Phase 3: Benchmarking & Tuning (Week 3)
 
@@ -116,7 +116,7 @@ fn bench_add_simd() raises -> BenchResult:
         _ = add_simd(a, b)
 
     return Bench.run[run_add]()
-```
+```text
 
 **Success Criteria:**
 
@@ -209,7 +209,7 @@ fn check_gradients(
             max_diff = diff
 
     return max_diff < tolerance
-```
+```text
 
 #### Phase 2: Add Tests for All Backward Passes (Days 3-5)
 
@@ -253,7 +253,7 @@ fn test_conv2d_gradient() raises:
 fn test_batch_norm_gradient() raises:
     """Test batch_norm backward pass using gradient checking."""
     # ... similar structure
-```
+```text
 
 #### Phase 3: CI Integration (Days 6-7)
 
@@ -276,7 +276,7 @@ jobs:
       - name: Run gradient checking tests
         run: |
           pixi run mojo test tests/shared/core/test_gradient_checking.mojo
-```
+```text
 
 **Success Criteria:**
 
@@ -338,7 +338,7 @@ fn to_gpu(tensor: ExTensor) raises -> DeviceArray:
 fn from_gpu(device_array: DeviceArray) raises -> ExTensor:
     """Transfer GPU array back to CPU tensor."""
     # ... implementation
-```
+```text
 
 **File:** `shared/core/gpu/matmul.mojo` (new)
 
@@ -381,7 +381,7 @@ fn matmul_gpu(a: ExTensor, b: ExTensor) raises -> ExTensor:
 
     # Transfer back to CPU
     return from_gpu(c_gpu)
-```
+```text
 
 #### Phase 2: Core Operations (Weeks 3-4)
 
@@ -413,7 +413,7 @@ fn benchmark_matmul_cpu_vs_gpu() raises:
         print(f"Size {size}x{size}: CPU={cpu_result.mean_time:.2f}ms, "
               f"GPU={gpu_result.mean_time:.2f}ms, "
               f"Speedup={cpu_result.mean_time / gpu_result.mean_time:.2f}x")
-```
+```text
 
 **Success Criteria:**
 
@@ -505,7 +505,7 @@ fn add[dtype: DType](
             result[i] = a[i] + b[i]
 
     return result^
-```
+```text
 
 #### Phase 2: Fixed-Size Tensor Specialization (Week 2)
 
@@ -560,7 +560,7 @@ struct FixedTensor[rows: Int, cols: Int, dtype: DType]:
 # Example usage:
 alias Conv3x3Kernel = FixedTensor[3, 3, DType.float32]
 alias RotationMatrix = FixedTensor[3, 3, DType.float64]
-```
+```text
 
 **Success Criteria:**
 
@@ -601,7 +601,7 @@ fn reshape(tensor: ExTensor, new_shape: DynamicVector[Int]) raises -> ExTensor:
     # Create view (share data)
     var result = ExTensor._create_view(tensor._data, new_shape, tensor.dtype())
     return result^
-```
+```text
 
 #### Week 2-3: Advanced Indexing & Slicing
 
@@ -646,7 +646,7 @@ trait Serializable:
 trait Composable:
     """Types that can be composed into pipelines."""
     fn compose[T: Composable](self, other: T) -> ComposedOp: ...
-```
+```text
 
 ---
 
@@ -670,7 +670,7 @@ fn test_add_commutative(a: ExTensor, b: ExTensor) raises:
     var ab = add(a, b)
     var ba = add(b, a)
     assert_tensors_equal(ab, ba)
-```
+```text
 
 ---
 

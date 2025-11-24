@@ -16,7 +16,7 @@ var stride = 1
 for i in range(ndim - 1, -1, -1):
     input_strides[i] = stride  # BUG: Accessing uninitialized/out-of-bounds memory!
     stride *= input_shape[i]
-```
+```text
 
 ### Lines 229-233 and 236-238 (BEFORE)
 
@@ -30,7 +30,7 @@ for i in range(ndim - 1, -1, -1):
 var input_coords = List[Int](ndim)  # BUG: Wrong initialization
 for i in range(ndim):
     input_coords[i] = result_coords[ndim - 1 - i]  # Out of bounds!
-```
+```text
 
 ### Why This Crashed
 
@@ -57,7 +57,7 @@ for i in range(ndim - 1, -1, -1):
 # Reverse to get correct indexing order
 for i in range(len(temp_strides) - 1, -1, -1):
     input_strides.append(temp_strides[i])
-```
+```text
 
 ### Lines 229-242 (AFTER)
 
@@ -75,7 +75,7 @@ for i in range(ndim - 1, -1, -1):
 var input_coords = List[Int]()
 for i in range(ndim):
     input_coords.append(result_coords[ndim - 1 - i])
-```
+```text
 
 ## How We Found It
 
@@ -120,7 +120,7 @@ for i in range(ndim):
 test_transpose_bug: Segmentation fault (CRASH)
 test_forward_minimal: Crashed at FC1 layer
 training: Crashed with tcmalloc OOM
-```
+```text
 
 ### After Fix
 
@@ -131,7 +131,7 @@ test_forward_pass (batch=32): ✅ PASSED (100 forward passes)
 test_memory_leak: ✅ PASSED
 test_one_hot_leak: ✅ PASSED
 training: ✅ RUNNING (no crash)
-```
+```text
 
 ## Impact
 

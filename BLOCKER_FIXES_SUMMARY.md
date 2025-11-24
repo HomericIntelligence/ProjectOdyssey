@@ -30,7 +30,7 @@ The actual file is at `tests/shared/core/test_gradient_checking.mojo`.
 - name: Run gradient checking tests
   run: |
     pixi run mojo tests/shared/core/test_gradient_checking.mojo
-```
+```text
 
 **Result**: ✅ Gradient test workflow now runs the correct test file.
 
@@ -44,7 +44,7 @@ The actual file is at `tests/shared/core/test_gradient_checking.mojo`.
 var shape = List[Int]()
 shape[0] = 4  # ERROR: Can't assign to non-existent index!
 shape[1] = 10
-```
+```text
 
 This causes "index out of bounds" runtime errors.
 
@@ -62,7 +62,7 @@ shape[1] = 10
 var shape = List[Int]()
 shape.append(4)
 shape.append(10)
-```
+```text
 
 ### Files Fixed (Manually Completed)
 
@@ -105,7 +105,7 @@ To fix all remaining files:
 
 ```bash
 python3 fix_list_initialization.py
-```
+```text
 
 **Result**: ✅ Critical test files fixed. Script available for remaining files.
 
@@ -130,7 +130,7 @@ echo "✅ Mojo integration tests completed"  # UNREACHABLE
 # After:
 done
 exit $EXIT_CODE
-```
+```text
 
 **Result**: ✅ Unreachable code removed from 2 locations.
 
@@ -172,7 +172,7 @@ pixi run mojo tests/shared/training/test_rmsprop.mojo
 
 # Run all tests (after fixing remaining files)
 pixi run mojo test
-```
+```text
 
 ---
 

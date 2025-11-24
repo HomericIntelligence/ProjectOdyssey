@@ -311,7 +311,7 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
        --title "Deep Residual Learning" \
        --authors "He et al." \
        --year 2015
-   ```
+   ```text
 
 1. **Configure**:
 
@@ -319,27 +319,27 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
    # Copy and edit configs
    cp configs/templates/paper.yaml configs/papers/resnet/model.yaml
    cp configs/templates/experiment.yaml configs/experiments/resnet/baseline.yaml
-   ```
+   ```text
 
 1. **Implement**:
 
    ```bash
    cd papers/resnet/
    # Edit model.mojo, train.mojo
-   ```
+   ```text
 
 1. **Test**:
 
    ```bash
    mojo test tests/papers/resnet/
-   ```
+   ```text
 
 1. **Document**:
 
    ```bash
    # Update papers/resnet/README.md
    # Add docs/api/papers/resnet.md
-   ```
+   ```text
 
 ### Workflow 2: I Want to Add a Reusable Component
 
@@ -350,7 +350,7 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
    ```bash
    # Add to appropriate location
    vim shared/core/layers/attention.mojo
-   ```
+   ```text
 
 1. **Test**:
 
@@ -358,21 +358,21 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
    # Add tests
    vim tests/shared/core/layers/test_attention.mojo
    mojo test tests/shared/core/layers/
-   ```
+   ```text
 
 1. **Document**:
 
    ```bash
    # Update API docs
    vim docs/api/shared/layers.md
-   ```
+   ```text
 
 1. **Example**:
 
    ```bash
    # Add usage example
    vim examples/custom_layer/attention_example.mojo
-   ```
+   ```text
 
 ### Workflow 3: I Want to Run an Experiment
 
@@ -384,27 +384,27 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
    cp configs/experiments/lenet5/baseline.yaml \
       configs/experiments/lenet5/augmented.yaml
    # Edit augmented.yaml with changes
-   ```
+   ```text
 
 1. **Run Training**:
 
    ```bash
    mojo papers/lenet5/train.mojo --config experiments/lenet5/augmented
-   ```
+   ```text
 
 1. **Benchmark**:
 
    ```bash
    mojo benchmarks/scripts/run_benchmarks.mojo \
        --experiment lenet5/augmented
-   ```
+   ```text
 
 1. **Document**:
 
    ```bash
    # Record results
    vim docs/research/experiments/lenet5_augmentation.md
-   ```
+   ```text
 
 ### Workflow 4: I Want to Optimize Performance
 
@@ -414,32 +414,32 @@ python scripts/lint_configs.py configs/experiments/{paper}/{name}.yaml
 
    ```bash
    mojo benchmarks/scripts/run_benchmarks.mojo --paper lenet5
-   ```
+   ```text
 
 1. **Profile**:
 
    ```bash
    mojo tools/benchmarking/runner.mojo --target lenet5 --profile
-   ```
+   ```text
 
 1. **Optimize**:
 
    ```bash
    # Edit code based on profiling
    vim papers/lenet5/model.mojo
-   ```
+   ```text
 
 1. **Verify**:
 
    ```bash
    mojo benchmarks/scripts/run_benchmarks.mojo --paper lenet5 --compare
-   ```
+   ```text
 
 1. **Document**:
 
    ```bash
    vim docs/advanced/optimization_techniques.md
-   ```
+   ```text
 
 ## Decision Tree: Where Does This Go
 
