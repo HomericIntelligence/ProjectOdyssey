@@ -212,7 +212,7 @@ fn test_prelu_backward() raises:
     # Validate gradient w.r.t. input using numerical checking
     fn backward_input(grad: ExTensor, inp: ExTensor) raises -> ExTensor:
         var result = prelu_backward(grad, inp, alpha)
-        return result[0]
+        return result.grad_a
 
     check_gradient(forward, backward_input, x, grad_out, rtol=1e-4, atol=1e-7)
 
@@ -696,8 +696,7 @@ fn test_elu_backward() raises:
 
     # Note: elu_backward takes x, y, and alpha
     fn backward_fn(grad: ExTensor, inp: ExTensor) raises -> ExTensor:
-        var out = elu(inp, alpha=1.0)  # Recompute output inside wrapper
-        return elu_backward(grad, inp, out, alpha=1.0)
+        return elu_backward(grad, inp, alpha=1.0)
 
     # Use numerical gradient checking (gold standard)
     check_gradient(forward, backward_fn, x, grad_out, rtol=1e-4, atol=1e-7)

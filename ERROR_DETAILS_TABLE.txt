@@ -23,7 +23,7 @@ AFFECTED LOCATIONS:
 PATTERN EXAMPLE:
   WRONG:   fn __init__(mut self, size: Int):
                self.size = size
-  
+
   CORRECT: fn __init__(mut self, size: Int) -> Self:
                return Self(size=size)
 
@@ -52,7 +52,7 @@ PATTERN EXAMPLE:
   WRONG:   fn __call__(self, data: ExTensor) raises -> ExTensor:
                # ... process data ...
                return data
-  
+
   CORRECT: fn __call__(self, data: ExTensor) raises -> ExTensor:
                # ... process data ...
                return data^
@@ -73,13 +73,13 @@ Files:          1 (tests/shared/data/transforms/test_augmentations.mojo)
 
 AFFECTED LOCATIONS:
   File: tests/shared/data/transforms/test_augmentations.mojo
-  
+
   Usage locations (lines): 37, 63, 67, 97, 116, 140, 164, 168, 187, 215, 242,
                             263, 288, 313, 346, 372
-  
+
   Current import (line 19):
     WRONG:   from shared.core.extensor import ExTensor
-  
+
   Fixed import:
     CORRECT: from shared.core.extensor import ExTensor, Tensor
 
@@ -87,7 +87,7 @@ PATTERN EXAMPLE:
   WRONG:   from shared.core.extensor import ExTensor
            # ... later in code ...
            var data = Tensor(data_list^)  # ERROR: Tensor not imported
-  
+
   CORRECT: from shared.core.extensor import ExTensor, Tensor
            # ... later in code ...
            var data = Tensor(data_list^)  # OK: Tensor imported
@@ -115,7 +115,7 @@ PATTERN EXAMPLE:
   WRONG:   if self.padding:
                var pad = self.padding.value()[]  # ERROR: Extra []
                actual_top = top - pad
-  
+
   CORRECT: if self.padding:
                var pad = self.padding.value()  # OK: No subscript needed
                actual_top = top - pad
@@ -138,13 +138,13 @@ Files:          4 test files
 AFFECTED STRUCT DEFINITIONS:
   1. tests/shared/data/datasets/test_base_dataset.mojo:15
      Struct: StubDataset
-  
+
   2. tests/shared/data/datasets/test_tensor_dataset.mojo
      Struct: TestTensorDataset
-  
+
   3. tests/shared/data/loaders/test_base_loader.mojo
      Struct: SimpleDataLoader
-  
+
   4. tests/shared/data/transforms/test_pipeline.mojo
      Structs: SimpleTransform, SimpleDataLoader
 
@@ -152,7 +152,7 @@ PATTERN EXAMPLE:
   WRONG:   struct StubDataset:
                var size: Int
                var data: List[Float32]
-  
+
   CORRECT: @fieldwise_init
            struct StubDataset(Copyable, Movable):
                var size: Int

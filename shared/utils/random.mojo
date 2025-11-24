@@ -228,7 +228,7 @@ struct SeedContext(Copyable, Movable):
         self.new_seed = seed
         set_seed(seed)
 
-    fn __del__(owned self):
+    fn __del__(var self):
         """Restore original seed on exit."""
         set_seed(self.saved_seed)
 

@@ -27,7 +27,7 @@ CATEGORY 1: __init__ Missing Return Type
   Severity:             CRITICAL
   Affected Files:       7 files
   Error Pattern:        fn __init__(mut self, ...) [missing -> Self]
-  Example:              
+  Example:
     WRONG:   fn __init__(mut self, size: Int): ...
     CORRECT: fn __init__(mut self, size: Int) -> Self: return Self(...)
 

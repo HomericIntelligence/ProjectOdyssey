@@ -37,7 +37,7 @@ fn rmsprop_step(
     epsilon: Float64 = 1e-8,
     weight_decay: Float64 = 0.0,
     momentum: Float64 = 0.0,
-    owned buf: ExTensor = zeros(List[Int](0), DType.float32)
+    var buf: ExTensor = zeros(List[Int](0), DType.float32)
 ) raises -> Tuple[ExTensor, ExTensor, ExTensor]:
     """Perform a single RMSprop optimization step - pure functional.
 

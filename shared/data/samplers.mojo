@@ -178,7 +178,7 @@ struct WeightedSampler(Sampler, Copyable, Movable):
 
     fn __init__(
         mut self,
-        owned weights: List[Float64],
+        var weights: List[Float64],
         `num_samples`: Int,
         `replacement`: Bool = True,
         `seed_value`: Optional[Int] = None,
