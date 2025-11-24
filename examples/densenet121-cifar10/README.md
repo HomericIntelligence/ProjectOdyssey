@@ -479,7 +479,6 @@ mojo run examples/densenet121-cifar10/inference.mojo \
 ### Related Resources
 
 - **Papers with Code - DenseNet**: <https://paperswithcode.com/method/densenet>
-- **DenseNet Explained**: <https://towardsdatascience.com/understanding-and-visualizing-densenets-7f688092391a>
 - **Dense Connectivity**: <https://d2l.ai/chapter_convolutional-modern/densenet.html>
 
 ## Contributing

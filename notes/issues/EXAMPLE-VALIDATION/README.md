@@ -264,19 +264,19 @@ SOLUTION: Update ExTensor struct to implement required traits
 
 Key issues related to Mojo language changes:
 
-1. **Function Parameter Changes**: <https://docs.modular.com/mojo/manual/lifecycle/inout-parameters>
+1. **Function Parameter Changes**: <https://docs.modular.com/mojo/manual/values/ownership>
    - `inout self` is no longer used for mutable method access
    - Methods naturally have mutable access to `self`
 
-2. **Struct Decorators**: <https://docs.modular.com/mojo/manual/structs#value-types>
+2. **Struct Decorators**: <https://docs.modular.com/mojo/manual/structs>
    - `@value` replaced with `@fieldwise_init`
    - Need explicit trait conformances
 
-3. **Move Semantics**: <https://docs.modular.com/mojo/manual/lifecycle/owned-borrowed-inout>
+3. **Move Semantics**: <https://docs.modular.com/mojo/manual/values/ownership>
    - Use `^` operator to transfer ownership
    - List[T] requires T to be Copyable
 
-4. **Collections**: <https://docs.modular.com/mojo/stdlib/collections/vector>
+4. **Collections**: <https://docs.modular.com/mojo/stdlib/>
    - Check if DynamicVector is in a different location
 
 ## Next Steps

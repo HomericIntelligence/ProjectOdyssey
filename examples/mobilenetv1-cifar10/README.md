@@ -429,7 +429,7 @@ mojo run examples/mobilenetv1-cifar10/inference.mojo \
 
 ### Reference Implementations
 
-- **MobileNets PyTorch**: <https://github.com/pytorch/vision/blob/main/torchvision/models/mobilenetv1.py>
+- **MobileNets PyTorch**: <https://github.com/pytorch/vision/blob/main/torchvision/models/mobilenet.py>
   - Official PyTorch implementation
   - Demonstrates depthwise separable convolution architecture
 
@@ -439,7 +439,6 @@ mojo run examples/mobilenetv1-cifar10/inference.mojo \
 ### Related Resources
 
 - **Papers with Code - MobileNets**: <https://paperswithcode.com/method/mobilenetv1>
-- **MobileNets Explained**: <https://towardsdatascience.com/mobilenetv1-architecture-explained-7f4c7f9e7b6a>
 - **Depthwise Separable Convolutions**: <https://eli.thegreenplace.net/2018/depthwise-separable-convolutions-for-machine-learning/>
 
 ## Contributing
