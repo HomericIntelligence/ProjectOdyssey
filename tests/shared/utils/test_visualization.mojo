@@ -421,3 +421,41 @@ fn test_create_training_report():
     # Verify: report contains all visualizations
     # Verify: report is saved to file
     pass
+
+
+fn main() raises:
+    """Run all tests."""
+    test_plot_training_loss()
+    test_plot_training_and_validation_loss()
+    test_plot_accuracy_curves()
+    test_plot_with_custom_style()
+    test_plot_with_title_and_labels()
+    test_save_plot_to_file()
+    test_create_confusion_matrix()
+    test_plot_confusion_matrix()
+    test_confusion_matrix_with_class_names()
+    test_confusion_matrix_normalization()
+    test_confusion_matrix_accuracy()
+    test_visualize_simple_model()
+    test_visualize_conv_model()
+    test_visualize_model_with_shapes()
+    test_save_architecture_diagram()
+    test_visualize_gradient_magnitudes()
+    test_detect_vanishing_gradients()
+    test_detect_exploding_gradients()
+    test_plot_gradient_flow()
+    test_visualize_image_batch()
+    test_visualize_images_with_labels()
+    test_visualize_augmented_images()
+    test_plot_class_distribution()
+    test_visualize_feature_maps()
+    test_visualize_activation_distribution()
+    test_set_plot_style()
+    test_plot_with_grid()
+    test_plot_with_legend()
+    test_plot_with_annotations()
+    test_export_plot_formats()
+    test_export_high_resolution_plot()
+    test_export_plot_with_transparent_background()
+    test_visualization_integration_training()
+    test_create_training_report()

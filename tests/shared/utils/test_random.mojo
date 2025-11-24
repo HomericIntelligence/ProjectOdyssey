@@ -415,3 +415,39 @@ fn test_reproducible_full_workflow():
     # Repeat entire workflow
     # Verify: all metrics match exactly
     pass
+
+
+fn main() raises:
+    """Run all tests."""
+    test_set_global_seed()
+    test_seed_affects_all_generators()
+    test_different_seeds_produce_different_sequences()
+    test_seed_zero()
+    test_seed_max_value()
+    test_save_random_state()
+    test_restore_random_state()
+    test_state_roundtrip()
+    test_save_multiple_states()
+    test_reproducible_training()
+    test_reproducible_data_augmentation()
+    test_reproducible_weight_initialization()
+    test_reproducible_batch_sampling()
+    test_sync_with_external_library()
+    test_restore_external_state()
+    test_seed_thread_local()
+    test_seed_global_across_threads()
+    test_negative_seed()
+    test_seed_type_validation()
+    test_seed_overflow()
+    test_uniform_distribution()
+    test_normal_distribution()
+    test_integer_range()
+    test_randomness_independence()
+    test_randn_shape()
+    test_randint_bounds()
+    test_random_choice()
+    test_random_permutation()
+    test_random_shuffle()
+    test_temporary_seed_context()
+    test_nested_seed_contexts()
+    test_reproducible_full_workflow()
