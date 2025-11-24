@@ -47,6 +47,9 @@ jobs:
 
       - name: Run Mojo unit tests
         run: |
+          # Set repository root for Mojo imports
+          REPO_ROOT="$(pwd)"
+
           # Check if Mojo tests exist
           if [ -d "tests/unit" ] && [ -n "$(find tests/unit -name '*.mojo' -o -name '*.🔥' 2>/dev/null)" ]; then
             echo "Running Mojo unit tests..."
@@ -63,7 +66,7 @@ jobs:
                 echo "=================================================="
                 test_count=$((test_count + 1))
 
-                if pixi run mojo -I . "$test_file"; then
+                if pixi run mojo -I "$REPO_ROOT" -I . "$test_file"; then
                   echo "✅ PASSED: $test_file"
                 else
                   echo "❌ FAILED: $test_file"
