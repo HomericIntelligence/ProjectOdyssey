@@ -140,7 +140,7 @@ fn test_training_loop_forward_pass() raises:
     var outputs = training_loop.forward(inputs)
     #
     # Output should preserve batch size
-    assert_equal(outputs.shape[0], 8)
+    assert_equal(outputs.shape()[0], 8)
 
 
 fn test_training_loop_forward_batches_independently() raises:
@@ -245,7 +245,7 @@ fn test_training_loop_backward_pass() raises:
     # Check gradients are computed
     for param in model.parameters():
         assert_not_none(param.grad)
-        assert_shape_equal(param.grad, param.shape)
+        assert_shape_equal(param.grad, param.shape())
 
 
 fn test_training_loop_gradient_accumulation() raises:

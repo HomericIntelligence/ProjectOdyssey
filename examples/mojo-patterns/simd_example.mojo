@@ -27,19 +27,19 @@ fn relu_simd(inout tensor: Tensor):
 
 fn matmul_simd(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
     """Matrix multiplication using SIMD."""
-    var result = Tensor.zeros(a.shape[0], b.shape[1], DType.float32)
+    var result = Tensor.zeros(a.shape()[0], b.shape()[1], DType.float32)
 
     alias simd_width = simdwidthof[DType.float32]()
 
-    for i in range(a.shape[0]):
-        for j in range(b.shape[1]):
+    for i in range(a.shape()[0]):
+        for j in range(b.shape()[1]):
             @parameter
             fn dot_product[width: Int](k: Int):
-                var a_vec = a.data.simd_load[width](i * a.shape[1] + k)
-                var b_vec = b.data.simd_load[width](k * b.shape[1] + j)
+                var a_vec = a.data.simd_load[width](i * a.shape()[1] + k)
+                var b_vec = b.data.simd_load[width](k * b.shape()[1] + j)
                 result[i, j] += (a_vec * b_vec).reduce_add()
 
-            vectorize[simd_width, dot_product](a.shape[1])
+            vectorize[simd_width, dot_product](a.shape()[1])
 
     return result
 
@@ -57,6 +57,6 @@ fn main() raises:
     var a = Tensor.randn(10, 20)
     var b = Tensor.randn(20, 15)
     var c = matmul_simd(a, b)
-    print("\nMatrix multiplication result shape:", c.shape)
+    print("\nMatrix multiplication result shape:", c.shape())
 
     print("\nSIMD example complete!")

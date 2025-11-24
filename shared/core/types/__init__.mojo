@@ -56,5 +56,5 @@ from .unsigned import UInt8, UInt16, UInt32, UInt64
 
 # Future exports will be added here as components are implemented
 # from .tensor import Tensor
-# from .shape import Shape
+# from .shape() import Shape
 # from .dtype import DType

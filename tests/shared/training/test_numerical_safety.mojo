@@ -312,7 +312,7 @@ fn test_numerical_safety_optimizer_step_stable() raises:
     #
     # Set large gradients
     for param in model.parameters():
-        param.grad = Tensor.fill(param.shape, 100.0)
+        param.grad = Tensor.fill(param.shape(), 100.0)
     #
     # Get initial weights
     var initial_weights = model.parameters()[0].data.copy()

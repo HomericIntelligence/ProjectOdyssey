@@ -445,7 +445,7 @@ fn test_optimizer_property_gradient_shape() raises:
     #     optimizer.step(params, grads)
     # #
     #     # Shape should be preserved
-    #     assert_equal(params.shape, shape)
+    #     assert_equal(params.shape(), shape)
     pass
 
 

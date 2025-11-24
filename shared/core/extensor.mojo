@@ -72,7 +72,7 @@ struct ExTensor(Copyable, Movable):
         var b = ones(List[Int](3, 4), DType.float32)
 
         # Access properties
-        print(a.shape)  # [3, 4]
+        print(a.shape())  # [3, 4]
         print(a.dtype())  # float32
         print(a.numel())  # 12
     """
@@ -218,7 +218,7 @@ struct ExTensor(Copyable, Movable):
 
         Examples:
             var t = zeros(List[Int](3, 4), DType.float32)
-            print(t.shape)  # List[3, 4]
+            print(t.shape())  # List[3, 4]
         """
         # Return a copy to avoid mutation issues
         var result = List[Int]()
@@ -1946,7 +1946,7 @@ fn ones_like(tensor: ExTensor) raises -> ExTensor:
     Example:.        var x = zeros(List[Int](3, 4), DType.float32)
         var y = ones_like(x)  # (3, 4) tensor of ones, float32
     """
-    var shape = tensor.shape
+    var shape = tensor.shape()
     var dtype = tensor.dtype()
     return ones(shape, dtype)
 
@@ -1961,7 +1961,7 @@ fn zeros_like(tensor: ExTensor) raises -> ExTensor:
     Example:.        var x = ones(List[Int](3, 4), DType.float32)
         var y = zeros_like(x)  # (3, 4) tensor of zeros, float32
     """
-    var shape = tensor.shape
+    var shape = tensor.shape()
     var dtype = tensor.dtype()
     return zeros(shape, dtype)
 
@@ -1977,7 +1977,7 @@ fn full_like(tensor: ExTensor, fill_value: Float64) raises -> ExTensor:
     Example:.        var x = ones(List[Int](3, 4), DType.float32)
         var y = full_like(x, 3.14)  # (3, 4) tensor of 3.14, float32
     """
-    var shape = tensor.shape
+    var shape = tensor.shape()
     var dtype = tensor.dtype()
     return full(shape, fill_value, dtype)
 

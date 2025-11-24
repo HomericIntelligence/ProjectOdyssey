@@ -197,7 +197,7 @@ fn create_metric_summary(results: List[MetricResult]) -> String:
             summary = summary + String(result.scalar_value) + "\n"
         else:
             summary = summary + "[tensor shape: "
-            var shape = result.tensor_value.shape
+            var shape = result.tensor_value.shape()
             for j in range(len(shape)):
                 summary = summary + String(shape[j])
                 if j < len(shape) - 1:

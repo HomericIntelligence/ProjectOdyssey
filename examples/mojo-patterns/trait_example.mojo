@@ -78,5 +78,5 @@ fn main() raises:
     var input = Tensor.randn(32, 784)
     var output = layer.forward(input)
 
-    print("Layer output shape:", output.shape)
+    print("Layer output shape:", output.shape())
     print("Trait-based design example complete!")

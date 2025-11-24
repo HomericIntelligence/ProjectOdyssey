@@ -25,9 +25,9 @@ fn matmul(a: ExTensor, b: ExTensor) raises -> ExTensor:
     Raises:.        Error if dimensions are incompatible.
 
     Requirements:
-        - 2D @ 2D: a.shape = (m, k), b.shape = (k, n) -> result.shape = (m, n)
-        - 2D @ 1D: a.shape = (m, k), b.shape = (k,) -> result.shape = (m,)
-        - 1D @ 2D: a.shape = (k,), b.shape = (k, n) -> result.shape = (n,)
+        - 2D @ 2D: a.shape() = (m, k), b.shape() = (k, n) -> result.shape() = (m, n)
+        - 2D @ 1D: a.shape() = (m, k), b.shape() = (k,) -> result.shape() = (m,)
+        - 1D @ 2D: a.shape() = (k,), b.shape() = (k, n) -> result.shape() = (n,)
         - ND tensors: batched matrix multiplication
 
     Preconditions:

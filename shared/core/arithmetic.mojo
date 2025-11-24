@@ -353,7 +353,7 @@ fn power(a: ExTensor, b: ExTensor) raises -> ExTensor:
 fn _reduce_broadcast_dims(grad: ExTensor, original_shape: List[Int]) raises -> ExTensor:
     """Reduce gradient from broadcast shape back to original shape.
 
-    When forward pass broadcasts input from original_shape to grad.shape,
+    When forward pass broadcasts input from original_shape to grad.shape(),
     backward pass must sum gradient back to original_shape.
 
     Args:.        `grad`: Gradient tensor (broadcast shape)
@@ -420,7 +420,7 @@ fn add_backward(grad_output: ExTensor, a_shape: List[Int], b_shape: List[Int]) r
         var b = ones(List[Int](), DType.float32)
         var c = add(a, b)
         var grad_c = ones(List[Int](), DType.float32)
-        var grads = add_backward(grad_c, a.shape, b.shape)
+        var grads = add_backward(grad_c, a.shape(), b.shape())
         var grad_a = grads.grad_a
         var grad_b = grads.grad_b
 
@@ -429,7 +429,7 @@ fn add_backward(grad_output: ExTensor, a_shape: List[Int], b_shape: List[Int]) r
         var y = ones(List[Int](), DType.float32)
         var z = add(x, y)  # Shape (3, 4)
         var grad_z = ones(List[Int](), DType.float32)
-        var grads = add_backward(grad_z, x.shape, y.shape)
+        var grads = add_backward(grad_z, x.shape(), y.shape())
         # grads.grad_a will be shape (3, 1) - summed over broadcast dimension
     """
     # For addition, gradient passes through but must be reduced for broadcasting
