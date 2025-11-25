@@ -16,6 +16,5 @@ Future: Add cosine annealing and warmup schedulers.
 # Export scheduler implementations
 from .step_decay import step_lr, multistep_lr, exponential_lr, constant_lr
 
-# TODO: Implement remaining schedulers
-# from .cosine import cosine_annealing_lr
-# from .warmup import warmup_lr
+# Export scheduler classes
+from ..schedulers import StepLR, CosineAnnealingLR, WarmupLR
