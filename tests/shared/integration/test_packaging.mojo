@@ -215,23 +215,25 @@ fn test_paper_implementation_pattern() raises:
 # ============================================================================
 
 
-fn test_public_api_exports() raises:
-    """Test that __all__ exports are consistent."""
-    from shared import __all__
+# SKIPPED: Mojo v0.25.7 doesn't support __all__
+# See shared/__init__.mojo lines 138-141 for explanation
+# fn test_public_api_exports() raises:
+#     """Test that __all__ exports are consistent."""
+#     from shared import __all__
+#
+#     # Verify __all__ exists and is non-empty
+#     # var expected_exports = [
+#     #     "Linear", "Conv2D", "ReLU",
+#     #     "SGD", "Adam",
+#     #     "Accuracy",
+#     #     "DataLoader",
+#     #     "Logger",
+#     # ]
 
-    # Verify __all__ exists and is non-empty
-    # var expected_exports = [
-    #     "Linear", "Conv2D", "ReLU",
-    #     "SGD", "Adam",
-    #     "Accuracy",
-    #     "DataLoader",
-    #     "Logger",
-    # ]
-
-    # for export in expected_exports:
-    #     assert_true(export in __all__)
-
-    print("✓ Public API exports test passed (placeholder)")
+#     # for export in expected_exports:
+#     #     assert_true(export in __all__)
+#
+#     print("✓ Public API exports test passed (placeholder)")
 
 
 fn test_no_private_exports() raises:
@@ -309,7 +311,7 @@ fn main() raises:
 
     # API stability
     print("\nTesting API Stability...")
-    test_public_api_exports()
+    # test_public_api_exports()  # SKIPPED: Mojo v0.25.7 doesn't support __all__
     test_no_private_exports()
 
     # Backward compatibility
