@@ -342,17 +342,21 @@ fn assert_tensor_equal(a: ExTensor, b: ExTensor, message: String = "") raises:
         Error if shapes don't match or any elements differ.
     """
     # Check dimensions
-    if a._ndim != b._ndim:
-        var msg = "Shape mismatch: " + String(a._ndim) + " vs " + String(b._ndim)
+    var a_shape = a.shape()
+    var b_shape = b.shape()
+    if len(a_shape) != len(b_shape):
+        var msg = "Shape mismatch: " + String(len(a_shape)) + " vs " + String(len(b_shape))
         raise Error(message + ": " + msg if message else msg)
 
     # Check total elements
-    if a._numel != b._numel:
-        var msg = "Size mismatch: " + String(a._numel) + " vs " + String(b._numel)
+    var a_numel = a.numel()
+    var b_numel = b.numel()
+    if a_numel != b_numel:
+        var msg = "Size mismatch: " + String(a_numel) + " vs " + String(b_numel)
         raise Error(message + ": " + msg if message else msg)
 
     # Check all elements
-    for i in range(a._numel):
+    for i in range(a_numel):
         var val_a = a._get_float64(i)
         var val_b = b._get_float64(i)
         var diff = val_a - val_b if val_a >= val_b else val_b - val_a

@@ -17,7 +17,7 @@ from shared.core.extensor import ExTensor, zeros_like, ones_like
 
 
 fn compute_numerical_gradient(
-    forward_fn: fn(ExTensor) raises -> ExTensor,
+    forward_fn: fn(ExTensor) raises escaping -> ExTensor,
     x: ExTensor,
     epsilon: Float64 = 1e-5
 ) raises -> ExTensor:
@@ -176,8 +176,8 @@ fn assert_gradients_close(
 
 
 fn check_gradient(
-    forward_fn: fn(ExTensor) raises -> ExTensor,
-    backward_fn: fn(ExTensor, ExTensor) raises -> ExTensor,
+    forward_fn: fn(ExTensor) raises escaping -> ExTensor,
+    backward_fn: fn(ExTensor, ExTensor) raises escaping -> ExTensor,
     x: ExTensor,
     grad_output: ExTensor,
     epsilon: Float64 = 1e-5,

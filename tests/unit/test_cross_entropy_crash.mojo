@@ -46,7 +46,14 @@ fn test_cross_entropy_small_batch() raises:
 
     try:
         var loss = cross_entropy(logits, targets)
-        print("Loss computed successfully! Shape:", loss.shape())
+        var shape = loss.shape()
+        var shape_str = "["
+        for i in range(len(shape)):
+            shape_str += String(shape[i])
+            if i < len(shape) - 1:
+                shape_str += ", "
+        shape_str += "]"
+        print("Loss computed successfully! Shape:", shape_str)
         print("Loss value:", loss[0])
     except e:
         print("ERROR:", e)

@@ -44,14 +44,12 @@ fn test_model_forward(
     try:
         # Create dummy input (batch_size, 3, 32, 32)
         print("Creating dummy input: (" + String(batch_size) + ", 3, 32, 32)")
-        var input = zeros(
-            List[Int]()
-                .append(batch_size)
-                .append(3)
-                .append(32)
-                .append(32),
-            DType.float32
-        )
+        var shape = List[Int]()
+        shape.append(batch_size)
+        shape.append(3)
+        shape.append(32)
+        shape.append(32)
+        var input = zeros(shape, DType.float32)
 
         # Fill with some non-zero values to avoid all-zero gradients
         var input_data = input._data.bitcast[Float32]()
