@@ -828,3 +828,457 @@ fn test_large_initialization() raises:
     # Verify statistical properties still hold
     var mean = compute_mean(W)
     assert_almost_equal(Float32(mean), Float32(0.0), tolerance=0.01)
+
+
+# ============================================================================
+# Main Test Runner
+# ============================================================================
+
+
+fn main() raises:
+    """Run all tests in this file."""
+    var total = 0
+    var passed = 0
+    var failed = 0
+
+    print("\n" + "=" * 70)
+    print("Running tests from: test_initializers.mojo")
+    print("=" * 70 + "\n")
+
+    # test_xavier_uniform_shape
+    total += 1
+    try:
+        test_xavier_uniform_shape()
+        passed += 1
+        print("  ✓ test_xavier_uniform_shape")
+    except e:
+        failed += 1
+        print("  ✗ test_xavier_uniform_shape:", e)
+
+    # test_xavier_uniform_range
+    total += 1
+    try:
+        test_xavier_uniform_range()
+        passed += 1
+        print("  ✓ test_xavier_uniform_range")
+    except e:
+        failed += 1
+        print("  ✗ test_xavier_uniform_range:", e)
+
+    # test_xavier_uniform_mean
+    total += 1
+    try:
+        test_xavier_uniform_mean()
+        passed += 1
+        print("  ✓ test_xavier_uniform_mean")
+    except e:
+        failed += 1
+        print("  ✗ test_xavier_uniform_mean:", e)
+
+    # test_xavier_uniform_variance
+    total += 1
+    try:
+        test_xavier_uniform_variance()
+        passed += 1
+        print("  ✓ test_xavier_uniform_variance")
+    except e:
+        failed += 1
+        print("  ✗ test_xavier_uniform_variance:", e)
+
+    # test_xavier_uniform_reproducibility
+    total += 1
+    try:
+        test_xavier_uniform_reproducibility()
+        passed += 1
+        print("  ✓ test_xavier_uniform_reproducibility")
+    except e:
+        failed += 1
+        print("  ✗ test_xavier_uniform_reproducibility:", e)
+
+    # test_xavier_uniform_different_seeds
+    total += 1
+    try:
+        test_xavier_uniform_different_seeds()
+        passed += 1
+        print("  ✓ test_xavier_uniform_different_seeds")
+    except e:
+        failed += 1
+        print("  ✗ test_xavier_uniform_different_seeds:", e)
+
+    # test_xavier_normal_shape
+    total += 1
+    try:
+        test_xavier_normal_shape()
+        passed += 1
+        print("  ✓ test_xavier_normal_shape")
+    except e:
+        failed += 1
+        print("  ✗ test_xavier_normal_shape:", e)
+
+    # test_xavier_normal_mean
+    total += 1
+    try:
+        test_xavier_normal_mean()
+        passed += 1
+        print("  ✓ test_xavier_normal_mean")
+    except e:
+        failed += 1
+        print("  ✗ test_xavier_normal_mean:", e)
+
+    # test_xavier_normal_std
+    total += 1
+    try:
+        test_xavier_normal_std()
+        passed += 1
+        print("  ✓ test_xavier_normal_std")
+    except e:
+        failed += 1
+        print("  ✗ test_xavier_normal_std:", e)
+
+    # test_xavier_normal_reproducibility
+    total += 1
+    try:
+        test_xavier_normal_reproducibility()
+        passed += 1
+        print("  ✓ test_xavier_normal_reproducibility")
+    except e:
+        failed += 1
+        print("  ✗ test_xavier_normal_reproducibility:", e)
+
+    # test_xavier_configurations
+    total += 1
+    try:
+        test_xavier_configurations()
+        passed += 1
+        print("  ✓ test_xavier_configurations")
+    except e:
+        failed += 1
+        print("  ✗ test_xavier_configurations:", e)
+
+    # test_kaiming_uniform_shape
+    total += 1
+    try:
+        test_kaiming_uniform_shape()
+        passed += 1
+        print("  ✓ test_kaiming_uniform_shape")
+    except e:
+        failed += 1
+        print("  ✗ test_kaiming_uniform_shape:", e)
+
+    # test_kaiming_uniform_range
+    total += 1
+    try:
+        test_kaiming_uniform_range()
+        passed += 1
+        print("  ✓ test_kaiming_uniform_range")
+    except e:
+        failed += 1
+        print("  ✗ test_kaiming_uniform_range:", e)
+
+    # test_kaiming_uniform_mean
+    total += 1
+    try:
+        test_kaiming_uniform_mean()
+        passed += 1
+        print("  ✓ test_kaiming_uniform_mean")
+    except e:
+        failed += 1
+        print("  ✗ test_kaiming_uniform_mean:", e)
+
+    # test_kaiming_uniform_variance_fan_in
+    total += 1
+    try:
+        test_kaiming_uniform_variance_fan_in()
+        passed += 1
+        print("  ✓ test_kaiming_uniform_variance_fan_in")
+    except e:
+        failed += 1
+        print("  ✗ test_kaiming_uniform_variance_fan_in:", e)
+
+    # test_kaiming_uniform_variance_fan_out
+    total += 1
+    try:
+        test_kaiming_uniform_variance_fan_out()
+        passed += 1
+        print("  ✓ test_kaiming_uniform_variance_fan_out")
+    except e:
+        failed += 1
+        print("  ✗ test_kaiming_uniform_variance_fan_out:", e)
+
+    # test_kaiming_uniform_reproducibility
+    total += 1
+    try:
+        test_kaiming_uniform_reproducibility()
+        passed += 1
+        print("  ✓ test_kaiming_uniform_reproducibility")
+    except e:
+        failed += 1
+        print("  ✗ test_kaiming_uniform_reproducibility:", e)
+
+    # test_kaiming_normal_shape
+    total += 1
+    try:
+        test_kaiming_normal_shape()
+        passed += 1
+        print("  ✓ test_kaiming_normal_shape")
+    except e:
+        failed += 1
+        print("  ✗ test_kaiming_normal_shape:", e)
+
+    # test_kaiming_normal_mean
+    total += 1
+    try:
+        test_kaiming_normal_mean()
+        passed += 1
+        print("  ✓ test_kaiming_normal_mean")
+    except e:
+        failed += 1
+        print("  ✗ test_kaiming_normal_mean:", e)
+
+    # test_kaiming_normal_std
+    total += 1
+    try:
+        test_kaiming_normal_std()
+        passed += 1
+        print("  ✓ test_kaiming_normal_std")
+    except e:
+        failed += 1
+        print("  ✗ test_kaiming_normal_std:", e)
+
+    # test_kaiming_normal_reproducibility
+    total += 1
+    try:
+        test_kaiming_normal_reproducibility()
+        passed += 1
+        print("  ✓ test_kaiming_normal_reproducibility")
+    except e:
+        failed += 1
+        print("  ✗ test_kaiming_normal_reproducibility:", e)
+
+    # test_uniform_shape
+    total += 1
+    try:
+        test_uniform_shape()
+        passed += 1
+        print("  ✓ test_uniform_shape")
+    except e:
+        failed += 1
+        print("  ✗ test_uniform_shape:", e)
+
+    # test_uniform_range
+    total += 1
+    try:
+        test_uniform_range()
+        passed += 1
+        print("  ✓ test_uniform_range")
+    except e:
+        failed += 1
+        print("  ✗ test_uniform_range:", e)
+
+    # test_uniform_mean
+    total += 1
+    try:
+        test_uniform_mean()
+        passed += 1
+        print("  ✓ test_uniform_mean")
+    except e:
+        failed += 1
+        print("  ✗ test_uniform_mean:", e)
+
+    # test_uniform_reproducibility
+    total += 1
+    try:
+        test_uniform_reproducibility()
+        passed += 1
+        print("  ✓ test_uniform_reproducibility")
+    except e:
+        failed += 1
+        print("  ✗ test_uniform_reproducibility:", e)
+
+    # test_normal_shape
+    total += 1
+    try:
+        test_normal_shape()
+        passed += 1
+        print("  ✓ test_normal_shape")
+    except e:
+        failed += 1
+        print("  ✗ test_normal_shape:", e)
+
+    # test_normal_mean
+    total += 1
+    try:
+        test_normal_mean()
+        passed += 1
+        print("  ✓ test_normal_mean")
+    except e:
+        failed += 1
+        print("  ✗ test_normal_mean:", e)
+
+    # test_normal_std
+    total += 1
+    try:
+        test_normal_std()
+        passed += 1
+        print("  ✓ test_normal_std")
+    except e:
+        failed += 1
+        print("  ✗ test_normal_std:", e)
+
+    # test_normal_reproducibility
+    total += 1
+    try:
+        test_normal_reproducibility()
+        passed += 1
+        print("  ✓ test_normal_reproducibility")
+    except e:
+        failed += 1
+        print("  ✗ test_normal_reproducibility:", e)
+
+    # test_constant_shape
+    total += 1
+    try:
+        test_constant_shape()
+        passed += 1
+        print("  ✓ test_constant_shape")
+    except e:
+        failed += 1
+        print("  ✗ test_constant_shape:", e)
+
+    # test_constant_value
+    total += 1
+    try:
+        test_constant_value()
+        passed += 1
+        print("  ✓ test_constant_value")
+    except e:
+        failed += 1
+        print("  ✗ test_constant_value:", e)
+
+    # test_constant_zero
+    total += 1
+    try:
+        test_constant_zero()
+        passed += 1
+        print("  ✓ test_constant_zero")
+    except e:
+        failed += 1
+        print("  ✗ test_constant_zero:", e)
+
+    # test_constant_negative
+    total += 1
+    try:
+        test_constant_negative()
+        passed += 1
+        print("  ✓ test_constant_negative")
+    except e:
+        failed += 1
+        print("  ✗ test_constant_negative:", e)
+
+    # test_constant_ones_and_zeros
+    total += 1
+    try:
+        test_constant_ones_and_zeros()
+        passed += 1
+        print("  ✓ test_constant_ones_and_zeros")
+    except e:
+        failed += 1
+        print("  ✗ test_constant_ones_and_zeros:", e)
+
+    # test_xavier_uniform_float64
+    total += 1
+    try:
+        test_xavier_uniform_float64()
+        passed += 1
+        print("  ✓ test_xavier_uniform_float64")
+    except e:
+        failed += 1
+        print("  ✗ test_xavier_uniform_float64:", e)
+
+    # test_xavier_normal_float16
+    total += 1
+    try:
+        test_xavier_normal_float16()
+        passed += 1
+        print("  ✓ test_xavier_normal_float16")
+    except e:
+        failed += 1
+        print("  ✗ test_xavier_normal_float16:", e)
+
+    # test_kaiming_normal_float64
+    total += 1
+    try:
+        test_kaiming_normal_float64()
+        passed += 1
+        print("  ✓ test_kaiming_normal_float64")
+    except e:
+        failed += 1
+        print("  ✗ test_kaiming_normal_float64:", e)
+
+    # test_uniform_float64
+    total += 1
+    try:
+        test_uniform_float64()
+        passed += 1
+        print("  ✓ test_uniform_float64")
+    except e:
+        failed += 1
+        print("  ✗ test_uniform_float64:", e)
+
+    # test_normal_float64
+    total += 1
+    try:
+        test_normal_float64()
+        passed += 1
+        print("  ✓ test_normal_float64")
+    except e:
+        failed += 1
+        print("  ✗ test_normal_float64:", e)
+
+    # test_constant_float64
+    total += 1
+    try:
+        test_constant_float64()
+        passed += 1
+        print("  ✓ test_constant_float64")
+    except e:
+        failed += 1
+        print("  ✗ test_constant_float64:", e)
+
+    # test_small_dimensions
+    total += 1
+    try:
+        test_small_dimensions()
+        passed += 1
+        print("  ✓ test_small_dimensions")
+    except e:
+        failed += 1
+        print("  ✗ test_small_dimensions:", e)
+
+    # test_rectangular_matrices
+    total += 1
+    try:
+        test_rectangular_matrices()
+        passed += 1
+        print("  ✓ test_rectangular_matrices")
+    except e:
+        failed += 1
+        print("  ✗ test_rectangular_matrices:", e)
+
+    # test_large_initialization
+    total += 1
+    try:
+        test_large_initialization()
+        passed += 1
+        print("  ✓ test_large_initialization")
+    except e:
+        failed += 1
+        print("  ✗ test_large_initialization:", e)
+
+    # Summary
+    print("\n" + "=" * 70)
+    print("Results:", passed, "/", total, "passed,", failed, "failed")
+    print("=" * 70)
+
+    if failed > 0:
+        raise Error("Tests failed")
