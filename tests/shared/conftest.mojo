@@ -653,7 +653,7 @@ struct BenchmarkResult(Copyable, Movable):
     var memory_mb: Float64
 
     fn __init__(
-        out self,
+        mut self,
         name: String,
         duration_ms: Float64,
         throughput: Float64,
