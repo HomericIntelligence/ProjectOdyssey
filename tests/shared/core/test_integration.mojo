@@ -26,11 +26,11 @@ fn test_chained_add_operations() raises:
     """Test chaining multiple add operations."""
     var shape = List[Int]()
     shape.append(5)
-    vara = ones(shape, DType.float32)  # [1, 1, 1, 1, 1]
-    varb = full(shape, 2.0, DType.float32)  # [2, 2, 2, 2, 2]
-    varc = full(shape, 3.0, DType.float32)  # [3, 3, 3, 3, 3]
+    var a = ones(shape, DType.float32)  # [1, 1, 1, 1, 1]
+    var b = full(shape, 2.0, DType.float32)  # [2, 2, 2, 2, 2]
+    var c = full(shape, 3.0, DType.float32)  # [3, 3, 3, 3, 3]
 
-    varresult = add(add(a, b), c)  # (1+2)+3 = 6
+    var result = add(add(a, b), c)  # (1+2)+3 = 6
 
     assert_all_values(result, 6.0, 1e-6, "Chained additions should work")
 
@@ -39,13 +39,13 @@ fn test_mixed_arithmetic_operations() raises:
     """Test mixing different arithmetic operations."""
     var shape = List[Int]()
     shape.append(5)
-    vara = full(shape, 2.0, DType.float32)
-    varb = full(shape, 3.0, DType.float32)
-    varc = full(shape, 4.0, DType.float32)
+    var a = full(shape, 2.0, DType.float32)
+    var b = full(shape, 3.0, DType.float32)
+    var c = full(shape, 4.0, DType.float32)
 
     # (a + b) * c = (2 + 3) * 4 = 20
-    varsum_ab = add(a, b)
-    varresult = multiply(sum_ab, c)
+    var sum_ab = add(a, b)
+    var result = multiply(sum_ab, c)
 
     assert_all_values(result, 20.0, 1e-6, "Mixed operations should work")
 
@@ -54,12 +54,12 @@ fn test_arithmetic_with_operator_overloading() raises:
     """Test using operator overloading for complex expressions."""
     var shape = List[Int]()
     shape.append(5)
-    vara = ones(shape, DType.float32)
-    varb = full(shape, 2.0, DType.float32)
-    varc = full(shape, 3.0, DType.float32)
+    var a = ones(shape, DType.float32)
+    var b = full(shape, 2.0, DType.float32)
+    var c = full(shape, 3.0, DType.float32)
 
     # a + b * c = 1 + 2 * 3 = 1 + 6 = 7
-    varresult = a + b * c
+    var result = a + b * c
 
     assert_all_values(result, 7.0, 1e-6, "Operator precedence should work")
 
@@ -69,13 +69,13 @@ fn test_complex_expression() raises:
     var shape = List[Int]()
     shape.append(2)
     shape.append(3)
-    vara = full(shape, 1.0, DType.float32)
-    varb = full(shape, 2.0, DType.float32)
-    varc = full(shape, 3.0, DType.float32)
-    vard = full(shape, 4.0, DType.float32)
+    var a = full(shape, 1.0, DType.float32)
+    var b = full(shape, 2.0, DType.float32)
+    var c = full(shape, 3.0, DType.float32)
+    var d = full(shape, 4.0, DType.float32)
 
     # ((a + b) * c) - d = ((1 + 2) * 3) - 4 = 9 - 4 = 5
-    varresult = ((a + b) * c) - d
+    var result = ((a + b) * c) - d
 
     assert_all_values(result, 5.0, 1e-6, "Complex expressions should work")
 
@@ -86,15 +86,15 @@ fn test_complex_expression() raises:
 
 fn test_identity_matrix_operations() raises:
     """Test operations with identity matrix."""
-    varI = eye(3, 3, 0, DType.float32)
-    varA = full(List[Int](), 2.0, DType.float32)  # Will need reshaping
+    var I = eye(3, 3, 0, DType.float32)
+    var A = full(List[Int](), 2.0, DType.float32)  # Will need reshaping
     var shape = List[Int]()
     shape.append(3)
     shape.append(3)
-    varB = full(shape, 2.0, DType.float32)
+    var B = full(shape, 2.0, DType.float32)
 
     # I + B should give all 3s on diagonal, 2s elsewhere
-    varresult = add(I, B)
+    var result = add(I, B)
 
     assert_numel(result, 9, "Result should be 3x3")
     # Check diagonal
@@ -108,12 +108,12 @@ fn test_identity_matrix_operations() raises:
 
 fn test_arange_arithmetic() raises:
     """Test arithmetic with arange-created tensors."""
-    vara = arange(0.0, 5.0, 1.0, DType.float32)  # [0, 1, 2, 3, 4]
+    var a = arange(0.0, 5.0, 1.0, DType.float32)  # [0, 1, 2, 3, 4]
     var shape = List[Int]()
     shape.append(5)
-    varb = ones(shape, DType.float32)  # [1, 1, 1, 1, 1]
+    var b = ones(shape, DType.float32)  # [1, 1, 1, 1, 1]
 
-    varresult = add(a, b)  # [1, 2, 3, 4, 5]
+    var result = add(a, b)  # [1, 2, 3, 4, 5]
 
     assert_value_at(result, 0, 1.0, 1e-6, "0 + 1 = 1")
     assert_value_at(result, 2, 3.0, 1e-6, "2 + 1 = 3")
@@ -122,10 +122,10 @@ fn test_arange_arithmetic() raises:
 
 fn test_linspace_operations() raises:
     """Test operations with linspace-created tensors."""
-    vara = linspace(0.0, 4.0, 5, DType.float32)  # [0, 1, 2, 3, 4]
-    varb = linspace(5.0, 9.0, 5, DType.float32)  # [5, 6, 7, 8, 9]
+    var a = linspace(0.0, 4.0, 5, DType.float32)  # [0, 1, 2, 3, 4]
+    var b = linspace(5.0, 9.0, 5, DType.float32)  # [5, 6, 7, 8, 9]
 
-    varresult = add(a, b)  # [5, 7, 9, 11, 13]
+    var result = add(a, b)  # [5, 7, 9, 11, 13]
 
     assert_value_at(result, 0, 5.0, 1e-6, "0 + 5 = 5")
     assert_value_at(result, 2, 9.0, 1e-6, "2 + 7 = 9")
@@ -141,14 +141,14 @@ fn test_same_dtype_consistency() raises:
     var shape = List[Int]()
     shape.append(5)
 
-    vara32 = ones(shape, DType.float32)
-    varb32 = ones(shape, DType.float32)
-    varresult32 = add(a32, b32)
+    var a32 = ones(shape, DType.float32)
+    var b32 = ones(shape, DType.float32)
+    var result32 = add(a32, b32)
     assert_dtype(result32, DType.float32, "float32 + float32 should be float32")
 
-    vara64 = ones(shape, DType.float64)
-    varb64 = ones(shape, DType.float64)
-    varresult64 = add(a64, b64)
+    var a64 = ones(shape, DType.float64)
+    var b64 = ones(shape, DType.float64)
+    var result64 = add(a64, b64)
     assert_dtype(result64, DType.float64, "float64 + float64 should be float64")
 
 
@@ -157,9 +157,9 @@ fn test_int_dtype_operations() raises:
     var shape = List[Int]()
     shape.append(5)
 
-    vara = full(shape, 3.0, DType.int32)
-    varb = full(shape, 2.0, DType.int32)
-    varresult = add(a, b)
+    var a = full(shape, 3.0, DType.int32)
+    var b = full(shape, 2.0, DType.int32)
+    var result = add(a, b)
 
     assert_dtype(result, DType.int32, "int32 + int32 should be int32")
     assert_all_values(result, 5.0, 1e-6, "3 + 2 = 5")
@@ -174,10 +174,10 @@ fn test_2d_elementwise_operations() raises:
     var shape = List[Int]()
     shape.append(3)
     shape.append(4)
-    vara = full(shape, 5.0, DType.float32)
-    varb = full(shape, 3.0, DType.float32)
+    var a = full(shape, 5.0, DType.float32)
+    var b = full(shape, 3.0, DType.float32)
 
-    varresult = subtract(a, b)  # All 2s
+    var result = subtract(a, b)  # All 2s
 
     assert_numel(result, 12, "Result should have 12 elements")
     assert_all_values(result, 2.0, 1e-6, "5 - 3 = 2 for all elements")
@@ -189,10 +189,10 @@ fn test_3d_operations() raises:
     shape.append(2)
     shape.append(3)
     shape.append(4)
-    vara = ones(shape, DType.float32)
-    varb = full(shape, 0.5, DType.float32)
+    var a = ones(shape, DType.float32)
+    var b = full(shape, 0.5, DType.float32)
 
-    varresult = multiply(a, b)  # All 0.5s
+    var result = multiply(a, b)  # All 0.5s
 
     assert_numel(result, 24, "Result should have 24 elements")
     assert_all_values(result, 0.5, 1e-6, "1 * 0.5 = 0.5 for all elements")
@@ -208,13 +208,13 @@ fn test_linear_transformation_pattern() raises:
     shape.append(5)
 
     # Simulate weights, input, and bias
-    varW = full(shape, 2.0, DType.float32)
-    varx = ones(shape, DType.float32)
-    varb = full(shape, 0.5, DType.float32)
+    var W = full(shape, 2.0, DType.float32)
+    var x = ones(shape, DType.float32)
+    var b = full(shape, 0.5, DType.float32)
 
     # Linear transformation: W*x + b
-    varWx = multiply(W, x)  # 2 * 1 = 2
-    varresult = add(Wx, b)  # 2 + 0.5 = 2.5
+    var Wx = multiply(W, x)  # 2 * 1 = 2
+    var result = add(Wx, b)  # 2 + 0.5 = 2.5
 
     assert_all_values(result, 2.5, 1e-6, "Linear transformation result")
 
@@ -224,13 +224,13 @@ fn test_gradient_descent_update_pattern() raises:
     var shape = List[Int]()
     shape.append(5)
 
-    varw = ones(shape, DType.float32)  # weights
-    vargrad = full(shape, 0.2, DType.float32)  # gradients
-    varlr = full(shape, 0.1, DType.float32)  # learning rate
+    var w = ones(shape, DType.float32)  # weights
+    var grad = full(shape, 0.2, DType.float32)  # gradients
+    var lr = full(shape, 0.1, DType.float32)  # learning rate
 
     # Update: w - lr * grad
-    varlr_grad = multiply(lr, grad)  # 0.1 * 0.2 = 0.02
-    varnew_w = subtract(w, lr_grad)  # 1 - 0.02 = 0.98
+    var lr_grad = multiply(lr, grad)  # 0.1 * 0.2 = 0.02
+    var new_w = subtract(w, lr_grad)  # 1 - 0.02 = 0.98
 
     assert_all_values(new_w, 0.98, 1e-6, "Weight update pattern")
 
@@ -240,13 +240,13 @@ fn test_batch_normalization_pattern() raises:
     var shape = List[Int]()
     shape.append(5)
 
-    varx = full(shape, 5.0, DType.float32)
-    varmean = full(shape, 3.0, DType.float32)
-    varscale = full(shape, 2.0, DType.float32)
+    var x = full(shape, 5.0, DType.float32)
+    var mean = full(shape, 3.0, DType.float32)
+    var scale = full(shape, 2.0, DType.float32)
 
     # (x - mean) * scale
-    varcentered = subtract(x, mean)  # 5 - 3 = 2
-    varresult = multiply(centered, scale)  # 2 * 2 = 4
+    var centered = subtract(x, mean)  # 5 - 3 = 2
+    var result = multiply(centered, scale)  # 2 * 2 = 4
 
     assert_all_values(result, 4.0, 1e-6, "Batch norm pattern")
 
@@ -260,10 +260,10 @@ fn test_additive_identity() raises:
     var shape = List[Int]()
     shape.append(3)
     shape.append(4)
-    vara = full(shape, 7.5, DType.float32)
-    varzero = zeros(shape, DType.float32)
+    var a = full(shape, 7.5, DType.float32)
+    var zero = zeros(shape, DType.float32)
 
-    varresult = add(a, zero)
+    var result = add(a, zero)
 
     assert_all_values(result, 7.5, 1e-6, "x + 0 = x")
 
@@ -273,10 +273,10 @@ fn test_multiplicative_identity() raises:
     var shape = List[Int]()
     shape.append(3)
     shape.append(4)
-    vara = full(shape, 7.5, DType.float32)
-    varone = ones(shape, DType.float32)
+    var a = full(shape, 7.5, DType.float32)
+    var one = ones(shape, DType.float32)
 
-    varresult = multiply(a, one)
+    var result = multiply(a, one)
 
     assert_all_values(result, 7.5, 1e-6, "x * 1 = x")
 
@@ -286,10 +286,10 @@ fn test_multiplicative_zero() raises:
     var shape = List[Int]()
     shape.append(3)
     shape.append(4)
-    vara = full(shape, 99.9, DType.float32)
-    varzero = zeros(shape, DType.float32)
+    var a = full(shape, 99.9, DType.float32)
+    var zero = zeros(shape, DType.float32)
 
-    varresult = multiply(a, zero)
+    var result = multiply(a, zero)
 
     assert_all_values(result, 0.0, 1e-8, "x * 0 = 0")
 
@@ -301,10 +301,10 @@ fn test_multiplicative_zero() raises:
 fn test_scalar_operations() raises:
     """Test operations with scalar tensors."""
     var shape_scalar = List[Int]()
-    vara = full(shape_scalar, 5.0, DType.float32)
-    varb = full(shape_scalar, 3.0, DType.float32)
+    var a = full(shape_scalar, 5.0, DType.float32)
+    var b = full(shape_scalar, 3.0, DType.float32)
 
-    varresult = add(a, b)
+    var result = add(a, b)
 
     assert_dim(result, 0, "Result should be scalar")
     assert_value_at(result, 0, 8.0, 1e-6, "5 + 3 = 8")
@@ -318,10 +318,10 @@ fn test_large_tensor_operations() raises:
     """Test operations on large tensors."""
     var shape = List[Int]()
     shape.append(10000)
-    vara = ones(shape, DType.float32)
-    varb = full(shape, 2.0, DType.float32)
+    var a = ones(shape, DType.float32)
+    var b = full(shape, 2.0, DType.float32)
 
-    varresult = multiply(a, b)
+    var result = multiply(a, b)
 
     assert_numel(result, 10000, "Result should have 10000 elements")
     # Spot check a few values

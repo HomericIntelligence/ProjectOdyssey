@@ -32,7 +32,7 @@ fn test_empty_tensor_creation() raises:
     """Test creating empty tensor with 0 elements."""
     var shape = List[Int]()
     shape.append(0)
-    vart = zeros(shape, DType.float32)
+    var t = zeros(shape, DType.float32)
 
     assert_numel(t, 0, "Empty tensor should have 0 elements")
     assert_dim(t, 1, "Empty tensor should have 1 dimension")
@@ -42,9 +42,9 @@ fn test_empty_tensor_operations() raises:
     """Test operations on empty tensors."""
     var shape = List[Int]()
     shape.append(0)
-    vara = zeros(shape, DType.float32)
-    varb = zeros(shape, DType.float32)
-    varc = add(a, b)
+    var a = zeros(shape, DType.float32)
+    var b = zeros(shape, DType.float32)
+    var c = add(a, b)
 
     assert_numel(c, 0, "Operations on empty tensors should give empty tensor")
 
@@ -53,8 +53,8 @@ fn test_empty_tensor_2d() raises:
     """Test 2D empty tensor (0 rows or 0 cols)."""
     var shape = List[Int]()
     shape.append(3)
-    shape.append(0  # 3x0 matrix)
-    vart = zeros(shape, DType.float32)
+    shape.append(0)  # 3x0 matrix
+    var t = zeros(shape, DType.float32)
 
     assert_numel(t, 0, "3x0 matrix should have 0 elements")
     assert_dim(t, 2, "Should preserve 2D structure")
@@ -67,7 +67,7 @@ fn test_empty_tensor_2d() raises:
 fn test_scalar_tensor_creation() raises:
     """Test creating 0D scalar tensor."""
     var shape = List[Int]()
-    vart = full(shape, 42.0, DType.float32)
+    var t = full(shape, 42.0, DType.float32)
 
     assert_numel(t, 1, "0D tensor should have 1 element")
     assert_dim(t, 0, "0D tensor should have 0 dimensions")
@@ -77,9 +77,9 @@ fn test_scalar_tensor_creation() raises:
 fn test_scalar_tensor_operations() raises:
     """Test operations on 0D scalar tensors."""
     var shape = List[Int]()
-    vara = full(shape, 3.0, DType.float32)
-    varb = full(shape, 2.0, DType.float32)
-    varc = add(a, b)
+    var a = full(shape, 3.0, DType.float32)
+    var b = full(shape, 2.0, DType.float32)
+    var c = add(a, b)
 
     assert_numel(c, 1, "Scalar + scalar should give scalar")
     assert_dim(c, 0, "Result should be 0D")
@@ -92,9 +92,9 @@ fn test_scalar_to_vector_broadcast() raises:
     var shape_vec = List[Int]()
     shape_vec.append(5)
 
-    vara = full(shape_scalar, 10.0, DType.float32)  # scalar
-    varb = full(shape_vec, 2.0, DType.float32)  # vector
-    varc = multiply(a, b)
+    var a = full(shape_scalar, 10.0, DType.float32)  # scalar
+    var b = full(shape_vec, 2.0, DType.float32)  # vector
+    var c = multiply(a, b)
 
     assert_numel(c, 5, "Result should have 5 elements")
     assert_all_values(c, 20.0, 1e-6, "10 * 2 broadcast to [20, 20, 20, 20, 20]")
@@ -107,8 +107,8 @@ fn test_scalar_to_vector_broadcast() raises:
 fn test_large_1d_tensor() raises:
     """Test creating and operating on large 1D tensor."""
     var shape = List[Int]()
-    shape.append(10000000  # 10 million elements)
-    vart = zeros(shape, DType.float32)
+    shape.append(10000000)  # 10 million elements
+    var t = zeros(shape, DType.float32)
 
     assert_numel(t, 10000000, "Large tensor should have 10M elements")
     # Spot check a few values
@@ -121,7 +121,7 @@ fn test_large_dimension_count() raises:
     var shape = List[Int]()
     for i in range(10):
         shape[i] = 2
-    vart = zeros(shape, DType.float32)
+    var t = zeros(shape, DType.float32)
 
     assert_dim(t, 10, "Should have 10 dimensions")
     assert_numel(t, 1024, "2^10 = 1024 elements")
@@ -311,13 +311,13 @@ fn test_divide_by_zero_float() raises:
     """Test division by zero for floating point."""
     var shape = List[Int]()
     shape.append(3)
-    vara = full(shape, 1.0, DType.float32)
-    varb = zeros(shape, DType.float32)
-    varc = divide(a, b)
+    var a = full(shape, 1.0, DType.float32)
+    var b = zeros(shape, DType.float32)
+    var c = divide(a, b)
 
     # IEEE 754: 1/0 = inf
     for i in range(3):
-        varval = c._get_float64(i)
+        var val = c._get_float64(i)
         if not isinf(val):
             raise Error("1/0 should be inf per IEEE 754")
         if val < 0:
@@ -328,8 +328,8 @@ fn test_divide_by_zero_int() raises:
     """Test division by zero for integers."""
     var shape = List[Int]()
     shape.append(3)
-    vara = full(shape, 10.0, DType.int32)
-    varb = zeros(shape, DType.int32)
+    var a = full(shape, 10.0, DType.int32)
+    var b = zeros(shape, DType.int32)
     # varc = divide(a, b)  # TODO: Implement divide()
 
     # Integer division by zero: undefined behavior (should error or saturate)
@@ -341,13 +341,13 @@ fn test_divide_zero_by_zero() raises:
     """Test 0/0 (should give NaN for floats)."""
     var shape = List[Int]()
     shape.append(3)
-    vara = zeros(shape, DType.float32)
-    varb = zeros(shape, DType.float32)
-    varc = divide(a, b)
+    var a = zeros(shape, DType.float32)
+    var b = zeros(shape, DType.float32)
+    var c = divide(a, b)
 
     # 0/0 = NaN (indeterminate form per IEEE 754)
     for i in range(3):
-        varval = c._get_float64(i)
+        var val = c._get_float64(i)
         if not isnan(val):
             raise Error("0/0 should be NaN per IEEE 754")
 
@@ -356,13 +356,13 @@ fn test_divide_negative_by_zero() raises:
     """Test -1/0 (should give -inf for floats)."""
     var shape = List[Int]()
     shape.append(3)
-    vara = full(shape, -1.0, DType.float32)
-    varb = zeros(shape, DType.float32)
-    varc = divide(a, b)
+    var a = full(shape, -1.0, DType.float32)
+    var b = zeros(shape, DType.float32)
+    var c = divide(a, b)
 
     # IEEE 754: -1/0 = -inf
     for i in range(3):
-        varval = c._get_float64(i)
+        var val = c._get_float64(i)
         if not isinf(val):
             raise Error("-1/0 should be -inf per IEEE 754")
         if val > 0:
@@ -377,13 +377,13 @@ fn test_modulo_by_zero() raises:
     """Test modulo by zero (should give NaN for floats)."""
     var shape = List[Int]()
     shape.append(3)
-    vara = full(shape, 5.0, DType.float32)
-    varb = zeros(shape, DType.float32)
-    varc = modulo(a, b)
+    var a = full(shape, 5.0, DType.float32)
+    var b = zeros(shape, DType.float32)
+    var c = modulo(a, b)
 
     # Modulo by zero: undefined, should give NaN
     for i in range(3):
-        varval = c._get_float64(i)
+        var val = c._get_float64(i)
         if not isnan(val):
             raise Error("x % 0 should be NaN")
 
@@ -392,9 +392,9 @@ fn test_modulo_with_negative_divisor() raises:
     """Test modulo with negative divisor."""
     var shape = List[Int]()
     shape.append(1)
-    vara = full(shape, 7.0, DType.float32)
-    varb = full(shape, -3.0, DType.float32)
-    varc = modulo(a, b)
+    var a = full(shape, 7.0, DType.float32)
+    var b = full(shape, -3.0, DType.float32)
+    var c = modulo(a, b)
 
     # Python semantics: 7 % -3 = -2 (result has sign of divisor)
     assert_value_at(c, 0, -2.0, 1e-6, "7 % -3 should be -2 (Python semantics)")
@@ -404,9 +404,9 @@ fn test_modulo_both_negative() raises:
     """Test modulo with both negative values."""
     var shape = List[Int]()
     shape.append(1)
-    vara = full(shape, -7.0, DType.float32)
-    varb = full(shape, -3.0, DType.float32)
-    varc = modulo(a, b)
+    var a = full(shape, -7.0, DType.float32)
+    var b = full(shape, -3.0, DType.float32)
+    var c = modulo(a, b)
 
     # Python semantics: -7 % -3 = -1
     assert_value_at(c, 0, -1.0, 1e-6, "-7 % -3 should be -1 (Python semantics)")
@@ -420,9 +420,9 @@ fn test_power_zero_to_zero() raises:
     """Test 0^0 (mathematically undefined, conventionally 1)."""
     var shape = List[Int]()
     shape.append(3)
-    vara = zeros(shape, DType.float32)
-    varb = zeros(shape, DType.float32)
-    varc = power(a, b)
+    var a = zeros(shape, DType.float32)
+    var b = zeros(shape, DType.float32)
+    var c = power(a, b)
 
     # Convention: 0^0 = 1 (used in polynomial evaluation)
     assert_all_values(c, 1.0, 1e-6, "0^0 should be 1 by convention")
@@ -432,9 +432,9 @@ fn test_power_negative_base_even() raises:
     """Test negative base with even exponent."""
     var shape = List[Int]()
     shape.append(1)
-    vara = full(shape, -2.0, DType.float32)
-    varb = full(shape, 2.0, DType.float32)
-    varc = power(a, b)
+    var a = full(shape, -2.0, DType.float32)
+    var b = full(shape, 2.0, DType.float32)
+    var c = power(a, b)
 
     # (-2)^2 = 4
     assert_value_at(c, 0, 4.0, 1e-6, "(-2)^2 should be 4")
@@ -444,9 +444,9 @@ fn test_power_negative_base_odd() raises:
     """Test negative base with odd exponent."""
     var shape = List[Int]()
     shape.append(1)
-    vara = full(shape, -2.0, DType.float32)
-    varb = full(shape, 3.0, DType.float32)
-    varc = power(a, b)
+    var a = full(shape, -2.0, DType.float32)
+    var b = full(shape, 3.0, DType.float32)
+    var c = power(a, b)
 
     # (-2)^3 = -8
     assert_value_at(c, 0, -8.0, 1e-6, "(-2)^3 should be -8")
@@ -456,9 +456,9 @@ fn test_power_zero_base_positive_exp() raises:
     """Test 0^n for positive n."""
     var shape = List[Int]()
     shape.append(3)
-    vara = zeros(shape, DType.float32)
-    varb = full(shape, 5.0, DType.float32)
-    varc = power(a, b)
+    var a = zeros(shape, DType.float32)
+    var b = full(shape, 5.0, DType.float32)
+    var c = power(a, b)
 
     # 0^5 = 0
     assert_all_values(c, 0.0, 1e-6, "0^n should be 0 for positive n")
@@ -472,13 +472,13 @@ fn test_floor_divide_by_zero() raises:
     """Test floor division by zero."""
     var shape = List[Int]()
     shape.append(3)
-    vara = full(shape, 10.0, DType.float32)
-    varb = zeros(shape, DType.float32)
-    varc = floor_divide(a, b)
+    var a = full(shape, 10.0, DType.float32)
+    var b = zeros(shape, DType.float32)
+    var c = floor_divide(a, b)
 
     # Floor division by zero should give inf (like regular division)
     for i in range(3):
-        varval = c._get_float64(i)
+        var val = c._get_float64(i)
         if not isinf(val):
             raise Error("x // 0 should be inf")
 
@@ -487,9 +487,9 @@ fn test_floor_divide_with_remainder() raises:
     """Test floor division with remainder."""
     var shape = List[Int]()
     shape.append(1)
-    vara = full(shape, 7.0, DType.float32)
-    varb = full(shape, 3.0, DType.float32)
-    varc = floor_divide(a, b)
+    var a = full(shape, 7.0, DType.float32)
+    var b = full(shape, 3.0, DType.float32)
+    var c = floor_divide(a, b)
 
     # 7 // 3 = 2 (floor of 2.333...)
     assert_value_at(c, 0, 2.0, 1e-6, "7 // 3 should be 2")
@@ -499,9 +499,9 @@ fn test_floor_divide_negative_result() raises:
     """Test floor division with negative result."""
     var shape = List[Int]()
     shape.append(1)
-    vara = full(shape, -7.0, DType.float32)
-    varb = full(shape, 3.0, DType.float32)
-    varc = floor_divide(a, b)
+    var a = full(shape, -7.0, DType.float32)
+    var b = full(shape, 3.0, DType.float32)
+    var c = floor_divide(a, b)
 
     # -7 // 3 = -3 (floor of -2.333... = -3, not -2)
     assert_value_at(c, 0, -3.0, 1e-6, "-7 // 3 should be -3 (floor toward -inf)")
@@ -516,19 +516,19 @@ fn test_comparison_with_zero() raises:
     var shape = List[Int]()
     shape.append(3)
 
-    varpositive = full(shape, 1.0, DType.float32)
-    varnegative = full(shape, -1.0, DType.float32)
-    varzero = zeros(shape, DType.float32)
+    var positive = full(shape, 1.0, DType.float32)
+    var negative = full(shape, -1.0, DType.float32)
+    var zero = zeros(shape, DType.float32)
 
     # Test greater than zero
-    varpos_gt_zero = greater(positive, zero)
+    var pos_gt_zero = greater(positive, zero)
     assert_all_values(pos_gt_zero, 1.0, 1e-6, "1.0 > 0 should be True")
 
-    varneg_gt_zero = greater(negative, zero)
+    var neg_gt_zero = greater(negative, zero)
     assert_all_values(neg_gt_zero, 0.0, 1e-6, "-1.0 > 0 should be False")
 
     # Test less than zero
-    varneg_lt_zero = less(negative, zero)
+    var neg_lt_zero = less(negative, zero)
     assert_all_values(neg_lt_zero, 1.0, 1e-6, "-1.0 < 0 should be True")
 
 
@@ -536,9 +536,9 @@ fn test_comparison_equal_values() raises:
     """Test equality comparison with same values."""
     var shape = List[Int]()
     shape.append(5)
-    vara = full(shape, 3.14159, DType.float64)
-    varb = full(shape, 3.14159, DType.float64)
-    varc = equal(a, b)
+    var a = full(shape, 3.14159, DType.float64)
+    var b = full(shape, 3.14159, DType.float64)
+    var c = equal(a, b)
 
     assert_dtype(c, DType.bool, "Comparison should return bool")
     assert_all_values(c, 1.0, 1e-10, "Equal values should be equal")
@@ -548,12 +548,12 @@ fn test_comparison_very_close_values() raises:
     """Test comparison with very close but not equal values."""
     var shape = List[Int]()
     shape.append(1)
-    vara = full(shape, 1.0, DType.float32)
-    varb = full(shape, 1.0000001, DType.float32)
+    var a = full(shape, 1.0, DType.float32)
+    var b = full(shape, 1.0000001, DType.float32)
 
     # These should NOT be equal (exact comparison, no tolerance)
-    vareq = equal(a, b)
-    varne = not_equal(a, b)
+    var eq = equal(a, b)
+    var ne = not_equal(a, b)
 
     # Depending on float32 precision, these might be equal or not
     # For now, just verify bool dtype
