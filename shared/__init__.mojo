@@ -156,10 +156,10 @@ alias LICENSE = "MIT"
 # For implementation of component-level imports when core modules
 # are fully implemented, see test_packaging.mojo
 #
-# NOTE: These imports will be uncommented during implementation
-# from . import core
-# from . import training
-# from . import data
-# from . import utils
-# from . import autograd
-# from . import testing
+# NOTE: These imports are now active as submodules are implemented
+from . import core
+from . import training
+from . import data
+from . import utils
+from . import autograd
+from . import testing

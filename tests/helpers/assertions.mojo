@@ -2,12 +2,22 @@
 
 Provides comprehensive assertion functions for validating tensor properties,
 values, shapes, dtypes, and numerical accuracy.
-
-Note: These functions work with ExTensor through duck typing.
-Import ExTensor in your test files before using these assertions.
 """
 
 from math import isnan, isinf
+from shared.core import ExTensor
+
+
+fn abs(x: Float64) -> Float64:
+    """Compute absolute value of a Float64.
+
+    Args:
+        x: Input value
+
+    Returns:
+        Absolute value of x
+    """
+    return x if x >= 0 else -x
 
 
 fn assert_true(condition: Bool, message: String = "") raises:
@@ -140,12 +150,75 @@ fn assert_close_float(
         raise Error(msg)
 
 
+fn assert_equal(a: Int, b: Int, message: String = "") raises:
+    """Assert two integer values are equal.
+
+    Args:
+        a: First value
+        b: Second value
+        message: Optional error message
+
+    Raises:
+        Error if values are not equal
+    """
+    if a != b:
+        var msg = "Expected " + String(a) + " == " + String(b)
+        if message:
+            msg = message + ": " + msg
+        raise Error(msg)
+
+
+fn assert_dtype_equal(a: DType, b: DType, message: String = "") raises:
+    """Assert two DType values are equal.
+
+    Args:
+        a: First dtype
+        b: Second dtype
+        message: Optional error message
+
+    Raises:
+        Error if dtypes are not equal
+    """
+    if a != b:
+        var msg = "Expected " + String(a) + " == " + String(b)
+        if message:
+            msg = message + ": " + msg
+        raise Error(msg)
+
+
+fn assert_almost_equal(
+    a: Float32,
+    b: Float32,
+    tolerance: Float64 = 1e-5,
+    message: String = ""
+) raises:
+    """Assert two Float32 values are almost equal within tolerance.
+
+    Args:
+        a: First value
+        b: Second value
+        tolerance: Numerical tolerance
+        message: Optional error message
+
+    Raises:
+        Error if values differ beyond tolerance
+    """
+    var diff = abs(Float64(a) - Float64(b))
+    if diff > tolerance:
+        var msg = (
+            "Expected " + String(a) + " ≈ " + String(b) +
+            " (diff=" + String(diff) + ", tolerance=" + String(tolerance) + ")"
+        )
+        if message:
+            msg = message + ": " + msg
+        raise Error(msg)
+
+
 # ============================================================================
 # ExTensor-Specific Assertions
 # ============================================================================
-# Note: Import ExTensor in your test files before using these assertions
 
-fn assert_shape[T: AnyType](tensor: T, expected: List[Int], message: String = "") raises:
+fn assert_shape(tensor: ExTensor, expected: List[Int], message: String = "") raises:
     """Assert tensor has expected shape.
 
     Args:
@@ -175,7 +248,7 @@ fn assert_shape[T: AnyType](tensor: T, expected: List[Int], message: String = ""
             raise Error(msg)
 
 
-fn assert_dtype[T: AnyType](tensor: T, expected_dtype: DType, message: String = "") raises:
+fn assert_dtype(tensor: ExTensor, expected_dtype: DType, message: String = "") raises:
     """Assert tensor has expected dtype.
 
     Args:
@@ -194,7 +267,7 @@ fn assert_dtype[T: AnyType](tensor: T, expected_dtype: DType, message: String = 
         raise Error(msg)
 
 
-fn assert_numel[T: AnyType](tensor: T, expected_numel: Int, message: String = "") raises:
+fn assert_numel(tensor: ExTensor, expected_numel: Int, message: String = "") raises:
     """Assert tensor has expected number of elements.
 
     Args:
@@ -213,7 +286,7 @@ fn assert_numel[T: AnyType](tensor: T, expected_numel: Int, message: String = ""
         raise Error(msg)
 
 
-fn assert_dim[T: AnyType](tensor: T, expected_dim: Int, message: String = "") raises:
+fn assert_dim(tensor: ExTensor, expected_dim: Int, message: String = "") raises:
     """Assert tensor has expected number of dimensions.
 
     Args:
@@ -232,7 +305,7 @@ fn assert_dim[T: AnyType](tensor: T, expected_dim: Int, message: String = "") ra
         raise Error(msg)
 
 
-fn assert_value_at[T: AnyType](tensor: T, index: Int, expected_value: Float64, tolerance: Float64 = 1e-8, message: String = "") raises:
+fn assert_value_at(tensor: ExTensor, index: Int, expected_value: Float64, tolerance: Float64 = 1e-8, message: String = "") raises:
     """Assert tensor has expected value at given index.
 
     Args:
@@ -246,7 +319,7 @@ fn assert_value_at[T: AnyType](tensor: T, index: Int, expected_value: Float64, t
         Error if value doesn't match
     """
     var actual_value = tensor._get_float64(index)
-    var diff = math_abs(actual_value - expected_value)
+    var diff = abs(actual_value - expected_value)
 
     if diff > tolerance:
         var msg = "Value mismatch at index " + String(index) + ": expected " + String(expected_value) + ", got " + String(actual_value) + " (diff=" + String(diff) + ")"
@@ -255,7 +328,7 @@ fn assert_value_at[T: AnyType](tensor: T, index: Int, expected_value: Float64, t
         raise Error(msg)
 
 
-fn assert_all_values[T: AnyType](tensor: T, expected_value: Float64, tolerance: Float64 = 1e-8, message: String = "") raises:
+fn assert_all_values(tensor: ExTensor, expected_value: Float64, tolerance: Float64 = 1e-8, message: String = "") raises:
     """Assert all tensor elements equal expected value.
 
     Args:
@@ -279,9 +352,9 @@ fn assert_all_values[T: AnyType](tensor: T, expected_value: Float64, tolerance: 
             raise Error(msg)
 
 
-fn assert_all_close[T: AnyType](
-    a: T,
-    b: T,
+fn assert_all_close(
+    a: ExTensor,
+    b: ExTensor,
     rtol: Float64 = 1e-5,
     atol: Float64 = 1e-8,
     message: String = ""
@@ -337,7 +410,7 @@ fn assert_all_close[T: AnyType](
             continue
 
         # Check numeric closeness
-        var diff = math_abs(val_a - val_b)
+        var diff = abs(val_a - val_b)
         var threshold = atol + rtol * abs(val_b)
 
         if diff > threshold:
@@ -347,7 +420,7 @@ fn assert_all_close[T: AnyType](
             raise Error(msg)
 
 
-fn assert_contiguous[T: AnyType](tensor: T, message: String = "") raises:
+fn assert_contiguous(tensor: ExTensor, message: String = "") raises:
     """Assert tensor is contiguous in memory.
 
     Args:

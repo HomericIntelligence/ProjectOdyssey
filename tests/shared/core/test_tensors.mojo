@@ -13,6 +13,9 @@ from ..helpers.assertions import (
     assert_true,
     assert_equal_int,
     assert_close_float,
+    assert_equal,
+    assert_almost_equal,
+    assert_dtype_equal,
 )
 from tests.shared.conftest import TestFixtures
 from shared.core.extensor import (
@@ -481,3 +484,267 @@ fn test_3d_indexing() raises:
     # Get value at (1, 2, 3)
     var val = t._data.bitcast[Float32]()[23]
     assert_almost_equal(val, Float32(99.0), tolerance=1e-5)
+
+
+# ============================================================================
+# Main Test Runner
+# ============================================================================
+
+
+fn main() raises:
+    """Run all tests in this file."""
+    var total = 0
+    var passed = 0
+    var failed = 0
+
+    print("\n" + "=" * 70)
+    print("Running tests from: test_tensors.mojo")
+    print("=" * 70 + "\n")
+
+    # test_zeros_creation
+    total += 1
+    try:
+        test_zeros_creation()
+        passed += 1
+        print("  ✓ test_zeros_creation")
+    except e:
+        failed += 1
+        print("  ✗ test_zeros_creation:", e)
+
+    # test_ones_creation
+    total += 1
+    try:
+        test_ones_creation()
+        passed += 1
+        print("  ✓ test_ones_creation")
+    except e:
+        failed += 1
+        print("  ✗ test_ones_creation:", e)
+
+    # test_full_creation
+    total += 1
+    try:
+        test_full_creation()
+        passed += 1
+        print("  ✓ test_full_creation")
+    except e:
+        failed += 1
+        print("  ✗ test_full_creation:", e)
+
+    # test_empty_creation
+    total += 1
+    try:
+        test_empty_creation()
+        passed += 1
+        print("  ✓ test_empty_creation")
+    except e:
+        failed += 1
+        print("  ✗ test_empty_creation:", e)
+
+    # test_arange_creation
+    total += 1
+    try:
+        test_arange_creation()
+        passed += 1
+        print("  ✓ test_arange_creation")
+    except e:
+        failed += 1
+        print("  ✗ test_arange_creation:", e)
+
+    # test_arange_with_step
+    total += 1
+    try:
+        test_arange_with_step()
+        passed += 1
+        print("  ✓ test_arange_with_step")
+    except e:
+        failed += 1
+        print("  ✗ test_arange_with_step:", e)
+
+    # test_eye_creation
+    total += 1
+    try:
+        test_eye_creation()
+        passed += 1
+        print("  ✓ test_eye_creation")
+    except e:
+        failed += 1
+        print("  ✗ test_eye_creation:", e)
+
+    # test_linspace_creation
+    total += 1
+    try:
+        test_linspace_creation()
+        passed += 1
+        print("  ✓ test_linspace_creation")
+    except e:
+        failed += 1
+        print("  ✗ test_linspace_creation:", e)
+
+    # test_zeros_like
+    total += 1
+    try:
+        test_zeros_like()
+        passed += 1
+        print("  ✓ test_zeros_like")
+    except e:
+        failed += 1
+        print("  ✗ test_zeros_like:", e)
+
+    # test_ones_like
+    total += 1
+    try:
+        test_ones_like()
+        passed += 1
+        print("  ✓ test_ones_like")
+    except e:
+        failed += 1
+        print("  ✗ test_ones_like:", e)
+
+    # test_full_like
+    total += 1
+    try:
+        test_full_like()
+        passed += 1
+        print("  ✓ test_full_like")
+    except e:
+        failed += 1
+        print("  ✗ test_full_like:", e)
+
+    # test_tensor_shape
+    total += 1
+    try:
+        test_tensor_shape()
+        passed += 1
+        print("  ✓ test_tensor_shape")
+    except e:
+        failed += 1
+        print("  ✗ test_tensor_shape:", e)
+
+    # test_tensor_dtype
+    total += 1
+    try:
+        test_tensor_dtype()
+        passed += 1
+        print("  ✓ test_tensor_dtype")
+    except e:
+        failed += 1
+        print("  ✗ test_tensor_dtype:", e)
+
+    # test_tensor_numel
+    total += 1
+    try:
+        test_tensor_numel()
+        passed += 1
+        print("  ✓ test_tensor_numel")
+    except e:
+        failed += 1
+        print("  ✗ test_tensor_numel:", e)
+
+    # test_tensor_dim
+    total += 1
+    try:
+        test_tensor_dim()
+        passed += 1
+        print("  ✓ test_tensor_dim")
+    except e:
+        failed += 1
+        print("  ✗ test_tensor_dim:", e)
+
+    # test_float_dtypes
+    total += 1
+    try:
+        test_float_dtypes()
+        passed += 1
+        print("  ✓ test_float_dtypes")
+    except e:
+        failed += 1
+        print("  ✗ test_float_dtypes:", e)
+
+    # test_int_dtypes
+    total += 1
+    try:
+        test_int_dtypes()
+        passed += 1
+        print("  ✓ test_int_dtypes")
+    except e:
+        failed += 1
+        print("  ✗ test_int_dtypes:", e)
+
+    # test_uint_dtypes
+    total += 1
+    try:
+        test_uint_dtypes()
+        passed += 1
+        print("  ✓ test_uint_dtypes")
+    except e:
+        failed += 1
+        print("  ✗ test_uint_dtypes:", e)
+
+    # test_scalar_tensor
+    total += 1
+    try:
+        test_scalar_tensor()
+        passed += 1
+        print("  ✓ test_scalar_tensor")
+    except e:
+        failed += 1
+        print("  ✗ test_scalar_tensor:", e)
+
+    # test_large_tensor
+    total += 1
+    try:
+        test_large_tensor()
+        passed += 1
+        print("  ✓ test_large_tensor")
+    except e:
+        failed += 1
+        print("  ✗ test_large_tensor:", e)
+
+    # test_high_dimensional_tensor
+    total += 1
+    try:
+        test_high_dimensional_tensor()
+        passed += 1
+        print("  ✓ test_high_dimensional_tensor")
+    except e:
+        failed += 1
+        print("  ✗ test_high_dimensional_tensor:", e)
+
+    # test_set_and_get_values
+    total += 1
+    try:
+        test_set_and_get_values()
+        passed += 1
+        print("  ✓ test_set_and_get_values")
+    except e:
+        failed += 1
+        print("  ✗ test_set_and_get_values:", e)
+
+    # test_2d_indexing
+    total += 1
+    try:
+        test_2d_indexing()
+        passed += 1
+        print("  ✓ test_2d_indexing")
+    except e:
+        failed += 1
+        print("  ✗ test_2d_indexing:", e)
+
+    # test_3d_indexing
+    total += 1
+    try:
+        test_3d_indexing()
+        passed += 1
+        print("  ✓ test_3d_indexing")
+    except e:
+        failed += 1
+        print("  ✗ test_3d_indexing:", e)
+
+    # Summary
+    print("\n" + "=" * 70)
+    print("Results:", passed, "/", total, "passed,", failed, "failed")
+    print("=" * 70)
+
+    if failed > 0:
+        raise Error("Tests failed")

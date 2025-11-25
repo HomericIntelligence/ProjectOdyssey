@@ -1087,3 +1087,477 @@ fn test_integration_forward_backward() raises:
     # Gradients at positive inputs should be non-zero
     assert_true(grad_x._data.bitcast[Float32]()[1] > 0.0)
     assert_true(grad_x._data.bitcast[Float32]()[2] > 0.0)
+
+
+# ============================================================================
+# Main Test Runner
+# ============================================================================
+
+
+fn main() raises:
+    """Run all tests in this file."""
+    var total = 0
+    var passed = 0
+    var failed = 0
+
+    print("\n" + "=" * 70)
+    print("Running tests from: test_activations.mojo")
+    print("=" * 70 + "\n")
+
+    # test_relu_basic
+    total += 1
+    try:
+        test_relu_basic()
+        passed += 1
+        print("  ✓ test_relu_basic")
+    except e:
+        failed += 1
+        print("  ✗ test_relu_basic:", e)
+
+    # test_relu_non_negativity
+    total += 1
+    try:
+        test_relu_non_negativity()
+        passed += 1
+        print("  ✓ test_relu_non_negativity")
+    except e:
+        failed += 1
+        print("  ✗ test_relu_non_negativity:", e)
+
+    # test_relu_backward
+    total += 1
+    try:
+        test_relu_backward()
+        passed += 1
+        print("  ✓ test_relu_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_relu_backward:", e)
+
+    # test_relu_shape
+    total += 1
+    try:
+        test_relu_shape()
+        passed += 1
+        print("  ✓ test_relu_shape")
+    except e:
+        failed += 1
+        print("  ✗ test_relu_shape:", e)
+
+    # test_relu_integer_types
+    total += 1
+    try:
+        test_relu_integer_types()
+        passed += 1
+        print("  ✓ test_relu_integer_types")
+    except e:
+        failed += 1
+        print("  ✗ test_relu_integer_types:", e)
+
+    # test_relu_float64
+    total += 1
+    try:
+        test_relu_float64()
+        passed += 1
+        print("  ✓ test_relu_float64")
+    except e:
+        failed += 1
+        print("  ✗ test_relu_float64:", e)
+
+    # test_leaky_relu_basic
+    total += 1
+    try:
+        test_leaky_relu_basic()
+        passed += 1
+        print("  ✓ test_leaky_relu_basic")
+    except e:
+        failed += 1
+        print("  ✗ test_leaky_relu_basic:", e)
+
+    # test_leaky_relu_custom_alpha
+    total += 1
+    try:
+        test_leaky_relu_custom_alpha()
+        passed += 1
+        print("  ✓ test_leaky_relu_custom_alpha")
+    except e:
+        failed += 1
+        print("  ✗ test_leaky_relu_custom_alpha:", e)
+
+    # test_leaky_relu_backward
+    total += 1
+    try:
+        test_leaky_relu_backward()
+        passed += 1
+        print("  ✓ test_leaky_relu_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_leaky_relu_backward:", e)
+
+    # test_prelu_basic
+    total += 1
+    try:
+        test_prelu_basic()
+        passed += 1
+        print("  ✓ test_prelu_basic")
+    except e:
+        failed += 1
+        print("  ✗ test_prelu_basic:", e)
+
+    # test_prelu_scalar_alpha
+    total += 1
+    try:
+        test_prelu_scalar_alpha()
+        passed += 1
+        print("  ✓ test_prelu_scalar_alpha")
+    except e:
+        failed += 1
+        print("  ✗ test_prelu_scalar_alpha:", e)
+
+    # test_prelu_elementwise_alpha
+    total += 1
+    try:
+        test_prelu_elementwise_alpha()
+        passed += 1
+        print("  ✓ test_prelu_elementwise_alpha")
+    except e:
+        failed += 1
+        print("  ✗ test_prelu_elementwise_alpha:", e)
+
+    # test_prelu_backward
+    total += 1
+    try:
+        test_prelu_backward()
+        passed += 1
+        print("  ✓ test_prelu_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_prelu_backward:", e)
+
+    # test_sigmoid_basic
+    total += 1
+    try:
+        test_sigmoid_basic()
+        passed += 1
+        print("  ✓ test_sigmoid_basic")
+    except e:
+        failed += 1
+        print("  ✗ test_sigmoid_basic:", e)
+
+    # test_sigmoid_backward
+    total += 1
+    try:
+        test_sigmoid_backward()
+        passed += 1
+        print("  ✓ test_sigmoid_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_sigmoid_backward:", e)
+
+    # test_sigmoid_range
+    total += 1
+    try:
+        test_sigmoid_range()
+        passed += 1
+        print("  ✓ test_sigmoid_range")
+    except e:
+        failed += 1
+        print("  ✗ test_sigmoid_range:", e)
+
+    # test_sigmoid_numerical_stability
+    total += 1
+    try:
+        test_sigmoid_numerical_stability()
+        passed += 1
+        print("  ✓ test_sigmoid_numerical_stability")
+    except e:
+        failed += 1
+        print("  ✗ test_sigmoid_numerical_stability:", e)
+
+    # test_sigmoid_float16
+    total += 1
+    try:
+        test_sigmoid_float16()
+        passed += 1
+        print("  ✓ test_sigmoid_float16")
+    except e:
+        failed += 1
+        print("  ✗ test_sigmoid_float16:", e)
+
+    # test_sigmoid_float64
+    total += 1
+    try:
+        test_sigmoid_float64()
+        passed += 1
+        print("  ✓ test_sigmoid_float64")
+    except e:
+        failed += 1
+        print("  ✗ test_sigmoid_float64:", e)
+
+    # test_tanh_basic
+    total += 1
+    try:
+        test_tanh_basic()
+        passed += 1
+        print("  ✓ test_tanh_basic")
+    except e:
+        failed += 1
+        print("  ✗ test_tanh_basic:", e)
+
+    # test_tanh_values
+    total += 1
+    try:
+        test_tanh_values()
+        passed += 1
+        print("  ✓ test_tanh_values")
+    except e:
+        failed += 1
+        print("  ✗ test_tanh_values:", e)
+
+    # test_tanh_backward
+    total += 1
+    try:
+        test_tanh_backward()
+        passed += 1
+        print("  ✓ test_tanh_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_tanh_backward:", e)
+
+    # test_tanh_range
+    total += 1
+    try:
+        test_tanh_range()
+        passed += 1
+        print("  ✓ test_tanh_range")
+    except e:
+        failed += 1
+        print("  ✗ test_tanh_range:", e)
+
+    # test_softmax_basic_2d
+    total += 1
+    try:
+        test_softmax_basic_2d()
+        passed += 1
+        print("  ✓ test_softmax_basic_2d")
+    except e:
+        failed += 1
+        print("  ✗ test_softmax_basic_2d:", e)
+
+    # test_softmax_one_hot
+    total += 1
+    try:
+        test_softmax_one_hot()
+        passed += 1
+        print("  ✓ test_softmax_one_hot")
+    except e:
+        failed += 1
+        print("  ✗ test_softmax_one_hot:", e)
+
+    # test_softmax_sum_to_one
+    total += 1
+    try:
+        test_softmax_sum_to_one()
+        passed += 1
+        print("  ✓ test_softmax_sum_to_one")
+    except e:
+        failed += 1
+        print("  ✗ test_softmax_sum_to_one:", e)
+
+    # test_softmax_numerical_stability
+    total += 1
+    try:
+        test_softmax_numerical_stability()
+        passed += 1
+        print("  ✓ test_softmax_numerical_stability")
+    except e:
+        failed += 1
+        print("  ✗ test_softmax_numerical_stability:", e)
+
+    # test_softmax_backward
+    total += 1
+    try:
+        test_softmax_backward()
+        passed += 1
+        print("  ✓ test_softmax_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_softmax_backward:", e)
+
+    # test_gelu_basic
+    total += 1
+    try:
+        test_gelu_basic()
+        passed += 1
+        print("  ✓ test_gelu_basic")
+    except e:
+        failed += 1
+        print("  ✗ test_gelu_basic:", e)
+
+    # test_gelu_positive
+    total += 1
+    try:
+        test_gelu_positive()
+        passed += 1
+        print("  ✓ test_gelu_positive")
+    except e:
+        failed += 1
+        print("  ✗ test_gelu_positive:", e)
+
+    # test_gelu_shape
+    total += 1
+    try:
+        test_gelu_shape()
+        passed += 1
+        print("  ✓ test_gelu_shape")
+    except e:
+        failed += 1
+        print("  ✗ test_gelu_shape:", e)
+
+    # test_gelu_approximate
+    total += 1
+    try:
+        test_gelu_approximate()
+        passed += 1
+        print("  ✓ test_gelu_approximate")
+    except e:
+        failed += 1
+        print("  ✗ test_gelu_approximate:", e)
+
+    # test_gelu_exact
+    total += 1
+    try:
+        test_gelu_exact()
+        passed += 1
+        print("  ✓ test_gelu_exact")
+    except e:
+        failed += 1
+        print("  ✗ test_gelu_exact:", e)
+
+    # test_gelu_comparison
+    total += 1
+    try:
+        test_gelu_comparison()
+        passed += 1
+        print("  ✓ test_gelu_comparison")
+    except e:
+        failed += 1
+        print("  ✗ test_gelu_comparison:", e)
+
+    # test_gelu_float16
+    total += 1
+    try:
+        test_gelu_float16()
+        passed += 1
+        print("  ✓ test_gelu_float16")
+    except e:
+        failed += 1
+        print("  ✗ test_gelu_float16:", e)
+
+    # test_gelu_backward_gradient
+    total += 1
+    try:
+        test_gelu_backward_gradient()
+        passed += 1
+        print("  ✓ test_gelu_backward_gradient")
+    except e:
+        failed += 1
+        print("  ✗ test_gelu_backward_gradient:", e)
+
+    # test_swish_basic
+    total += 1
+    try:
+        test_swish_basic()
+        passed += 1
+        print("  ✓ test_swish_basic")
+    except e:
+        failed += 1
+        print("  ✗ test_swish_basic:", e)
+
+    # test_swish_positive
+    total += 1
+    try:
+        test_swish_positive()
+        passed += 1
+        print("  ✓ test_swish_positive")
+    except e:
+        failed += 1
+        print("  ✗ test_swish_positive:", e)
+
+    # test_swish_backward_gradient
+    total += 1
+    try:
+        test_swish_backward_gradient()
+        passed += 1
+        print("  ✓ test_swish_backward_gradient")
+    except e:
+        failed += 1
+        print("  ✗ test_swish_backward_gradient:", e)
+
+    # test_mish_basic
+    total += 1
+    try:
+        test_mish_basic()
+        passed += 1
+        print("  ✓ test_mish_basic")
+    except e:
+        failed += 1
+        print("  ✗ test_mish_basic:", e)
+
+    # test_mish_shape
+    total += 1
+    try:
+        test_mish_shape()
+        passed += 1
+        print("  ✓ test_mish_shape")
+    except e:
+        failed += 1
+        print("  ✗ test_mish_shape:", e)
+
+    # test_mish_backward_gradient
+    total += 1
+    try:
+        test_mish_backward_gradient()
+        passed += 1
+        print("  ✓ test_mish_backward_gradient")
+    except e:
+        failed += 1
+        print("  ✗ test_mish_backward_gradient:", e)
+
+    # test_elu_basic
+    total += 1
+    try:
+        test_elu_basic()
+        passed += 1
+        print("  ✓ test_elu_basic")
+    except e:
+        failed += 1
+        print("  ✗ test_elu_basic:", e)
+
+    # test_elu_backward
+    total += 1
+    try:
+        test_elu_backward()
+        passed += 1
+        print("  ✓ test_elu_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_elu_backward:", e)
+
+    # test_integration_forward_backward
+    total += 1
+    try:
+        test_integration_forward_backward()
+        passed += 1
+        print("  ✓ test_integration_forward_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_integration_forward_backward:", e)
+
+    # Summary
+    print("\n" + "=" * 70)
+    print("Results:", passed, "/", total, "passed,", failed, "failed")
+    print("=" * 70)
+
+    if failed > 0:
+        raise Error("Tests failed")

@@ -215,21 +215,33 @@ fn check_gradient(
     # Compute analytical gradient
     var analytical = backward_fn(grad_output, x)
 
-    # Compute numerical gradient
-    # Note: For functions with grad_output, we need to wrap the forward function
-    # to include the grad_output multiplication
-    fn scaled_forward(inp: ExTensor) raises -> ExTensor:
-        var out = forward_fn(inp)
-        # For simplicity, assume scalar output or sum of outputs
-        var result: Float64 = 0.0
-        for i in range(out._numel):
-            result += out._get_float64(i) * grad_output._get_float64(i)
-        var scalar_out = ExTensor(List[Int](), out._dtype)
-        scalar_out._set_float64(0, result)
-        return scalar_out
+    # Compute numerical gradient for scalar loss
+    # For non-scalar outputs, we compute gradient of: loss = sum(forward(x) * grad_output)
+    # We'll approximate this by perturbing x and seeing how the scalar loss changes
+    var grad = zeros_like(x)
 
-    var numerical = compute_numerical_gradient(scaled_forward, x, epsilon)
+    for i in range(x._numel):
+        # Forward perturbation
+        var x_plus = x
+        var old_val = x._get_float64(i)
+        x_plus._set_float64(i, old_val + epsilon)
+        var out_plus = forward_fn(x_plus)
+        var loss_plus: Float64 = 0.0
+        for j in range(out_plus._numel):
+            loss_plus += out_plus._get_float64(j) * grad_output._get_float64(j)
+
+        # Backward perturbation
+        var x_minus = x
+        x_minus._set_float64(i, old_val - epsilon)
+        var out_minus = forward_fn(x_minus)
+        var loss_minus: Float64 = 0.0
+        for j in range(out_minus._numel):
+            loss_minus += out_minus._get_float64(j) * grad_output._get_float64(j)
+
+        # Central difference
+        var numerical_grad = (loss_plus - loss_minus) / (2.0 * epsilon)
+        grad._set_float64(i, numerical_grad)
 
     # Compare
-    assert_gradients_close(analytical, numerical, rtol, atol,
+    assert_gradients_close(analytical, grad, rtol, atol,
                           "Gradient check failed for " + String(x._dtype))

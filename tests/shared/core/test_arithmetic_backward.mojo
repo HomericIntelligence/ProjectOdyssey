@@ -861,3 +861,257 @@ fn test_divide_backward_broadcast_gradient() raises:
     var grad_output = ones_like(output)
 
     check_gradient(forward, backward, b, grad_output, rtol=1e-3, atol=1e-6)
+
+
+# ============================================================================
+# Main Test Runner
+# ============================================================================
+
+
+fn main() raises:
+    """Run all tests in this file."""
+    var total = 0
+    var passed = 0
+    var failed = 0
+
+    print("\n" + "=" * 70)
+    print("Running tests from: test_arithmetic_backward.mojo")
+    print("=" * 70 + "\n")
+
+    # test_add_backward
+    total += 1
+    try:
+        test_add_backward()
+        passed += 1
+        print("  ✓ test_add_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_add_backward:", e)
+
+    # test_add_scalar_backward
+    total += 1
+    try:
+        test_add_scalar_backward()
+        passed += 1
+        print("  ✓ test_add_scalar_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_add_scalar_backward:", e)
+
+    # test_subtract_backward
+    total += 1
+    try:
+        test_subtract_backward()
+        passed += 1
+        print("  ✓ test_subtract_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_subtract_backward:", e)
+
+    # test_subtract_scalar_backward
+    total += 1
+    try:
+        test_subtract_scalar_backward()
+        passed += 1
+        print("  ✓ test_subtract_scalar_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_subtract_scalar_backward:", e)
+
+    # test_multiply_backward
+    total += 1
+    try:
+        test_multiply_backward()
+        passed += 1
+        print("  ✓ test_multiply_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_multiply_backward:", e)
+
+    # test_multiply_scalar_backward
+    total += 1
+    try:
+        test_multiply_scalar_backward()
+        passed += 1
+        print("  ✓ test_multiply_scalar_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_multiply_scalar_backward:", e)
+
+    # test_divide_backward
+    total += 1
+    try:
+        test_divide_backward()
+        passed += 1
+        print("  ✓ test_divide_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_divide_backward:", e)
+
+    # test_divide_scalar_backward
+    total += 1
+    try:
+        test_divide_scalar_backward()
+        passed += 1
+        print("  ✓ test_divide_scalar_backward")
+    except e:
+        failed += 1
+        print("  ✗ test_divide_scalar_backward:", e)
+
+    # test_add_broadcast
+    total += 1
+    try:
+        test_add_broadcast()
+        passed += 1
+        print("  ✓ test_add_broadcast")
+    except e:
+        failed += 1
+        print("  ✗ test_add_broadcast:", e)
+
+    # test_subtract_broadcast
+    total += 1
+    try:
+        test_subtract_broadcast()
+        passed += 1
+        print("  ✓ test_subtract_broadcast")
+    except e:
+        failed += 1
+        print("  ✗ test_subtract_broadcast:", e)
+
+    # test_multiply_broadcast
+    total += 1
+    try:
+        test_multiply_broadcast()
+        passed += 1
+        print("  ✓ test_multiply_broadcast")
+    except e:
+        failed += 1
+        print("  ✗ test_multiply_broadcast:", e)
+
+    # test_divide_broadcast
+    total += 1
+    try:
+        test_divide_broadcast()
+        passed += 1
+        print("  ✓ test_divide_broadcast")
+    except e:
+        failed += 1
+        print("  ✗ test_divide_broadcast:", e)
+
+    # test_add_backward_gradient
+    total += 1
+    try:
+        test_add_backward_gradient()
+        passed += 1
+        print("  ✓ test_add_backward_gradient")
+    except e:
+        failed += 1
+        print("  ✗ test_add_backward_gradient:", e)
+
+    # test_subtract_backward_gradient
+    total += 1
+    try:
+        test_subtract_backward_gradient()
+        passed += 1
+        print("  ✓ test_subtract_backward_gradient")
+    except e:
+        failed += 1
+        print("  ✗ test_subtract_backward_gradient:", e)
+
+    # test_multiply_backward_gradient
+    total += 1
+    try:
+        test_multiply_backward_gradient()
+        passed += 1
+        print("  ✓ test_multiply_backward_gradient")
+    except e:
+        failed += 1
+        print("  ✗ test_multiply_backward_gradient:", e)
+
+    # test_divide_backward_gradient
+    total += 1
+    try:
+        test_divide_backward_gradient()
+        passed += 1
+        print("  ✓ test_divide_backward_gradient")
+    except e:
+        failed += 1
+        print("  ✗ test_divide_backward_gradient:", e)
+
+    # test_add_backward_b_gradient
+    total += 1
+    try:
+        test_add_backward_b_gradient()
+        passed += 1
+        print("  ✓ test_add_backward_b_gradient")
+    except e:
+        failed += 1
+        print("  ✗ test_add_backward_b_gradient:", e)
+
+    # test_subtract_backward_b_gradient
+    total += 1
+    try:
+        test_subtract_backward_b_gradient()
+        passed += 1
+        print("  ✓ test_subtract_backward_b_gradient")
+    except e:
+        failed += 1
+        print("  ✗ test_subtract_backward_b_gradient:", e)
+
+    # test_multiply_backward_b_gradient
+    total += 1
+    try:
+        test_multiply_backward_b_gradient()
+        passed += 1
+        print("  ✓ test_multiply_backward_b_gradient")
+    except e:
+        failed += 1
+        print("  ✗ test_multiply_backward_b_gradient:", e)
+
+    # test_divide_backward_b_gradient
+    total += 1
+    try:
+        test_divide_backward_b_gradient()
+        passed += 1
+        print("  ✓ test_divide_backward_b_gradient")
+    except e:
+        failed += 1
+        print("  ✗ test_divide_backward_b_gradient:", e)
+
+    # test_add_backward_broadcast_gradient
+    total += 1
+    try:
+        test_add_backward_broadcast_gradient()
+        passed += 1
+        print("  ✓ test_add_backward_broadcast_gradient")
+    except e:
+        failed += 1
+        print("  ✗ test_add_backward_broadcast_gradient:", e)
+
+    # test_multiply_backward_broadcast_gradient
+    total += 1
+    try:
+        test_multiply_backward_broadcast_gradient()
+        passed += 1
+        print("  ✓ test_multiply_backward_broadcast_gradient")
+    except e:
+        failed += 1
+        print("  ✗ test_multiply_backward_broadcast_gradient:", e)
+
+    # test_divide_backward_broadcast_gradient
+    total += 1
+    try:
+        test_divide_backward_broadcast_gradient()
+        passed += 1
+        print("  ✓ test_divide_backward_broadcast_gradient")
+    except e:
+        failed += 1
+        print("  ✗ test_divide_backward_broadcast_gradient:", e)
+
+    # Summary
+    print("\n" + "=" * 70)
+    print("Results:", passed, "/", total, "passed,", failed, "failed")
+    print("=" * 70)
+
+    if failed > 0:
+        raise Error("Tests failed")
