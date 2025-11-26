@@ -354,6 +354,83 @@ When reviewing or writing Mojo code:
 
 **Reference**: [Mojo Manual - Types](https://docs.modular.com/mojo/manual/types/) | [Value Ownership](https://docs.modular.com/mojo/manual/values/ownership/)
 
+### Mojo Compiler as Source of Truth
+
+**CRITICAL PRINCIPLE**: When there is ANY confusion or uncertainty about Mojo syntax, the Mojo compiler is the **single source of truth**.
+
+#### Why This Matters
+
+Documentation, issues, and even AI-generated code can be incorrect or outdated. The Mojo compiler is authoritative and will reject invalid syntax.
+
+#### Verification Process
+
+When uncertain about Mojo syntax:
+
+1. **Create a minimal test file** with the syntax in question
+2. **Run the Mojo compiler** (`mojo build` or `mojo test`)
+3. **Trust the compiler output** - if it compiles, the syntax is valid
+4. **Document the findings** if they contradict other sources
+
+#### Real-World Example: PR #1982
+
+**The Mistake**:
+- Issue #1968 claimed `out self` was "deprecated" in `__init__` methods
+- PR #1982 attempted to change FROM `out self` TO `mut self`
+- This would have introduced INCORRECT syntax
+
+**The Reality** (confirmed by compiler):
+```mojo
+# CORRECT for constructors
+fn __init__(out self, value: Int):
+    self.value = value
+
+# INCORRECT for constructors (would fail compilation)
+fn __init__(mut self, value: Int):  # ❌ Wrong!
+    self.value = value
+```
+
+**Mojo v0.25.7+ Convention**:
+
+- `out self` ✅ - Constructors (`__init__`) that create new instances
+- `mut self` - Methods that mutate existing instances
+- `read` (default) - Methods that read but don't mutate
+
+**The Fix**:
+
+- Tested with Mojo compiler: `out self` compiles successfully in `__init__`
+- Tested with Mojo compiler: `mut self` in `__init__` would fail
+- Closed PR #1982 and Issue #1968 as incorrect
+- Prevented introducing bugs into the codebase
+
+#### Best Practices
+
+1. **Always verify syntax** with the compiler before making PRs
+2. **Never trust documentation alone** - versions may be outdated
+3. **Test edge cases** - create minimal reproducible examples
+4. **Update documentation** when you find discrepancies
+5. **Use compiler errors** as learning opportunities
+
+#### Quick Compiler Verification
+
+```bash
+# Create test file
+cat > /tmp/test_syntax.mojo << 'EOF'
+struct TestStruct:
+    var value: Int
+
+    fn __init__(out self, value: Int):
+        self.value = value
+EOF
+
+# Verify syntax
+mojo build /tmp/test_syntax.mojo
+
+# If it compiles → syntax is valid
+# If it fails → compiler shows correct syntax
+```
+
+**Remember**: The compiler never lies. When in doubt, compile.
+
 ## Environment Setup
 
 This project uses Pixi for environment management:
@@ -784,7 +861,7 @@ Additional context
      --label "appropriate-label"
    ```
 
-#### Never Push Directly to Main
+### Never Push Directly to Main
 
 ❌ **NEVER DO THIS:**
 
