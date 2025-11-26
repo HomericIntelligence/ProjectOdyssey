@@ -120,7 +120,7 @@ fn test_large_dimension_count() raises:
     """Test tensor with many dimensions (10D)."""
     var shape = List[Int]()
     for i in range(10):
-        shape[i] = 2
+        shape.append(2)
     var t = zeros(shape, DType.float32)
 
     assert_dim(t, 10, "Should have 10 dimensions")
