@@ -242,7 +242,7 @@ struct Reshape(Transform, Copyable, Movable):
         # Calculate total elements in target shape
         var target_elements = 1
         for dim in self.target_shape:
-            target_elements *= dim[]
+            target_elements *= dim
 
         # Validate element count matches
         if target_elements != data.num_elements():
@@ -279,7 +279,7 @@ struct Resize(Transform, Copyable, Movable):
     var interpolation: String
 
     fn __init__(
-        mut self, size: Tuple[Int, Int], interpolation: String = "bilinear"
+        out self, size: Tuple[Int, Int], interpolation: String = "bilinear"
     ):
         """Create resize transform.
 
@@ -620,7 +620,7 @@ struct RandomRotation(Transform, Copyable, Movable):
     var fill_value: Float64
 
     fn __init__(
-        mut self, degrees: Tuple[Float64, Float64], fill_value: Float64 = 0.0
+        out self, degrees: Tuple[Float64, Float64], fill_value: Float64 = 0.0
     ):
         """Create random rotation transform.
 
@@ -723,7 +723,7 @@ struct RandomErasing(Transform, Copyable, Movable):
     var value: Float64  # Fill value (0 for black, can be random)
 
     fn __init__(
-        mut self,
+        out self,
         p: Float64 = 0.5,
         scale: Tuple[Float64, Float64] = (0.02, 0.33),
         ratio: Tuple[Float64, Float64] = (0.3, 3.3),

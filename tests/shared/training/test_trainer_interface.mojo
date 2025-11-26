@@ -39,13 +39,13 @@ fn test_trainer_interface_required_methods() raises:
 
     var trainer = MockTrainer()
 
-    Verify all required methods are callable
+    # Verify all required methods are callable
     _ = trainer.train(epochs=1)
     _ = trainer.validate()
     trainer.save_checkpoint("test.pt")
     trainer.load_checkpoint("test.pt")
 
-    Test passes if no errors raised
+    # Test passes if no errors raised
     assert_true(True)
 
 
@@ -70,11 +70,11 @@ fn test_trainer_train_signature() raises:
 
     var trainer = MockTrainer()
 
-    Train for 3 epochs
+    # Train for 3 epochs
     var results = trainer.train(epochs=3)
 
-    Verify return type contains train and val losses
-    Stub returns train_loss_0, train_loss_1, ... format
+    # Verify return type contains train and val losses
+    # Stub returns train_loss_0, train_loss_1, ... format
     assert_true("train_loss_0" in results)
     assert_true("val_loss_0" in results)
     assert_true("train_loss_2" in results)
@@ -95,10 +95,10 @@ fn test_trainer_validate_signature() raises:
 
     var trainer = MockTrainer()
 
-    Run validation
+    # Run validation
     var results = trainer.validate()
 
-    Verify return type contains loss and accuracy
+    # Verify return type contains loss and accuracy
     assert_true("loss" in results)
     assert_true("accuracy" in results)
 
@@ -118,11 +118,11 @@ fn test_trainer_checkpoint_path() raises:
 
     var trainer = MockTrainer()
 
-    Test save/load with different paths (no-op in stub but tests signature)
+    # Test save/load with different paths (no-op in stub but tests signature)
     trainer.save_checkpoint("checkpoints/model_epoch_10.pt")
     trainer.load_checkpoint("checkpoints/model_epoch_10.pt")
 
-    Test passes if no errors raised
+    # Test passes if no errors raised
     assert_true(True)
 
 
@@ -252,7 +252,8 @@ fn test_trainer_checkpoint_model_only() raises:
         - Useful for inference or transfer learning
     """
     # TODO(#34): Implement if model-only checkpointing is supported
-    This is a nice-to-have feature, may be deferred
+    # This is a nice-to-have feature, may be deferred
+    pass
 
 
 # ============================================================================
@@ -317,7 +318,8 @@ fn test_trainer_property_forward_backward_consistency() raises:
     the same loss used for backward pass.
     """
     # TODO(#34): Implement when Trainer is available
-    This tests internal consistency of the training loop
+    # This tests internal consistency of the training loop
+    pass
 
 
 fn test_trainer_property_batch_independence() raises:
@@ -327,7 +329,8 @@ fn test_trainer_property_batch_independence() raises:
     (within stochastic variance).
     """
     # TODO(#34): Implement when Trainer is available
-    This is a statistical property test
+    # This is a statistical property test
+    pass
 
 
 # ============================================================================
