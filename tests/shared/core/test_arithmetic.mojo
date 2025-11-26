@@ -142,7 +142,7 @@ fn test_add_backward() raises:
     var b = ones(shape, DType.float32)
     var grad_output = ones(shape, DType.float32)
 
-    var grads = add_backward(grad_output, a, b)
+    var grads = add_backward(grad_output, a.shape(), b.shape())
     var grad_a = grads.grad_a
     var grad_b = grads.grad_b
 
@@ -252,7 +252,7 @@ fn test_subtract_backward() raises:
     var b = ones(shape, DType.float32)
     var grad_output = ones(shape, DType.float32)
 
-    var grads = subtract_backward(grad_output, a, b)
+    var grads = subtract_backward(grad_output, a.shape(), b.shape())
     var grad_a = grads.grad_a
     var grad_b = grads.grad_b
 
