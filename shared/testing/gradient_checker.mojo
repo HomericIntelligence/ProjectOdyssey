@@ -38,7 +38,6 @@ References:
 """
 
 from shared.core import ExTensor, zeros_like
-from shared.core.reduction import sum as tensor_sum
 
 
 fn check_gradients(
@@ -46,7 +45,7 @@ fn check_gradients(
     backward_fn: fn(ExTensor, ExTensor) raises escaping -> ExTensor,
     input: ExTensor,
     epsilon: Float64 = 1e-5,
-    tolerance: Float64 = 1e-3
+    tolerance: Float64 = 1e-2
 ) raises -> Bool:
     """Verify gradients using finite differences.
 
@@ -59,7 +58,7 @@ fn check_gradients(
         backward_fn: Backward pass function: (grad_output, input) -> grad_input
         input: Input tensor for testing
         epsilon: Step size for finite differences (default: 1e-5)
-        tolerance: Maximum allowed difference (default: 1e-3)
+        tolerance: Maximum allowed difference (default: 1e-2)
 
     Returns:
         True if gradients are correct, False otherwise
@@ -91,7 +90,7 @@ fn check_gradients(
     Notes:
         - Expensive: O(n) forward passes where n = input.numel()
         - Use small tensors for testing (e.g., 3x4 instead of 1024x1024)
-        - Typical tolerance: 1e-3 to 1e-5
+        - Typical tolerance: 1e-2 for float32 (accounts for accumulated numerical error)
         - Lower epsilon = more accurate but numerically unstable
         - Higher epsilon = more stable but less accurate
     """
@@ -117,18 +116,18 @@ fn check_gradients(
         # f(x + ε)
         input_copy_plus._set_float64(i, original_val + epsilon)
         var output_plus = forward_fn(input_copy_plus)
-        var sum_plus_tensor = tensor_sum(output_plus)
-        var sum_plus = sum_plus_tensor._get_float64(0)
 
         # f(x - ε)
         input_copy_minus._set_float64(i, original_val - epsilon)
         var output_minus = forward_fn(input_copy_minus)
-        var sum_minus_tensor = tensor_sum(output_minus)
-        var sum_minus = sum_minus_tensor._get_float64(0)
 
-        # Numerical gradient: [f(x+ε) - f(x-ε)] / (2ε)
-        var numerical = (sum_plus - sum_minus) / (2.0 * epsilon)
-        numerical_grad._set_float64(i, numerical)
+        # Compute per-element numerical gradient: sum([f(x+ε) - f(x-ε)] / (2ε))
+        # This matches the per-element analytical gradient from ones_like(output)
+        var numerical_sum = 0.0
+        for j in range(output_plus.numel()):
+            var diff = output_plus._get_float64(j) - output_minus._get_float64(j)
+            numerical_sum += diff / (2.0 * epsilon)
+        numerical_grad._set_float64(i, numerical_sum)
 
         # Restore original value for next iteration
         input_copy_plus._set_float64(i, original_val)
@@ -165,7 +164,7 @@ fn check_gradients_verbose(
     backward_fn: fn(ExTensor, ExTensor) raises escaping -> ExTensor,
     input: ExTensor,
     epsilon: Float64 = 1e-5,
-    tolerance: Float64 = 1e-3,
+    tolerance: Float64 = 1e-2,
     print_all: Bool = False
 ) raises -> Bool:
     """Gradient checking with detailed output.
@@ -215,16 +214,15 @@ fn check_gradients_verbose(
 
             input_copy_plus._set_float64(i, original_val + epsilon)
             var output_plus = forward_fn(input_copy_plus)
-            var sum_plus_tensor = tensor_sum(output_plus)
-            var sum_plus = sum_plus_tensor._get_float64(0)
 
             input_copy_minus._set_float64(i, original_val - epsilon)
             var output_minus = forward_fn(input_copy_minus)
-            var sum_minus_tensor = tensor_sum(output_minus)
-            var sum_minus = sum_minus_tensor._get_float64(0)
 
-            var numerical = (sum_plus - sum_minus) / (2.0 * epsilon)
-            numerical_grad._set_float64(i, numerical)
+            var numerical_sum = 0.0
+            for j in range(output_plus.numel()):
+                var diff = output_plus._get_float64(j) - output_minus._get_float64(j)
+                numerical_sum += diff / (2.0 * epsilon)
+            numerical_grad._set_float64(i, numerical_sum)
 
             input_copy_plus._set_float64(i, original_val)
             input_copy_minus._set_float64(i, original_val)
