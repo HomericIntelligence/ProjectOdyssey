@@ -74,8 +74,8 @@ fn split_words(text: String) raises -> List[String]:
     # Filter out empty strings that may result from multiple spaces
     var words = List[String]()
     for i in range(len(parts)):
-        if len(parts[i]) > 0:
-            words.append(parts[i])
+        if len(String(parts[i])) > 0:
+            words.append(String(parts[i]))
 
     return words^
 
@@ -234,17 +234,17 @@ struct RandomInsertion(TextTransform, Copyable, Movable):
     var n: Int  # Number of words to insert
     var vocabulary: List[String]  # Words to insert from
 
-    fn __init__(out self, p: Float64 = 0.1, n: Int = 1, var vocabulary: List[String]):
+    fn __init__(out self, var vocabulary: List[String], p: Float64 = 0.1, n: Int = 1):
         """Create random insertion transform.
 
         Args:
+            vocabulary: List of words to choose from for insertion.
             p: Probability of performing insertion (0.0 to 1.0).
             n: Number of words to insert.
-            vocabulary: List of words to choose from for insertion.
         """
+        self.vocabulary = vocabulary^
         self.p = p
         self.n = n
-        self.vocabulary = vocabulary^
 
     fn __call__(self, text: String) raises -> String:
         """Insert random words from vocabulary into text.
@@ -305,15 +305,15 @@ struct RandomSynonymReplacement(TextTransform, Copyable, Movable):
     var p: Float64  # Probability of replacing each word
     var synonyms: Dict[String, List[String]]  # Synonym dictionary
 
-    fn __init__(out self, p: Float64 = 0.2, var synonyms: Dict[String, List[String]]):
+    fn __init__(out self, var synonyms: Dict[String, List[String]], p: Float64 = 0.2):
         """Create random synonym replacement transform.
 
         Args:
-            p: Probability of replacing each word (0.0 to 1.0).
             synonyms: Dictionary mapping words to lists of synonyms.
+            p: Probability of replacing each word (0.0 to 1.0).
         """
-        self.p = p
         self.synonyms = synonyms^
+        self.p = p
 
     fn __call__(self, text: String) raises -> String:
         """Replace random words with synonyms.

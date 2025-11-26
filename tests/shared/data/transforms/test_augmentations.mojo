@@ -18,6 +18,9 @@ from shared.data.transforms import (
 )
 from shared.core.extensor import ExTensor
 
+# Type alias for compatibility
+alias Tensor = ExTensor
+
 
 # ============================================================================
 # Random Augmentation Tests

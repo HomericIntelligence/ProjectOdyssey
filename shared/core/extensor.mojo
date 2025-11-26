@@ -211,6 +211,38 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
         self.__init__(shape, DType.float64)
         self._data.bitcast[Float64]()[] = value
 
+    fn __init__(out self, var data: List[Float32]) raises:
+        """Create 1D tensor from List[Float32].
+
+        Args:
+            data: List of Float32 values
+
+        Example:
+            var values = List[Float32](1.0, 2.0, 3.0)
+            var tensor = ExTensor(values)
+        """
+        var shape = List[Int]()
+        shape.append(len(data))
+        self.__init__(shape, DType.float32)
+        for i in range(len(data)):
+            self._set_float32(i, data[i])
+
+    fn __init__(out self, var data: List[Int]) raises:
+        """Create 1D tensor from List[Int].
+
+        Args:
+            data: List of Int values
+
+        Example:
+            var values = List[Int](1, 2, 3)
+            var tensor = ExTensor(values)
+        """
+        var shape = List[Int]()
+        shape.append(len(data))
+        self.__init__(shape, DType.int64)
+        for i in range(len(data)):
+            self._data.bitcast[Int64]()[i] = Int64(data[i])
+
     fn __copyinit__(out self, existing: Self):
         """Copy constructor - creates shared ownership with reference counting.
 

@@ -34,7 +34,7 @@ struct MockTrainer(Copyable, Movable):
     var epoch_count: Int
     var should_fail: Bool
 
-    fn __init__(mut self):
+    fn __init__(out self):
         """Initialize mock trainer."""
         self.epoch_count = 0
         self.should_fail = False
