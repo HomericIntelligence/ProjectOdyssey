@@ -72,11 +72,19 @@ fn test_relu_mixed_inputs() raises:
     shape.append(4)
 
     var input = zeros(shape, DType.float32)
-    # Set some positive, some negative
+    # Set some positive, some negative (avoid 0.0 at ReLU discontinuity)
     input._set_float64(0, 1.0)
     input._set_float64(1, -1.0)
     input._set_float64(2, 2.0)
     input._set_float64(3, -2.0)
+    input._set_float64(4, 1.5)
+    input._set_float64(5, -1.5)
+    input._set_float64(6, 0.5)
+    input._set_float64(7, -0.5)
+    input._set_float64(8, 3.0)
+    input._set_float64(9, -3.0)
+    input._set_float64(10, 0.1)
+    input._set_float64(11, -0.1)
 
     fn forward(x: ExTensor) raises escaping -> ExTensor:
         return relu(x)

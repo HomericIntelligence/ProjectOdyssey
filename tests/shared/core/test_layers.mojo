@@ -345,11 +345,11 @@ fn test_tanh_range() raises:
     # Apply tanh
     var output = tanh(input)
 
-    # All outputs should be in (-1, 1)
+    # All outputs should be in [-1, 1] (inclusive due to FP precision)
     for i in range(5):
         var val = output._data.bitcast[Float32]()[i]
-        assert_true(Float32(-1.0) < val, "Value must be greater than -1")
-        assert_true(val < Float32(1.0), "Value must be less than 1")
+        assert_true(Float32(-1.0) <= val, "Value must be >= -1")
+        assert_true(val <= Float32(1.0), "Value must be <= 1")
 
     # Check tanh(0) = 0.0
     assert_almost_equal(output._data.bitcast[Float32]()[2], 0.0, tolerance=1e-6)

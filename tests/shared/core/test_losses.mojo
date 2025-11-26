@@ -24,6 +24,7 @@ fn test_binary_cross_entropy_perfect_prediction() raises:
     print("Testing BCE with perfect predictions...")
 
     var shape = List[Int]()
+    shape.append(4)
     var predictions = ExTensor(shape, DType.float32)
     var targets = ExTensor(shape, DType.float32)
 
@@ -51,6 +52,7 @@ fn test_binary_cross_entropy_worst_prediction() raises:
     print("Testing BCE with worst predictions...")
 
     var shape = List[Int]()
+    shape.append(4)
     var predictions = ExTensor(shape, DType.float32)
     var targets = ExTensor(shape, DType.float32)
 
@@ -79,6 +81,7 @@ fn test_binary_cross_entropy_gradient_shape() raises:
     print("Testing BCE gradient shape...")
 
     var shape = List[Int]()
+    shape.append(3)
     var predictions = ExTensor(shape, DType.float32)
     var targets = ExTensor(shape, DType.float32)
 
@@ -107,6 +110,7 @@ fn test_mean_squared_error_zero_loss() raises:
     print("Testing MSE with zero loss...")
 
     var shape = List[Int]()
+    shape.append(5)
     var predictions = ExTensor(shape, DType.float32)
     var targets = ExTensor(shape, DType.float32)
 
@@ -134,6 +138,7 @@ fn test_mean_squared_error_known_values() raises:
     print("Testing MSE with known values...")
 
     var shape = List[Int]()
+    shape.append(3)
     var predictions = ExTensor(shape, DType.float32)
     var targets = ExTensor(shape, DType.float32)
 
@@ -171,6 +176,7 @@ fn test_mean_squared_error_gradient() raises:
     print("Testing MSE gradient...")
 
     var shape = List[Int]()
+    shape.append(3)
     var predictions = ExTensor(shape, DType.float32)
     var targets = ExTensor(shape, DType.float32)
 
@@ -216,6 +222,7 @@ fn test_loss_numerical_stability() raises:
     print("Testing loss function numerical stability...")
 
     var shape = List[Int]()
+    shape.append(2)
     var predictions = ExTensor(shape, DType.float32)
     var targets = ExTensor(shape, DType.float32)
 
@@ -244,6 +251,7 @@ fn test_binary_cross_entropy_backward_gradient() raises:
     print("Testing BCE backward gradient checking...")
 
     var shape = List[Int]()
+    shape.append(4)
     var predictions = zeros(shape, DType.float32)
     var targets = zeros(shape, DType.float32)
 
@@ -280,6 +288,7 @@ fn test_mean_squared_error_backward_gradient() raises:
     print("Testing MSE backward gradient checking...")
 
     var shape = List[Int]()
+    shape.append(5)
     var predictions = zeros(shape, DType.float32)
     var targets = zeros(shape, DType.float32)
 
