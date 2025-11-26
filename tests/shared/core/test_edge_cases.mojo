@@ -622,8 +622,8 @@ fn test_bool_dtype_operations() raises:
     """Test operations on bool dtype tensors."""
     var shape = List[Int]()
     shape.append(5)
-    vara = ones(shape, DType.bool)  # All True
-    varb = zeros(shape, DType.bool)  # All False
+    var a = ones(shape, DType.bool)  # All True
+    var b = zeros(shape, DType.bool)  # All False
 
     # TODO: Test bool-specific operations (and, or, xor, not)
     # varc = bitwise_and(a, b)  # Should be all False
