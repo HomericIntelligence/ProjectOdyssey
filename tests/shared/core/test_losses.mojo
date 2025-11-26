@@ -230,7 +230,7 @@ fn test_loss_numerical_stability() raises:
     var loss = binary_cross_entropy(predictions, targets)
     var avg_loss = mean(loss)
 
-    varloss_val = avg_loss._get_float64(0)
+    var loss_val = avg_loss._get_float64(0)
     print("  BCE with extreme values:", loss_val)
 
     # Should be finite (not NaN or Inf)
