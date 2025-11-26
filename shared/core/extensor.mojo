@@ -33,7 +33,8 @@ Reference: https://data-apis.org/array-api/latest/API_specification/index.html
 from collections import List
 from memory import UnsafePointer, memset_zero, alloc
 from sys.info import simdwidthof
-from math import ceildiv
+from math import ceildiv, sqrt, log, cos, sin
+from random import random_float64
 
 # Memory safety constants
 alias MAX_TENSOR_BYTES: Int = 2_000_000_000  # 2 GB max per tensor
@@ -537,6 +538,60 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
         elif self._dtype == DType.float64:
             var ptr = (self._data + offset).bitcast[Float64]()
             ptr[] = value
+
+    fn _get_float32(self, index: Int) -> Float32:
+        """Internal: Get value at index as Float32 (assumes float-compatible dtype).
+
+        Args:
+            index: Flat index to retrieve value from
+
+        Returns:
+            Value at index as Float32
+
+        Note:
+            For Float64 and integer types, value is cast to Float32.
+            For Float16, value is upcast to Float32.
+        """
+        var dtype_size = self._get_dtype_size()
+        var offset = index * dtype_size
+
+        if self._dtype == DType.float16:
+            var ptr = (self._data + offset).bitcast[Float16]()
+            return ptr[].cast[DType.float32]()
+        elif self._dtype == DType.float32:
+            var ptr = (self._data + offset).bitcast[Float32]()
+            return ptr[]
+        elif self._dtype == DType.float64:
+            var ptr = (self._data + offset).bitcast[Float64]()
+            return ptr[].cast[DType.float32]()
+        else:
+            # For integer types, cast to float32
+            return Float32(self._get_int64(index))
+
+    fn _set_float32(self, index: Int, value: Float32):
+        """Internal: Set value at index as Float32 (assumes float-compatible dtype).
+
+        Args:
+            index: Flat index to set value at
+            value: Float32 value to store
+
+        Note:
+            For Float16, value is downcast with potential precision loss.
+            For Float64, value is upcast to Float64.
+            For integer types, value is truncated to integer.
+        """
+        var dtype_size = self._get_dtype_size()
+        var offset = index * dtype_size
+
+        if self._dtype == DType.float16:
+            var ptr = (self._data + offset).bitcast[Float16]()
+            ptr[] = value.cast[DType.float16]()
+        elif self._dtype == DType.float32:
+            var ptr = (self._data + offset).bitcast[Float32]()
+            ptr[] = value
+        elif self._dtype == DType.float64:
+            var ptr = (self._data + offset).bitcast[Float64]()
+            ptr[] = value.cast[DType.float64]()
 
     fn _get_int64(self, index: Int) -> Int64:
         """Internal: Get value at index as Int64 (assumes integer-compatible dtype).
@@ -2044,6 +2099,90 @@ fn full_like(tensor: ExTensor, fill_value: Float64) raises -> ExTensor:
     var shape = tensor.shape()
     var dtype = tensor.dtype()
     return full(shape, fill_value, dtype)
+
+
+fn randn(shape: List[Int], dtype: DType, seed: Int = 0) raises -> ExTensor:
+    """Create tensor filled with random values from standard normal distribution.
+
+    Uses Box-Muller transform to generate normally distributed random values
+    from uniform random values. Generates values with mean=0 and std=1.
+
+    Args:
+        `shape`: The shape of the output tensor
+        `dtype`: The data type of tensor elements (should be floating-point)
+        `seed`: Random seed for reproducibility (default: 0 uses system randomness)
+
+    Returns:
+        A new ExTensor filled with random values from N(0, 1)
+
+    Raises:
+        Error: If dtype is not a floating-point type
+
+    Examples:
+        var t = randn(List[Int](3, 4), DType.float32)
+        # Creates 3x4 tensor with values from N(0, 1)
+
+        var t2 = randn(List[Int](100, 100), DType.float32, seed=42)
+        # Reproducible random tensor with seed=42
+
+    Note:
+        For integer dtypes, values are generated as floats then truncated.
+        Box-Muller transform generates pairs of independent normal values.
+    """
+    # Verify floating-point dtype (best practice)
+    if not (
+        dtype == DType.float16
+        or dtype == DType.float32
+        or dtype == DType.float64
+    ):
+        print(
+            "Warning: randn() is designed for floating-point types, got",
+            str(dtype),
+        )
+
+    var tensor = ExTensor(shape, dtype)
+
+    # Box-Muller transform: generates pairs of independent N(0,1) values
+    # from pairs of uniform random values
+    var i = 0
+    while i < tensor.numel():
+        # Generate two uniform random values in (0, 1]
+        var u1 = random_float64()
+        var u2 = random_float64()
+
+        # Ensure u1 is not zero (would cause log(0))
+        if u1 < 1e-10:
+            u1 = 1e-10
+
+        # Box-Muller transform
+        var magnitude = sqrt(-2.0 * log(u1))
+        var angle = 2.0 * 3.14159265358979323846 * u2
+
+        # Generate two independent normal values
+        var z0 = magnitude * cos(angle)
+        var z1 = magnitude * sin(angle)
+
+        # Store first value
+        if dtype == DType.float16 or dtype == DType.float32 or dtype == DType.float64:
+            tensor._set_float64(i, z0)
+        else:
+            tensor._set_int64(i, Int(z0))
+
+        i += 1
+
+        # Store second value if there's room
+        if i < tensor.numel():
+            if (
+                dtype == DType.float16
+                or dtype == DType.float32
+                or dtype == DType.float64
+            ):
+                tensor._set_float64(i, z1)
+            else:
+                tensor._set_int64(i, Int(z1))
+            i += 1
+
+    return tensor^
 
 
 fn calculate_max_batch_size(
