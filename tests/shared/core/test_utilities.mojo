@@ -99,7 +99,7 @@ fn test_zeros_like_values() raises:
 
     # Check all values are 0
     for i in range(result.numel()):
-        varval = result._get_float64(i)
+        var val = result._get_float64(i)
         if val != 0.0:
             raise Error("zeros_like should fill with 0.0")
 
