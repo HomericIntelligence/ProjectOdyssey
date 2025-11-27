@@ -390,9 +390,9 @@ fn _reduce_broadcast_dims(grad: ExTensor, original_shape: List[Int]) raises -> E
 
     # Now handle dimensions that were size 1 and got broadcast
     # Example: (3, 1, 5) → (3, 4, 5), sum over axis 1 keeping dims
-    for i in range(min(orig_ndim, grad_ndim)):
-        var dim_idx = i if orig_ndim < grad_ndim else i + (grad_ndim - orig_ndim)
-        if i < orig_ndim and original_shape[i] == 1 and i < len(result.shape()) and result.shape()[i] > 1:
+    # After reducing prepended dims, result has same ndim as original_shape
+    for i in range(orig_ndim):
+        if original_shape[i] == 1 and i < len(result.shape()) and result.shape()[i] > 1:
             result = sum(result, axis=i, keepdims=True)
 
     return result
