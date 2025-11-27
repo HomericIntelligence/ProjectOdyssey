@@ -152,21 +152,20 @@ fn assert_gradients_close(
             abs_diff = -(a - n)
         else:
             abs_diff = a - n
-        var tolerance = atol + rtol * (n if n >= 0.0 else -n)
+
+        # Use max(|a|, |n|) for relative tolerance to handle near-zero gradients
+        var abs_a = a if a >= 0.0 else -a
+        var abs_n = n if n >= 0.0 else -n
+        var max_abs = abs_a if abs_a > abs_n else abs_n
+        var tolerance = atol + rtol * max_abs
 
         if abs_diff > max_diff:
             max_diff = abs_diff
             worst_idx = i
 
-        # Compute relative difference for reporting
-        var abs_n: Float64
-        if n < 0:
-            abs_n = -n
-        else:
-            abs_n = n
-
-        if abs_n > 1e-10:
-            var rel_diff = abs_diff / abs_n
+        # Compute relative difference for reporting (using max_abs from above)
+        if max_abs > 1e-10:
+            var rel_diff = abs_diff / max_abs
             if rel_diff > max_rel_diff:
                 max_rel_diff = rel_diff
 
@@ -202,7 +201,7 @@ fn check_gradient(
     backward_fn: fn(ExTensor, ExTensor) raises escaping -> ExTensor,
     x: ExTensor,
     grad_output: ExTensor,
-    epsilon: Float64 = 1e-5,
+    epsilon: Float64 = 0.0,  # Auto-select based on dtype if 0.0
     rtol: Float64 = 1e-3,
     atol: Float64 = 1e-6
 ) raises:
@@ -216,7 +215,7 @@ fn check_gradient(
         backward_fn: Backward pass function (takes grad_output and x)
         x: Input tensor
         grad_output: Gradient from upstream (typically ones_like(output))
-        epsilon: Perturbation size for finite differences
+        epsilon: Perturbation size for finite differences (0.0 = auto-select)
         rtol: Relative tolerance
         atol: Absolute tolerance
 
@@ -237,6 +236,25 @@ fn check_gradient(
             var grad_out = ones_like(relu(x))
             check_gradient(forward, backward_wrapper, x, grad_out)
     """
+    # Auto-select epsilon and atol based on dtype if not specified
+    var eps = epsilon
+    var auto_atol = atol
+    if eps == 0.0:
+        # Use sqrt(machine_epsilon) for numerical stability
+        # Float32: machine eps ~1.2e-7, sqrt ~3.5e-4, use 1e-4
+        # Float64: machine eps ~2.2e-16, sqrt ~1.5e-8, use 1e-7
+        if x._dtype == DType.float32:
+            eps = 1e-4
+            # For near-zero gradients, numerical error is O(eps), so set atol >= eps
+            if atol < 1e-4:  # If atol is too small for eps=1e-4
+                auto_atol = 1e-4
+        elif x._dtype == DType.float64:
+            eps = 1e-7
+            if atol < 1e-7:  # If atol is too small for eps=1e-7
+                auto_atol = 1e-7
+        else:
+            eps = 1e-5  # Default for other types
+
     # Compute analytical gradient
     var analytical = backward_fn(grad_output, x)
 
@@ -250,7 +268,7 @@ fn check_gradient(
         # (ExTensor.__copyinit__ creates shallow copies with shared data)
         var x_plus = _deep_copy(x)
         var old_val = x._get_float64(i)
-        x_plus._set_float64(i, old_val + epsilon)
+        x_plus._set_float64(i, old_val + eps)
         var out_plus = forward_fn(x_plus)
         var loss_plus: Float64 = 0.0
         for j in range(out_plus._numel):
@@ -258,16 +276,16 @@ fn check_gradient(
 
         # Backward perturbation
         var x_minus = _deep_copy(x)
-        x_minus._set_float64(i, old_val - epsilon)
+        x_minus._set_float64(i, old_val - eps)
         var out_minus = forward_fn(x_minus)
         var loss_minus: Float64 = 0.0
         for j in range(out_minus._numel):
             loss_minus += out_minus._get_float64(j) * grad_output._get_float64(j)
 
         # Central difference
-        var numerical_grad = (loss_plus - loss_minus) / (2.0 * epsilon)
+        var numerical_grad = (loss_plus - loss_minus) / (2.0 * eps)
         grad._set_float64(i, numerical_grad)
 
     # Compare
-    assert_gradients_close(analytical, grad, rtol, atol,
+    assert_gradients_close(analytical, grad, rtol, auto_atol,
                           "Gradient check failed for " + String(x._dtype))

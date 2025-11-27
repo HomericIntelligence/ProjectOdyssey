@@ -406,8 +406,8 @@ fn matmul_backward(grad_output: ExTensor, a: ExTensor, b: ExTensor) raises -> Gr
                 grad_a._set_float64(i * k + j, grad_val * b_val)
 
         # grad_b: A^T @ grad_output
-        var b_t = transpose(a)  # Transpose A to get (k, m)
-        var grad_b = matmul(b_t, grad_output)  # (k, m) @ (m,) -> (k,)
+        var a_t = transpose(a)  # Transpose A to get (k, m)
+        var grad_b = matmul(a_t, grad_output)  # (k, m) @ (m,) -> (k,)
 
         return GradientPair(grad_a, grad_b)
 
