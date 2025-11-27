@@ -81,6 +81,60 @@ See [CLAUDE.md](../../CLAUDE.md#documentation-rules) for complete documentation 
 See [mojo-language-review-specialist.md](./mojo-language-review-specialist.md) for comprehensive guidelines and
 [mojo-test-patterns.md](../../agents/guides/mojo-test-patterns.md) for additional patterns.
 
+### Critical Mistakes to Avoid
+
+**From 64+ test failures (PRs #2037-#2046)** - See [notes/review/mojo-test-failure-learnings.md](../../notes/review/mojo-test-failure-learnings.md):
+
+1. **❌ NEVER pass temporary expressions to functions**
+
+   ```mojo
+   # WRONG - cannot transfer temporary List[Int]()
+   var tensor = ExTensor(List[Int](), DType.int32)
+
+   # CORRECT - create named variable first
+   var shape = List[Int]()
+   var tensor = ExTensor(shape, DType.int32)
+   ```
+
+2. **❌ NEVER use `mut self` in `__init__` constructors**
+
+   ```mojo
+   # WRONG - constructors create new instances
+   fn __init__(mut self, value: Int):
+
+   # CORRECT - use out self
+   fn __init__(out self, value: Int):
+   ```
+
+3. **❌ NEVER forget space after `var` keyword**
+
+   ```mojo
+   # WRONG - common typo
+   vara = 1.0
+
+   # CORRECT - space required
+   var a = 1.0
+   ```
+
+4. **❌ NEVER return List/Dict without `^` operator**
+
+   ```mojo
+   # WRONG
+   fn get_data(self) -> List[Int]:
+       return self.data
+
+   # CORRECT - explicit transfer
+   fn get_data(self) -> List[Int]:
+       return self.data^
+   ```
+
+**Checklist** (before submitting code):
+
+- [ ] All `__init__` use `out self` (not `mut self`)
+- [ ] No temporary rvalues passed to `var` parameters
+- [ ] All `List`/`Dict` returns use `^` operator
+- [ ] No `vara`/`varb` typos (space after `var`)
+
 ### Mojo Language Patterns
 
 #### Function Definitions (fn vs def)

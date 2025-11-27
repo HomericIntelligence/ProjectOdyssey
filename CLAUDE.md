@@ -431,6 +431,179 @@ mojo build /tmp/test_syntax.mojo
 
 **Remember**: The compiler never lies. When in doubt, compile.
 
+### Common Mistakes to Avoid (From 64+ Test Failure Analysis)
+
+**Source**: [Complete Pattern Analysis](/home/mvillmow/ml-odyssey/notes/review/mojo-test-failure-learnings.md)
+
+Based on systematic analysis of 10 PRs fixing 64+ test failures, here are the most critical patterns to avoid:
+
+#### 1. Ownership Violations (40% of Failures)
+
+**❌ NEVER**: Pass temporary expressions to functions requiring ownership
+
+```mojo
+# WRONG - Cannot transfer ownership of temporary
+var labels = ExTensor(List[Int](), DType.int32)
+```
+
+**✅ ALWAYS**: Create named variables for ownership transfer
+
+```mojo
+# CORRECT - Named variable can be transferred
+var labels_shape = List[Int]()
+var labels = ExTensor(labels_shape, DType.int32)
+```
+
+**❌ NEVER**: Mark structs `ImplicitlyCopyable` when fields contain List/Dict/String
+
+```mojo
+# WRONG - List[Float32] is NOT ImplicitlyCopyable
+struct SimpleMLP(Copyable, Movable, ImplicitlyCopyable):
+    var weights: List[Float32]  # Compiler error!
+```
+
+**✅ ALWAYS**: Use explicit transfer operator `^` for non-copyable returns
+
+```mojo
+# CORRECT - Explicit ownership transfer
+fn get_weights(self) -> List[Float32]:
+    return self.weights^
+```
+
+#### 2. Constructor Signatures (25% of Failures)
+
+**❌ NEVER**: Use `mut self` in `__init__` constructors
+
+```mojo
+# WRONG - Constructors create new instances
+fn __init__(mut self, value: Int):
+    self.value = value
+```
+
+**✅ ALWAYS**: Use `out self` for ALL constructors
+
+```mojo
+# CORRECT - out self for constructors
+fn __init__(out self, value: Int):
+    self.value = value
+```
+
+**Constructor Convention Table**:
+
+| Method             | Parameter                  | Example                                          |
+| ------------------ | -------------------------- | ------------------------------------------------ |
+| `__init__`         | `out self`                 | `fn __init__(out self, value: Int)`              |
+| `__moveinit__`     | `out self, deinit existing`| `fn __moveinit__(out self, deinit existing: Self)` |
+| `__copyinit__`     | `out self, existing`       | `fn __copyinit__(out self, existing: Self)`      |
+| Mutating methods   | `mut self`                 | `fn modify(mut self)`                            |
+| Read-only methods  | `read` (implicit)          | `fn get_value(self) -> Int`                      |
+
+#### 3. Uninitialized Data (20% of Failures)
+
+**❌ NEVER**: Assign to list indices without appending first
+
+```mojo
+# WRONG - Cannot assign to uninitialized index
+var list = List[Int]()
+list[0] = 42  # Runtime error - index out of bounds
+```
+
+**✅ ALWAYS**: Use `append()` to add new elements
+
+```mojo
+# CORRECT - append creates the element
+var list = List[Int]()
+list.append(42)  # Now list[0] exists
+```
+
+**❌ NEVER**: Create ExTensor with empty shape then access multiple indices
+
+```mojo
+# WRONG - Empty shape is 0D scalar (1 element only)
+var shape = List[Int]()
+var tensor = ExTensor(shape, DType.float32)
+tensor._data[0] = 1.0
+tensor._data[1] = 2.0  # SEGFAULT - out of bounds!
+```
+
+**✅ ALWAYS**: Initialize shape dimensions before creating tensors
+
+```mojo
+# CORRECT - 1D tensor with 4 elements
+var shape = List[Int]()
+shape.append(4)
+var tensor = ExTensor(shape, DType.float32)
+# Now can safely access indices 0-3
+```
+
+#### 4. Type System Issues (10% of Failures)
+
+**❌ NEVER**: Use `assert_equal()` for DType comparisons
+
+```mojo
+# WRONG - DType doesn't conform to Comparable trait
+assert_equal(tensor._dtype, DType.float32)
+```
+
+**✅ ALWAYS**: Use `assert_true()` with `==` operator for DType
+
+```mojo
+# CORRECT - == works, but needs assert_true
+assert_true(tensor._dtype == DType.float32, "Expected float32")
+```
+
+**❌ NEVER**: Access methods as properties
+
+```mojo
+# WRONG - dtype is a method, not a property
+if tensor.dtype == DType.float32:
+```
+
+**✅ ALWAYS**: Call methods with parentheses
+
+```mojo
+# CORRECT - Call method with ()
+if tensor.dtype() == DType.float32:
+```
+
+#### 5. Syntax Errors (5% of Failures)
+
+**❌ COMMON TYPO**: Missing space after `var` keyword
+
+```mojo
+# WRONG - Typo causing undeclared identifier
+vara = ones(shape, DType.float32)
+varb = ones(shape, DType.float32)
+```
+
+**✅ CORRECT**: Always add space after `var`
+
+```mojo
+# CORRECT - Space after var
+var a = ones(shape, DType.float32)
+var b = ones(shape, DType.float32)
+```
+
+### Critical Pre-Flight Checklist
+
+Before committing Mojo code, verify:
+
+- [ ] All `__init__` methods use `out self` (not `mut self`)
+- [ ] All List/Dict/String returns use `^` transfer operator
+- [ ] All List operations use `append()` for new elements (not `list[i] = value` on empty list)
+- [ ] All ExTensor shapes initialized with `shape.append(dimension)`
+- [ ] All test tensors have ALL elements initialized (check `numel()`)
+- [ ] No `ImplicitlyCopyable` trait on structs with List/Dict/String fields
+- [ ] DType comparisons use `assert_true(a == b)` not `assert_equal(a, b)`
+- [ ] Methods called with `()`: `tensor.dtype()` not `tensor.dtype`
+- [ ] Closures use `escaping` keyword when captured by other functions
+- [ ] No temporary expressions passed to `var` parameters
+- [ ] All package functions exported in `__init__.mojo`
+- [ ] Space after `var` keyword: `var a` not `vara`
+
+**See**: [Complete Mojo Failure Patterns](notes/review/mojo-test-failure-learnings.md) for detailed
+examples and prevention strategies.
+
 ## Environment Setup
 
 This project uses Pixi for environment management:
