@@ -397,6 +397,88 @@ fn matrix_multiply(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
 
 ```text
 
+## Production Failure Patterns (HIGHEST PRIORITY)
+
+**CRITICAL**: These patterns caused 64+ test failures in PRs #2037-#2046. Flag ALL occurrences immediately.
+
+See [notes/review/mojo-test-failure-learnings.md](../../notes/review/mojo-test-failure-learnings.md) for complete analysis.
+
+### 1. Ownership Violations (40% of failures)
+
+🔴 **CRITICAL**: Temporary rvalue ownership transfer
+```mojo
+# ❌ WRONG - Cannot transfer ownership of temporary
+var tensor = ExTensor(List[Int](), DType.int32)
+
+# ✅ CORRECT - Create named variable first
+var shape = List[Int]()
+var tensor = ExTensor(shape, DType.int32)
+```
+
+**Fix**: Create named variable for ALL ownership transfers to `var` parameters.
+
+### 2. Constructor Signatures (25% of failures)
+
+🔴 **CRITICAL**: Wrong `self` convention in constructors
+
+```mojo
+# ❌ WRONG - mut self in constructor
+fn __init__(mut self, value: Int):
+
+# ✅ CORRECT - out self for constructors
+fn __init__(out self, value: Int):
+```
+
+**Fix**: ALL `__init__` constructors MUST use `out self`, never `mut self`.
+
+### 3. ImplicitlyCopyable Violations (15% of failures)
+
+🔴 **CRITICAL**: ImplicitlyCopyable with non-copyable fields
+
+```mojo
+# ❌ WRONG - List is NOT implicitly copyable
+struct Foo(Copyable, Movable, ImplicitlyCopyable):
+    var data: List[Int]
+
+# ✅ CORRECT - Only Copyable and Movable
+struct Foo(Copyable, Movable):
+    var data: List[Int]
+    fn get_data(self) -> List[Int]:
+        return self.data^  # Explicit transfer
+```
+
+**Fix**: NEVER add `ImplicitlyCopyable` to structs with `List`/`Dict`/`String` fields.
+
+### 4. Missing Transfer Operator (10% of failures)
+
+🟠 **MAJOR**: Return List/Dict without `^`
+
+```mojo
+# ❌ WRONG - Implicit copy fails
+fn get_params(self) -> List[Float32]:
+    return self.params
+
+# ✅ CORRECT - Explicit transfer
+fn get_params(self) -> List[Float32]:
+    return self.params^
+```
+
+**Fix**: ALL returns of `List`/`Dict`/`String` MUST use `^` operator.
+
+### 5. Common Syntax Errors (10% of failures)
+
+🟡 **MINOR**: Missing space after `var`
+
+```mojo
+# ❌ WRONG - Typo (vara seen as variable name)
+vara = 1.0
+
+# ✅ CORRECT - Space required
+var a = 1.0
+```
+
+**Fix**: Search for `var[a-z]` pattern.
+
 ## Deprecated Syntax Detection (CRITICAL)
 
 **PRIORITY**: Flag ALL deprecated syntax patterns for immediate fix.
@@ -404,6 +486,7 @@ fn matrix_multiply(borrowed a: Tensor, borrowed b: Tensor) -> Tensor:
 ### ❌ DEPRECATED: `inout` keyword
 
 **Wrong**:
+
 ```mojo
 fn __init__(inout self, value: Int):
 fn modify(inout self):

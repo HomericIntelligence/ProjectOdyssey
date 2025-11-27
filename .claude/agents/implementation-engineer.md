@@ -144,6 +144,36 @@ var key = String(parts[0].strip())  # StringSlice → String
 See [mojo-language-review-specialist.md](./mojo-language-review-specialist.md) for comprehensive guidelines and
 [mojo-test-patterns.md](../../agents/guides/mojo-test-patterns.md) for additional patterns.
 
+### Critical Anti-Patterns from Production Failures
+
+**Based on 64+ failures in PRs #2037-#2046** (See [notes/review/mojo-test-failure-learnings.md](../../notes/review/mojo-test-failure-learnings.md)):
+
+1. **Ownership Violations** (40% of all failures)
+   - ❌ `ExTensor(List[Int](), DType.int32)` - Cannot transfer temporary
+   - ✅ `var shape = List[Int](); ExTensor(shape, DType.int32)` - Named variable required
+   - ❌ `return self.data` (List/Dict) - Missing transfer operator
+   - ✅ `return self.data^` - Explicit ownership transfer
+
+2. **Constructor Signatures** (25% of all failures)
+   - ❌ `fn __init__(mut self, ...)` - Wrong for constructors
+   - ✅ `fn __init__(out self, ...)` - Constructors create new instances
+   - ❌ `struct Foo(ImplicitlyCopyable)` with `List`/`Dict` fields
+   - ✅ `struct Foo(Copyable, Movable)` - Only these traits for collections
+
+3. **Common Syntax Errors** (20% of all failures)
+   - ❌ `vara = 1.0` - Missing space after `var`
+   - ✅ `var a = 1.0` - Space required
+   - ❌ `inout self` - Deprecated in v0.25.7+
+   - ✅ `mut self` - Current syntax for mutable parameters
+
+**Pre-Implementation Checklist**:
+
+- [ ] All `__init__` constructors use `out self` (never `mut self`)
+- [ ] No `ImplicitlyCopyable` on structs with `List`/`Dict`/`String` fields
+- [ ] All temporary expressions stored in named variables before ownership transfer
+- [ ] All `List`/`Dict`/`String` returns use `^` transfer operator
+- [ ] No `vara`/`varb` typos (check spacing after `var`)
+
 ### Mojo Language Patterns
 
 #### Function Definitions (fn vs def)

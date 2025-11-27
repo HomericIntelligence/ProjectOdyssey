@@ -104,6 +104,43 @@ tests/
 **IMPORTANT**: When writing or fixing Mojo tests, follow the comprehensive patterns in:
 
 - [agents/guides/mojo-test-patterns.md](../../agents/guides/mojo-test-patterns.md) - Common test patterns and fixes
+- [notes/review/mojo-test-failure-learnings.md](../../notes/review/mojo-test-failure-learnings.md) - Complete failure pattern analysis
+
+### Critical Anti-Patterns to Avoid
+
+**Based on 64+ test failures analyzed in PRs #2037-#2046**:
+
+1. **Ownership Violations** (40% of failures)
+   - ❌ NEVER: `ExTensor(List[Int](), DType.int32)` - Cannot transfer ownership of temporary
+   - ✅ ALWAYS: Create named variable first: `var shape = List[Int](); ExTensor(shape, DType.int32)`
+   - ❌ NEVER: Return `List`/`Dict` without `^`: `return self.data`
+   - ✅ ALWAYS: Use transfer operator: `return self.data^`
+
+2. **Constructor Signatures** (25% of failures)
+   - ❌ NEVER: `fn __init__(mut self, ...)` - Wrong for constructors
+   - ✅ ALWAYS: `fn __init__(out self, ...)` - Constructors create new instances
+   - ❌ NEVER: `struct Foo(ImplicitlyCopyable)` with `List`/`Dict` fields
+   - ✅ ALWAYS: Only `(Copyable, Movable)` for structs with collections
+
+3. **Syntax Errors** (20% of failures)
+   - ❌ NEVER: `vara = 1.0` - Typo in variable declaration
+   - ✅ ALWAYS: `var a = 1.0` - Space required after `var`
+   - ❌ NEVER: Use deprecated `inout` keyword (replaced with `mut` in v0.25.7+)
+   - ✅ ALWAYS: Use `mut` for mutable parameters
+
+4. **Uninitialized Data** (10% of failures)
+   - ❌ NEVER: Create `ExTensor` without filling data
+   - ✅ ALWAYS: Call `_fill_zero()` or `_set_float32()` after construction
+
+**Pre-Flight Checklist** (before committing tests):
+- [ ] No temporary rvalues passed to `var` parameters
+- [ ] All `__init__` use `out self` (not `mut self`)
+- [ ] No `ImplicitlyCopyable` on structs with `List`/`Dict` fields
+- [ ] All returns of `List`/`Dict` use `^` operator
+- [ ] All `ExTensor` instances initialized with data
+- [ ] No `vara`/`varb` typos (check for space after `var`)
+
+See [notes/review/mojo-test-failure-learnings.md](../../notes/review/mojo-test-failure-learnings.md) for complete pattern catalog with 50+ examples.
 
 ### Key Test Patterns
 
