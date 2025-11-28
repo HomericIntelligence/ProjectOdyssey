@@ -538,9 +538,15 @@ fn test_linear_matches_pytorch() raises:
         output = F.linear(x, weights, bias)
         print(output)
 
-        # Expected output:
+        # Expected output (manual calculation):
+        # Row 0: [1,2,3,4] @ W.T + bias
+        #      = [1,2,3,4] @ [[0.1,0.5,0.9],[0.2,0.6,1.0],[0.3,0.7,1.1],[0.4,0.8,1.2]] + [1,2,3]
+        #      = [3.0, 7.0, 11.0] + [1.0, 2.0, 3.0] = [4.0, 9.0, 14.0]
+        # Row 1: [5,6,7,8] @ W.T + bias
+        #      = [5,6,7,8] @ [[0.1,0.5,0.9],[0.2,0.6,1.0],[0.3,0.7,1.1],[0.4,0.8,1.2]] + [1,2,3]
+        #      = [7.0, 17.4, 27.8] + [1.0, 2.0, 3.0] = [8.0, 19.4, 30.8]
         # tensor([[ 4.0000,  9.0000, 14.0000],
-        #         [ 8.0000, 17.0000, 26.0000]])
+        #         [ 8.0000, 19.4000, 30.8000]])
         ```
     """
     # Create input: (2, 4)
@@ -586,14 +592,14 @@ fn test_linear_matches_pytorch() raises:
     # Forward pass
     var output = linear(input, weights, bias)
 
-    # Validate against PyTorch reference values
-    # Expected output: [[4.0, 9.0, 14.0], [8.0, 17.0, 26.0]]
+    # Validate against corrected reference values
+    # Expected output: [[4.0, 9.0, 14.0], [8.0, 19.4, 30.8]]
     assert_almost_equal(output._data.bitcast[Float32]()[0], 4.0, tolerance=1e-5)
     assert_almost_equal(output._data.bitcast[Float32]()[1], 9.0, tolerance=1e-5)
     assert_almost_equal(output._data.bitcast[Float32]()[2], 14.0, tolerance=1e-5)
     assert_almost_equal(output._data.bitcast[Float32]()[3], 8.0, tolerance=1e-5)
-    assert_almost_equal(output._data.bitcast[Float32]()[4], 17.0, tolerance=1e-5)
-    assert_almost_equal(output._data.bitcast[Float32]()[5], 26.0, tolerance=1e-5)
+    assert_almost_equal(output._data.bitcast[Float32]()[4], 19.4, tolerance=1e-5)
+    assert_almost_equal(output._data.bitcast[Float32]()[5], 30.8, tolerance=1e-5)
 
 
 fn test_relu_matches_pytorch() raises:
