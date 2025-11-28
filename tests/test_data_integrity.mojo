@@ -13,6 +13,7 @@ Run with: `mojo test_data_integrity.mojo`
 from collections import List
 from memory import UnsafePointer
 from shared.core.extensor import ExTensor, zeros, ones
+from tests.shared.conftest import assert_equal_int, assert_true
 
 
 fn test_mxfp4_aligned_roundtrip() raises:
@@ -48,15 +49,17 @@ fn test_mxfp4_unaligned_roundtrip() raises:
     # Encode: 33 elements → 2 blocks × 32 = 64 elements padded
     var encoded = t.to_mxfp4()
     # The encoded tensor should have stored original size in metadata
-    assert (
-        encoded._original_numel_quantized == 33
-    ), "Encoded should store original size (33)"
+    assert_true(
+        encoded._original_numel_quantized == 33,
+        "Encoded should store original size (33)"
+    )
 
     # Decode: Should restore to original 33 elements, NOT 64!
     var decoded = encoded.from_mxfp4()
-    assert (
-        decoded.numel() == 33
-    ), "Decoded size should be 33 (was 64 before fix!)"
+    assert_true(
+        decoded.numel() == 33,
+        "Decoded size should be 33 (was 64 before fix!)"
+    )
     print("  ✓ Unaligned MXFP4 round-trip: 33 → 33 elements (FIX VERIFIED!)")
 
 
@@ -79,9 +82,10 @@ fn test_mxfp4_various_unaligned_sizes() raises:
         var decoded = encoded.from_mxfp4()
 
         # Verify size is preserved
-        assert (
-            decoded.numel() == original_size
-        ), "Size should be preserved for " + String(original_size) + " elements"
+        assert_true(
+            decoded.numel() == original_size,
+            "Size should be preserved for " + String(original_size) + " elements"
+        )
         print(
             "  ✓ Size "
             + String(original_size)
@@ -104,12 +108,13 @@ fn test_nvfp4_unaligned_roundtrip() raises:
         t._data.bitcast[Float32]()[i] = Float32(i) + 1.0
 
     var encoded = t.to_nvfp4()
-    assert (
-        encoded._original_numel_quantized == 17
-    ), "Encoded should store original size (17)"
+    assert_true(
+        encoded._original_numel_quantized == 17,
+        "Encoded should store original size (17)"
+    )
 
     var decoded = encoded.from_nvfp4()
-    assert decoded.numel() == 17, "Decoded size should be 17 (was 32 before fix!)"
+    assert_true(decoded.numel() == 17, "Decoded size should be 17 (was 32 before fix!)")
     print("  ✓ Unaligned NVFP4 round-trip: 17 → 17 elements (FIX VERIFIED!)")
 
 
@@ -126,7 +131,7 @@ fn test_fp8_bounds_checking() raises:
 
     # Normal conversion should work
     var fp8_t = t.to_fp8()
-    assert fp8_t.numel() == 10, "FP8 tensor should have 10 elements"
+    assert_true(fp8_t.numel() == 10, "FP8 tensor should have 10 elements")
     print("  ✓ FP8 bounds checking prevents out-of-bounds access")
 
 
@@ -177,8 +182,8 @@ fn test_fp16_conversion_behavior() raises:
     for i in range(10):
         # Convert int to FP16
         var val_f32 = Float32(i) + 1.5
-        # Store as FP16 (will be converted to FP32 internally)
-        t_fp16._data.bitcast[Float16]()[i] = val_f32
+        # Store as FP16 (explicit cast required)
+        t_fp16._data.bitcast[Float16]()[i] = Float16(val_f32)
 
     # Convert to MXFP4 (internally uses FP32)
     var mxfp4_t = t_fp16.to_mxfp4()
@@ -187,7 +192,7 @@ fn test_fp16_conversion_behavior() raises:
     var decoded = mxfp4_t.from_mxfp4()
 
     # Verify we got reasonable values back (may differ slightly due to quantization)
-    assert decoded.numel() == 10, "Decoded should have 10 elements"
+    assert_true(decoded.numel() == 10, "Decoded should have 10 elements")
     print("  ✓ FP16 conversion: FP16 → FP32 (internal) → MXFP4 → Float32")
 
 
@@ -201,19 +206,19 @@ fn test_int_conversion_bounds() raises:
 
     # Test to_int8
     var i8_t = t.to_int8()
-    assert i8_t.numel() == 10, "Int8 tensor should have 10 elements"
+    assert_true(i8_t.numel() == 10, "Int8 tensor should have 10 elements")
 
     # Test to_int16
     var i16_t = t.to_int16()
-    assert i16_t.numel() == 10, "Int16 tensor should have 10 elements"
+    assert_true(i16_t.numel() == 10, "Int16 tensor should have 10 elements")
 
     # Test to_int32
     var i32_t = t.to_int32()
-    assert i32_t.numel() == 10, "Int32 tensor should have 10 elements"
+    assert_true(i32_t.numel() == 10, "Int32 tensor should have 10 elements")
 
     # Test to_uint8
     var u8_t = t.to_uint8()
-    assert u8_t.numel() == 10, "UInt8 tensor should have 10 elements"
+    assert_true(u8_t.numel() == 10, "UInt8 tensor should have 10 elements")
 
     print("  ✓ Integer conversion bounds checking works")
 
@@ -230,17 +235,19 @@ fn test_metadata_preservation() raises:
     var encoded = t.to_mxfp4()
 
     # Metadata should be set
-    assert (
-        encoded._original_numel_quantized == 123
-    ), "Original size should be stored in metadata"
+    assert_true(
+        encoded._original_numel_quantized == 123,
+        "Original size should be stored in metadata"
+    )
 
     # Decode using metadata
     var decoded = encoded.from_mxfp4()
 
     # Should restore exact size
-    assert (
-        decoded.numel() == 123
-    ), "Decoded should restore original size from metadata"
+    assert_true(
+        decoded.numel() == 123,
+        "Decoded should restore original size from metadata"
+    )
     print("  ✓ Quantization metadata preserved and used correctly")
 
 
@@ -251,13 +258,14 @@ fn test_backwards_compatibility() raises:
     var t = zeros(List[Int](10), DType.float32)
 
     # Non-quantized tensors should have _original_numel_quantized = -1
-    assert (
-        t._original_numel_quantized == -1
-    ), "Non-quantized tensor should have -1 flag"
+    assert_true(
+        t._original_numel_quantized == -1,
+        "Non-quantized tensor should have -1 flag"
+    )
 
     # Regular operations should not be affected
     var t2 = t.copy()
-    assert t2.numel() == 10, "Copy should work normally"
+    assert_true(t2.numel() == 10, "Copy should work normally")
     print("  ✓ Backwards compatibility maintained")
 
 

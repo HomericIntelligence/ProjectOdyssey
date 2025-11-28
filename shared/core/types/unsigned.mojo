@@ -27,7 +27,6 @@ Examples:
 from math import trunc
 
 
-@fieldwise_init
 struct UInt8(Stringable, Representable, Copyable, Movable):
     """8-bit unsigned integer type (0 to 255)."""
 

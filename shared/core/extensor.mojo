@@ -942,7 +942,8 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
             elif self._dtype == DType.float64:
                 val = self._data.bitcast[Float64]()[i].cast[DType.float32]()
             elif self._dtype == DType.int8:
-                result._data.bitcast[Int8]()[i] = self._data.bitcast[Int8]()[i]
+                var source_val = self._data.bitcast[SIMD[DType.int8, 1]]()[i]
+                result._data.bitcast[SIMD[DType.int8, 1]]()[i] = source_val
                 continue
             elif self._dtype == DType.int16:
                 val = Float32(self._data.bitcast[Int16]()[i])
@@ -962,8 +963,13 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
                 # Defensive re-validation (fixes DATA-003)
                 raise Error("Unsupported dtype for to_int8 conversion")
 
-            var i8_val = Int8.from_float32(val)
-            result._data.bitcast[Int8]()[i] = i8_val.value
+            # Convert to int8 range [-128, 127]
+            var int_val = Int(val)
+            if int_val < -128:
+                int_val = -128
+            elif int_val > 127:
+                int_val = 127
+            result._data.bitcast[SIMD[DType.int8, 1]]()[i][0] = int_val
 
         return result^
 
@@ -997,7 +1003,8 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
             elif self._dtype == DType.int8:
                 val = Float32(self._data.bitcast[Int8]()[i])
             elif self._dtype == DType.int16:
-                result._data.bitcast[Int16]()[i] = self._data.bitcast[Int16]()[i]
+                var source_val = self._data.bitcast[SIMD[DType.int16, 1]]()[i]
+                result._data.bitcast[SIMD[DType.int16, 1]]()[i] = source_val
                 continue
             elif self._dtype == DType.int32:
                 val = Float32(self._data.bitcast[Int32]()[i])
@@ -1015,8 +1022,13 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
                 # Defensive re-validation (fixes DATA-003)
                 raise Error("Unsupported dtype for to_int16 conversion")
 
-            var i16_val = Int16.from_float32(val)
-            result._data.bitcast[Int16]()[i] = i16_val.value
+            # Convert to int16 range [-32768, 32767]
+            var int_val = Int(val)
+            if int_val < -32768:
+                int_val = -32768
+            elif int_val > 32767:
+                int_val = 32767
+            result._data.bitcast[SIMD[DType.int16, 1]]()[i][0] = int_val
 
         return result^
 
@@ -1052,7 +1064,8 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
             elif self._dtype == DType.int16:
                 val = Float32(self._data.bitcast[Int16]()[i])
             elif self._dtype == DType.int32:
-                result._data.bitcast[Int32]()[i] = self._data.bitcast[Int32]()[i]
+                var source_val = self._data.bitcast[SIMD[DType.int32, 1]]()[i]
+                result._data.bitcast[SIMD[DType.int32, 1]]()[i] = source_val
                 continue
             elif self._dtype == DType.int64:
                 val = Float32(self._data.bitcast[Int64]()[i])
@@ -1068,8 +1081,9 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
                 # Defensive re-validation (fixes DATA-003)
                 raise Error("Unsupported dtype for to_int32 conversion")
 
-            var i32_val = Int32.from_float32(val)
-            result._data.bitcast[Int32]()[i] = i32_val.value
+            # Convert to int32
+            var int_val = Int(val)
+            result._data.bitcast[SIMD[DType.int32, 1]]()[i][0] = int_val
 
         return result^
 
@@ -1161,7 +1175,8 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
             elif self._dtype == DType.int64:
                 val = Float32(self._data.bitcast[Int64]()[i])
             elif self._dtype == DType.uint8:
-                result._data.bitcast[UInt8]()[i] = self._data.bitcast[UInt8]()[i]
+                var source_val = self._data.bitcast[SIMD[DType.uint8, 1]]()[i]
+                result._data.bitcast[SIMD[DType.uint8, 1]]()[i] = source_val
                 continue
             elif self._dtype == DType.uint16:
                 val = Float32(self._data.bitcast[UInt16]()[i])
@@ -1173,8 +1188,13 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
                 # Defensive re-validation (fixes DATA-003)
                 raise Error("Unsupported dtype for to_uint8 conversion")
 
-            var u8_val = UInt8.from_float32(val)
-            result._data.bitcast[UInt8]()[i] = u8_val.value
+            # Convert to uint8 range [0, 255]
+            var int_val = Int(val)
+            if int_val < 0:
+                int_val = 0
+            elif int_val > 255:
+                int_val = 255
+            result._data.bitcast[SIMD[DType.uint8, 1]]()[i][0] = int_val
 
         return result^
 

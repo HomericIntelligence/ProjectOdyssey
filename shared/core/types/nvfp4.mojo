@@ -94,7 +94,7 @@ struct E4M3Scale(Stringable, Representable, Copyable, Movable):
             var mantissa = Int(scale * 512.0)
             if mantissa > 7:
                 mantissa = 7
-            return E4M3Scale(mantissa.cast[DType.uint8]())
+            return E4M3Scale(UInt8(mantissa))
 
         # Normal number encoding (same as FP8 E4M3)
         var exp_val = 0
@@ -125,7 +125,7 @@ struct E4M3Scale(Stringable, Representable, Copyable, Movable):
             mantissa = 7
 
         # Combine: exponent(4) | mantissa(3)
-        var bits = (biased_exp.cast[DType.uint8]() << 3) | mantissa.cast[DType.uint8]()
+        var bits = (UInt8(biased_exp) << 3) | UInt8(mantissa)
         return E4M3Scale(bits)
 
     fn to_float32(self) -> Float32:
@@ -535,7 +535,7 @@ struct NVFP4Block(Stringable, Representable, Copyable, Movable):
             scale: E4M3 scale factor for the block
         """
         self.data = data
-        self.scale = scale
+        self.scale = scale.copy()
 
     @staticmethod
     fn from_float32_array(values: List[Float32]) raises -> Self:
