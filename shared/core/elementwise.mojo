@@ -19,8 +19,39 @@ from memory import UnsafePointer
 
 @always_inline
 fn math_round[T: DType](x: Scalar[T]) -> Scalar[T]:
-    """Round to nearest integer (banker's rounding)."""
-    return math_floor(x + Scalar[T](0.5))
+    """Round to nearest integer (banker's rounding - round half to even).
+
+    Examples:
+        -2.5 → -2.0 (nearest even)
+        -1.4 → -1.0
+         0.5 →  0.0 (nearest even)
+         1.4 →  1.0
+         2.5 →  2.0 (nearest even)
+    """
+    var floor_val = math_floor(x)
+    var frac = x - floor_val
+
+    # If exactly 0.5, round to nearest even integer
+    if frac == Scalar[T](0.5):
+        # Check if floor_val is even
+        var floor_int = Int(floor_val)
+        if floor_int % 2 == 0:
+            return floor_val  # Already even, round down
+        else:
+            return floor_val + Scalar[T](1.0)  # Round up to even
+    # For -0.5, need to check ceiling
+    elif frac == Scalar[T](-0.5):
+        var ceil_val = math_ceil(x)
+        var ceil_int = Int(ceil_val)
+        if ceil_int % 2 == 0:
+            return ceil_val  # Round up to even
+        else:
+            return floor_val  # Round down to even
+    # Otherwise, standard rounding
+    elif frac >= Scalar[T](0.5):
+        return math_ceil(x)
+    else:
+        return floor_val
 
 
 # ============================================================================
@@ -407,7 +438,7 @@ fn logical_and(a: ExTensor, b: ExTensor) raises -> ExTensor:
         if shape_a[i] != shape_b[i]:
             raise Error("logical_and: tensors must have same shape (broadcasting TODO)")
 
-    var result = ExTensor(a.shape(), DType.bool)
+    var result = ExTensor(a.shape(), a.dtype())
 
     var numel = a.numel()
     for i in range(numel):
@@ -446,7 +477,7 @@ fn logical_or(a: ExTensor, b: ExTensor) raises -> ExTensor:
         if shape_a[i] != shape_b[i]:
             raise Error("logical_or: tensors must have same shape (broadcasting TODO)")
 
-    var result = ExTensor(a.shape(), DType.bool)
+    var result = ExTensor(a.shape(), a.dtype())
 
     var numel = a.numel()
     for i in range(numel):
@@ -470,7 +501,7 @@ fn logical_not(tensor: ExTensor) raises -> ExTensor:
         var a = tensor([0.0, 1.0, 2.0])
         var b = logical_not(a)  # [True, False, False]
     """
-    var result = ExTensor(tensor.shape(), DType.bool)
+    var result = ExTensor(tensor.shape(), tensor.dtype())
 
     var numel = tensor.numel()
     for i in range(numel):
@@ -508,7 +539,7 @@ fn logical_xor(a: ExTensor, b: ExTensor) raises -> ExTensor:
         if shape_a[i] != shape_b[i]:
             raise Error("logical_xor: tensors must have same shape (broadcasting TODO)")
 
-    var result = ExTensor(a.shape(), DType.bool)
+    var result = ExTensor(a.shape(), a.dtype())
 
     var numel = a.numel()
     for i in range(numel):
@@ -584,31 +615,29 @@ fn log2(tensor: ExTensor) raises -> ExTensor:
 # ============================================================================
 
 
-fn exp_backward(grad_output: ExTensor, output: ExTensor) raises -> ExTensor:
+fn exp_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
     """Compute gradient for exponential function.
 
     For Y = exp(X), given ∂L/∂Y, computes:
-        ∂L/∂X = ∂L/∂Y * exp(X) = ∂L/∂Y * Y
-
-    Uses output from forward pass to avoid recomputing exp(X).
+        ∂L/∂X = ∂L/∂Y * exp(X)
 
     Args:.        `grad_output`: Gradient from upstream (∂L/∂Y)
-        `output`: Output from forward pass (Y = exp(X))
+        `x`: Input from forward pass
 
     Returns:.        Gradient w.r.t. input (∂L/∂X)
 
     Examples:
         var x = ones([3, 4])
-        var y = exp(x)  # Forward pass
         var grad_y = ones([3, 4])
-        var grad_x = exp_backward(grad_y, y)  # grad_x = grad_y * y
+        var grad_x = exp_backward(grad_y, x)  # grad_x = grad_y * exp(x)
     """
     var result = ExTensor(grad_output.shape(), grad_output.dtype())
 
     for i in range(grad_output.numel()):
         var grad = grad_output._get_float64(i)
-        var out_val = output._get_float64(i)
-        result._set_float64(i, grad * out_val)
+        var x_val = x._get_float64(i)
+        # Compute exp(x) for the gradient
+        result._set_float64(i, grad * math_exp(x_val))
 
     return result
 
@@ -648,28 +677,24 @@ fn log_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
     return result
 
 
-fn sqrt_backward(grad_output: ExTensor, output: ExTensor) raises -> ExTensor:
+fn sqrt_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
     """Compute gradient for square root.
 
     For Y = sqrt(X), given ∂L/∂Y, computes:
-        ∂L/∂X = ∂L/∂Y / (2 * sqrt(X)) = ∂L/∂Y / (2 * Y)
-
-    Uses output from forward pass to avoid recomputing sqrt(X).
-    Includes numerical stability.
+        ∂L/∂X = ∂L/∂Y / (2 * sqrt(X))
 
     Args:.        `grad_output`: Gradient from upstream (∂L/∂Y)
-        `output`: Output from forward pass (Y = sqrt(X))
+        `x`: Input from forward pass
 
     Returns:.        Gradient w.r.t. input (∂L/∂X)
 
     Examples:
         var x = full([3, 4], 4.0)
-        var y = sqrt(x)  # y = 2.0
         var grad_y = ones([3, 4])
-        var grad_x = sqrt_backward(grad_y, y)  # grad_x = grad_y / (2 * 2.0) = 0.25
+        var grad_x = sqrt_backward(grad_y, x)  # grad_x = grad_y / (2 * sqrt(4.0)) = 0.25
 
     Numerical Stability:
-        Uses epsilon = 1e-10 to prevent division by zero when Y ≈ 0.
+        Uses epsilon = 1e-10 to prevent division by zero when sqrt(X) ≈ 0.
     """
     alias EPSILON = 1e-10
 
@@ -677,10 +702,10 @@ fn sqrt_backward(grad_output: ExTensor, output: ExTensor) raises -> ExTensor:
 
     for i in range(grad_output.numel()):
         var grad = grad_output._get_float64(i)
-        var out_val = output._get_float64(i)
-        # grad / (2 * sqrt(x)) = grad / (2 * output)
+        var x_val = x._get_float64(i)
+        # grad / (2 * sqrt(x))
         # Add epsilon for numerical stability
-        result._set_float64(i, grad / (2.0 * out_val + EPSILON))
+        result._set_float64(i, grad / (2.0 * math_sqrt(x_val) + EPSILON))
 
     return result
 
