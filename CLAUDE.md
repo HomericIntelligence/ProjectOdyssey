@@ -14,25 +14,12 @@ comprehensive 4-level hierarchical planning structure with automated GitHub issu
 This project uses a hierarchical agent system for all development work. **Always use agents** as the primary
 method for completing tasks.
 
-### Agent Hierarchy Quick Reference
+### Agent Hierarchy
 
-| Level | Role | Model | Examples |
-|-------|------|-------|----------|
-| **0** | Chief Architect | Opus | Strategic decisions, architecture |
-| **1** | Orchestrators | Sonnet | foundation, shared-library, tooling, papers, ci-cd, agentic-workflows |
-| **2** | Design/Coordinators | Sonnet | architecture-design, security-design, integration-design, code-review-orchestrator |
-| **3** | Specialists | Sonnet | All review specialists, test-specialist, implementation-specialist, performance-specialist |
-| **4** | Engineers | Haiku | implementation-engineer, test-engineer, documentation-engineer, log-analyzer |
-| **5** | Junior Engineers | Haiku | junior-implementation-engineer, junior-test-engineer, junior-documentation-engineer |
-
-### New Agents (v2.0)
-
-- **numerical-stability-specialist** (L3) - ML numerical accuracy issues
-- **mojo-syntax-validator** (L3) - Mojo v0.25.7+ syntax validation
-- **ci-failure-analyzer** (L3) - CI failure root cause analysis
-- **pr-cleanup-specialist** (L3) - PR squashing, rebasing, cleanup
-- **test-flakiness-specialist** (L3) - Flaky test identification
-- **log-analyzer** (L4) - Log parsing and pattern extraction
+See [agents/hierarchy.md](agents/hierarchy.md) for the complete agent hierarchy including:
+- 6-level hierarchy (L0 Chief Architect → L5 Junior Engineers)
+- Model assignments (Opus, Sonnet, Haiku)
+- All 44 agents with roles and responsibilities
 
 ### Key Agent Principles
 
