@@ -17,7 +17,6 @@ Example:.    from shared.core.types.fp8 import FP8
 from math import isnan, isinf
 
 
-@fieldwise_init
 struct FP8(Stringable, Representable, Copyable, Movable):
     """8-bit floating point number in E4M3 format.
 
@@ -122,7 +121,7 @@ struct FP8(Stringable, Representable, Copyable, Movable):
             mantissa = 7
 
         # Combine: sign(1) | exponent(4) | mantissa(3)
-        var bits = (sign << 7) | (biased_exp.cast[DType.uint8]() << 3) | mantissa.cast[DType.uint8]()
+        var bits = (sign << 7) | (UInt8(biased_exp) << 3) | UInt8(mantissa)
         return FP8(bits)
 
     fn to_float32(self) -> Float32:

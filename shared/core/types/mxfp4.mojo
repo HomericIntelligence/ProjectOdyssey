@@ -484,7 +484,7 @@ struct MXFP4Block(Stringable, Representable, Copyable, Movable):
             scale: E8M0 scale factor for the block
         """
         self.data = data
-        self.scale = scale
+        self.scale = scale.copy()
 
     @staticmethod
     fn from_float32_array(values: List[Float32]) raises -> Self:

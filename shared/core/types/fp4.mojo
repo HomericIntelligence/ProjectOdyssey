@@ -164,7 +164,7 @@ struct FP4_E2M1(Stringable, Representable, Copyable, Movable):
 
         # Handle zero
         if exp == 0:
-            return 0.0 if sign == 0 else -0.0
+            return Float32(0.0) if sign == 0 else Float32(-0.0)
 
         # Compute unscaled value
         # E2M1: value = 2^(exp-1) * (1 + mantissa)
