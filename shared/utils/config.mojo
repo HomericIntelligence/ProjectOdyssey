@@ -628,14 +628,11 @@ struct Config(Copyable, Movable, ImplicitlyCopyable):
                 for i in range(len(pairs)):
                     var pair = pairs[i].strip()
                     if ":" in pair:
-                        var parts = pair.split(":")
-                        if len(parts) >= 2:
-                            var key = String(parts[0].strip())
-                            # Join all parts after the first with ":" to handle values with colons
-                            var value_parts = List[String]()
-                            for j in range(1, len(parts)):
-                                value_parts.append(String(parts[j]))
-                            var value_str = String(":").join(value_parts).strip()
+                        # Split only on the FIRST colon to handle values with colons
+                        var colon_idx = pair.find(":")
+                        if colon_idx != -1:
+                            var key = String(pair[:colon_idx].strip())
+                            var value_str = String(pair[colon_idx + 1:].strip())
 
                             # Try to parse as number
                             if "." in value_str:

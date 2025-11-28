@@ -567,14 +567,14 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
 
         return result^
 
-    fn __getitem__(self, index: Int) raises -> Float64:
+    fn __getitem__(self, index: Int) raises -> Float32:
         """Get element at flat index.
 
         Args:
             index: The flat index to access
 
         Returns:
-            The value at the given index as Float64
+            The value at the given index as Float32
 
         Raises:
             Error: If index is out of bounds
@@ -587,7 +587,7 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
             raise Error("Index out of bounds")
 
         # Return value based on dtype
-        return self._get_float64(index)
+        return self._get_float32(index)
 
     fn _get_float64(self, index: Int) -> Float64:
         """Internal: Get value at index as Float64 (assumes float-compatible dtype).

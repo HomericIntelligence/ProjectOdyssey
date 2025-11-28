@@ -1,0 +1,8 @@
+{
+  "api_url": "http://localhost:8080",
+  "database_url": "postgresql://user:pass@localhost:5432/db",
+  "model_url": "https://models.example.com/lenet5.bin",
+  "time_start": "12:30:45",
+  "port": 8080,
+  "learning_rate": 0.001
+}
