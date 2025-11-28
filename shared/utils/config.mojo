@@ -480,11 +480,8 @@ struct Config(Copyable, Movable, ImplicitlyCopyable):
     fn from_yaml(filepath: String) raises -> Config:
         """Load configuration from YAML file with validation.
 
-        NOTE: Current implementation only supports flat key-value pairs.
-        Nested objects and arrays are not yet supported. For complex configs,
-        use flattened keys (e.g., "model.learning_rate" instead of nested
-        "model: {learning_rate: 0.001}") or consider using Python's PyYAML
-        for parsing and converting to Config.
+        Supports nested YAML structures by flattening them into dot notation.
+        For example, "optimizer: {name: sgd}" becomes "optimizer.name: sgd".
 
         Args:
             filepath: Path to YAML file
@@ -495,8 +492,6 @@ struct Config(Copyable, Movable, ImplicitlyCopyable):
         Raises:
             Error if file not found, empty, or invalid YAML
         """
-        # NOTE: Current implementation supports flat key-value pairs.
-        # Full nested YAML parsing can be added as needed. Using basic parsing.
         var config = Config()
 
         try:
@@ -509,30 +504,85 @@ struct Config(Copyable, Movable, ImplicitlyCopyable):
 
                 var lines = content.split("\n")
 
+                # Stack to track parent keys at each indentation level
+                var parent_stack = List[String]()
+                var indent_stack = List[Int]()
+
                 for i in range(len(lines)):
-                    var line = lines[i].strip()
-                    if len(line) == 0 or line.startswith("#"):
+                    var line = lines[i]
+                    if len(line.strip()) == 0 or line.strip().startswith("#"):
                         continue
 
-                    if ":" in line:
-                        var parts = line.split(":")
-                        if len(parts) >= 2:
-                            var key = String(parts[0].strip())
-                            var value_str = parts[1].strip()
+                    # Calculate indentation
+                    var indent = 0
+                    for j in range(len(line)):
+                        if line[j] == " ":
+                            indent += 1
+                        else:
+                            break
 
-                            # Try to parse as number
-                            if "." in value_str:
-                                try:
-                                    var float_val = Float64(atof(value_str))
-                                    config.set(key, float_val)
-                                except:
-                                    config.set(key, value_str)
-                            else:
-                                try:
-                                    var int_val = atol(value_str)
-                                    config.set(key, int_val)
-                                except:
-                                    config.set(key, value_str)
+                    var trimmed = line.strip()
+                    if ":" not in trimmed:
+                        continue
+
+                    var parts = trimmed.split(":")
+                    if len(parts) < 2:
+                        continue
+
+                    var key = String(parts[0].strip())
+                    var value_str = parts[1].strip()
+
+                    # Pop stack until we find the right parent level
+                    while len(indent_stack) > 0 and indent_stack[len(indent_stack)-1] >= indent:
+                        _ = parent_stack.pop()
+                        _ = indent_stack.pop()
+
+                    # Build full key from parent stack
+                    var full_key = String("")
+                    for j in range(len(parent_stack)):
+                        if j > 0:
+                            full_key = full_key + "."
+                        full_key = full_key + parent_stack[j]
+
+                    if len(full_key) > 0:
+                        full_key = full_key + "." + key
+                    else:
+                        full_key = key
+
+                    # If value is empty, this is a parent key
+                    if len(value_str) == 0:
+                        parent_stack.append(key)
+                        indent_stack.append(indent)
+                        continue
+
+                    # Parse and store value
+                    # Remove quotes if present
+                    if value_str.startswith('"') and value_str.endswith('"'):
+                        value_str = value_str[1:-1]
+
+                    # Skip list values for now (e.g., [1, 32, 32])
+                    if value_str.startswith("["):
+                        config.set(full_key, value_str)
+                        continue
+
+                    # Try to parse as boolean
+                    if value_str == "true" or value_str == "True":
+                        config.set(full_key, True)
+                    elif value_str == "false" or value_str == "False":
+                        config.set(full_key, False)
+                    # Try to parse as number
+                    elif "." in value_str:
+                        try:
+                            var float_val = Float64(atof(value_str))
+                            config.set(full_key, float_val)
+                        except:
+                            config.set(full_key, value_str)
+                    else:
+                        try:
+                            var int_val = atol(value_str)
+                            config.set(full_key, int_val)
+                        except:
+                            config.set(full_key, value_str)
         except e:
             raise Error("Failed to load YAML file: " + String(e))
 
