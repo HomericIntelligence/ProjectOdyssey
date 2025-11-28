@@ -498,9 +498,9 @@ fn test_kaiming_normal_reproducibility() raises:
 
 fn test_uniform_shape() raises:
     """Test uniform initialization with custom range."""
-    var shape = List[Int](2)
-    shape[0] = 50
-    shape[1] = 30
+    var shape = List[Int]()
+    shape.append(50)
+    shape.append(30)
     var W = uniform(shape, -0.5, 0.5, DType.float32)
 
     assert_equal(W.shape()[0], 50)
@@ -509,9 +509,9 @@ fn test_uniform_shape() raises:
 
 fn test_uniform_range() raises:
     """Test uniform values are within specified range."""
-    var shape = List[Int](2)
-    shape[0] = 100
-    shape[1] = 100
+    var shape = List[Int]()
+    shape.append(100)
+    shape.append(100)
     var low = -0.7
     var high = 0.3
     var W = uniform(shape, low, high, DType.float32)
@@ -527,9 +527,9 @@ fn test_uniform_range() raises:
 
 fn test_uniform_mean() raises:
     """Test uniform distribution has approximately correct mean."""
-    var shape = List[Int](2)
-    shape[0] = 200
-    shape[1] = 200
+    var shape = List[Int]()
+    shape.append(200)
+    shape.append(200)
     var low = -1.0
     var high = 1.0
     var W = uniform(shape, low, high, DType.float32)
@@ -563,9 +563,9 @@ fn test_uniform_reproducibility() raises:
 
 fn test_normal_shape() raises:
     """Test normal initialization with custom parameters."""
-    var shape = List[Int](2)
-    shape[0] = 50
-    shape[1] = 30
+    var shape = List[Int]()
+    shape.append(50)
+    shape.append(30)
     var W = normal(shape, 0.0, 1.0, DType.float32)
 
     assert_equal(W.shape()[0], 50)
@@ -574,9 +574,9 @@ fn test_normal_shape() raises:
 
 fn test_normal_mean() raises:
     """Test normal distribution has approximately correct mean."""
-    var shape = List[Int](2)
-    shape[0] = 200
-    shape[1] = 200
+    var shape = List[Int]()
+    shape.append(200)
+    shape.append(200)
     var target_mean = 2.5
     var target_std = 0.5
     var W = normal(shape, target_mean, target_std, DType.float32)
@@ -589,9 +589,9 @@ fn test_normal_mean() raises:
 
 fn test_normal_std() raises:
     """Test normal distribution has approximately correct standard deviation."""
-    var shape = List[Int](2)
-    shape[0] = 300
-    shape[1] = 300
+    var shape = List[Int]()
+    shape.append(300)
+    shape.append(300)
     var target_mean = 0.0
     var target_std = 1.5
     var W = normal(shape, target_mean, target_std, DType.float32)
@@ -625,9 +625,9 @@ fn test_normal_reproducibility() raises:
 
 fn test_constant_shape() raises:
     """Test constant initialization preserves shape."""
-    var shape = List[Int](2)
-    shape[0] = 50
-    shape[1] = 30
+    var shape = List[Int]()
+    shape.append(50)
+    shape.append(30)
     var W = constant(shape, 3.14, DType.float32)
 
     assert_equal(W.shape()[0], 50)
@@ -636,9 +636,9 @@ fn test_constant_shape() raises:
 
 fn test_constant_value() raises:
     """Test constant initialization sets all values correctly."""
-    var shape = List[Int](2)
-    shape[0] = 10
-    shape[1] = 10
+    var shape = List[Int]()
+    shape.append(10)
+    shape.append(10)
     var value = 7.5
     var W = constant(shape, value, DType.float32)
 
@@ -649,9 +649,9 @@ fn test_constant_value() raises:
 
 fn test_constant_zero() raises:
     """Test constant initialization with zero."""
-    var shape = List[Int](2)
-    shape[0] = 5
-    shape[1] = 5
+    var shape = List[Int]()
+    shape.append(5)
+    shape.append(5)
     var W = constant(shape, 0.0, DType.float32)
 
     for i in range(25):
@@ -660,9 +660,9 @@ fn test_constant_zero() raises:
 
 fn test_constant_negative() raises:
     """Test constant initialization with negative value."""
-    var shape = List[Int](2)
-    shape[0] = 5
-    shape[1] = 5
+    var shape = List[Int]()
+    shape.append(5)
+    shape.append(5)
     var value = -2.5
     var W = constant(shape, value, DType.float32)
 
@@ -770,9 +770,9 @@ fn test_normal_float64() raises:
 
 fn test_constant_float64() raises:
     """Test constant initialization with float64 dtype."""
-    var shape = List[Int](2)
-    shape[0] = 10
-    shape[1] = 10
+    var shape = List[Int]()
+    shape.append(10)
+    shape.append(10)
     var W = constant(shape, 1.5, DType.float64)
 
     assert_true(W._dtype == DType.float64, "Constant should have float64 dtype")
