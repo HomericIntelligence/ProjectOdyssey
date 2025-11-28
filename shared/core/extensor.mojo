@@ -160,7 +160,7 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
             var x: ExTensor = 42  # Implicit conversion from IntLiteral
         """
         var shape = List[Int]()
-        self.__init__(shape, DType.int64)
+        _ = self.__init__(shape, DType.int64)
         self._data.bitcast[Int64]()[] = Int64(value)
 
     fn __init__(out self, value: FloatLiteral) raises:
@@ -176,7 +176,7 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
             var x: ExTensor = 3.14  # Implicit conversion from FloatLiteral
         """
         var shape = List[Int]()
-        self.__init__(shape, DType.float64)
+        _ = self.__init__(shape, DType.float64)
         self._data.bitcast[Float64]()[] = Float64(value)
 
     fn __init__(out self, value: Int) raises:
@@ -192,7 +192,7 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
             var x: ExTensor = Int(42)
         """
         var shape = List[Int]()
-        self.__init__(shape, DType.int64)
+        _ = self.__init__(shape, DType.int64)
         self._data.bitcast[Int64]()[] = Int64(value)
 
     fn __init__(out self, value: Float64) raises:
@@ -208,7 +208,7 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
             var x: ExTensor = Float64(3.14)
         """
         var shape = List[Int]()
-        self.__init__(shape, DType.float64)
+        _ = self.__init__(shape, DType.float64)
         self._data.bitcast[Float64]()[] = value
 
     fn __init__(out self, var data: List[Float32]) raises:
@@ -223,7 +223,7 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
         """
         var shape = List[Int]()
         shape.append(len(data))
-        self.__init__(shape, DType.float32)
+        _ = self.__init__(shape, DType.float32)
         for i in range(len(data)):
             self._set_float32(i, data[i])
 
@@ -239,7 +239,7 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
         """
         var shape = List[Int]()
         shape.append(len(data))
-        self.__init__(shape, DType.int64)
+        _ = self.__init__(shape, DType.int64)
         for i in range(len(data)):
             self._data.bitcast[Int64]()[i] = Int64(data[i])
 
