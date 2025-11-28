@@ -146,6 +146,10 @@ struct Config(Copyable, Movable, ImplicitlyCopyable):
         """Set list of strings configuration value."""
         self.data[key] = ConfigValue(value^)
 
+    fn set(mut self, key: String, value: StringSlice) raises:
+        """Set configuration value from StringSlice."""
+        self.set(key, String(value))
+
     fn has(self, key: String) -> Bool:
         """Check if configuration key exists.
 
@@ -872,7 +876,7 @@ fn merge_configs(base: Config, override: Config) -> Config:
 # ============================================================================
 
 
-struct ConfigValidator(Copyable, Movable, ImplicitlyCopyable):
+struct ConfigValidator(Copyable, Movable):
     """Validator for configuration values."""
 
     var required_keys: List[String]
@@ -882,6 +886,11 @@ struct ConfigValidator(Copyable, Movable, ImplicitlyCopyable):
         """Create empty validator."""
         self.required_keys = List[String]()
         self.allowed_keys = Dict[String, String]()
+
+    fn __copyinit__(out self, existing: Self):
+        """Copy constructor for ConfigValidator."""
+        self.required_keys = existing.required_keys.copy()
+        self.allowed_keys = existing.allowed_keys.copy()
 
     fn require(mut self, key: String) -> Self:
         """Mark key as required.
@@ -893,7 +902,7 @@ struct ConfigValidator(Copyable, Movable, ImplicitlyCopyable):
             Self for method chaining
         """
         self.required_keys.append(key)
-        return self
+        return self.copy()
 
     fn allow(mut self, key: String, type_name: String) -> Self:
         """Mark key as allowed with specific type.
@@ -906,7 +915,7 @@ struct ConfigValidator(Copyable, Movable, ImplicitlyCopyable):
             Self for method chaining
         """
         self.allowed_keys[key] = type_name
-        return self
+        return self.copy()
 
     fn validate(self, config: Config) -> Bool:
         """Validate configuration against rules.
