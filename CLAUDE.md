@@ -601,22 +601,157 @@ var a = ones(shape, DType.float32)
 var b = ones(shape, DType.float32)
 ```
 
+#### 6. ExTensor API Patterns (From PR #2168)
+
+**❌ NEVER**: Use static methods on ExTensor - they don't exist
+
+```mojo
+# WRONG - ExTensor has no static methods
+var tensor = ExTensor.full(shape, 1.0, DType.float32)
+var zeros_tensor = ExTensor.zeros(shape, DType.float32)
+var value = tensor.item()  # .item() doesn't exist
+```
+
+**✅ ALWAYS**: Use standalone functions from shared.core.extensor
+
+```mojo
+# CORRECT - Use module-level functions
+from shared.core.extensor import full, zeros, ones
+
+var tensor = full(shape, 1.0, DType.float32)
+var zeros_tensor = zeros(shape, DType.float32)
+var value = tensor._get_float64(0)  # Access first element
+```
+
+#### 7. Deprecated Pointer API (Mojo v0.25.7+)
+
+**❌ NEVER**: Use `Pointer.address_of()` - it no longer exists
+
+```mojo
+# WRONG - Deprecated API
+from memory import Pointer
+var ptr = Pointer.address_of(float_val)
+var bits = ptr.bitcast[UInt32]()[]
+```
+
+**✅ ALWAYS**: Use SIMD bitcast for type punning
+
+```mojo
+# CORRECT - SIMD bitcast
+from memory import bitcast
+var bits = bitcast[DType.uint32, 1](SIMD[DType.float32, 1](float_val))[0]
+```
+
+#### 8. Type Casting Syntax
+
+**❌ NEVER**: Use old `.cast[DType]()` syntax
+
+```mojo
+# WRONG - Old syntax
+var bits = value.cast[DType.uint8]()
+var text = str(dtype)
+```
+
+**✅ ALWAYS**: Use constructor-style casts
+
+```mojo
+# CORRECT - Constructor syntax
+var bits = UInt8(value)
+var text = String(dtype)
+```
+
+#### 9. Binary Operations with Tensors
+
+**❌ NEVER**: Pass literals to tensor binary operations
+
+```mojo
+# WRONG - power() requires two tensors
+var squared = power(tensor, 2.0)
+```
+
+**✅ ALWAYS**: Create tensor for second operand
+
+```mojo
+# CORRECT - Use full_like to create matching tensor
+var exponent = full_like(tensor, 2.0)
+var squared = power(tensor, exponent)
+```
+
+#### 10. Test Assertion Patterns
+
+**❌ NEVER**: Pass Float32 directly to assert_almost_equal
+
+```mojo
+# WRONG - Float32 may not match expected signature
+assert_almost_equal(tensor._data.bitcast[Float32]()[0], 0.99, tolerance=1e-6)
+```
+
+**✅ ALWAYS**: Wrap Float32 in Float64 for assertions
+
+```mojo
+# CORRECT - Explicit Float64 conversion
+assert_almost_equal(Float64(tensor._data.bitcast[Float32]()[0]), 0.99, tolerance=1e-6)
+```
+
+**Numerical Gradient Tolerances**: Float32 gradients need relaxed tolerances
+
+```mojo
+# For float32 numerical gradient checking:
+# - Use rtol=1e-2, atol=1e-2 for Conv2D operations
+# - Use rtol=1e-3, atol=1e-3 for cross-entropy loss
+# - Use rtol=1e-3, atol=5e-4 for softmax operations
+```
+
+#### 11. List Initialization Shorthand
+
+**✅ PREFER**: Use List constructor with initial values
+
+```mojo
+# PREFERRED - Concise initialization
+var shape = List[Int](3, 4, 5)  # 3D tensor shape
+
+# ALSO VALID - Explicit append (more verbose)
+var shape = List[Int]()
+shape.append(3)
+shape.append(4)
+shape.append(5)
+```
+
 ### Critical Pre-Flight Checklist
 
 Before committing Mojo code, verify:
 
+**Ownership & Initialization:**
+
 - [ ] All `__init__` methods use `out self` (not `mut self`)
 - [ ] All List/Dict/String returns use `^` transfer operator
 - [ ] All List operations use `append()` for new elements (not `list[i] = value` on empty list)
-- [ ] All ExTensor shapes initialized with `shape.append(dimension)`
+- [ ] All ExTensor shapes initialized with dimensions (not empty `List[Int]()` for multi-element access)
 - [ ] All test tensors have ALL elements initialized (check `numel()`)
 - [ ] No `ImplicitlyCopyable` trait on structs with List/Dict/String fields
+- [ ] No temporary expressions passed to `var` parameters
+
+**API Usage:**
+
+- [ ] Use `full()`, `zeros()`, `ones()` functions (NOT `ExTensor.full()`, etc.)
+- [ ] Use `._get_float64(0)` for scalar access (NOT `.item()`)
+- [ ] Use `bitcast[]` for type punning (NOT `Pointer.address_of()`)
+- [ ] Use `UInt8(value)` for casts (NOT `value.cast[DType.uint8]()`)
+- [ ] Use `String(dtype)` (NOT `str(dtype)`)
+- [ ] Binary tensor ops use two tensors (NOT `power(tensor, 2.0)`)
+
+**Type System:**
+
 - [ ] DType comparisons use `assert_true(a == b)` not `assert_equal(a, b)`
 - [ ] Methods called with `()`: `tensor.dtype()` not `tensor.dtype`
+- [ ] Float32 values wrapped in `Float64()` for `assert_almost_equal()`
 - [ ] Closures use `escaping` keyword when captured by other functions
-- [ ] No temporary expressions passed to `var` parameters
+
+**Code Quality:**
+
 - [ ] All package functions exported in `__init__.mojo`
 - [ ] Space after `var` keyword: `var a` not `vara`
+- [ ] Verify function signatures before calling (check source or compiler)
 
 **See**: [Complete Mojo Failure Patterns](notes/review/mojo-test-failure-learnings.md) for detailed
 examples and prevention strategies.
