@@ -23,6 +23,8 @@ from sys import argv
 from collections import List
 from math import exp
 
+# Default number of classes for EMNIST Balanced dataset
+alias DEFAULT_NUM_CLASSES = 47
 
 # EMNIST Balanced class mapping (47 classes)
 # 0-9: digits, 10-35: uppercase letters, 36-46: lowercase letters (select)
@@ -193,7 +195,7 @@ fn main() raises:
 
     # Initialize model
     print("Initializing LeNet-5 model...")
-    var model = LeNet5(num_classes=47)
+    var model = LeNet5(num_classes=DEFAULT_NUM_CLASSES)
     print("  Model initialized with", model.num_classes, "classes")
     print()
 
