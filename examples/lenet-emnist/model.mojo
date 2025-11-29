@@ -30,20 +30,123 @@ from collections import List
 from weights import save_tensor, load_tensor
 
 
+# ============================================================================
+# Architecture Hyperparameters
+# ============================================================================
+# All architecture dimensions are defined here for easy modification.
+# Change these values to experiment with different model sizes.
+
+# Input dimensions
+alias INPUT_HEIGHT = 28
+alias INPUT_WIDTH = 28
+alias INPUT_CHANNELS = 1
+
+# Conv layer 1 hyperparameters
+alias CONV1_OUT_CHANNELS = 6
+alias CONV1_KERNEL_SIZE = 5
+alias CONV1_STRIDE = 1
+alias CONV1_PADDING = 0
+
+# Pool layer 1 hyperparameters
+alias POOL1_KERNEL_SIZE = 2
+alias POOL1_STRIDE = 2
+alias POOL1_PADDING = 0
+
+# Conv layer 2 hyperparameters
+alias CONV2_OUT_CHANNELS = 16
+alias CONV2_KERNEL_SIZE = 5
+alias CONV2_STRIDE = 1
+alias CONV2_PADDING = 0
+
+# Pool layer 2 hyperparameters
+alias POOL2_KERNEL_SIZE = 2
+alias POOL2_STRIDE = 2
+alias POOL2_PADDING = 0
+
+# Fully connected layer sizes
+alias FC1_OUT_FEATURES = 120
+alias FC2_OUT_FEATURES = 84
+
+
+# ============================================================================
+# Dimension Computation Helpers
+# ============================================================================
+
+fn conv_output_size(input_size: Int, kernel_size: Int, stride: Int, padding: Int) -> Int:
+    """Compute output dimension after a convolution operation.
+
+    Args:
+        input_size: Input spatial dimension (height or width)
+        kernel_size: Convolution kernel size
+        stride: Convolution stride
+        padding: Padding applied to input
+
+    Returns:
+        Output spatial dimension
+    """
+    return (input_size + 2 * padding - kernel_size) // stride + 1
+
+
+fn pool_output_size(input_size: Int, kernel_size: Int, stride: Int, padding: Int) -> Int:
+    """Compute output dimension after a pooling operation.
+
+    Args:
+        input_size: Input spatial dimension (height or width)
+        kernel_size: Pool kernel size
+        stride: Pool stride
+        padding: Padding applied to input
+
+    Returns:
+        Output spatial dimension
+    """
+    return (input_size + 2 * padding - kernel_size) // stride + 1
+
+
+fn compute_flattened_size() -> Int:
+    """Compute the flattened feature size after all conv/pool layers.
+
+    This derives the FC1 input dimension from the architecture hyperparameters.
+
+    Returns:
+        Number of features after flattening (channels * height * width)
+    """
+    # After conv1: (INPUT - KERNEL + 2*PAD) / STRIDE + 1
+    var h1 = conv_output_size(INPUT_HEIGHT, CONV1_KERNEL_SIZE, CONV1_STRIDE, CONV1_PADDING)
+    var w1 = conv_output_size(INPUT_WIDTH, CONV1_KERNEL_SIZE, CONV1_STRIDE, CONV1_PADDING)
+
+    # After pool1
+    var h2 = pool_output_size(h1, POOL1_KERNEL_SIZE, POOL1_STRIDE, POOL1_PADDING)
+    var w2 = pool_output_size(w1, POOL1_KERNEL_SIZE, POOL1_STRIDE, POOL1_PADDING)
+
+    # After conv2
+    var h3 = conv_output_size(h2, CONV2_KERNEL_SIZE, CONV2_STRIDE, CONV2_PADDING)
+    var w3 = conv_output_size(w2, CONV2_KERNEL_SIZE, CONV2_STRIDE, CONV2_PADDING)
+
+    # After pool2
+    var h4 = pool_output_size(h3, POOL2_KERNEL_SIZE, POOL2_STRIDE, POOL2_PADDING)
+    var w4 = pool_output_size(w3, POOL2_KERNEL_SIZE, POOL2_STRIDE, POOL2_PADDING)
+
+    return CONV2_OUT_CHANNELS * h4 * w4
+
+
 struct LeNet5(Model, Movable):
     """LeNet-5 model for EMNIST classification.
 
+    Architecture is defined by module-level constants (CONV1_*, POOL1_*, etc.)
+    for easy experimentation. FC layer input sizes are automatically derived
+    from the conv/pool layer dimensions.
+
     Attributes:
         num_classes: Number of output classes (47 for EMNIST Balanced)
-        conv1_kernel: First conv layer weights (6, 1, 5, 5)
-        conv1_bias: First conv layer bias (6,)
-        conv2_kernel: Second conv layer weights (16, 6, 5, 5)
-        conv2_bias: Second conv layer bias (16,)
-        fc1_weights: First FC layer weights (120, 256)
-        fc1_bias: First FC layer bias (120,)
-        fc2_weights: Second FC layer weights (84, 120)
-        fc2_bias: Second FC layer bias (84,)
-        fc3_weights: Third FC layer weights (num_classes, 84)
+        conv1_kernel: First conv layer weights (CONV1_OUT_CHANNELS, INPUT_CHANNELS, k, k)
+        conv1_bias: First conv layer bias (CONV1_OUT_CHANNELS,)
+        conv2_kernel: Second conv layer weights (CONV2_OUT_CHANNELS, CONV1_OUT_CHANNELS, k, k)
+        conv2_bias: Second conv layer bias (CONV2_OUT_CHANNELS,)
+        fc1_weights: First FC layer weights (FC1_OUT_FEATURES, flattened_size)
+        fc1_bias: First FC layer bias (FC1_OUT_FEATURES,)
+        fc2_weights: Second FC layer weights (FC2_OUT_FEATURES, FC1_OUT_FEATURES)
+        fc2_bias: Second FC layer bias (FC2_OUT_FEATURES,)
+        fc3_weights: Third FC layer weights (num_classes, FC2_OUT_FEATURES)
         fc3_bias: Third FC layer bias (num_classes,)
     """
 
@@ -69,96 +172,76 @@ struct LeNet5(Model, Movable):
         """
         self.num_classes = num_classes
 
-        # Conv1: 1 input channel, 6 output channels, 5x5 kernel
-        var conv1_shape = List[Int]()
-        conv1_shape.append(6)
-        conv1_shape.append(1)
-        conv1_shape.append(5)
-        conv1_shape.append(5)
-        var conv1_fan_in = 1 * 5 * 5  # in_channels * kernel_h * kernel_w = 25
-        var conv1_fan_out = 6 * 5 * 5  # out_channels * kernel_h * kernel_w = 150
+        # Compute derived dimensions
+        var flattened_size = compute_flattened_size()
+
+        # Conv1: INPUT_CHANNELS -> CONV1_OUT_CHANNELS, kernel CONV1_KERNEL_SIZE x CONV1_KERNEL_SIZE
+        var conv1_shape = List[Int](CONV1_OUT_CHANNELS, INPUT_CHANNELS, CONV1_KERNEL_SIZE, CONV1_KERNEL_SIZE)
+        var conv1_fan_in = INPUT_CHANNELS * CONV1_KERNEL_SIZE * CONV1_KERNEL_SIZE
+        var conv1_fan_out = CONV1_OUT_CHANNELS * CONV1_KERNEL_SIZE * CONV1_KERNEL_SIZE
         self.conv1_kernel = kaiming_uniform(conv1_fan_in, conv1_fan_out, conv1_shape, dtype=DType.float32)
-        var conv1_bias_shape = List[Int]()
-        conv1_bias_shape.append(6)
+        var conv1_bias_shape = List[Int](CONV1_OUT_CHANNELS)
         self.conv1_bias = zeros(conv1_bias_shape, DType.float32)
 
-        # Conv2: 6 input channels, 16 output channels, 5x5 kernel
-        var conv2_shape = List[Int]()
-        conv2_shape.append(16)
-        conv2_shape.append(6)
-        conv2_shape.append(5)
-        conv2_shape.append(5)
-        var conv2_fan_in = 6 * 5 * 5  # in_channels * kernel_h * kernel_w = 150
-        var conv2_fan_out = 16 * 5 * 5  # out_channels * kernel_h * kernel_w = 400
+        # Conv2: CONV1_OUT_CHANNELS -> CONV2_OUT_CHANNELS, kernel CONV2_KERNEL_SIZE x CONV2_KERNEL_SIZE
+        var conv2_shape = List[Int](CONV2_OUT_CHANNELS, CONV1_OUT_CHANNELS, CONV2_KERNEL_SIZE, CONV2_KERNEL_SIZE)
+        var conv2_fan_in = CONV1_OUT_CHANNELS * CONV2_KERNEL_SIZE * CONV2_KERNEL_SIZE
+        var conv2_fan_out = CONV2_OUT_CHANNELS * CONV2_KERNEL_SIZE * CONV2_KERNEL_SIZE
         self.conv2_kernel = kaiming_uniform(conv2_fan_in, conv2_fan_out, conv2_shape, dtype=DType.float32)
-        var conv2_bias_shape = List[Int]()
-        conv2_bias_shape.append(16)
+        var conv2_bias_shape = List[Int](CONV2_OUT_CHANNELS)
         self.conv2_bias = zeros(conv2_bias_shape, DType.float32)
 
-        # After conv1 (28x28 -> 24x24) -> pool1 (24x24 -> 12x12)
-        # After conv2 (12x12 -> 8x8) -> pool2 (8x8 -> 4x4)
-        # Flattened size: 16 * 4 * 4 = 256
-
-        # FC1: 256 -> 120
-        var fc1_shape = List[Int]()
-        fc1_shape.append(120)
-        fc1_shape.append(256)
-        var fc1_fan_in = 256
-        var fc1_fan_out = 120
-        self.fc1_weights = kaiming_uniform(fc1_fan_in, fc1_fan_out, fc1_shape, dtype=DType.float32)
-        var fc1_bias_shape = List[Int]()
-        fc1_bias_shape.append(120)
+        # FC1: flattened_size -> FC1_OUT_FEATURES (derived from conv/pool layers)
+        var fc1_shape = List[Int](FC1_OUT_FEATURES, flattened_size)
+        self.fc1_weights = kaiming_uniform(flattened_size, FC1_OUT_FEATURES, fc1_shape, dtype=DType.float32)
+        var fc1_bias_shape = List[Int](FC1_OUT_FEATURES)
         self.fc1_bias = zeros(fc1_bias_shape, DType.float32)
 
-        # FC2: 120 -> 84
-        var fc2_shape = List[Int]()
-        fc2_shape.append(84)
-        fc2_shape.append(120)
-        var fc2_fan_in = 120
-        var fc2_fan_out = 84
-        self.fc2_weights = kaiming_uniform(fc2_fan_in, fc2_fan_out, fc2_shape, dtype=DType.float32)
-        var fc2_bias_shape = List[Int]()
-        fc2_bias_shape.append(84)
+        # FC2: FC1_OUT_FEATURES -> FC2_OUT_FEATURES
+        var fc2_shape = List[Int](FC2_OUT_FEATURES, FC1_OUT_FEATURES)
+        self.fc2_weights = kaiming_uniform(FC1_OUT_FEATURES, FC2_OUT_FEATURES, fc2_shape, dtype=DType.float32)
+        var fc2_bias_shape = List[Int](FC2_OUT_FEATURES)
         self.fc2_bias = zeros(fc2_bias_shape, DType.float32)
 
-        # FC3: 84 -> num_classes
-        var fc3_shape = List[Int]()
-        fc3_shape.append(num_classes)
-        fc3_shape.append(84)
-        var fc3_fan_in = 84
-        var fc3_fan_out = num_classes
-        self.fc3_weights = kaiming_uniform(fc3_fan_in, fc3_fan_out, fc3_shape, dtype=DType.float32)
-        var fc3_bias_shape = List[Int]()
-        fc3_bias_shape.append(num_classes)
+        # FC3: FC2_OUT_FEATURES -> num_classes
+        var fc3_shape = List[Int](num_classes, FC2_OUT_FEATURES)
+        self.fc3_weights = kaiming_uniform(FC2_OUT_FEATURES, num_classes, fc3_shape, dtype=DType.float32)
+        var fc3_bias_shape = List[Int](num_classes)
         self.fc3_bias = zeros(fc3_bias_shape, DType.float32)
 
     fn forward(mut self, input: ExTensor) raises -> ExTensor:
         """Forward pass through LeNet-5.
 
         Args:
-            input: Input tensor of shape (batch, 1, 28, 28)
+            input: Input tensor of shape (batch, INPUT_CHANNELS, INPUT_HEIGHT, INPUT_WIDTH)
 
         Returns:
             Output logits of shape (batch, num_classes)
         """
         # Conv1 + ReLU + MaxPool
-        var conv1_out = conv2d(input, self.conv1_kernel, self.conv1_bias, stride=1, padding=0)
+        var conv1_out = conv2d(input, self.conv1_kernel, self.conv1_bias,
+                               stride=CONV1_STRIDE, padding=CONV1_PADDING)
         var relu1_out = relu(conv1_out)
-        var pool1_out = maxpool2d(relu1_out, kernel_size=2, stride=2, padding=0)
+        var pool1_out = maxpool2d(relu1_out,
+                                  kernel_size=POOL1_KERNEL_SIZE,
+                                  stride=POOL1_STRIDE,
+                                  padding=POOL1_PADDING)
 
         # Conv2 + ReLU + MaxPool
-        var conv2_out = conv2d(pool1_out, self.conv2_kernel, self.conv2_bias, stride=1, padding=0)
+        var conv2_out = conv2d(pool1_out, self.conv2_kernel, self.conv2_bias,
+                               stride=CONV2_STRIDE, padding=CONV2_PADDING)
         var relu2_out = relu(conv2_out)
-        var pool2_out = maxpool2d(relu2_out, kernel_size=2, stride=2, padding=0)
+        var pool2_out = maxpool2d(relu2_out,
+                                  kernel_size=POOL2_KERNEL_SIZE,
+                                  stride=POOL2_STRIDE,
+                                  padding=POOL2_PADDING)
 
-        # Flatten: (batch, 16, 4, 4) -> (batch, 256)
+        # Flatten: (batch, CONV2_OUT_CHANNELS, h, w) -> (batch, flattened_size)
         var pool2_shape = pool2_out.shape()
         var batch_size = pool2_shape[0]
         var flattened_size = pool2_shape[1] * pool2_shape[2] * pool2_shape[3]
 
-        var flatten_shape = List[Int]()
-        flatten_shape.append(batch_size)
-        flatten_shape.append(flattened_size)
+        var flatten_shape = List[Int](batch_size, flattened_size)
         var flattened = pool2_out.reshape(flatten_shape)
 
         # FC1 + ReLU
