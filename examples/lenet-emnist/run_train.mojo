@@ -95,20 +95,29 @@ fn compute_gradients(
     mut model: LeNet5,
     input: ExTensor,
     labels: ExTensor,
-    learning_rate: Float32
-) raises -> Float32:
-    """Compute gradients and update parameters for one batch.
+    learning_rate: Float32,
+    mut precision_config: PrecisionConfig
+) raises -> Tuple[Float32, Bool]:
+    """Compute gradients and update parameters for one batch with precision scaling.
 
-    This implements the full forward and backward pass manually.
+    Implements full forward and backward pass with support for mixed-precision training.
+    For FP16/BF16 training:
+    - Loss is scaled before backward pass to prevent gradient underflow
+    - Gradients are checked for overflow/NaN after backward pass
+    - On overflow, parameter update is skipped and scaler is adjusted
+    - On success, scaler may increase for next iteration
 
     Args:
         model: LeNet-5 model.
         input: Batch of images (batch, 1, 28, 28).
         labels: One-hot encoded batch of labels (batch, num_classes).
         learning_rate: Learning rate for SGD.
+        precision_config: Precision configuration (FP32, FP16, BF16, FP8).
 
     Returns:
-        Loss value for this batch.
+        Tuple of (loss_value, success_flag):
+        - loss_value: Unscaled loss for logging
+        - success_flag: True if update succeeded, False on gradient overflow
     """
     # ========== Forward Pass (with caching) ==========
 
@@ -146,9 +155,12 @@ fn compute_gradients(
     var loss_tensor = cross_entropy(logits, labels)
     var loss = loss_tensor._data.bitcast[Float32]()[0]
 
+    # Scale loss for mixed-precision training (prevents gradient underflow in FP16)
+    var scaled_loss_tensor = precision_config.scale_loss(loss_tensor)
+
     # ========== Backward Pass ==========
 
-    # Start with gradient from loss
+    # Start with gradient from scaled loss
     var grad_output_shape = List[Int]()
     grad_output_shape.append(1)
     var grad_output = zeros(grad_output_shape, logits.dtype())
@@ -191,22 +203,57 @@ fn compute_gradients(
     # Conv1 backward
     var conv1_grads = conv2d_backward(grad_conv1_out, input, model.conv1_kernel, stride=1, padding=0)
 
-    # ========== Parameter Update (SGD) ==========
-    model.update_parameters(
-        learning_rate,
-        conv1_grads.grad_kernel^,
-        conv1_grads.grad_bias^,
-        conv2_grads.grad_kernel^,
-        conv2_grads.grad_bias^,
-        fc1_grads.grad_kernel^,
-        fc1_grads.grad_bias^,
-        fc2_grads.grad_kernel^,
-        fc2_grads.grad_bias^,
-        fc3_grads.grad_kernel^,
-        fc3_grads.grad_bias^
-    )
+    # ========== Gradient Scaling and Validation ==========
 
-    return loss
+    # Unscale gradients for mixed-precision training
+    var unscaled_conv1_grad_kernel = precision_config.unscale_gradients(conv1_grads.grad_kernel)
+    var unscaled_conv1_grad_bias = precision_config.unscale_gradients(conv1_grads.grad_bias)
+    var unscaled_conv2_grad_kernel = precision_config.unscale_gradients(conv2_grads.grad_kernel)
+    var unscaled_conv2_grad_bias = precision_config.unscale_gradients(conv2_grads.grad_bias)
+    var unscaled_fc1_grad_kernel = precision_config.unscale_gradients(fc1_grads.grad_kernel)
+    var unscaled_fc1_grad_bias = precision_config.unscale_gradients(fc1_grads.grad_bias)
+    var unscaled_fc2_grad_kernel = precision_config.unscale_gradients(fc2_grads.grad_kernel)
+    var unscaled_fc2_grad_bias = precision_config.unscale_gradients(fc2_grads.grad_bias)
+    var unscaled_fc3_grad_kernel = precision_config.unscale_gradients(fc3_grads.grad_kernel)
+    var unscaled_fc3_grad_bias = precision_config.unscale_gradients(fc3_grads.grad_bias)
+
+    # Check if any gradients have NaN/Inf (overflow detection)
+    var grads_valid = True
+    grads_valid = grads_valid and precision_config.check_gradients(unscaled_conv1_grad_kernel)
+    grads_valid = grads_valid and precision_config.check_gradients(unscaled_conv1_grad_bias)
+    grads_valid = grads_valid and precision_config.check_gradients(unscaled_conv2_grad_kernel)
+    grads_valid = grads_valid and precision_config.check_gradients(unscaled_conv2_grad_bias)
+    grads_valid = grads_valid and precision_config.check_gradients(unscaled_fc1_grad_kernel)
+    grads_valid = grads_valid and precision_config.check_gradients(unscaled_fc1_grad_bias)
+    grads_valid = grads_valid and precision_config.check_gradients(unscaled_fc2_grad_kernel)
+    grads_valid = grads_valid and precision_config.check_gradients(unscaled_fc2_grad_bias)
+    grads_valid = grads_valid and precision_config.check_gradients(unscaled_fc3_grad_kernel)
+    grads_valid = grads_valid and precision_config.check_gradients(unscaled_fc3_grad_bias)
+
+    # ========== Conditional Parameter Update ==========
+
+    if grads_valid:
+        # Gradients are valid: perform parameter update
+        model.update_parameters(
+            learning_rate,
+            unscaled_conv1_grad_kernel^,
+            unscaled_conv1_grad_bias^,
+            unscaled_conv2_grad_kernel^,
+            unscaled_conv2_grad_bias^,
+            unscaled_fc1_grad_kernel^,
+            unscaled_fc1_grad_bias^,
+            unscaled_fc2_grad_kernel^,
+            unscaled_fc2_grad_bias^,
+            unscaled_fc3_grad_kernel^,
+            unscaled_fc3_grad_bias^
+        )
+        precision_config.step(grads_valid=True)
+    else:
+        # Gradient overflow detected: skip update and reduce scale
+        print("WARNING: Gradient overflow detected, skipping parameter update")
+        precision_config.step(grads_valid=False)
+
+    return Tuple[Float32, Bool](loss, grads_valid)
 
 
 fn train_epoch(
@@ -216,13 +263,30 @@ fn train_epoch(
     batch_size: Int,
     learning_rate: Float32,
     epoch: Int,
-    total_epochs: Int
+    total_epochs: Int,
+    mut precision_config: PrecisionConfig
 ) raises -> Float32:
-    """Train for one epoch."""
+    """Train for one epoch with mixed-precision support.
+
+    Args:
+        model: LeNet-5 model.
+        train_images: Training images.
+        train_labels: Training labels.
+        batch_size: Batch size for training.
+        learning_rate: Learning rate for SGD.
+        epoch: Current epoch number.
+        total_epochs: Total number of epochs.
+        precision_config: Precision configuration for mixed-precision training.
+
+    Returns:
+        Average loss for the epoch (unscaled).
+    """
     var num_samples = train_images.shape()[0]
     var num_batches = (num_samples + batch_size - 1) // batch_size
 
     var total_loss = Float32(0.0)
+    var successful_batches = 0
+    var skipped_batches = 0
 
     print("Epoch [", epoch, "/", total_epochs, "]")
 
@@ -237,17 +301,28 @@ fn train_epoch(
         # Convert batch labels to one-hot encoding
         var batch_labels = one_hot_encode(batch_labels_int, num_classes=47)
 
-        # Compute gradients and update parameters
-        var batch_loss = compute_gradients(model, batch_images, batch_labels, learning_rate)
+        # Compute gradients and update parameters with precision scaling
+        var result = compute_gradients(model, batch_images, batch_labels, learning_rate, precision_config)
+        var batch_loss = result[0]
+        var batch_success = result[1]
+
         total_loss += batch_loss
+
+        if batch_success:
+            successful_batches += 1
+        else:
+            skipped_batches += 1
 
         # Print progress every 100 batches
         if (batch_idx + 1) % 100 == 0:
             var avg_loss = total_loss / Float32(batch_idx + 1)
-            print("  Batch [", batch_idx + 1, "/", num_batches, "] - Loss: ", avg_loss)
+            var scale = precision_config.get_scale()
+            print("  Batch [", batch_idx + 1, "/", num_batches, "] - Loss: ", avg_loss, " (scale: ", scale, ")")
 
     var avg_loss = total_loss / Float32(num_batches)
     print("  Average Loss: ", avg_loss)
+    if precision_config.get_overflow_count() > 0:
+        print("  Gradient overflows: ", precision_config.get_overflow_count())
 
     return avg_loss
 
@@ -344,17 +419,24 @@ fn main() raises:
     print("  Test samples: ", test_images.shape()[0])
     print()
 
-    # Training loop
+    # Training loop with mixed-precision support
     print("Starting training...")
     for epoch in range(1, config.epochs + 1):
         var train_loss = train_epoch(
             model, train_images, train_labels,
             config.batch_size, config.learning_rate,
-            epoch, config.epochs
+            epoch, config.epochs,
+            precision_config
         )
 
         # Evaluate every epoch
         var test_acc = evaluate(model, test_images, test_labels)
+        print()
+
+    # Print final precision statistics
+    if precision_config.get_overflow_count() > 0:
+        print("Final Training Statistics:")
+        precision_config.print_stats()
         print()
 
     # Save model
