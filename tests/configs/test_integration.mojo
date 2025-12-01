@@ -106,17 +106,17 @@ fn test_model_creation_from_config() raises:
     var config = load_config("configs/papers/lenet5/model.yaml")
 
     # Verify config has required fields for model creation
-    # Note: Config parser flattens YAML, so nested "model.name" becomes "name"
-    assert_true(config.has("name"), "Should have model name")
-    assert_true(config.has("output_classes"), "Should have output_classes")
+    # Config uses dotted keys for nested YAML (e.g., "model.name")
+    assert_true(config.has("model.name"), "Should have model.name")
+    assert_true(config.has("model.output_classes"), "Should have model.output_classes")
 
     # In actual implementation, would do:
     # var model = create_model_from_config(config)
     # For now, verify config structure
-    var name = config.get_string("name")
-    var num_classes = config.get_int("output_classes")
+    var name = config.get_string("model.name")
+    var num_classes = config.get_int("model.output_classes")
 
-    assert_equal(name, '"lenet5"', "Model name should be lenet5")
+    assert_equal(name, "lenet5", "Model name should be lenet5")
     assert_equal(num_classes, 10, "Should have 10 classes for MNIST")
 
     print("✓ test_model_creation_from_config passed")
