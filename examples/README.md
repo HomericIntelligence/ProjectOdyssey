@@ -43,6 +43,7 @@ Introduction to ML Odyssey basics:
 - **`quickstart_example.mojo`** - Simple neural network creation and training
 - **`first_model_model.mojo`** - 3-layer digit classifier model
 - **`first_model_train.mojo`** - Complete training script with callbacks
+- **`benchmark_quickstart.mojo`** - Benchmarking neural network training with performance metrics
 
 **Documentation**: [Getting Started Guide](../docs/getting-started/quickstart.md)
 
@@ -68,12 +69,49 @@ Building custom neural network components:
 
 #### 4. Performance
 
-Optimization techniques:
+Optimization techniques and performance benchmarking:
 
 - **`simd_optimization.mojo`** - SIMD for ReLU, batch norm, matmul
 - **`memory_optimization.mojo`** - In-place operations and buffer reuse
+- **`benchmark_model_inference.mojo`** - Benchmarking neural network inference performance
+- **`benchmark_operations.mojo`** - Benchmarking individual ML operations
 
 **Documentation**: [Performance Guide](../docs/advanced/performance.md)
+
+**Benchmarking Guide**: [Benchmarking Examples](performance/BENCHMARKING.md)
+
+## Benchmarking Examples
+
+The Performance section includes comprehensive benchmarking examples using the `shared.benchmarking`
+framework. These examples show how to:
+
+- Measure operation latency with statistical analysis
+- Perform warmup iterations for accurate measurements
+- Compute percentiles (p50, p95, p99) for latency distribution
+- Calculate throughput metrics (operations per second)
+- Generate formatted reports for performance comparison
+- Analyze scaling behavior across different tensor sizes
+
+### Quick Benchmark Example
+
+```mojo
+from shared.benchmarking import benchmark_function, print_benchmark_report
+
+fn my_operation():
+    # Your ML operation here
+    var output = relu(input_tensor)
+
+var result = benchmark_function(
+    my_operation,
+    warmup_iters=10,
+    measure_iters=100,
+)
+
+print_benchmark_report(result, "ReLU Operation")
+```
+
+For detailed benchmarking patterns and best practices, see:
+[Benchmarking Guide](performance/BENCHMARKING.md)
 
 ## Example File Structure
 
