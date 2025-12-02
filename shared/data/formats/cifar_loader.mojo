@@ -1,6 +1,11 @@
-"""CIFAR-10 Dataset Loader
+"""CIFAR Format Binary Data Loader
 
-Provides functions to load CIFAR-10 dataset from IDX file format (converted from binary batches).
+Provides functionality to load CIFAR-10 and CIFAR-100 binary format datasets.
+
+CIFAR Format Overview:
+    - CIFAR-10: 1 label + 3*32*32 pixel bytes per image (3073 bytes total)
+    - CIFAR-100: 2 labels (coarse + fine) + 3*32*32 pixel bytes (3074 bytes total)
+    - Format: [label(s)][red_pixels][green_pixels][blue_pixels]
 
 CIFAR-10 Structure:
     - Images: 32x32 RGB (3 channels)
@@ -8,97 +13,230 @@ CIFAR-10 Structure:
     - Training: 50,000 images (5 batches of 10,000)
     - Test: 10,000 images (1 batch)
 
+CIFAR-100 Structure:
+    - Images: 32x32 RGB (3 channels)
+    - Labels: 100 fine classes, 20 coarse superclasses
+    - Training: 50,000 images (1 batch)
+    - Test: 10,000 images (1 batch)
+
 References:
-    - CIFAR-10 Dataset: https://www.cs.toronto.edu/~kriz/cifar.html
-    - IDX Format: http://yann.lecun.com/exdb/mnist/
+    - CIFAR-10/100 Homepage: https://www.cs.toronto.edu/~kriz/cifar.html
+    - Binary format details: https://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz
 """
 
+from collections import List
+from memory import UnsafePointer
 from shared.core import ExTensor, zeros
-from shared.core.normalization import normalize_rgb as normalize_rgb_shared
-from .idx_loader import load_idx_labels, load_idx_images_rgb
 
 
-fn normalize_images_rgb(mut images: ExTensor) raises -> ExTensor:
-    """Normalize uint8 RGB images to float32 with ImageNet normalization.
+alias CIFAR10_IMAGE_SIZE: Int = 32
+alias CIFAR10_CHANNELS: Int = 3
+alias CIFAR10_BYTES_PER_IMAGE: Int = 3073  # 1 label + 3*32*32 pixels
+alias CIFAR10_NUM_CLASSES: Int = 10
 
-    Args:
-        images: Input images as uint8 ExTensor of shape (N, 3, H, W)
+alias CIFAR100_IMAGE_SIZE: Int = 32
+alias CIFAR100_CHANNELS: Int = 3
+alias CIFAR100_BYTES_PER_IMAGE: Int = 3074  # 2 labels + 3*32*32 pixels
+alias CIFAR100_NUM_CLASSES_FINE: Int = 100
+alias CIFAR100_NUM_CLASSES_COARSE: Int = 20
 
-    Returns:
-        Normalized images as float32 ExTensor
 
-    Note:
-        Applies ImageNet normalization:
-        - mean=[0.485, 0.456, 0.406] for RGB channels
-        - std=[0.229, 0.224, 0.225] for RGB channels
-        - Converts pixel values from [0, 255] to normalized float
+struct CIFARLoader(Copyable, Movable):
+    """Loader for CIFAR-10 and CIFAR-100 binary format files.
 
-        Uses shared library implementation.
+    Supports loading batches of images and labels from CIFAR binary format.
+    Each batch file contains multiple images packed sequentially.
+
+    Attributes:
+        cifar_version: Version of CIFAR format (10 or 100)
+        image_size: Size of each image (32x32 for standard CIFAR)
+        channels: Number of color channels (3 for RGB)
+        bytes_per_image: Total bytes per image including label(s)
+
+    Example:
+        # Load CIFAR-10 batch
+        var loader = CIFARLoader(10)
+        var images = loader.load_images("data/data_batch_1.bin")
+        var labels = loader.load_labels("data/data_batch_1.bin")
     """
-    # ImageNet normalization parameters (R, G, B)
-    var mean = (Float32(0.485), Float32(0.456), Float32(0.406))
-    var std = (Float32(0.229), Float32(0.224), Float32(0.225))
 
-    # Use shared library normalize_rgb function
-    return normalize_rgb_shared(images, mean, std)
+    var cifar_version: Int
+    var image_size: Int
+    var channels: Int
+    var bytes_per_image: Int
 
+    fn __init__(out self, cifar_version: Int) raises:
+        """Initialize CIFAR loader with specified version.
 
-fn _copy_batch_data(
-    mut dest_images: ExTensor,
-    mut dest_labels: ExTensor,
-    src_images: ExTensor,
-    src_labels: ExTensor,
-    offset: Int
-) raises:
-    """Helper function to copy batch data into full training tensor.
+        Args:
+            cifar_version: CIFAR version (10 or 100)
 
-    Args:
-        dest_images: Destination image tensor
-        dest_labels: Destination label tensor
-        src_images: Source batch images (10,000 images)
-        src_labels: Source batch labels (10,000 labels)
-        offset: Starting index in destination tensor
-    """
-    var batch_size = src_images.shape()[0]
-    var pixels_per_image = 3 * 32 * 32  # RGB channels * height * width
+        Raises:
+            Error: If cifar_version is not 10 or 100
+        """
+        if cifar_version != 10 and cifar_version != 100:
+            raise Error("CIFAR version must be 10 or 100, got: " + str(cifar_version))
 
-    # Copy images
-    var dest_img_data = dest_images._data.bitcast[Float32]()
-    var src_img_data = src_images._data.bitcast[Float32]()
-    for i in range(batch_size):
-        for j in range(pixels_per_image):
-            dest_img_data[offset * pixels_per_image + i * pixels_per_image + j] = src_img_data[i * pixels_per_image + j]
+        self.cifar_version = cifar_version
+        self.image_size = CIFAR10_IMAGE_SIZE
+        self.channels = CIFAR10_CHANNELS
 
-    # Copy labels
-    var dest_label_data = dest_labels._data
-    var src_label_data = src_labels._data
-    for i in range(batch_size):
-        dest_label_data[offset + i] = src_label_data[i]
+        if cifar_version == 10:
+            self.bytes_per_image = CIFAR10_BYTES_PER_IMAGE
+        else:
+            self.bytes_per_image = CIFAR100_BYTES_PER_IMAGE
 
+    fn _validate_file_size(self, file_size: Int) raises:
+        """Validate that file size is consistent with CIFAR format.
 
-fn load_cifar10_batch(batch_dir: String, batch_name: String) raises -> Tuple[ExTensor, ExTensor]:
-    """Load a single CIFAR-10 batch (images and labels).
+        Args:
+            file_size: Size of file in bytes
 
-    Args:
-        batch_dir: Directory containing CIFAR-10 IDX files
-        batch_name: Batch name without extension (e.g., "train_batch_1", "test_batch")
+        Raises:
+            Error: If file size is not a multiple of bytes_per_image
+        """
+        if file_size % self.bytes_per_image != 0:
+            raise Error(
+                "Invalid file size "
+                + str(file_size)
+                + ": not a multiple of "
+                + str(self.bytes_per_image)
+            )
 
-    Returns:
-        Tuple of (images, labels):
-        - images: ExTensor of shape (N, 3, 32, 32) normalized float32
-        - labels: ExTensor of shape (N,) uint8
+    fn _calculate_num_images(self, file_size: Int) -> Int:
+        """Calculate number of images in file based on file size.
 
-    Raises:
-        Error: If batch files cannot be read
-    """
-    var images_path = batch_dir + "/" + batch_name + "_images.idx"
-    var labels_path = batch_dir + "/" + batch_name + "_labels.idx"
+        Args:
+            file_size: Size of file in bytes
 
-    # Load raw images and labels
-    var images_raw = load_idx_images_rgb(images_path)
-    var labels = load_idx_labels(labels_path)
+        Returns:
+            Number of images in file
+        """
+        return file_size // self.bytes_per_image
 
-    # Normalize images
-    var images_normalized = normalize_images_rgb(images_raw)
+    fn load_labels(self, filepath: String) raises -> ExTensor:
+        """Load labels from CIFAR binary format file.
 
-    return (images_normalized^, labels^)
+        For CIFAR-10, returns shape (num_images,) with single label per image.
+        For CIFAR-100, returns shape (num_images, 2) with (coarse, fine) labels.
+
+        Args:
+            filepath: Path to CIFAR binary file
+
+        Returns:
+            ExTensor containing labels
+
+        Raises:
+            Error: If file cannot be read or format is invalid
+        """
+        var content: String
+        with open(filepath, "r") as f:
+            content = f.read()
+
+        var file_size = len(content)
+        self._validate_file_size(file_size)
+
+        var num_images = self._calculate_num_images(file_size)
+        var data_bytes = content._as_ptr()
+
+        if self.cifar_version == 10:
+            # CIFAR-10: 1 label per image
+            var shape = List[Int]()
+            shape.append(num_images)
+            var labels = zeros(shape, DType.uint8)
+
+            var labels_data = labels._data
+            for i in range(num_images):
+                var offset = i * self.bytes_per_image
+                labels_data[i] = data_bytes[offset]
+
+            return labels^
+        else:
+            # CIFAR-100: 2 labels (coarse, fine) per image
+            var shape = List[Int]()
+            shape.append(num_images)
+            shape.append(2)
+            var labels = zeros(shape, DType.uint8)
+
+            var labels_data = labels._data
+            for i in range(num_images):
+                var offset = i * self.bytes_per_image
+                # Coarse label at offset
+                labels_data[i * 2] = data_bytes[offset]
+                # Fine label at offset + 1
+                labels_data[i * 2 + 1] = data_bytes[offset + 1]
+
+            return labels^
+
+    fn load_images(self, filepath: String) raises -> ExTensor:
+        """Load images from CIFAR binary format file.
+
+        Returns shape (num_images, channels, image_size, image_size) with uint8 pixel values.
+        Pixel data is stored as: [red_pixels][green_pixels][blue_pixels] for each image.
+
+        Args:
+            filepath: Path to CIFAR binary file
+
+        Returns:
+            ExTensor of shape (num_images, 3, 32, 32) with uint8 pixel values
+
+        Raises:
+            Error: If file cannot be read or format is invalid
+        """
+        var content: String
+        with open(filepath, "r") as f:
+            content = f.read()
+
+        var file_size = len(content)
+        self._validate_file_size(file_size)
+
+        var num_images = self._calculate_num_images(file_size)
+        var data_bytes = content._as_ptr()
+
+        # Create tensor to hold images
+        var shape = List[Int]()
+        shape.append(num_images)
+        shape.append(self.channels)
+        shape.append(self.image_size)
+        shape.append(self.image_size)
+        var images = zeros(shape, DType.uint8)
+
+        var images_data = images._data
+        var pixels_per_image = self.image_size * self.image_size
+
+        # For each image, extract pixel data
+        # Offset depends on CIFAR version (1 or 2 label bytes)
+        var label_bytes = 1 if self.cifar_version == 10 else 2
+
+        for img_idx in range(num_images):
+            var file_offset = img_idx * self.bytes_per_image + label_bytes
+            var tensor_offset = img_idx * self.channels * pixels_per_image
+
+            # Copy pixel data: R channel, then G channel, then B channel
+            for pixel_idx in range(pixels_per_image * self.channels):
+                images_data[tensor_offset + pixel_idx] = data_bytes[file_offset + pixel_idx]
+
+        return images^
+
+    fn load_batch(
+        self, filepath: String
+    ) raises -> Tuple[ExTensor, ExTensor]:
+        """Load a complete batch of images and labels from CIFAR file.
+
+        Convenience function that loads both images and labels in a single call.
+
+        Args:
+            filepath: Path to CIFAR binary file
+
+        Returns:
+            Tuple of (images, labels) where:
+            - images: ExTensor of shape (num_images, 3, 32, 32) with uint8 pixels
+            - labels: ExTensor with shape (num_images,) for CIFAR-10 or (num_images, 2) for CIFAR-100
+
+        Raises:
+            Error: If file cannot be read or format is invalid
+        """
+        var images = self.load_images(filepath)
+        var labels = self.load_labels(filepath)
+
+        return Tuple[ExTensor, ExTensor](images, labels)
