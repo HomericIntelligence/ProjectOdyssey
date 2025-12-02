@@ -125,6 +125,14 @@ from .serialization import (
     dtype_to_string,  # Convert dtype enum to string
 )
 
+# Argument parsing utilities
+from .arg_parser import (
+    ArgumentParser,  # Main argument parser class
+    ArgumentSpec,  # Argument specification
+    ParsedArgs,  # Parsed arguments container
+    create_parser,  # Create new parser
+)
+
 # ============================================================================
 # Public API
 # ============================================================================
