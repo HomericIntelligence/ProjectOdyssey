@@ -1,10 +1,10 @@
 """Data Format Loaders
 
-Provides functions for loading various data formats used in ML Odyssey.
+Provides functions and classes for loading various data formats used in ML Odyssey.
 
 Modules:
     `idx_loader`: IDX file format (MNIST, EMNIST, CIFAR-10 as IDX)
-    `cifar_loader`: CIFAR-10 dataset utilities
+    `cifar_loader`: CIFAR-10 and CIFAR-100 binary format loader
 """
 
 # IDX Format Loaders
@@ -15,8 +15,16 @@ from .idx_loader import (
     load_idx_images_rgb,
 )
 
-# CIFAR-10 Specific Loaders
+# CIFAR Binary Format Loaders
 from .cifar_loader import (
-    normalize_images_rgb,
-    load_cifar10_batch,
+    CIFARLoader,
+    CIFAR10_IMAGE_SIZE,
+    CIFAR10_CHANNELS,
+    CIFAR10_BYTES_PER_IMAGE,
+    CIFAR10_NUM_CLASSES,
+    CIFAR100_IMAGE_SIZE,
+    CIFAR100_CHANNELS,
+    CIFAR100_BYTES_PER_IMAGE,
+    CIFAR100_NUM_CLASSES_FINE,
+    CIFAR100_NUM_CLASSES_COARSE,
 )
