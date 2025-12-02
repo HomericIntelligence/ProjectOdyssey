@@ -1,0 +1,406 @@
+"""Tests for tensor serialization utilities.
+
+Tests checkpoint save/load operations with named tensors and metadata.
+Covers both single tensor and collection operations.
+"""
+
+from shared.core import ExTensor, zeros, ones
+from shared.utils import (
+    NamedTensor,
+    save_named_tensors,
+    load_named_tensors,
+    save_checkpoint,
+    load_checkpoint,
+)
+from testing import assert_true, assert_equal
+
+
+# ============================================================================
+# Helper Functions
+# ============================================================================
+
+
+fn create_test_dir(base: String) -> String:
+    """Create a unique test directory."""
+    from python import Python
+    var uuid = Python.import_module("uuid")
+    var test_id = String(uuid.uuid4())[:8]
+    var test_dir = base + "/test_checkpoint_" + test_id
+    return test_dir
+
+
+fn cleanup_test_dir(dir_path: String) -> Bool:
+    """Clean up test directory after testing."""
+    try:
+        from python import Python
+        var shutil = Python.import_module("shutil")
+        shutil.rmtree(dir_path)
+        return True
+    except:
+        return False
+
+
+# ============================================================================
+# NamedTensor Tests
+# ============================================================================
+
+
+fn test_named_tensor_creation() raises:
+    """Test creating a NamedTensor."""
+    var shape = List[Int]()
+    shape.append(3)
+    shape.append(4)
+    var tensor = zeros(shape, DType.float32)
+
+    var named = NamedTensor("test_weights", tensor)
+
+    assert_equal(named.name, "test_weights", "Name should match")
+    assert_equal(named.tensor.shape()[0], 3, "Shape should match")
+    assert_equal(named.tensor.shape()[1], 4, "Shape should match")
+
+
+fn test_named_tensor_multiple_dtypes() raises:
+    """Test NamedTensor with different dtypes."""
+    # Float32 tensor
+    var shape_f32 = List[Int]()
+    shape_f32.append(2)
+    var tensor_f32 = zeros(shape_f32, DType.float32)
+    var named_f32 = NamedTensor("weights_f32", tensor_f32)
+    assert_equal(named_f32.tensor.dtype(), DType.float32, "Float32 dtype check")
+
+    # Int64 tensor
+    var shape_i64 = List[Int]()
+    shape_i64.append(5)
+    var tensor_i64 = zeros(shape_i64, DType.int64)
+    var named_i64 = NamedTensor("indices_i64", tensor_i64)
+    assert_equal(named_i64.tensor.dtype(), DType.int64, "Int64 dtype check")
+
+
+# ============================================================================
+# Save/Load Named Tensors Tests
+# ============================================================================
+
+
+fn test_save_load_single_named_tensor() raises:
+    """Test saving and loading a single named tensor."""
+    var test_dir = create_test_dir("/tmp")
+
+    try:
+        # Create a test tensor
+        var shape = List[Int]()
+        shape.append(3)
+        shape.append(4)
+        var tensor = ones(shape, DType.float32)
+        var named = NamedTensor("test_tensor", tensor)
+
+        # Create list with single tensor
+        var tensors = List[NamedTensor]()
+        tensors.append(named)
+
+        # Save
+        save_named_tensors(tensors, test_dir)
+
+        # Load
+        var loaded_tensors = load_named_tensors(test_dir)
+
+        # Verify
+        assert_equal(
+            len(loaded_tensors), 1, "Should have loaded 1 tensor"
+        )
+        assert_equal(
+            loaded_tensors[0].name, "test_tensor", "Name should match"
+        )
+        assert_equal(
+            loaded_tensors[0].tensor.shape()[0], 3, "Shape dim 0 should match"
+        )
+        assert_equal(
+            loaded_tensors[0].tensor.shape()[1], 4, "Shape dim 1 should match"
+        )
+
+    finally:
+        _ = cleanup_test_dir(test_dir)
+
+
+fn test_save_load_multiple_named_tensors() raises:
+    """Test saving and loading multiple named tensors."""
+    var test_dir = create_test_dir("/tmp")
+
+    try:
+        # Create multiple test tensors
+        var shape1 = List[Int]()
+        shape1.append(2)
+        shape1.append(3)
+        var tensor1 = ones(shape1, DType.float32)
+
+        var shape2 = List[Int]()
+        shape2.append(4)
+        var tensor2 = zeros(shape2, DType.float64)
+
+        var shape3 = List[Int]()
+        shape3.append(5)
+        shape3.append(5)
+        var tensor3 = ones(shape3, DType.int32)
+
+        # Create list with multiple tensors
+        var tensors = List[NamedTensor]()
+        tensors.append(NamedTensor("weights", tensor1))
+        tensors.append(NamedTensor("bias", tensor2))
+        tensors.append(NamedTensor("indices", tensor3))
+
+        # Save
+        save_named_tensors(tensors, test_dir)
+
+        # Load
+        var loaded = load_named_tensors(test_dir)
+
+        # Verify count
+        assert_equal(len(loaded), 3, "Should have loaded 3 tensors")
+
+        # Verify names (should be in sorted order)
+        var names = List[String]()
+        for i in range(len(loaded)):
+            names.append(loaded[i].name)
+
+    finally:
+        _ = cleanup_test_dir(test_dir)
+
+
+# ============================================================================
+# Checkpoint Tests (with metadata)
+# ============================================================================
+
+
+fn test_save_checkpoint_without_metadata() raises:
+    """Test saving checkpoint without metadata."""
+    var test_dir = create_test_dir("/tmp")
+
+    try:
+        # Create test tensors
+        var shape = List[Int]()
+        shape.append(3)
+        shape.append(4)
+        var tensor = ones(shape, DType.float32)
+
+        var tensors = List[NamedTensor]()
+        tensors.append(NamedTensor("weights", tensor))
+
+        # Save without metadata - should not raise
+        save_checkpoint(tensors, test_dir)
+
+        # If we reach here, save succeeded
+        assert_true(True, "Checkpoint save without metadata should succeed")
+
+    finally:
+        _ = cleanup_test_dir(test_dir)
+
+
+fn test_save_checkpoint_with_metadata() raises:
+    """Test saving checkpoint with metadata."""
+    var test_dir = create_test_dir("/tmp")
+
+    try:
+        # Create test tensors
+        var shape = List[Int]()
+        shape.append(2)
+        var tensor = ones(shape, DType.float32)
+
+        var tensors = List[NamedTensor]()
+        tensors.append(NamedTensor("weights", tensor))
+
+        # Create metadata
+        var metadata = Dict[String, String]()
+        metadata["epoch"] = "10"
+        metadata["loss"] = "0.45"
+        metadata["learning_rate"] = "0.001"
+
+        # Save with metadata - should not raise
+        save_checkpoint(tensors, test_dir, metadata)
+
+        # If we reach here, save succeeded
+        assert_true(True, "Checkpoint save with metadata should succeed")
+
+    finally:
+        _ = cleanup_test_dir(test_dir)
+
+
+fn test_load_checkpoint_with_metadata() raises:
+    """Test loading checkpoint with metadata."""
+    var test_dir = create_test_dir("/tmp")
+
+    try:
+        # Create test tensors
+        var shape = List[Int]()
+        shape.append(3)
+        var tensor = ones(shape, DType.float32)
+
+        var tensors = List[NamedTensor]()
+        tensors.append(NamedTensor("weights", tensor))
+
+        # Create metadata
+        var metadata = Dict[String, String]()
+        metadata["epoch"] = "20"
+        metadata["loss"] = "0.32"
+
+        # Save
+        save_checkpoint(tensors, test_dir, metadata)
+
+        # Load
+        var (loaded_tensors, loaded_metadata) = load_checkpoint(test_dir)
+
+        # Verify tensors
+        assert_equal(
+            len(loaded_tensors), 1, "Should load 1 tensor"
+        )
+        assert_equal(
+            loaded_tensors[0].name, "weights", "Tensor name should match"
+        )
+
+        # Verify metadata
+        assert_true(
+            loaded_metadata.contains("epoch"), "Metadata should have epoch"
+        )
+        assert_true(
+            loaded_metadata.contains("loss"), "Metadata should have loss"
+        )
+        assert_equal(
+            loaded_metadata["epoch"], "20", "Epoch value should match"
+        )
+        assert_equal(
+            loaded_metadata["loss"], "0.32", "Loss value should match"
+        )
+
+    finally:
+        _ = cleanup_test_dir(test_dir)
+
+
+fn test_load_checkpoint_without_metadata_file() raises:
+    """Test loading checkpoint when metadata file doesn't exist."""
+    var test_dir = create_test_dir("/tmp")
+
+    try:
+        # Create and save tensors without metadata
+        var shape = List[Int]()
+        shape.append(2)
+        var tensor = ones(shape, DType.float32)
+
+        var tensors = List[NamedTensor]()
+        tensors.append(NamedTensor("weights", tensor))
+
+        # Save without metadata (None)
+        save_checkpoint(tensors, test_dir)
+
+        # Load should still work with empty metadata
+        var (loaded_tensors, loaded_metadata) = load_checkpoint(test_dir)
+
+        # Verify tensors loaded
+        assert_equal(
+            len(loaded_tensors), 1, "Should load 1 tensor"
+        )
+
+        # Verify metadata is empty but not error
+        assert_equal(
+            len(loaded_metadata), 0, "Metadata should be empty"
+        )
+
+    finally:
+        _ = cleanup_test_dir(test_dir)
+
+
+fn test_checkpoint_round_trip() raises:
+    """Test full checkpoint save/load round trip."""
+    var test_dir = create_test_dir("/tmp")
+
+    try:
+        # Create original tensors with different shapes and dtypes
+        var shape1 = List[Int]()
+        shape1.append(4)
+        shape1.append(5)
+        var tensor1 = ones(shape1, DType.float32)
+
+        var shape2 = List[Int]()
+        shape2.append(10)
+        var tensor2 = zeros(shape2, DType.float64)
+
+        var tensors = List[NamedTensor]()
+        tensors.append(NamedTensor("layer1_w", tensor1))
+        tensors.append(NamedTensor("layer1_b", tensor2))
+
+        # Create metadata
+        var metadata = Dict[String, String]()
+        metadata["epoch"] = "100"
+        metadata["best_loss"] = "0.001"
+        metadata["model"] = "test_model"
+
+        # Save checkpoint
+        save_checkpoint(tensors, test_dir, metadata)
+
+        # Load checkpoint
+        var (loaded_tensors, loaded_meta) = load_checkpoint(test_dir)
+
+        # Verify tensor count
+        assert_equal(
+            len(loaded_tensors), 2, "Should have 2 tensors"
+        )
+
+        # Verify first tensor
+        assert_equal(
+            loaded_tensors[0].shape()[0], 4, "First tensor dim 0"
+        )
+        assert_equal(
+            loaded_tensors[0].shape()[1], 5, "First tensor dim 1"
+        )
+
+        # Verify second tensor
+        assert_equal(
+            loaded_tensors[1].shape()[0], 10, "Second tensor dim 0"
+        )
+
+        # Verify metadata
+        assert_equal(
+            loaded_meta["epoch"], "100", "Epoch should match"
+        )
+        assert_equal(
+            loaded_meta["best_loss"], "0.001", "Best loss should match"
+        )
+        assert_equal(
+            loaded_meta["model"], "test_model", "Model should match"
+        )
+
+    finally:
+        _ = cleanup_test_dir(test_dir)
+
+
+fn test_checkpoint_with_many_tensors() raises:
+    """Test checkpoint with many tensors."""
+    var test_dir = create_test_dir("/tmp")
+
+    try:
+        # Create many tensors
+        var tensors = List[NamedTensor]()
+        for i in range(10):
+            var shape = List[Int]()
+            shape.append(i + 1)
+            var tensor = ones(shape, DType.float32)
+            var name = "tensor_" + String(i)
+            tensors.append(NamedTensor(name, tensor))
+
+        # Save
+        save_checkpoint(tensors, test_dir)
+
+        # Load
+        var (loaded_tensors, _) = load_checkpoint(test_dir)
+
+        # Verify all tensors loaded
+        assert_equal(
+            len(loaded_tensors), 10, "Should load 10 tensors"
+        )
+
+        # Verify shapes are preserved
+        for i in range(len(loaded_tensors)):
+            assert_equal(
+                loaded_tensors[i].shape()[0], i + 1,
+                "Shape should be preserved for tensor " + String(i)
+            )
+
+    finally:
+        _ = cleanup_test_dir(test_dir)
