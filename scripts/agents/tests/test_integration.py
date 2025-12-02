@@ -6,17 +6,18 @@ Tests that all agent files exist, are readable, have valid YAML frontmatter,
 and that all references (skills, agents) resolve correctly.
 """
 
-import pytest
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
+import pytest
+
 # Import helper functions from conftest (not fixtures, which are auto-discovered)
 from conftest import (
-    parse_frontmatter,
-    validate_frontmatter_keys,
-    extract_skill_references,
     extract_agent_references,
-    resolve_relative_path
+    extract_skill_references,
+    parse_frontmatter,
+    resolve_relative_path,
+    validate_frontmatter_keys,
 )
 
 

@@ -6,12 +6,13 @@ Tests that validation scripts work correctly, setup scripts handle errors,
 and utility scripts produce expected output.
 """
 
+import json
 import subprocess
 import sys
-import json
-import pytest
 from pathlib import Path
-from typing import List, Dict
+from typing import Dict, List
+
+import pytest
 
 
 # ============================================================================

@@ -7,13 +7,15 @@ contents matches sections, and references are not broken.
 """
 
 import re
-import pytest
 from pathlib import Path
-from typing import List, Tuple, Set, Dict
+from typing import Dict, List, Set, Tuple
+
+import pytest
+
 from conftest import (
     extract_links,
+    generate_doc_test_ids,
     resolve_relative_path,
-    generate_doc_test_ids
 )
 
 
