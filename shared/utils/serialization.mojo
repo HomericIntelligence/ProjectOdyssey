@@ -317,7 +317,7 @@ fn load_named_tensors(dirpath: String) raises -> List[NamedTensor]:
 # ============================================================================
 
 
-fn save_checkpoint(
+fn save_named_checkpoint(
     tensors: List[NamedTensor], path: String, metadata: Optional[Dict[String, String]] = None
 ) raises:
     """Save model checkpoint with named tensors and optional metadata.
@@ -358,7 +358,7 @@ fn save_checkpoint(
             _ = f.write(meta_content)
 
 
-fn load_checkpoint(path: String) raises -> Tuple[List[NamedTensor], Dict[String, String]]:
+fn load_named_checkpoint(path: String) raises -> Tuple[List[NamedTensor], Dict[String, String]]:
     """Load model checkpoint with named tensors and metadata.
 
     Reads all tensor files from checkpoint directory and metadata if present.
