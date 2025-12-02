@@ -9,8 +9,8 @@ from shared.utils import (
     NamedTensor,
     save_named_tensors,
     load_named_tensors,
-    save_checkpoint,
-    load_checkpoint,
+    save_named_checkpoint,
+    load_named_checkpoint,
 )
 from testing import assert_true, assert_equal
 
@@ -170,7 +170,7 @@ fn test_save_load_multiple_named_tensors() raises:
 # ============================================================================
 
 
-fn test_save_checkpoint_without_metadata() raises:
+fn test_save_named_checkpoint_without_metadata() raises:
     """Test saving checkpoint without metadata."""
     var test_dir = create_test_dir("/tmp")
 
@@ -185,7 +185,7 @@ fn test_save_checkpoint_without_metadata() raises:
         tensors.append(NamedTensor("weights", tensor))
 
         # Save without metadata - should not raise
-        save_checkpoint(tensors, test_dir)
+        save_named_checkpoint(tensors, test_dir)
 
         # If we reach here, save succeeded
         assert_true(True, "Checkpoint save without metadata should succeed")
@@ -194,7 +194,7 @@ fn test_save_checkpoint_without_metadata() raises:
         _ = cleanup_test_dir(test_dir)
 
 
-fn test_save_checkpoint_with_metadata() raises:
+fn test_save_named_checkpoint_with_metadata() raises:
     """Test saving checkpoint with metadata."""
     var test_dir = create_test_dir("/tmp")
 
@@ -214,7 +214,7 @@ fn test_save_checkpoint_with_metadata() raises:
         metadata["learning_rate"] = "0.001"
 
         # Save with metadata - should not raise
-        save_checkpoint(tensors, test_dir, metadata)
+        save_named_checkpoint(tensors, test_dir, metadata)
 
         # If we reach here, save succeeded
         assert_true(True, "Checkpoint save with metadata should succeed")
@@ -223,7 +223,7 @@ fn test_save_checkpoint_with_metadata() raises:
         _ = cleanup_test_dir(test_dir)
 
 
-fn test_load_checkpoint_with_metadata() raises:
+fn test_load_named_checkpoint_with_metadata() raises:
     """Test loading checkpoint with metadata."""
     var test_dir = create_test_dir("/tmp")
 
@@ -242,10 +242,10 @@ fn test_load_checkpoint_with_metadata() raises:
         metadata["loss"] = "0.32"
 
         # Save
-        save_checkpoint(tensors, test_dir, metadata)
+        save_named_checkpoint(tensors, test_dir, metadata)
 
         # Load
-        var (loaded_tensors, loaded_metadata) = load_checkpoint(test_dir)
+        var (loaded_tensors, loaded_metadata) = load_named_checkpoint(test_dir)
 
         # Verify tensors
         assert_equal(
@@ -273,7 +273,7 @@ fn test_load_checkpoint_with_metadata() raises:
         _ = cleanup_test_dir(test_dir)
 
 
-fn test_load_checkpoint_without_metadata_file() raises:
+fn test_load_named_checkpoint_without_metadata_file() raises:
     """Test loading checkpoint when metadata file doesn't exist."""
     var test_dir = create_test_dir("/tmp")
 
@@ -287,10 +287,10 @@ fn test_load_checkpoint_without_metadata_file() raises:
         tensors.append(NamedTensor("weights", tensor))
 
         # Save without metadata (None)
-        save_checkpoint(tensors, test_dir)
+        save_named_checkpoint(tensors, test_dir)
 
         # Load should still work with empty metadata
-        var (loaded_tensors, loaded_metadata) = load_checkpoint(test_dir)
+        var (loaded_tensors, loaded_metadata) = load_named_checkpoint(test_dir)
 
         # Verify tensors loaded
         assert_equal(
@@ -332,10 +332,10 @@ fn test_checkpoint_round_trip() raises:
         metadata["model"] = "test_model"
 
         # Save checkpoint
-        save_checkpoint(tensors, test_dir, metadata)
+        save_named_checkpoint(tensors, test_dir, metadata)
 
         # Load checkpoint
-        var (loaded_tensors, loaded_meta) = load_checkpoint(test_dir)
+        var (loaded_tensors, loaded_meta) = load_named_checkpoint(test_dir)
 
         # Verify tensor count
         assert_equal(
@@ -385,10 +385,10 @@ fn test_checkpoint_with_many_tensors() raises:
             tensors.append(NamedTensor(name, tensor))
 
         # Save
-        save_checkpoint(tensors, test_dir)
+        save_named_checkpoint(tensors, test_dir)
 
         # Load
-        var (loaded_tensors, _) = load_checkpoint(test_dir)
+        var (loaded_tensors, _) = load_named_checkpoint(test_dir)
 
         # Verify all tensors loaded
         assert_equal(
