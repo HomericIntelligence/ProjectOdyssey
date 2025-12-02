@@ -177,25 +177,5 @@ from ..core.dropout import (
     dropout2d_backward,
 )
 
-__all__ = [
-    # Foundation components
-    "Variable",
-    "GradientTape",
-    "TapeNode",
-    "SGD",
-    # Functional helpers
-    "LossAndGrad",
-    "mse_loss_and_grad",
-    "bce_loss_and_grad",
-    "ce_loss_and_grad",
-    "compute_gradient",
-    "multiply_scalar",
-    "add_scalar",
-    "subtract_scalar",
-    "divide_scalar",
-    "apply_gradient",
-    "apply_gradients",
-    # Backward passes from shared.core
-    "dropout_backward",
-    "dropout2d_backward",
-]
+# Note: In Mojo, all imported symbols are automatically available
+# to package consumers. No __all__ equivalent is needed.
