@@ -183,7 +183,7 @@ fn _deserialize_checkpoint(content: String) -> Checkpoint:
                 var value = data[eq_pos + 1 :]
                 checkpoint.metadata[key] = value
 
-    return checkpoint
+    return checkpoint^
 
 
 # ============================================================================
