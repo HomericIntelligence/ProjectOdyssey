@@ -118,6 +118,8 @@ from .serialization import (
     load_tensor_with_name,  # Load tensor with associated name
     save_named_tensors,  # Save collection of named tensors
     load_named_tensors,  # Load collection from directory
+    save_checkpoint,  # Save checkpoint with metadata
+    load_checkpoint,  # Load checkpoint with metadata
     bytes_to_hex,  # Encode bytes to hex string
     hex_to_bytes,  # Decode hex string to bytes
     get_dtype_size,  # Get dtype size in bytes

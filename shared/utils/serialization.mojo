@@ -39,7 +39,8 @@ Example:
 
 from shared.core.extensor import ExTensor, zeros
 from memory import UnsafePointer
-from collections import List
+from collections import List, Dict
+from collections.optional import Optional
 
 
 # ============================================================================
@@ -309,6 +310,153 @@ fn load_named_tensors(dirpath: String) raises -> List[NamedTensor]:
         raise Error("Failed to load tensors from: " + dirpath)
 
     return result^
+
+
+# ============================================================================
+# Checkpoint Serialization (with optional metadata)
+# ============================================================================
+
+
+fn save_checkpoint(
+    tensors: List[NamedTensor], path: String, metadata: Optional[Dict[String, String]] = None
+) raises:
+    """Save model checkpoint with named tensors and optional metadata.
+
+    Creates checkpoint directory with tensor files and metadata file.
+    Metadata is stored in a separate JSON-like format.
+
+    Args:
+        tensors: List of NamedTensor objects to save
+        path: Checkpoint directory path (created if doesn't exist)
+        metadata: Optional metadata dictionary (e.g., epoch, loss values)
+
+    Raises:
+        Error: If directory creation or file write fails
+
+    Example:
+        var tensors = List[NamedTensor]()
+        tensors.append(NamedTensor("weights", weights_tensor))
+        tensors.append(NamedTensor("bias", bias_tensor))
+        var meta = Dict[String, String]()
+        meta["epoch"] = "10"
+        meta["loss"] = "0.45"
+        save_checkpoint(tensors, "checkpoints/model/", meta)
+    """
+    # Create checkpoint directory
+    from shared.utils.io import create_directory
+    if not create_directory(path):
+        raise Error("Failed to create checkpoint directory: " + path)
+
+    # Save all named tensors
+    save_named_tensors(tensors, path)
+
+    # Save metadata if provided
+    if metadata:
+        var meta_path = path + "/metadata.txt"
+        var meta_content = _serialize_metadata(metadata.value())
+        with open(meta_path, "w") as f:
+            _ = f.write(meta_content)
+
+
+fn load_checkpoint(path: String) raises -> Tuple[List[NamedTensor], Dict[String, String]]:
+    """Load model checkpoint with named tensors and metadata.
+
+    Reads all tensor files from checkpoint directory and metadata if present.
+    Returns both the tensors and any associated metadata.
+
+    Args:
+        path: Checkpoint directory path
+
+    Returns:
+        Tuple of (tensors, metadata)
+
+    Raises:
+        Error: If directory doesn't exist or file format is invalid
+
+    Example:
+        var (tensors, metadata) = load_checkpoint("checkpoints/model/")
+        for i in range(len(tensors)):
+            print(tensors[i].name)
+        if metadata.contains("epoch"):
+            print("Epoch: " + metadata["epoch"])
+    """
+    # Load all named tensors
+    var tensors = load_named_tensors(path)
+
+    # Load metadata if it exists
+    var metadata = Dict[String, String]()
+    var meta_path = path + "/metadata.txt"
+
+    try:
+        var meta_content: String
+        with open(meta_path, "r") as f:
+            meta_content = f.read()
+        metadata = _deserialize_metadata(meta_content)
+    except:
+        # Metadata file not found, return empty metadata
+        pass
+
+    return Tuple[List[NamedTensor], Dict[String, String]](tensors^, metadata)
+
+
+fn _serialize_metadata(metadata: Dict[String, String]) -> String:
+    """Serialize metadata dictionary to text format.
+
+    Format: one key=value pair per line
+
+    Args:
+        metadata: Dictionary to serialize
+
+    Returns:
+        Serialized string
+    """
+    var lines = List[String]()
+
+    for item in metadata.items():
+        var key = item[].key
+        var value = item[].value
+        lines.append(key + "=" + value)
+
+    # Join lines
+    var result = String("")
+    for i in range(len(lines)):
+        if i > 0:
+            result += "\n"
+        result += lines[i]
+
+    return result
+
+
+fn _deserialize_metadata(content: String) raises -> Dict[String, String]:
+    """Deserialize metadata from text format.
+
+    Args:
+        content: Serialized metadata string
+
+    Returns:
+        Metadata dictionary
+
+    Raises:
+        Error: If format is invalid
+    """
+    var metadata = Dict[String, String]()
+    var lines = content.split("\n")
+
+    for i in range(len(lines)):
+        var line = lines[i].strip()
+        if len(line) == 0:
+            continue
+
+        # Find key=value separator
+        var eq_pos = line.find("=")
+        if eq_pos == -1:
+            continue  # Skip malformed lines
+
+        var key = line[:eq_pos]
+        var value = line[eq_pos + 1 :]
+        metadata[key] = value
+
+    return metadata
 
 
 # ============================================================================
