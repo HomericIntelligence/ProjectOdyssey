@@ -171,11 +171,11 @@ from .functional import (
 # # Normalization backward passes
 # from ..core.normalization import batch_norm2d_backward
 
-# # Dropout backward passes
-# from ..core.dropout import (
-#     dropout_backward,
-#     dropout2d_backward,
-# )
+# Dropout backward passes
+from ..core.dropout import (
+    dropout_backward,
+    dropout2d_backward,
+)
 
 __all__ = [
     # Foundation components
@@ -195,6 +195,7 @@ __all__ = [
     "divide_scalar",
     "apply_gradient",
     "apply_gradients",
-    # Backward passes from shared.core (to be added when implementations are complete)
-    # See TODO.md for progress on backward function implementations
+    # Backward passes from shared.core
+    "dropout_backward",
+    "dropout2d_backward",
 ]
