@@ -1372,7 +1372,7 @@ skill-name/
 ## References
 
 - [Claude Code Skills Documentation](https://code.claude.com/docs/en/skills)
-- [Agent Hierarchy](../agents/agent-hierarchy.md)
+- [Agent Hierarchy](https://github.com/mvillmow/ml-odyssey/blob/main/agents/hierarchy.md)
 - [Orchestration Patterns](./orchestration-patterns.md)
-- [CLAUDE.md](../../CLAUDE.md)
-- [5-Phase Workflow](./README.md)
+- [CLAUDE.md](https://github.com/mvillmow/ml-odyssey/blob/main/CLAUDE.md)
+- [5-Phase Workflow](./phases.md)
