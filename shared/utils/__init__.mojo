@@ -133,6 +133,10 @@ from .arg_parser import (
     ArgumentSpec,  # Argument specification
     ParsedArgs,  # Parsed arguments container
     create_parser,  # Create new parser
+    create_training_parser,  # Create training-specific parser
+    validate_positive_int,  # Validate positive integer arguments
+    validate_positive_float,  # Validate positive float arguments
+    validate_range_float,  # Validate float within range
 )
 
 # Training argument utilities

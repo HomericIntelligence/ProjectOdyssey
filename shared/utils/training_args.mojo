@@ -3,17 +3,30 @@
 This module provides a standardized TrainingArgs struct and parse_training_args()
 function for consistent command-line argument handling across training scripts.
 
+Features:
+    - TrainingArgs struct for common hyperparameters
+    - Automatic argument parsing with sensible defaults
+    - Support for custom defaults via parse_training_args_with_defaults()
+    - Validation of numeric ranges
+    - Backward compatibility with direct sys.argv parsing
+
 Example:
-    from shared.utils.training_args import TrainingArgs, parse_training_args
+    from shared.utils import TrainingArgs, parse_training_args
 
     fn main() raises:
         var args = parse_training_args()
         print("Epochs:", args.epochs)
         print("Batch size:", args.batch_size)
         print("Learning rate:", args.learning_rate)
+        print("Verbose:", args.verbose)
 """
 
-from sys import argv
+from .arg_parser import (
+    create_training_parser,
+    validate_positive_int,
+    validate_positive_float,
+    validate_range_float,
+)
 
 
 # ============================================================================
@@ -60,7 +73,7 @@ struct TrainingArgs(Copyable, Movable):
 
 
 fn parse_training_args() raises -> TrainingArgs:
-    """Parse common training arguments from command line.
+    """Parse common training arguments from command line with defaults.
 
     Supported arguments:
         --epochs <int>: Number of training epochs (default: 10).
@@ -72,46 +85,24 @@ fn parse_training_args() raises -> TrainingArgs:
         --verbose: Enable verbose output.
 
     Returns:
-        TrainingArgs struct with parsed values.
+        TrainingArgs struct with parsed and validated values.
+
+    Raises:
+        Error if argument validation fails.
 
     Example:
-        # Command line: python train.py --epochs 100 --lr 0.001 --verbose
+        # Command line: mojo train.mojo --epochs 100 --lr 0.001 --verbose
         var args = parse_training_args()
         # args.epochs == 100, args.learning_rate == 0.001, args.verbose == True
     """
-    var result = TrainingArgs()
-
-    var args = argv()
-    var i = 1  # Skip program name
-    while i < len(args):
-        var arg = args[i]
-
-        if arg == "--epochs" and i + 1 < len(args):
-            result.epochs = Int(args[i + 1])
-            i += 2
-        elif arg == "--batch-size" and i + 1 < len(args):
-            result.batch_size = Int(args[i + 1])
-            i += 2
-        elif arg == "--lr" and i + 1 < len(args):
-            result.learning_rate = Float64(args[i + 1])
-            i += 2
-        elif arg == "--momentum" and i + 1 < len(args):
-            result.momentum = Float64(args[i + 1])
-            i += 2
-        elif arg == "--data-dir" and i + 1 < len(args):
-            result.data_dir = args[i + 1]
-            i += 2
-        elif arg == "--weights-dir" and i + 1 < len(args):
-            result.weights_dir = args[i + 1]
-            i += 2
-        elif arg == "--verbose":
-            result.verbose = True
-            i += 1
-        else:
-            # Skip unknown arguments (allows model-specific args)
-            i += 1
-
-    return result^
+    return parse_training_args_with_defaults(
+        default_epochs=10,
+        default_batch_size=32,
+        default_lr=0.01,
+        default_momentum=0.9,
+        default_data_dir="datasets",
+        default_weights_dir="weights",
+    )
 
 
 fn parse_training_args_with_defaults(
@@ -122,21 +113,24 @@ fn parse_training_args_with_defaults(
     default_data_dir: String = "datasets",
     default_weights_dir: String = "weights",
 ) raises -> TrainingArgs:
-    """Parse training arguments with custom defaults.
+    """Parse training arguments with custom defaults and validation.
 
     Allows each training script to specify model-appropriate defaults
-    while still using shared parsing logic.
+    while still using shared parsing logic. Validates numeric ranges.
 
     Args:
-        default_epochs: Default number of epochs.
-        default_batch_size: Default batch size.
-        default_lr: Default learning rate.
-        default_momentum: Default momentum.
+        default_epochs: Default number of epochs (must be positive).
+        default_batch_size: Default batch size (must be positive).
+        default_lr: Default learning rate (must be positive).
+        default_momentum: Default momentum (must be in [0.0, 1.0]).
         default_data_dir: Default dataset directory.
         default_weights_dir: Default weights directory.
 
     Returns:
-        TrainingArgs struct with parsed values.
+        TrainingArgs struct with parsed and validated values.
+
+    Raises:
+        Error if argument validation fails.
 
     Example:
         # AlexNet with custom defaults
@@ -148,42 +142,30 @@ fn parse_training_args_with_defaults(
             default_weights_dir="alexnet_weights"
         )
     """
-    var result = TrainingArgs()
-    result.epochs = default_epochs
-    result.batch_size = default_batch_size
-    result.learning_rate = default_lr
-    result.momentum = default_momentum
-    result.data_dir = default_data_dir
-    result.weights_dir = default_weights_dir
-    result.verbose = False
+    var parser = create_training_parser()
+    var parsed = parser.parse()
 
-    var args = argv()
-    var i = 1
-    while i < len(args):
-        var arg = args[i]
+    # Extract values with defaults
+    var epochs = parsed.get_int("epochs", default_epochs)
+    var batch_size = parsed.get_int("batch-size", default_batch_size)
+    var learning_rate = parsed.get_float("lr", default_lr)
+    var momentum = parsed.get_float("momentum", default_momentum)
+    var data_dir = parsed.get_string("data-dir", default_data_dir)
+    var weights_dir = parsed.get_string("weights-dir", default_weights_dir)
+    var verbose = parsed.get_bool("verbose")
 
-        if arg == "--epochs" and i + 1 < len(args):
-            result.epochs = Int(args[i + 1])
-            i += 2
-        elif arg == "--batch-size" and i + 1 < len(args):
-            result.batch_size = Int(args[i + 1])
-            i += 2
-        elif arg == "--lr" and i + 1 < len(args):
-            result.learning_rate = Float64(args[i + 1])
-            i += 2
-        elif arg == "--momentum" and i + 1 < len(args):
-            result.momentum = Float64(args[i + 1])
-            i += 2
-        elif arg == "--data-dir" and i + 1 < len(args):
-            result.data_dir = args[i + 1]
-            i += 2
-        elif arg == "--weights-dir" and i + 1 < len(args):
-            result.weights_dir = args[i + 1]
-            i += 2
-        elif arg == "--verbose":
-            result.verbose = True
-            i += 1
-        else:
-            i += 1
+    # Validate numeric arguments
+    validate_positive_int(epochs, "epochs")
+    validate_positive_int(batch_size, "batch-size")
+    validate_positive_float(learning_rate, "learning-rate")
+    validate_range_float(momentum, 0.0, 1.0, "momentum")
 
-    return result^
+    return TrainingArgs(
+        epochs=epochs,
+        batch_size=batch_size,
+        learning_rate=learning_rate,
+        momentum=momentum,
+        data_dir=data_dir,
+        weights_dir=weights_dir,
+        verbose=verbose,
+    )
