@@ -107,7 +107,7 @@ struct SavedTensors(Movable):
         self.shapes = List[List[Int]]()
         self.scalars = List[Float64]()
 
-    fn __moveinit__(out self, owned existing: Self):
+    fn __moveinit__(out self, deinit existing: Self):
         """Move constructor."""
         self.tensors = existing.tensors^
         self.shapes = existing.shapes^
@@ -134,7 +134,7 @@ struct SavedTensors(Movable):
         self.scalars.append(value)
 
 
-struct TapeNode(Movable):
+struct TapeNode(Copyable, Movable):
     """Represents a single operation in the computation graph.
 
     Each node records:
@@ -147,10 +147,10 @@ struct TapeNode(Movable):
     order, and each node's backward function is called to compute gradients.
 
     Attributes:
-        op_type: String identifier for the operation (e.g., "add", "matmul")
-        input_ids: IDs of input Variables (for tracking dependencies)
-        output_id: ID of output Variable
-        saved_tensors: Tensors saved for backward pass
+        op_type: String identifier for the operation (e.g., "add", "matmul").
+        input_ids: IDs of input Variables (for tracking dependencies).
+        output_id: ID of output Variable.
+        saved_tensors: Tensors saved for backward pass.
     """
 
     var op_type: String
@@ -162,12 +162,12 @@ struct TapeNode(Movable):
         """Initialize a tape node.
 
         Args:
-            op_type: String identifier for the operation
-            input_ids: IDs of input Variables
-            output_id: ID of output Variable
+            op_type: String identifier for the operation.
+            input_ids: IDs of input Variables.
+            output_id: ID of output Variable.
         """
         self.op_type = op_type
-        self.input_ids = input_ids
+        self.input_ids = input_ids.copy()
         self.output_id = output_id
         self.saved = SavedTensors()
 
@@ -176,22 +176,22 @@ struct TapeNode(Movable):
         op_type: String,
         input_ids: List[Int],
         output_id: Int,
-        owned saved: SavedTensors,
+        var saved: SavedTensors,
     ):
         """Initialize a tape node with saved tensors.
 
         Args:
-            op_type: String identifier for the operation
-            input_ids: IDs of input Variables
-            output_id: ID of output Variable
-            saved: Saved tensors for backward pass
+            op_type: String identifier for the operation.
+            input_ids: IDs of input Variables.
+            output_id: ID of output Variable.
+            saved: Saved tensors for backward pass.
         """
         self.op_type = op_type
-        self.input_ids = input_ids
+        self.input_ids = input_ids.copy()
         self.output_id = output_id
         self.saved = saved^
 
-    fn __moveinit__(out self, owned existing: Self):
+    fn __moveinit__(out self, deinit existing: Self):
         """Move constructor."""
         self.op_type = existing.op_type
         self.input_ids = existing.input_ids^
@@ -218,14 +218,14 @@ struct VariableRegistry:
         self.requires_grad = List[Bool]()
         self.next_id = 0
 
-    fn register(mut self, requires_grad: Bool) -> Int:
+    fn register(mut self, requires_grad: Bool) raises -> Int:
         """Register a new variable and return its ID.
 
         Args:
-            requires_grad: Whether this variable requires gradients
+            requires_grad: Whether this variable requires gradients.
 
         Returns:
-            The unique ID assigned to this variable
+            The unique ID assigned to this variable.
         """
         var id = self.next_id
         self.next_id += 1
@@ -379,14 +379,14 @@ struct GradientTape:
         self.nodes = List[TapeNode]()
         self.registry.clear()
 
-    fn register_variable(mut self, requires_grad: Bool) -> Int:
+    fn register_variable(mut self, requires_grad: Bool) raises -> Int:
         """Register a new variable in the tape's registry.
 
         Args:
-            requires_grad: Whether this variable requires gradients
+            requires_grad: Whether this variable requires gradients.
 
         Returns:
-            Unique ID for the variable
+            Unique ID for the variable.
         """
         return self.registry.register(requires_grad)
 
@@ -395,7 +395,7 @@ struct GradientTape:
         op_type: String,
         input_ids: List[Int],
         output_id: Int,
-        owned saved: SavedTensors,
+        var saved: SavedTensors,
     ):
         """Record an operation in the tape.
 
@@ -632,39 +632,8 @@ struct GradientTape:
         return self.registry.get_grad(var_id)
 
 
-struct NoGradContext:
-    """Context manager equivalent for disabling gradient computation.
-
-    Used for inference or when you want to temporarily disable gradient tracking.
-    Unlike Python's context manager, you must manually call exit().
-
-    Examples:
-        var ctx = NoGradContext(tape)
-        ctx.enter()  # Disable gradient tracking
-
-        # Operations here are not recorded
-        var y = model.forward(x)
-
-        ctx.exit()  # Re-enable gradient tracking
-    """
-
-    var tape: UnsafePointer[GradientTape]
-    var was_enabled: Bool
-
-    fn __init__(out self, mut tape: GradientTape):
-        """Initialize no-grad context.
-
-        Args:
-            tape: The gradient tape to manage
-        """
-        self.tape = UnsafePointer[GradientTape].address_of(tape)
-        self.was_enabled = tape.enabled
-
-    fn enter(mut self):
-        """Enter no-grad mode (disable recording)."""
-        self.tape[].disable()
-
-    fn exit(mut self):
-        """Exit no-grad mode (restore previous state)."""
-        if self.was_enabled:
-            self.tape[].enable()
+# TODO: NoGradContext requires UnsafePointer with parametric mutability
+# which is not well-supported yet. Use tape.disable() / tape.enable() directly.
+# struct NoGradContext:
+#     """Context manager equivalent for disabling gradient computation."""
+#     pass

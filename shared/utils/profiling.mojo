@@ -77,15 +77,15 @@ struct MemoryStats(Copyable, Movable):
 
     fn allocated_mb(self) -> Float32:
         """Get allocated memory in MB."""
-        return self.allocated_bytes / 1_000_000.0
+        return Float32(self.allocated_bytes) / Float32(1_000_000)
 
     fn peak_mb(self) -> Float32:
         """Get peak memory in MB."""
-        return self.peak_bytes / 1_000_000.0
+        return Float32(self.peak_bytes) / Float32(1_000_000)
 
     fn available_mb(self) -> Float32:
         """Get available memory in MB."""
-        return self.available_bytes / 1_000_000.0
+        return Float32(self.available_bytes) / Float32(1_000_000)
 
 
 # ============================================================================
@@ -108,9 +108,9 @@ struct ProfilingReport(Copyable, Movable):
         self.memory_end = MemoryStats()
         self.total_time_ms = 0.0
 
-    fn add_timing(mut self, name: String, stats: TimingStats):
+    fn add_timing(mut self, name: String, var stats: TimingStats):
         """Add timing statistics to report."""
-        self.timing_stats[name] = stats
+        self.timing_stats[name] = stats^
 
     fn to_string(self) -> String:
         """Format report as human-readable string."""
@@ -177,16 +177,18 @@ struct Timer(Copyable, Movable):
 
     fn elapsed_ms(self) -> Float32:
         """Get elapsed time in milliseconds."""
-        if self.end_ns == 0:
-            # Still running
-            self.end_ns = self._get_time_ns()
-        return (self.end_ns - self.start_ns) / 1_000_000.0
+        var end = self.end_ns
+        if end == 0:
+            # Still running - use current time
+            end = self._get_time_ns()
+        return Float32(end - self.start_ns) / Float32(1_000_000)
 
     fn elapsed_us(self) -> Float32:
         """Get elapsed time in microseconds."""
-        if self.end_ns == 0:
-            self.end_ns = self._get_time_ns()
-        return (self.end_ns - self.start_ns) / 1_000.0
+        var end = self.end_ns
+        if end == 0:
+            end = self._get_time_ns()
+        return Float32(end - self.start_ns) / Float32(1_000)
 
     fn reset(mut self):
         """Reset timer for reuse."""
@@ -252,7 +254,7 @@ fn profile_function(name: String, func_ptr: fn () -> None) -> TimingStats:
     # TODO: Implement function profiling
     var stats = TimingStats()
     stats.name = name
-    return stats
+    return stats^
 
 
 fn benchmark_function(
@@ -262,17 +264,19 @@ fn benchmark_function(
 
     Runs function multiple times and computes statistics (mean, std dev, etc).
 
-    Args:.        `name`: Function name.
-        `func_ptr`: Function to benchmark.
-        `iterations`: Number of iterations.
+    Args:
+        name: Function name.
+        func_ptr: Function to benchmark.
+        iterations: Number of iterations.
 
-    Returns:.        Timing statistics with min, max, average, std dev.
+    Returns:
+        Timing statistics with min, max, average, std dev.
     """
     # TODO: Implement function benchmarking
     var stats = TimingStats()
     stats.name = name
     stats.call_count = iterations
-    return stats
+    return stats^
 
 
 # ============================================================================
@@ -339,7 +343,7 @@ fn generate_timing_report(
     """
     var report = ProfilingReport()
     # TODO: Aggregate timing data
-    return report
+    return report^
 
 
 fn print_timing_report(report: ProfilingReport):

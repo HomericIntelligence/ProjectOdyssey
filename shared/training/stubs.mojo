@@ -141,7 +141,7 @@ struct MockCosineAnnealingLR(LRScheduler):
     var eta_min: Float64
 
     fn __init__(
-        mut self, base_lr: Float64, T_max: Int, eta_min: Float64 = 0.0
+        out self, base_lr: Float64, T_max: Int, eta_min: Float64 = 0.0
     ):
         """Initialize Cosine Annealing scheduler.
 
@@ -231,7 +231,7 @@ struct MockEarlyStopping(Callback):
     var stopped: Bool
 
     fn __init__(
-        mut self,
+        out self,
         monitor: String = "val_loss",
         patience: Int = 5,
         min_delta: Float64 = 0.0,
@@ -264,7 +264,7 @@ struct MockEarlyStopping(Callback):
         """No-op at epoch begin."""
         return CONTINUE
 
-    fn on_epoch_end(mut self, mut state: TrainingState) -> CallbackSignal:
+    fn on_epoch_end(mut self, mut state: TrainingState) raises -> CallbackSignal:
         """Check for improvement and decide whether to stop.
 
         Args:
@@ -338,7 +338,7 @@ struct MockCheckpoint(Callback):
         """No-op at epoch begin."""
         return CONTINUE
 
-    fn on_epoch_end(mut self, mut state: TrainingState) -> CallbackSignal:
+    fn on_epoch_end(mut self, mut state: TrainingState) raises -> CallbackSignal:
         """Save checkpoint at end of epoch (stub).
 
         Args:
@@ -386,7 +386,7 @@ struct MockLoggingCallback(Callback):
         """No-op at epoch begin."""
         return CONTINUE
 
-    fn on_epoch_end(mut self, mut state: TrainingState) -> CallbackSignal:
+    fn on_epoch_end(mut self, mut state: TrainingState) raises -> CallbackSignal:
         """Log metrics at end of epoch (stub).
 
         Args:

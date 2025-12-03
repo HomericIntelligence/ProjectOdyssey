@@ -127,17 +127,17 @@ fn _serialize_checkpoint(checkpoint: Checkpoint) -> String:
     return result
 
 
-fn _deserialize_checkpoint(content: String) -> Checkpoint:
+fn _deserialize_checkpoint(content: String) raises -> Checkpoint:
     """Deserialize checkpoint from string format.
 
     Args:
-        content: Serialized checkpoint string
+        content: Serialized checkpoint string.
 
     Returns:
-        Deserialized checkpoint
+        Deserialized checkpoint.
 
     Raises:
-        ValueError: If format is invalid
+        ValueError: If format is invalid.
     """
     var checkpoint = Checkpoint()
     var lines = content.split("\n")
@@ -152,8 +152,8 @@ fn _deserialize_checkpoint(content: String) -> Checkpoint:
         if colon_pos == -1:
             continue  # Skip malformed lines
 
-        var prefix = line[:colon_pos]
-        var data = line[colon_pos + 1 :]
+        var prefix = String(line[:colon_pos])
+        var data = String(line[colon_pos + 1 :])
 
         if prefix == "EPOCH":
             checkpoint.epoch = atol(data)
@@ -165,22 +165,22 @@ fn _deserialize_checkpoint(content: String) -> Checkpoint:
             # Parse key=value
             var eq_pos = data.find("=")
             if eq_pos != -1:
-                var key = data[:eq_pos]
-                var value = data[eq_pos + 1 :]
+                var key = String(data[:eq_pos])
+                var value = String(data[eq_pos + 1 :])
                 checkpoint.model_state[key] = value
         elif prefix == "OPTIMIZER":
             # Parse key=value
             var eq_pos = data.find("=")
             if eq_pos != -1:
-                var key = data[:eq_pos]
-                var value = data[eq_pos + 1 :]
+                var key = String(data[:eq_pos])
+                var value = String(data[eq_pos + 1 :])
                 checkpoint.optimizer_state[key] = value
         elif prefix == "META":
             # Parse key=value
             var eq_pos = data.find("=")
             if eq_pos != -1:
-                var key = data[:eq_pos]
-                var value = data[eq_pos + 1 :]
+                var key = String(data[:eq_pos])
+                var value = String(data[eq_pos + 1 :])
                 checkpoint.metadata[key] = value
 
     return checkpoint^
@@ -226,18 +226,18 @@ fn save_checkpoint(
     return safe_write_file(filepath, content)
 
 
-fn load_checkpoint(filepath: String) -> Checkpoint:
+fn load_checkpoint(filepath: String) raises -> Checkpoint:
     """Load checkpoint from file.
 
     Args:
-        filepath: Path to checkpoint file
+        filepath: Path to checkpoint file.
 
     Returns:
-        Loaded checkpoint
+        Loaded checkpoint.
 
     Raises:
-        FileNotFoundError: If checkpoint file doesn't exist
-        ValueError: If file format is invalid
+        FileNotFoundError: If checkpoint file doesn't exist.
+        ValueError: If file format is invalid.
 
     Example:
         var checkpoint = load_checkpoint("checkpoints/epoch_10.pt")
@@ -517,7 +517,7 @@ fn serialize_tensor(name: String, data: List[String]) -> SerializedTensor:
         serialized.data.append(data[i])
         serialized.metadata.size_bytes += len(data[i])
 
-    return serialized
+    return serialized^
 
 
 fn deserialize_tensor(serialized: SerializedTensor) -> List[String]:
@@ -583,17 +583,17 @@ fn safe_write_file(filepath: String, content: String) -> Bool:
         return False
 
 
-fn safe_read_file(filepath: String) -> String:
+fn safe_read_file(filepath: String) raises -> String:
     """Read file safely.
 
     Args:
-        filepath: Input file path
+        filepath: Input file path.
 
     Returns:
-        File contents
+        File contents.
 
     Raises:
-        FileNotFoundError: If file doesn't exist
+        FileNotFoundError: If file doesn't exist.
     """
     try:
         with open(filepath, "r") as f:

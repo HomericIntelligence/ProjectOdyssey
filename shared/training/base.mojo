@@ -16,7 +16,7 @@ from collections import Dict
 # ============================================================================
 
 
-struct CallbackSignal(Copyable, Movable):
+struct CallbackSignal(Copyable, Movable, ImplicitlyCopyable):
     """Signal returned by callbacks to control training flow.
 
     Values:

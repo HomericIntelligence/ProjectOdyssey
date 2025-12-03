@@ -54,7 +54,7 @@ struct LogRecord(Copyable, Movable):
     var timestamp: String
 
     fn __init__(
-        mut self,
+        out self,
         logger_name: String,
         level: Int,
         message: String,
@@ -62,64 +62,17 @@ struct LogRecord(Copyable, Movable):
     ):
         """Initialize a log record.
 
-        Args:.            `logger_name`: Name of the logger that created this record.
-            `level`: Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-            `message`: The log message.
-            `timestamp`: Optional timestamp (auto-generated if empty)
+        Args:
+            logger_name: Name of the logger that created this record.
+            level: Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+            message: The log message.
+            timestamp: Optional timestamp string.
         """
         self.logger_name = logger_name
         self.level = level
         self.message = message
-        self.timestamp = timestamp if timestamp else self._get_timestamp()
-
-    fn _get_timestamp(self) -> String:
-        """Generate current timestamp string.
-
-        Uses time.now() to get current Unix timestamp and formats it.
-        as ISO 8601 basic format. Mojo v0.25.7 lacks full datetime
-        support, so this is a simplified implementation.
-
-        Returns:.            Timestamp string in format "YYYY-MM-DD HH:MM:SS"
-        """
-        # NOTE: This is a simplified implementation until Mojo
-        # stdlib includes full datetime support
-        from time import now
-
-        # Get Unix timestamp in nanoseconds
-        var timestamp_ns = now()
-        var timestamp_s = timestamp_ns // 1_000_000_000
-
-        # Calculate time components
-        var seconds_per_day = 86400
-        var days_since_epoch = timestamp_s // seconds_per_day
-        var seconds_today = timestamp_s % seconds_per_day
-
-        var hours = seconds_today // 3600
-        var minutes = (seconds_today % 3600) // 60
-        var seconds = seconds_today % 60
-
-        # Approximate date calculation (starting from 1970-01-01)
-        # This is simplified and doesn't account for leap years
-        var year = 1970 + (days_since_epoch // 365)
-        var day_of_year = days_since_epoch % 365
-        var month = (day_of_year // 30) + 1  # Rough approximation
-        var day = (day_of_year % 30) + 1
-
-        # Format as YYYY-MM-DD HH:MM:SS using string concatenation
-        # (Mojo may not support all Python string formatting features)
-        return (
-            String(year)
-            + "-"
-            + String(month).zfill(2)
-            + "-"
-            + String(day).zfill(2)
-            + " "
-            + String(hours).zfill(2)
-            + ":"
-            + String(minutes).zfill(2)
-            + ":"
-            + String(seconds).zfill(2)
-        )
+        # Use provided timestamp or empty string (Mojo lacks stdlib time support)
+        self.timestamp = timestamp if timestamp else ""
 
     fn level_name(self) -> String:
         """Get human-readable level name."""
@@ -150,33 +103,35 @@ trait Formatter:
         ...
 
 
-struct SimpleFormatter(Formatter):
-    """Simple formatter: [LEVEL] message"""
+@fieldwise_init
+struct SimpleFormatter(Formatter, Copyable, Movable, ImplicitlyCopyable):
+    """Simple formatter: [LEVEL] message."""
 
     fn format(self, record: LogRecord) -> String:
-        """Format log record as: [LEVEL] message"""
-        return f"[{record.level_name()}] {record.message}"
+        """Format log record as: [LEVEL] message."""
+        return "[" + record.level_name() + "] " + record.message
 
 
-struct TimestampFormatter(Formatter):
-    """Timestamp formatter: YYYY-MM-DD HH:MM:SS [LEVEL] message"""
+@fieldwise_init
+struct TimestampFormatter(Formatter, Copyable, Movable, ImplicitlyCopyable):
+    """Timestamp formatter: YYYY-MM-DD HH:MM:SS [LEVEL] message."""
 
     fn format(self, record: LogRecord) -> String:
         """Format log record with timestamp."""
-        return f"{record.timestamp} [{record.level_name()}] {record.message}"
+        return record.timestamp + " [" + record.level_name() + "] " + record.message
 
 
-struct DetailedFormatter(Formatter):
-    """Detailed formatter: [LEVEL] logger_name - message"""
+@fieldwise_init
+struct DetailedFormatter(Formatter, Copyable, Movable, ImplicitlyCopyable):
+    """Detailed formatter: [LEVEL] logger_name - message."""
 
     fn format(self, record: LogRecord) -> String:
         """Format log record with logger name."""
-        return (
-            f"[{record.level_name()}] {record.logger_name} - {record.message}"
-        )
+        return "[" + record.level_name() + "] " + record.logger_name + " - " + record.message
 
 
-struct ColoredFormatter(Formatter):
+@fieldwise_init
+struct ColoredFormatter(Formatter, Copyable, Movable, ImplicitlyCopyable):
     """Colored formatter using ANSI escape codes."""
 
     # ANSI color codes
@@ -189,7 +144,7 @@ struct ColoredFormatter(Formatter):
     fn format(self, record: LogRecord) -> String:
         """Format log record with ANSI color codes."""
         var color = self._get_color(record.level)
-        return f"{color}[{record.level_name()}]{self.RESET} {record.message}"
+        return color + "[" + record.level_name() + "]" + self.RESET + " " + record.message
 
     fn _get_color(self, level: Int) -> String:
         """Get ANSI color for level."""
@@ -216,7 +171,7 @@ trait Handler:
         ...
 
 
-struct StreamHandler(Handler):
+struct StreamHandler(Handler, Copyable, Movable, ImplicitlyCopyable):
     """Write log messages to stdout/stderr."""
 
     var formatter: SimpleFormatter
@@ -231,7 +186,7 @@ struct StreamHandler(Handler):
         print(formatted)
 
 
-struct FileHandler(Handler):
+struct FileHandler(Handler, Copyable, Movable):
     """Write log messages to a file."""
 
     var filepath: String
@@ -240,7 +195,8 @@ struct FileHandler(Handler):
     fn __init__(out self, filepath: String):
         """Create file handler that writes to given file.
 
-        Args:.            `filepath`: Path to log file to write to.
+        Args:
+            filepath: Path to log file to write to.
         """
         self.filepath = filepath
         self.formatter = TimestampFormatter()
@@ -255,19 +211,19 @@ struct FileHandler(Handler):
 
         Opens file in append mode, writes the message with newline,
         and closes the file. If file cannot be opened, falls back
-        to stderr printing.
+        to print.
 
         Args:
-            message: Formatted log message to write
+            message: Formatted log message to write.
         """
         try:
             # Open file in append mode
             with open(self.filepath, "a") as file:
                 _ = file.write(message + "\n")
         except:
-            # Fallback to stderr if file write fails
-            print("[LOG ERROR] Failed to write to", self.filepath, file=2)
-            print(message, file=2)
+            # Fallback to print if file write fails
+            print("[LOG ERROR] Failed to write to " + self.filepath)
+            print(message)
 
 
 # ============================================================================

@@ -984,8 +984,6 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
         Note:
             FP16 inputs are converted to FP32 before conversion.
         """
-        from .types.integer import Int8
-
         # (Fixes DATA-003, DATA-004, DATA-005 - see docstring for documentation)
 
         # Create output tensor with int8 dtype
@@ -1045,7 +1043,6 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
 
         Returns:.            A new ExTensor with dtype=int16 containing converted values.
         """
-        from .types.integer import Int16
 
         # (Fixes DATA-003, DATA-004, DATA-005 - see docstring for documentation)
 
@@ -1104,7 +1101,6 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
 
         Returns:.            A new ExTensor with dtype=int32 containing converted values.
         """
-        from .types.integer import Int32
 
         # (Fixes DATA-003, DATA-004, DATA-005 - see docstring for documentation)
 
@@ -1158,7 +1154,6 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
 
         Returns:.            A new ExTensor with dtype=int64 containing converted values.
         """
-        from .types.integer import Int64
 
         # (Fixes DATA-003, DATA-004, DATA-005 - see docstring for documentation)
 
@@ -1198,8 +1193,8 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
                 # Defensive re-validation (fixes DATA-003)
                 raise Error("Unsupported dtype for to_int64 conversion")
 
-            var i64_val = Int64.from_float32(val)
-            result._data.bitcast[Int64]()[i] = i64_val.value
+            var i64_val = Int64(val)
+            result._data.bitcast[Int64]()[i] = i64_val
 
         return result^
 
@@ -1211,7 +1206,6 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
 
         Returns:.            A new ExTensor with dtype=uint8 containing converted values.
         """
-        from .types.unsigned import UInt8
 
         # (Fixes DATA-003, DATA-004, DATA-005 - see docstring for documentation)
 
@@ -1270,7 +1264,6 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
 
         Returns:.            A new ExTensor with dtype=uint16 containing converted values.
         """
-        from .types.unsigned import UInt16
 
         # (Fixes DATA-003, DATA-004, DATA-005 - see docstring for documentation)
 
@@ -1310,8 +1303,8 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
                 # Defensive re-validation (fixes DATA-003)
                 raise Error("Unsupported dtype for to_uint16 conversion")
 
-            var u16_val = UInt16.from_float32(val)
-            result._data.bitcast[UInt16]()[i] = u16_val.value
+            var u16_val = UInt16(val)
+            result._data.bitcast[UInt16]()[i] = u16_val
 
         return result^
 
@@ -1323,7 +1316,6 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
 
         Returns:.            A new ExTensor with dtype=uint32 containing converted values.
         """
-        from .types.unsigned import UInt32
 
         # (Fixes DATA-003, DATA-004, DATA-005 - see docstring for documentation)
 
@@ -1363,8 +1355,8 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
                 # Defensive re-validation (fixes DATA-003)
                 raise Error("Unsupported dtype for to_uint32 conversion")
 
-            var u32_val = UInt32.from_float32(val)
-            result._data.bitcast[UInt32]()[i] = u32_val.value
+            var u32_val = UInt32(val)
+            result._data.bitcast[UInt32]()[i] = u32_val
 
         return result^
 
@@ -1375,7 +1367,6 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
 
         Returns:.            A new ExTensor with dtype=uint64 containing converted values.
         """
-        from .types.unsigned import UInt64
 
         # (Fixes DATA-003, DATA-004, DATA-005 - see docstring for documentation)
 
@@ -1415,8 +1406,8 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
                 # Defensive re-validation (fixes DATA-003)
                 raise Error("Unsupported dtype for to_uint64 conversion")
 
-            var u64_val = UInt64.from_float32(val)
-            result._data.bitcast[UInt64]()[i] = u64_val.value
+            var u64_val = UInt64(val)
+            result._data.bitcast[UInt64]()[i] = u64_val
 
         return result^
 
