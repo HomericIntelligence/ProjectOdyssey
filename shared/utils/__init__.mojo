@@ -135,6 +135,13 @@ from .arg_parser import (
     create_parser,  # Create new parser
 )
 
+# Training argument utilities
+from .training_args import (
+    TrainingArgs,  # Training hyperparameters container
+    parse_training_args,  # Parse common training arguments
+    parse_training_args_with_defaults,  # Parse with custom defaults
+)
+
 # ============================================================================
 # Public API
 # ============================================================================

@@ -26,7 +26,7 @@ fn sgd_step(
     velocity: ExTensor,
     learning_rate: Float64,
     momentum: Float64 = 0.0,
-    weight_decay: Float64 = 0.0
+    weight_decay: Float64 = 0.0,
 ) raises -> Tuple[ExTensor, ExTensor]:
     """Perform a single SGD optimization step - pure functional.
 
@@ -90,7 +90,10 @@ fn sgd_step(
     # Apply momentum if specified
     if momentum > 0.0:
         if velocity.numel() == 0:
-            raise Error("Velocity buffer required when using momentum (use zeros_like(params))")
+            raise Error(
+                "Velocity buffer required when using momentum (use"
+                " zeros_like(params))"
+            )
 
         # velocity = momentum * velocity + gradients (SIMD optimized)
         var momentum_tensor = full_like(velocity, momentum)
@@ -110,9 +113,7 @@ fn sgd_step(
 
 
 fn sgd_step_simple(
-    params: ExTensor,
-    gradients: ExTensor,
-    learning_rate: Float64
+    params: ExTensor, gradients: ExTensor, learning_rate: Float64
 ) raises -> ExTensor:
     """Simplified SGD step without momentum or weight decay.
 
@@ -149,7 +150,7 @@ fn sgd_momentum_update_inplace(
     grad: ExTensor,
     mut velocity: ExTensor,
     lr: Float64,
-    momentum: Float64
+    momentum: Float64,
 ) raises:
     """SGD parameter update with momentum (in-place mutation).
 
@@ -206,7 +207,9 @@ fn sgd_momentum_update_inplace(
         # Update velocity and parameters in-place
         for i in range(numel):
             # velocity = momentum * velocity - lr * grad
-            velocity_data[i] = momentum_f32 * velocity_data[i] - lr_f32 * grad_data[i]
+            velocity_data[i] = (
+                momentum_f32 * velocity_data[i] - lr_f32 * grad_data[i]
+            )
             # param = param + velocity
             param_data[i] += velocity_data[i]
     elif param.dtype() == DType.float64:
@@ -221,4 +224,100 @@ fn sgd_momentum_update_inplace(
             # param = param + velocity
             param_data[i] += velocity_data[i]
     else:
-        raise Error("sgd_momentum_update_inplace only supports float32 and float64")
+        raise Error(
+            "sgd_momentum_update_inplace only supports float32 and float64"
+        )
+
+
+# ============================================================================
+# Velocity Initialization Utilities
+# ============================================================================
+
+
+fn initialize_velocities(
+    param_shapes: List[List[Int]], dtype: DType = DType.float32
+) raises -> List[ExTensor]:
+    """Create zero-initialized velocity tensors for SGD with momentum.
+
+    This utility function creates momentum buffers for all parameters in a model.
+    Each velocity tensor is zero-initialized with the same shape as its
+    corresponding parameter.
+
+    Args:
+        param_shapes: List of parameter shapes to create velocities for.
+        dtype: Data type for velocity tensors (default: float32).
+
+    Returns:
+        List of zero-initialized tensors matching parameter shapes.
+
+    Example:
+        ```mojo
+        from shared.training.optimizers import initialize_velocities
+
+        # Get shapes from model parameters
+        var shapes = List[List[Int]]()
+        shapes.append(model.conv1_kernel.shape())
+        shapes.append(model.conv1_bias.shape())
+        shapes.append(model.fc1_weights.shape())
+        shapes.append(model.fc1_bias.shape())
+
+        var velocities = initialize_velocities(shapes)
+        # velocities[0] matches conv1_kernel shape
+        # velocities[1] matches conv1_bias shape, etc.
+        ```
+
+    Note:
+        The order of velocities matches the order of shapes provided.
+        Ensure you use the same ordering when calling sgd_momentum_update_inplace.
+    """
+    from shared.core.extensor import zeros
+
+    var velocities = List[ExTensor]()
+
+    for i in range(len(param_shapes)):
+        # Copy the shape since List[Int] is not ImplicitlyCopyable
+        var shape = List[Int]()
+        for j in range(len(param_shapes[i])):
+            shape.append(param_shapes[i][j])
+        velocities.append(zeros(shape, dtype))
+
+    return velocities^
+
+
+fn initialize_velocities_from_params(
+    params: List[ExTensor],
+) raises -> List[ExTensor]:
+    """Create zero-initialized velocity tensors matching a list of parameters.
+
+    Convenience function that extracts shapes from existing parameter tensors
+    and creates matching velocity buffers.
+
+    Args:
+        params: List of parameter tensors.
+
+    Returns:
+        List of zero-initialized velocity tensors with matching shapes and dtypes.
+
+    Example:
+        ```mojo
+        from shared.training.optimizers import initialize_velocities_from_params
+
+        # Collect all model parameters
+        var params = List[ExTensor]()
+        params.append(model.conv1_kernel)
+        params.append(model.conv1_bias)
+        params.append(model.fc1_weights)
+        params.append(model.fc1_bias)
+
+        var velocities = initialize_velocities_from_params(params)
+        ```
+    """
+    from shared.core.extensor import zeros
+
+    var velocities = List[ExTensor]()
+
+    for i in range(len(params)):
+        var param = params[i]
+        velocities.append(zeros(param.shape(), param.dtype()))
+
+    return velocities^
