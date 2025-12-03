@@ -289,3 +289,88 @@ fn create_parser() raises -> ArgumentParser:
         New ArgumentParser instance
     """
     return ArgumentParser()
+
+
+# ============================================================================
+# ML Training Argument Helpers
+# ============================================================================
+
+
+fn create_training_parser() raises -> ArgumentParser:
+    """Create argument parser with common ML training arguments.
+
+    Provides predefined arguments for:
+        - epochs (int, default 100)
+        - batch-size (int, default 32)
+        - lr/learning-rate (float, default 0.001)
+        - momentum (float, default 0.9)
+        - weight-decay (float, default 0.0)
+        - model-path (string, default "model.weights")
+        - data-dir (string, default "datasets")
+        - seed (int, default 42)
+        - verbose (flag)
+
+    Returns:
+        ArgumentParser configured with ML training arguments
+    """
+    var parser = ArgumentParser()
+
+    parser.add_argument("epochs", "int", "100")
+    parser.add_argument("batch-size", "int", "32")
+    parser.add_argument("lr", "float", "0.001")
+    parser.add_argument("learning-rate", "float", "0.001")
+    parser.add_argument("momentum", "float", "0.9")
+    parser.add_argument("weight-decay", "float", "0.0")
+    parser.add_argument("model-path", "string", "model.weights")
+    parser.add_argument("data-dir", "string", "datasets")
+    parser.add_argument("seed", "int", "42")
+    parser.add_flag("verbose")
+
+    return parser
+
+
+fn validate_positive_int(value: Int, name: String) raises:
+    """Validate that an integer argument is positive.
+
+    Args:
+        value: Value to validate
+        name: Argument name for error messages
+
+    Raises:
+        Error if value is not positive
+    """
+    if value <= 0:
+        raise Error(name + " must be positive, got: " + String(value))
+
+
+fn validate_positive_float(value: Float64, name: String) raises:
+    """Validate that a float argument is positive.
+
+    Args:
+        value: Value to validate
+        name: Argument name for error messages
+
+    Raises:
+        Error if value is not positive
+    """
+    if value <= 0.0:
+        raise Error(name + " must be positive, got: " + String(value))
+
+
+fn validate_range_float(value: Float64, min_val: Float64, max_val: Float64, name: String) raises:
+    """Validate that a float argument is within a range.
+
+    Args:
+        value: Value to validate
+        min_val: Minimum allowed value (inclusive)
+        max_val: Maximum allowed value (inclusive)
+        name: Argument name for error messages
+
+    Raises:
+        Error if value is outside the range
+    """
+    if value < min_val or value > max_val:
+        raise Error(
+            name + " must be between " + String(min_val) + " and " + String(max_val)
+            + ", got: " + String(value)
+        )
