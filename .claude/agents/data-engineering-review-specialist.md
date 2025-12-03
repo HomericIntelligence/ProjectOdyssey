@@ -36,6 +36,11 @@ data loaders, and data validation.
 - Security of data handling (→ Security Specialist)
 - Documentation (→ Documentation Specialist)
 
+## Output Location
+
+**CRITICAL**: All review feedback MUST be posted directly to the GitHub pull request using
+`gh pr review` or the GitHub MCP. **NEVER** write reviews to local files or `notes/review/`.
+
 ## Review Checklist
 
 - [ ] Preprocessing is correct and consistent (train vs. inference)

@@ -12,9 +12,10 @@ See `.claude/shared/github-issue-workflow.md` for the workflow.
 ```text
 ml-odyssey/
 ├── notes/
-│   ├── review/                  # PR review documentation and architectural specs
-│   ├── blog/                    # Development blog entries
-│   └── analysis/                # Analysis and reports
+│   ├── review/                  # Architectural specs and comprehensive documentation
+│   └── blog/                    # Development blog entries
+├── docs/
+│   └── adr/                     # Architecture Decision Records
 ├── agents/                      # Agent system documentation
 ├── scripts/                     # Automation scripts
 │   └── README.md                # Scripts documentation
@@ -26,9 +27,10 @@ ml-odyssey/
 | Content | Location |
 |---------|----------|
 | Issue-specific work | GitHub issue comments |
-| Architectural decisions | `/notes/review/` |
+| PR reviews | GitHub PR review comments |
+| Architecture Decision Records | `/docs/adr/` |
+| Architectural specs | `/notes/review/` |
 | Team guides | `/agents/` |
-| Comprehensive specs | `/notes/review/` |
 | Development blog | `/notes/blog/` |
 
 ## Working with GitHub Issues
@@ -88,4 +90,5 @@ For questions or issues:
 - Check the logs in `logs/`
 - Review [scripts/README.md](../scripts/README.md)
 - See existing issues on GitHub
-- Refer to tracked documentation in `notes/review/`, `agents/`
+- Refer to architectural specs in `notes/review/` and ADRs in `docs/adr/`
+- Agent documentation in `agents/`

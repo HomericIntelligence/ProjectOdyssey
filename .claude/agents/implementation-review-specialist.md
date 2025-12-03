@@ -40,6 +40,11 @@ best practices.
 - Architecture/design (→ Architecture Specialist)
 - Algorithm correctness (→ Algorithm Specialist)
 
+## Output Location
+
+**CRITICAL**: All review feedback MUST be posted directly to the GitHub pull request using
+`gh pr review` or the GitHub MCP. **NEVER** write reviews to local files or `notes/review/`.
+
 ## Review Checklist
 
 - [ ] Logic is correct - no off-by-one errors or boundary issues

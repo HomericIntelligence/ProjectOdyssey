@@ -36,6 +36,11 @@ test organization, and edge case handling. Focuses exclusively on testing practi
 - General code quality in tests (→ Implementation Specialist)
 - Algorithm correctness (→ Algorithm Specialist)
 
+## Output Location
+
+**CRITICAL**: All review feedback MUST be posted directly to the GitHub pull request using
+`gh pr review` or the GitHub MCP. **NEVER** write reviews to local files or `notes/review/`.
+
 ## Review Checklist
 
 - [ ] All public functions have corresponding tests

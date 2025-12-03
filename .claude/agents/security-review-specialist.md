@@ -38,6 +38,11 @@ authentication, authorization, cryptography, and common vulnerabilities.
 - Architecture (→ Architecture Specialist)
 - Test coverage (→ Test Specialist)
 
+## Output Location
+
+**CRITICAL**: All review feedback MUST be posted directly to the GitHub pull request using
+`gh pr review` or the GitHub MCP. **NEVER** write reviews to local files or `notes/review/`.
+
 ## Review Checklist
 
 - [ ] All user input validated and sanitized

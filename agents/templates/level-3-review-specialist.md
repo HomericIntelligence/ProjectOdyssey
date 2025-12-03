@@ -127,6 +127,25 @@ Level 3 specialist responsible for reviewing [DOMAIN AREA - e.g., "code security
 | [OUT OF SCOPE AREA 7] | [Specialist Name 7] |
 | [OUT OF SCOPE AREA 8] | [Specialist Name 8] |
 
+## Output Location
+
+**CRITICAL**: All review feedback MUST be posted directly to the GitHub pull request.
+
+```bash
+# Post review comment to PR
+gh pr review <pr-number> --comment --body "[Your review feedback]"
+
+# Or reply to specific review comments
+gh api repos/OWNER/REPO/pulls/PR/comments/COMMENT_ID/replies \
+  --method POST -f body="[Your response]"
+```
+
+**NEVER** write reviews to:
+
+- `notes/review/` directory (reserved for architectural specs only)
+- Local files
+- Issue comments (use PR review comments instead)
+
 ## Workflow
 
 ### Phase 1: Initial Assessment
@@ -136,7 +155,7 @@ Level 3 specialist responsible for reviewing [DOMAIN AREA - e.g., "code security
 2. Understand the change purpose and scope
 3. Identify [DOMAIN-SPECIFIC PATTERNS - e.g., "security-sensitive operations"]
 4. Assess overall [DOMAIN ASPECT - e.g., "security posture"]
-```text
+```
 
 ### Phase 2: Detailed Review
 

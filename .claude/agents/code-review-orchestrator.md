@@ -34,6 +34,29 @@ without overlap. Prevents redundant reviews while ensuring all critical dimensio
 - Override specialist decisions
 - Create unilateral architectural decisions (escalate to Chief Architect)
 
+## Output Location
+
+**CRITICAL**: All review feedback MUST be posted directly to the GitHub pull request.
+
+```bash
+# Post review comments to PR
+gh pr review <pr-number> --comment --body "$(cat <<'EOF'
+## Code Review Summary
+
+[Review content here]
+EOF
+)"
+
+# Or use the GitHub MCP to create review comments
+# mcp__github__pull_request_review_write with method: "create"
+```
+
+**NEVER** write reviews to:
+
+- `notes/review/` directory (reserved for architectural specs only)
+- Local files
+- Issue comments (use PR review comments instead)
+
 ## Workflow
 
 1. Receive PR notification
@@ -42,7 +65,7 @@ without overlap. Prevents redundant reviews while ensuring all critical dimensio
 4. Route each dimension to appropriate specialist (one specialist per dimension)
 5. Collect feedback from all specialists in parallel
 6. Identify conflicts or contradictions
-7. Consolidate into unified review report with prioritized findings
+7. **Post consolidated review to GitHub PR** using `gh pr review` or GitHub MCP
 8. Escalate unresolved conflicts to Chief Architect
 
 ## Routing Dimensions

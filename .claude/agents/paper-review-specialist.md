@@ -36,6 +36,11 @@ the academic writing and presentation aspects of research papers.
 - Experimental design (→ Research Specialist)
 - Reproducibility details (→ Research Specialist)
 
+## Output Location
+
+**CRITICAL**: All review feedback MUST be posted directly to the GitHub pull request using
+`gh pr review` or the GitHub MCP. **NEVER** write reviews to local files or `notes/review/`.
+
 ## Review Checklist
 
 - [ ] Paper follows standard academic structure (Abstract, Intro, Methods, Results, Conclusion)
