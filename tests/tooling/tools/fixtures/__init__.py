@@ -224,7 +224,7 @@ def get_tool_readme_template() -> str:
 **Justification**:
 {{language_justification}}
 
-**Reference**: [ADR-001](../../notes/review/adr/ADR-001-language-selection-tooling.md)
+**Reference**: [ADR-001](../../docs/adr/ADR-001-language-selection-tooling.md)
 
 ## Examples
 

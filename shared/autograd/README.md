@@ -316,7 +316,7 @@ The autograd system **wraps** ExTensor rather than modifying it because:
 - [PyTorch Autograd Tutorial](https://docs.pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html)
 - [Micrograd](https://github.com/karpathy/micrograd) - Minimal autograd implementation
 - [Existing Backward Passes](../../docs/backward-passes/README.md) - Comprehensive gradient guide
-- [ADR-002](../../notes/review/adr/ADR-002-gradient-struct-return-types.md) - Gradient return type design
+- [ADR-002](../../docs/adr/ADR-002-gradient-struct-return-types.md) - Gradient return type design
 
 ## Contributing
 

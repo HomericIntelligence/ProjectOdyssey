@@ -58,7 +58,7 @@ python tools/codegen/training_template.py \
 
 ## Language Justification
 
-Per [ADR-001](../../notes/review/adr/ADR-001-language-selection-tooling.md):
+Per [ADR-001](../../docs/adr/ADR-001-language-selection-tooling.md):
 
 - **Why Python**: Template processing, string manipulation, no performance requirements
 - **Conversion blocker**: Mojo regex not production-ready
@@ -75,4 +75,4 @@ Per [ADR-001](../../notes/review/adr/ADR-001-language-selection-tooling.md):
 
 - [Issue #67](https://github.com/mvillmow/ml-odyssey/issues/67): Tools planning
 - [Issue #69](https://github.com/mvillmow/ml-odyssey/issues/69): Tools implementation
-- [ADR-001](../../notes/review/adr/ADR-001-language-selection-tooling.md): Language strategy
+- [ADR-001](../../docs/adr/ADR-001-language-selection-tooling.md): Language strategy

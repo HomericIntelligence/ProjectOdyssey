@@ -340,7 +340,7 @@ python tools/benchmarking/report_generator.py \
 
 - [Tools README](./README.md) - Main tools documentation
 - [Scripts README](../scripts/README.md) - Automation scripts
-- [ADR-001](../notes/review/adr/ADR-001-language-selection-tooling.md) - Language selection
+- [ADR-001](../docs/adr/ADR-001-language-selection-tooling.md) - Language selection
 - [Agent Hierarchy](../agents/hierarchy.md) - Agent system overview
 - [CLAUDE.md](../CLAUDE.md) - Project guidelines
 

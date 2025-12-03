@@ -520,7 +520,7 @@ See individual tool README files for examples of this format.
 
 - [INTEGRATION.md](./INTEGRATION.md) - Integration guide
 - [INSTALL.md](./INSTALL.md) - Installation instructions
-- [ADR-001](../notes/review/adr/ADR-001-language-selection-tooling.md) - Language selection
+- [ADR-001](../docs/adr/ADR-001-language-selection-tooling.md) - Language selection
 - [Tools README](./README.md) - Overview
 
 ---
