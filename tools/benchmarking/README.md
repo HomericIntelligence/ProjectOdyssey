@@ -96,7 +96,7 @@ Results include:
 
 ## Language Justification
 
-Per [ADR-001](../../notes/review/adr/ADR-001-language-selection-tooling.md):
+Per [ADR-001](../../docs/adr/ADR-001-language-selection-tooling.md):
 
 - **Why Mojo**: Required for accurate ML performance measurement
 - **Benefits**: Zero Python overhead, precise timing, SIMD optimization
@@ -115,5 +115,5 @@ Per [ADR-001](../../notes/review/adr/ADR-001-language-selection-tooling.md):
 
 - [Issue #67](https://github.com/mvillmow/ml-odyssey/issues/67): Tools planning
 - [Issue #69](https://github.com/mvillmow/ml-odyssey/issues/69): Tools implementation
-- [ADR-001](../../notes/review/adr/ADR-001-language-selection-tooling.md): Language strategy
+- [ADR-001](../../docs/adr/ADR-001-language-selection-tooling.md): Language strategy
 - [Mojo Best Practices](../../.claude/agents/mojo-language-review-specialist.md)

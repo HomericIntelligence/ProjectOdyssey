@@ -85,7 +85,7 @@ fn test_model():
 
 ## Language Justification
 
-Per [ADR-001](../../notes/review/adr/ADR-001-language-selection-tooling.md):
+Per [ADR-001](../../docs/adr/ADR-001-language-selection-tooling.md):
 
 - **Why Mojo**: Performance-critical data generation, type safety, memory efficiency
 - **Benefits**: SIMD optimization, zero Python overhead, compile-time validation
@@ -102,5 +102,5 @@ Per [ADR-001](../../notes/review/adr/ADR-001-language-selection-tooling.md):
 
 - [Issue #67](https://github.com/mvillmow/ml-odyssey/issues/67): Tools planning
 - [Issue #69](https://github.com/mvillmow/ml-odyssey/issues/69): Tools implementation
-- [ADR-001](../../notes/review/adr/ADR-001-language-selection-tooling.md): Language strategy
+- [ADR-001](../../docs/adr/ADR-001-language-selection-tooling.md): Language strategy
 - [Mojo Best Practices](../../.claude/agents/mojo-language-review-specialist.md)

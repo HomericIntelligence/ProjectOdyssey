@@ -15,7 +15,7 @@ if [[ -z "$TITLE" ]]; then
     exit 1
 fi
 
-ADR_DIR="notes/review/adr"
+ADR_DIR="docs/adr"
 mkdir -p "$ADR_DIR"
 
 # Find next ADR number

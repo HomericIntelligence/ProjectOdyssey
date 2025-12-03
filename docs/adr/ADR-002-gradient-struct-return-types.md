@@ -6,7 +6,8 @@ ACCEPTED
 
 ## Context
 
-The Mojo compiler (v0.25.7) does not fully support tuple return types in all contexts, causing compilation failures in backward pass functions that needed to return multiple gradients.
+The Mojo compiler (v0.25.7) does not fully support tuple return types in all contexts, causing
+compilation failures in backward pass functions that needed to return multiple gradients.
 
 ### Problem
 
@@ -40,7 +41,8 @@ This caused all arithmetic backward tests to fail to compile, blocking gradient 
 
 ## Decision
 
-Create type-safe gradient container structs to replace tuple return types, following Mojo best practices for struct-based return types.
+Create type-safe gradient container structs to replace tuple return types, following Mojo best
+practices for struct-based return types.
 
 ### Solution Architecture
 

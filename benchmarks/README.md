@@ -136,7 +136,7 @@ See `.github/workflows/benchmarks.yml` for CI configuration.
 
 ## References
 
-- **Planning**: [Issue #52](../notes/issues/52/README.md) - Plan
-- **Tests**: [Issue #53](../tests/tooling/benchmarks/) - Test
-- **Implementation**: [Issue #54](../notes/issues/54/README.md) - Implementation
+- **Planning**: [Issue #52](https://github.com/mvillmow/ml-odyssey/issues/52) - Plan
+- **Tests**: [Issue #53](https://github.com/mvillmow/ml-odyssey/issues/53) - Test
+- **Implementation**: [Issue #54](https://github.com/mvillmow/ml-odyssey/issues/54) - Implementation
 - **CI/CD**: [Benchmarks Workflow](../.github/workflows/benchmarks.yml)

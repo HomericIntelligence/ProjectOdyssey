@@ -20,7 +20,7 @@ Create Architecture Decision Records for technical decisions.
 
 ```bash
 ./scripts/create_adr.sh "Decision Title"
-# Creates: notes/review/adr/ADR-XXX-decision-title.md
+# Creates: docs/adr/ADR-XXX-decision-title.md
 ```
 
 ## Workflow
@@ -77,7 +77,7 @@ Why not chosen.
 ## Storage Location
 
 ```text
-notes/review/adr/
+docs/adr/
 ├── ADR-001-language-selection.md
 ├── ADR-002-testing-strategy.md
 └── README.md
@@ -94,5 +94,5 @@ notes/review/adr/
 
 ## References
 
-- See existing ADRs in `/notes/review/adr/` for examples
+- See existing ADRs in `/docs/adr/` for examples
 - Related skill: `phase-plan-generate` for planning

@@ -61,8 +61,9 @@ mojo benchmarks/scripts/run_benchmarks.mojo --paper {name}
 | Type | Location | Purpose |
 | ------ | ---------- | --------- |
 | **User Docs** | `docs/` | Tutorials, guides, API reference |
-| **Issue Docs** | `notes/issues/{number}/` | Issue-specific implementation notes |
+| **Issue Docs** | GitHub issue comments | Issue-specific implementation notes |
 | **Architectural** | `notes/review/` | Design decisions, comprehensive specs |
+| **ADRs** | `docs/adr/` | Architecture Decision Records |
 | **Agent Docs** | `agents/` | Agent system documentation |
 | **Code Comments** | Source files | Inline documentation |
 
@@ -491,11 +492,11 @@ Agent Documentation?
 └─ No → Continue
 
 Issue-Specific Notes?
-├─ Yes → notes/issues/{issue_number}/
+├─ Yes → Post as GitHub issue comment (gh issue comment <number>)
 └─ No → Continue
 
 Architectural Decision?
-├─ Yes → notes/review/
+├─ Yes → docs/adr/ (for ADRs) or notes/review/ (for specs)
 └─ No → Ask in team channel!
 
 ```text
@@ -522,8 +523,9 @@ Architectural Decision?
 
 1. **Choose Right Location**:
    - User-facing → `docs/`
-   - Implementation notes → `notes/issues/{number}/`
-   - Architecture → `notes/review/`
+   - Implementation notes → GitHub issue comments
+   - Architecture decisions → `docs/adr/`
+   - Comprehensive specs → `notes/review/`
 
 2. **Follow Markdown Standards**:
    - Specify language for code blocks

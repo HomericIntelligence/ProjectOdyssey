@@ -888,7 +888,7 @@ Last Review: [YYYY-MM-DD]
 
 ### Document Metadata
 
-- Location: `/notes/review/adr/ADR-001-language-selection-tooling.md`
+- Location: `/docs/adr/ADR-001-language-selection-tooling.md`
 - Status: Accepted
 - Review Frequency: As-needed (only if Mojo announces major subprocess/regex improvements)
 - Next Review: TBD (triggered by Mojo announcements, not scheduled)

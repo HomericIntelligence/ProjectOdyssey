@@ -228,7 +228,7 @@ Test coverage includes:
 
 ### Language: Python
 
-Per [ADR-001](../../notes/review/adr/ADR-001-language-selection-tooling.md):
+Per [ADR-001](../../docs/adr/ADR-001-language-selection-tooling.md):
 
 - **Justification**: Template processing, file I/O, subprocess limitations in Mojo
 - **Alternatives Considered**: Mojo (lacks subprocess output capture), Bash (harder to test)
@@ -272,6 +272,6 @@ Validation runs after generation, never modifies files.
 
 ## References
 
-- [Planning Documentation](../../notes/issues/759/README.md)
+- [Planning Documentation](https://github.com/mvillmow/ml-odyssey/issues/759)
 - [5-Phase Workflow](../../notes/review/README.md)
-- [ADR-001: Language Selection](../../notes/review/adr/ADR-001-language-selection-tooling.md)
+- [ADR-001: Language Selection](../../docs/adr/ADR-001-language-selection-tooling.md)
