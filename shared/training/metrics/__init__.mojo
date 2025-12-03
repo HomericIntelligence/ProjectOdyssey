@@ -24,6 +24,13 @@ from .accuracy import top1_accuracy, topk_accuracy, per_class_accuracy, Accuracy
 from .loss_tracker import LossTracker, Statistics, ComponentTracker
 from .confusion_matrix import ConfusionMatrix
 
+# Consolidated evaluation utilities
+from .evaluate import (
+    evaluate_with_predict,
+    evaluate_logits_batch,
+    compute_accuracy_on_batch,
+)
+
 # Future exports (to be implemented):
 # from .precision import Precision
 # from .recall import Recall
