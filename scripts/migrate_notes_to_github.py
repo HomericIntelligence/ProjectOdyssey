@@ -35,6 +35,7 @@ from typing import Dict, List, Optional, Tuple
 # Try to import tqdm for progress bars
 try:
     from tqdm import tqdm
+
     HAS_TQDM = True
 except ImportError:
     HAS_TQDM = False
@@ -42,6 +43,7 @@ except ImportError:
 
 class Colors:
     """ANSI color codes for terminal output"""
+
     HEADER = "\033[95m"
     OKBLUE = "\033[94m"
     OKCYAN = "\033[96m"
@@ -72,10 +74,7 @@ def get_repo_root() -> Path:
 def check_github_rate_limit() -> Tuple[int, float]:
     """Check GitHub API rate limit status."""
     try:
-        result = subprocess.run(
-            ["gh", "api", "rate_limit"],
-            capture_output=True, text=True, check=True
-        )
+        result = subprocess.run(["gh", "api", "rate_limit"], capture_output=True, text=True, check=True)
         data = json.loads(result.stdout)
         remaining = data["resources"]["core"]["remaining"]
         reset_time = data["resources"]["core"]["reset"]
@@ -104,8 +103,7 @@ def check_issue_exists(issue_number: int) -> bool:
     """Check if a GitHub issue exists."""
     try:
         result = subprocess.run(
-            ["gh", "issue", "view", str(issue_number), "--json", "number"],
-            capture_output=True, text=True
+            ["gh", "issue", "view", str(issue_number), "--json", "number"], capture_output=True, text=True
         )
         return result.returncode == 0
     except subprocess.SubprocessError:
@@ -115,6 +113,7 @@ def check_issue_exists(issue_number: int) -> bool:
 @dataclass
 class MigrationState:
     """Tracks migration progress for resume capability."""
+
     migrated_issues: List[int] = field(default_factory=list)
     created_issues: Dict[str, int] = field(default_factory=dict)  # dir_name -> issue_number
     skipped_issues: List[int] = field(default_factory=list)
@@ -127,15 +126,19 @@ class MigrationState:
         """Save state to file."""
         self.last_updated = datetime.now().isoformat()
         with open(path, "w") as f:
-            json.dump({
-                "migrated_issues": self.migrated_issues,
-                "created_issues": self.created_issues,
-                "skipped_issues": self.skipped_issues,
-                "failed_issues": self.failed_issues,
-                "failed_dirs": self.failed_dirs,
-                "started_at": self.started_at,
-                "last_updated": self.last_updated,
-            }, f, indent=2)
+            json.dump(
+                {
+                    "migrated_issues": self.migrated_issues,
+                    "created_issues": self.created_issues,
+                    "skipped_issues": self.skipped_issues,
+                    "failed_issues": self.failed_issues,
+                    "failed_dirs": self.failed_dirs,
+                    "started_at": self.started_at,
+                    "last_updated": self.last_updated,
+                },
+                f,
+                indent=2,
+            )
 
     @classmethod
     def load(cls, path: Path) -> "MigrationState":
@@ -163,8 +166,7 @@ def post_comment_to_issue(issue_number: int, content: str, dry_run: bool = False
 
         try:
             result = subprocess.run(
-                ["gh", "issue", "comment", str(issue_number), "--body-file", temp_path],
-                capture_output=True, text=True
+                ["gh", "issue", "comment", str(issue_number), "--body-file", temp_path], capture_output=True, text=True
             )
             if result.returncode == 0:
                 logging.info(f"Posted comment to issue #{issue_number}")
@@ -197,7 +199,7 @@ def create_issue_for_dir(dir_name: str, content: str, dry_run: bool = False) -> 
 This issue was automatically created during the migration of `notes/issues/` to GitHub issues.
 
 **Original directory**: `notes/issues/{dir_name}/`
-**Migration date**: {datetime.now().strftime('%Y-%m-%d')}
+**Migration date**: {datetime.now().strftime("%Y-%m-%d")}
 
 ---
 
@@ -211,13 +213,9 @@ The content from the original README.md will be posted as a comment below.
 
         try:
             result = subprocess.run(
-                [
-                    "gh", "issue", "create",
-                    "--title", title,
-                    "--body-file", body_path,
-                    "--label", "migrated-notes"
-                ],
-                capture_output=True, text=True
+                ["gh", "issue", "create", "--title", title, "--body-file", body_path, "--label", "migrated-notes"],
+                capture_output=True,
+                text=True,
             )
 
             if result.returncode == 0:
@@ -253,10 +251,7 @@ def format_migration_comment(content: str, source_path: str) -> str:
 
 
 def migrate_notes(
-    notes_dir: Path,
-    state: MigrationState,
-    dry_run: bool = False,
-    limit: Optional[int] = None
+    notes_dir: Path, state: MigrationState, dry_run: bool = False, limit: Optional[int] = None
 ) -> MigrationState:
     """Migrate all notes to GitHub issues."""
 
@@ -278,7 +273,8 @@ def migrate_notes(
     # Process numeric directories (post to existing issues)
     print(f"\n{Colors.OKBLUE}Processing numeric directories...{Colors.ENDC}")
     numeric_to_process = [
-        d for d in numeric_dirs
+        d
+        for d in numeric_dirs
         if int(d.name) not in state.migrated_issues
         and int(d.name) not in state.skipped_issues
         and int(d.name) not in state.failed_issues
@@ -322,9 +318,7 @@ def migrate_notes(
     # Process non-numeric directories (create new issues)
     print(f"\n{Colors.OKBLUE}Processing non-numeric directories...{Colors.ENDC}")
     non_numeric_to_process = [
-        d for d in non_numeric_dirs
-        if d.name not in state.created_issues
-        and d.name not in state.failed_dirs
+        d for d in non_numeric_dirs if d.name not in state.created_issues and d.name not in state.failed_dirs
     ]
 
     for issue_dir in non_numeric_to_process:
@@ -351,10 +345,7 @@ def ensure_label_exists(label: str = "migrated-notes") -> bool:
     """Ensure the migration label exists."""
     try:
         # Check if label exists
-        result = subprocess.run(
-            ["gh", "label", "list", "--search", label],
-            capture_output=True, text=True
-        )
+        result = subprocess.run(["gh", "label", "list", "--search", label], capture_output=True, text=True)
 
         if label in result.stdout:
             return True
@@ -362,11 +353,17 @@ def ensure_label_exists(label: str = "migrated-notes") -> bool:
         # Create label
         result = subprocess.run(
             [
-                "gh", "label", "create", label,
-                "--description", "Documentation migrated from notes/issues/",
-                "--color", "5319e7"
+                "gh",
+                "label",
+                "create",
+                label,
+                "--description",
+                "Documentation migrated from notes/issues/",
+                "--color",
+                "5319e7",
             ],
-            capture_output=True, text=True
+            capture_output=True,
+            text=True,
         )
         return result.returncode == 0
 
@@ -376,9 +373,9 @@ def ensure_label_exists(label: str = "migrated-notes") -> bool:
 
 def print_summary(state: MigrationState) -> None:
     """Print migration summary."""
-    print(f"\n{Colors.HEADER}{'='*60}{Colors.ENDC}")
+    print(f"\n{Colors.HEADER}{'=' * 60}{Colors.ENDC}")
     print(f"{Colors.HEADER}Migration Complete{Colors.ENDC}")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"\n{Colors.OKGREEN}Successfully migrated:{Colors.ENDC}")
     print(f"  - Issues with comments added: {len(state.migrated_issues)}")
     print(f"  - New issues created: {len(state.created_issues)}")
@@ -401,38 +398,17 @@ def print_summary(state: MigrationState) -> None:
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Migrate notes/issues/ content to GitHub issues"
-    )
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Show what would be done without making changes"
-    )
-    parser.add_argument(
-        "--resume",
-        action="store_true",
-        help="Resume from saved state"
-    )
-    parser.add_argument(
-        "--limit",
-        type=int,
-        help="Limit number of issues to process (for testing)"
-    )
-    parser.add_argument(
-        "--verbose", "-v",
-        action="store_true",
-        help="Enable verbose logging"
-    )
+    parser = argparse.ArgumentParser(description="Migrate notes/issues/ content to GitHub issues")
+    parser.add_argument("--dry-run", action="store_true", help="Show what would be done without making changes")
+    parser.add_argument("--resume", action="store_true", help="Resume from saved state")
+    parser.add_argument("--limit", type=int, help="Limit number of issues to process (for testing)")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging")
 
     args = parser.parse_args()
 
     # Setup logging
     log_level = logging.DEBUG if args.verbose else logging.INFO
-    logging.basicConfig(
-        level=log_level,
-        format="%(asctime)s - %(levelname)s - %(message)s"
-    )
+    logging.basicConfig(level=log_level, format="%(asctime)s - %(levelname)s - %(message)s")
 
     # Disable colors if not a terminal
     if not sys.stdout.isatty():
@@ -464,12 +440,7 @@ def main():
             logging.warning("Could not ensure 'migrated-notes' label exists")
 
     # Run migration
-    state = migrate_notes(
-        notes_dir,
-        state,
-        dry_run=args.dry_run,
-        limit=args.limit
-    )
+    state = migrate_notes(notes_dir, state, dry_run=args.dry_run, limit=args.limit)
 
     # Save final state
     state.save(state_path)
