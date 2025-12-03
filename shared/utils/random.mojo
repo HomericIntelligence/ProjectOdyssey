@@ -143,7 +143,7 @@ fn get_random_state() -> RandomState:
     state.set_seed(DEFAULT_SEED)
     # TODO: Capture Mojo stdlib RNG state
     # TODO: Capture custom RNG state
-    return state
+    return state^
 
 
 fn set_random_state(state: RandomState):
@@ -228,7 +228,7 @@ struct SeedContext(Copyable, Movable):
         self.new_seed = seed
         set_seed(seed)
 
-    fn __del__(var self):
+    fn __del__(deinit self):
         """Restore original seed on exit."""
         set_seed(self.saved_seed)
 
@@ -272,7 +272,7 @@ fn random_int(min_val: Int, max_val: Int) -> Int:
     return min_val
 
 
-fn random_choice[T: Movable](options: List[T]) -> T:
+fn random_choice[T: Copyable & Movable](options: List[T]) -> T:
     """Choose random element from list.
 
     Args:
@@ -285,7 +285,7 @@ fn random_choice[T: Movable](options: List[T]) -> T:
     return options[0]
 
 
-fn shuffle[T: Movable](mut items: List[T]):
+fn shuffle[T: Copyable & Movable](mut items: List[T]):
     """Shuffle list in-place using Fisher-Yates algorithm.
 
     Args:
