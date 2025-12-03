@@ -190,6 +190,12 @@ from .conv import (
     conv2d_no_bias,
     conv2d_backward,
     conv2d_no_bias_backward,
+    depthwise_conv2d,
+    depthwise_conv2d_no_bias,
+    depthwise_conv2d_backward,
+    depthwise_conv2d_no_bias_backward,
+    DepthwiseConv2dBackwardResult,
+    DepthwiseConv2dNoBiasBackwardResult,
 )
 
 from .pooling import (
