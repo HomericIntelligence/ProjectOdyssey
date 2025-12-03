@@ -709,8 +709,8 @@ This implementation is successful when:
 
 ### Project Guidelines
 
-- [CLAUDE.md](../../CLAUDE.md) - Project-wide guidelines
-- [Chief Architect Guidelines](../../.claude/agents/chief-architect.md) - Strategic decisions
+- [CLAUDE.md](https://github.com/mvillmow/ml-odyssey/blob/main/CLAUDE.md) - Project-wide guidelines
+- [Chief Architect Guidelines](https://github.com/mvillmow/ml-odyssey/blob/main/.claude/agents/chief-architect.md) - Strategic decisions
 
 ### Mojo Documentation
 
