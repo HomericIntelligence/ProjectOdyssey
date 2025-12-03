@@ -863,7 +863,6 @@ No outputs should be created outside `/notes/issues/<issue-number>/` directory.
 
 ## References
 
-- [Agent Hierarchy](./agent-hierarchy.md)
+- [Agent Hierarchy](https://github.com/mvillmow/ml-odyssey/blob/main/agents/hierarchy.md)
 - [Skills Design](./skills-design.md)
-- [Worktree Strategy](./worktree-strategy.md)
-- [5-Phase Workflow](../../review/README.md)
+- [5-Phase Workflow](./phases.md)
