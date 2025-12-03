@@ -215,6 +215,8 @@ from .normalization import (
     layer_norm_backward,
     group_norm,
     group_norm_backward,
+    instance_norm,
+    instance_norm_backward,
 )
 
 # ============================================================================
