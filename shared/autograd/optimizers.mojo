@@ -753,7 +753,7 @@ struct RMSprop:
             for j in range(working_grad.numel()):
                 var g = working_grad._get_float64(j)
                 var v_val = v_updated._get_float64(j)
-                var denom = sqrt(v_val) + self.epsilon
+                var denom = (v_val ** 0.5) + self.epsilon
                 adaptive_grad._set_float64(j, g / denom)
 
             # Apply learning rate
