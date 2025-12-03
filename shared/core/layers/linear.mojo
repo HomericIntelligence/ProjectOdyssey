@@ -111,4 +111,4 @@ struct Linear:
         var params = List[ExTensor]()
         params.append(self.weight)
         params.append(self.bias)
-        return params
+        return params^
