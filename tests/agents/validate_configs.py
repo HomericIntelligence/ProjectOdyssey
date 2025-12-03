@@ -67,7 +67,7 @@ class AgentConfigValidator:
 
     # Valid Claude Code tools
     # This list must be kept in sync with available tools in Claude Code.
-    # Reference: https://docs.claude.com/claude-code/tools
+    # Reference: https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview
     #
     # To update when new tools are added:
     # 1. Check Claude Code documentation for new tools
