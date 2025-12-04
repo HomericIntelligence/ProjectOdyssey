@@ -22,7 +22,8 @@ Issue: #2352 - Create shared/training/evaluation.mojo
 """
 
 from shared.core import ExTensor
-from shared.data import extract_batch_pair, compute_num_batches
+from shared.core.traits import Model
+from shared.data.batch_utils import extract_batch_pair, compute_num_batches
 from collections import List
 
 
@@ -80,7 +81,7 @@ struct EvaluationResult(Copyable, Movable):
 # ============================================================================
 
 
-fn evaluate_model[M](
+fn evaluate_model[M: Model](
     mut model: M,
     images: ExTensor,
     labels: ExTensor,
@@ -133,7 +134,7 @@ fn evaluate_model[M](
         total_per_class.append(0)
 
     if verbose:
-        print("Evaluating on " + str(num_samples) + " samples (" + str(num_batches) + " batches)...")
+        print("Evaluating on " + String(num_samples) + " samples (" + String(num_batches) + " batches)...")
 
     # Evaluate in batches
     for batch_idx in range(num_batches):
@@ -178,7 +179,7 @@ fn evaluate_model[M](
         if verbose and (batch_idx + 1) % 20 == 0:
             var progress = Float32(batch_idx + 1) / Float32(num_batches) * 100.0
             var current_acc = Float32(total_correct) / Float32((batch_idx + 1) * batch_size) * 100.0
-            print("  Progress: " + str(progress) + "% - Current Acc: " + str(current_acc) + "%")
+            print("  Progress: " + String(progress) + "% - Current Acc: " + String(current_acc) + "%")
 
     var overall_accuracy = Float32(total_correct) / Float32(num_samples)
 
@@ -195,7 +196,7 @@ fn evaluate_model[M](
     )
 
 
-fn evaluate_model_simple[M](
+fn evaluate_model_simple[M: Model](
     mut model: M,
     images: ExTensor,
     labels: ExTensor,
@@ -236,7 +237,7 @@ fn evaluate_model_simple[M](
     var total_correct = 0
 
     if verbose:
-        print("Evaluating on " + str(num_samples) + " samples...")
+        print("Evaluating on " + String(num_samples) + " samples...")
 
     # Evaluate in batches
     for batch_idx in range(num_batches):
@@ -275,7 +276,7 @@ fn evaluate_model_simple[M](
         # Print progress
         if verbose and (batch_idx + 1) % 20 == 0:
             var progress = Float32(batch_idx + 1) / Float32(num_batches) * 100.0
-            print("  Progress: " + str(progress) + "%")
+            print("  Progress: " + String(progress) + "%")
 
     var overall_accuracy = Float32(total_correct) / Float32(num_samples)
 
@@ -286,7 +287,7 @@ fn evaluate_model_simple[M](
     return overall_accuracy
 
 
-fn evaluate_topk[M](
+fn evaluate_topk[M: Model](
     mut model: M,
     images: ExTensor,
     labels: ExTensor,
@@ -332,7 +333,7 @@ fn evaluate_topk[M](
     var total_correct = 0
 
     if verbose:
-        print("Evaluating top-" + str(k) + " accuracy on " + str(num_samples) + " samples...")
+        print("Evaluating top-" + String(k) + " accuracy on " + String(num_samples) + " samples...")
 
     # Evaluate in batches
     for batch_idx in range(num_batches):
@@ -385,12 +386,12 @@ fn evaluate_topk[M](
         # Print progress
         if verbose and (batch_idx + 1) % 20 == 0:
             var progress = Float32(batch_idx + 1) / Float32(num_batches) * 100.0
-            print("  Progress: " + str(progress) + "%")
+            print("  Progress: " + String(progress) + "%")
 
     var topk_accuracy = Float32(total_correct) / Float32(num_samples)
 
     if verbose:
-        print("Top-" + str(k) + " evaluation complete!")
+        print("Top-" + String(k) + " evaluation complete!")
         print()
 
     return topk_accuracy
