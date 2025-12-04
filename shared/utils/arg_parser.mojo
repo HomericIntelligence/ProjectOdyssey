@@ -326,7 +326,7 @@ fn create_training_parser() raises -> ArgumentParser:
     parser.add_argument("seed", "int", "42")
     parser.add_flag("verbose")
 
-    return parser
+    return parser^
 
 
 fn validate_positive_int(value: Int, name: String) raises:

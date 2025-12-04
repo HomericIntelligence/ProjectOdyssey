@@ -92,7 +92,7 @@ fn save_model_weights(parameters: List[ExTensor], directory: String, param_names
         save_tensor(parameters[i], filepath, param_names[i])
 
 
-fn load_model_weights(parameters: List[ExTensor], directory: String, param_names: List[String]) raises:
+fn load_model_weights(mut parameters: List[ExTensor], directory: String, param_names: List[String]) raises:
     """Load model weights from directory.
 
     Loads parameter tensors from individual .weights files in the directory
@@ -127,7 +127,7 @@ fn load_model_weights(parameters: List[ExTensor], directory: String, param_names
         parameters.append(tensor)
 
 
-fn get_model_parameter_names(model_type: String) -> List[String]:
+fn get_model_parameter_names(model_type: String) raises -> List[String]:
     """Get standard parameter names for a model architecture.
 
     Returns the canonical parameter names for supported architectures.
