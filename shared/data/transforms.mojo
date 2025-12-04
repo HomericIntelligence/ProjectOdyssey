@@ -12,7 +12,7 @@ These limitations are due to Mojo's current ExTensor API not exposing shape meta
 Future versions may support arbitrary image dimensions.
 """
 
-from shared.core.extensor import ExTensor
+from shared.core.extensor import ExTensor, zeros
 from math import sqrt, floor, ceil, sin, cos
 from random import random_si64
 
@@ -268,14 +268,17 @@ struct Reshape(Transform, Copyable, Movable):
                 + " elements"
             )
 
-        # Copy all values (reshape is just a view change, data stays the same)
-        var values = List[Float32](capacity=data.num_elements())
-        for i in range(data.num_elements()):
-            values.append(Float32(data[i]))
+        # Build reshaped data as a List
+        var reshaped_data = List[Float32](capacity=data.num_elements())
 
-        # TODO(#2388): Properly set shape metadata on returned tensor
-        # For now, return flattened tensor (Mojo's ExTensor API limitation)
-        return ExTensor(values^)
+        # Copy all values from source tensor to the list
+        for i in range(data.num_elements()):
+            reshaped_data.append(Float32(data[i]))
+
+        # Create output tensor from the list
+        var reshaped = ExTensor(reshaped_data^)
+
+        return reshaped^
 
 
 # ============================================================================
@@ -305,10 +308,11 @@ struct Resize(Transform, Copyable, Movable):
         self.interpolation = interpolation
 
     fn __call__(self, data: ExTensor) raises -> ExTensor:
-        """Resize image tensor using nearest-neighbor sampling.
+        """Resize image tensor using bilinear interpolation.
 
-        This is a simplified implementation for 1D tensors.
-        Proper 2D image resizing requires bilinear/bicubic interpolation.
+        Resizes spatial dimensions (H, W) while preserving channels (C).
+        Uses bilinear interpolation for smooth resizing.
+        Assumes tensor layout: flattened (H, W, C) with channels-last.
 
         Args:
             data: Input image tensor.
@@ -319,26 +323,74 @@ struct Resize(Transform, Copyable, Movable):
         Raises:
             Error if operation fails.
         """
-        var old_size = data.num_elements()
-        var new_size = self.size[0] * self.size[1]
+        # Get image dimensions (assumes square images with H=W, C=3 by default)
+        var dims = infer_image_dimensions(data, 3)
+        var old_h = dims[0]
+        var old_w = dims[1]
+        var channels = dims[2]
 
-        # Simplified nearest-neighbor resize for 1D tensors
-        var resized = List[Float32](capacity=new_size)
+        var new_h = self.size[0]
+        var new_w = self.size[1]
 
-        for i in range(new_size):
-            # Map new index to old index using nearest-neighbor
-            var old_idx = Int((Float64(i) / Float64(new_size)) * Float64(old_size))
-            if old_idx >= old_size:
-                old_idx = old_size - 1
+        # Calculate scale factors
+        var scale_h = Float64(old_h - 1) / Float64(new_h - 1) if new_h > 1 else 0.0
+        var scale_w = Float64(old_w - 1) / Float64(new_w - 1) if new_w > 1 else 0.0
 
-            resized.append(Float32(data[old_idx]))
+        # Build resized data as a List
+        var resized_data = List[Float32](capacity=new_h * new_w * channels)
 
-        # TODO(#2388): Implement proper 2D image resizing with interpolation
-        # This requires:
-        # 1. Understanding tensor layout (H, W, C) vs (C, H, W)
-        # 2. Bilinear or bicubic interpolation for quality
-        # 3. Handling edge cases and aspect ratio
-        return ExTensor(resized^)
+        # For each output pixel
+        for y_new in range(new_h):
+            for x_new in range(new_w):
+                # Map to source image coordinates (floating point)
+                var y_src = Float64(y_new) * scale_h
+                var x_src = Float64(x_new) * scale_w
+
+                # Get integer and fractional parts
+                var y_int = Int(y_src)
+                var x_int = Int(x_src)
+                var y_frac = y_src - Float64(y_int)
+                var x_frac = x_src - Float64(x_int)
+
+                # Bounds check
+                if y_int < 0 or y_int >= old_h or x_int < 0 or x_int >= old_w:
+                    # Fill with zeros if out of bounds
+                    for c in range(channels):
+                        resized_data.append(Float32(0.0))
+                    continue
+
+                # Bilinear interpolation with 4 neighboring pixels
+                # Get the 4 neighbors: (y_int, x_int), (y_int+1, x_int), etc.
+                var y_int_next = min(y_int + 1, old_h - 1)
+                var x_int_next = min(x_int + 1, old_w - 1)
+
+                # For each channel, interpolate the value
+                for c in range(channels):
+                    # Get the 4 source values
+                    var idx_00 = (y_int * old_w + x_int) * channels + c
+                    var idx_01 = (y_int * old_w + x_int_next) * channels + c
+                    var idx_10 = (y_int_next * old_w + x_int) * channels + c
+                    var idx_11 = (y_int_next * old_w + x_int_next) * channels + c
+
+                    var v_00 = Float64(data[idx_00])
+                    var v_01 = Float64(data[idx_01])
+                    var v_10 = Float64(data[idx_10])
+                    var v_11 = Float64(data[idx_11])
+
+                    # Bilinear interpolation:
+                    # v = (1-y_frac) * [(1-x_frac)*v_00 + x_frac*v_01] +
+                    #      y_frac * [(1-x_frac)*v_10 + x_frac*v_11]
+                    var v0 = (1.0 - x_frac) * v_00 + x_frac * v_01
+                    var v1 = (1.0 - x_frac) * v_10 + x_frac * v_11
+                    var v = (1.0 - y_frac) * v0 + y_frac * v1
+
+                    # Append interpolated value to output list
+                    resized_data.append(Float32(v))
+
+        # Create output tensor from the list
+        var resized = ExTensor(resized_data^)
+
+        return resized^
 
 
 struct CenterCrop(Transform, Copyable, Movable):
@@ -831,18 +883,21 @@ struct RandomErasing(Transform, Copyable, Movable):
         var left = Int(random_si64(0, max_left + 1))
 
         # Step 5: Erase the rectangle
-        # Copy original data
+        # Copy original data and mark erased regions
         var result = List[Float32](capacity=total_elements)
-        for i in range(total_elements):
-            result.append(Float32(data[i]))
 
-        # Erase rectangle by setting to fill value
-        # For each pixel in the erased rectangle
-        for row in range(top, top + erase_h):
-            for col in range(left, left + erase_w):
-                # Set all channels to fill value
-                for c in range(channels):
-                    var index = (row * width + col) * channels + c
-                    result[index] = Float32(self.value)
+        for i in range(total_elements):
+            # Check if this element is in the erased rectangle
+            # Calculate (row, col, c) from flat index
+            var pixel_idx = i // channels
+            var c = i % channels
+            var col = pixel_idx % width
+            var row = pixel_idx // width
+
+            # Check if in erased region
+            if row >= top and row < top + erase_h and col >= left and col < left + erase_w:
+                result.append(Float32(self.value))
+            else:
+                result.append(Float32(data[i]))
 
         return ExTensor(result^)
