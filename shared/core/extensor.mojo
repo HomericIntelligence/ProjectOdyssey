@@ -1958,9 +1958,155 @@ struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
 
         return result^
 
-    # TODO(#2386): Add reflected operators (__radd__, __rsub__, etc.) for operations like: 2 + tensor
-    # TODO(#2386): Add in-place operators (__iadd__, __isub__, etc.) for operations like: tensor += 2
-    # TODO(#2386): Add unary operators (__neg__, __pos__, __abs__, __invert__)
+    # Reflected operators - enable reversed operand order (e.g., 2 + tensor)
+    # These are called when the left operand doesn't support the operation
+    fn __radd__(self, other: ExTensor) raises -> ExTensor:
+        """Reflected addition: other + self (commutative, so same as __add__)"""
+        return self.__add__(other)
+
+    fn __rsub__(self, other: ExTensor) raises -> ExTensor:
+        """Reflected subtraction: other - self (order matters: returns other - self)"""
+        from .arithmetic import subtract
+
+        return subtract(other, self)
+
+    fn __rmul__(self, other: ExTensor) raises -> ExTensor:
+        """Reflected multiplication: other * self (commutative, so same as __mul__)"""
+        return self.__mul__(other)
+
+    fn __rtruediv__(self, other: ExTensor) raises -> ExTensor:
+        """Reflected division: other / self (order matters: returns other / self)"""
+        from .arithmetic import divide
+
+        return divide(other, self)
+
+    # In-place operators - mutate self instead of creating new tensor
+    fn __iadd__(mut self, other: ExTensor) raises:
+        """In-place addition: self += other"""
+        from .arithmetic import add
+
+        var result = add(self, other)
+        # Copy result data into self (must match shape/dtype)
+        if result.numel() == self.numel() and result.dtype() == self.dtype():
+            for i in range(self._numel):
+                self._set_float64(i, result._get_float64(i))
+        else:
+            raise Error("In-place operation requires matching shapes and dtypes")
+
+    fn __isub__(mut self, other: ExTensor) raises:
+        """In-place subtraction: self -= other"""
+        from .arithmetic import subtract
+
+        var result = subtract(self, other)
+        # Copy result data into self (must match shape/dtype)
+        if result.numel() == self.numel() and result.dtype() == self.dtype():
+            for i in range(self._numel):
+                self._set_float64(i, result._get_float64(i))
+        else:
+            raise Error("In-place operation requires matching shapes and dtypes")
+
+    fn __imul__(mut self, other: ExTensor) raises:
+        """In-place multiplication: self *= other"""
+        from .arithmetic import multiply
+
+        var result = multiply(self, other)
+        # Copy result data into self (must match shape/dtype)
+        if result.numel() == self.numel() and result.dtype() == self.dtype():
+            for i in range(self._numel):
+                self._set_float64(i, result._get_float64(i))
+        else:
+            raise Error("In-place operation requires matching shapes and dtypes")
+
+    fn __itruediv__(mut self, other: ExTensor) raises:
+        """In-place division: self /= other"""
+        from .arithmetic import divide
+
+        var result = divide(self, other)
+        # Copy result data into self (must match shape/dtype)
+        if result.numel() == self.numel() and result.dtype() == self.dtype():
+            for i in range(self._numel):
+                self._set_float64(i, result._get_float64(i))
+        else:
+            raise Error("In-place operation requires matching shapes and dtypes")
+
+    # Unary operators - operate on single tensor
+    fn __neg__(self) raises -> ExTensor:
+        """Negation: -self"""
+        # Create result tensor with same shape and dtype
+        var result = ExTensor(self._shape, self._dtype)
+
+        # Negate each element based on dtype
+        if self._dtype == DType.float32:
+            var self_ptr = self._data.bitcast[Float32]()
+            var result_ptr = result._data.bitcast[Float32]()
+            for i in range(self._numel):
+                result_ptr[i] = -self_ptr[i]
+        elif self._dtype == DType.float64:
+            var self_ptr = self._data.bitcast[Float64]()
+            var result_ptr = result._data.bitcast[Float64]()
+            for i in range(self._numel):
+                result_ptr[i] = -self_ptr[i]
+        elif self._dtype == DType.float16:
+            var self_ptr = self._data.bitcast[Float16]()
+            var result_ptr = result._data.bitcast[Float16]()
+            for i in range(self._numel):
+                result_ptr[i] = -self_ptr[i]
+        elif self._dtype == DType.int8:
+            var self_ptr = self._data.bitcast[Int8]()
+            var result_ptr = result._data.bitcast[Int8]()
+            for i in range(self._numel):
+                result_ptr[i] = -self_ptr[i]
+        elif self._dtype == DType.int16:
+            var self_ptr = self._data.bitcast[Int16]()
+            var result_ptr = result._data.bitcast[Int16]()
+            for i in range(self._numel):
+                result_ptr[i] = -self_ptr[i]
+        elif self._dtype == DType.int32:
+            var self_ptr = self._data.bitcast[Int32]()
+            var result_ptr = result._data.bitcast[Int32]()
+            for i in range(self._numel):
+                result_ptr[i] = -self_ptr[i]
+        elif self._dtype == DType.int64:
+            var self_ptr = self._data.bitcast[Int64]()
+            var result_ptr = result._data.bitcast[Int64]()
+            for i in range(self._numel):
+                result_ptr[i] = -self_ptr[i]
+        elif self._dtype == DType.uint8:
+            var self_ptr = self._data.bitcast[UInt8]()
+            var result_ptr = result._data.bitcast[UInt8]()
+            for i in range(self._numel):
+                result_ptr[i] = -self_ptr[i]
+        elif self._dtype == DType.uint16:
+            var self_ptr = self._data.bitcast[UInt16]()
+            var result_ptr = result._data.bitcast[UInt16]()
+            for i in range(self._numel):
+                result_ptr[i] = -self_ptr[i]
+        elif self._dtype == DType.uint32:
+            var self_ptr = self._data.bitcast[UInt32]()
+            var result_ptr = result._data.bitcast[UInt32]()
+            for i in range(self._numel):
+                result_ptr[i] = -self_ptr[i]
+        elif self._dtype == DType.uint64:
+            var self_ptr = self._data.bitcast[UInt64]()
+            var result_ptr = result._data.bitcast[UInt64]()
+            for i in range(self._numel):
+                result_ptr[i] = -self_ptr[i]
+        else:
+            raise Error("Unsupported dtype for negation")
+
+        return result^
+
+    fn __pos__(self) raises -> ExTensor:
+        """Positive: +self (returns a copy)"""
+        # Return a copy of the tensor using Mojo's copy semantics
+        var copy = self
+        return copy^
+
+    fn __abs__(self) raises -> ExTensor:
+        """Absolute value: abs(self)"""
+        from .elementwise import abs
+
+        return abs(self)
 
 
 # ============================================================================
