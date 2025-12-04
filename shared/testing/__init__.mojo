@@ -9,7 +9,8 @@ Provides tools for validating neural network implementations:
 Modules:
     data_generators: Generate synthetic test data (random tensors, classification datasets)
     gradient_checker: Validate backward passes using finite differences
-    fixtures: Test models, data generators, and assertion helpers
+    fixtures: Test models and fixture generators
+    assertions: Custom assertion functions for testing
 """
 
 from .gradient_checker import (
@@ -36,4 +37,11 @@ from .fixtures import (
     assert_tensor_dtype,
     assert_tensor_all_finite,
     assert_tensor_not_all_zeros,
+)
+
+from .assertions import (
+    assert_true,
+    assert_equal,
+    assert_almost_equal,
+    assert_shape,
 )

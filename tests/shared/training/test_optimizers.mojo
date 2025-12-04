@@ -24,6 +24,7 @@ from tests.shared.conftest import (
 from shared.core.extensor import ExTensor, zeros, ones, zeros_like
 from shared.training.optimizers.sgd import sgd_step, sgd_step_simple
 from shared.training.optimizers.adam import adam_step, adam_step_simple
+from shared.training.optimizers.adamw import adamw_step, adamw_step_simple
 
 
 # ============================================================================
@@ -319,19 +320,36 @@ fn test_adamw_weight_decay() raises:
         - Then apply: params = params * (1 - lr * weight_decay)
 
         This differs from L2 regularization used in standard Adam.
+
+    Test validates that:
+        1. Weight decay is applied AFTER the Adam update
+        2. Weight decay factor is: params *= (1 - lr * weight_decay)
+        3. With lr=0.001 and weight_decay=0.01, decay factor = 1 - 0.00001 = 0.99999
     """
-    # TODO(#1538): Implement when AdamW is available
-    # var params = Tensor(List[Float32](1.0), Shape(1))
-    # var grads = Tensor(List[Float32](0.1), Shape(1))
-    # #
-    # var optimizer = AdamW(learning_rate=0.001, weight_decay=0.01)
-    # #
-    # # AdamW should decay weights more aggressively than Adam+L2
-    # optimizer.step(params, grads)
-    # #
-    # # Verify weight decay was applied
-    # assert_less(params[0], 1.0)
-    pass
+    var shape = List[Int]()
+    shape.append(1)
+    var params = ones(shape, DType.float32)
+    params._data.bitcast[Float32]()[0] = 1.0
+
+    var grads = zeros(shape, DType.float32)
+    grads._data.bitcast[Float32]()[0] = 0.0  # Zero gradient to isolate weight decay effect
+
+    var m = zeros(shape, DType.float32)
+    var v = zeros(shape, DType.float32)
+
+    # With zero gradient and weight decay:
+    # Adam update: params stays at 1.0 (no gradient update)
+    # Weight decay: params = 1.0 * (1 - 0.001 * 0.01) = 1.0 * 0.99999 = 0.99999
+    var result = adamw_step(
+        params, grads, m, v, t=1,
+        learning_rate=0.001,
+        weight_decay=0.01
+    )
+    var new_params = result[0]
+
+    # Verify weight decay was applied
+    assert_less(new_params._data.bitcast[Float32]()[0], 1.0)
+    assert_almost_equal(new_params._data.bitcast[Float32]()[0], 0.99999, tolerance=1e-5)
 
 
 # ============================================================================
