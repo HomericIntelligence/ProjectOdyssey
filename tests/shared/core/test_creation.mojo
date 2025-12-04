@@ -6,6 +6,7 @@ from_array, eye, linspace, and empty with various shapes and dtypes.
 
 # Import ExTensor and creation operations
 from shared.core import ExTensor, zeros, ones, full, empty, arange, eye, linspace
+from shared.core.extensor import zeros_like, ones_like, full_like
 
 # Import test helpers
 from tests.shared.conftest import (
@@ -21,6 +22,14 @@ from tests.shared.conftest import (
     assert_value_at,
     assert_all_values,
     assert_all_close,
+)
+
+# Import tensor assertions from shared testing fixtures
+from shared.testing.fixtures import (
+    assert_tensor_shape,
+    assert_tensor_dtype,
+    assert_tensor_all_finite,
+    assert_tensor_not_all_zeros,
 )
 
 
@@ -505,6 +514,145 @@ fn test_creation_high_dimensional() raises:
 
 
 # ============================================================================
+# Test consolidated assertions from shared/testing/fixtures
+# ============================================================================
+
+
+fn test_assert_tensor_shape_validation() raises:
+    """Test assert_tensor_shape helper validates correct shapes."""
+    var shape = List[Int]()
+    shape.append(3)
+    shape.append(4)
+    var t = ones(shape, DType.float32)
+
+    # Test that shape assertion works correctly
+    var expected_shape = List[Int]()
+    expected_shape.append(3)
+    expected_shape.append(4)
+    assert_true(assert_tensor_shape(t, expected_shape), "Shape should match")
+
+    # Test incorrect shape returns False
+    var wrong_shape = List[Int]()
+    wrong_shape.append(4)
+    wrong_shape.append(3)
+    assert_true(not assert_tensor_shape(t, wrong_shape), "Wrong shape should fail")
+
+
+fn test_assert_tensor_dtype_validation() raises:
+    """Test assert_tensor_dtype helper validates correct dtypes."""
+    var shape = List[Int]()
+    shape.append(5)
+    var t32 = zeros(shape, DType.float32)
+    var t64 = ones(shape, DType.float64)
+
+    # Test correct dtype
+    assert_true(assert_tensor_dtype(t32, DType.float32), "float32 should match")
+    assert_true(assert_tensor_dtype(t64, DType.float64), "float64 should match")
+
+    # Test incorrect dtype
+    assert_true(not assert_tensor_dtype(t32, DType.float64), "Wrong dtype should fail")
+    assert_true(not assert_tensor_dtype(t64, DType.float32), "Wrong dtype should fail")
+
+
+fn test_assert_tensor_all_finite_validation() raises:
+    """Test assert_tensor_all_finite detects NaN and Inf."""
+    var shape = List[Int]()
+    shape.append(4)
+    var t = ones(shape, DType.float32)
+
+    # Test normal finite values
+    assert_true(assert_tensor_all_finite(t), "All ones should be finite")
+
+    # Create tensor with zeros and check finitude
+    var t_zeros = zeros(shape, DType.float32)
+    assert_true(assert_tensor_all_finite(t_zeros), "All zeros should be finite")
+
+
+fn test_assert_tensor_not_all_zeros_validation() raises:
+    """Test assert_tensor_not_all_zeros detects non-zero values."""
+    var shape = List[Int]()
+    shape.append(5)
+
+    # Test tensor with all zeros
+    var t_zeros = zeros(shape, DType.float32)
+    assert_true(not assert_tensor_not_all_zeros(t_zeros), "All zeros should fail check")
+
+    # Test tensor with all ones
+    var t_ones = ones(shape, DType.float32)
+    assert_true(assert_tensor_not_all_zeros(t_ones), "All ones should pass check")
+
+    # Test tensor with mixed values
+    var t_mixed = zeros(shape, DType.float32)
+    t_mixed._set_float64(0, 0.5)  # Set one non-zero value
+    assert_true(assert_tensor_not_all_zeros(t_mixed), "Mixed values should pass check")
+
+
+fn test_create_tensor_validate_shape_and_dtype() raises:
+    """Test creating tensors and validating with consolidated assertions."""
+    # Create a 2D tensor
+    var shape = List[Int]()
+    shape.append(2)
+    shape.append(3)
+    var t = full(shape, 7.5, DType.float32)
+
+    # Validate using consolidated assertions
+    var expected_shape = List[Int]()
+    expected_shape.append(2)
+    expected_shape.append(3)
+
+    assert_true(assert_tensor_shape(t, expected_shape), "2D tensor shape should match")
+    assert_true(assert_tensor_dtype(t, DType.float32), "Tensor dtype should be float32")
+    assert_true(assert_tensor_all_finite(t), "Full tensor should be all finite")
+    assert_true(assert_tensor_not_all_zeros(t), "Tensor filled with 7.5 should not be all zeros")
+
+
+fn test_zeros_like_validation_with_shared_assertions() raises:
+    """Test zeros_like creation with consolidated assertion helpers."""
+    var orig_shape = List[Int]()
+    orig_shape.append(3)
+    orig_shape.append(4)
+    var original = ones(orig_shape, DType.float64)
+
+    # Create zeros_like tensor
+    var t_zeros_like = zeros_like(original)
+
+    # Validate shape preserved
+    var expected_shape = List[Int]()
+    expected_shape.append(3)
+    expected_shape.append(4)
+    assert_true(assert_tensor_shape(t_zeros_like, expected_shape), "zeros_like should preserve shape")
+
+    # Validate dtype preserved
+    assert_true(assert_tensor_dtype(t_zeros_like, DType.float64), "zeros_like should preserve dtype")
+
+    # Validate all values are zero
+    assert_true(not assert_tensor_not_all_zeros(t_zeros_like), "zeros_like should be all zeros")
+
+
+fn test_ones_like_validation_with_shared_assertions() raises:
+    """Test ones_like creation with consolidated assertion helpers."""
+    var orig_shape = List[Int]()
+    orig_shape.append(2)
+    orig_shape.append(5)
+    var original = full(orig_shape, 3.14, DType.float32)
+
+    # Create ones_like tensor
+    var t_ones_like = ones_like(original)
+
+    # Validate shape preserved
+    var expected_shape = List[Int]()
+    expected_shape.append(2)
+    expected_shape.append(5)
+    assert_true(assert_tensor_shape(t_ones_like, expected_shape), "ones_like should preserve shape")
+
+    # Validate dtype preserved
+    assert_true(assert_tensor_dtype(t_ones_like, DType.float32), "ones_like should preserve dtype")
+
+    # Validate not all zeros
+    assert_true(assert_tensor_not_all_zeros(t_ones_like), "ones_like should not be all zeros")
+
+
+# ============================================================================
 # Main test runner
 # ============================================================================
 
@@ -571,5 +719,14 @@ fn main() raises:
     test_creation_0d_scalar()
     test_creation_very_large_1d()
     test_creation_high_dimensional()
+
+    # Consolidated assertions tests
+    test_assert_tensor_shape_validation()
+    test_assert_tensor_dtype_validation()
+    test_assert_tensor_all_finite_validation()
+    test_assert_tensor_not_all_zeros_validation()
+    test_create_tensor_validate_shape_and_dtype()
+    test_zeros_like_validation_with_shared_assertions()
+    test_ones_like_validation_with_shared_assertions()
 
     print("All creation operation tests completed!")

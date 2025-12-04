@@ -54,7 +54,7 @@ REQUIRED_SUBDIRS = {
     "benchmarks": ["scripts", "baselines", "results"],
     "docs": ["getting-started", "core", "advanced", "dev"],
     "agents": ["templates", "guides", "docs"],
-    "tools": ["paper-scaffold", "test-utils", "benchmarking", "codegen"],
+    "tools": ["paper-scaffold", "codegen"],
     "configs": ["defaults", "papers", "experiments", "templates"],
     "papers": ["_template"],
     "shared": ["core", "training", "data", "utils"],

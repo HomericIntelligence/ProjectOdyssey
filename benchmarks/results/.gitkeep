@@ -1,3 +1,0 @@
-# This directory stores timestamped benchmark results
-# Format: {timestamp}_results.json
-# Results are compared against baselines for regression detection

@@ -19,6 +19,14 @@ from tests.shared.conftest import (
     assert_true,
 )
 from tests.shared.conftest import TestFixtures
+
+# Import tensor assertions from shared testing fixtures
+from shared.testing.fixtures import (
+    assert_tensor_shape,
+    assert_tensor_dtype,
+    assert_tensor_all_finite,
+    assert_tensor_not_all_zeros,
+)
 from shared.core.extensor import ExTensor, zeros, ones, zeros_like, ones_like
 from shared.core.elementwise import (
     abs,
@@ -763,6 +771,113 @@ fn test_logical_not_values() raises:
 
 
 # ============================================================================
+# Test consolidated assertions with elementwise operations
+# ============================================================================
+
+
+fn test_elementwise_ops_with_consolidated_assertions() raises:
+    """Test elementwise operations and validate with consolidated assertions."""
+    # Create input tensor
+    var shape = List[Int]()
+    shape.append(5)
+    var input_tensor = zeros(shape, DType.float32)
+
+    # Set values: [-2, -1, 0, 1, 2]
+    input_tensor._data.bitcast[Float32]()[0] = -2.0
+    input_tensor._data.bitcast[Float32]()[1] = -1.0
+    input_tensor._data.bitcast[Float32]()[2] = 0.0
+    input_tensor._data.bitcast[Float32]()[3] = 1.0
+    input_tensor._data.bitcast[Float32]()[4] = 2.0
+
+    # Compute abs
+    var abs_result = abs(input_tensor)
+
+    # Validate using consolidated assertions
+    var expected_shape = List[Int]()
+    expected_shape.append(5)
+    assert_true(assert_tensor_shape(abs_result, expected_shape), "abs should preserve shape")
+    assert_true(assert_tensor_dtype(abs_result, DType.float32), "abs should preserve dtype")
+    assert_true(assert_tensor_all_finite(abs_result), "abs result should be finite")
+    assert_true(assert_tensor_not_all_zeros(abs_result), "abs of mixed values should not be all zeros")
+
+
+fn test_elementwise_exp_validation() raises:
+    """Test exp operation and validate output with consolidated assertions."""
+    var shape = List[Int]()
+    shape.append(3)
+    var input_tensor = zeros(shape, DType.float32)
+
+    # Set values: [0, 1, 2]
+    input_tensor._data.bitcast[Float32]()[0] = 0.0
+    input_tensor._data.bitcast[Float32]()[1] = 1.0
+    input_tensor._data.bitcast[Float32]()[2] = 2.0
+
+    # Compute exp
+    var exp_result = exp(input_tensor)
+
+    # Validate shape and dtype preserved
+    var expected_shape = List[Int]()
+    expected_shape.append(3)
+    assert_true(assert_tensor_shape(exp_result, expected_shape), "exp should preserve shape")
+    assert_true(assert_tensor_dtype(exp_result, DType.float32), "exp should preserve dtype")
+
+    # Validate finite values (exp should never produce NaN/Inf for reasonable inputs)
+    assert_true(assert_tensor_all_finite(exp_result), "exp values should be finite")
+
+    # exp(0)=1, exp(1)~2.718, exp(2)~7.389 - all non-zero
+    assert_true(assert_tensor_not_all_zeros(exp_result), "exp should not be all zeros")
+
+
+fn test_elementwise_sqrt_validation() raises:
+    """Test sqrt operation validation with consolidated assertions."""
+    var shape = List[Int]()
+    shape.append(4)
+    var input_tensor = zeros(shape, DType.float32)
+
+    # Set values: [0, 1, 4, 9]
+    input_tensor._data.bitcast[Float32]()[0] = 0.0
+    input_tensor._data.bitcast[Float32]()[1] = 1.0
+    input_tensor._data.bitcast[Float32]()[2] = 4.0
+    input_tensor._data.bitcast[Float32]()[3] = 9.0
+
+    # Compute sqrt
+    var sqrt_result = sqrt(input_tensor)
+
+    # Validate properties
+    var expected_shape = List[Int]()
+    expected_shape.append(4)
+    assert_true(assert_tensor_shape(sqrt_result, expected_shape), "sqrt should preserve shape")
+    assert_true(assert_tensor_dtype(sqrt_result, DType.float32), "sqrt should preserve dtype")
+    assert_true(assert_tensor_all_finite(sqrt_result), "sqrt should produce finite values")
+
+
+fn test_elementwise_logical_ops_validation() raises:
+    """Test logical operations validation with consolidated assertions."""
+    var shape = List[Int]()
+    shape.append(2)
+    var ones_tensor = ones(shape, DType.float32)
+    var zeros_tensor = zeros(shape, DType.float32)
+
+    # Test logical_and
+    var and_result = logical_and(ones_tensor, ones_tensor)
+    var expected_shape = List[Int]()
+    expected_shape.append(2)
+    assert_true(assert_tensor_shape(and_result, expected_shape), "logical_and should preserve shape")
+    assert_true(assert_tensor_all_finite(and_result), "logical_and result should be finite")
+
+    # Test logical_or
+    var or_result = logical_or(zeros_tensor, ones_tensor)
+    assert_true(assert_tensor_shape(or_result, expected_shape), "logical_or should preserve shape")
+    assert_true(assert_tensor_all_finite(or_result), "logical_or result should be finite")
+
+    # Test logical_not
+    var not_result = logical_not(zeros_tensor)
+    assert_true(assert_tensor_shape(not_result, expected_shape), "logical_not should preserve shape")
+    assert_true(assert_tensor_all_finite(not_result), "logical_not result should be finite")
+    assert_true(assert_tensor_not_all_zeros(not_result), "logical_not(zeros) should not be all zeros")
+
+
+# ============================================================================
 # Main Test Runner
 # ============================================================================
 
@@ -857,5 +972,18 @@ fn main() raises:
 
     test_logical_not_values()
     print("✓ test_logical_not_values")
+
+    # Consolidated assertions tests
+    test_elementwise_ops_with_consolidated_assertions()
+    print("✓ test_elementwise_ops_with_consolidated_assertions")
+
+    test_elementwise_exp_validation()
+    print("✓ test_elementwise_exp_validation")
+
+    test_elementwise_sqrt_validation()
+    print("✓ test_elementwise_sqrt_validation")
+
+    test_elementwise_logical_ops_validation()
+    print("✓ test_elementwise_logical_ops_validation")
 
     print("\nAll elementwise operation tests passed!")

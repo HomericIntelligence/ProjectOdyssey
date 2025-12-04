@@ -66,12 +66,10 @@ class TestMainReadmeDocumentation:
         self, main_readme: Path, category_names: list
     ) -> None:
         """
-        Test that main README documents all 4 tool categories.
+        Test that main README documents all tool categories.
 
         Verifies:
         - README mentions paper-scaffold category
-        - README mentions test-utils category
-        - README mentions benchmarking category
         - README mentions codegen category
 
         Args:
@@ -311,64 +309,6 @@ class TestCategoryReadmeDocumentation:
 
         assert has_purpose, (
             "paper-scaffold/README.md should describe scaffolding purpose"
-        )
-
-    def test_test_utils_readme_describes_purpose(
-        self, category_readmes: Dict[str, Path]
-    ) -> None:
-        """
-        Test that test-utils README describes its purpose.
-
-        Verifies:
-        - README explains testing utilities
-        - README mentions test data or fixtures
-
-        Args:
-            category_readmes: Dictionary of category README paths
-        """
-        readme_path = category_readmes["test-utils"]
-        content = readme_path.read_text().lower()
-
-        # Check for testing-related content
-        has_purpose = any(
-            keyword in content
-            for keyword in ["test", "fixture", "data", "utility", "utilities"]
-        )
-
-        assert has_purpose, (
-            "test-utils/README.md should describe testing utilities purpose"
-        )
-
-    def test_benchmarking_readme_describes_purpose(
-        self, category_readmes: Dict[str, Path]
-    ) -> None:
-        """
-        Test that benchmarking README describes its purpose.
-
-        Verifies:
-        - README explains benchmarking functionality
-        - README mentions performance or measurement
-
-        Args:
-            category_readmes: Dictionary of category README paths
-        """
-        readme_path = category_readmes["benchmarking"]
-        content = readme_path.read_text().lower()
-
-        # Check for benchmarking-related content
-        has_purpose = any(
-            keyword in content
-            for keyword in [
-                "benchmark",
-                "performance",
-                "measure",
-                "speed",
-                "timing",
-            ]
-        )
-
-        assert has_purpose, (
-            "benchmarking/README.md should describe benchmarking purpose"
         )
 
     def test_codegen_readme_describes_purpose(

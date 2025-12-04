@@ -144,7 +144,7 @@ struct LeNet5(Model, Movable):
         var conv1_shape = List[Int](CONV1_OUT_CHANNELS, INPUT_CHANNELS, CONV1_KERNEL_SIZE, CONV1_KERNEL_SIZE)
         var conv1_fan_in = INPUT_CHANNELS * CONV1_KERNEL_SIZE * CONV1_KERNEL_SIZE
         var conv1_fan_out = CONV1_OUT_CHANNELS * CONV1_KERNEL_SIZE * CONV1_KERNEL_SIZE
-        self.conv1_kernel = kaiming_uniform(conv1_fan_in, conv1_fan_out, conv1_shape, dtype=DType.float32)
+        self.conv1_kernel = kaiming_uniform(conv1_fan_in, conv1_fan_out, conv1_shape, "fan_in", DType.float32)
         var conv1_bias_shape = List[Int](CONV1_OUT_CHANNELS)
         self.conv1_bias = zeros(conv1_bias_shape, DType.float32)
 
@@ -152,25 +152,25 @@ struct LeNet5(Model, Movable):
         var conv2_shape = List[Int](CONV2_OUT_CHANNELS, CONV1_OUT_CHANNELS, CONV2_KERNEL_SIZE, CONV2_KERNEL_SIZE)
         var conv2_fan_in = CONV1_OUT_CHANNELS * CONV2_KERNEL_SIZE * CONV2_KERNEL_SIZE
         var conv2_fan_out = CONV2_OUT_CHANNELS * CONV2_KERNEL_SIZE * CONV2_KERNEL_SIZE
-        self.conv2_kernel = kaiming_uniform(conv2_fan_in, conv2_fan_out, conv2_shape, dtype=DType.float32)
+        self.conv2_kernel = kaiming_uniform(conv2_fan_in, conv2_fan_out, conv2_shape, "fan_in", DType.float32)
         var conv2_bias_shape = List[Int](CONV2_OUT_CHANNELS)
         self.conv2_bias = zeros(conv2_bias_shape, DType.float32)
 
         # FC1: flattened_size -> FC1_OUT_FEATURES (derived from conv/pool layers)
         var fc1_shape = List[Int](FC1_OUT_FEATURES, flattened_size)
-        self.fc1_weights = kaiming_uniform(flattened_size, FC1_OUT_FEATURES, fc1_shape, dtype=DType.float32)
+        self.fc1_weights = kaiming_uniform(flattened_size, FC1_OUT_FEATURES, fc1_shape, "fan_in", DType.float32)
         var fc1_bias_shape = List[Int](FC1_OUT_FEATURES)
         self.fc1_bias = zeros(fc1_bias_shape, DType.float32)
 
         # FC2: FC1_OUT_FEATURES -> FC2_OUT_FEATURES
         var fc2_shape = List[Int](FC2_OUT_FEATURES, FC1_OUT_FEATURES)
-        self.fc2_weights = kaiming_uniform(FC1_OUT_FEATURES, FC2_OUT_FEATURES, fc2_shape, dtype=DType.float32)
+        self.fc2_weights = kaiming_uniform(FC1_OUT_FEATURES, FC2_OUT_FEATURES, fc2_shape, "fan_in", DType.float32)
         var fc2_bias_shape = List[Int](FC2_OUT_FEATURES)
         self.fc2_bias = zeros(fc2_bias_shape, DType.float32)
 
         # FC3: FC2_OUT_FEATURES -> num_classes
         var fc3_shape = List[Int](num_classes, FC2_OUT_FEATURES)
-        self.fc3_weights = kaiming_uniform(FC2_OUT_FEATURES, num_classes, fc3_shape, dtype=DType.float32)
+        self.fc3_weights = kaiming_uniform(FC2_OUT_FEATURES, num_classes, fc3_shape, "fan_in", DType.float32)
         var fc3_bias_shape = List[Int](num_classes)
         self.fc3_bias = zeros(fc3_bias_shape, DType.float32)
 

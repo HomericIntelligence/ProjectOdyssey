@@ -194,8 +194,6 @@ def verify_tool_structure(repo_root: Path) -> bool:
     required_dirs = [
         "tools",
         "tools/paper-scaffold",
-        "tools/test-utils",
-        "tools/benchmarking",
         "tools/codegen",
     ]
 

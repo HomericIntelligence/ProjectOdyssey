@@ -3,19 +3,25 @@
 Provides data loaders for common ML datasets and utilities for handling various data formats.
 
 Modules:
+    `constants`: Dataset class names and metadata
     `formats`: Low-level data format loaders (IDX, CIFAR, etc.)
     `datasets`: High-level dataset interfaces (CIFAR-10, EMNIST, etc.)
 
 Architecture:
+    - `constants` provides class name mappings and metadata for all supported datasets
     - `formats` provides low-level file I/O and format parsing
     - `datasets` provides high-level, user-friendly interfaces
     - All data is returned as ExTensor for consistency with core library
 
 Example:
-    from shared.data import load_emnist_train, load_emnist_test
+    from shared.data import load_emnist_train, load_emnist_test, get_class_name
 
     # Load EMNIST
     images, labels = load_emnist_train("/path/to/emnist", split="balanced")
+
+    # Get class names
+    var airplane = get_class_name("cifar10", 0)  # Returns "airplane"
+    var zero = get_class_name("emnist", 0)       # Returns "0"
 
     # Or use the EMNISTDataset class directly
     from shared.data import EMNISTDataset
@@ -25,6 +31,21 @@ Example:
 
 # Package version
 alias VERSION = "0.1.0"
+
+# ============================================================================
+# Dataset Constants (Class Names and Metadata)
+# ============================================================================
+
+# Dataset constants and helper functions
+from .constants import (
+    CIFAR10_NUM_CLASSES,       # Number of CIFAR-10 classes (10)
+    EMNIST_NUM_CLASSES,        # Number of EMNIST classes (47)
+    get_cifar10_class_name,    # Get CIFAR-10 class name by index
+    get_emnist_class_name,     # Get EMNIST class name by index
+    get_class_name,            # Get class name by dataset and index
+    get_num_classes,           # Get number of classes in dataset
+    is_valid_dataset,          # Check if dataset is supported
+)
 
 # ============================================================================
 # Format Loaders (Low-Level File I/O)

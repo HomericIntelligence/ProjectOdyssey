@@ -312,6 +312,13 @@ fn create_training_parser() raises -> ArgumentParser:
 
     Returns:
         ArgumentParser configured with ML training arguments
+
+    Example:
+        var parser = create_training_parser()
+        var args = parser.parse()
+        var epochs = args.get_int("epochs")
+        var batch_size = args.get_int("batch-size")
+        var lr = args.get_float("lr")
     """
     var parser = ArgumentParser()
 
@@ -324,6 +331,42 @@ fn create_training_parser() raises -> ArgumentParser:
     parser.add_argument("model-path", "string", "model.weights")
     parser.add_argument("data-dir", "string", "datasets")
     parser.add_argument("seed", "int", "42")
+    parser.add_flag("verbose")
+
+    return parser^
+
+
+fn create_inference_parser() raises -> ArgumentParser:
+    """Create argument parser with common ML inference arguments.
+
+    Provides predefined arguments for:
+        - checkpoint (string, default "model.weights")
+        - image (string, default "")
+        - data-dir (string, default "datasets")
+        - top-k (int, default 5)
+        - batch-size (int, default 32)
+        - test-set (flag)
+        - verbose (flag)
+
+    Returns:
+        ArgumentParser configured with ML inference arguments
+
+    Example:
+        var parser = create_inference_parser()
+        var args = parser.parse()
+        var checkpoint = args.get_string("checkpoint")
+        var image = args.get_string("image")
+        var top_k = args.get_int("top-k")
+        var run_test_set = args.get_bool("test-set")
+    """
+    var parser = ArgumentParser()
+
+    parser.add_argument("checkpoint", "string", "model.weights")
+    parser.add_argument("image", "string", "")
+    parser.add_argument("data-dir", "string", "datasets")
+    parser.add_argument("top-k", "int", "5")
+    parser.add_argument("batch-size", "int", "32")
+    parser.add_flag("test-set")
     parser.add_flag("verbose")
 
     return parser^

@@ -159,8 +159,6 @@ def check_tool_structure(repo_root: Path, verbose: bool = False) -> int:
         ("tools/CATALOG.md", "Tool catalog"),
         ("tools/INSTALL.md", "Installation guide"),
         ("tools/paper-scaffold/", "Paper scaffolding"),
-        ("tools/test-utils/", "Test utilities"),
-        ("tools/benchmarking/", "Benchmarking tools"),
         ("tools/codegen/", "Code generation"),
         ("tools/setup/", "Setup scripts"),
     ]
@@ -182,8 +180,6 @@ def check_tool_readmes(repo_root: Path, verbose: bool = False) -> int:
 
     tool_dirs = [
         "paper-scaffold",
-        "test-utils",
-        "benchmarking",
         "codegen",
     ]
 

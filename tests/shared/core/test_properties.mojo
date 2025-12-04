@@ -6,6 +6,7 @@ contiguity, and basic tensor operations that should work with current implementa
 
 # Import ExTensor and operations
 from shared.core import ExTensor, zeros, ones, full, arange, eye
+from shared.core.extensor import zeros_like, ones_like, full_like, linspace
 
 # Import test helpers
 from tests.shared.conftest import (
@@ -16,6 +17,14 @@ from tests.shared.conftest import (
     assert_dim,
     assert_equal_int,
     assert_value_at,
+)
+
+# Import tensor assertions from shared testing fixtures
+from shared.testing.fixtures import (
+    assert_tensor_shape,
+    assert_tensor_dtype,
+    assert_tensor_all_finite,
+    assert_tensor_not_all_zeros,
 )
 
 
@@ -435,6 +444,135 @@ fn test_dtype_size_int32() raises:
 
 
 # ============================================================================
+# Test consolidated assertions from shared/testing/fixtures
+# ============================================================================
+
+
+fn test_properties_with_assert_tensor_shape() raises:
+    """Test shape property validation with consolidated assertion."""
+    var shape = List[Int]()
+    shape.append(5)
+    shape.append(6)
+    var t = ones(shape, DType.float32)
+
+    # Use consolidated assertion to validate shape
+    var expected_shape = List[Int]()
+    expected_shape.append(5)
+    expected_shape.append(6)
+    assert_true(assert_tensor_shape(t, expected_shape), "Shape should be (5, 6)")
+
+    # Verify shape() method returns same result
+    var shape_result = t.shape()
+    assert_equal_int(shape_result[0], 5, "Shape[0] should be 5")
+    assert_equal_int(shape_result[1], 6, "Shape[1] should be 6")
+
+
+fn test_properties_with_assert_tensor_dtype() raises:
+    """Test dtype property validation with consolidated assertion."""
+    var shape = List[Int]()
+    shape.append(4)
+    var t_float32 = ones(shape, DType.float32)
+    var t_float64 = zeros(shape, DType.float64)
+    var t_int32 = zeros(shape, DType.int32)
+
+    # Use consolidated assertions for dtype validation
+    assert_true(assert_tensor_dtype(t_float32, DType.float32), "Should be float32")
+    assert_true(assert_tensor_dtype(t_float64, DType.float64), "Should be float64")
+    assert_true(assert_tensor_dtype(t_int32, DType.int32), "Should be int32")
+
+    # Cross-validate with method
+    assert_dtype(t_float32, DType.float32, "Method should confirm float32")
+    assert_dtype(t_float64, DType.float64, "Method should confirm float64")
+
+
+fn test_properties_validate_created_tensors() raises:
+    """Test that created tensors are finite and properly initialized."""
+    var shape = List[Int]()
+    shape.append(3)
+    shape.append(4)
+
+    # Create tensors with different methods
+    var t_zeros = zeros(shape, DType.float32)
+    var t_ones = ones(shape, DType.float32)
+    var t_full = full(shape, 2.5, DType.float32)
+
+    # Verify all are finite
+    assert_true(assert_tensor_all_finite(t_zeros), "Zeros should be finite")
+    assert_true(assert_tensor_all_finite(t_ones), "Ones should be finite")
+    assert_true(assert_tensor_all_finite(t_full), "Full should be finite")
+
+    # Verify zero/non-zero content
+    assert_true(not assert_tensor_not_all_zeros(t_zeros), "Zeros should be all zeros")
+    assert_true(assert_tensor_not_all_zeros(t_ones), "Ones should not be all zeros")
+    assert_true(assert_tensor_not_all_zeros(t_full), "Full(2.5) should not be all zeros")
+
+
+fn test_arange_tensor_validation() raises:
+    """Test arange tensor with consolidated assertions."""
+    var t = arange(0.0, 5.0, 1.0, DType.float32)
+
+    # Validate shape
+    var expected_shape = List[Int]()
+    expected_shape.append(5)
+    assert_true(assert_tensor_shape(t, expected_shape), "arange should produce shape (5,)")
+
+    # Validate dtype
+    assert_true(assert_tensor_dtype(t, DType.float32), "arange should produce float32")
+
+    # Validate all finite
+    assert_true(assert_tensor_all_finite(t), "arange values should be finite")
+
+    # Validate not all zeros
+    assert_true(assert_tensor_not_all_zeros(t), "arange [0,1,2,3,4] should not be all zeros")
+
+
+fn test_eye_tensor_validation() raises:
+    """Test eye (identity) tensor with consolidated assertions."""
+    var t = eye(3, 3, 0, DType.float64)
+
+    # Validate shape
+    var expected_shape = List[Int]()
+    expected_shape.append(3)
+    expected_shape.append(3)
+    assert_true(assert_tensor_shape(t, expected_shape), "eye(3,3) should be 3x3")
+
+    # Validate dtype
+    assert_true(assert_tensor_dtype(t, DType.float64), "eye should preserve dtype")
+
+    # Validate finiteness
+    assert_true(assert_tensor_all_finite(t), "eye matrix should be finite")
+
+    # Validate not all zeros (due to diagonal)
+    assert_true(assert_tensor_not_all_zeros(t), "Identity matrix has non-zero diagonal")
+
+
+fn test_dtype_consistency_with_consolidated_assertions() raises:
+    """Test dtype consistency across shape transformations."""
+    var shape_2d = List[Int]()
+    shape_2d.append(4)
+    shape_2d.append(4)
+    var original = full(shape_2d, 1.0, DType.float64)
+
+    # Verify original is correct dtype
+    assert_true(assert_tensor_dtype(original, DType.float64), "Original should be float64")
+
+    # Create related tensors
+    var t_zeros_like = zeros_like(original)
+    var t_ones_like = ones_like(original)
+
+    # All should maintain dtype
+    assert_true(assert_tensor_dtype(t_zeros_like, DType.float64), "zeros_like should preserve dtype")
+    assert_true(assert_tensor_dtype(t_ones_like, DType.float64), "ones_like should preserve dtype")
+
+    # Shapes should also be preserved
+    var expected_shape = List[Int]()
+    expected_shape.append(4)
+    expected_shape.append(4)
+    assert_true(assert_tensor_shape(t_zeros_like, expected_shape), "zeros_like should preserve shape")
+    assert_true(assert_tensor_shape(t_ones_like, expected_shape), "ones_like should preserve shape")
+
+
+# ============================================================================
 # Main test runner
 # ============================================================================
 
@@ -507,5 +645,14 @@ fn main() raises:
     test_dtype_size_float32()
     test_dtype_size_float64()
     test_dtype_size_int32()
+
+    # Consolidated assertion tests
+    print("  Testing consolidated assertions from shared/testing/fixtures...")
+    test_properties_with_assert_tensor_shape()
+    test_properties_with_assert_tensor_dtype()
+    test_properties_validate_created_tensors()
+    test_arange_tensor_validation()
+    test_eye_tensor_validation()
+    test_dtype_consistency_with_consolidated_assertions()
 
     print("All property and core functionality tests completed!")

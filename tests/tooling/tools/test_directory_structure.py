@@ -116,12 +116,10 @@ class TestCategoryDirectories:
         self, category_paths: Dict[str, Path]
     ) -> None:
         """
-        Test that all 4 tool category directories exist.
+        Test that all tool category directories exist.
 
         Verifies:
         - paper-scaffold/ exists
-        - test-utils/ exists
-        - benchmarking/ exists
         - codegen/ exists
 
         Args:

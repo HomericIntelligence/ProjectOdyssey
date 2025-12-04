@@ -45,7 +45,7 @@ def category_names() -> list:
     Returns:
         List of category directory names
     """
-    return ["paper-scaffold", "test-utils", "benchmarking", "codegen"]
+    return ["paper-scaffold", "codegen"]
 
 
 @pytest.fixture

@@ -24,6 +24,14 @@ from tests.shared.conftest import (
     assert_almost_equal,
 )
 from shared.core import ExTensor, zeros, ones, full
+
+# Import tensor assertions from shared testing fixtures
+from shared.testing.fixtures import (
+    assert_tensor_shape,
+    assert_tensor_dtype,
+    assert_tensor_all_finite,
+    assert_tensor_not_all_zeros,
+)
 from shared.training.metrics import (
     LossTracker,
     Statistics,
@@ -407,6 +415,128 @@ fn test_metric_logger_get_best() raises:
 
 
 # ============================================================================
+# Test consolidated assertions with tensor-based metrics
+# ============================================================================
+
+
+fn test_metric_result_tensor_with_consolidated_assertions() raises:
+    """Test MetricResult tensor with consolidated assertion helpers."""
+    print("Testing MetricResult tensor with consolidated assertions...")
+
+    # Create a 1D tensor for per-class accuracies
+    var shape = List[Int]()
+    shape.append(5)  # 5 classes
+    var per_class_accs = ones(shape, DType.float32)
+
+    # Set realistic per-class accuracies (values between 0 and 1)
+    per_class_accs._set_float64(0, 0.95)
+    per_class_accs._set_float64(1, 0.92)
+    per_class_accs._set_float64(2, 0.88)
+    per_class_accs._set_float64(3, 0.91)
+    per_class_accs._set_float64(4, 0.93)
+
+    # Create metric result
+    var result = MetricResult(name="per_class_accuracy", value=per_class_accs)
+
+    # Validate tensor properties using consolidated assertions
+    var expected_shape = List[Int]()
+    expected_shape.append(5)
+    assert_true(assert_tensor_shape(per_class_accs, expected_shape), "Tensor should be shape (5,)")
+    assert_true(assert_tensor_dtype(per_class_accs, DType.float32), "Tensor should be float32")
+    assert_true(assert_tensor_all_finite(per_class_accs), "Per-class accuracies should all be finite")
+    assert_true(assert_tensor_not_all_zeros(per_class_accs), "Per-class accuracies should not be all zeros")
+
+    print("   MetricResult tensor with consolidated assertions test passed")
+
+
+fn test_loss_tensor_validation() raises:
+    """Test loss tensors created during training with consolidated assertions."""
+    print("Testing loss tensor validation with consolidated assertions...")
+
+    # Create a batch of loss values (one per sample)
+    var shape = List[Int]()
+    shape.append(32)  # Batch size
+    var batch_losses = zeros(shape, DType.float32)
+
+    # Fill with realistic loss values
+    for i in range(32):
+        batch_losses._set_float64(i, Float64((i % 10) + 1) / 10.0)
+
+    # Validate tensor properties
+    var expected_shape = List[Int]()
+    expected_shape.append(32)
+    assert_true(assert_tensor_shape(batch_losses, expected_shape), "Batch losses should be (32,)")
+    assert_true(assert_tensor_dtype(batch_losses, DType.float32), "Losses should be float32")
+    assert_true(assert_tensor_all_finite(batch_losses), "Loss values should be finite")
+    assert_true(assert_tensor_not_all_zeros(batch_losses), "Loss batch should contain non-zero values")
+
+    print("   Loss tensor validation test passed")
+
+
+fn test_multi_output_metric_tensors() raises:
+    """Test metrics with multiple output tensors using consolidated assertions."""
+    print("Testing multi-output metric tensors...")
+
+    # Create confusion matrix (4 classes) - use float32 for consistency with _set_float64
+    var cm_shape = List[Int]()
+    cm_shape.append(4)
+    cm_shape.append(4)
+    var confusion_matrix = zeros(cm_shape, DType.float32)
+
+    # Fill with realistic confusion data
+    for i in range(4):
+        for j in range(4):
+            if i == j:
+                # Diagonal (correct predictions)
+                confusion_matrix._set_float64(i * 4 + j, 100.0)
+            else:
+                # Off-diagonal (misclassifications)
+                confusion_matrix._set_float64(i * 4 + j, 5.0)
+
+    # Validate confusion matrix properties
+    var expected_shape = List[Int]()
+    expected_shape.append(4)
+    expected_shape.append(4)
+    assert_true(assert_tensor_shape(confusion_matrix, expected_shape), "Confusion matrix should be 4x4")
+    assert_true(assert_tensor_dtype(confusion_matrix, DType.float32), "Confusion matrix should be float32")
+    assert_true(assert_tensor_all_finite(confusion_matrix), "Confusion matrix should be finite")
+    assert_true(assert_tensor_not_all_zeros(confusion_matrix), "Confusion matrix should have data")
+
+    print("   Multi-output metric tensors test passed")
+
+
+fn test_metric_result_with_scalar_and_tensor_validation() raises:
+    """Test mixing scalar and tensor metrics with consolidated assertions."""
+    print("Testing scalar and tensor metric validation...")
+
+    # Scalar metric
+    var scalar_metric = MetricResult(name="f1_score", value=0.92)
+    assert_true(scalar_metric.is_scalar, "F1 score should be scalar")
+
+    # Tensor metric (per-class F1)
+    var shape = List[Int]()
+    shape.append(3)  # 3 classes
+    var per_class_f1 = ones(shape, DType.float32)
+
+    per_class_f1._set_float64(0, 0.90)
+    per_class_f1._set_float64(1, 0.92)
+    per_class_f1._set_float64(2, 0.94)
+
+    var tensor_metric = MetricResult(name="per_class_f1", value=per_class_f1)
+    assert_false(tensor_metric.is_scalar, "Per-class F1 should not be scalar")
+
+    # Validate tensor using consolidated assertions
+    var expected_shape = List[Int]()
+    expected_shape.append(3)
+    assert_true(assert_tensor_shape(per_class_f1, expected_shape), "Per-class F1 should be (3,)")
+    assert_true(assert_tensor_dtype(per_class_f1, DType.float32), "Per-class F1 should be float32")
+    assert_true(assert_tensor_all_finite(per_class_f1), "Per-class F1 values should be finite")
+    assert_true(assert_tensor_not_all_zeros(per_class_f1), "Per-class F1 should have non-zero values")
+
+    print("   Scalar and tensor metric validation test passed")
+
+
+# ============================================================================
 # Main Test Runner
 # ============================================================================
 
@@ -441,6 +571,12 @@ fn main() raises:
     test_metric_logger_multiple_epochs()
     test_metric_logger_get_latest()
     test_metric_logger_get_best()
+
+    # Consolidated assertions tests
+    test_metric_result_tensor_with_consolidated_assertions()
+    test_loss_tensor_validation()
+    test_multi_output_metric_tensors()
+    test_metric_result_with_scalar_and_tensor_validation()
 
     print()
     print("=" * 60)

@@ -43,40 +43,7 @@ python tools/paper-scaffold/scaffold.py \
     --output papers/
 ```text
 
-### 2. Testing Utilities (`test-utils/`)
-
-Reusable testing components for ML implementations.
-
-### Available Now
-
-- `data_generators.mojo` - Tensor generation utilities (Mojo)
-- `fixtures.mojo` - Test model fixtures (Mojo)
-- Random, zero, and one-filled tensor generation
-- SimpleCNN and LinearModel test fixtures
-
-### Future
-
-- Coverage analysis tools
-- More sophisticated data distributions
-
-### 3. Benchmarking (`benchmarking/`)
-
-Performance measurement and tracking tools.
-
-### Available Now
-
-- `benchmark.mojo` - Core benchmarking framework (Mojo)
-- `runner.mojo` - Benchmark suite runner (Mojo)
-- Inference latency measurement
-- Throughput calculation
-- Warmup iteration support
-
-### Future
-
-- Memory usage tracking
-- Performance report generation (JSON/visualization)
-
-### 4. Code Generation (`codegen/`)
+### 2. Code Generation (`codegen/`)
 
 Boilerplate and pattern generators for common ML code.
 
@@ -144,8 +111,6 @@ Tools will be added incrementally as needed. Each tool will include:
 tools/
 ├── README.md            # This file
 ├── paper-scaffold/      # Paper implementation scaffolding
-├── test-utils/          # Testing utilities
-├── benchmarking/        # Performance benchmarking
 └── codegen/             # Code generation utilities
 ```text
 
@@ -166,9 +131,12 @@ with future enhancements planned.
 ### Current Implementation Status
 
 - ✅ **Paper Scaffolding**: Basic scaffolder with templates (Python)
-- ✅ **Testing Utilities**: Data generators and fixtures (Mojo)
-- ✅ **Benchmarking**: Performance measurement framework (Mojo)
 - ✅ **Code Generation**: Struct and layer generators (Python)
+
+### Consolidated into Shared Library
+
+- **Testing Utilities**: Moved to `shared/testing/` module for centralized access
+- **Benchmarking**: Moved to `shared/benchmarking/` module for consistency
 
 ## References
 

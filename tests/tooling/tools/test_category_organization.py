@@ -46,54 +46,6 @@ class TestCategoryStructure:
         assert readme.exists(), "paper-scaffold/README.md should exist"
         assert readme.is_file(), "paper-scaffold/README.md should be a file"
 
-    def test_test_utils_category_structure(
-        self, category_paths: Dict[str, Path]
-    ) -> None:
-        """
-        Test that test-utils category has correct structure.
-
-        Verifies:
-        - Category directory exists
-        - README.md present at category root
-
-        Args:
-            category_paths: Dictionary of category paths
-        """
-        test_utils = category_paths["test-utils"]
-
-        # Verify directory exists
-        assert test_utils.exists(), "test-utils/ should exist"
-        assert test_utils.is_dir(), "test-utils/ should be a directory"
-
-        # Verify README at root
-        readme = test_utils / "README.md"
-        assert readme.exists(), "test-utils/README.md should exist"
-        assert readme.is_file(), "test-utils/README.md should be a file"
-
-    def test_benchmarking_category_structure(
-        self, category_paths: Dict[str, Path]
-    ) -> None:
-        """
-        Test that benchmarking category has correct structure.
-
-        Verifies:
-        - Category directory exists
-        - README.md present at category root
-
-        Args:
-            category_paths: Dictionary of category paths
-        """
-        benchmarking = category_paths["benchmarking"]
-
-        # Verify directory exists
-        assert benchmarking.exists(), "benchmarking/ should exist"
-        assert benchmarking.is_dir(), "benchmarking/ should be a directory"
-
-        # Verify README at root
-        readme = benchmarking / "README.md"
-        assert readme.exists(), "benchmarking/README.md should exist"
-        assert readme.is_file(), "benchmarking/README.md should be a file"
-
     def test_codegen_category_structure(
         self, category_paths: Dict[str, Path]
     ) -> None:
@@ -197,8 +149,6 @@ class TestCategoryNamingConventions:
         # Define expected descriptive terms
         expected_categories = {
             "paper-scaffold",
-            "test-utils",
-            "benchmarking",
             "codegen",
         }
 
@@ -371,60 +321,6 @@ class TestLanguageStrategyAlignment:
 
         assert has_language_info, (
             "paper-scaffold/README.md should mention language strategy "
-            "or have 'Coming Soon'"
-        )
-
-    def test_test_utils_language_documented(
-        self, category_readmes: Dict[str, Path]
-    ) -> None:
-        """
-        Test that test-utils README documents language choice.
-
-        Verifies:
-        - README mentions Mojo (primary) or Python (integration)
-
-        Args:
-            category_readmes: Dictionary of category README paths
-        """
-        readme_path = category_readmes["test-utils"]
-        content = readme_path.read_text().lower()
-
-        # test-utils should primarily use Mojo
-        has_language_info = (
-            "mojo" in content or
-            "python" in content or
-            "coming soon" in content
-        )
-
-        assert has_language_info, (
-            "test-utils/README.md should mention language strategy "
-            "or have 'Coming Soon'"
-        )
-
-    def test_benchmarking_language_documented(
-        self, category_readmes: Dict[str, Path]
-    ) -> None:
-        """
-        Test that benchmarking README documents language choice.
-
-        Verifies:
-        - README mentions Mojo (required for accurate benchmarks)
-
-        Args:
-            category_readmes: Dictionary of category README paths
-        """
-        readme_path = category_readmes["benchmarking"]
-        content = readme_path.read_text().lower()
-
-        # benchmarking should use Mojo for accurate measurements
-        has_language_info = (
-            "mojo" in content or
-            "python" in content or
-            "coming soon" in content
-        )
-
-        assert has_language_info, (
-            "benchmarking/README.md should mention language strategy "
             "or have 'Coming Soon'"
         )
 

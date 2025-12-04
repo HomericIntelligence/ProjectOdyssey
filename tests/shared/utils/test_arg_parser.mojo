@@ -6,10 +6,17 @@ Tests basic argument parsing functionality including:
 - Parsing from simulated command line args
 - Type conversion (int, float, string, bool)
 - Error handling for unknown arguments and type mismatches
+- Convenience helpers for training/inference argument patterns
 """
 
 from testing import assert_true, assert_equal
-from shared.utils import ArgumentParser, ArgumentSpec, ParsedArgs
+from shared.utils import (
+    ArgumentParser,
+    ArgumentSpec,
+    ParsedArgs,
+    create_training_parser,
+    create_inference_parser,
+)
 
 
 fn test_argument_spec_creation() raises:
@@ -152,6 +159,175 @@ fn test_parsed_args_multiple_values() raises:
     print("PASS: test_parsed_args_multiple_values")
 
 
+fn test_create_training_parser_structure() raises:
+    """Test that create_training_parser creates parser with expected arguments."""
+    var parser = create_training_parser()
+
+    # Verify all expected training arguments are present
+    assert_true("epochs" in parser.arguments)
+    assert_true("batch-size" in parser.arguments)
+    assert_true("lr" in parser.arguments)
+    assert_true("learning-rate" in parser.arguments)
+    assert_true("momentum" in parser.arguments)
+    assert_true("weight-decay" in parser.arguments)
+    assert_true("model-path" in parser.arguments)
+    assert_true("data-dir" in parser.arguments)
+    assert_true("seed" in parser.arguments)
+    assert_true("verbose" in parser.arguments)
+
+    print("PASS: test_create_training_parser_structure")
+
+
+fn test_create_training_parser_defaults() raises:
+    """Test that create_training_parser has correct default values."""
+    var parser = create_training_parser()
+
+    assert_equal(parser.arguments["epochs"].default_value, "100")
+    assert_equal(parser.arguments["batch-size"].default_value, "32")
+    assert_equal(parser.arguments["lr"].default_value, "0.001")
+    assert_equal(parser.arguments["learning-rate"].default_value, "0.001")
+    assert_equal(parser.arguments["momentum"].default_value, "0.9")
+    assert_equal(parser.arguments["weight-decay"].default_value, "0.0")
+    assert_equal(parser.arguments["model-path"].default_value, "model.weights")
+    assert_equal(parser.arguments["data-dir"].default_value, "datasets")
+    assert_equal(parser.arguments["seed"].default_value, "42")
+
+    print("PASS: test_create_training_parser_defaults")
+
+
+fn test_create_training_parser_types() raises:
+    """Test that create_training_parser has correct argument types."""
+    var parser = create_training_parser()
+
+    # Verify integer arguments
+    assert_equal(parser.arguments["epochs"].arg_type, "int")
+    assert_equal(parser.arguments["batch-size"].arg_type, "int")
+    assert_equal(parser.arguments["seed"].arg_type, "int")
+
+    # Verify float arguments
+    assert_equal(parser.arguments["lr"].arg_type, "float")
+    assert_equal(parser.arguments["learning-rate"].arg_type, "float")
+    assert_equal(parser.arguments["momentum"].arg_type, "float")
+    assert_equal(parser.arguments["weight-decay"].arg_type, "float")
+
+    # Verify string arguments
+    assert_equal(parser.arguments["model-path"].arg_type, "string")
+    assert_equal(parser.arguments["data-dir"].arg_type, "string")
+
+    # Verify flag
+    assert_true(parser.arguments["verbose"].is_flag)
+
+    print("PASS: test_create_training_parser_types")
+
+
+fn test_create_inference_parser_structure() raises:
+    """Test that create_inference_parser creates parser with expected arguments."""
+    var parser = create_inference_parser()
+
+    # Verify all expected inference arguments are present
+    assert_true("checkpoint" in parser.arguments)
+    assert_true("image" in parser.arguments)
+    assert_true("data-dir" in parser.arguments)
+    assert_true("top-k" in parser.arguments)
+    assert_true("batch-size" in parser.arguments)
+    assert_true("test-set" in parser.arguments)
+    assert_true("verbose" in parser.arguments)
+
+    print("PASS: test_create_inference_parser_structure")
+
+
+fn test_create_inference_parser_defaults() raises:
+    """Test that create_inference_parser has correct default values."""
+    var parser = create_inference_parser()
+
+    assert_equal(parser.arguments["checkpoint"].default_value, "model.weights")
+    assert_equal(parser.arguments["image"].default_value, "")
+    assert_equal(parser.arguments["data-dir"].default_value, "datasets")
+    assert_equal(parser.arguments["top-k"].default_value, "5")
+    assert_equal(parser.arguments["batch-size"].default_value, "32")
+
+    print("PASS: test_create_inference_parser_defaults")
+
+
+fn test_create_inference_parser_types() raises:
+    """Test that create_inference_parser has correct argument types."""
+    var parser = create_inference_parser()
+
+    # Verify string arguments
+    assert_equal(parser.arguments["checkpoint"].arg_type, "string")
+    assert_equal(parser.arguments["image"].arg_type, "string")
+    assert_equal(parser.arguments["data-dir"].arg_type, "string")
+
+    # Verify integer arguments
+    assert_equal(parser.arguments["top-k"].arg_type, "int")
+    assert_equal(parser.arguments["batch-size"].arg_type, "int")
+
+    # Verify flags
+    assert_true(parser.arguments["test-set"].is_flag)
+    assert_true(parser.arguments["verbose"].is_flag)
+
+    print("PASS: test_create_inference_parser_types")
+
+
+fn test_training_parser_can_parse_args() raises:
+    """Test that training parser can handle parsed arguments."""
+    var parser = create_training_parser()
+    var args = ParsedArgs()
+
+    # Simulate parsed arguments
+    args.set("epochs", "50")
+    args.set("batch-size", "64")
+    args.set("lr", "0.01")
+    args.set("momentum", "0.95")
+    args.set("weight-decay", "0.0001")
+    args.set("model-path", "my_model.weights")
+    args.set("data-dir", "my_data")
+    args.set("seed", "123")
+    args.set("verbose", "true")
+
+    # Verify values can be retrieved with correct types
+    assert_equal(args.get_int("epochs"), 50)
+    assert_equal(args.get_int("batch-size"), 64)
+    var lr = args.get_float("lr")
+    assert_true(lr > 0.009 and lr < 0.011)
+    var momentum = args.get_float("momentum")
+    assert_true(momentum > 0.949 and momentum < 0.951)
+    var weight_decay = args.get_float("weight-decay")
+    assert_true(weight_decay > 0.00009 and weight_decay < 0.00011)
+    assert_equal(args.get_string("model-path"), "my_model.weights")
+    assert_equal(args.get_string("data-dir"), "my_data")
+    assert_equal(args.get_int("seed"), 123)
+    assert_true(args.get_bool("verbose"))
+
+    print("PASS: test_training_parser_can_parse_args")
+
+
+fn test_inference_parser_can_parse_args() raises:
+    """Test that inference parser can handle parsed arguments."""
+    var parser = create_inference_parser()
+    var args = ParsedArgs()
+
+    # Simulate parsed arguments
+    args.set("checkpoint", "checkpoints/model_final")
+    args.set("image", "test_image.png")
+    args.set("data-dir", "custom_data")
+    args.set("top-k", "10")
+    args.set("batch-size", "16")
+    args.set("test-set", "true")
+    args.set("verbose", "true")
+
+    # Verify values can be retrieved with correct types
+    assert_equal(args.get_string("checkpoint"), "checkpoints/model_final")
+    assert_equal(args.get_string("image"), "test_image.png")
+    assert_equal(args.get_string("data-dir"), "custom_data")
+    assert_equal(args.get_int("top-k"), 10)
+    assert_equal(args.get_int("batch-size"), 16)
+    assert_true(args.get_bool("test-set"))
+    assert_true(args.get_bool("verbose"))
+
+    print("PASS: test_inference_parser_can_parse_args")
+
+
 fn main() raises:
     """Run all argument parser tests."""
     print("")
@@ -160,6 +336,7 @@ fn main() raises:
     print("=" * 70)
     print("")
 
+    # Basic argument parser tests
     test_argument_spec_creation()
     test_parsed_args_string()
     test_parsed_args_int()
@@ -172,6 +349,18 @@ fn main() raises:
     test_argument_parser_invalid_type()
     test_argument_defaults()
     test_parsed_args_multiple_values()
+
+    # Training parser convenience helper tests
+    test_create_training_parser_structure()
+    test_create_training_parser_defaults()
+    test_create_training_parser_types()
+    test_training_parser_can_parse_args()
+
+    # Inference parser convenience helper tests
+    test_create_inference_parser_structure()
+    test_create_inference_parser_defaults()
+    test_create_inference_parser_types()
+    test_inference_parser_can_parse_args()
 
     print("")
     print("=" * 70)
