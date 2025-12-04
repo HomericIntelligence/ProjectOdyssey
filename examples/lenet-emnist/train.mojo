@@ -31,7 +31,7 @@ from shared.core.pooling import maxpool2d, maxpool2d_backward
 from shared.core.linear import linear, linear_backward
 from shared.core.activation import relu, relu_backward
 from shared.core.loss import cross_entropy, cross_entropy_backward
-from sys import argv
+from shared.utils.arg_parser import create_training_parser
 from collections import List
 
 # Default number of classes for EMNIST Balanced dataset
@@ -55,29 +55,21 @@ struct TrainConfig:
 
 
 fn parse_args() raises -> TrainConfig:
-    """Parse command line arguments.
+    """Parse command line arguments using enhanced argument parser.
 
     Returns:
         TrainConfig with parsed arguments.
     """
-    var epochs = 10
-    var batch_size = 32
-    var learning_rate = Float32(0.001)
-    var data_dir = String("datasets/emnist")
-    var weights_dir = String("lenet5_weights")
+    var parser = create_training_parser()
+    parser.add_argument("weights-dir", "string", "lenet5_weights")
 
-    var args = argv()
-    for i in range(len(args)):
-        if args[i] == "--epochs" and i + 1 < len(args):
-            epochs = Int(args[i + 1])
-        elif args[i] == "--batch-size" and i + 1 < len(args):
-            batch_size = Int(args[i + 1])
-        elif args[i] == "--lr" and i + 1 < len(args):
-            learning_rate = Float32(Float64(args[i + 1]))
-        elif args[i] == "--data-dir" and i + 1 < len(args):
-            data_dir = args[i + 1]
-        elif args[i] == "--weights-dir" and i + 1 < len(args):
-            weights_dir = args[i + 1]
+    var args = parser.parse()
+
+    var epochs = args.get_int("epochs", 10)
+    var batch_size = args.get_int("batch-size", 32)
+    var learning_rate = Float32(args.get_float("lr", 0.001))
+    var data_dir = args.get_string("data-dir", "datasets/emnist")
+    var weights_dir = args.get_string("weights-dir", "lenet5_weights")
 
     return TrainConfig(epochs, batch_size, learning_rate, data_dir, weights_dir)
 

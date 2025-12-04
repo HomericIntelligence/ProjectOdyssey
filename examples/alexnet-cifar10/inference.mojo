@@ -18,26 +18,25 @@ References:
 from model import AlexNet
 from shared.data.datasets import load_cifar10_test
 from shared.core import ExTensor
-from sys import argv
+from shared.utils.arg_parser import ArgumentParser
 
 
 fn parse_args() raises -> Tuple[String, String]:
-    """Parse command line arguments.
+    """Parse command line arguments using enhanced argument parser.
 
     Returns:
         Tuple of (weights_dir, data_dir)
     """
-    var weights_dir = "alexnet_weights"
-    var data_dir = "datasets/cifar10"
+    var parser = ArgumentParser()
+    parser.add_argument("weights-dir", "string", "alexnet_weights")
+    parser.add_argument("data-dir", "string", "datasets/cifar10")
 
-    var args = argv()
-    for i in range(len(args)):
-        if args[i] == "--weights-dir" and i + 1 < len(args):
-            weights_dir = args[i + 1]
-        elif args[i] == "--data-dir" and i + 1 < len(args):
-            data_dir = args[i + 1]
+    var args = parser.parse()
 
-    return (weights_dir, data_dir)
+    var weights_dir = args.get_string("weights-dir", "alexnet_weights")
+    var data_dir = args.get_string("data-dir", "datasets/cifar10")
+
+    return Tuple[String, String](weights_dir, data_dir)
 
 
 fn evaluate_model(

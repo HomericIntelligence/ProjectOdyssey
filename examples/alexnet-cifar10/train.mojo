@@ -26,36 +26,26 @@ from shared.core.activation import relu, relu_backward
 from shared.core.dropout import dropout, dropout_backward
 from shared.core.loss import cross_entropy, cross_entropy_backward
 from shared.training.schedulers import step_lr
-from sys import argv
+from shared.utils.arg_parser import create_training_parser
 
 
 fn parse_args() raises -> Tuple[Int, Int, Float32, Float32, String, String]:
-    """Parse command line arguments.
+    """Parse command line arguments using enhanced argument parser.
 
     Returns:
         Tuple of (epochs, batch_size, learning_rate, momentum, data_dir, weights_dir)
     """
-    var epochs = 100
-    var batch_size = 128
-    var learning_rate = Float32(0.01)
-    var momentum = Float32(0.9)
-    var data_dir = "datasets/cifar10"
-    var weights_dir = "alexnet_weights"
+    var parser = create_training_parser()
+    parser.add_argument("weights-dir", "string", "alexnet_weights")
 
-    var args = argv()
-    for i in range(len(args)):
-        if args[i] == "--epochs" and i + 1 < len(args):
-            epochs = int(args[i + 1])
-        elif args[i] == "--batch-size" and i + 1 < len(args):
-            batch_size = int(args[i + 1])
-        elif args[i] == "--lr" and i + 1 < len(args):
-            learning_rate = Float32(float(args[i + 1]))
-        elif args[i] == "--momentum" and i + 1 < len(args):
-            momentum = Float32(float(args[i + 1]))
-        elif args[i] == "--data-dir" and i + 1 < len(args):
-            data_dir = args[i + 1]
-        elif args[i] == "--weights-dir" and i + 1 < len(args):
-            weights_dir = args[i + 1]
+    var args = parser.parse()
+
+    var epochs = args.get_int("epochs", 100)
+    var batch_size = args.get_int("batch-size", 128)
+    var learning_rate = Float32(args.get_float("lr", 0.01))
+    var momentum = Float32(args.get_float("momentum", 0.9))
+    var data_dir = args.get_string("data-dir", "datasets/cifar10")
+    var weights_dir = args.get_string("weights-dir", "alexnet_weights")
 
     return (epochs, batch_size, learning_rate, momentum, data_dir, weights_dir)
 

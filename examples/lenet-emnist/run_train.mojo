@@ -1,11 +1,11 @@
 """CLI Wrapper for LeNet-5 Training
 
 Provides command-line interface for training LeNet-5 on EMNIST.
-Wraps the core train.mojo functionality with config loading.
+Wraps the core train.mojo functionality with enhanced argument parser.
 
 Usage:
     mojo run examples/lenet-emnist/run_train.mojo --epochs 10 --precision fp32
-    mojo run examples/lenet-emnist/run_train.mojo --config configs/lenet5/emnist/fp16.toml
+    mojo run examples/lenet-emnist/run_train.mojo --batch-size 64 --lr 0.01
 
 Arguments:
     --epochs N       Number of training epochs (default: 10)
@@ -14,7 +14,6 @@ Arguments:
     --precision P    Precision mode: fp32, fp16, bf16, fp8 (default: fp32)
     --data-dir DIR   EMNIST data directory (default: datasets/emnist)
     --weights-dir D  Output weights directory (default: lenet5_weights)
-    --config FILE    TOML config file (overrides other args)
 """
 
 from model import LeNet5
@@ -26,7 +25,7 @@ from shared.core.linear import linear, linear_backward
 from shared.core.activation import relu, relu_backward
 from shared.core.loss import cross_entropy, cross_entropy_backward
 from shared.training.precision_config import PrecisionConfig, PrecisionMode
-from sys import argv
+from shared.utils.arg_parser import create_training_parser
 from collections import List
 
 
@@ -57,36 +56,24 @@ struct TrainConfig(Movable):
 
 
 fn parse_args() raises -> TrainConfig:
-    """Parse command line arguments.
+    """Parse command line arguments using enhanced argument parser.
 
     Returns:
         TrainConfig with parsed arguments.
     """
-    var config = TrainConfig()
+    var parser = create_training_parser()
+    parser.add_argument("precision", "string", "fp32")
+    parser.add_argument("weights-dir", "string", "lenet5_weights")
 
-    var args = argv()
-    var i = 0
-    while i < len(args):
-        if args[i] == "--epochs" and i + 1 < len(args):
-            config.epochs = Int(args[i + 1])
-            i += 2
-        elif args[i] == "--batch-size" and i + 1 < len(args):
-            config.batch_size = Int(args[i + 1])
-            i += 2
-        elif args[i] == "--lr" and i + 1 < len(args):
-            config.learning_rate = Float32(Float64(args[i + 1]))
-            i += 2
-        elif args[i] == "--precision" and i + 1 < len(args):
-            config.precision = args[i + 1]
-            i += 2
-        elif args[i] == "--data-dir" and i + 1 < len(args):
-            config.data_dir = args[i + 1]
-            i += 2
-        elif args[i] == "--weights-dir" and i + 1 < len(args):
-            config.weights_dir = args[i + 1]
-            i += 2
-        else:
-            i += 1
+    var args = parser.parse()
+
+    var config = TrainConfig()
+    config.epochs = args.get_int("epochs", 10)
+    config.batch_size = args.get_int("batch-size", 32)
+    config.learning_rate = Float32(args.get_float("lr", 0.001))
+    config.precision = args.get_string("precision", "fp32")
+    config.data_dir = args.get_string("data-dir", "datasets/emnist")
+    config.weights_dir = args.get_string("weights-dir", "lenet5_weights")
 
     return config^
 

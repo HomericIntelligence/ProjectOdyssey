@@ -17,7 +17,7 @@ Arguments:
 from model import LeNet5
 from shared.data import load_idx_labels, load_idx_images, normalize_images
 from shared.core import ExTensor, zeros
-from sys import argv
+from shared.utils.arg_parser import ArgumentParser
 from collections import List
 
 
@@ -75,29 +75,22 @@ struct InferConfig(Movable):
 
 
 fn parse_args() raises -> InferConfig:
-    """Parse command line arguments."""
-    var config = InferConfig()
+    """Parse command line arguments using enhanced argument parser."""
+    var parser = ArgumentParser()
+    parser.add_argument("checkpoint", "string", "")
+    parser.add_argument("image", "string", "")
+    parser.add_flag("test-set")
+    parser.add_argument("data-dir", "string", "datasets/emnist")
+    parser.add_argument("top-k", "int", "5")
 
-    var args = argv()
-    var i = 0
-    while i < len(args):
-        if args[i] == "--checkpoint" and i + 1 < len(args):
-            config.checkpoint_dir = args[i + 1]
-            i += 2
-        elif args[i] == "--image" and i + 1 < len(args):
-            config.image_path = args[i + 1]
-            i += 2
-        elif args[i] == "--test-set":
-            config.run_test_set = True
-            i += 1
-        elif args[i] == "--data-dir" and i + 1 < len(args):
-            config.data_dir = args[i + 1]
-            i += 2
-        elif args[i] == "--top-k" and i + 1 < len(args):
-            config.top_k = Int(args[i + 1])
-            i += 2
-        else:
-            i += 1
+    var args = parser.parse()
+
+    var config = InferConfig()
+    config.checkpoint_dir = args.get_string("checkpoint", "")
+    config.image_path = args.get_string("image", "")
+    config.run_test_set = args.get_bool("test-set")
+    config.data_dir = args.get_string("data-dir", "datasets/emnist")
+    config.top_k = args.get_int("top-k", 5)
 
     return config^
 
