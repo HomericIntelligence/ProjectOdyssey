@@ -76,9 +76,9 @@ struct SimpleCNN(Copyable, Movable):
         var shape = List[Int]()
         shape.append(batch_size)
         shape.append(self.num_classes)
-        return shape
+        return shape^
 
-    fn forward(self, input: ExTensor) -> ExTensor:
+    fn forward(self, input: ExTensor) raises -> ExTensor:
         """Forward pass (simplified for testing).
 
         Creates output tensor with correct shape filled with dummy values.
@@ -148,9 +148,9 @@ struct LinearModel(Copyable, Movable):
         var shape = List[Int]()
         shape.append(batch_size)
         shape.append(self.out_features)
-        return shape
+        return shape^
 
-    fn forward(self, input: ExTensor) -> ExTensor:
+    fn forward(self, input: ExTensor) raises -> ExTensor:
         """Forward pass.
 
         Creates output tensor with correct shape filled with zeros.
@@ -229,7 +229,7 @@ fn create_test_input(
     batch_size: Int,
     in_features: Int,
     dtype: DType = DType.float32
-) -> ExTensor:
+) raises -> ExTensor:
     """Create a test input tensor for linear models.
 
     Creates a simple tensor filled with ones for testing.
@@ -257,7 +257,7 @@ fn create_test_targets(
     batch_size: Int,
     num_classes: Int,
     dtype: DType = DType.int32
-) -> ExTensor:
+) raises -> ExTensor:
     """Create a test target tensor for classification.
 
     Creates a tensor filled with zeros for testing.
@@ -293,10 +293,10 @@ fn assert_tensor_shape(tensor: ExTensor, expected_shape: List[Int]) -> Bool:
         var tensor = ones(List[Int](32, 10), DType.float32)
         assert_true(assert_tensor_shape(tensor, List[Int](32, 10)))
     """
-    if tensor._shape.size() != expected_shape.size():
+    if len(tensor._shape) != len(expected_shape):
         return False
 
-    for i in range(expected_shape.size()):
+    for i in range(len(expected_shape)):
         if tensor._shape[i] != expected_shape[i]:
             return False
 
