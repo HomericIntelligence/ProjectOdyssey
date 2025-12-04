@@ -802,8 +802,56 @@ struct GradientTape:
             self.registry.set_grad(self.nodes[idx].input_ids[0], grad_input)
 
 
-# TODO(#2400): NoGradContext requires UnsafePointer with parametric mutability
-# which is not well-supported yet. Use tape.disable() / tape.enable() directly.
-# struct NoGradContext:
-#     """Context manager equivalent for disabling gradient computation."""
-#     pass
+struct NoGradContext(Copyable, Movable):
+    """Context manager for disabling gradient computation.
+
+    NOTE: Full implementation blocked by Mojo limitation.
+    UnsafePointer with parametric mutability is not yet supported.
+
+    Workaround: Manually manage gradient tracking with requires_grad=False
+    on Variables that shouldn't track gradients. Alternatively, use
+    tape.disable() / tape.enable() directly on the global tape.
+
+    Example (future usage when full support is available):
+        with NoGradContext():
+            var output = model(input)  # No gradients tracked
+
+    Current workaround:
+        tape.disable()
+        var output = model(input)
+        tape.enable()
+
+    Limitation Details:
+        Full context manager implementation requires storing a mutable reference
+        to the global gradient tape. Mojo's UnsafePointer does not yet support
+        parametric mutability, making it impossible to create a context that
+        preserves the mutability state of the tape across scope boundaries.
+
+    Related Issue: #2400
+    """
+
+    fn __init__(out self):
+        """Initialize NoGradContext (stub).
+
+        This is a stub implementation. The full context manager is blocked
+        by Mojo's UnsafePointer parametric mutability limitation.
+        """
+        pass
+
+    fn __enter__(mut self):
+        """Enter no-grad context (stub).
+
+        TODO(#2400): Implement gradient tracking disable when Mojo supports
+        UnsafePointer with parametric mutability. For now, use:
+            tape.disable()
+        """
+        pass
+
+    fn __exit__(mut self):
+        """Exit no-grad context (stub).
+
+        TODO(#2400): Implement gradient tracking restore when Mojo supports
+        UnsafePointer with parametric mutability. For now, use:
+            tape.enable()
+        """
+        pass

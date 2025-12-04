@@ -73,7 +73,7 @@ Design Philosophy:
 Status:
     ✅ GradientTape with backward() implementation
     ✅ Variable operations with tape recording
-    ✅ NoGradContext for inference mode
+    ⏳ NoGradContext stub (full context manager blocked by Mojo limitation)
     ✅ Functional gradient helpers (mse, bce, ce)
     ✅ SGD optimizer
     ✅ Adam optimizer
@@ -108,7 +108,7 @@ from .tape import (
     TapeNode,
     SavedTensors,
     VariableRegistry,
-    # NoGradContext - commented out due to UnsafePointer parametric mutability issues
+    NoGradContext,
     # Operation type aliases
     OP_ADD,
     OP_SUBTRACT,
