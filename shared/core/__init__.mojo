@@ -305,6 +305,7 @@ from .broadcasting import (
     broadcast_shapes,
     are_shapes_broadcastable,
     compute_broadcast_strides,
+    BroadcastIterator,
 )
 
 # ============================================================================

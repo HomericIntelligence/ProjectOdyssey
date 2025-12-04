@@ -182,10 +182,14 @@ struct BroadcastIterator:
         for i in range(len(self.shape)):
             self.size *= self.shape[i]
 
-    # TODO(#2390): __iter__ requires copying which isn't supported with List[Int] fields
-    # Callers should use __next__ directly or iterate with while loop
-    # fn __iter__(self) -> Self:
-    #     return self
+    # NOTE: We intentionally do not implement __iter__() because List[Int] fields
+    # are not Copyable, and __iter__ would need to return Self which requires copying.
+    # Callers should use __next__ directly with a while loop:
+    #
+    #   var iterator = BroadcastIterator(shape, strides1, strides2)
+    #   while iterator.has_next():
+    #       var (idx1, idx2) = iterator.__next__()
+    #       # Use idx1 and idx2 to access elements
 
     fn __next__(mut self) raises -> Tuple[Int, Int]:
         """Get next pair of indices for the two tensors.
@@ -195,20 +199,40 @@ struct BroadcastIterator:
 
         Raises:
             Error when iteration is complete
+
+        Algorithm:
+            Converts flat position to multi-dimensional coordinates using the
+            broadcast shape and row-major (C-style) layout, then applies
+            broadcast strides to get indices for both tensors. Broadcasting
+            strides are 0 for dimensions that are being broadcast, allowing
+            efficient iteration without materializing the full broadcast tensor.
         """
         if self.position >= self.size:
             raise Error("Iterator exhausted")
 
-        # Compute multi-dimensional index from flat position
-        var remaining = self.position
+        # Compute multi-dimensional coordinates from flat position (row-major)
+        # For shape [D0, D1, D2], position p -> coords where:
+        #   coord[0] = p // (D1 * D2)
+        #   coord[1] = (p % (D1 * D2)) // D2
+        #   coord[2] = p % D2
+        var pos = self.position
         var idx1 = 0
         var idx2 = 0
+        var ndim = len(self.shape)
 
-        for i in range(len(self.shape)):
-            var dim_size = self.shape[i]
-            var coord = remaining // self.size  # TODO(#2390): Fix this calculation
-            remaining = remaining % dim_size
+        # Process each dimension from left to right
+        # We need to compute strides for coordinate extraction
+        for i in range(ndim):
+            # Compute the product of dimensions to the right
+            var stride = 1
+            for j in range(i + 1, ndim):
+                stride *= self.shape[j]
 
+            # Extract coordinate for this dimension
+            var coord = pos // stride
+            pos = pos % stride
+
+            # Apply broadcast strides (handles stride 0 for broadcast dims)
             idx1 += coord * self.strides1[i]
             idx2 += coord * self.strides2[i]
 
