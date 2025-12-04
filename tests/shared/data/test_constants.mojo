@@ -54,13 +54,10 @@ fn test_emnist_balanced_classes() raises:
             classes[10 + i], expected, "Uppercase letter at index " + String(10 + i)
         )
 
-    # Test lowercase letters (a-z) - indices 36-61
-    var lowercase = "abcdefghijklmnopqrstuvwxyz"
-    for i in range(26):
-        var expected = lowercase[i]
-        assert_equal(
-            classes[36 + i], expected, "Lowercase letter at index " + String(36 + i)
-        )
+    # EMNIST Balanced has only 11 lowercase letters at indices 36-46
+    # These are letters that look different from uppercase: a, b, d, e, f, g, h, n, q, r, t
+    # Total: 10 digits + 26 uppercase + 11 lowercase = 47 classes
+    assert_equal(len(classes), 47, "Total should be 47 classes")
 
 
 fn test_emnist_byclass_classes() raises:
