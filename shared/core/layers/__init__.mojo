@@ -28,9 +28,9 @@ Example:.    from shared.core.layers import Linear, ReLU
             self.fc2 = Linear(128, 10)
 """
 
-# Layer exports will be added here as components are implemented
+# Layer exports
 from .linear import Linear
-# from .conv import Conv2D
+from .conv2d import Conv2dLayer
+from .batchnorm import BatchNorm2dLayer
 # from .activation import ReLU, Sigmoid, Tanh
-# from .normalization import BatchNorm, LayerNorm
 # from .pooling import MaxPool2D, AvgPool2D
