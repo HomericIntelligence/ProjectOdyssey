@@ -277,19 +277,17 @@ fn print_confusion_matrix(
     # Print rows
     print("-" * 60)
     for r in range(num_classes):
-        # Row label
+        # Row label - define outside if/else for proper scope
+        var row_label: String
         if len(class_names) > 0 and r < len(class_names):
             var name = class_names[r]
-            var row_label = "True " + name
-            # Pad to label width (8 chars)
-            while len(row_label) < 8:
-                row_label = row_label + " "
+            row_label = "True " + name
         else:
             var idx_str = String(r)
-            var row_label = "True " + idx_str
-            # Pad to label width
-            while len(row_label) < 8:
-                row_label = row_label + " "
+            row_label = "True " + idx_str
+        # Pad to label width (8 chars)
+        while len(row_label) < 8:
+            row_label = row_label + " "
 
         var row_str = row_label
 
