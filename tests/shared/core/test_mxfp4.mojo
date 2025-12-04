@@ -18,8 +18,9 @@ from tests.shared.conftest import (
     assert_equal_int,
     assert_true,
 )
-from shared.core.types.mxfp4 import MXFP4, E8M0Scale
+from shared.core.types.mxfp4 import MXFP4, MXFP4Block, E8M0Scale
 from math import isnan, isinf
+from collections import List
 
 
 # ============================================================================
@@ -141,7 +142,7 @@ fn test_mxfp4_special_values_nan() raises:
     """Test MXFP4 encoding of NaN."""
     var nan_val = Float32(0.0) / Float32(0.0)
     var mxfp4_nan = MXFP4.from_float32(nan_val)
-    var result = mxfp4_nan.to_float32()
+    var _ = mxfp4_nan.to_float32()
 
     # NaN encoding: E2M1 value should be max (0b0111)
     assert_equal(mxfp4_nan.value.value, 0b0111)
@@ -152,7 +153,7 @@ fn test_mxfp4_special_values_inf() raises:
     # Positive infinity
     var pos_inf = Float32(1.0) / Float32(0.0)
     var mxfp4_pos_inf = MXFP4.from_float32(pos_inf)
-    var result_pos = mxfp4_pos_inf.to_float32()
+    var _ = mxfp4_pos_inf.to_float32()
 
     # Should encode as max E2M1 value with max scale
     assert_equal(mxfp4_pos_inf.value.value, 0b0111)
@@ -160,7 +161,7 @@ fn test_mxfp4_special_values_inf() raises:
     # Negative infinity
     var neg_inf = Float32(-1.0) / Float32(0.0)
     var mxfp4_neg_inf = MXFP4.from_float32(neg_inf)
-    var result_neg = mxfp4_neg_inf.to_float32()
+    var _ = mxfp4_neg_inf.to_float32()
 
     # Should encode as max negative E2M1 value
     assert_equal(mxfp4_neg_inf.value.value, 0b1111)
@@ -307,6 +308,235 @@ fn test_mxfp4_precision_vs_fp8() raises:
 
 
 # ============================================================================
+# MXFP4Block Scale Edge Case Tests (GitHub Issue #2379)
+# ============================================================================
+
+
+fn test_e8m0_scale_from_zero() raises:
+    """Test E8M0Scale.from_float32(0.0) direct behavior.
+
+    Edge case: Zero scale should return minimum scale (exponent = 0).
+    This represents 2^(0 - 127) = 2^-127, the smallest representable scale.
+    """
+    var scale = E8M0Scale.from_float32(0.0)
+    assert_equal(scale.exponent, 0)
+
+    # Convert back to float and verify it's a very small positive number
+    var scale_f32 = scale.to_float32()
+    assert_true(scale_f32 > 0.0, "Zero scale should convert to tiny positive value")
+    assert_true(scale_f32 < 1e-30, "Zero scale should be extremely small")
+
+
+fn test_mxfp4_block_all_zeros() raises:
+    """Test MXFP4Block with all zeros.
+
+    Edge case: Block with all zeros should:
+    1. Trigger the fallback (max_abs = 0.0 < 1e-10)
+    2. Use scale = 1.0 (exponent = 127)
+    3. Encode all values as 0 (since 0.0 / scale = 0.0)
+    4. Round-trip losslessly to zeros
+    """
+    # Create a block with 32 zeros
+    var values = List[Float32]()
+    for _ in range(32):
+        values.append(Float32(0.0))
+
+    # Encode to MXFP4Block
+    var block = MXFP4Block.from_float32_array(values)
+
+    # Verify scale is 1.0 (exponent = 127)
+    assert_equal(block.scale.exponent, 127)
+    var scale_f32 = block.scale.to_float32()
+    assert_almost_equal(scale_f32, Float32(1.0), tolerance=1e-6)
+
+    # Verify all packed values are 0
+    for i in range(16):
+        assert_equal(block.data[i], 0)
+
+    # Decode and verify round-trip
+    var decoded = block.to_float32_array()
+    assert_equal(len(decoded), 32)
+    for i in range(32):
+        assert_almost_equal(decoded[i], Float32(0.0), tolerance=1e-7)
+
+
+fn test_mxfp4_block_near_zero_values() raises:
+    """Test MXFP4Block with very small values < 1e-10.
+
+    Edge case: Block with values < 1e-10 should trigger fallback to scale=1.0.
+    Normally scale = max(abs) / 6.0 would be tiny. The fallback ensures
+    we use scale = 1.0 instead, avoiding numerical instability.
+    """
+    # Create a block with values < 1e-10
+    var values = List[Float32]()
+    for i in range(32):
+        # Use values like 1e-12, 5e-13, etc.
+        values.append(Float32(1e-12) * Float32(i + 1))
+
+    # Encode to MXFP4Block
+    var block = MXFP4Block.from_float32_array(values)
+
+    # Verify scale is 1.0 (exponent = 127)
+    assert_equal(block.scale.exponent, 127)
+    var scale_f32 = block.scale.to_float32()
+    assert_almost_equal(scale_f32, Float32(1.0), tolerance=1e-6)
+
+    # Verify no NaN or Inf in decoded values
+    var decoded = block.to_float32_array()
+    assert_equal(len(decoded), 32)
+    for i in range(32):
+        # Values should be either 0 or very small (quantized to E2M1 minimum)
+        var val = decoded[i]
+        assert_true(not isnan(val), "Decoded value should not be NaN")
+        assert_true(not isinf(val), "Decoded value should not be Inf")
+
+
+fn test_mxfp4_block_near_threshold_edge_case() raises:
+    """Test MXFP4Block with values near the 1e-10 threshold.
+
+    Edge case: max_abs values near 1e-10 (where max_abs / 6.0 < 1e-10).
+    To trigger fallback with threshold 1e-10, max_abs must be < 6e-10.
+    Using values around 1e-11 ensures fallback is triggered.
+    """
+    # Create a block with values that trigger the fallback
+    # max_abs = 1e-11 * 32 = 3.2e-10, and 3.2e-10 / 6.0 = 5.3e-11 < 1e-10 (fallback triggers)
+    var values = List[Float32]()
+    var threshold_val = Float32(1e-11)
+    for i in range(32):
+        values.append(threshold_val * Float32(i + 1))
+
+    # Encode to MXFP4Block
+    var block = MXFP4Block.from_float32_array(values)
+
+    # Verify scale is 1.0 (fallback applies)
+    assert_equal(block.scale.exponent, 127)
+
+    # Verify decode works without NaN/Inf
+    var decoded = block.to_float32_array()
+    assert_equal(len(decoded), 32)
+    for i in range(32):
+        assert_true(not isnan(decoded[i]), "Should not produce NaN")
+        assert_true(not isinf(decoded[i]), "Should not produce Inf")
+
+
+fn test_mxfp4_block_mixed_zero_and_small() raises:
+    """Test MXFP4Block with mixed zeros and tiny values.
+
+    Edge case: Block with some zeros and some tiny values (mixed scenario).
+    Should still trigger fallback since max_abs might be < 1e-10.
+    """
+    var values = List[Float32]()
+
+    # Mix zeros and small values
+    for i in range(32):
+        if i % 2 == 0:
+            values.append(Float32(0.0))
+        else:
+            values.append(Float32(1e-12) * Float32(i))
+
+    # Encode to MXFP4Block
+    var block = MXFP4Block.from_float32_array(values)
+
+    # Should use fallback scale = 1.0
+    assert_equal(block.scale.exponent, 127)
+
+    # Round-trip should work
+    var decoded = block.to_float32_array()
+    assert_equal(len(decoded), 32)
+
+    # Verify decoded values
+    for i in range(32):
+        if i % 2 == 0:
+            # Zeros should round-trip to zero
+            assert_almost_equal(decoded[i], Float32(0.0), tolerance=1e-7)
+        else:
+            # Non-zeros should remain non-negative and not be NaN/Inf
+            assert_true(decoded[i] >= 0.0, "Should remain non-negative")
+            assert_true(not isnan(decoded[i]), "Should not be NaN")
+            assert_true(not isinf(decoded[i]), "Should not be Inf")
+
+
+fn test_mxfp4_block_zero_roundtrip_lossless() raises:
+    """Test that zero blocks round-trip losslessly.
+
+    Requirement: Zero blocks should encode as all-zero with scale=1.0
+    and decode back to all zeros without any data corruption.
+    """
+    var values = List[Float32]()
+    for _ in range(32):
+        values.append(Float32(0.0))
+
+    # Encode
+    var block = MXFP4Block.from_float32_array(values)
+
+    # Verify internal representation
+    var scale_f32 = block.scale.to_float32()
+    assert_almost_equal(scale_f32, Float32(1.0), tolerance=1e-6)
+
+    # Verify all bits are zero
+    for i in range(16):
+        assert_equal(block.data[i], 0)
+
+    # Decode
+    var decoded = block.to_float32_array()
+
+    # Verify perfect round-trip
+    assert_equal(len(decoded), 32)
+    for i in range(32):
+        assert_almost_equal(decoded[i], Float32(0.0), tolerance=1e-10)
+
+
+fn test_mxfp4_block_scale_computation_no_division_by_zero() raises:
+    """Test that scale computation handles division by zero safely.
+
+    Requirement: When max_abs = 0.0, computing scale = max_abs / 6.0 = 0.0
+    should not cause NaN or undefined behavior. The fallback to scale=1.0
+    should handle this gracefully.
+    """
+    # Create multiple blocks with all zeros to ensure consistent behavior
+    for _ in range(3):
+        var values = List[Float32]()
+        for _ in range(32):
+            values.append(Float32(0.0))
+
+        var block = MXFP4Block.from_float32_array(values)
+
+        # Should always have scale = 1.0
+        var scale_f32 = block.scale.to_float32()
+        assert_almost_equal(scale_f32, Float32(1.0), tolerance=1e-6)
+
+        # Decode should be consistent
+        var decoded = block.to_float32_array()
+        for i in range(32):
+            assert_equal(decoded[i], Float32(0.0))
+
+
+fn test_mxfp4_block_normal_scale_computation_still_works() raises:
+    """Test that normal (non-zero) scale computation still works correctly.
+
+    Regression: Ensure that adding fallback logic for zero doesn't break
+    normal scale computation for typical values.
+    """
+    # Create block with normal-sized values (max_abs = 12.0)
+    var values = List[Float32]()
+    for i in range(32):
+        values.append(Float32(i + 1) * 0.4)  # Range 0.4 to 12.8
+
+    # Encode
+    var block = MXFP4Block.from_float32_array(values)
+
+    # Scale should be computed as max(12.8) / 6.0 ≈ 2.13
+    var scale_f32 = block.scale.to_float32()
+    # Scale should be reasonable - definitely above 1.0 for these values
+    assert_true(scale_f32 >= 1.5, "Scale should be computed normally for non-zero values")
+    assert_true(scale_f32 <= 4.0, "Scale should be reasonable")
+
+    # Decode and verify reasonable round-trip
+    var decoded = block.to_float32_array()
+    assert_equal(len(decoded), 32)
+
+
+# ============================================================================
 # Main Test Runner
 # ============================================================================
 
@@ -380,5 +610,30 @@ fn main() raises:
 
     test_mxfp4_precision_vs_fp8()
     print("✓ MXFP4 vs FP8 range comparison")
+
+    print("\n=== MXFP4Block Scale Edge Case Tests ===")
+    test_e8m0_scale_from_zero()
+    print("✓ E8M0 scale from zero")
+
+    test_mxfp4_block_all_zeros()
+    print("✓ MXFP4 block with all zeros")
+
+    test_mxfp4_block_near_zero_values()
+    print("✓ MXFP4 block with near-zero values")
+
+    test_mxfp4_block_near_threshold_edge_case()
+    print("✓ MXFP4 block near 1e-10 threshold")
+
+    test_mxfp4_block_mixed_zero_and_small()
+    print("✓ MXFP4 block mixed zeros and tiny values")
+
+    test_mxfp4_block_zero_roundtrip_lossless()
+    print("✓ MXFP4 block zero round-trip (lossless)")
+
+    test_mxfp4_block_scale_computation_no_division_by_zero()
+    print("✓ MXFP4 block scale computation (no division by zero)")
+
+    test_mxfp4_block_normal_scale_computation_still_works()
+    print("✓ MXFP4 block normal scale computation (regression test)")
 
     print("\n=== All MXFP4 Tests Passed! ===\n")
