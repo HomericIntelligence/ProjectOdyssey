@@ -23,6 +23,7 @@ from .reduction import mean, sum, max_reduce
 from .activation import softmax
 from .comparison import less, greater
 from .dtype_dispatch import dispatch_binary, dispatch_scalar
+from .dtype_cast import cast_tensor
 
 
 fn binary_cross_entropy(
@@ -410,7 +411,9 @@ fn smooth_l1_loss(
     var linear = subtract(abs_diff, half_beta)
 
     # Create mask for where |x| < beta
-    var is_quadratic = less(abs_diff, beta_tensor)
+    var is_quadratic_bool = less(abs_diff, beta_tensor)
+    # Cast bool mask to same dtype as diff for arithmetic operations
+    var is_quadratic = cast_tensor(is_quadratic_bool, diff.dtype())
 
     # Blend quadratic and linear based on mask: if |x| < beta use quadratic else linear
     # Result = quadratic * mask + linear * (1 - mask)
@@ -478,12 +481,16 @@ fn smooth_l1_loss_backward(
 
     # Linear gradient: sign(x) (for |x| >= beta)
     # sign(x) = 1 if x > 0, -1 if x < 0, 0 if x == 0
-    var is_positive = greater(diff, zero)
-    var is_negative = less(diff, zero)
+    var is_positive_bool = greater(diff, zero)
+    var is_negative_bool = less(diff, zero)
+    # Cast bool masks to same dtype as diff for arithmetic operations
+    var is_positive = cast_tensor(is_positive_bool, diff.dtype())
+    var is_negative = cast_tensor(is_negative_bool, diff.dtype())
     var sign_diff = add(multiply(is_positive, one), multiply(is_negative, neg_one))
 
     # Create mask for where |x| < beta
-    var is_quadratic = less(abs_diff, beta_tensor)
+    var is_quadratic_bool = less(abs_diff, beta_tensor)
+    var is_quadratic = cast_tensor(is_quadratic_bool, diff.dtype())
     var mask_inv = subtract(one, is_quadratic)
 
     # Blend gradients: quadratic_grad if |x| < beta else sign_diff
@@ -545,7 +552,9 @@ fn hinge_loss(predictions: ExTensor, targets: ExTensor) raises -> ExTensor:
 
     # Return max(0, margin)
     var zero = zeros_like(margin)
-    var is_positive = greater(margin, zero)
+    var is_positive_bool = greater(margin, zero)
+    # Cast bool mask to same dtype as margin for arithmetic operations
+    var is_positive = cast_tensor(is_positive_bool, margin.dtype())
 
     # max(0, margin) = margin * (margin > 0)
     return multiply(margin, is_positive)
@@ -600,7 +609,9 @@ fn hinge_loss_backward(
     var neg_one = full_like(targets, -1.0)
 
     # Check if margin is violated: y * pred < 1
-    var margin_violated = less(y_pred, one)
+    var margin_violated_bool = less(y_pred, one)
+    # Cast bool mask to same dtype as targets for arithmetic operations
+    var margin_violated = cast_tensor(margin_violated_bool, targets.dtype())
 
     # Gradient: if y * pred < 1 then -y else 0
     var neg_targets = multiply(targets, neg_one)
