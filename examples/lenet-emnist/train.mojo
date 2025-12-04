@@ -32,6 +32,7 @@ from shared.core.linear import linear, linear_backward
 from shared.core.activation import relu, relu_backward
 from shared.core.loss import cross_entropy, cross_entropy_backward
 from shared.utils.arg_parser import create_training_parser
+from shared.training.loops import TrainingLoop
 from collections import List
 
 # Default number of classes for EMNIST Balanced dataset
@@ -210,7 +211,7 @@ fn train_epoch(
     epoch: Int,
     total_epochs: Int
 ) raises -> Float32:
-    """Train for one epoch.
+    """Train for one epoch using TrainingLoop.
 
     Args:
         model: LeNet-5 model.
@@ -224,35 +225,26 @@ fn train_epoch(
     Returns:
         Average loss for the epoch.
     """
-    var num_samples = train_images.shape()[0]
-    var num_batches = (num_samples + batch_size - 1) // batch_size
+    # Create training loop with progress logging every 100 batches
+    var loop = TrainingLoop(log_interval=100)
 
-    var total_loss = Float32(0.0)
-
-    print("Epoch [", epoch, "/", total_epochs, "]")
-
-    for batch_idx in range(num_batches):
-        var start_idx = batch_idx * batch_size
-        var end_idx = min(start_idx + batch_size, num_samples)
-
-        # Extract batch slice from dataset (zero-copy view)
-        var batch_images = train_images.slice(start_idx, end_idx, axis=0)
-        var batch_labels_int = train_labels.slice(start_idx, end_idx, axis=0)
-
+    # Define compute_batch_loss closure that processes batches
+    fn compute_batch_loss(batch_images: ExTensor, batch_labels_int: ExTensor) raises -> Float32:
         # Convert batch labels to one-hot encoding (required for cross_entropy loss)
         var batch_labels = one_hot_encode(batch_labels_int, num_classes=DEFAULT_NUM_CLASSES)
 
         # Compute gradients and update parameters
-        var batch_loss = compute_gradients(model, batch_images, batch_labels, learning_rate)
-        total_loss += batch_loss
+        return compute_gradients(model, batch_images, batch_labels, learning_rate)
 
-        # Print progress every 100 batches
-        if (batch_idx + 1) % 100 == 0:
-            var avg_loss = total_loss / Float32(batch_idx + 1)
-            print("  Batch [", batch_idx + 1, "/", num_batches, "] - Loss: ", avg_loss)
-
-    var avg_loss = total_loss / Float32(num_batches)
-    print("  Average Loss: ", avg_loss)
+    # Run one epoch using the consolidated training loop
+    var avg_loss = loop.run_epoch_manual(
+        train_images,
+        train_labels,
+        batch_size=batch_size,
+        compute_batch_loss=compute_batch_loss,
+        epoch=epoch,
+        total_epochs=total_epochs
+    )
 
     return avg_loss
 

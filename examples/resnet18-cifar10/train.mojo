@@ -42,6 +42,7 @@ from shared.data.datasets import load_cifar10_train, load_cifar10_test
 from shared.training.optimizers import sgd_momentum_update_inplace
 from shared.training.metrics import evaluate_with_predict, top1_accuracy
 from shared.utils.arg_parser import ArgumentParser, ArgumentSpec, ParsedArgs
+from shared.training.loops import TrainingLoop
 from model import ResNet18
 
 
@@ -108,15 +109,13 @@ fn train_epoch(
     learning_rate: Float32,
     momentum: Float32,
     mut velocities: List[ExTensor],
+    epoch: Int,
+    total_epochs: Int
 ) raises -> Float32:
-    """Train for one epoch with manual backpropagation through all 18 layers.
+    """Train for one epoch using TrainingLoop.
 
-    This function demonstrates complete manual backpropagation through ResNet-18:
-    - Forward pass with activation caching
-    - Backward pass through FC, GAP, 4 stages (8 residual blocks)
-    - Batch normalization backward at every layer
-    - Skip connection gradient handling (add_backward)
-    - Parameter updates with SGD + momentum
+    This function uses the consolidated TrainingLoop to manage batch iteration,
+    while maintaining the forward/backward pass structure through ResNet-18.
 
     Args:
         model: ResNet-18 model
@@ -126,187 +125,64 @@ fn train_epoch(
         learning_rate: Learning rate for SGD
         momentum: Momentum factor
         velocities: Momentum velocity tensors (84 total - one per parameter)
+        epoch: Current epoch number (1-indexed)
+        total_epochs: Total number of epochs
 
     Returns:
         Average training loss for the epoch
 
     Note:
         Due to the complexity of implementing full backprop through 18 layers with
-        batch norm, this is a simplified demonstration that shows the structure.
-        A complete implementation would cache all intermediate activations during
-        forward pass and compute all gradients during backward pass.
+        batch norm, this demonstrates the structure. A complete implementation would
+        cache all intermediate activations during forward pass and compute all
+        gradients during backward pass.
 
         For production use, consider implementing a computational graph or using
         automatic differentiation instead of manual backpropagation for such
         deep networks.
     """
-    var num_samples = train_images.shape()[0]
-    var num_batches = compute_num_batches(num_samples, batch_size)
-    var total_loss = Float32(0.0)
+    # Create training loop with progress logging every 100 batches
+    var loop = TrainingLoop(log_interval=100)
 
-    print("Training epoch with", num_batches, "batches...")
-
-    for batch_idx in range(num_batches):
-        var start_idx = batch_idx * batch_size
-
-        # Extract mini-batch
-        var batch_pair = extract_batch_pair(train_images, train_labels, start_idx, batch_size)
-        var batch_images = batch_pair[0]
-        var batch_labels = batch_pair[1]
-        var current_batch_size = batch_images.shape()[0]
-
-        # ========== FORWARD PASS WITH CACHING ==========
-        # NOTE: A complete implementation would cache ALL intermediate activations
-        # (conv outputs, BN outputs, ReLU outputs, skip connections) for backward pass.
-        #
-        # For demonstration, we show the forward structure. In production, you would:
-        # 1. Cache every intermediate tensor during forward pass
-        # 2. Use cached values during backward pass
-        # 3. Compute gradients w.r.t. all 84 parameters
-        # 4. Update parameters with momentum
-
+    # Define compute_batch_loss closure that processes batches
+    fn compute_batch_loss(batch_images: ExTensor, batch_labels: ExTensor) raises -> Float32:
         # Forward pass (training mode - updates BN running stats)
         var logits = model.forward(batch_images, training=True)
 
         # Compute loss
         var loss_value = cross_entropy(logits, batch_labels)
-        total_loss += loss_value
 
         # ========== BACKWARD PASS DEMONSTRATION ==========
         # Compute gradient of loss w.r.t. logits
         var grad_logits = cross_entropy_backward(logits, batch_labels)
 
-        # The full backward pass would flow as follows:
-        #
-        # 1. FC Layer Backward
-        #    var (grad_fc_input, grad_fc_weights, grad_fc_bias) = linear_backward(
-        #        grad_logits, flattened, model.fc_weights
-        #    )
-        #    Update: model.fc_weights, model.fc_bias
-        #
-        # 2. Flatten Backward (reshape gradient)
-        #    var grad_gap = grad_fc_input.reshape(batch, 512, 1, 1)
-        #
-        # 3. Global Average Pool Backward
-        #    var grad_s4b2_out = avgpool2d_backward(grad_gap, s4b2_out, kernel_size=4)
-        #
-        # 4. Stage 4, Block 2 Backward (Identity Shortcut)
-        #    # ReLU backward (final)
-        #    var grad_s4b2_skip = relu_backward(grad_s4b2_out, s4b2_skip)
-        #
-        #    # Split gradient at skip connection
-        #    var s4b2_shapes = (s4b2_bn2.shape(), s4b1_out.shape())
-        #    var grad_pair = add_backward(grad_s4b2_skip, s4b2_shapes[0], s4b2_shapes[1])
-        #    var grad_s4b2_bn2 = grad_pair[0]  # Main path
-        #    var grad_s4b2_from_skip = grad_pair[1]  # Skip path
-        #
-        #    # BN backward (conv2)
-        #    var bn2_grads = batch_norm2d_backward(
-        #        grad_s4b2_bn2, s4b2_conv2,
-        #        model.s4b2_bn2_gamma, model.s4b2_bn2_running_mean, model.s4b2_bn2_running_var,
-        #        training=True
-        #    )
-        #    var grad_s4b2_conv2 = bn2_grads[0]
-        #    var grad_s4b2_bn2_gamma = bn2_grads[1]
-        #    var grad_s4b2_bn2_beta = bn2_grads[2]
-        #    Update: model.s4b2_bn2_gamma, model.s4b2_bn2_beta
-        #
-        #    # Conv backward (conv2)
-        #    var conv2_grads = conv2d_backward(
-        #        grad_s4b2_conv2, s4b2_relu1, model.s4b2_conv2_kernel,
-        #        stride=1, padding=1
-        #    )
-        #    var grad_s4b2_relu1 = conv2_grads[0]
-        #    var grad_s4b2_conv2_kernel = conv2_grads[1]
-        #    var grad_s4b2_conv2_bias = conv2_grads[2]
-        #    Update: model.s4b2_conv2_kernel, model.s4b2_conv2_bias
-        #
-        #    # ReLU backward (intermediate)
-        #    var grad_s4b2_bn1 = relu_backward(grad_s4b2_relu1, s4b2_bn1)
-        #
-        #    # BN backward (conv1)
-        #    var bn1_grads = batch_norm2d_backward(
-        #        grad_s4b2_bn1, s4b2_conv1,
-        #        model.s4b2_bn1_gamma, model.s4b2_bn1_running_mean, model.s4b2_bn1_running_var,
-        #        training=True
-        #    )
-        #    var grad_s4b2_conv1 = bn1_grads[0]
-        #    var grad_s4b2_bn1_gamma = bn1_grads[1]
-        #    var grad_s4b2_bn1_beta = bn1_grads[2]
-        #    Update: model.s4b2_bn1_gamma, model.s4b2_bn1_beta
-        #
-        #    # Conv backward (conv1)
-        #    var conv1_grads = conv2d_backward(
-        #        grad_s4b2_conv1, s4b1_out, model.s4b2_conv1_kernel,
-        #        stride=1, padding=1
-        #    )
-        #    var grad_s4b2_main_path = conv1_grads[0]
-        #    var grad_s4b2_conv1_kernel = conv1_grads[1]
-        #    var grad_s4b2_conv1_bias = conv1_grads[2]
-        #    Update: model.s4b2_conv1_kernel, model.s4b2_conv1_bias
-        #
-        #    # Combine gradients from main path and skip path
-        #    var grad_s4b1_out = add(grad_s4b2_main_path, grad_s4b2_from_skip)
-        #
-        # 5. Stage 4, Block 1 Backward (Projection Shortcut)
-        #    Similar structure but skip path goes through:
-        #    - Projection BN backward
-        #    - Projection conv backward (1×1, stride=2)
-        #
-        # 6-8. Stages 3, 2, 1 Backward
-        #    Each stage has 2 blocks:
-        #    - First block: projection shortcut (except Stage 1)
-        #    - Second block: identity shortcut
-        #    Total: 3 stages × 2 blocks × 8 params = 48 params
-        #    Plus Stage 1: 2 blocks × 8 params = 16 params
-        #
-        # 9. Initial Conv + BN + ReLU Backward
-        #    # ReLU backward
-        #    var grad_bn1 = relu_backward(grad_conv1_input, bn1)
-        #
-        #    # BN backward
-        #    var bn_grads = batch_norm2d_backward(
-        #        grad_bn1, conv1,
-        #        model.bn1_gamma, model.bn1_running_mean, model.bn1_running_var,
-        #        training=True
-        #    )
-        #    var grad_conv1 = bn_grads[0]
-        #    var grad_bn1_gamma = bn_grads[1]
-        #    var grad_bn1_beta = bn_grads[2]
-        #    Update: model.bn1_gamma, model.bn1_beta
-        #
-        #    # Conv backward
-        #    var conv_grads = conv2d_backward(
-        #        grad_conv1, batch_images, model.conv1_kernel,
-        #        stride=1, padding=1
-        #    )
-        #    var grad_conv1_kernel = conv_grads[1]
-        #    var grad_conv1_bias = conv_grads[2]
-        #    Update: model.conv1_kernel, model.conv1_bias
-        #
-        # Total parameter updates: 84 parameters
-        # - Initial: 6 (conv + BN)
-        # - Stage 1: 16 (2 blocks × 8)
-        # - Stage 2: 20 (block1: 12 with projection, block2: 8)
-        # - Stage 3: 20 (block1: 12 with projection, block2: 8)
-        # - Stage 4: 20 (block1: 12 with projection, block2: 8)
-        # - FC: 2
-        #
-        # Each parameter update uses SGD with momentum:
-        #    velocities[i] = momentum * velocities[i] + learning_rate * grad[i]
-        #    params[i] -= velocities[i]
+        # The full backward pass would flow as documented in the original implementation.
+        # Key steps for complete implementation:
+        # 1. Cache all intermediate activations (conv, BN, ReLU, skip connections)
+        # 2. Backprop through FC layer
+        # 3. Backprop through global average pool
+        # 4. Backprop through 4 stages (8 residual blocks total)
+        # 5. Handle skip connections with add_backward for gradient splitting
+        # 6. Update all 84 parameters with momentum
 
-        # For now, we demonstrate the structure without full implementation
-        # A production implementation would need:
+        # Note: For now, this demonstrates the structure. Production code needs:
         # - ~2000 lines of backward pass code
         # - Careful activation caching during forward
         # - Gradient accumulation for all 84 parameters
         # - Momentum velocity updates
 
-        if (batch_idx + 1) % 100 == 0:
-            print("  Batch " + str(batch_idx + 1) + "/" + str(num_batches) + ", Loss: " + str(loss_value))
+        return Float32(loss_value)
 
-    var avg_loss = total_loss / Float32(num_batches)
+    # Run one epoch using the consolidated training loop
+    var avg_loss = loop.run_epoch_manual(
+        train_images,
+        train_labels,
+        batch_size=batch_size,
+        compute_batch_loss=compute_batch_loss,
+        epoch=epoch,
+        total_epochs=total_epochs
+    )
+
     return avg_loss
 
 
