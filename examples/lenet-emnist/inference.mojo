@@ -19,7 +19,7 @@ References:
 from model import LeNet5
 from shared.data import load_idx_labels, load_idx_images, normalize_images
 from shared.core import ExTensor, zeros
-from sys import argv
+from shared.utils.arg_parser import ArgumentParser
 from collections import List
 from math import exp
 
@@ -70,20 +70,19 @@ struct EvaluationResult:
 
 
 fn parse_args() raises -> InferenceConfig:
-    """Parse command line arguments.
+    """Parse command line arguments using enhanced argument parser.
 
     Returns:
         InferenceConfig with parsed arguments.
     """
-    var weights_dir = String("lenet5_weights")
-    var data_dir = String("datasets/emnist")
+    var parser = ArgumentParser()
+    parser.add_argument("weights-dir", "string", "lenet5_weights")
+    parser.add_argument("data-dir", "string", "datasets/emnist")
 
-    var args = argv()
-    for i in range(len(args)):
-        if args[i] == "--weights-dir" and i + 1 < len(args):
-            weights_dir = args[i + 1]
-        elif args[i] == "--data-dir" and i + 1 < len(args):
-            data_dir = args[i + 1]
+    var args = parser.parse()
+
+    var weights_dir = args.get_string("weights-dir", "lenet5_weights")
+    var data_dir = args.get_string("data-dir", "datasets/emnist")
 
     return InferenceConfig(weights_dir, data_dir)
 

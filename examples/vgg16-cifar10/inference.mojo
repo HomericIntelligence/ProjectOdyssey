@@ -3,12 +3,32 @@
 Loads trained weights and evaluates on test set.
 
 Usage:
-    mojo run examples/vgg16-cifar10/inference.mojo --weights-dir vgg16_weights
+    mojo run examples/vgg16-cifar10/inference.mojo --weights-dir vgg16_weights --data-dir datasets/cifar10
 """
 
 from shared.core import ExTensor, zeros
 from shared.data.formats import load_cifar10_batch
 from model import VGG16
+from shared.utils.arg_parser import ArgumentParser
+from collections import List
+
+
+fn parse_args() raises -> Tuple[String, String]:
+    """Parse command line arguments using enhanced argument parser.
+
+    Returns:
+        Tuple of (weights_dir, data_dir)
+    """
+    var parser = ArgumentParser()
+    parser.add_argument("weights-dir", "string", "vgg16_weights")
+    parser.add_argument("data-dir", "string", "datasets/cifar10")
+
+    var args = parser.parse()
+
+    var weights_dir = args.get_string("weights-dir", "vgg16_weights")
+    var data_dir = args.get_string("data-dir", "datasets/cifar10")
+
+    return Tuple[String, String](weights_dir, data_dir)
 
 
 fn compute_test_accuracy(mut model: VGG16, test_images: ExTensor, test_labels: ExTensor) raises -> Float32:
@@ -61,9 +81,10 @@ fn main() raises:
     print("=== VGG-16 Inference on CIFAR-10 ===")
     print()
 
-    # Configuration
-    var weights_dir = "vgg16_weights"
-    var data_dir = "datasets/cifar10"
+    # Parse command-line arguments
+    var parsed = parse_args()
+    var weights_dir = parsed[0]
+    var data_dir = parsed[1]
 
     # Load test set
     print("Loading CIFAR-10 test set...")
