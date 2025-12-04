@@ -311,7 +311,7 @@ fn test_adamw_shape_mismatch() raises:
     var v = zeros(shape1, DType.float32)
 
     try:
-        var _ = adamw_step(params, grads, m, v, t=1)
+        var _ = adamw_step(params, grads, m, v, t=1, learning_rate=0.001)
         # Should not reach here
         assert_true(False, "Should have raised error on shape mismatch")
     except:
@@ -334,7 +334,7 @@ fn test_adamw_dtype_mismatch() raises:
 
     # If different dtypes were supported, this would test that
     # For now, just verify dtypes match in valid case
-    var result = adamw_step(params, grads, m, v, t=1)
+    var result = adamw_step(params, grads, m, v, t=1, learning_rate=0.001)
     assert_true(True)
 
 
@@ -380,7 +380,7 @@ fn test_adamw_timestep_validation() raises:
 
     try:
         # t=0 should fail
-        var _ = adamw_step(params, grads, m, v, t=0)
+        var _ = adamw_step(params, grads, m, v, t=0, learning_rate=0.001)
         assert_true(False, "Should have raised error for t=0")
     except:
         # Expected error
@@ -388,7 +388,7 @@ fn test_adamw_timestep_validation() raises:
 
     try:
         # t=-1 should fail
-        var _ = adamw_step(params, grads, m, v, t=-1)
+        var _ = adamw_step(params, grads, m, v, t=-1, learning_rate=0.001)
         assert_true(False, "Should have raised error for t=-1")
     except:
         # Expected error
