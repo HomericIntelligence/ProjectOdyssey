@@ -21,7 +21,7 @@ from .arithmetic import add, subtract, multiply, divide
 from .elementwise import log, clip, exp, abs
 from .reduction import mean, sum, max_reduce
 from .activation import softmax
-from .comparison import less
+from .comparison import less, greater
 from .dtype_dispatch import dispatch_binary, dispatch_scalar
 
 
@@ -395,24 +395,30 @@ fn smooth_l1_loss(
 
     # Compute differences: x = predictions - targets
     var diff = subtract(predictions, targets)
+    var abs_diff = abs(diff)
 
-    # Use dispatch to compute smooth L1 element-wise
-    @always_inline
-    fn _smooth_l1_op[T: DType](pred: Scalar[T], targ: Scalar[T]) -> Scalar[T]:
-        var diff_val = pred - targ
-        # Compute absolute value
-        var abs_diff = diff_val if diff_val >= Scalar[T](0) else -diff_val
-        var beta_val = Scalar[T](beta)
-        var half_beta = beta_val * Scalar[T](0.5)
+    # Create tensors for beta and 0.5 * beta
+    var beta_tensor = full_like(diff, Float64(beta))
+    var half = full_like(diff, 0.5)
+    var half_beta = multiply(beta_tensor, half)
 
-        # if |x| < beta: return 0.5 * x^2 / beta
-        # else: return |x| - 0.5 * beta
-        if abs_diff < beta_val:
-            return Scalar[T](0.5) * diff_val * diff_val / beta_val
-        else:
-            return abs_diff - half_beta
+    # Quadratic part: 0.5 * x^2 / beta (for |x| < beta)
+    var diff_squared = multiply(diff, diff)
+    var quadratic = divide(multiply(half, diff_squared), beta_tensor)
 
-    return dispatch_binary[_smooth_l1_op](predictions, targets)
+    # Linear part: |x| - 0.5 * beta (for |x| >= beta)
+    var linear = subtract(abs_diff, half_beta)
+
+    # Create mask for where |x| < beta
+    var is_quadratic = less(abs_diff, beta_tensor)
+
+    # Blend quadratic and linear based on mask: if |x| < beta use quadratic else linear
+    # Result = quadratic * mask + linear * (1 - mask)
+    var one = ones_like(diff)
+    var mask_inv = subtract(one, is_quadratic)
+    var result = add(multiply(quadratic, is_quadratic), multiply(linear, mask_inv))
+
+    return result
 
 
 fn smooth_l1_loss_backward(
@@ -457,35 +463,34 @@ fn smooth_l1_loss_backward(
     if grad_output.shape() != predictions.shape():
         raise Error("smooth_l1_loss_backward: grad_output and predictions must have same shape")
 
-    # Use dispatch to compute gradient element-wise
-    @always_inline
-    fn _smooth_l1_backward_op[T: DType](grad: Scalar[T], pred: Scalar[T], targ: Scalar[T]) -> Scalar[T]:
-        var diff_val = pred - targ
-        # Compute absolute value
-        var abs_diff = diff_val if diff_val >= Scalar[T](0) else -diff_val
-        var beta_val = Scalar[T](beta)
+    # Compute differences: x = predictions - targets
+    var diff = subtract(predictions, targets)
+    var abs_diff = abs(diff)
 
-        # if |x| < beta: return grad * (x / beta)
-        # else: return grad * sign(x)
-        if abs_diff < beta_val:
-            # Gradient: x / beta
-            return grad * diff_val / beta_val
-        else:
-            # Gradient: sign(x)
-            var sign_val = diff_val if diff_val > Scalar[T](0) else (diff_val if diff_val < Scalar[T](0) else Scalar[T](0))
-            return grad * sign_val
+    # Create tensors for beta
+    var beta_tensor = full_like(diff, Float64(beta))
+    var one = ones_like(diff)
+    var zero = zeros_like(diff)
+    var neg_one = full_like(diff, -1.0)
 
-    # Create a 3-argument wrapper by manually iterating
-    var result = ExTensor(predictions.shape(), predictions.dtype())
-    var pred_ptr = predictions._data.bitcast[Scalar[predictions.dtype()]]()
-    var targ_ptr = targets._data.bitcast[Scalar[targets.dtype()]]()
-    var grad_ptr = grad_output._data.bitcast[Scalar[grad_output.dtype()]]()
-    var result_ptr = result._data.bitcast[Scalar[predictions.dtype()]]()
+    # Quadratic gradient: x / beta (for |x| < beta)
+    var quadratic_grad = divide(diff, beta_tensor)
 
-    for i in range(predictions._numel):
-        result_ptr[i] = _smooth_l1_backward_op[predictions.dtype()](grad_ptr[i], pred_ptr[i], targ_ptr[i])
+    # Linear gradient: sign(x) (for |x| >= beta)
+    # sign(x) = 1 if x > 0, -1 if x < 0, 0 if x == 0
+    var is_positive = greater(diff, zero)
+    var is_negative = less(diff, zero)
+    var sign_diff = add(multiply(is_positive, one), multiply(is_negative, neg_one))
 
-    return result
+    # Create mask for where |x| < beta
+    var is_quadratic = less(abs_diff, beta_tensor)
+    var mask_inv = subtract(one, is_quadratic)
+
+    # Blend gradients: quadratic_grad if |x| < beta else sign_diff
+    var blended_grad = add(multiply(quadratic_grad, is_quadratic), multiply(sign_diff, mask_inv))
+
+    # Multiply by upstream gradient
+    return multiply(grad_output, blended_grad)
 
 
 fn hinge_loss(predictions: ExTensor, targets: ExTensor) raises -> ExTensor:
@@ -531,16 +536,19 @@ fn hinge_loss(predictions: ExTensor, targets: ExTensor) raises -> ExTensor:
     if predictions.shape() != targets.shape():
         raise Error("Predictions and targets must have the same shape")
 
-    # Use dispatch to compute hinge loss element-wise
-    @always_inline
-    fn _hinge_loss_op[T: DType](pred: Scalar[T], targ: Scalar[T]) -> Scalar[T]:
-        var y_pred = targ * pred
-        var margin = Scalar[T](1) - y_pred
+    # Compute y * pred
+    var y_pred = multiply(targets, predictions)
 
-        # return max(0, margin)
-        return margin if margin > Scalar[T](0) else Scalar[T](0)
+    # Compute margin = 1 - y * pred
+    var one = ones_like(y_pred)
+    var margin = subtract(one, y_pred)
 
-    return dispatch_binary[_hinge_loss_op](predictions, targets)
+    # Return max(0, margin)
+    var zero = zeros_like(margin)
+    var is_positive = greater(margin, zero)
+
+    # max(0, margin) = margin * (margin > 0)
+    return multiply(margin, is_positive)
 
 
 fn hinge_loss_backward(
@@ -583,25 +591,20 @@ fn hinge_loss_backward(
     if grad_output.shape() != predictions.shape():
         raise Error("hinge_loss_backward: grad_output and predictions must have same shape")
 
-    # Use dispatch to compute gradient element-wise
-    @always_inline
-    fn _hinge_backward_op[T: DType](grad: Scalar[T], pred: Scalar[T], targ: Scalar[T]) -> Scalar[T]:
-        var y_pred = targ * pred
-        # if y * pred < 1: return grad * (-y)
-        # else: return 0
-        if y_pred < Scalar[T](1):
-            return grad * (-targ)
-        else:
-            return Scalar[T](0)
+    # Compute y * pred
+    var y_pred = multiply(targets, predictions)
 
-    # Create a 3-argument wrapper by manually iterating
-    var result = ExTensor(predictions.shape(), predictions.dtype())
-    var pred_ptr = predictions._data.bitcast[Scalar[predictions.dtype()]]()
-    var targ_ptr = targets._data.bitcast[Scalar[targets.dtype()]]()
-    var grad_ptr = grad_output._data.bitcast[Scalar[grad_output.dtype()]]()
-    var result_ptr = result._data.bitcast[Scalar[predictions.dtype()]]()
+    # Create tensors
+    var one = ones_like(y_pred)
+    var zero = zeros_like(y_pred)
+    var neg_one = full_like(targets, -1.0)
 
-    for i in range(predictions._numel):
-        result_ptr[i] = _hinge_backward_op[predictions.dtype()](grad_ptr[i], pred_ptr[i], targ_ptr[i])
+    # Check if margin is violated: y * pred < 1
+    var margin_violated = less(y_pred, one)
 
-    return result
+    # Gradient: if y * pred < 1 then -y else 0
+    var neg_targets = multiply(targets, neg_one)
+    var hinge_grad = multiply(neg_targets, margin_violated)
+
+    # Multiply by upstream gradient
+    return multiply(grad_output, hinge_grad)
