@@ -163,7 +163,7 @@ fn adamw_step(
         new_params = subtract_simd(new_params, wd_term)
 
     # Return new state (pure functional)
-    return (new_params, new_m, new_v)
+    return Tuple[ExTensor, ExTensor, ExTensor](new_params^, new_m^, new_v^)
 
 
 fn adamw_step_simple(
