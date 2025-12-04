@@ -546,7 +546,7 @@ fn kl_divergence(p: ExTensor, q: ExTensor, epsilon: Float64 = 1e-7) raises -> Ex
     """Kullback-Leibler divergence loss for distribution matching.
 
     Formula:
-        KL(p||q) = sum(p * log(p / q)) = sum(p * (log(p) - log(q)))
+        KL(p||q) = p * log(p / q) = p * (log(p) - log(q))
 
     where:
         p = reference distribution (target)
@@ -561,8 +561,8 @@ fn kl_divergence(p: ExTensor, q: ExTensor, epsilon: Float64 = 1e-7) raises -> Ex
         `epsilon`: Small constant for numerical stability (default: 1e-7)
 
     Returns:
-        KL divergence loss, reduced along class axis
-        Use mean() to get scalar loss for backpropagation
+        Element-wise KL divergence contribution, same shape as inputs
+        Use sum() or mean() to get scalar loss for backpropagation
 
     Raises:
         Error if shapes don't match or dtypes are incompatible
@@ -570,8 +570,9 @@ fn kl_divergence(p: ExTensor, q: ExTensor, epsilon: Float64 = 1e-7) raises -> Ex
     Example:
         var p_dist = softmax(targets_logits, axis=1)  # (batch_size, num_classes)
         var q_dist = softmax(predictions_logits, axis=1)  # (batch_size, num_classes)
-        var kl_per_sample = kl_divergence(p_dist, q_dist)
-        var loss = mean(kl_per_sample)  # Scalar loss
+        var kl_per_element = kl_divergence(p_dist, q_dist)  # (batch_size, num_classes)
+        var loss_per_sample = sum(kl_per_element, axis=1)  # (batch_size,)
+        var loss = mean(loss_per_sample)  # Scalar loss
 
     Note:
         This implementation assumes inputs are already probabilities (sum to 1).
@@ -598,21 +599,9 @@ fn kl_divergence(p: ExTensor, q: ExTensor, epsilon: Float64 = 1e-7) raises -> Ex
     # Compute log(p/q) = log(p) - log(q)
     var log_ratio = subtract(log_p, log_q)
 
-    # Compute p * log(p/q)
-    var kl_per_element = multiply(p, log_ratio)
-
-    # Sum along all axes except the first (batch) to get per-sample KL divergence
-    # For 2D: (batch, classes) -> (batch,)
-    # For 1D: (classes,) -> scalar
-    var shape = p.shape()
-    if len(shape) > 1:
-        # Sum over class axis (axis 1 for 2D, or all axes except batch)
-        var kl_per_sample = sum(kl_per_element, axis=-1, keepdims=False)
-        return kl_per_sample
-    else:
-        # For 1D input, sum all elements
-        var kl_total = sum(kl_per_element, axis=0, keepdims=False)
-        return kl_total
+    # Compute p * log(p/q) - element-wise KL contribution
+    # Return per-element values (user can sum or mean as needed)
+    return multiply(p, log_ratio)
 
 
 fn kl_divergence_backward(
@@ -629,7 +618,7 @@ fn kl_divergence_backward(
         ∂KL/∂p = log(p) - log(q) + 1 (not used in typical backprop since targets are fixed)
 
     Args:
-        `grad_output`: Gradient from upstream (e.g., from mean_backward)
+        `grad_output`: Gradient from upstream, same shape as forward output (same as inputs)
         `p`: Reference distribution passed to forward pass
         `q`: Approximating distribution passed to forward pass
         `epsilon`: Small constant for numerical stability (default: 1e-7)
@@ -639,13 +628,15 @@ fn kl_divergence_backward(
 
     Example:
         # Forward
-        var kl = kl_divergence(p_dist, q_dist)
-        var loss = mean(kl)
+        var kl_per_element = kl_divergence(p_dist, q_dist)
+        var loss_per_sample = sum(kl_per_element, axis=1)
+        var loss = mean(loss_per_sample)
 
         # Backward
         var grad_loss = ones_like(loss)
-        var grad_kl = mean_backward(grad_loss, kl)
-        var grad_q = kl_divergence_backward(grad_kl, p_dist, q_dist)
+        var grad_per_sample = mean_backward(grad_loss, loss_per_sample)
+        var grad_per_element = sum_backward(grad_per_sample, kl_per_element)
+        var grad_q = kl_divergence_backward(grad_per_element, p_dist, q_dist)
     """
     # Clip q to prevent division by zero
     var clipped_q = clip(q, epsilon, 1.0)
