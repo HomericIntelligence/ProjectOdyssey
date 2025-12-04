@@ -1301,6 +1301,50 @@ git push -u origin <issue-number>-description
 gh pr create --title "..." --body "Closes #<issue>" --label "..."
 ```
 
+### One PR Per GitHub Issue (CRITICAL)
+
+**NEVER consolidate multiple GitHub issues into a single PR.** Each issue should have its own dedicated PR.
+
+❌ **NEVER DO THIS:**
+
+```bash
+# Combining fixes for multiple issues into one PR
+git checkout -b combined-fixes
+# Make changes for issue #123, #124, #125
+gh pr create --title "Fix multiple issues" --body "Closes #123, #124, #125"
+```
+
+✅ **ALWAYS DO THIS:**
+
+```bash
+# Separate PR for each issue
+git checkout -b 123-fix-assertions
+# Make changes ONLY for issue #123
+gh pr create --title "[D1.1] Fix assertions" --body "Closes #123"
+
+git checkout main && git pull
+git checkout -b 124-add-constants
+# Make changes ONLY for issue #124
+gh pr create --title "[D1.2] Add constants" --body "Closes #124"
+```
+
+**Why This Matters:**
+
+- **Atomic reviews**: Each PR can be reviewed independently
+- **Clean history**: Each merge represents one logical change
+- **Easy reverts**: If one change breaks things, only that PR needs reverting
+- **Parallel work**: Multiple reviewers can work on different PRs simultaneously
+- **Clear tracking**: GitHub issue ↔ PR relationship is 1:1
+
+**When Rebasing Multiple PRs:**
+
+If you have multiple open PRs that need rebasing against main:
+
+1. Rebase each PR's branch individually
+2. Push each branch separately
+3. Do NOT merge branches together
+4. Keep changes isolated to their respective issues
+
 ### Commit Message Format
 
 Follow conventional commits:
