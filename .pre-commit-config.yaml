@@ -2,9 +2,23 @@
 # See https://pre-commit.com for more information
 
 repos:
-  # Mojo formatting (DISABLED - bug in mojo format removes space in "inout self")
-  # See: https://github.com/modular/modular/issues/5573
-  # TODO(#2391): Re-enable when bug is fixed
+  # Mojo formatting (DISABLED)
+  #
+  # DISABLED REASON: The mojo format tool incorrectly removes spaces in method signatures,
+  # specifically converting "fn method(mut self" to "fn method(mutself" which breaks the code.
+  # This causes all Mojo files formatted by this hook to become syntactically invalid.
+  #
+  # TRACKING ISSUE: https://github.com/modular/modular/issues/5573
+  # Bug description: mojo format removes the space after 'mut' keyword in parameter lists
+  #
+  # RE-ENABLE CONDITIONS:
+  # - When the upstream bug is fixed in the Mojo formatter
+  # - Verify the fix with: mojo format <test-file.mojo> and confirm spaces are preserved
+  # - Test on files containing: fn method(mut self), fn method(out self), etc.
+  # - Update this comment and uncomment the hook configuration below
+  #
+  # TODO(#2391): Re-enable when Modular releases a fix for mojo/modular#5573
+  #
   # - repo: local
   #   hooks:
   #     - id: mojo-format
