@@ -445,3 +445,86 @@ fn test_dispatch_binary_2d_tensor() raises:
     assert_almost_equal(
         result._data.bitcast[Float32]()[3], Float32(6.0), tolerance=1e-6
     )
+
+
+# ============================================================================
+# Main Test Runner
+# ============================================================================
+
+
+fn main() raises:
+    """Run all dtype_dispatch tests."""
+    print("Running dtype_dispatch tests...")
+
+    # Unary dispatch tests
+    test_dispatch_unary_float32_identity()
+    print("✓ test_dispatch_unary_float32_identity")
+
+    test_dispatch_unary_float32_double()
+    print("✓ test_dispatch_unary_float32_double")
+
+    test_dispatch_unary_float64()
+    print("✓ test_dispatch_unary_float64")
+
+    test_dispatch_unary_int32()
+    print("✓ test_dispatch_unary_int32")
+
+    test_dispatch_unary_uint8()
+    print("✓ test_dispatch_unary_uint8")
+
+    # Binary dispatch tests
+    test_dispatch_binary_float32_add()
+    print("✓ test_dispatch_binary_float32_add")
+
+    test_dispatch_binary_float32_mul()
+    print("✓ test_dispatch_binary_float32_mul")
+
+    test_dispatch_binary_float64()
+    print("✓ test_dispatch_binary_float64")
+
+    test_dispatch_binary_int32()
+    print("✓ test_dispatch_binary_int32")
+
+    test_dispatch_binary_dtype_mismatch()
+    print("✓ test_dispatch_binary_dtype_mismatch")
+
+    # Scalar dispatch tests
+    test_dispatch_scalar_float32_add()
+    print("✓ test_dispatch_scalar_float32_add")
+
+    test_dispatch_scalar_float32_mul()
+    print("✓ test_dispatch_scalar_float32_mul")
+
+    test_dispatch_scalar_int32()
+    print("✓ test_dispatch_scalar_int32")
+
+    # Float-only dispatch tests
+    test_dispatch_float_unary_float32()
+    print("✓ test_dispatch_float_unary_float32")
+
+    test_dispatch_float_unary_float64()
+    print("✓ test_dispatch_float_unary_float64")
+
+    test_dispatch_float_unary_rejects_int32()
+    print("✓ test_dispatch_float_unary_rejects_int32")
+
+    test_dispatch_float_binary_float32()
+    print("✓ test_dispatch_float_binary_float32")
+
+    test_dispatch_float_binary_rejects_int32()
+    print("✓ test_dispatch_float_binary_rejects_int32")
+
+    test_dispatch_float_scalar_float32()
+    print("✓ test_dispatch_float_scalar_float32")
+
+    test_dispatch_float_scalar_rejects_int32()
+    print("✓ test_dispatch_float_scalar_rejects_int32")
+
+    # 2D tensor tests
+    test_dispatch_unary_2d_tensor()
+    print("✓ test_dispatch_unary_2d_tensor")
+
+    test_dispatch_binary_2d_tensor()
+    print("✓ test_dispatch_binary_2d_tensor")
+
+    print("\nAll 22 dtype_dispatch tests passed!")
