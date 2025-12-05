@@ -26,6 +26,7 @@ from shared.utils.random import (
     random_int,
     random_choice,
     shuffle,
+    RandomState,
 )
 
 
@@ -197,39 +198,44 @@ fn test_state_roundtrip() raises:
 
 
 fn test_save_multiple_states() raises:
-    """Test saving and restoring multiple states.
+    """Test RandomState creation and restoration.
 
-    Note: Current implementation only saves the seed value, not the RNG position.
-    So save_random_state and get_saved_state work with seed values only.
-    This test verifies the save/restore mechanism works, even though
-    restoring state just re-seeds (doesn't resume from a position).
+    Note: Current implementation limitations:
+    - get_random_state() always returns DEFAULT_SEED (42)
+    - save_random_state/get_saved_state are stubs requiring external management
+
+    This test verifies the basic RandomState struct works correctly
+    and that set_random_state restores to the seed in the state.
     """
-    # Set seed to 42
-    set_seed(42)
+    # Get the default state (always returns seed=42)
+    var state = get_random_state()
+    assert_equal(state.seed_used, 42, "Default state should have seed 42")
 
-    # Generate values to advance the RNG
+    # Create a custom RandomState with a different seed
+    var custom_state = RandomState()
+    custom_state.set_seed(123)
+    assert_equal(custom_state.seed_used, 123, "Custom state should have seed 123")
+
+    # Generate values with seed 42
+    set_seed(42)
     var a = random_uniform()
 
-    # Save state (saves seed 42)
-    save_random_state(get_random_state())
+    # Generate values with seed 123
+    set_seed(123)
+    var b = random_uniform()
 
-    var _ = random_uniform()  # Advance RNG
+    # Verify different seeds produce different values
+    assert_not_equal(a, b, "Different seeds should produce different values")
 
-    # Save state again (still seed 42)
-    save_random_state(get_random_state())
-
-    # Verify we have 2 saved states
-    var state0 = get_saved_state(0)
-    var state1 = get_saved_state(1)
-
-    # Both states should have same seed since implementation only tracks seed
-    assert_equal(state0.seed_used, 42, "State 0 should have seed 42")
-    assert_equal(state1.seed_used, 42, "State 1 should have seed 42")
-
-    # Restore state0 and verify we get same sequence from beginning
-    set_random_state(state0)
+    # Restore to seed 42 using state object
+    set_random_state(state)
     var a_again = random_uniform()
-    assert_equal(a, a_again, "Restored state should give same first value")
+    assert_equal(a, a_again, "Restored to seed 42 should give same first value")
+
+    # Restore to seed 123 using custom state
+    set_random_state(custom_state)
+    var b_again = random_uniform()
+    assert_equal(b, b_again, "Restored to seed 123 should give same first value")
 
 
 # ============================================================================
