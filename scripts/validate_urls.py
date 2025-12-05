@@ -32,6 +32,8 @@ SKIP_URLS = {
     "https://github.com/user/repo.git",  # Example in comments
     # Template URLs (contain placeholders)
     "https://github.com/modularml/mojo/issues/",  # Template in batch_planning_docs.py
+    # External documentation (timeout issues in CI)
+    "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",  # CI timeout
 }
 
 # URL pattern to match HTTP/HTTPS URLs
