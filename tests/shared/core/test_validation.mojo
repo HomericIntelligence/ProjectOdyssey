@@ -324,3 +324,41 @@ fn test_validate_4d_input_5d() raises:
         )
 
     assert_true(error_raised, "Error should be raised for non-4D tensor")
+
+
+fn main() raises:
+    """Run all tensor validation tests."""
+    print("Running tensor validation tests...")
+
+    # validate_tensor_shape tests
+    test_validate_tensor_shape_1d_correct()
+    test_validate_tensor_shape_2d_correct()
+    test_validate_tensor_shape_3d_correct()
+    test_validate_tensor_shape_wrong_dimension_count()
+    test_validate_tensor_shape_wrong_dimension_value()
+
+    # validate_tensor_dtype tests
+    test_validate_tensor_dtype_float32_correct()
+    test_validate_tensor_dtype_float64_correct()
+    test_validate_tensor_dtype_int32_correct()
+    test_validate_tensor_dtype_mismatch()
+
+    # validate_matching_tensors tests
+    test_validate_matching_tensors_same_shape_dtype()
+    test_validate_matching_tensors_different_dtype()
+    test_validate_matching_tensors_different_shape()
+    test_validate_matching_tensors_different_ndim()
+
+    # validate_2d_input tests
+    test_validate_2d_input_correct()
+    test_validate_2d_input_1d()
+    test_validate_2d_input_3d()
+    test_validate_2d_input_4d()
+
+    # validate_4d_input tests
+    test_validate_4d_input_correct()
+    test_validate_4d_input_2d()
+    test_validate_4d_input_3d()
+    test_validate_4d_input_5d()
+
+    print("All tensor validation tests passed!")
