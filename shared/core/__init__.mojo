@@ -233,6 +233,14 @@ from .normalization import (
     instance_norm_backward,
 )
 
+from .normalize_ops import (
+    normalize_rgb,
+    sqrt_scalar_f32,
+    sqrt_scalar_f64,
+    pow_scalar_f32,
+    pow_scalar_f64,
+)
+
 # ============================================================================
 # Attention Mechanisms
 # ============================================================================
