@@ -20,9 +20,9 @@ Tools integrate directly into the paper implementation workflow:
 ```text
 Developer Workflow:
 1. Create paper structure → tools/paper-scaffold/
-2. Write tests → tools/test-utils/ (fixtures, generators)
+2. Write tests → tests/shared/fixtures/ (fixtures, generators)
 3. Implement model → (direct Mojo implementation)
-4. Benchmark performance → tools/benchmarking/
+4. Benchmark performance → shared/benchmarking/
 5. Generate boilerplate → tools/codegen/
 ```text
 
@@ -53,8 +53,7 @@ Tools can be integrated into GitHub Actions workflows:
 # .github/workflows/benchmark.yml
 - name: Run performance benchmarks
   run: |
-    mojo tools/benchmarking/model_bench.mojo
-    python tools/benchmarking/report_generator.py
+    pixi run mojo test benchmarks/
 ```text
 
 #### Example: Code Generation Validation
@@ -72,8 +71,8 @@ Tools can be integrated into GitHub Actions workflows:
 
 - `pre-commit.yml` - Could integrate validation tools
 - `test-agents.yml` - Could use test utilities
-- `unit-tests.yml` - Could leverage test-utils fixtures
-- `benchmark.yml` - Could use benchmarking tools
+- `unit-tests.yml` - Leverages tests/shared/fixtures/
+- `benchmark.yml` - Uses shared/benchmarking/
 - `validate-configs.yml` - Could use validation utilities
 
 ### 4. Agent System Integration
@@ -95,7 +94,7 @@ Tools support agent-driven workflows (`.claude/agents/`):
 - [`generate_boilerplate`](../skills/tier-1/generate-boilerplate/SKILL.md)
   → Wraps `tools/codegen/` for agent use
 - [`run_tests`](../skills/tier-1/run-tests/SKILL.md)
-  → Uses `tools/test-utils/` for test execution
+  → Uses `tests/shared/fixtures/` for test execution
 ```text
 
 ## Usage Scenarios
@@ -120,7 +119,7 @@ python tools/codegen/mojo_boilerplate.py \
 
 # 3. Use test utilities
 # (Import fixtures in test files)
-from tools.test_utils import generate_batch, ModelFixture
+from tests.shared.fixtures import generate_batch, ModelFixture
 ```text
 
 ### Scenario 2: Running Benchmarks
@@ -128,15 +127,11 @@ from tools.test_utils import generate_batch, ModelFixture
 ### Workflow
 
 ```bash
-# 1. Benchmark model performance
-mojo tools/benchmarking/model_bench.mojo \
-    --paper lenet5 \
-    --batch-sizes 1,8,32,128
+# 1. Run benchmarks
+pixi run mojo test benchmarks/
 
-# 2. Generate report
-python tools/benchmarking/report_generator.py \
-    --input benchmarks/lenet5.json \
-    --output benchmarks/lenet5_report.html
+# 2. Use shared benchmarking module in code
+from shared.benchmarking import benchmark_function, print_benchmark_report
 ```text
 
 ### Scenario 3: Test-Driven Development
@@ -144,22 +139,25 @@ python tools/benchmarking/report_generator.py \
 ### Workflow
 
 ```mojo
-// 1. Use test data generators
-from tools.test_utils import generate_batch
+// 1. Use test fixtures
+from tests.shared.fixtures import create_test_tensor
 
-fn test_forward_pass():
-    let batch = generate_batch(shape=(32, 3, 28, 28))
-    let model = MyModel()
-    let output = model.forward(batch)
-    assert output.shape == (32, 10)
+fn test_forward_pass() raises:
+    var batch = create_test_tensor(List[Int](32, 3, 28, 28))
+    var model = MyModel()
+    var output = model.forward(batch)
+    assert output.shape()[0] == 32
 
-// 2. Use performance utilities
-from tools.test_utils import measure_latency
+// 2. Use shared benchmarking
+from shared.benchmarking import benchmark_function
 
-fn test_inference_speed():
-    let model = MyModel()
-    let latency = measure_latency(model, num_runs=100)
-    assert latency < 10.0  # milliseconds
+fn test_inference_speed() raises:
+    fn run_inference() raises:
+        var model = MyModel()
+        _ = model.forward(create_test_tensor(List[Int](1, 3, 28, 28)))
+
+    var result = benchmark_function(run_inference, warmup_iters=10, measure_iters=100)
+    assert result.mean_latency_ms < 10.0
 ```text
 
 ## Configuration and Setup
@@ -199,12 +197,11 @@ python tools/setup/verify_tools.py
 ```text
 What do you need?
 ├── Create new paper structure → paper-scaffold/scaffold.py
-├── Generate test data → test-utils/data_generators.mojo
-├── Create test fixtures → test-utils/fixtures.mojo
-├── Measure performance → benchmarking/
-│   ├── Model inference → model_bench.mojo
-│   ├── Training speed → training_bench.mojo
-│   └── Memory usage → memory_tracker.mojo
+├── Generate test data → tests/shared/fixtures/data_generators.mojo
+├── Create test fixtures → tests/shared/fixtures/mock_models.mojo
+├── Measure performance → shared/benchmarking/
+│   ├── Benchmark functions → benchmark_function()
+│   └── Print reports → print_benchmark_report()
 └── Generate code → codegen/
     ├── Mojo structs → mojo_boilerplate.py
     ├── Training loops → training_template.py
@@ -286,8 +283,8 @@ ls tools/paper-scaffold/scaffold.py
 export MOJO_PATH=/path/to/ml-odyssey
 
 # Verify imports in Mojo REPL
-mojo
->>> from tools.test_utils import generate_batch
+pixi run mojo
+>>> from tests.shared.fixtures import create_test_tensor
 ```text
 
 ### Permission Issues
@@ -325,15 +322,10 @@ python tools/codegen/training_template.py \
     --output papers/resnet/train.mojo
 
 # 5. Write tests with fixtures
-# Use tools/test-utils/ in test files
+# Use tests/shared/fixtures/ in test files
 
 # 6. Run benchmarks
-mojo tools/benchmarking/model_bench.mojo \
-    --paper resnet
-
-# 7. Generate report
-python tools/benchmarking/report_generator.py \
-    --paper resnet
+pixi run mojo test benchmarks/
 ```text
 
 ## References
