@@ -10,7 +10,7 @@ Modules:
     assertions: Comprehensive assertion functions for testing
     data_generators: Generate synthetic test data (random tensors, classification datasets)
     gradient_checker: Validate backward passes using finite differences
-    test_models: Consolidated test model implementations (SimpleCNN, LinearModel, SimpleMLP, etc.)
+    models: Consolidated test model implementations (SimpleCNN, LinearModel, SimpleMLP, etc.)
     fixtures: Test model factories, tensor utilities, and assertion helpers
 
 Test Models:
@@ -66,7 +66,7 @@ from .data_generators import (
     synthetic_classification_data
 )
 
-from .test_models import (
+from .models import (
     SimpleCNN,
     LinearModel,
     SimpleMLP,
