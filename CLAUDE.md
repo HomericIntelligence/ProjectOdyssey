@@ -1282,6 +1282,14 @@ See `.claude/shared/github-issue-workflow.md` for complete workflow patterns.
      --label "appropriate-label"
    ```
 
+1. **Enable auto-merge:**
+
+   ```bash
+   gh pr merge --auto --rebase
+   ```
+
+   **Always enable auto-merge** so PRs merge automatically once CI passes.
+
 ### Never Push Directly to Main
 
 ❌ **NEVER DO THIS:**
@@ -1299,6 +1307,7 @@ git checkout -b <issue-number>-description
 git commit -m "changes"
 git push -u origin <issue-number>-description
 gh pr create --title "..." --body "Closes #<issue>" --label "..."
+gh pr merge --auto --rebase  # Enable auto-merge
 ```
 
 ### Commit Message Format

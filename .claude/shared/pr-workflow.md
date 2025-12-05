@@ -9,6 +9,7 @@ git checkout -b {issue-number}-{description}
 # Make changes, commit
 git push -u origin {branch-name}
 gh pr create --title "[Type] Description" --body "Closes #{issue}"
+gh pr merge --auto --rebase  # Always enable auto-merge
 ```
 
 ## Verification
@@ -25,6 +26,7 @@ After creating PR:
 - PR must be linked to GitHub issue
 - PR title should be clear and descriptive
 - PR description should summarize changes
+- **Always enable auto-merge** (`gh pr merge --auto --rebase`)
 - Do NOT create PR without linking to issue
 - Do NOT combine multiple issues into a single PR
 
