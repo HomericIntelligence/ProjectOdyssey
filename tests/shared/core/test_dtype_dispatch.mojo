@@ -124,9 +124,9 @@ fn test_dispatch_unary_int32() raises:
     var result = dispatch_unary[identity_op](x)
 
     assert_equal_int(result._numel, 3)
-    assert_equal_int(result._data.bitcast[Int32]()[0], 1)
-    assert_equal_int(result._data.bitcast[Int32]()[1], 2)
-    assert_equal_int(result._data.bitcast[Int32]()[2], 3)
+    assert_equal_int(Int(result._data.bitcast[Int32]()[0]), 1)
+    assert_equal_int(Int(result._data.bitcast[Int32]()[1]), 2)
+    assert_equal_int(Int(result._data.bitcast[Int32]()[2]), 3)
 
 
 fn test_dispatch_unary_uint8() raises:
@@ -141,8 +141,8 @@ fn test_dispatch_unary_uint8() raises:
     var result = dispatch_unary[identity_op](x)
 
     assert_equal_int(result._numel, 2)
-    assert_equal_int(result._data.bitcast[UInt8]()[0], 42)
-    assert_equal_int(result._data.bitcast[UInt8]()[1], 84)
+    assert_equal_int(Int(result._data.bitcast[UInt8]()[0]), 42)
+    assert_equal_int(Int(result._data.bitcast[UInt8]()[1]), 84)
 
 
 # ============================================================================
@@ -219,8 +219,8 @@ fn test_dispatch_binary_int32() raises:
     var result = dispatch_binary[add_op](a, b)
 
     assert_equal_int(result._numel, 2)
-    assert_equal_int(result._data.bitcast[Int32]()[0], 15)
-    assert_equal_int(result._data.bitcast[Int32]()[1], 30)
+    assert_equal_int(Int(result._data.bitcast[Int32]()[0]), 15)
+    assert_equal_int(Int(result._data.bitcast[Int32]()[1]), 30)
 
 
 fn test_dispatch_binary_dtype_mismatch() raises:
@@ -293,8 +293,8 @@ fn test_dispatch_scalar_int32() raises:
     var result = dispatch_scalar[add_op](x, 3.0)
 
     assert_equal_int(result._numel, 2)
-    assert_equal_int(result._data.bitcast[Int32]()[0], 8)
-    assert_equal_int(result._data.bitcast[Int32]()[1], 13)
+    assert_equal_int(Int(result._data.bitcast[Int32]()[0]), 8)
+    assert_equal_int(Int(result._data.bitcast[Int32]()[1]), 13)
 
 
 # ============================================================================
