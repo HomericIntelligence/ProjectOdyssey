@@ -337,11 +337,15 @@ from .loss import (
     cross_entropy,
     smooth_l1_loss,
     hinge_loss,
+    focal_loss,
+    kl_divergence,
     binary_cross_entropy_backward,
     mean_squared_error_backward,
     cross_entropy_backward,
     smooth_l1_loss_backward,
     hinge_loss_backward,
+    focal_loss_backward,
+    kl_divergence_backward,
 )
 
 from .numerical_safety import (
