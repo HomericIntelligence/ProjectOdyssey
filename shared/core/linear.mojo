@@ -96,7 +96,7 @@ fn linear_backward(
         # Backward pass
         var result = linear_backward(grad_output, x, weights)
         var grad_x = result.grad_input
-        var grad_w = result.grad_kernel
+        var grad_w = result.grad_weights
         var grad_b = result.grad_bias
         ```
 
