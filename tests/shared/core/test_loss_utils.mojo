@@ -479,3 +479,60 @@ fn test_negate_tensor_zero() raises:
 
     var result_data = result._data.bitcast[Float32]()
     assert_almost_equal(Float64(result_data[0]), 0.0, tolerance=1e-6)
+
+
+fn main() raises:
+    """Run all loss utility tests."""
+    print("Running loss utility tests...")
+
+    # clip_predictions tests
+    test_clip_predictions_within_range()
+    test_clip_predictions_zero_lower_bound()
+    test_clip_predictions_one_upper_bound()
+    test_clip_predictions_custom_epsilon()
+
+    # create_epsilon_tensor tests
+    test_create_epsilon_tensor_shape()
+    test_create_epsilon_tensor_values()
+
+    # validate_tensor_shapes tests
+    test_validate_tensor_shapes_matching()
+    test_validate_tensor_shapes_mismatch()
+
+    # validate_tensor_dtypes tests
+    test_validate_tensor_dtypes_matching()
+    test_validate_tensor_dtypes_mismatch()
+
+    # compute_one_minus_tensor tests
+    test_compute_one_minus_tensor_half()
+    test_compute_one_minus_tensor_zero()
+    test_compute_one_minus_tensor_one()
+
+    # compute_sign_tensor tests
+    test_compute_sign_tensor_positive()
+    test_compute_sign_tensor_negative()
+    test_compute_sign_tensor_zero()
+
+    # blend_tensors tests
+    test_blend_tensors_all_first()
+    test_blend_tensors_all_second()
+    test_blend_tensors_mixed()
+
+    # compute_difference tests
+    test_compute_difference_basic()
+    test_compute_difference_shape_mismatch()
+
+    # compute_product tests
+    test_compute_product_basic()
+    test_compute_product_with_zero()
+
+    # compute_ratio tests
+    test_compute_ratio_basic()
+    test_compute_ratio_zero_denominator()
+
+    # negate_tensor tests
+    test_negate_tensor_positive()
+    test_negate_tensor_negative()
+    test_negate_tensor_zero()
+
+    print("All loss utility tests passed!")
