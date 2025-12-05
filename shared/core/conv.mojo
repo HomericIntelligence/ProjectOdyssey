@@ -207,7 +207,7 @@ fn conv2d_backward(
         # Backward pass
         var result = conv2d_backward(grad_output, x, kernel, stride, padding)
         var grad_x = result.grad_input
-        var grad_k = result.grad_kernel
+        var grad_k = result.grad_weights
         var grad_b = result.grad_bias
         ```
 
@@ -352,7 +352,7 @@ fn conv2d_no_bias_backward(
     var result = conv2d_backward(grad_output, x, kernel, stride, padding)
     # Copy needed fields before result is destroyed (ExTensor is ImplicitlyCopyable)
     var grad_input_copy = result.grad_input
-    var grad_kernel_copy = result.grad_kernel
+    var grad_kernel_copy = result.grad_weights
     return Conv2dNoBiasBackwardResult(grad_input_copy^, grad_kernel_copy^)
 
 
@@ -538,7 +538,7 @@ fn depthwise_conv2d_backward(
         # Backward pass
         var result = depthwise_conv2d_backward(grad_output, x, kernel, stride, padding)
         var grad_x = result.grad_input
-        var grad_k = result.grad_kernel
+        var grad_k = result.grad_weights
         var grad_b = result.grad_bias
         ```
 
@@ -669,7 +669,7 @@ fn depthwise_conv2d_no_bias_backward(
     var result = depthwise_conv2d_backward(grad_output, x, kernel, stride, padding)
     # Copy needed fields before result is destroyed (ExTensor is ImplicitlyCopyable)
     var grad_input_copy = result.grad_input
-    var grad_kernel_copy = result.grad_kernel
+    var grad_kernel_copy = result.grad_weights
     return DepthwiseConv2dNoBiasBackwardResult(grad_input_copy^, grad_kernel_copy^)
 
 
@@ -841,15 +841,15 @@ fn depthwise_separable_conv2d_backward(
         grad_output, depthwise_output, pointwise_kernel, stride=1, padding=0
     )
     var grad_depthwise_output = pointwise_result.grad_input
-    var grad_pointwise_kernel = pointwise_result.grad_kernel
+    var grad_pointwise_kernel = pointwise_result.grad_weights
     var grad_bias = pointwise_result.grad_bias
 
     # Backward through depthwise convolution
     var depthwise_result = depthwise_conv2d_no_bias_backward(
         grad_depthwise_output, x, depthwise_kernel, stride, padding
     )
-    var grad_input = depthwise_result.grad_input
-    var grad_depthwise_kernel = depthwise_result.grad_kernel
+    var grad_input = depthwise_result.grad_a
+    var grad_depthwise_kernel = depthwise_result.grad_b
 
     return DepthwiseSeparableConv2dBackwardResult(
         grad_input, grad_depthwise_kernel, grad_pointwise_kernel, grad_bias
@@ -886,8 +886,8 @@ fn depthwise_separable_conv2d_no_bias_backward(
     var pointwise_result = conv2d_no_bias_backward(
         grad_output, depthwise_output, pointwise_kernel, stride=1, padding=0
     )
-    var grad_depthwise_output = pointwise_result.grad_input
-    var grad_pointwise_kernel = pointwise_result.grad_kernel
+    var grad_depthwise_output = pointwise_result.grad_a
+    var grad_pointwise_kernel = pointwise_result.grad_b
 
     # Backward through depthwise convolution
     var depthwise_result = depthwise_conv2d_no_bias_backward(
@@ -895,7 +895,7 @@ fn depthwise_separable_conv2d_no_bias_backward(
     )
 
     return DepthwiseSeparableConv2dNoBiasBackwardResult(
-        depthwise_result.grad_input,
-        depthwise_result.grad_kernel,
+        depthwise_result.grad_a,
+        depthwise_result.grad_b,
         grad_pointwise_kernel,
     )

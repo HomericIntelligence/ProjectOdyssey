@@ -168,7 +168,7 @@ struct Conv2dLayer(Copyable, Movable):
         )
         # Return the result struct fields directly
         # The Conv2dBackwardResult struct is only movable, so we return its fields
-        return (result.grad_input, result.grad_kernel, result.grad_bias)
+        return (result.grad_input, result.grad_weights, result.grad_bias)
 
     fn parameters(self) raises -> List[ExTensor]:
         """Get list of trainable parameters.
