@@ -218,7 +218,7 @@ fn test_simple_mlp_forward_1_hidden() raises:
 
     # Test with List[Float32] input
     var input = List[Float32](10)
-    for i in range(10):
+    for _ in range(10):
         input.append(1.0)
 
     var output = mlp.forward(input)
@@ -230,7 +230,7 @@ fn test_simple_mlp_forward_2_hidden() raises:
     var mlp = SimpleMLP(10, 20, 5, num_hidden_layers=2)
 
     var input = List[Float32](10)
-    for i in range(10):
+    for _ in range(10):
         input.append(1.0)
 
     var output = mlp.forward(input)
@@ -243,7 +243,7 @@ fn test_simple_mlp_forward_extensor_1_hidden() raises:
     var input_shape = List[Int](10)
     var input = zeros(input_shape, DType.float32)
 
-    var output = mlp.forward(mut mlp, input)
+    var output = mlp.forward(input)
 
     # Check output shape
     assert_equal(len(output._shape), 1)
@@ -259,7 +259,7 @@ fn test_simple_mlp_forward_extensor_2_hidden() raises:
     var input_shape = List[Int](10)
     var input = ones(input_shape, DType.float32)
 
-    var output = mlp.forward(mut mlp, input)
+    var output = mlp.forward(input)
 
     # Check output shape
     assert_equal(len(output._shape), 1)
@@ -390,7 +390,7 @@ fn test_mock_layer_forward_scale() raises:
     var layer = MockLayer(5, 5, scale=2.0)
 
     var input = List[Float32]()
-    for i in range(5):
+    for _ in range(5):
         input.append(1.0)
 
     var output = layer.forward(input)
@@ -444,7 +444,7 @@ fn test_simple_linear_model_forward() raises:
     var model = SimpleLinearModel(10, 5, init_value=0.1)
 
     var input = List[Float32]()
-    for i in range(10):
+    for _ in range(10):
         input.append(1.0)
 
     var output = model.forward(input)
@@ -463,7 +463,7 @@ fn test_simple_linear_model_no_bias() raises:
     var model = SimpleLinearModel(10, 5, use_bias=False, init_value=0.1)
 
     var input = List[Float32]()
-    for i in range(10):
+    for _ in range(10):
         input.append(1.0)
 
     var output = model.forward(input)
@@ -589,7 +589,7 @@ fn test_mlp_with_different_configs() raises:
     assert_equal(mlp_minimal.num_parameters(), 1*1 + 1 + 1*1 + 1)
 
 
-fn main():
+fn main() raises:
     """Run all tests."""
     print("Testing SimpleCNN...")
     test_simple_cnn_initialization()
