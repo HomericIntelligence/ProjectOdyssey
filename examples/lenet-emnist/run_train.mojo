@@ -104,8 +104,8 @@ fn compute_gradients(
 
     Returns:
         Tuple of (loss_value, success_flag):
-        - loss_value: Unscaled loss for logging
-        - success_flag: True if update succeeded, False on gradient overflow
+        - loss_value: Unscaled loss for logging.
+        - success_flag: True if update succeeded, False on gradient overflow.
     """
     # ========== Forward Pass (with caching) ==========
 
@@ -194,15 +194,15 @@ fn compute_gradients(
     # ========== Gradient Scaling and Validation ==========
 
     # Unscale gradients for mixed-precision training
-    var unscaled_conv1_grad_kernel = precision_config.unscale_gradients(conv1_grads.grad_kernel)
+    var unscaled_conv1_grad_kernel = precision_config.unscale_gradients(conv1_grads.grad_weights)
     var unscaled_conv1_grad_bias = precision_config.unscale_gradients(conv1_grads.grad_bias)
-    var unscaled_conv2_grad_kernel = precision_config.unscale_gradients(conv2_grads.grad_kernel)
+    var unscaled_conv2_grad_kernel = precision_config.unscale_gradients(conv2_grads.grad_weights)
     var unscaled_conv2_grad_bias = precision_config.unscale_gradients(conv2_grads.grad_bias)
-    var unscaled_fc1_grad_kernel = precision_config.unscale_gradients(fc1_grads.grad_kernel)
+    var unscaled_fc1_grad_kernel = precision_config.unscale_gradients(fc1_grads.grad_weights)
     var unscaled_fc1_grad_bias = precision_config.unscale_gradients(fc1_grads.grad_bias)
-    var unscaled_fc2_grad_kernel = precision_config.unscale_gradients(fc2_grads.grad_kernel)
+    var unscaled_fc2_grad_kernel = precision_config.unscale_gradients(fc2_grads.grad_weights)
     var unscaled_fc2_grad_bias = precision_config.unscale_gradients(fc2_grads.grad_bias)
-    var unscaled_fc3_grad_kernel = precision_config.unscale_gradients(fc3_grads.grad_kernel)
+    var unscaled_fc3_grad_kernel = precision_config.unscale_gradients(fc3_grads.grad_weights)
     var unscaled_fc3_grad_bias = precision_config.unscale_gradients(fc3_grads.grad_bias)
 
     # Check if any gradients have NaN/Inf (overflow detection)
