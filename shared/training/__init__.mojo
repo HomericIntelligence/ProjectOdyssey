@@ -185,11 +185,11 @@ struct TrainingLoop[M: Model & Movable, L: Loss & Movable, O: Optimizer & Movabl
         var loop = TrainingLoop[SimpleMLP, MSELoss, SGD](model, optimizer, loss_fn)
         ```
     """
-    var model: M
-    var optimizer: O
-    var loss_fn: L
+    var model: Self.M
+    var optimizer: Self.O
+    var loss_fn: Self.L
 
-    fn __init__(out self, var model: M, var optimizer: O, var loss_fn: L):
+    fn __init__(out self, var model: Self.M, var optimizer: Self.O, var loss_fn: Self.L):
         """Initialize training loop with generic components.
 
         Args:

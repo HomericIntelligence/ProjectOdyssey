@@ -147,12 +147,12 @@ struct ConditionalTransform[T: Transform & Copyable & Movable](Transform, Copyab
     """
 
     var predicate: fn (ExTensor) raises -> Bool
-    var transform: T
+    var transform: Self.T
 
     fn __init__(
         out self,
         predicate: fn (ExTensor) raises -> Bool,
-        var transform: T,
+        var transform: Self.T,
     ):
         """Create conditional transform.
 
