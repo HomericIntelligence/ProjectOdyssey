@@ -58,14 +58,14 @@ struct BaseLoader[D: Dataset & Copyable & Movable](Copyable, Movable):
         D: Dataset type that conforms to the Dataset trait and is Copyable & Movable.
     """
 
-    var dataset: D
+    var dataset: Self.D
     var batch_size: Int
     var drop_last: Bool
     var _len: Int
 
     fn __init__(
         out self,
-        var dataset: D,
+        var dataset: Self.D,
         batch_size: Int = 1,
         drop_last: Bool = False,
     ) raises:
@@ -122,8 +122,8 @@ struct BatchLoader[D: Dataset & Copyable & Movable, S: Sampler & Copyable & Mova
 
     fn __init__(
         out self,
-        var dataset: D,
-        var sampler: S,
+        var dataset: Self.D,
+        var sampler: Self.S,
         batch_size: Int = 32,
         shuffle: Bool = False,
         drop_last: Bool = False,
