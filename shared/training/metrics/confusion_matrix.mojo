@@ -59,8 +59,8 @@ struct ConfusionMatrix(Metric):
     fn __init__(out self, num_classes: Int, class_names: List[String] = List[String]()) raises:
         """Initialize NxN confusion matrix.
 
-        Args:.            `num_classes`: Number of classes.
-            `class_names`: Optional list of class names (default: empty)
+        Args:.            num_classes: Number of classes.
+            class_names: Optional list of class names (default: empty)
 
         Raises:
             Error: If tensor size exceeds memory limits
@@ -82,8 +82,8 @@ struct ConfusionMatrix(Metric):
     fn update(mut self, predictions: ExTensor, labels: ExTensor) raises:
         """Update confusion matrix with new batch of predictions.
 
-        Args:.            `predictions`: Predicted class indices [batch_size] or logits [batch_size, num_classes]
-            `labels`: True class labels [batch_size]
+        Args:.            predictions: Predicted class indices [batch_size] or logits [batch_size, num_classes]
+            labels: True class labels [batch_size]
 
         Raises:.            Error: If shapes are incompatible or labels out of range.
         """

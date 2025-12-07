@@ -124,8 +124,8 @@ struct TrainingMetrics(Copyable, Movable):
     fn update_train_metrics(mut self, loss: Float64, accuracy: Float64):
         """Update training metrics for current batch.
 
-        Args:.            `loss`: Current batch loss.
-            `accuracy`: Current batch accuracy.
+        Args:.            loss: Current batch loss.
+            accuracy: Current batch accuracy.
         """
         self.train_loss = loss
         self.train_accuracy = accuracy
@@ -133,8 +133,8 @@ struct TrainingMetrics(Copyable, Movable):
     fn update_val_metrics(mut self, loss: Float64, accuracy: Float64):
         """Update validation metrics and track best results.
 
-        Args:.            `loss`: Validation loss.
-            `accuracy`: Validation accuracy.
+        Args:.            loss: Validation loss.
+            accuracy: Validation accuracy.
         """
         self.val_loss = loss
         self.val_accuracy = accuracy
@@ -191,7 +191,7 @@ trait Trainer:
     fn train(mut self, num_epochs: Int) raises:
         """Execute training loop for specified number of epochs.
 
-        Args:.            `num_epochs`: Number of epochs to train.
+        Args:.            num_epochs: Number of epochs to train.
 
         Raises:.            Error if training fails.
         """
@@ -209,8 +209,8 @@ trait Trainer:
     fn fit(mut self, num_epochs: Int, validate_every: Int = 1) raises:
         """Train model with periodic validation.
 
-        Args:.            `num_epochs`: Number of epochs to train.
-            `validate_every`: Validate every N epochs (default=1)
+        Args:.            num_epochs: Number of epochs to train.
+            validate_every: Validate every N epochs (default=1)
 
         Raises:.            Error if training or validation fails.
         """
@@ -229,8 +229,8 @@ struct DataBatch(Copyable, Movable):
     fn __init__(out self, var data: ExTensor, var labels: ExTensor):
         """Initialize data batch.
 
-        Args:.            `data`: Input features tensor (ownership transferred).
-            `labels`: Labels tensor (ownership transferred).
+        Args:.            data: Input features tensor (ownership transferred).
+            labels: Labels tensor (ownership transferred).
         """
         self.data = data^
         self.labels = labels^
@@ -254,9 +254,9 @@ struct DataLoader(Copyable, Movable):
     fn __init__(out self, var data: ExTensor, var labels: ExTensor, batch_size: Int):
         """Initialize data loader.
 
-        Args:.            `data`: Full dataset features (ownership transferred).
-            `labels`: Full dataset labels (ownership transferred).
-            `batch_size`: Batch size.
+        Args:.            data: Full dataset features (ownership transferred).
+            labels: Full dataset labels (ownership transferred).
+            batch_size: Batch size.
         """
         self.data = data^
         self.labels = labels^

@@ -51,7 +51,7 @@ struct RandomTransformBase(Copyable, Movable):
     use this pattern.
 
     Fields:
-        `p`: Probability of applying the transform (0.0 to 1.0).
+        p: Probability of applying the transform (0.0 to 1.0).
 
     Example:
         var base = RandomTransformBase(0.5)

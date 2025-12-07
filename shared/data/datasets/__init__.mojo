@@ -3,14 +3,14 @@
 Provides high-level dataset interfaces for common ML datasets including CIFAR-10.
 
 Modules:
-    `cifar10`: CIFAR-10 dataset wrapper for image classification
+    cifar10: CIFAR-10 dataset wrapper for image classification
 
 Classes:
-    `Dataset`: Base trait for all datasets
-    `ExTensorDataset`: In-memory tensor dataset
-    `TensorDataset`: Alias for ExTensorDataset
-    `FileDataset`: Lazy-loading file-based dataset
-    `CIFAR10Dataset`: High-level interface for CIFAR-10 data access
+    Dataset: Base trait for all datasets
+    ExTensorDataset: In-memory tensor dataset
+    TensorDataset: Alias for ExTensorDataset
+    FileDataset: Lazy-loading file-based dataset
+    CIFAR10Dataset: High-level interface for CIFAR-10 data access
 
 Example:
     from shared.data.datasets import CIFAR10Dataset, TensorDataset

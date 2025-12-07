@@ -54,7 +54,7 @@ struct IdentityTransform(Transform, Copyable, Movable):
     fn __call__(self, data: ExTensor) raises -> ExTensor:
         """Apply identity transform (passthrough).
 
-        Args:.            `data`: Input tensor.
+        Args:.            data: Input tensor.
 
         Returns:.            Input tensor unchanged.
         """
@@ -96,7 +96,7 @@ struct LambdaTransform(Transform, Copyable, Movable):
     fn __call__(self, data: ExTensor) raises -> ExTensor:
         """Apply function to each element.
 
-        Args:.            `data`: Input tensor.
+        Args:.            data: Input tensor.
 
         Returns:.            Transformed tensor with function applied to each element.
         """
@@ -151,7 +151,7 @@ struct ConditionalTransform[T: Transform & Copyable & Movable](Transform, Copyab
     fn __call__(self, data: ExTensor) raises -> ExTensor:
         """Apply transform if predicate is true.
 
-        Args:.            `data`: Input tensor.
+        Args:.            data: Input tensor.
 
         Returns:.            Transformed tensor if predicate true, otherwise original.
         """
@@ -201,7 +201,7 @@ struct ClampTransform(Transform, Copyable, Movable):
     fn __call__(self, data: ExTensor) raises -> ExTensor:
         """Clamp all values to [min_val, max_val].
 
-        Args:.            `data`: Input tensor.
+        Args:.            data: Input tensor.
 
         Returns:.            ExTensor with all values clamped to range.
         """
@@ -253,7 +253,7 @@ struct DebugTransform(Transform, Copyable, Movable):
     fn __call__(self, data: ExTensor) raises -> ExTensor:
         """Print tensor info and return unchanged.
 
-        Args:.            `data`: Input tensor.
+        Args:.            data: Input tensor.
 
         Returns:.            Input tensor unchanged.
         """
@@ -429,7 +429,7 @@ struct SequentialTransform(Transform, Copyable, Movable):
     fn __call__(self, data: ExTensor) raises -> ExTensor:
         """Apply all transforms sequentially.
 
-        Args:.            `data`: Input tensor.
+        Args:.            data: Input tensor.
 
         Returns:.            ExTensor after all transforms applied.
         """
@@ -476,7 +476,7 @@ struct BatchTransform(Copyable, Movable):
     fn __call__(self, batch: List[ExTensor]) raises -> List[ExTensor]:
         """Apply transform to each tensor in batch.
 
-        Args:.            `batch`: List of input tensors.
+        Args:.            batch: List of input tensors.
 
         Returns:.            List of transformed tensors (same order as input).
         """
@@ -514,7 +514,7 @@ struct ToFloat32(Transform, Copyable, Movable):
     fn __call__(self, data: ExTensor) raises -> ExTensor:
         """Convert to Float32.
 
-        Args:.            `data`: Input tensor.
+        Args:.            data: Input tensor.
 
         Returns:.            ExTensor with all values as Float32.
         """
@@ -549,7 +549,7 @@ struct ToInt32(Transform, Copyable, Movable):
     fn __call__(self, data: ExTensor) raises -> ExTensor:
         """Convert to Int32 (truncate).
 
-        Args:.            `data`: Input tensor.
+        Args:.            data: Input tensor.
 
         Returns:.            ExTensor with all values truncated to Int32.
 
@@ -580,8 +580,8 @@ fn apply_to_tensor(
     Helper function for creating ad-hoc transforms without.
     defining a transform struct.
 
-    Args:.        `data`: Input tensor.
-        `func`: Function to apply to each element.
+    Args:.        data: Input tensor.
+        func: Function to apply to each element.
 
     Returns:.        Transformed tensor.
 
@@ -599,7 +599,7 @@ fn compose_transforms(var transforms: List[AnyTransform]) raises -> SequentialTr
 
     Convenience function for building transform pipelines.
 
-    Args:.        `transforms`: List of transforms to compose.
+    Args:.        transforms: List of transforms to compose.
 
     Returns:.        SequentialTransform that applies all transforms in order.
 

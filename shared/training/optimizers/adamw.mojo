@@ -51,16 +51,16 @@ fn adamw_step(
     gradient-based update and applied directly to the parameters.
 
     Args:
-        `params`: Model parameters to update.
-        `gradients`: Gradients of loss with respect to params.
-        `m`: First moment estimates (exponential moving average of gradients)
-        `v`: Second moment estimates (exponential moving average of squared gradients)
-        `t`: Current timestep (starts at 1, increments each step)
-        `learning_rate`: Step size for parameter updates.
-        `beta1`: Exponential decay rate for first moment (default: 0.9)
-        `beta2`: Exponential decay rate for second moment (default: 0.999)
-        `epsilon`: Small constant for numerical stability (default: 1e-8)
-        `weight_decay`: Decoupled weight decay factor (default: 0.01)
+        params: Model parameters to update.
+        gradients: Gradients of loss with respect to params.
+        m: First moment estimates (exponential moving average of gradients)
+        v: Second moment estimates (exponential moving average of squared gradients)
+        t: Current timestep (starts at 1, increments each step)
+        learning_rate: Step size for parameter updates.
+        beta1: Exponential decay rate for first moment (default: 0.9)
+        beta2: Exponential decay rate for second moment (default: 0.999)
+        epsilon: Small constant for numerical stability (default: 1e-8)
+        weight_decay: Decoupled weight decay factor (default: 0.01)
 
     Returns:
         Tuple of (new_params, new_m, new_v)
@@ -180,12 +180,12 @@ fn adamw_step_simple(
         params = params - 0.01 * params  # Decoupled weight decay
 
     Args:
-        `params`: Model parameters to update.
-        `gradients`: Gradients of loss with respect to params.
-        `m`: First moment estimate.
-        `v`: Second moment estimate.
-        `t`: Current timestep (starts at 1)
-        `learning_rate`: Step size for parameter updates.
+        params: Model parameters to update.
+        gradients: Gradients of loss with respect to params.
+        m: First moment estimate.
+        v: Second moment estimate.
+        t: Current timestep (starts at 1)
+        learning_rate: Step size for parameter updates.
 
     Returns:
         Tuple of (new_params, new_m, new_v)

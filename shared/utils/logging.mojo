@@ -337,8 +337,8 @@ struct Logger:
 fn get_logger(name: String, level: Int = LogLevel.INFO) -> Logger:
     """Get or create a named logger.
 
-    Args:.        `name`: Logger name.
-        `level`: Log level threshold (default: INFO)
+    Args:.        name: Logger name.
+        level: Log level threshold (default: INFO)
 
     Returns:.        Logger with specified name and level.
 

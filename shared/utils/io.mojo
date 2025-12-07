@@ -188,7 +188,7 @@ fn _deserialize_checkpoint(content: String) raises -> Checkpoint:
 
 
 fn save_checkpoint(
-    `filepath`: String, checkpoint: Checkpoint, backup: Bool = True
+    filepath: String, checkpoint: Checkpoint, backup: Bool = True
 ) -> Bool:
     """Save model checkpoint to file with optional backup.
 

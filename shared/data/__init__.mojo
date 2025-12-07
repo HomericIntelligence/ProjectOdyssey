@@ -3,8 +3,8 @@
 Provides data loaders for common ML datasets and utilities for handling various data formats.
 
 Modules:
-    `formats`: Low-level data format loaders (IDX, CIFAR, etc.)
-    `datasets`: High-level dataset interfaces (CIFAR-10, EMNIST, etc.)
+    formats: Low-level data format loaders (IDX, CIFAR, etc.)
+    datasets: High-level dataset interfaces (CIFAR-10, EMNIST, etc.)
 
 Architecture:
     - `formats` provides low-level file I/O and format parsing

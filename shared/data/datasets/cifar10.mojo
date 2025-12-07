@@ -9,7 +9,7 @@ CIFAR-10 Properties:
     - Test: 10,000 images
 
 Architecture:
-    - `CIFAR10Dataset`: Main struct providing dataset access
+    - CIFAR10Dataset: Main struct providing dataset access
     - Lazy loading: Data loaded on-demand for memory efficiency
     - Train/test splits: Separate methods for accessing different portions
     - Iterator support: Can be used with data loaders

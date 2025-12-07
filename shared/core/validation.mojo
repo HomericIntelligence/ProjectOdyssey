@@ -5,11 +5,11 @@ These utilities are used throughout the library to validate tensor arguments and
 detect shape/dtype mismatches early.
 
 Functions:
-    `validate_tensor_shape`: Validate tensor has expected shape
-    `validate_tensor_dtype`: Validate tensor has expected dtype
-    `validate_matching_tensors`: Validate two tensors have matching shape and dtype
-    `validate_2d_input`: Validate tensor is 2D
-    `validate_4d_input`: Validate tensor is 4D
+    validate_tensor_shape: Validate tensor has expected shape
+    validate_tensor_dtype: Validate tensor has expected dtype
+    validate_matching_tensors: Validate two tensors have matching shape and dtype
+    validate_2d_input: Validate tensor is 2D
+    validate_4d_input: Validate tensor is 4D
 """
 
 from .extensor import ExTensor
@@ -24,9 +24,9 @@ fn validate_tensor_shape(
     an error with a descriptive message including the tensor name.
 
     Args:
-        `tensor`: The tensor to validate.
-        `expected_shape`: The expected shape as a List[Int].
-        `name`: The name of the tensor (for error messages).
+        tensor: The tensor to validate.
+        expected_shape: The expected shape as a List[Int].
+        name: The name of the tensor (for error messages).
 
     Raises:
         Error: If the tensor shape does not match the expected shape.
@@ -73,9 +73,9 @@ fn validate_tensor_dtype(
     an error with a descriptive message including the tensor name.
 
     Args:
-        `tensor`: The tensor to validate.
-        `expected_dtype`: The expected data type.
-        `name`: The name of the tensor (for error messages).
+        tensor: The tensor to validate.
+        expected_dtype: The expected data type.
+        name: The name of the tensor (for error messages).
 
     Raises:
         Error: If the tensor dtype does not match the expected dtype.
@@ -107,10 +107,10 @@ fn validate_matching_tensors(
     verifying that tensors can be used together in element-wise operations.
 
     Args:
-        `a`: The first tensor.
-        `b`: The second tensor.
-        `a_name`: The name of the first tensor (for error messages).
-        `b_name`: The name of the second tensor (for error messages).
+        a: The first tensor.
+        b: The second tensor.
+        a_name: The name of the first tensor (for error messages).
+        b_name: The name of the second tensor (for error messages).
 
     Raises:
         Error: If tensors have different shapes or dtypes.
@@ -172,8 +172,8 @@ fn validate_2d_input(tensor: ExTensor, name: String) raises:
     """Validate that a tensor is exactly 2-dimensional.
 
     Args:
-        `tensor`: The tensor to validate.
-        `name`: The name of the tensor (for error messages).
+        tensor: The tensor to validate.
+        name: The name of the tensor (for error messages).
 
     Raises:
         Error: If the tensor is not 2D.
@@ -205,8 +205,8 @@ fn validate_4d_input(tensor: ExTensor, name: String) raises:
     """Validate that a tensor is exactly 4-dimensional.
 
     Args:
-        `tensor`: The tensor to validate.
-        `name`: The name of the tensor (for error messages).
+        tensor: The tensor to validate.
+        name: The name of the tensor (for error messages).
 
     Raises:
         Error: If the tensor is not 4D.
@@ -243,7 +243,7 @@ fn _shape_to_string(shape: List[Int]) -> String:
     """Convert a shape list to a string representation.
 
     Args:
-        `shape`: The shape as a List[Int].
+        shape: The shape as a List[Int].
 
     Returns:
         A string like "2, 3, 4" for shape [2, 3, 4].
@@ -262,7 +262,7 @@ fn _dtype_to_string(dtype: DType) -> String:
     """Convert a DType to a readable string representation.
 
     Args:
-        `dtype`: The data type.
+        dtype: The data type.
 
     Returns:
         A string like "float32", "int64", etc.

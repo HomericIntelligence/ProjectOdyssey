@@ -32,15 +32,15 @@ fn batch_norm2d(
     Normalizes activations across the batch dimension for each channel.
     Returns updated running statistics (pure functional - caller must capture).
 
-    Args:.        `x`: Input tensor of shape (batch, channels, height, width)
-        `gamma`: Scale parameter of shape (channels,)
-        `beta`: Shift parameter of shape (channels,)
-        `running_mean`: Running mean of shape (channels,)
-        `running_var`: Running variance of shape (channels,)
-        `training`: If True, use batch statistics and update running stats.
+    Args:.        x: Input tensor of shape (batch, channels, height, width)
+        gamma: Scale parameter of shape (channels,)
+        beta: Shift parameter of shape (channels,)
+        running_mean: Running mean of shape (channels,)
+        running_var: Running variance of shape (channels,)
+        training: If True, use batch statistics and update running stats.
                  If False, use running statistics.
-        `momentum`: Momentum for running statistics update (default: 0.1)
-        `epsilon`: Small constant for numerical stability (default: 1e-5)
+        momentum: Momentum for running statistics update (default: 0.1)
+        epsilon: Small constant for numerical stability (default: 1e-5)
 
     Returns:.        Tuple of (output, new_running_mean, new_running_var):
             - output: Normalized tensor, shape (batch, channels, height, width)
@@ -283,13 +283,13 @@ fn batch_norm2d_backward(
 
     Computes gradients with respect to input, gamma, and beta parameters.
 
-    Args:.        `grad_output`: Gradient w.r.t. output (batch, channels, height, width)
-        `x`: Original input tensor (batch, channels, height, width)
-        `gamma`: Scale parameter (channels,)
-        `running_mean`: Running mean (channels,) - used in inference mode.
-        `running_var`: Running variance (channels,) - used in inference mode.
-        `training`: Whether in training mode (affects gradient computation)
-        `epsilon`: Small constant for numerical stability (default: 1e-5)
+    Args:.        grad_output: Gradient w.r.t. output (batch, channels, height, width)
+        x: Original input tensor (batch, channels, height, width)
+        gamma: Scale parameter (channels,)
+        running_mean: Running mean (channels,) - used in inference mode.
+        running_var: Running variance (channels,) - used in inference mode.
+        training: Whether in training mode (affects gradient computation)
+        epsilon: Small constant for numerical stability (default: 1e-5)
 
     Returns:.        Tuple of (grad_input, grad_gamma, grad_beta):
             - grad_input: Gradient w.r.t. input (batch, channels, height, width)
@@ -689,10 +689,10 @@ fn layer_norm(
     Normalizes activations across the feature dimension for each sample.
     Unlike batch norm, this doesn't require running statistics.
 
-    Args:.        `x`: Input tensor of shape (batch, features) or (batch, channels, height, width)
-        `gamma`: Scale parameter of shape matching last dim(s)
-        `beta`: Shift parameter of shape matching last dim(s)
-        `epsilon`: Small constant for numerical stability (default: 1e-5)
+    Args:.        x: Input tensor of shape (batch, features) or (batch, channels, height, width)
+        gamma: Scale parameter of shape matching last dim(s)
+        beta: Shift parameter of shape matching last dim(s)
+        epsilon: Small constant for numerical stability (default: 1e-5)
 
     Returns:.        Normalized tensor, same shape as input.
 
@@ -888,10 +888,10 @@ fn layer_norm_backward(
 
     Computes gradients with respect to input, gamma, and beta parameters.
 
-    Args:.        `grad_output`: Gradient w.r.t. output, same shape as input
-        `x`: Original input tensor (batch, features) or (batch, channels, height, width)
-        `gamma`: Scale parameter matching normalized dimensions
-        `epsilon`: Small constant for numerical stability (default: 1e-5)
+    Args:.        grad_output: Gradient w.r.t. output, same shape as input
+        x: Original input tensor (batch, features) or (batch, channels, height, width)
+        gamma: Scale parameter matching normalized dimensions
+        epsilon: Small constant for numerical stability (default: 1e-5)
 
     Returns:.        Tuple of (grad_input, grad_gamma, grad_beta):
             - grad_input: Gradient w.r.t. input (same shape as input)
@@ -1343,11 +1343,11 @@ fn group_norm(
     within each group. Works well with small batch sizes where batch norm fails.
 
     Args:
-        `x`: Input tensor of shape (batch, channels, height, width)
-        `num_groups`: Number of groups to divide channels into
-        `gamma`: Scale parameter of shape (channels,)
-        `beta`: Shift parameter of shape (channels,)
-        `epsilon`: Small constant for numerical stability (default: 1e-5)
+        x: Input tensor of shape (batch, channels, height, width)
+        num_groups: Number of groups to divide channels into
+        gamma: Scale parameter of shape (channels,)
+        beta: Shift parameter of shape (channels,)
+        epsilon: Small constant for numerical stability (default: 1e-5)
 
     Returns:
         Normalized tensor, same shape as input.
@@ -1487,11 +1487,11 @@ fn group_norm_backward(
     Computes gradients with respect to input, gamma, and beta parameters.
 
     Args:
-        `grad_output`: Gradient w.r.t. output (batch, channels, height, width)
-        `x`: Original input tensor (batch, channels, height, width)
-        `num_groups`: Number of groups channels were divided into
-        `gamma`: Scale parameter (channels,)
-        `epsilon`: Small constant for numerical stability (default: 1e-5)
+        grad_output: Gradient w.r.t. output (batch, channels, height, width)
+        x: Original input tensor (batch, channels, height, width)
+        num_groups: Number of groups channels were divided into
+        gamma: Scale parameter (channels,)
+        epsilon: Small constant for numerical stability (default: 1e-5)
 
     Returns:
         Tuple of (grad_input, grad_gamma, grad_beta):
@@ -1753,10 +1753,10 @@ fn instance_norm(
     Used in style transfer and image generation models.
 
     Args:
-        `x`: Input tensor of shape (batch, channels, height, width)
-        `gamma`: Scale parameter of shape (channels,)
-        `beta`: Shift parameter of shape (channels,)
-        `epsilon`: Small constant for numerical stability (default: 1e-5)
+        x: Input tensor of shape (batch, channels, height, width)
+        gamma: Scale parameter of shape (channels,)
+        beta: Shift parameter of shape (channels,)
+        epsilon: Small constant for numerical stability (default: 1e-5)
 
     Returns:
         Normalized tensor, same shape as input.
@@ -1913,10 +1913,10 @@ fn instance_norm_backward(
     Computes gradients with respect to input, gamma, and beta parameters.
 
     Args:
-        `grad_output`: Gradient w.r.t. output (batch, channels, height, width)
-        `x`: Original input tensor (batch, channels, height, width)
-        `gamma`: Scale parameter (channels,)
-        `epsilon`: Small constant for numerical stability (default: 1e-5)
+        grad_output: Gradient w.r.t. output (batch, channels, height, width)
+        x: Original input tensor (batch, channels, height, width)
+        gamma: Scale parameter (channels,)
+        epsilon: Small constant for numerical stability (default: 1e-5)
 
     Returns:
         Tuple of (grad_input, grad_gamma, grad_beta):

@@ -81,7 +81,7 @@ fn set_seed(seed: Int):
 
     Setting the same seed ensures reproducible results across runs.
 
-    Args:.        `seed`: Random seed value (0-2147483647)
+    Args:.        seed: Random seed value (0-2147483647)
 
     Example:.        # At start of experiment.
         set_seed(42)
@@ -149,7 +149,7 @@ fn set_random_state(state: RandomState):
     Restores all RNGs to a previously saved state. This ensures that.
     resuming training or validation continues with the same random sequence.
 
-    Args:.        `state`: Previously saved random state.
+    Args:.        state: Previously saved random state.
 
     Example:.        var saved_state = get_random_state()
         # ... do something ...
@@ -164,7 +164,7 @@ fn set_random_state(state: RandomState):
 fn save_random_state(state: RandomState):
     """Save random state to list (for history tracking).
 
-    Args:.        `state`: State to save.
+    Args:.        state: State to save.
 
     Note:
         State saving requires external state management outside this module.
@@ -177,7 +177,7 @@ fn save_random_state(state: RandomState):
 fn get_saved_state(index: Int) -> RandomState:
     """Get previously saved random state by index.
 
-    Args:.        `index`: Index in saved states list.
+    Args:.        index: Index in saved states list.
 
     Returns:.        Saved random state (empty state placeholder).
 
@@ -218,7 +218,7 @@ struct SeedContext(Copyable, Movable):
     fn __init__(out self, seed: Int):
         """Create context manager with new seed.
 
-        Args:.            `seed`: Seed to use within context.
+        Args:.            seed: Seed to use within context.
         """
         self.saved_seed = get_global_seed()
         self.new_seed = seed

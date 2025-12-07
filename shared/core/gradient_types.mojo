@@ -18,8 +18,8 @@ struct GradientPair(Copyable, Movable):
     two inputs (e.g., add_backward, multiply_backward).
 
     Attributes:
-        `grad_a`: Gradient with respect to first input.
-        `grad_b`: Gradient with respect to second input.
+        grad_a: Gradient with respect to first input.
+        grad_b: Gradient with respect to second input.
 
     Examples:
         var grads = add_backward(grad_output, a_shape, b_shape)
@@ -34,8 +34,8 @@ struct GradientPair(Copyable, Movable):
         """Initialize gradient pair.
 
         Args:
-            `grad_a`: Gradient tensor for first input.
-            `grad_b`: Gradient tensor for second input.
+            grad_a: Gradient tensor for first input.
+            grad_b: Gradient tensor for second input.
         """
         self.grad_a = grad_a^
         self.grad_b = grad_b^
@@ -48,9 +48,9 @@ struct GradientTriple(Copyable, Movable):
     three inputs (e.g., linear_backward, conv2d_backward).
 
     Attributes:
-        `grad_input`: Gradient with respect to input activation.
-        `grad_weights`: Gradient with respect to weights.
-        `grad_bias`: Gradient with respect to bias.
+        grad_input: Gradient with respect to input activation.
+        grad_weights: Gradient with respect to weights.
+        grad_bias: Gradient with respect to bias.
 
     Examples:
         var grads = linear_backward(grad_output, x, weights)
@@ -72,9 +72,9 @@ struct GradientTriple(Copyable, Movable):
         """Initialize gradient triple.
 
         Args:
-            `grad_input`: Gradient tensor for input.
-            `grad_weights`: Gradient tensor for weights.
-            `grad_bias`: Gradient tensor for bias.
+            grad_input: Gradient tensor for input.
+            grad_weights: Gradient tensor for weights.
+            grad_bias: Gradient tensor for bias.
         """
         self.grad_input = grad_input^
         self.grad_weights = grad_weights^
@@ -88,10 +88,10 @@ struct GradientQuad(Copyable, Movable):
     four inputs (reserved for future use in complex backward passes).
 
     Attributes:
-        `grad_a`: Gradient with respect to first input.
-        `grad_b`: Gradient with respect to second input.
-        `grad_c`: Gradient with respect to third input.
-        `grad_d`: Gradient with respect to fourth input.
+        grad_a: Gradient with respect to first input.
+        grad_b: Gradient with respect to second input.
+        grad_c: Gradient with respect to third input.
+        grad_d: Gradient with respect to fourth input.
 
     Examples:
         var grads = complex_backward(grad_output, a, b, c, d)
@@ -116,10 +116,10 @@ struct GradientQuad(Copyable, Movable):
         """Initialize gradient quad.
 
         Args:
-            `grad_a`: Gradient tensor for first input.
-            `grad_b`: Gradient tensor for second input.
-            `grad_c`: Gradient tensor for third input.
-            `grad_d`: Gradient tensor for fourth input.
+            grad_a: Gradient tensor for first input.
+            grad_b: Gradient tensor for second input.
+            grad_c: Gradient tensor for third input.
+            grad_d: Gradient tensor for fourth input.
         """
         self.grad_a = grad_a^
         self.grad_b = grad_b^

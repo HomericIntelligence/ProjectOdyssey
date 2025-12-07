@@ -17,7 +17,7 @@ from python import Python
 fn load_default_config(config_type: String) raises -> Config:
     """Load a default configuration file.
 
-    Args:.        `config_type`: Type of config to load (e.g., "training", "model", "data", "paths")
+    Args:.        config_type: Type of config to load (e.g., "training", "model", "data", "paths")
 
     Returns:.        Loaded default configuration.
 
@@ -37,8 +37,8 @@ fn load_paper_config(
 
     Merges: defaults/{config_type}.yaml → papers/{paper_name}/{config_type}.yaml.
 
-    Args:.        `paper_name`: Name of the paper (e.g., "lenet5", "alexnet")
-        `config_type`: Type of config to load (default: "training")
+    Args:.        paper_name: Name of the paper (e.g., "lenet5", "alexnet")
+        config_type: Type of config to load (default: "training")
 
     Returns:.        Merged configuration with paper overrides.
 
@@ -79,8 +79,8 @@ fn load_experiment_config(
     4. Merge: defaults → paper → experiment
     5. Substitute environment variables
 
-    Args:.        `paper_name`: Name of the paper (e.g., "lenet5")
-        `experiment_name`: Name of the experiment (e.g., "baseline", "augmented")
+    Args:.        paper_name: Name of the paper (e.g., "lenet5")
+        experiment_name: Name of the experiment (e.g., "baseline", "augmented")
 
     Returns:.        Complete merged and validated configuration.
 
@@ -141,8 +141,8 @@ fn load_config_with_validation(
 ) raises -> Config:
     """Load configuration with validation of required keys.
 
-    Args:.        `filepath`: Path to configuration file.
-        `required_keys`: List of required configuration keys.
+    Args:.        filepath: Path to configuration file.
+        required_keys: List of required configuration keys.
 
     Returns:.        Loaded and validated configuration.
 
@@ -170,9 +170,9 @@ fn create_experiment_config(
     Creates a new experiment config file that extends the paper config.
     with specified overrides.
 
-    Args:.        `paper_name`: Name of the paper.
-        `experiment_name`: Name of the new experiment.
-        `overrides`: Configuration overrides to apply.
+    Args:.        paper_name: Name of the paper.
+        experiment_name: Name of the new experiment.
+        overrides: Configuration overrides to apply.
 
     Raises:.        Error if experiment already exists or file cannot be written.
 
@@ -198,7 +198,7 @@ fn validate_experiment_config(config: Config) raises:
 
     Checks for common required fields across training, model, and data configs.
 
-    Args:.        `config`: Configuration to validate.
+    Args:.        config: Configuration to validate.
 
     Raises:.        Error if any required field is missing or invalid.
 

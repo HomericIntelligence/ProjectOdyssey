@@ -36,7 +36,7 @@ struct BF8(Stringable, Representable, Copyable, Movable):
     fn __init__(out self, value: UInt8 = 0):
         """Initialize BF8 from raw UInt8 bits.
 
-        Args:.            `value`: Raw 8-bit representation.
+        Args:.            value: Raw 8-bit representation.
         """
         self.value = value
 
@@ -44,7 +44,7 @@ struct BF8(Stringable, Representable, Copyable, Movable):
     fn from_float32(x: Float32) -> Self:
         """Convert Float32 to BF8 E5M2 format.
 
-        Args:.            `x`: Float32 value to convert.
+        Args:.            x: Float32 value to convert.
 
         Returns:.            BF8 representation (with potential precision loss)
 
@@ -200,7 +200,7 @@ struct BF8(Stringable, Representable, Copyable, Movable):
     fn __eq__(self, other: Self) -> Bool:
         """Check equality by comparing raw bits.
 
-        Args:.            `other`: Other BF8 value.
+        Args:.            other: Other BF8 value.
 
         Returns:.            True if bit patterns match.
         """
@@ -209,7 +209,7 @@ struct BF8(Stringable, Representable, Copyable, Movable):
     fn __ne__(self, other: Self) -> Bool:
         """Check inequality.
 
-        Args:.            `other`: Other BF8 value.
+        Args:.            other: Other BF8 value.
 
         Returns:.            True if bit patterns differ.
         """

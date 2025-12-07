@@ -33,13 +33,13 @@ struct EarlyStopping(Callback, Copyable, Movable):
     Supports both minimization (e.g., loss) and maximization (e.g., accuracy) modes.
 
     Attributes:
-        `monitor`: Name of metric to monitor (e.g., "val_loss", "val_accuracy")
-        `patience`: Number of epochs with no improvement before stopping.
-        `min_delta`: Minimum change to qualify as improvement.
+        monitor: Name of metric to monitor (e.g., "val_loss", "val_accuracy")
+        patience: Number of epochs with no improvement before stopping.
+        min_delta: Minimum change to qualify as improvement.
         mode: "min" for minimization (loss), "max" for maximization (accuracy)
-        `best_value`: Best value seen so far.
-        `wait_count`: Epochs since last improvement.
-        `stopped`: Whether training has been stopped.
+        best_value: Best value seen so far.
+        wait_count: Epochs since last improvement.
+        stopped: Whether training has been stopped.
 
     Example:.        # For loss (minimize)
         var early_stop = EarlyStopping(
@@ -75,9 +75,9 @@ struct EarlyStopping(Callback, Copyable, Movable):
     ):
         """Initialize early stopping callback.
 
-        Args:.            `monitor`: Metric to monitor (e.g., "val_loss", "val_accuracy").
-            `patience`: Epochs to wait before stopping.
-            `min_delta`: Minimum improvement threshold.
+        Args:.            monitor: Metric to monitor (e.g., "val_loss", "val_accuracy").
+            patience: Epochs to wait before stopping.
+            min_delta: Minimum improvement threshold.
             mode: "min" for metrics to minimize (loss), "max" for metrics to maximize (accuracy).
         """
         self.monitor = monitor
@@ -222,11 +222,11 @@ struct ModelCheckpoint(Callback, Copyable, Movable):
 
     fn __init__(
         out self,
-        `filepath`: String = "checkpoint.pt",
-        `monitor`: String = "val_loss",
-        `save_best_only`: Bool = False,
-        `save_frequency`: Int = 1,
-        `mode`: String = "min",
+        filepath: String = "checkpoint.pt",
+        monitor: String = "val_loss",
+        save_best_only: Bool = False,
+        save_frequency: Int = 1,
+        mode: String = "min",
     ):
         """Initialize checkpoint callback.
 
@@ -274,7 +274,7 @@ struct ModelCheckpoint(Callback, Copyable, Movable):
         If saving fails, logs a warning but continues training to prevent I/O.
         errors from interrupting the training process.
 
-        Args:.            `state`: Training state with current epoch number and metrics.
+        Args:.            state: Training state with current epoch number and metrics.
 
         Returns:.            CONTINUE always (even if checkpoint save fails).
         """
@@ -357,8 +357,8 @@ struct LoggingCallback(Callback, Copyable, Movable):
     Logs training progress to stdout at regular intervals.
 
     Attributes:
-        `log_interval`: Log every N epochs.
-        `log_count`: Number of times logged.
+        log_interval: Log every N epochs.
+        log_count: Number of times logged.
 
     Example:.        var logger = LoggingCallback(log_interval=1)
     """
@@ -369,7 +369,7 @@ struct LoggingCallback(Callback, Copyable, Movable):
     fn __init__(out self, log_interval: Int = 1):
         """Initialize logging callback.
 
-        Args:.            `log_interval`: Log every N epochs.
+        Args:.            log_interval: Log every N epochs.
         """
         self.log_interval = log_interval
         self.log_count = 0

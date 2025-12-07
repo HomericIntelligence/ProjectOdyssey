@@ -24,10 +24,10 @@ fn _broadcast_binary[
     This helper eliminates 200+ lines of duplicated broadcasting code and removes.
     dtype conversion overhead by using compile-time specialization.
 
-    Args:.        `dtype`: Compile-time dtype parameter.
-        `op`: Binary operation function (e.g., add, subtract, multiply, divide)
-        `a`: First tensor.
-        `b`: Second tensor.
+    Args:.        dtype: Compile-time dtype parameter.
+        op: Binary operation function (e.g., add, subtract, multiply, divide)
+        a: First tensor.
+        b: Second tensor.
 
     Returns:.        Result tensor with operation applied element-wise with broadcasting.
 
@@ -94,9 +94,9 @@ fn _dispatch_broadcast_binary[
     This dispatcher performs runtime dtype checking but dispatches to compile-time.
     specialized versions, ensuring zero overhead compared to hand-written dtype branches.
 
-    Args:.        `op`: Binary operation function pointer.
-        `a`: First tensor.
-        `b`: Second tensor.
+    Args:.        op: Binary operation function pointer.
+        a: First tensor.
+        b: Second tensor.
 
     Returns:.        Result tensor with operation applied with broadcasting.
 
@@ -136,8 +136,8 @@ fn _dispatch_broadcast_binary[
 fn add(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise addition with broadcasting.
 
-    Args:.        `a`: First tensor.
-        `b`: Second tensor.
+    Args:.        a: First tensor.
+        b: Second tensor.
 
     Returns:.        A new tensor containing a + b.
 
@@ -165,8 +165,8 @@ fn add(a: ExTensor, b: ExTensor) raises -> ExTensor:
 fn subtract(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise subtraction with broadcasting.
 
-    Args:.        `a`: First tensor.
-        `b`: Second tensor.
+    Args:.        a: First tensor.
+        b: Second tensor.
 
     Returns:.        A new tensor containing a - b.
 
@@ -193,8 +193,8 @@ fn subtract(a: ExTensor, b: ExTensor) raises -> ExTensor:
 fn multiply(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise multiplication with broadcasting.
 
-    Args:.        `a`: First tensor.
-        `b`: Second tensor.
+    Args:.        a: First tensor.
+        b: Second tensor.
 
     Returns:.        A new tensor containing a * b.
 
@@ -220,8 +220,8 @@ fn multiply(a: ExTensor, b: ExTensor) raises -> ExTensor:
 fn divide(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise division with broadcasting.
 
-    Args:.        `a`: First tensor (numerator)
-        `b`: Second tensor (denominator)
+    Args:.        a: First tensor (numerator)
+        b: Second tensor (denominator)
 
     Returns:.        A new tensor containing a / b.
 
@@ -253,8 +253,8 @@ fn divide(a: ExTensor, b: ExTensor) raises -> ExTensor:
 fn floor_divide(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise floor division with broadcasting.
 
-    Args:.        `a`: First tensor (numerator)
-        `b`: Second tensor (denominator)
+    Args:.        a: First tensor (numerator)
+        b: Second tensor (denominator)
 
     Returns:.        A new tensor containing a // b (floor division)
 
@@ -298,8 +298,8 @@ fn floor_divide(a: ExTensor, b: ExTensor) raises -> ExTensor:
 fn modulo(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise modulo with broadcasting.
 
-    Args:.        `a`: First tensor.
-        `b`: Second tensor (modulus)
+    Args:.        a: First tensor.
+        b: Second tensor (modulus)
 
     Returns:.        A new tensor containing a % b.
 
@@ -335,8 +335,8 @@ fn modulo(a: ExTensor, b: ExTensor) raises -> ExTensor:
 fn power(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise exponentiation with broadcasting.
 
-    Args:.        `a`: Base tensor.
-        `b`: Exponent tensor.
+    Args:.        a: Base tensor.
+        b: Exponent tensor.
 
     Returns:.        A new tensor containing a ** b.
 
@@ -376,8 +376,8 @@ fn _reduce_broadcast_dims(grad: ExTensor, original_shape: List[Int]) raises -> E
     When forward pass broadcasts input from original_shape to grad.shape(),
     backward pass must sum gradient back to original_shape.
 
-    Args:.        `grad`: Gradient tensor (broadcast shape)
-        `original_shape`: Original input shape before broadcasting.
+    Args:.        grad: Gradient tensor (broadcast shape)
+        original_shape: Original input shape before broadcasting.
 
     Returns:.        Reduced gradient matching original_shape.
 
@@ -428,9 +428,9 @@ fn add_backward(grad_output: ExTensor, a: ExTensor, b: ExTensor) raises -> Gradi
     Handles broadcasting: If input was broadcast to output shape, gradient.
     is summed back to the original input shape.
 
-    Args:.        `grad_output`: Gradient from upstream (∂L/∂C)
-        `a`: First input from forward pass (A)
-        `b`: Second input from forward pass (B)
+    Args:.        grad_output: Gradient from upstream (∂L/∂C)
+        a: First input from forward pass (A)
+        b: Second input from forward pass (B)
 
     Returns:.        GradientPair containing (grad_a, grad_b) - gradients w.r.t. inputs.
 
@@ -468,9 +468,9 @@ fn subtract_backward(grad_output: ExTensor, a: ExTensor, b: ExTensor) raises -> 
 
     The gradient for B is negated since ∂(A-B)/∂B = -1.
 
-    Args:.        `grad_output`: Gradient from upstream (∂L/∂C)
-        `a`: First input from forward pass (A)
-        `b`: Second input from forward pass (B)
+    Args:.        grad_output: Gradient from upstream (∂L/∂C)
+        a: First input from forward pass (A)
+        b: Second input from forward pass (B)
 
     Returns:.        GradientPair containing (grad_a, grad_b) - gradients w.r.t. inputs.
     """
@@ -496,9 +496,9 @@ fn multiply_backward(grad_output: ExTensor, a: ExTensor, b: ExTensor) raises -> 
         ∂L/∂A = ∂L/∂C * B  (product rule, reduced for broadcasting)
         ∂L/∂B = ∂L/∂C * A  (reduced for broadcasting)
 
-    Args:.        `grad_output`: Gradient from upstream (∂L/∂C)
-        `a`: First input from forward pass (A)
-        `b`: Second input from forward pass (B)
+    Args:.        grad_output: Gradient from upstream (∂L/∂C)
+        a: First input from forward pass (A)
+        b: Second input from forward pass (B)
 
     Returns:.        GradientPair containing (grad_a, grad_b) - gradients w.r.t. inputs.
 
@@ -531,9 +531,9 @@ fn divide_backward(grad_output: ExTensor, a: ExTensor, b: ExTensor) raises -> Gr
 
     Includes numerical stability: adds small epsilon to prevent division by zero.
 
-    Args:.        `grad_output`: Gradient from upstream (∂L/∂C)
-        `a`: First input from forward pass (A)
-        `b`: Second input from forward pass (B)
+    Args:.        grad_output: Gradient from upstream (∂L/∂C)
+        a: First input from forward pass (A)
+        b: Second input from forward pass (B)
 
     Returns:.        GradientPair containing (grad_a, grad_b) - gradients w.r.t. inputs.
 

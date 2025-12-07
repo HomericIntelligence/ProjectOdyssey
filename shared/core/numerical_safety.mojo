@@ -29,7 +29,7 @@ from collections import List
 fn has_nan(tensor: ExTensor) -> Bool:
     """Check if tensor contains any NaN values.
 
-    Args:.        `tensor`: Input tensor to check.
+    Args:.        tensor: Input tensor to check.
 
     Returns:.        True if any element is NaN, False otherwise.
 
@@ -65,7 +65,7 @@ fn has_nan(tensor: ExTensor) -> Bool:
 fn has_inf(tensor: ExTensor) -> Bool:
     """Check if tensor contains any Inf values (positive or negative).
 
-    Args:.        `tensor`: Input tensor to check.
+    Args:.        tensor: Input tensor to check.
 
     Returns:.        True if any element is Inf or -Inf, False otherwise.
 
@@ -101,7 +101,7 @@ fn has_inf(tensor: ExTensor) -> Bool:
 fn count_nan(tensor: ExTensor) -> Int:
     """Count number of NaN values in tensor.
 
-    Args:.        `tensor`: Input tensor to check.
+    Args:.        tensor: Input tensor to check.
 
     Returns:.        Number of NaN elements.
 
@@ -135,7 +135,7 @@ fn count_nan(tensor: ExTensor) -> Int:
 fn count_inf(tensor: ExTensor) -> Int:
     """Count number of Inf values in tensor.
 
-    Args:.        `tensor`: Input tensor to check.
+    Args:.        tensor: Input tensor to check.
 
     Returns:.        Number of Inf/-Inf elements.
 
@@ -176,8 +176,8 @@ fn check_tensor_safety[enable: Bool = False](
     When enable=True, raises Error if NaN or Inf found.
     When enable=False, compiles to nothing (zero overhead).
 
-    Args:.        `tensor`: Tensor to check.
-        `name`: Name for error message (default: "tensor")
+    Args:.        tensor: Tensor to check.
+        name: Name for error message (default: "tensor")
 
     Raises:.        Error: If tensor contains NaN or Inf values (only when enable=True)
 
@@ -211,7 +211,7 @@ fn check_tensor_safety[enable: Bool = False](
 fn tensor_min(tensor: ExTensor) -> Float64:
     """Find minimum value in tensor.
 
-    Args:.        `tensor`: Input tensor.
+    Args:.        tensor: Input tensor.
 
     Returns:.        Minimum value as Float64.
 
@@ -251,7 +251,7 @@ fn tensor_min(tensor: ExTensor) -> Float64:
 fn tensor_max(tensor: ExTensor) -> Float64:
     """Find maximum value in tensor.
 
-    Args:.        `tensor`: Input tensor.
+    Args:.        tensor: Input tensor.
 
     Returns:.        Maximum value as Float64.
 
@@ -296,10 +296,10 @@ fn check_tensor_range(
 ) raises:
     """Check if all tensor values are within [min_val, max_val].
 
-    Args:.        `tensor`: Tensor to check.
-        `min_val`: Minimum allowed value.
-        `max_val`: Maximum allowed value.
-        `name`: Name for error message.
+    Args:.        tensor: Tensor to check.
+        min_val: Minimum allowed value.
+        max_val: Maximum allowed value.
+        name: Name for error message.
 
     Raises:.        Error: If any value is outside the range.
 
@@ -323,7 +323,7 @@ fn check_tensor_range(
 fn compute_tensor_l2_norm(tensor: ExTensor) -> Float64:
     """Compute L2 norm of tensor: sqrt(sum(x^2)).
 
-    Args:.        `tensor`: Input tensor.
+    Args:.        tensor: Input tensor.
 
     Returns:.        L2 norm as Float64.
 
@@ -361,9 +361,9 @@ fn check_gradient_norm(
 ) raises:
     """Check if gradient L2 norm exceeds threshold (gradient explosion detection).
 
-    Args:.        `gradient`: Gradient tensor to check.
-        `max_norm`: Maximum allowed L2 norm.
-        `name`: Name for error message.
+    Args:.        gradient: Gradient tensor to check.
+        max_norm: Maximum allowed L2 norm.
+        name: Name for error message.
 
     Raises:.        Error: If gradient norm exceeds max_norm.
 
@@ -393,9 +393,9 @@ fn check_gradient_vanishing(
 ) raises:
     """Check if gradient L2 norm is too small (gradient vanishing detection).
 
-    Args:.        `gradient`: Gradient tensor to check.
-        `min_norm`: Minimum expected L2 norm.
-        `name`: Name for error message.
+    Args:.        gradient: Gradient tensor to check.
+        min_norm: Minimum expected L2 norm.
+        name: Name for error message.
 
     Raises:.        Error: If gradient norm is below min_norm.
 
@@ -432,10 +432,10 @@ fn check_gradient_safety[enable: Bool = False](
     - Gradient explosion (norm > max_norm)
     - Gradient vanishing (norm < min_norm)
 
-    Args:.        `gradient`: Gradient tensor to check.
-        `max_norm`: Maximum allowed L2 norm.
-        `min_norm`: Minimum expected L2 norm.
-        `name`: Name for error message.
+    Args:.        gradient: Gradient tensor to check.
+        max_norm: Maximum allowed L2 norm.
+        min_norm: Minimum expected L2 norm.
+        name: Name for error message.
 
     Raises:.        Error: If any safety check fails (only when enable=True)
 

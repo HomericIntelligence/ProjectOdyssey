@@ -35,7 +35,7 @@ struct FP8(Stringable, Representable, Copyable, Movable):
     fn __init__(out self, value: UInt8 = 0):
         """Initialize FP8 from raw UInt8 bits.
 
-        Args:.            `value`: Raw 8-bit representation.
+        Args:.            value: Raw 8-bit representation.
         """
         self.value = value
 
@@ -43,7 +43,7 @@ struct FP8(Stringable, Representable, Copyable, Movable):
     fn from_float32(x: Float32) -> Self:
         """Convert Float32 to FP8 E4M3 format.
 
-        Args:.            `x`: Float32 value to convert.
+        Args:.            x: Float32 value to convert.
 
         Returns:.            FP8 representation (with potential precision loss)
 
@@ -199,7 +199,7 @@ struct FP8(Stringable, Representable, Copyable, Movable):
     fn __eq__(self, other: Self) -> Bool:
         """Check equality by comparing raw bits.
 
-        Args:.            `other`: Other FP8 value.
+        Args:.            other: Other FP8 value.
 
         Returns:.            True if bit patterns match.
         """
@@ -208,7 +208,7 @@ struct FP8(Stringable, Representable, Copyable, Movable):
     fn __ne__(self, other: Self) -> Bool:
         """Check inequality.
 
-        Args:.            `other`: Other FP8 value.
+        Args:.            other: Other FP8 value.
 
         Returns:.            True if bit patterns differ.
         """

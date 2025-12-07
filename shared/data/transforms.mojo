@@ -30,8 +30,8 @@ fn infer_image_dimensions(data: ExTensor, channels: Int = 3) raises -> Tuple[Int
     Auto-detects channels if default doesn't work (tries 3, then 1).
 
     Args:
-        `data`: Flattened image tensor.
-        `channels`: Number of channels (default: 3 for RGB, auto-detects if mismatch).
+        data: Flattened image tensor.
+        channels: Number of channels (default: 3 for RGB, auto-detects if mismatch).
 
     Returns:
         Tuple of (height, width, channels).
@@ -74,7 +74,7 @@ trait Transform(Copyable, Movable):
     fn __call__(self, data: ExTensor) raises -> ExTensor:
         """Apply the transform to data.
 
-        Args:.            `data`: Input tensor.
+        Args:.            data: Input tensor.
 
         Returns:.            Transformed tensor.
 
@@ -94,7 +94,7 @@ struct Compose[T: Transform & Copyable & Movable](Transform, Copyable, Movable):
     Applies transforms in order, passing output of each to the next.
 
     Parameters:
-        `T`: Type of transforms in the composition (must implement Transform).
+        T: Type of transforms in the composition (must implement Transform).
     """
 
     var transforms: List[T]
@@ -110,7 +110,7 @@ struct Compose[T: Transform & Copyable & Movable](Transform, Copyable, Movable):
     fn __call__(self, data: ExTensor) raises -> ExTensor:
         """Apply all transforms sequentially.
 
-        Args:.            `data`: Input tensor.
+        Args:.            data: Input tensor.
 
         Returns:.            Transformed tensor after all transforms.
 

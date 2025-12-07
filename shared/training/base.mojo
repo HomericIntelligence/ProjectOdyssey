@@ -31,7 +31,7 @@ struct CallbackSignal(Copyable, Movable, ImplicitlyCopyable):
     fn __init__(out self, value: Int):
         """Initialize callback signal.
 
-        Args:.            `value`: Signal value (0=CONTINUE, 1=STOP).
+        Args:.            value: Signal value (0=CONTINUE, 1=STOP).
         """
         self.value = value
 
@@ -51,11 +51,11 @@ struct TrainingState(Copyable, Movable):
         Created at training start, updated each epoch/batch, destroyed at end.
 
     Fields:
-        `epoch`: Current epoch number (0-indexed)
-        `batch`: Current batch number within epoch (0-indexed)
-        `metrics`: Dictionary of metric name -> value.
-        `learning_rate`: Current learning rate.
-        `should_stop`: Flag set by callbacks to request training stop.
+        epoch: Current epoch number (0-indexed)
+        batch: Current batch number within epoch (0-indexed)
+        metrics: Dictionary of metric name -> value.
+        learning_rate: Current learning rate.
+        should_stop: Flag set by callbacks to request training stop.
 
     Example:.        var state = TrainingState(epoch=0, batch=0, metrics={}, lr=0.1)
         state.metrics["train_loss"] = 0.5
@@ -76,9 +76,9 @@ struct TrainingState(Copyable, Movable):
     ):
         """Initialize training state.
 
-        Args:.            `epoch`: Current epoch number.
-            `batch`: Current batch number.
-            `learning_rate`: Current learning rate.
+        Args:.            epoch: Current epoch number.
+            batch: Current batch number.
+            learning_rate: Current learning rate.
         """
         self.epoch = epoch
         self.batch = batch
@@ -123,7 +123,7 @@ trait Callback:
     fn on_train_begin(mut self, mut state: TrainingState) -> CallbackSignal:
         """Called once at the start of training.
 
-        Args:.            `state`: Training state (epoch=0, batch=0, empty metrics).
+        Args:.            state: Training state (epoch=0, batch=0, empty metrics).
 
         Returns:.            CallbackSignal (CONTINUE or STOP).
         """
@@ -132,7 +132,7 @@ trait Callback:
     fn on_train_end(mut self, mut state: TrainingState) -> CallbackSignal:
         """Called once at the end of training.
 
-        Args:.            `state`: Final training state with complete metrics history.
+        Args:.            state: Final training state with complete metrics history.
 
         Returns:.            CallbackSignal (ignored, training already ending).
         """
@@ -141,7 +141,7 @@ trait Callback:
     fn on_epoch_begin(mut self, mut state: TrainingState) -> CallbackSignal:
         """Called at the start of each epoch.
 
-        Args:.            `state`: Training state (epoch set, batch=0, previous epoch metrics).
+        Args:.            state: Training state (epoch set, batch=0, previous epoch metrics).
 
         Returns:.            CallbackSignal (CONTINUE or STOP).
         """
@@ -150,7 +150,7 @@ trait Callback:
     fn on_epoch_end(mut self, mut state: TrainingState) raises -> CallbackSignal:
         """Called at the end of each epoch (after validation).
 
-        Args:.            `state`: Training state with current epoch metrics (train_loss, val_loss, etc.).
+        Args:.            state: Training state with current epoch metrics (train_loss, val_loss, etc.).
 
         Returns:.            CallbackSignal (CONTINUE or STOP).
         """
@@ -159,7 +159,7 @@ trait Callback:
     fn on_batch_begin(mut self, mut state: TrainingState) -> CallbackSignal:
         """Called at the start of each batch.
 
-        Args:.            `state`: Training state (epoch, batch set).
+        Args:.            state: Training state (epoch, batch set).
 
         Returns:.            CallbackSignal (CONTINUE or STOP).
         """
@@ -168,7 +168,7 @@ trait Callback:
     fn on_batch_end(mut self, mut state: TrainingState) -> CallbackSignal:
         """Called at the end of each batch (after optimizer step).
 
-        Args:.            `state`: Training state (may include batch metrics like batch_loss).
+        Args:.            state: Training state (may include batch metrics like batch_loss).
 
         Returns:.            CallbackSignal (CONTINUE or STOP).
         """
@@ -210,8 +210,8 @@ trait LRScheduler:
     fn get_lr(self, epoch: Int, batch: Int = 0) -> Float64:
         """Compute learning rate for given epoch and batch.
 
-        Args:.            `epoch`: Current epoch number (0-indexed).
-            `batch`: Current batch number within epoch (0-indexed).
+        Args:.            epoch: Current epoch number (0-indexed).
+            batch: Current batch number within epoch (0-indexed).
 
         Returns:.            Learning rate to use for this step.
 
@@ -234,7 +234,7 @@ fn has_nan_or_inf(tensor: ExTensor) -> Bool:
     - NaN (Not a Number) values indicating undefined operations
     - Inf (positive or negative infinity) indicating overflow
 
-    Args:.        `tensor`: Tensor to check for numerical instability.
+    Args:.        tensor: Tensor to check for numerical instability.
 
     Returns:.        True if tensor contains any NaN or Inf values, False otherwise.
 
@@ -256,7 +256,7 @@ fn has_nan_or_inf(tensor: ExTensor) -> Bool:
 fn is_valid_loss(loss: Float64) raises -> Bool:
     """Check if loss value is valid (not NaN or inf).
 
-    Args:.        `loss`: Loss value to check.
+    Args:.        loss: Loss value to check.
 
     Returns:.        True if loss is finite (not NaN, not inf), False otherwise.
 
@@ -292,8 +292,8 @@ fn compute_gradient_norm(
     - Training diagnostics (monitoring gradient magnitude)
     - Exploding gradient detection (norm > threshold)
 
-    Args:.        `parameters`: List of gradient tensors to compute norm over.
-        `norm_type`: Type of norm to compute ("L2" or "L1"). Defaults to "L2".
+    Args:.        parameters: List of gradient tensors to compute norm over.
+        norm_type: Type of norm to compute ("L2" or "L1"). Defaults to "L2".
 
     Returns:.        Global norm of all gradients as Float64.
 
@@ -360,8 +360,8 @@ fn compute_gradient_norm(
 fn clip_gradients(var gradients: List[Float64], max_norm: Float64) -> List[Float64]:
     """Clip gradients by global norm to prevent exploding gradients.
 
-    Args:.        `gradients`: List of gradient values.
-        `max_norm`: Maximum allowed gradient norm.
+    Args:.        gradients: List of gradient values.
+        max_norm: Maximum allowed gradient norm.
 
     Returns:.        Clipped gradients with norm <= max_norm.
 

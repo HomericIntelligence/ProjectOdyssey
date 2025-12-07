@@ -219,7 +219,7 @@ fn sigmoid(tensor: ExTensor) raises -> ExTensor:
 
     Supported dtypes: float16, float32, float64.
 
-    Args:.        `tensor`: Input tensor of any shape.
+    Args:.        tensor: Input tensor of any shape.
 
     Returns:.        New tensor with sigmoid applied element-wise, values in (0, 1)
 
@@ -513,8 +513,8 @@ fn relu_backward(grad_output: ExTensor, x: ExTensor) raises escaping -> ExTensor
 
     ReLU gradient: ∂L/∂x = ∂L/∂y * (x > 0)
 
-    Args:.        `grad_output`: Gradient from upstream (∂L/∂y)
-        `x`: Input tensor from forward pass.
+    Args:.        grad_output: Gradient from upstream (∂L/∂y)
+        x: Input tensor from forward pass.
 
     Returns:.        Gradient with respect to input (∂L/∂x)
 
@@ -556,9 +556,9 @@ fn leaky_relu_backward(grad_output: ExTensor, x: ExTensor, alpha: Float64 = 0.01
 
     Leaky ReLU gradient: ∂L/∂x = ∂L/∂y * (1 if x > 0 else alpha)
 
-    Args:.        `grad_output`: Gradient from upstream (∂L/∂y)
-        `x`: Input tensor from forward pass.
-        `alpha`: Slope for negative values (default: 0.01)
+    Args:.        grad_output: Gradient from upstream (∂L/∂y)
+        x: Input tensor from forward pass.
+        alpha: Slope for negative values (default: 0.01)
 
     Returns:.        Gradient with respect to input (∂L/∂x)
     """
@@ -627,9 +627,9 @@ fn prelu_backward(grad_output: ExTensor, x: ExTensor, alpha: ExTensor) raises es
     - ∂L/∂x = ∂L/∂y * (1 if x > 0 else alpha)
     - ∂L/∂alpha = sum(∂L/∂y * x) where x <= 0
 
-    Args:.        `grad_output`: Gradient from upstream (∂L/∂y)
-        `x`: Input tensor from forward pass.
-        `alpha`: Learnable slope parameter.
+    Args:.        grad_output: Gradient from upstream (∂L/∂y)
+        x: Input tensor from forward pass.
+        alpha: Learnable slope parameter.
 
     Returns:.        GradientPair containing (grad_input, grad_alpha)
     """
@@ -697,8 +697,8 @@ fn tanh_backward(grad_output: ExTensor, output: ExTensor) raises escaping -> ExT
     Tanh gradient: ∂L/∂x = ∂L/∂y * (1 - y²)
     where y = tanh(x)
 
-    Args:.        `grad_output`: Gradient from upstream (∂L/∂y)
-        `output`: Output from forward pass (tanh(x))
+    Args:.        grad_output: Gradient from upstream (∂L/∂y)
+        output: Output from forward pass (tanh(x))
 
     Returns:.        Gradient with respect to input (∂L/∂x)
 
@@ -721,9 +721,9 @@ fn gelu_backward(grad_output: ExTensor, x: ExTensor, approximate: Bool = False) 
 
     GELU gradient (approximate): Uses derivative of tanh approximation.
 
-    Args:.        `grad_output`: Gradient from upstream (∂L/∂y)
-        `x`: Input tensor from forward pass.
-        `approximate`: Use tanh approximation (True) or exact erf (False)
+    Args:.        grad_output: Gradient from upstream (∂L/∂y)
+        x: Input tensor from forward pass.
+        approximate: Use tanh approximation (True) or exact erf (False)
 
     Returns:.        Gradient with respect to input (∂L/∂x)
     """
@@ -839,9 +839,9 @@ fn softmax_backward(grad_output: ExTensor, output: ExTensor, axis: Int = -1) rai
 
     Supported dtypes: float16, float32, float64.
 
-    Args:.        `grad_output`: Gradient from upstream (∂L/∂y)
-        `output`: Softmax output from forward pass (y = softmax(x))
-        `axis`: Axis along which softmax was computed (default: -1)
+    Args:.        grad_output: Gradient from upstream (∂L/∂y)
+        output: Softmax output from forward pass (y = softmax(x))
+        axis: Axis along which softmax was computed (default: -1)
 
     Returns:.        Gradient with respect to input (∂L/∂x)
 
@@ -966,7 +966,7 @@ fn swish(tensor: ExTensor) raises -> ExTensor:
         - Self-gated (uses its own value as gate)
         - Bounded below, unbounded above
 
-    Args:.        `tensor`: Input tensor of any shape.
+    Args:.        tensor: Input tensor of any shape.
 
     Returns:.        Output tensor with swish applied element-wise.
 
@@ -1001,7 +1001,7 @@ fn mish(tensor: ExTensor) raises -> ExTensor:
         - Self-regularized (bounded below)
         - Unbounded above
 
-    Args:.        `tensor`: Input tensor of any shape.
+    Args:.        tensor: Input tensor of any shape.
 
     Returns:.        Output tensor with mish applied element-wise.
 
@@ -1057,8 +1057,8 @@ fn elu(tensor: ExTensor, alpha: Float64 = 1.0) raises -> ExTensor:
         - Saturates for large negative values
         - Reduces bias shift
 
-    Args:.        `tensor`: Input tensor of any shape.
-        `alpha`: Scale for negative values (default: 1.0)
+    Args:.        tensor: Input tensor of any shape.
+        alpha: Scale for negative values (default: 1.0)
 
     Returns:.        Output tensor with ELU applied element-wise.
 
@@ -1131,8 +1131,8 @@ fn swish_backward(grad_output: ExTensor, x: ExTensor) raises escaping -> ExTenso
         d/dx[swish(x)] = sigmoid(x) + x * sigmoid(x) * (1 - sigmoid(x))
                        = sigmoid(x) * (1 + x * (1 - sigmoid(x)))
 
-    Args:.        `grad_output`: Gradient from upstream.
-        `x`: Input from forward pass.
+    Args:.        grad_output: Gradient from upstream.
+        x: Input from forward pass.
 
     Returns:.        Gradient with respect to input.
 
@@ -1163,8 +1163,8 @@ fn mish_backward(grad_output: ExTensor, x: ExTensor) raises escaping -> ExTensor
 
     The derivative involves the derivative of tanh(softplus(x)).
 
-    Args:.        `grad_output`: Gradient from upstream.
-        `x`: Input from forward pass.
+    Args:.        grad_output: Gradient from upstream.
+        x: Input from forward pass.
 
     Returns:.        Gradient with respect to input.
 
@@ -1215,9 +1215,9 @@ fn elu_backward(grad_output: ExTensor, x: ExTensor, alpha: Float64 = 1.0) raises
         d/dx[elu(x)] = 1 if x > 0
         d/dx[elu(x)] = alpha * exp(x) if x <= 0
 
-    Args:.        `grad_output`: Gradient from upstream.
-        `x`: Input from forward pass.
-        `alpha`: Scale for negative values (must match forward pass)
+    Args:.        grad_output: Gradient from upstream.
+        x: Input from forward pass.
+        alpha: Scale for negative values (must match forward pass)
 
     Returns:.        Gradient with respect to input.
 

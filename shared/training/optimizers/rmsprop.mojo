@@ -44,16 +44,16 @@ fn rmsprop_step(
     Returns new parameters, new square average, and new momentum buffer.
     Caller manages all state including timestep tracking.
 
-    Args:.        `params`: Model parameters to update.
-        `gradients`: Gradients of loss with respect to params.
-        `square_avg`: Running average of squared gradients.
-        `t`: Current timestep (starts at 1, increments each step)
-        `learning_rate`: Step size for parameter updates.
-        `alpha`: Smoothing constant for running average (default: 0.99)
-        `epsilon`: Small constant for numerical stability (default: 1e-8)
-        `weight_decay`: L2 regularization factor (default: 0.0, no regularization)
-        `momentum`: Momentum factor (default: 0.0, no momentum)
-        `buf`: Momentum buffer (only used if momentum > 0)
+    Args:.        params: Model parameters to update.
+        gradients: Gradients of loss with respect to params.
+        square_avg: Running average of squared gradients.
+        t: Current timestep (starts at 1, increments each step)
+        learning_rate: Step size for parameter updates.
+        alpha: Smoothing constant for running average (default: 0.99)
+        epsilon: Small constant for numerical stability (default: 1e-8)
+        weight_decay: L2 regularization factor (default: 0.0, no regularization)
+        momentum: Momentum factor (default: 0.0, no momentum)
+        buf: Momentum buffer (only used if momentum > 0)
 
     Returns:.        Tuple of (new_params, new_square_avg, new_buf)
 
@@ -175,12 +175,12 @@ fn rmsprop_step_simple(
 
     This is a convenience function for basic RMSprop updates.
 
-    Args:.        `params`: Model parameters to update.
-        `gradients`: Gradients of loss with respect to params.
-        `square_avg`: Running average of squared gradients.
-        `learning_rate`: Step size for parameter updates.
-        `alpha`: Smoothing constant for running average (default: 0.99)
-        `epsilon`: Small constant for numerical stability (default: 1e-8)
+    Args:.        params: Model parameters to update.
+        gradients: Gradients of loss with respect to params.
+        square_avg: Running average of squared gradients.
+        learning_rate: Step size for parameter updates.
+        alpha: Smoothing constant for running average (default: 0.99)
+        epsilon: Small constant for numerical stability (default: 1e-8)
 
     Returns:.        Tuple of (new_params, new_square_avg)
 
