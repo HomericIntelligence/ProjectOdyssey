@@ -225,7 +225,7 @@ struct Timer(Copyable, Movable):
     fn __init__(out self, name: String = ""):
         """Create timer with optional name.
 
-        Args:.            `name`: Timer name for display.
+        Args:.            name: Timer name for display.
         """
         self.name = name
         self.start_ns = 0
@@ -308,8 +308,8 @@ fn memory_at_checkpoint() -> MemoryStats:
 fn get_memory_delta(before: MemoryStats, after: MemoryStats) -> Int:
     """Compute memory change between two points.
 
-    Args:.        `before`: Memory before operation.
-        `after`: Memory after operation.
+    Args:.        before: Memory before operation.
+        after: Memory after operation.
 
     Returns:.        Memory delta in bytes (positive = increase)
     """
@@ -327,8 +327,8 @@ fn profile_function(name: String, func_ptr: fn () raises -> None) raises -> Timi
     Measures function execution time and returns statistics.
 
     Args:
-        `name`: Function name.
-        `func_ptr`: Pointer to function (simplified)
+        name: Function name.
+        func_ptr: Pointer to function (simplified)
 
     Returns:
         Timing statistics for function.
@@ -460,7 +460,7 @@ struct CallStack(Copyable, Movable):
 
 
 fn generate_timing_report(
-    `timings`: Dict[String, TimingStats]
+    timings: Dict[String, TimingStats]
 ) raises -> ProfilingReport:
     """Generate profiling report from timing data.
 
@@ -503,7 +503,7 @@ fn print_timing_report(report: ProfilingReport) raises:
 
 
 fn export_profiling_report(
-    `report`: ProfilingReport, filepath: String, format: String = "json"
+    report: ProfilingReport, filepath: String, format: String = "json"
 ) raises -> Bool:
     """Export profiling report to file.
 
@@ -609,7 +609,7 @@ struct BaselineMetrics(Copyable, Movable):
 
 
 fn compare_to_baseline(
-    `current`: TimingStats, baseline: BaselineMetrics
+    current: TimingStats, baseline: BaselineMetrics
 ) -> Tuple[Bool, Float32]:
     """Check if current performance is within baseline tolerance.
 
@@ -630,8 +630,8 @@ fn compare_to_baseline(
 
 
 fn detect_performance_regression(
-    `current_metrics`: Dict[String, TimingStats],
-    `baseline_metrics`: Dict[String, BaselineMetrics],
+    current_metrics: Dict[String, TimingStats],
+    baseline_metrics: Dict[String, BaselineMetrics],
 ) raises -> List[String]:
     """Detect performance regressions compared to baseline.
 

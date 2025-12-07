@@ -6,8 +6,8 @@ Unlike activation.mojo which contains high-level activation functions
 helper functions for computation and numerical stability.
 
 Functions:
-    `exp_scalar_f32`: Compute exponential of a float32 scalar.
-    `exp_scalar_f64`: Compute exponential of a float64 scalar.
+    exp_scalar_f32: Compute exponential of a float32 scalar.
+    exp_scalar_f64: Compute exponential of a float64 scalar.
 
 Example:
     from shared.core.activation_ops import exp_scalar_f32, exp_scalar_f64

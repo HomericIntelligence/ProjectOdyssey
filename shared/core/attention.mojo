@@ -51,12 +51,12 @@ fn scaled_dot_product_attention_masked(
     This is the fundamental building block of transformer architectures.
 
     Args:
-        `query`: Query tensor of shape (batch, seq_len, d_k) or (batch, heads, seq_len, d_k)
-        `key`: Key tensor of shape (batch, seq_len, d_k) or (batch, heads, seq_len, d_k)
-        `value`: Value tensor of shape (batch, seq_len, d_v) or (batch, heads, seq_len, d_v)
-        `mask`: Optional attention mask. Use large negative values (-1e9) for positions
+        query: Query tensor of shape (batch, seq_len, d_k) or (batch, heads, seq_len, d_k)
+        key: Key tensor of shape (batch, seq_len, d_k) or (batch, heads, seq_len, d_k)
+        value: Value tensor of shape (batch, seq_len, d_v) or (batch, heads, seq_len, d_v)
+        mask: Optional attention mask. Use large negative values (-1e9) for positions
                to ignore. Shape: (batch, seq_len, seq_len) or (batch, heads, seq_len, seq_len)
-        `dropout_p`: Dropout probability (not applied in this implementation)
+        dropout_p: Dropout probability (not applied in this implementation)
 
     Returns:
         Attention output of shape (batch, seq_len, d_v) or (batch, heads, seq_len, d_v)
@@ -172,12 +172,12 @@ fn scaled_dot_product_attention_backward_masked(
     Computes gradients with respect to query, key, and value tensors.
 
     Args:
-        `grad_output`: Gradient w.r.t. attention output
-        `query`: Original query tensor
-        `key`: Original key tensor
-        `value`: Original value tensor
-        `attention_weights`: Attention weights from forward pass (after softmax)
-        `mask`: Optional attention mask (same as forward pass)
+        grad_output: Gradient w.r.t. attention output
+        query: Original query tensor
+        key: Original key tensor
+        value: Original value tensor
+        attention_weights: Attention weights from forward pass (after softmax)
+        mask: Optional attention mask (same as forward pass)
 
     Returns:
         GradientTriple containing gradients for query, key, and value.
@@ -322,8 +322,8 @@ fn create_causal_mask(
     values (-1e9) and valid positions have 0.
 
     Args:
-        `seq_len`: Sequence length for the mask
-        `dtype`: Data type for the mask tensor
+        seq_len: Sequence length for the mask
+        dtype: Data type for the mask tensor
 
     Returns:
         Mask tensor of shape (seq_len, seq_len) suitable for attention.
@@ -458,12 +458,12 @@ fn multi_head_attention_masked(
     transformer architectures.
 
     Args:
-        `query`: Query tensor of shape (batch, seq_len, d_model)
-        `key`: Key tensor of shape (batch, seq_len, d_model)
-        `value`: Value tensor of shape (batch, seq_len, d_model)
-        `weights`: MultiHeadAttentionWeights containing Wq, Wk, Wv, Wo
-        `num_heads`: Number of attention heads
-        `mask`: Optional attention mask
+        query: Query tensor of shape (batch, seq_len, d_model)
+        key: Key tensor of shape (batch, seq_len, d_model)
+        value: Value tensor of shape (batch, seq_len, d_model)
+        weights: MultiHeadAttentionWeights containing Wq, Wk, Wv, Wo
+        num_heads: Number of attention heads
+        mask: Optional attention mask
 
     Returns:
         MultiHeadAttentionResult containing:
@@ -742,13 +742,13 @@ fn multi_head_attention_backward(
     Computes gradients with respect to all inputs and weight matrices.
 
     Args:
-        `grad_output`: Gradient w.r.t. output (batch, seq_len, d_model)
-        `query`: Original query tensor (batch, seq_len, d_model)
-        `key`: Original key tensor (batch, seq_len, d_model)
-        `value`: Original value tensor (batch, seq_len, d_model)
-        `weights`: MultiHeadAttentionWeights used in forward pass
-        `attention_weights`: Attention weights from forward pass
-        `num_heads`: Number of attention heads
+        grad_output: Gradient w.r.t. output (batch, seq_len, d_model)
+        query: Original query tensor (batch, seq_len, d_model)
+        key: Original key tensor (batch, seq_len, d_model)
+        value: Original value tensor (batch, seq_len, d_model)
+        weights: MultiHeadAttentionWeights used in forward pass
+        attention_weights: Attention weights from forward pass
+        num_heads: Number of attention heads
 
     Returns:
         MultiHeadAttentionBackwardResult containing gradients for all inputs/weights.

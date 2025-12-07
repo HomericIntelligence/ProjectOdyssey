@@ -40,9 +40,9 @@ fn binary_cross_entropy(
         p = predictions (should be in [0, 1] range, typically from sigmoid)
         y = targets (ground truth labels, 0 or 1)
 
-    Args:.        `predictions`: Predicted probabilities, shape (batch_size,) or (batch_size, 1)
-        `targets`: Ground truth binary labels (0 or 1), same shape as predictions.
-        `epsilon`: Small constant for numerical stability (prevents log(0))
+    Args:.        predictions: Predicted probabilities, shape (batch_size,) or (batch_size, 1)
+        targets: Ground truth binary labels (0 or 1), same shape as predictions.
+        epsilon: Small constant for numerical stability (prevents log(0))
 
     Returns:.        Loss tensor of same shape as inputs (element-wise loss)
         Use mean() or sum() to get scalar loss for backpropagation.
@@ -107,10 +107,10 @@ fn binary_cross_entropy_backward(
         ∂BCE/∂p = (p - y) / (p(1-p) + epsilon)
 
     Args:
-        `grad_output`: Gradient from upstream (e.g., from mean_backward)
-        `predictions`: Original predictions passed to forward pass.
-        `targets`: Original targets passed to forward pass.
-        `epsilon`: Small constant for numerical stability (default: 1e-7)
+        grad_output: Gradient from upstream (e.g., from mean_backward)
+        predictions: Original predictions passed to forward pass.
+        targets: Original targets passed to forward pass.
+        epsilon: Small constant for numerical stability (default: 1e-7)
 
     Returns:
         Gradient with respect to predictions, same shape as predictions.
@@ -159,8 +159,8 @@ fn mean_squared_error(predictions: ExTensor, targets: ExTensor) raises -> ExTens
 
     Returns element-wise squared error. Use mean() to get scalar loss.
 
-    Args:.        `predictions`: Predicted values, any shape.
-        `targets`: Ground truth values, same shape as predictions.
+    Args:.        predictions: Predicted values, any shape.
+        targets: Ground truth values, same shape as predictions.
 
     Returns:.        Squared error tensor, same shape as inputs.
         Use mean() or sum() to get scalar loss for backpropagation.
@@ -193,9 +193,9 @@ fn mean_squared_error_backward(
     Formula:
         ∂MSE/∂predictions = 2 * (predictions - targets)
 
-    Args:.        `grad_output`: Gradient from upstream (e.g., from mean_backward)
-        `predictions`: Original predictions passed to forward pass.
-        `targets`: Original targets passed to forward pass.
+    Args:.        grad_output: Gradient from upstream (e.g., from mean_backward)
+        predictions: Original predictions passed to forward pass.
+        targets: Original targets passed to forward pass.
 
     Returns:.        Gradient with respect to predictions, same shape as predictions.
 
@@ -230,10 +230,10 @@ fn cross_entropy(
 
     This implementation uses the log-sum-exp trick for numerical stability.
 
-    Args:.        `logits`: Raw model outputs (before softmax), shape (batch_size, num_classes)
-        `targets`: One-hot encoded ground truth, same shape as logits.
-        `axis`: Axis along which to compute softmax (default: -1, last axis)
-        `epsilon`: Small constant for numerical stability in log operations (default: 1e-7)
+    Args:.        logits: Raw model outputs (before softmax), shape (batch_size, num_classes)
+        targets: One-hot encoded ground truth, same shape as logits.
+        axis: Axis along which to compute softmax (default: -1, last axis)
+        epsilon: Small constant for numerical stability in log operations (default: 1e-7)
 
     Returns:.        Loss tensor, shape depends on reduction.
         Use mean() to get scalar loss for backpropagation.
@@ -311,9 +311,9 @@ fn cross_entropy_backward(
     This beautiful result comes from the chain rule and the properties.
     of the softmax function.
 
-    Args:.        `grad_output`: Gradient from upstream (scalar for mean reduction)
-        `logits`: Original logits passed to forward pass, shape (batch, num_classes)
-        `targets`: Original one-hot targets, shape (batch, num_classes)
+    Args:.        grad_output: Gradient from upstream (scalar for mean reduction)
+        logits: Original logits passed to forward pass, shape (batch, num_classes)
+        targets: Original one-hot targets, shape (batch, num_classes)
 
     Returns:.        Gradient with respect to logits, shape (batch, num_classes)
 
@@ -368,9 +368,9 @@ fn smooth_l1_loss(
     for regression tasks with noisy data.
 
     Args:
-        `predictions`: Predicted values, any shape.
-        `targets`: Ground truth values, same shape as predictions.
-        `beta`: Threshold parameter that controls the transition between L2 and L1.
+        predictions: Predicted values, any shape.
+        targets: Ground truth values, same shape as predictions.
+        beta: Threshold parameter that controls the transition between L2 and L1.
                 Smaller beta makes the function more similar to L1.
                 Default: 1.0
 
@@ -445,10 +445,10 @@ fn smooth_l1_loss_backward(
         where x = predictions - targets, sign(x) = 1 if x > 0 else -1
 
     Args:
-        `grad_output`: Gradient from upstream (e.g., from mean_backward)
-        `predictions`: Original predictions passed to forward pass.
-        `targets`: Original targets passed to forward pass.
-        `beta`: Threshold parameter (must match forward pass).
+        grad_output: Gradient from upstream (e.g., from mean_backward)
+        predictions: Original predictions passed to forward pass.
+        targets: Original targets passed to forward pass.
+        beta: Threshold parameter (must match forward pass).
 
     Returns:
         Gradient with respect to predictions, same shape as predictions.
@@ -516,8 +516,8 @@ fn hinge_loss(predictions: ExTensor, targets: ExTensor) raises -> ExTensor:
     A prediction is correct when y * pred >= 1 (margin of 1).
 
     Args:
-        `predictions`: Model predictions (real-valued scores).
-        `targets`: Ground truth labels, must be -1 or 1, same shape as predictions.
+        predictions: Model predictions (real-valued scores).
+        targets: Ground truth labels, must be -1 or 1, same shape as predictions.
 
     Returns:
         Loss tensor, same shape as inputs. Use mean() to get scalar loss.
@@ -580,9 +580,9 @@ fn hinge_loss_backward(
     where y = targets, pred = predictions
 
     Args:
-        `grad_output`: Gradient from upstream (e.g., from mean_backward)
-        `predictions`: Original predictions passed to forward pass.
-        `targets`: Original targets passed to forward pass (-1 or 1).
+        grad_output: Gradient from upstream (e.g., from mean_backward)
+        predictions: Original predictions passed to forward pass.
+        targets: Original targets passed to forward pass (-1 or 1).
 
     Returns:
         Gradient with respect to predictions, same shape as predictions.
@@ -642,10 +642,10 @@ fn focal_loss(
     It is particularly useful for addressing class imbalance.
 
     Args:
-        `predictions`: Predicted probabilities, shape (batch_size,) or (batch_size, 1)
-        `targets`: Ground truth binary labels (0 or 1), same shape as predictions
-        `alpha`: Weighting factor for class 1 (default: 0.25)
-        `gamma`: Focusing parameter (default: 2.0)
+        predictions: Predicted probabilities, shape (batch_size,) or (batch_size, 1)
+        targets: Ground truth binary labels (0 or 1), same shape as predictions
+        alpha: Weighting factor for class 1 (default: 0.25)
+        gamma: Focusing parameter (default: 2.0)
 
     Returns:
         Loss tensor of same shape as inputs (element-wise loss)
@@ -730,11 +730,11 @@ fn focal_loss_backward(
                  + (1-alpha) * p^gamma * (1-target) / (1-p)
 
     Args:
-        `grad_output`: Gradient from upstream (e.g., from mean_backward)
-        `predictions`: Original predictions passed to forward pass
-        `targets`: Original targets passed to forward pass
-        `alpha`: Weighting factor (default: 0.25)
-        `gamma`: Focusing parameter (default: 2.0)
+        grad_output: Gradient from upstream (e.g., from mean_backward)
+        predictions: Original predictions passed to forward pass
+        targets: Original targets passed to forward pass
+        alpha: Weighting factor (default: 0.25)
+        gamma: Focusing parameter (default: 2.0)
 
     Returns:
         Gradient with respect to predictions, same shape as predictions
@@ -837,9 +837,9 @@ fn kl_divergence(p: ExTensor, q: ExTensor, epsilon: Float64 = 1e-7) raises -> Ex
     It is always non-negative and is zero only when p == q almost everywhere.
 
     Args:
-        `p`: Reference distribution (target), should sum to 1 along class axis
-        `q`: Approximating distribution (predicted), should sum to 1 along class axis
-        `epsilon`: Small constant for numerical stability (default: 1e-7)
+        p: Reference distribution (target), should sum to 1 along class axis
+        q: Approximating distribution (predicted), should sum to 1 along class axis
+        epsilon: Small constant for numerical stability (default: 1e-7)
 
     Returns:
         Element-wise KL divergence contribution, same shape as inputs
@@ -899,10 +899,10 @@ fn kl_divergence_backward(
         dKL/dp = log(p) - log(q) + 1 (not used in typical backprop since targets are fixed)
 
     Args:
-        `grad_output`: Gradient from upstream, same shape as forward output (same as inputs)
-        `p`: Reference distribution passed to forward pass
-        `q`: Approximating distribution passed to forward pass
-        `epsilon`: Small constant for numerical stability (default: 1e-7)
+        grad_output: Gradient from upstream, same shape as forward output (same as inputs)
+        p: Reference distribution passed to forward pass
+        q: Approximating distribution passed to forward pass
+        epsilon: Small constant for numerical stability (default: 1e-7)
 
     Returns:
         Gradient with respect to q, same shape as q

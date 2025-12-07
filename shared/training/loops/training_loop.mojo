@@ -39,12 +39,12 @@ fn training_step(
 ) raises -> Float64:
     """Execute single training step (forward, backward, update).
 
-    Args:.        `model_forward`: Function to compute model forward pass.
-        `compute_loss`: Function to compute loss.
-        `optimizer_step`: Function to update weights.
-        `zero_gradients`: Function to zero gradients.
-        `data`: Input batch data.
-        `labels`: Target labels.
+    Args:.        model_forward: Function to compute model forward pass.
+        compute_loss: Function to compute loss.
+        optimizer_step: Function to update weights.
+        zero_gradients: Function to zero gradients.
+        data: Input batch data.
+        labels: Target labels.
 
     Returns:.        Loss value for this batch.
 
@@ -82,13 +82,13 @@ fn train_one_epoch(
 ) raises:
     """Train for one epoch.
 
-    Args:.        `model_forward`: Forward pass function.
-        `compute_loss`: Loss computation function.
-        `optimizer_step`: Weight update function.
-        `zero_gradients`: Gradient zeroing function.
-        `train_loader`: Training data loader.
-        `metrics`: Training metrics to update.
-        `log_interval`: Log metrics every N batches.
+    Args:.        model_forward: Forward pass function.
+        compute_loss: Loss computation function.
+        optimizer_step: Weight update function.
+        zero_gradients: Gradient zeroing function.
+        train_loader: Training data loader.
+        metrics: Training metrics to update.
+        log_interval: Log metrics every N batches.
 
     Raises:.        Error if training fails.
     """

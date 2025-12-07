@@ -27,10 +27,10 @@ fn step_lr(
 ) raises -> Float32:
     """Compute learning rate with step decay.
 
-    Args:.        `initial_lr`: Initial learning rate at epoch 0.
-        `epoch`: Current epoch number (0-indexed)
-        `step_size`: Number of epochs between each decay step (default: 30)
-        `gamma`: Multiplicative decay factor (default: 0.1)
+    Args:.        initial_lr: Initial learning rate at epoch 0.
+        epoch: Current epoch number (0-indexed)
+        step_size: Number of epochs between each decay step (default: 30)
+        gamma: Multiplicative decay factor (default: 0.1)
 
     Returns:.        Decayed learning rate for current epoch.
 
@@ -82,10 +82,10 @@ fn multistep_lr(
     Decays learning rate by gamma at each milestone epoch.
     More flexible than step_lr - allows arbitrary decay schedule.
 
-    Args:.        `initial_lr`: Initial learning rate at epoch 0.
-        `epoch`: Current epoch number (0-indexed)
-        `milestones`: List of epoch numbers where lr should be decayed.
-        `gamma`: Multiplicative decay factor at each milestone (default: 0.1)
+    Args:.        initial_lr: Initial learning rate at epoch 0.
+        epoch: Current epoch number (0-indexed)
+        milestones: List of epoch numbers where lr should be decayed.
+        gamma: Multiplicative decay factor at each milestone (default: 0.1)
 
     Returns:.        Decayed learning rate for current epoch.
 
@@ -137,9 +137,9 @@ fn exponential_lr(
     Formula:
         lr = initial_lr * (gamma ** epoch)
 
-    Args:.        `initial_lr`: Initial learning rate at epoch 0.
-        `epoch`: Current epoch number (0-indexed)
-        `gamma`: Decay factor per epoch (default: 0.95 for ~5% decay per epoch)
+    Args:.        initial_lr: Initial learning rate at epoch 0.
+        epoch: Current epoch number (0-indexed)
+        gamma: Decay factor per epoch (default: 0.95 for ~5% decay per epoch)
 
     Returns:.        Decayed learning rate for current epoch.
 
@@ -176,8 +176,8 @@ fn constant_lr(initial_lr: Float32, epoch: Int) -> Float32:
     Returns the same learning rate for all epochs.
     Useful as baseline or for simple experiments.
 
-    Args:.        `initial_lr`: Learning rate to use.
-        `epoch`: Current epoch (ignored)
+    Args:.        initial_lr: Learning rate to use.
+        epoch: Current epoch (ignored)
 
     Returns:.        Constant learning rate.
 

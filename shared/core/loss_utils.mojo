@@ -30,8 +30,8 @@ fn clip_predictions(
     log of zero or one, which would produce NaN or Inf values.
 
     Args:
-        `predictions`: Input tensor with values typically in [0, 1] range.
-        `epsilon`: Small constant for numerical stability (default: 1e-7).
+        predictions: Input tensor with values typically in [0, 1] range.
+        epsilon: Small constant for numerical stability (default: 1e-7).
 
     Returns:
         Clipped tensor with values in [epsilon, 1.0 - epsilon].
@@ -50,8 +50,8 @@ fn create_epsilon_tensor(
     """Create an epsilon tensor with same shape as template.
 
     Args:
-        `template`: Template tensor determining output shape.
-        `epsilon`: Epsilon value to fill (default: 1e-7).
+        template: Template tensor determining output shape.
+        epsilon: Epsilon value to fill (default: 1e-7).
 
     Returns:
         Tensor filled with epsilon value, same shape as template.
@@ -70,9 +70,9 @@ fn validate_tensor_shapes(
     """Validate that two tensors have compatible shapes.
 
     Args:
-        `tensor1`: First tensor to validate.
-        `tensor2`: Second tensor to validate.
-        `operation`: Name of operation for error message.
+        tensor1: First tensor to validate.
+        tensor2: Second tensor to validate.
+        operation: Name of operation for error message.
 
     Raises:
         Error if shapes don't match.
@@ -90,9 +90,9 @@ fn validate_tensor_dtypes(
     """Validate that two tensors have compatible dtypes.
 
     Args:
-        `tensor1`: First tensor to validate.
-        `tensor2`: Second tensor to validate.
-        `operation`: Name of operation for error message.
+        tensor1: First tensor to validate.
+        tensor2: Second tensor to validate.
+        operation: Name of operation for error message.
 
     Raises:
         Error if dtypes don't match.
@@ -110,7 +110,7 @@ fn compute_one_minus_tensor(tensor: ExTensor) raises -> ExTensor:
     This is a common operation in loss functions (e.g., 1 - predictions).
 
     Args:
-        `tensor`: Input tensor.
+        tensor: Input tensor.
 
     Returns:
         Tensor with values: 1.0 - tensor[i] for each element.
@@ -128,7 +128,7 @@ fn compute_sign_tensor(tensor: ExTensor) raises -> ExTensor:
     This is used in loss functions like smooth L1 for gradient computation.
 
     Args:
-        `tensor`: Input tensor.
+        tensor: Input tensor.
 
     Returns:
         Tensor with sign values (-1, 0, or 1).
@@ -165,9 +165,9 @@ fn blend_tensors(
     (e.g., quadratic vs linear term in smooth L1 loss).
 
     Args:
-        `tensor1`: Values to use where mask is 1.
-        `tensor2`: Values to use where mask is 0.
-        `mask`: Binary mask with values 0 or 1 (should be float for multiplication).
+        tensor1: Values to use where mask is 1.
+        tensor2: Values to use where mask is 0.
+        mask: Binary mask with values 0 or 1 (should be float for multiplication).
 
     Returns:
         Blended tensor with shape of inputs.
@@ -194,7 +194,7 @@ fn compute_max_stable(tensor: ExTensor) raises -> ExTensor:
     This is used in cross-entropy to find the max logit for numerical stability.
 
     Args:
-        `tensor`: Input tensor.
+        tensor: Input tensor.
 
     Returns:
         Maximum value in tensor.
@@ -213,8 +213,8 @@ fn compute_difference(
     """Compute tensor1 - tensor2 with error checking.
 
     Args:
-        `tensor1`: First tensor (minuend).
-        `tensor2`: Second tensor (subtrahend).
+        tensor1: First tensor (minuend).
+        tensor2: Second tensor (subtrahend).
 
     Returns:
         Difference tensor.
@@ -232,8 +232,8 @@ fn compute_product(tensor1: ExTensor, tensor2: ExTensor) raises -> ExTensor:
     """Compute element-wise product of two tensors with error checking.
 
     Args:
-        `tensor1`: First tensor.
-        `tensor2`: Second tensor.
+        tensor1: First tensor.
+        tensor2: Second tensor.
 
     Returns:
         Product tensor.
@@ -253,9 +253,9 @@ fn compute_ratio(tensor1: ExTensor, tensor2: ExTensor, epsilon: Float64 = 1e-7) 
     Adds epsilon to denominator to prevent division by zero.
 
     Args:
-        `tensor1`: Numerator tensor.
-        `tensor2`: Denominator tensor.
-        `epsilon`: Small value to add to denominator for stability (default: 1e-7).
+        tensor1: Numerator tensor.
+        tensor2: Denominator tensor.
+        epsilon: Small value to add to denominator for stability (default: 1e-7).
 
     Returns:
         Ratio tensor.
@@ -283,7 +283,7 @@ fn negate_tensor(tensor: ExTensor) raises -> ExTensor:
     """Negate all elements of a tensor (multiply by -1).
 
     Args:
-        `tensor`: Input tensor.
+        tensor: Input tensor.
 
     Returns:
         Negated tensor with opposite signs.

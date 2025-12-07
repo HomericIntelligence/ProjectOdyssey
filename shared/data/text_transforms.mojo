@@ -33,7 +33,7 @@ trait TextTransform:
     fn __call__(self, text: String) raises -> String:
         """Apply the transform to text.
 
-        Args:.            `text`: Input text string.
+        Args:.            text: Input text string.
 
         Returns:.            Transformed text string.
 
@@ -52,7 +52,7 @@ fn split_words(text: String) raises -> List[String]:
 
     Simple space-based tokenization. Does not handle punctuation specially.
 
-    Args:.        `text`: Input text to split.
+    Args:.        text: Input text to split.
 
     Returns:.        List of words (space-separated tokens).
     """
@@ -71,7 +71,7 @@ fn split_words(text: String) raises -> List[String]:
 fn join_words(words: List[String]) raises -> String:
     """Join words into text with spaces.
 
-    Args:.        `words`: List of words to join.
+    Args:.        words: List of words to join.
 
     Returns:.        Joined text with spaces between words.
     """
@@ -117,7 +117,7 @@ struct RandomSwap(TextTransform, Copyable, Movable):
     fn __call__(self, text: String) raises -> String:
         """Randomly swap word pairs in text.
 
-        Args:.            `text`: Input text.
+        Args:.            text: Input text.
 
         Returns:.            Text with randomly swapped words.
 
@@ -177,7 +177,7 @@ struct RandomDeletion(TextTransform, Copyable, Movable):
 
         Ensures at least one word remains even if all would be deleted.
 
-        Args:.            `text`: Input text.
+        Args:.            text: Input text.
 
         Returns:.            Text with some words randomly deleted.
 
@@ -241,7 +241,7 @@ struct RandomInsertion(TextTransform, Copyable, Movable):
     fn __call__(self, text: String) raises -> String:
         """Insert random words from vocabulary into text.
 
-        Args:.            `text`: Input text.
+        Args:.            text: Input text.
 
         Returns:.            Text with randomly inserted words.
 
@@ -311,7 +311,7 @@ struct RandomSynonymReplacement(TextTransform, Copyable, Movable):
     fn __call__(self, text: String) raises -> String:
         """Replace random words with synonyms.
 
-        Args:.            `text`: Input text.
+        Args:.            text: Input text.
 
         Returns:.            Text with some words replaced by synonyms.
 
@@ -376,7 +376,7 @@ struct RandomSynonymReplacement(TextTransform, Copyable, Movable):
 #     fn __call__(self, text: String) raises -> String:
 #         """Apply all text transforms sequentially.
 #
-#         Args:.            `text`: Input text.
+#         Args:.            text: Input text.
 #
 #         Returns:.            Transformed text after all transforms.
 #

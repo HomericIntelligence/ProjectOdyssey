@@ -43,14 +43,14 @@ fn lars_step(
     training on distributed systems.
 
     Args:
-        `params`: Model parameters to update.
-        `gradients`: Gradients of loss with respect to params.
-        `velocity`: Momentum buffer (use zeros_like(params) if no momentum)
-        `learning_rate`: Base learning rate (will be scaled by trust_ratio).
-        `momentum`: Momentum factor (default: 0.9)
-        `weight_decay`: L2 regularization factor (default: 0.0001)
-        `trust_coefficient`: Trust coefficient for adaptive scaling (default: 0.001)
-        `epsilon`: Small constant for numerical stability (default: 1e-8)
+        params: Model parameters to update.
+        gradients: Gradients of loss with respect to params.
+        velocity: Momentum buffer (use zeros_like(params) if no momentum)
+        learning_rate: Base learning rate (will be scaled by trust_ratio).
+        momentum: Momentum factor (default: 0.9)
+        weight_decay: L2 regularization factor (default: 0.0001)
+        trust_coefficient: Trust coefficient for adaptive scaling (default: 0.001)
+        epsilon: Small constant for numerical stability (default: 1e-8)
 
     Returns:
         Tuple of (new_params, new_velocity)
@@ -154,10 +154,10 @@ fn lars_step_simple(
         params = params - learning_rate * velocity
 
     Args:
-        `params`: Model parameters to update.
-        `gradients`: Gradients of loss with respect to params.
-        `velocity`: Momentum buffer (use zeros_like(params)).
-        `learning_rate`: Base learning rate.
+        params: Model parameters to update.
+        gradients: Gradients of loss with respect to params.
+        velocity: Momentum buffer (use zeros_like(params)).
+        learning_rate: Base learning rate.
 
     Returns:
         Tuple of (new_params, new_velocity)

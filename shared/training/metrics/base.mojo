@@ -30,8 +30,8 @@ trait Metric:
     fn update(mut self, predictions: ExTensor, labels: ExTensor) raises:
         """Update metric state with a batch of predictions and labels.
 
-        Args:.            `predictions`: Model predictions (logits or class indices)
-            `labels`: Ground truth labels.
+        Args:.            predictions: Model predictions (logits or class indices)
+            labels: Ground truth labels.
 
         Raises:.            Error if shapes are incompatible or values are invalid.
         """
@@ -235,8 +235,8 @@ struct MetricLogger:
     fn log_epoch(mut self, epoch: Int, metrics: List[MetricResult]):
         """Log metrics for an epoch.
 
-        Args:.            `epoch`: Epoch number.
-            `metrics`: Metric results to log.
+        Args:.            epoch: Epoch number.
+            metrics: Metric results to log.
         """
         # First epoch: initialize history
         if self.num_epochs == 0:
@@ -259,7 +259,7 @@ struct MetricLogger:
     fn get_history(self, metric_name: String) raises -> List[Float64]:
         """Get history for a specific metric.
 
-        Args:.            `metric_name`: Name of metric.
+        Args:.            metric_name: Name of metric.
 
         Returns:.            Vector of metric values across epochs.
 
@@ -275,7 +275,7 @@ struct MetricLogger:
     fn get_latest(self, metric_name: String) raises -> Float64:
         """Get latest value for a metric.
 
-        Args:.            `metric_name`: Name of metric.
+        Args:.            metric_name: Name of metric.
 
         Returns:.            Latest metric value.
 
@@ -289,8 +289,8 @@ struct MetricLogger:
     fn get_best(self, metric_name: String, maximize: Bool = True) raises -> Float64:
         """Get best value for a metric.
 
-        Args:.            `metric_name`: Name of metric.
-            `maximize`: If True, return maximum value; if False, return minimum.
+        Args:.            metric_name: Name of metric.
+            maximize: If True, return maximum value; if False, return minimum.
 
         Returns:.            Best metric value.
 

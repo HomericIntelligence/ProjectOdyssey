@@ -95,7 +95,7 @@ fn is_reduced_precision(dtype: DType) -> Bool:
     Returns True for any dtype using less than 32-bit floating point.
     Useful for conditional logic in mixed precision training.
 
-    Args:.        `dtype`: DType to check.
+    Args:.        dtype: DType to check.
 
     Returns:.        True if dtype is float16 or bfloat16, False otherwise.
 
@@ -109,7 +109,7 @@ fn is_reduced_precision(dtype: DType) -> Bool:
 fn is_floating_point(dtype: DType) -> Bool:
     """Check if dtype is a floating point type.
 
-    Args:.        `dtype`: DType to check.
+    Args:.        dtype: DType to check.
 
     Returns:.        True if dtype is float16, float32, or float64.
 
@@ -128,7 +128,7 @@ fn get_dtype_precision_bits(dtype: DType) -> Int:
     Returns the precision (mantissa bits) for floating point dtypes.
     Useful for understanding numerical precision limits.
 
-    Args:.        `dtype`: DType to query.
+    Args:.        dtype: DType to query.
 
     Returns:.        Number of mantissa bits (10 for FP16, 23 for FP32, 52 for FP64)
         Returns 0 for non-floating-point dtypes.
@@ -152,7 +152,7 @@ fn get_dtype_exponent_bits(dtype: DType) -> Int:
     Returns the exponent bits for floating point dtypes.
     Useful for understanding numerical range limits.
 
-    Args:.        `dtype`: DType to query.
+    Args:.        dtype: DType to query.
 
     Returns:.        Number of exponent bits (5 for FP16, 8 for FP32/BF16, 11 for FP64)
         Returns 0 for non-floating-point dtypes.
@@ -173,7 +173,7 @@ fn get_dtype_exponent_bits(dtype: DType) -> Int:
 fn dtype_to_string(dtype: DType) -> String:
     """Convert DType to human-readable string.
 
-    Args:.        `dtype`: DType to convert.
+    Args:.        dtype: DType to convert.
 
     Returns:.        String representation (e.g., "float16", "float32", "int32")
 
@@ -215,8 +215,8 @@ fn recommend_precision_dtype(model_size_mb: Float64,
     Provides guidance for choosing between FP32, FP16, and BF16 based on.
     model characteristics and hardware capabilities.
 
-    Args:.        `model_size_mb`: Model size in megabytes.
-        `hardware_has_fp16`: Whether hardware supports FP16 acceleration.
+    Args:.        model_size_mb: Model size in megabytes.
+        hardware_has_fp16: Whether hardware supports FP16 acceleration.
 
     Returns:.        Recommended DType (float16, bfloat16, or float32)
 
@@ -250,7 +250,7 @@ fn print_dtype_info(dtype: DType):
     Displays precision, range, and memory usage for the given dtype.
     Useful for debugging and understanding dtype characteristics.
 
-    Args:.        `dtype`: DType to describe.
+    Args:.        dtype: DType to describe.
 
     Example:.        print_dtype_info(DType.float16)
         # Output:

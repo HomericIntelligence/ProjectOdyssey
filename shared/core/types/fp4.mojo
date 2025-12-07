@@ -63,7 +63,7 @@ struct FP4_E2M1(Stringable, Representable, Copyable, Movable):
     fn __init__(out self, value: UInt8 = 0):
         """Initialize FP4_E2M1 from raw 4-bit value.
 
-        Args:.            `value`: Raw 4-bit representation (only lower 4 bits used)
+        Args:.            value: Raw 4-bit representation (only lower 4 bits used)
         """
         self.value = value & 0xF  # Mask to 4 bits
 
@@ -71,8 +71,8 @@ struct FP4_E2M1(Stringable, Representable, Copyable, Movable):
     fn from_float32(x: Float32, scale: Float32 = 1.0) -> Self:
         """Convert Float32 to FP4 E2M1 format with given scale.
 
-        Args:.            `x`: Float32 value to convert.
-            `scale`: Block-level scale factor.
+        Args:.            x: Float32 value to convert.
+            scale: Block-level scale factor.
 
         Returns:.            FP4_E2M1 representation.
 
@@ -152,7 +152,7 @@ struct FP4_E2M1(Stringable, Representable, Copyable, Movable):
     fn to_float32(self, scale: Float32 = 1.0) -> Float32:
         """Convert FP4 E2M1 to Float32 with given scale.
 
-        Args:.            `scale`: Block-level scale factor.
+        Args:.            scale: Block-level scale factor.
 
         Returns:.            Float32 representation of the scaled E2M1 value.
         """
@@ -204,7 +204,7 @@ struct FP4_E2M1(Stringable, Representable, Copyable, Movable):
     fn __eq__(self, other: Self) -> Bool:
         """Check equality by comparing raw bits.
 
-        Args:.            `other`: Other FP4_E2M1 value.
+        Args:.            other: Other FP4_E2M1 value.
 
         Returns:.            True if bit patterns match.
         """
@@ -213,7 +213,7 @@ struct FP4_E2M1(Stringable, Representable, Copyable, Movable):
     fn __ne__(self, other: Self) -> Bool:
         """Check inequality.
 
-        Args:.            `other`: Other FP4_E2M1 value.
+        Args:.            other: Other FP4_E2M1 value.
 
         Returns:.            True if bit patterns differ.
         """

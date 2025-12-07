@@ -25,7 +25,7 @@ fn is_contiguous(tensor: ExTensor) -> Bool:
     with no gaps. This is true when strides match C-order (row-major) layout.
 
     Args:
-        `tensor`: The tensor to check.
+        tensor: The tensor to check.
 
     Returns:
         True if tensor is contiguous in memory, False otherwise.
@@ -62,7 +62,7 @@ fn as_contiguous(tensor: ExTensor) raises -> ExTensor:
     non-contiguous strides, creates a new contiguous copy.
 
     Args:
-        `tensor`: The tensor to make contiguous.
+        tensor: The tensor to make contiguous.
 
     Returns:
         A new contiguous tensor with the same data.
@@ -111,8 +111,8 @@ fn view(tensor: ExTensor, new_shape: List[Int]) raises -> ExTensor:
     if the new shape is compatible with the current stride pattern.
 
     Args:
-        `tensor`: Input tensor.
-        `new_shape`: Target shape.
+        tensor: Input tensor.
+        new_shape: Target shape.
 
     Returns:
         A new ExTensor sharing the same data with different shape/strides.
@@ -153,8 +153,8 @@ fn reshape(tensor: ExTensor, new_shape: List[Int]) raises -> ExTensor:
     """Reshape tensor to new shape.
 
     Args:
-        `tensor`: Input tensor.
-        `new_shape`: Target shape (must have same total number of elements)
+        tensor: Input tensor.
+        new_shape: Target shape (must have same total number of elements)
 
     Returns:
         A new tensor with the specified shape.
@@ -228,8 +228,8 @@ fn squeeze(tensor: ExTensor, dim: Int = -999) raises -> ExTensor:
     """Remove size-1 dimensions.
 
     Args:
-        `tensor`: Input tensor.
-        `dim`: Specific dimension to squeeze (optional, default squeezes all size-1 dims)
+        tensor: Input tensor.
+        dim: Specific dimension to squeeze (optional, default squeezes all size-1 dims)
 
     Returns:
         Tensor with size-1 dimensions removed.
@@ -289,8 +289,8 @@ fn unsqueeze(tensor: ExTensor, dim: Int) raises -> ExTensor:
     """Add a size-1 dimension at specified position.
 
     Args:
-        `tensor`: Input tensor.
-        `dim`: Position to insert new dimension (supports negative indexing)
+        tensor: Input tensor.
+        dim: Position to insert new dimension (supports negative indexing)
 
     Returns:
         Tensor with additional size-1 dimension.
@@ -328,8 +328,8 @@ fn expand_dims(tensor: ExTensor, dim: Int) raises -> ExTensor:
     """Alias for unsqueeze(). Add a size-1 dimension at specified position.
 
     Args:
-        `tensor`: Input tensor.
-        `dim`: Position to insert new dimension.
+        tensor: Input tensor.
+        dim: Position to insert new dimension.
 
     Returns:
         Tensor with additional size-1 dimension.
@@ -341,7 +341,7 @@ fn flatten(tensor: ExTensor) raises -> ExTensor:
     """Flatten tensor to 1D.
 
     Args:
-        `tensor`: Input tensor.
+        tensor: Input tensor.
 
     Returns:
         1D tensor with all elements in row-major (C) order.
@@ -365,7 +365,7 @@ fn ravel(tensor: ExTensor) raises -> ExTensor:
     If the tensor is contiguous, ravel() returns a view. Otherwise, it copies.
 
     Args:
-        `tensor`: Input tensor.
+        tensor: Input tensor.
 
     Returns:
         1D tensor with all elements (may be a view if contiguous).
@@ -388,8 +388,8 @@ fn concatenate(tensors: List[ExTensor], axis: Int = 0) raises -> ExTensor:
     """Concatenate tensors along an existing axis.
 
     Args:
-        `tensors`: Vector of tensors to concatenate.
-        `axis`: Axis along which to concatenate (default 0)
+        tensors: Vector of tensors to concatenate.
+        axis: Axis along which to concatenate (default 0)
 
     Returns:
         Concatenated tensor.
@@ -482,8 +482,8 @@ fn stack(tensors: List[ExTensor], axis: Int = 0) raises -> ExTensor:
     """Stack tensors along a new axis.
 
     Args:
-        `tensors`: Vector of tensors to stack (must have identical shapes)
-        `axis`: Position of new axis (default 0)
+        tensors: Vector of tensors to stack (must have identical shapes)
+        axis: Position of new axis (default 0)
 
     Returns:
         Stacked tensor with one additional dimension.
@@ -552,13 +552,13 @@ fn conv2d_output_shape(
     operation given input dimensions, kernel size, stride, padding, and dilation.
 
     Args:
-        `input_h`: Input height in pixels
-        `input_w`: Input width in pixels
-        `kernel_h`: Kernel height in pixels
-        `kernel_w`: Kernel width in pixels
-        `stride`: Convolution stride (same for both dimensions)
-        `padding`: Zero-padding added to input (same for all sides)
-        `dilation`: Dilation factor for kernel (default: 1 for standard convolution)
+        input_h: Input height in pixels
+        input_w: Input width in pixels
+        kernel_h: Kernel height in pixels
+        kernel_w: Kernel width in pixels
+        stride: Convolution stride (same for both dimensions)
+        padding: Zero-padding added to input (same for all sides)
+        dilation: Dilation factor for kernel (default: 1 for standard convolution)
 
     Returns:
         Tuple of (output_height, output_width)
@@ -593,11 +593,11 @@ fn pool_output_shape(
     operation given input dimensions, kernel size, stride, and padding.
 
     Args:
-        `input_h`: Input height in pixels
-        `input_w`: Input width in pixels
-        `kernel_size`: Pooling window size (square, same for both dimensions)
-        `stride`: Pooling stride (same for both dimensions)
-        `padding`: Zero-padding added to input (same for all sides)
+        input_h: Input height in pixels
+        input_w: Input width in pixels
+        kernel_size: Pooling window size (square, same for both dimensions)
+        stride: Pooling stride (same for both dimensions)
+        padding: Zero-padding added to input (same for all sides)
 
     Returns:
         Tuple of (output_height, output_width)
@@ -626,9 +626,9 @@ fn flatten_size(height: Int, width: Int, channels: Int) -> Int:
     following convolutional or pooling layers.
 
     Args:
-        `height`: Spatial height dimension
-        `width`: Spatial width dimension
-        `channels`: Number of channels
+        height: Spatial height dimension
+        width: Spatial width dimension
+        channels: Number of channels
 
     Returns:
         Total number of elements: height * width * channels
@@ -651,7 +651,7 @@ fn flatten_to_2d(tensor: ExTensor) raises -> ExTensor:
     (batch, channels, height, width) to (batch, channels * height * width).
 
     Args:
-        `tensor`: Input tensor of shape (batch, channels, height, width)
+        tensor: Input tensor of shape (batch, channels, height, width)
 
     Returns:
         Tensor of shape (batch, channels * height * width)
@@ -696,13 +696,13 @@ fn transposed_conv2d_output_shape(
     input and is commonly used in decoder networks and generative models.
 
     Args:
-        `input_h`: Input height in pixels
-        `input_w`: Input width in pixels
-        `kernel_h`: Kernel height in pixels
-        `kernel_w`: Kernel width in pixels
-        `stride`: Convolution stride (same for both dimensions)
-        `padding`: Padding applied to input (same for all sides)
-        `output_padding`: Additional padding added to output (default: 0)
+        input_h: Input height in pixels
+        input_w: Input width in pixels
+        kernel_h: Kernel height in pixels
+        kernel_w: Kernel width in pixels
+        stride: Convolution stride (same for both dimensions)
+        padding: Padding applied to input (same for all sides)
+        output_padding: Additional padding added to output (default: 0)
 
     Returns:
         Tuple of (output_height, output_width)
@@ -730,8 +730,8 @@ fn global_avgpool_output_shape(batch: Int, channels: Int) -> Tuple[Int, Int, Int
     all spatial dimensions. The output has shape (batch, channels, 1, 1).
 
     Args:
-        `batch`: Batch size
-        `channels`: Number of channels
+        batch: Batch size
+        channels: Number of channels
 
     Returns:
         Tuple of (batch, channels, 1, 1)
@@ -753,8 +753,8 @@ fn linear_output_shape(batch_size: Int, out_features: Int) -> Tuple[Int, Int]:
     shape is (batch_size, out_features).
 
     Args:
-        `batch_size`: Number of samples in the batch
-        `out_features`: Number of output features (neurons)
+        batch_size: Number of samples in the batch
+        out_features: Number of output features (neurons)
 
     Returns:
         Tuple of (batch_size, out_features)

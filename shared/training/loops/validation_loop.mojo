@@ -28,10 +28,10 @@ fn validation_step(
 ) raises -> Float64:
     """Execute single validation step (forward pass only, no gradients).
 
-    Args:.        `model_forward`: Function to compute model forward pass.
-        `compute_loss`: Function to compute loss.
-        `data`: Input batch data.
-        `labels`: Target labels.
+    Args:.        model_forward: Function to compute model forward pass.
+        compute_loss: Function to compute loss.
+        data: Input batch data.
+        labels: Target labels.
 
     Returns:.        Loss value for this batch.
 
@@ -59,12 +59,12 @@ fn validate(
 ) raises -> Float64:
     """Run validation loop.
 
-    Args:.        `model_forward`: Forward pass function.
-        `compute_loss`: Loss computation function.
-        `val_loader`: Validation data loader.
-        `compute_accuracy`: Whether to compute accuracy.
-        `compute_confusion`: Whether to compute confusion matrix.
-        `num_classes`: Number of classes (for confusion matrix)
+    Args:.        model_forward: Forward pass function.
+        compute_loss: Loss computation function.
+        val_loader: Validation data loader.
+        compute_accuracy: Whether to compute accuracy.
+        compute_confusion: Whether to compute confusion matrix.
+        num_classes: Number of classes (for confusion matrix)
 
     Returns:.        Average validation loss.
 
@@ -156,9 +156,9 @@ struct ValidationLoop:
         """Initialize validation loop.
 
         Args:
-            `compute_accuracy`: Whether to compute accuracy.
-            `compute_confusion`: Whether to compute confusion matrix.
-            `num_classes`: Number of classes (for confusion matrix)
+            compute_accuracy: Whether to compute accuracy.
+            compute_confusion: Whether to compute confusion matrix.
+            num_classes: Number of classes (for confusion matrix)
         """
         self.compute_accuracy = compute_accuracy
         self.compute_confusion = compute_confusion
@@ -173,10 +173,10 @@ struct ValidationLoop:
     ) raises -> Float64:
         """Run validation loop.
 
-        Args:.            `model_forward`: Forward pass function.
-            `compute_loss`: Loss computation function.
-            `val_loader`: Validation data loader.
-            `metrics`: Training metrics to update.
+        Args:.            model_forward: Forward pass function.
+            compute_loss: Loss computation function.
+            val_loader: Validation data loader.
+            metrics: Training metrics to update.
 
         Returns:.            Validation loss.
 
@@ -208,11 +208,11 @@ struct ValidationLoop:
 
         Useful for quick validation checks during training.
 
-        Args:.            `model_forward`: Forward pass function.
-            `compute_loss`: Loss computation function.
-            `val_loader`: Validation data loader (mutable for iteration).
-            `max_batches`: Maximum number of batches to evaluate.
-            `metrics`: Training metrics to update.
+        Args:.            model_forward: Forward pass function.
+            compute_loss: Loss computation function.
+            val_loader: Validation data loader (mutable for iteration).
+            max_batches: Maximum number of batches to evaluate.
+            metrics: Training metrics to update.
 
         Returns:.            Validation loss.
 

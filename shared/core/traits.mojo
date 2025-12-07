@@ -38,8 +38,8 @@ trait Differentiable:
     that participate in backpropagation.
 
     Required Methods:
-        `forward`: Compute output from input (forward pass)
-        `backward`: Compute input gradient from output gradient (backward pass)
+        forward: Compute output from input (forward pass)
+        backward: Compute input gradient from output gradient (backward pass)
 
     Contract:
         - forward and backward must be mathematical inverses
@@ -60,7 +60,7 @@ trait Differentiable:
     fn forward(mut self, input: ExTensor) raises -> ExTensor:
         """Compute forward pass.
 
-        Args:.            `input`: Input tensor (batch_size, ...)
+        Args:.            input: Input tensor (batch_size, ...)
 
         Returns:.            Output tensor (batch_size, ...)
 
@@ -74,7 +74,7 @@ trait Differentiable:
     fn backward(self, grad_output: ExTensor) raises -> ExTensor:
         """Compute backward pass (input gradient).
 
-        Args:.            `grad_output`: Gradient w.r.t. output (∂L/∂output)
+        Args:.            grad_output: Gradient w.r.t. output (∂L/∂output)
 
         Returns:.            Gradient w.r.t. input (∂L/∂input)
 
@@ -93,9 +93,9 @@ trait Parameterized:
     trainable parameters that should be updated during optimization.
 
     Required Methods:
-        `parameters`: Return list of all parameter tensors.
-        `gradients`: Return list of all gradient tensors.
-        `zero_grad`: Reset all gradients to zero.
+        parameters: Return list of all parameter tensors.
+        gradients: Return list of all gradient tensors.
+        zero_grad: Reset all gradients to zero.
 
     Contract:
         - parameters() and gradients() must return same-length lists
@@ -162,8 +162,8 @@ trait Serializable:
     state to disk (checkpointing, model saving).
 
     Required Methods:
-        `save`: Write state to file.
-        `load`: Read state from file.
+        save: Write state to file.
+        load: Read state from file.
 
     Contract:
         - save() must write all necessary state
@@ -189,7 +189,7 @@ trait Serializable:
     fn save(self, path: String) raises:
         """Save component state to file.
 
-        Args:.            `path`: File path or directory.
+        Args:.            path: File path or directory.
 
         Raises:.            Error: If write fails or path is invalid.
 
@@ -202,7 +202,7 @@ trait Serializable:
     fn load(mut self, path: String) raises:
         """Load component state from file.
 
-        Args:.            `path`: File path or directory.
+        Args:.            path: File path or directory.
 
         Raises:.            Error: If file doesn't exist, is corrupted, or has version mismatch.
 
@@ -220,7 +220,7 @@ trait Composable(Differentiable):
     chained together (e.g., Sequential, Residual connections).
 
     Required Methods:
-        `compose`: Chain this component with another.
+        compose: Chain this component with another.
 
     Contract:
         - Composition must preserve differentiability
@@ -308,9 +308,9 @@ trait Trainable:
     training vs. inference (e.g., Dropout, BatchNorm).
 
     Required Methods:
-        `train`: Set to training mode.
-        `eval`: Set to evaluation mode.
-        `is_training`: Check current mode.
+        train: Set to training mode.
+        eval: Set to evaluation mode.
+        is_training: Check current mode.
 
     Example:.        struct Dropout(Trainable):
             var training: Bool
@@ -365,9 +365,9 @@ trait Model:
     All neural network models should implement this trait.
 
     Required Methods:
-        `forward`: Execute forward pass
-        `parameters`: Return trainable parameters
-        `zero_grad`: Reset parameter gradients
+        forward: Execute forward pass
+        parameters: Return trainable parameters
+        zero_grad: Reset parameter gradients
 
     Example:
         struct SimpleMLP(Model):
@@ -422,7 +422,7 @@ trait Loss:
     Defines the contract for loss functions that measure prediction error.
 
     Required Methods:
-        `compute`: Calculate loss between predictions and targets
+        compute: Calculate loss between predictions and targets
 
     Example:
         struct MSELoss(Loss):
@@ -453,8 +453,8 @@ trait Optimizer:
     Defines the contract for optimization algorithms that update parameters.
 
     Required Methods:
-        `step`: Update parameters based on gradients
-        `zero_grad`: Reset optimizer state
+        step: Update parameters based on gradients
+        zero_grad: Reset optimizer state
 
     Example:
         struct SGD(Optimizer):

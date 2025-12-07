@@ -4,11 +4,11 @@ This module provides helper functions used by reduction operations (sum, mean, m
 These utilities handle common tasks like coordinate/stride computation and index conversion.
 
 Functions:
-    `compute_strides`: Compute memory strides from tensor shape.
-    `linear_to_coords`: Convert linear index to multi-dimensional coordinates.
-    `coords_to_linear`: Convert multi-dimensional coordinates to linear index.
-    `map_result_to_input_coords`: Map output coordinates to input coordinates accounting for reduction axis.
-    `create_result_coords`: Create and initialize coordinate list.
+    compute_strides: Compute memory strides from tensor shape.
+    linear_to_coords: Convert linear index to multi-dimensional coordinates.
+    coords_to_linear: Convert multi-dimensional coordinates to linear index.
+    map_result_to_input_coords: Map output coordinates to input coordinates accounting for reduction axis.
+    create_result_coords: Create and initialize coordinate list.
 
 Example:
     from shared.core.reduction_utils import compute_strides, linear_to_coords, coords_to_linear

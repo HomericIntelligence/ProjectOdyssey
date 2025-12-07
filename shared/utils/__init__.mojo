@@ -4,9 +4,9 @@ Utility Functions Library
 Provides logging, visualization, configuration, and other helper utilities.
 
 Modules:
-    `logging`: Logging infrastructure for training and evaluation.
-    `visualization`: Plotting and visualization tools.
-    `config`: Configuration management utilities.
+    logging: Logging infrastructure for training and evaluation.
+    visualization: Plotting and visualization tools.
+    config: Configuration management utilities.
 
 Example:.    from shared.utils import Logger, plot_training_curves, load_config
 

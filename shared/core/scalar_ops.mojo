@@ -4,10 +4,10 @@ This module provides pure functional scalar operations for floating-point values
 These are used throughout the library for numerical computations with single values.
 
 Functions:
-    `sqrt_scalar_f32`: Compute square root of a float32 scalar.
-    `sqrt_scalar_f64`: Compute square root of a float64 scalar.
-    `pow_scalar_f32`: Compute power (x^y) for float32 scalars.
-    `pow_scalar_f64`: Compute power (x^y) for float64 scalars.
+    sqrt_scalar_f32: Compute square root of a float32 scalar.
+    sqrt_scalar_f64: Compute square root of a float64 scalar.
+    pow_scalar_f32: Compute power (x^y) for float32 scalars.
+    pow_scalar_f64: Compute power (x^y) for float64 scalars.
 
 Example:
     from shared.core.scalar_ops import sqrt_scalar_f32, pow_scalar_f32

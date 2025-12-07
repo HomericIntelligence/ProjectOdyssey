@@ -6,7 +6,7 @@ Unlike normalization.mojo which contains statistical normalization layers
 preprocessing and data transformations.
 
 Functions:
-    `normalize_rgb`: Normalize RGB images with per-channel mean and std deviation.
+    normalize_rgb: Normalize RGB images with per-channel mean and std deviation.
 
 Example:
     from shared.core.normalize_ops import normalize_rgb

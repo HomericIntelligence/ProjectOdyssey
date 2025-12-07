@@ -247,7 +247,7 @@ struct BFloat16:
     fn __add__(self, other: BFloat16) -> BFloat16:
         """Add two BFloat16 values.
 
-        Args:.            `other`: Value to add.
+        Args:.            other: Value to add.
 
         Returns:.            Sum as BFloat16.
         """
@@ -258,7 +258,7 @@ struct BFloat16:
     fn __sub__(self, other: BFloat16) -> BFloat16:
         """Subtract two BFloat16 values.
 
-        Args:.            `other`: Value to subtract.
+        Args:.            other: Value to subtract.
 
         Returns:.            Difference as BFloat16.
         """
@@ -269,7 +269,7 @@ struct BFloat16:
     fn __mul__(self, other: BFloat16) -> BFloat16:
         """Multiply two BFloat16 values.
 
-        Args:.            `other`: Value to multiply.
+        Args:.            other: Value to multiply.
 
         Returns:.            Product as BFloat16.
         """
@@ -280,7 +280,7 @@ struct BFloat16:
     fn __truediv__(self, other: BFloat16) -> BFloat16:
         """Divide two BFloat16 values.
 
-        Args:.            `other`: Divisor.
+        Args:.            other: Divisor.
 
         Returns:.            Quotient as BFloat16.
         """
@@ -303,7 +303,7 @@ struct BFloat16:
     fn __eq__(self, other: BFloat16) -> Bool:
         """Check equality.
 
-        Args:.            `other`: Value to compare.
+        Args:.            other: Value to compare.
 
         Returns:.            True if equal.
         """
@@ -315,7 +315,7 @@ struct BFloat16:
     fn __ne__(self, other: BFloat16) -> Bool:
         """Check inequality.
 
-        Args:.            `other`: Value to compare.
+        Args:.            other: Value to compare.
 
         Returns:.            True if not equal.
         """
@@ -324,7 +324,7 @@ struct BFloat16:
     fn __lt__(self, other: BFloat16) -> Bool:
         """Check less than.
 
-        Args:.            `other`: Value to compare.
+        Args:.            other: Value to compare.
 
         Returns:.            True if self < other.
         """
@@ -333,7 +333,7 @@ struct BFloat16:
     fn __le__(self, other: BFloat16) -> Bool:
         """Check less than or equal.
 
-        Args:.            `other`: Value to compare.
+        Args:.            other: Value to compare.
 
         Returns:.            True if self <= other.
         """
@@ -342,7 +342,7 @@ struct BFloat16:
     fn __gt__(self, other: BFloat16) -> Bool:
         """Check greater than.
 
-        Args:.            `other`: Value to compare.
+        Args:.            other: Value to compare.
 
         Returns:.            True if self > other.
         """
@@ -351,7 +351,7 @@ struct BFloat16:
     fn __ge__(self, other: BFloat16) -> Bool:
         """Check greater than or equal.
 
-        Args:.            `other`: Value to compare.
+        Args:.            other: Value to compare.
 
         Returns:.            True if self >= other.
         """
@@ -385,7 +385,7 @@ fn print_bfloat16_bits(value: BFloat16):
 
     Shows sign, exponent, and mantissa bits for debugging.
 
-    Args:.        `value`: BFloat16 value to print.
+    Args:.        value: BFloat16 value to print.
 
     Example:.        var bf16 = BFloat16.from_float32(3.14159)
         print_bfloat16_bits(bf16)

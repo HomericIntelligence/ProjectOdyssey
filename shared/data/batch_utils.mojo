@@ -17,9 +17,9 @@ fn extract_batch(
     Extracts a contiguous slice of samples from the dataset starting at.
     start_idx and containing up to batch_size samples.
 
-    Args:.        `data`: Full dataset tensor of shape (N, ...) where N is number of samples.
-        `start_idx`: Starting index for batch extraction (0-indexed)
-        `batch_size`: Number of samples to extract.
+    Args:.        data: Full dataset tensor of shape (N, ...) where N is number of samples.
+        start_idx: Starting index for batch extraction (0-indexed)
+        batch_size: Number of samples to extract.
 
     Returns:.        Batch tensor of shape (actual_batch_size, ...) where actual_batch_size.
         is min(batch_size, N - start_idx)
@@ -92,10 +92,10 @@ fn extract_batch_pair(
     Convenience function that extracts matching batches from both.
     data and label tensors.
 
-    Args:.        `data`: Full dataset tensor of shape (N, ...)
-        `labels`: Full labels tensor of shape (N,) or (N, ...)
-        `start_idx`: Starting index for batch extraction.
-        `batch_size`: Number of samples to extract.
+    Args:.        data: Full dataset tensor of shape (N, ...)
+        labels: Full labels tensor of shape (N,) or (N, ...)
+        start_idx: Starting index for batch extraction.
+        batch_size: Number of samples to extract.
 
     Returns:.        Tuple of (batch_data, batch_labels) with matching first dimension.
 
@@ -134,8 +134,8 @@ fn extract_batch_pair(
 fn compute_num_batches(num_samples: Int, batch_size: Int) -> Int:
     """Compute the number of batches needed to process all samples.
 
-    Args:.        `num_samples`: Total number of samples in dataset.
-        `batch_size`: Number of samples per batch.
+    Args:.        num_samples: Total number of samples in dataset.
+        batch_size: Number of samples per batch.
 
     Returns:.        Number of batches needed (rounded up)
 
@@ -163,9 +163,9 @@ fn get_batch_indices(
     Helper function to compute batch boundaries with proper handling.
     of the final partial batch.
 
-    Args:.        `batch_idx`: Batch index (0-indexed)
-        `batch_size`: Desired batch size.
-        `num_samples`: Total number of samples in dataset.
+    Args:.        batch_idx: Batch index (0-indexed)
+        batch_size: Desired batch size.
+        num_samples: Total number of samples in dataset.
 
     Returns:.        Tuple of (start_idx, end_idx, actual_batch_size) where:
         - start_idx: Starting sample index (inclusive)

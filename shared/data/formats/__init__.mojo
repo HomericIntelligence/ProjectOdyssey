@@ -3,8 +3,8 @@
 Provides functions and classes for loading various data formats used in ML Odyssey.
 
 Modules:
-    `idx_loader`: IDX file format (MNIST, EMNIST, CIFAR-10 as IDX)
-    `cifar_loader`: CIFAR-10 and CIFAR-100 binary format loader
+    idx_loader: IDX file format (MNIST, EMNIST, CIFAR-10 as IDX)
+    cifar_loader: CIFAR-10 and CIFAR-100 binary format loader
 """
 
 # IDX Format Loaders

@@ -86,7 +86,7 @@ struct ComponentTracker(Copyable, Movable):
     fn __init__(out self, window_size: Int):
         """Initialize tracker with specified window size.
 
-        Args:.            `window_size`: Number of values to keep for moving average.
+        Args:.            window_size: Number of values to keep for moving average.
         """
         self.window_size = window_size
         self.buffer = List[Float32]()
@@ -109,7 +109,7 @@ struct ComponentTracker(Copyable, Movable):
 
         Uses Welford's algorithm for numerically stable online variance computation.
 
-        Args:.            `value`: New loss value to add.
+        Args:.            value: New loss value to add.
 
         Reference:
             Welford, B. P. (1962). "Note on a method for calculating corrected sums.

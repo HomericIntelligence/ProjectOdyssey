@@ -53,7 +53,7 @@ fn _format_dtype_name(dtype: DType) -> String:
     """Format a DType into a readable string name.
 
     Args:
-        `dtype`: The dtype to format.
+        dtype: The dtype to format.
 
     Returns:
         String representation of the dtype name.
@@ -100,9 +100,9 @@ fn elementwise_unary[
     This function is compile-time specialized for a specific dtype and operation.
     Use `dispatch_unary` for runtime dtype dispatch.
 
-    Args:.        `dtype`: Compile-time dtype parameter.
-        `op`: Unary operation function pointer.
-        `tensor`: Input tensor.
+    Args:.        dtype: Compile-time dtype parameter.
+        op: Unary operation function pointer.
+        tensor: Input tensor.
 
     Returns:.        New tensor with operation applied element-wise.
 
@@ -135,8 +135,8 @@ fn dispatch_unary[
     hand-written dtype branches.
 
     Args:
-        `op`: Unary operation function pointer.
-        `tensor`: Input tensor.
+        op: Unary operation function pointer.
+        tensor: Input tensor.
 
     Returns:
         New tensor with operation applied element-wise.
@@ -198,10 +198,10 @@ fn elementwise_binary[
     This function is compile-time specialized for a specific dtype and operation.
     Use `dispatch_binary` for runtime dtype dispatch.
 
-    Args:.        `dtype`: Compile-time dtype parameter.
-        `op`: Binary operation function pointer.
-        `lhs`: Left-hand side tensor.
-        `rhs`: Right-hand side tensor (must have same shape as lhs)
+    Args:.        dtype: Compile-time dtype parameter.
+        op: Binary operation function pointer.
+        lhs: Left-hand side tensor.
+        rhs: Right-hand side tensor (must have same shape as lhs)
 
     Returns:.        New tensor with operation applied element-wise.
 
@@ -238,9 +238,9 @@ fn dispatch_binary[
     specialized versions of the operation.
 
     Args:
-        `op`: Binary operation function pointer.
-        `lhs`: Left-hand side tensor.
-        `rhs`: Right-hand side tensor.
+        op: Binary operation function pointer.
+        lhs: Left-hand side tensor.
+        rhs: Right-hand side tensor.
 
     Returns:
         New tensor with operation applied element-wise.
@@ -310,10 +310,10 @@ fn elementwise_scalar[
     This function applies a binary operation between a tensor and a scalar value.
     The scalar is converted to the appropriate dtype at compile time.
 
-    Args:.        `dtype`: Compile-time dtype parameter.
-        `op`: Binary operation function pointer.
-        `tensor`: Input tensor.
-        `scalar`: Scalar value (converted to appropriate dtype)
+    Args:.        dtype: Compile-time dtype parameter.
+        op: Binary operation function pointer.
+        tensor: Input tensor.
+        scalar: Scalar value (converted to appropriate dtype)
 
     Returns:.        New tensor with operation applied element-wise.
 
@@ -345,9 +345,9 @@ fn dispatch_scalar[
     converted to the tensor's dtype.
 
     Args:
-        `op`: Binary operation function pointer.
-        `tensor`: Input tensor.
-        `scalar`: Scalar value (converted to tensor's dtype).
+        op: Binary operation function pointer.
+        tensor: Input tensor.
+        scalar: Scalar value (converted to tensor's dtype).
 
     Returns:
         New tensor with operation applied element-wise.
@@ -412,8 +412,8 @@ fn dispatch_float_unary[
     compile-time specialized version.
 
     Args:
-        `op`: Unary operation function pointer.
-        `tensor`: Input tensor (must be float16/32/64)
+        op: Unary operation function pointer.
+        tensor: Input tensor (must be float16/32/64)
 
     Returns:
         New tensor with operation applied element-wise.
@@ -455,9 +455,9 @@ fn dispatch_float_binary[
     and dispatches to the appropriate compile-time specialized version.
 
     Args:
-        `op`: Binary operation function pointer.
-        `lhs`: Left-hand side tensor (must be float16/32/64)
-        `rhs`: Right-hand side tensor (must match lhs dtype)
+        op: Binary operation function pointer.
+        lhs: Left-hand side tensor (must be float16/32/64)
+        rhs: Right-hand side tensor (must match lhs dtype)
 
     Returns:
         New tensor with operation applied element-wise.
@@ -498,9 +498,9 @@ fn dispatch_float_scalar[
     The scalar value is automatically converted to the tensor's float dtype.
 
     Args:
-        `op`: Binary operation function pointer.
-        `tensor`: Input tensor (must be float16/32/64)
-        `scalar`: Scalar value (converted to tensor's dtype).
+        op: Binary operation function pointer.
+        tensor: Input tensor (must be float16/32/64)
+        scalar: Scalar value (converted to tensor's dtype).
 
     Returns:
         New tensor with operation applied element-wise.
