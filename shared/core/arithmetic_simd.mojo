@@ -97,12 +97,12 @@ fn _add_simd_float32(a: ExTensor, b: ExTensor, mut result: ExTensor) raises:
     var result_ptr = result._data.bitcast[Float32]()
 
     @parameter
-    fn vectorized_add[width: Int](idx: Int):
+    fn vectorized_add[width: Int](idx: Int) unified {mut}:
         var a_vec = a_ptr.load[width=width](idx)
         var b_vec = b_ptr.load[width=width](idx)
         result_ptr.store[width=width](idx, a_vec + b_vec)
 
-    vectorize[vectorized_add, simd_width](size)
+    vectorize[simd_width](size, vectorized_add)
 
 
 @always_inline
@@ -116,12 +116,12 @@ fn _add_simd_float64(a: ExTensor, b: ExTensor, mut result: ExTensor) raises:
     var result_ptr = result._data.bitcast[Float64]()
 
     @parameter
-    fn vectorized_add[width: Int](idx: Int):
+    fn vectorized_add[width: Int](idx: Int) unified {mut}:
         var a_vec = a_ptr.load[width=width](idx)
         var b_vec = b_ptr.load[width=width](idx)
         result_ptr.store[width=width](idx, a_vec + b_vec)
 
-    vectorize[vectorized_add, simd_width](size)
+    vectorize[simd_width](size, vectorized_add)
 
 
 # ============================================================================
@@ -170,12 +170,12 @@ fn _subtract_simd_float32(a: ExTensor, b: ExTensor, mut result: ExTensor) raises
     var result_ptr = result._data.bitcast[Float32]()
 
     @parameter
-    fn vectorized_subtract[width: Int](idx: Int):
+    fn vectorized_subtract[width: Int](idx: Int) unified {mut}:
         var a_vec = a_ptr.load[width=width](idx)
         var b_vec = b_ptr.load[width=width](idx)
         result_ptr.store[width=width](idx, a_vec - b_vec)
 
-    vectorize[vectorized_subtract, simd_width](size)
+    vectorize[simd_width](size, vectorized_subtract)
 
 
 @always_inline
@@ -189,12 +189,12 @@ fn _subtract_simd_float64(a: ExTensor, b: ExTensor, mut result: ExTensor) raises
     var result_ptr = result._data.bitcast[Float64]()
 
     @parameter
-    fn vectorized_subtract[width: Int](idx: Int):
+    fn vectorized_subtract[width: Int](idx: Int) unified {mut}:
         var a_vec = a_ptr.load[width=width](idx)
         var b_vec = b_ptr.load[width=width](idx)
         result_ptr.store[width=width](idx, a_vec - b_vec)
 
-    vectorize[vectorized_subtract, simd_width](size)
+    vectorize[simd_width](size, vectorized_subtract)
 
 
 # ============================================================================
@@ -243,12 +243,12 @@ fn _multiply_simd_float32(a: ExTensor, b: ExTensor, mut result: ExTensor) raises
     var result_ptr = result._data.bitcast[Float32]()
 
     @parameter
-    fn vectorized_multiply[width: Int](idx: Int):
+    fn vectorized_multiply[width: Int](idx: Int) unified {mut}:
         var a_vec = a_ptr.load[width=width](idx)
         var b_vec = b_ptr.load[width=width](idx)
         result_ptr.store[width=width](idx, a_vec * b_vec)
 
-    vectorize[vectorized_multiply, simd_width](size)
+    vectorize[simd_width](size, vectorized_multiply)
 
 
 @always_inline
@@ -262,12 +262,12 @@ fn _multiply_simd_float64(a: ExTensor, b: ExTensor, mut result: ExTensor) raises
     var result_ptr = result._data.bitcast[Float64]()
 
     @parameter
-    fn vectorized_multiply[width: Int](idx: Int):
+    fn vectorized_multiply[width: Int](idx: Int) unified {mut}:
         var a_vec = a_ptr.load[width=width](idx)
         var b_vec = b_ptr.load[width=width](idx)
         result_ptr.store[width=width](idx, a_vec * b_vec)
 
-    vectorize[vectorized_multiply, simd_width](size)
+    vectorize[simd_width](size, vectorized_multiply)
 
 
 # ============================================================================
@@ -316,12 +316,12 @@ fn _divide_simd_float32(a: ExTensor, b: ExTensor, mut result: ExTensor) raises:
     var result_ptr = result._data.bitcast[Float32]()
 
     @parameter
-    fn vectorized_divide[width: Int](idx: Int):
+    fn vectorized_divide[width: Int](idx: Int) unified {mut}:
         var a_vec = a_ptr.load[width=width](idx)
         var b_vec = b_ptr.load[width=width](idx)
         result_ptr.store[width=width](idx, a_vec / b_vec)
 
-    vectorize[vectorized_divide, simd_width](size)
+    vectorize[simd_width](size, vectorized_divide)
 
 
 @always_inline
@@ -335,9 +335,9 @@ fn _divide_simd_float64(a: ExTensor, b: ExTensor, mut result: ExTensor) raises:
     var result_ptr = result._data.bitcast[Float64]()
 
     @parameter
-    fn vectorized_divide[width: Int](idx: Int):
+    fn vectorized_divide[width: Int](idx: Int) unified {mut}:
         var a_vec = a_ptr.load[width=width](idx)
         var b_vec = b_ptr.load[width=width](idx)
         result_ptr.store[width=width](idx, a_vec / b_vec)
 
-    vectorize[vectorized_divide, simd_width](size)
+    vectorize[simd_width](size, vectorized_divide)
