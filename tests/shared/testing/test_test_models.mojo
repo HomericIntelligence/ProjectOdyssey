@@ -74,7 +74,11 @@ fn test_simple_cnn_output_shape() raises:
 fn test_simple_cnn_forward_pass() raises:
     """Test SimpleCNN forward pass shape and dtype."""
     var cnn = SimpleCNN(1, 8, 10)
-    var input_shape = List[Int](32, 1, 28, 28)
+    var input_shape = List[Int]()
+    input_shape.append(32)
+    input_shape.append(1)
+    input_shape.append(28)
+    input_shape.append(28)
     var input = ones(input_shape, DType.float32)
 
     var output = cnn.forward(input)
@@ -101,7 +105,11 @@ fn test_simple_cnn_batch_sizes() raises:
     var cnn = SimpleCNN(1, 8, 10)
 
     for batch_size in range(1, 65, 16):
-        var shape = List[Int](batch_size, 1, 28, 28)
+        var shape = List[Int]()
+        shape.append(batch_size)
+        shape.append(1)
+        shape.append(28)
+        shape.append(28)
         var input = zeros(shape, DType.float32)
         var output = cnn.forward(input)
 
@@ -142,7 +150,9 @@ fn test_linear_model_output_shape() raises:
 fn test_linear_model_forward_pass() raises:
     """Test LinearModel forward pass."""
     var linear = LinearModel(784, 10)
-    var input_shape = List[Int](32, 784)
+    var input_shape = List[Int]()
+    input_shape.append(32)
+    input_shape.append(784)
     var input = ones(input_shape, DType.float32)
 
     var output = linear.forward(input)
@@ -165,7 +175,11 @@ fn test_linear_model_batch_processing() raises:
     var linear = LinearModel(100, 50)
 
     for batch_size in range(1, 65, 16):
-        var shape = List[Int](batch_size, 100)
+        var shape = List[Int]()
+
+        shape.append(batch_size)
+
+        shape.append(100)
         var input = zeros(shape, DType.float32)
         var output = linear.forward(input)
 
@@ -217,7 +231,7 @@ fn test_simple_mlp_forward_1_hidden() raises:
     var mlp = SimpleMLP(10, 20, 5, num_hidden_layers=1)
 
     # Test with List[Float32] input
-    var input = List[Float32](10)
+    var input = List[Float32]()
     for _ in range(10):
         input.append(1.0)
 
@@ -229,7 +243,7 @@ fn test_simple_mlp_forward_2_hidden() raises:
     """Test SimpleMLP forward pass with 2 hidden layers."""
     var mlp = SimpleMLP(10, 20, 5, num_hidden_layers=2)
 
-    var input = List[Float32](10)
+    var input = List[Float32]()
     for _ in range(10):
         input.append(1.0)
 
@@ -240,7 +254,8 @@ fn test_simple_mlp_forward_2_hidden() raises:
 fn test_simple_mlp_forward_extensor_1_hidden() raises:
     """Test SimpleMLP ExTensor forward pass with 1 hidden layer."""
     var mlp = SimpleMLP(10, 20, 5, num_hidden_layers=1)
-    var input_shape = List[Int](10)
+    var input_shape = List[Int]()
+    input_shape.append(10)
     var input = zeros(input_shape, DType.float32)
 
     var output = mlp.forward(input)
@@ -256,7 +271,8 @@ fn test_simple_mlp_forward_extensor_1_hidden() raises:
 fn test_simple_mlp_forward_extensor_2_hidden() raises:
     """Test SimpleMLP ExTensor forward pass with 2 hidden layers."""
     var mlp = SimpleMLP(10, 20, 5, num_hidden_layers=2)
-    var input_shape = List[Int](10)
+    var input_shape = List[Int]()
+    input_shape.append(10)
     var input = ones(input_shape, DType.float32)
 
     var output = mlp.forward(input)
@@ -491,7 +507,13 @@ fn test_simple_linear_model_num_parameters() raises:
 
 fn test_parameter_initialization() raises:
     """Test Parameter initialization."""
-    var data = ones(List[Int](10, 5), DType.float32)
+    var shape = List[Int]()
+
+    shape.append(10)
+
+    shape.append(5)
+
+    var data = ones(shape, DType.float32)
     var param = Parameter(data)
 
     # Check shape preserved
@@ -507,13 +529,19 @@ fn test_parameter_initialization() raises:
 
 fn test_parameter_shape() raises:
     """Test Parameter.shape() method."""
-    var data = zeros(List[Int](20, 15), DType.float32)
+    var shape = List[Int]()
+
+    shape.append(20)
+
+    shape.append(15)
+
+    var data = zeros(shape, DType.float32)
     var param = Parameter(data)
 
-    var shape = param.shape()
-    assert_equal(len(shape), 2)
-    assert_equal(shape[0], 20)
-    assert_equal(shape[1], 15)
+    var param_shape = param.shape()
+    assert_equal(len(param_shape), 2)
+    assert_equal(param_shape[0], 20)
+    assert_equal(param_shape[1], 15)
 
 
 # ============================================================================
@@ -561,13 +589,28 @@ fn test_multiple_models_forward() raises:
     var linear = create_linear_model(784, 10)
 
     # Run CNN forward
-    var cnn_input = ones(List[Int](32, 1, 28, 28), DType.float32)
+    var shape = List[Int]()
+
+    shape.append(32)
+
+    shape.append(1)
+
+    shape.append(28)
+
+    shape.append(28)
+
+    var cnn_input = ones(shape, DType.float32)
     var cnn_output = cnn.forward(cnn_input)
     assert_equal(cnn_output._shape[0], 32)
     assert_equal(cnn_output._shape[1], 10)
 
     # Run Linear forward
-    var linear_input = zeros(List[Int](32, 784), DType.float32)
+    # Reuse shape variable
+    shape = List[Int]()
+    shape.append(32)
+    shape.append(784)
+
+    var linear_input = zeros(shape, DType.float32)
     var linear_output = linear.forward(linear_input)
     assert_equal(linear_output._shape[0], 32)
     assert_equal(linear_output._shape[1], 10)
