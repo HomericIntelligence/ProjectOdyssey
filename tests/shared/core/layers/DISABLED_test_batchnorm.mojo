@@ -296,9 +296,7 @@ fn test_batchnorm_get_running_stats() raises:
     """Test BatchNorm2dLayer.get_running_stats() returns current statistics."""
     var layer = BatchNorm2dLayer(16)
 
-    var stats = layer.get_running_stats()
-    var mean = stats[0]
-    var variance = stats[1]
+    var (mean, variance) = layer.get_running_stats()
 
     # Should return copies of running_mean and running_var
     var mean_shape = mean.shape()

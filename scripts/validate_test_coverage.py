@@ -135,8 +135,7 @@ def check_coverage(
     return uncovered, coverage_by_group
 
 
-def generate_report(uncovered: Set[Path], test_files: List[Path],
-                    coverage_by_group: Dict[str, Set[Path]]) -> str:
+def generate_report(uncovered: Set[Path], test_files: List[Path], coverage_by_group: Dict[str, Set[Path]]) -> str:
     """Generate a detailed validation report."""
     report_lines = []
     report_lines.append("## Test Coverage Validation Report")
@@ -183,7 +182,7 @@ def generate_report(uncovered: Set[Path], test_files: List[Path],
         for group, files in sorted(suggestions.items()):
             report_lines.append(f'- name: "{group.title()}"')
             report_lines.append(f'  path: "{files[0].parent}"')
-            report_lines.append(f'  pattern: "test_*.mojo"')
+            report_lines.append('  pattern: "test_*.mojo"')
         report_lines.append("```")
 
     return "\n".join(report_lines)
@@ -228,23 +227,14 @@ def post_to_pr(report: str) -> bool:
             print("✅ Posted validation report to PR", file=sys.stderr)
             return True
         else:
-            print(
-                f"⚠️  Failed to post comment to PR: {result.stderr}",
-                file=sys.stderr
-            )
+            print(f"⚠️  Failed to post comment to PR: {result.stderr}", file=sys.stderr)
             return False
 
     except subprocess.TimeoutExpired:
-        print(
-            "⚠️  Timeout posting comment to PR",
-            file=sys.stderr
-        )
+        print("⚠️  Timeout posting comment to PR", file=sys.stderr)
         return False
     except Exception as e:
-        print(
-            f"⚠️  Error posting comment to PR: {e}",
-            file=sys.stderr
-        )
+        print(f"⚠️  Error posting comment to PR: {e}", file=sys.stderr)
         return False
 
 
@@ -307,7 +297,7 @@ def main():
         for group, files in sorted(suggestions.items()):
             print(f'  - name: "{group.title()}"')
             print(f'    path: "{files[0].parent}"')
-            print(f'    pattern: "test_*.mojo"')
+            print('    pattern: "test_*.mojo"')
             print()
 
         print()

@@ -2,11 +2,13 @@
 
 ## Overview
 
-Fixed PR #2555 to ensure the test discovery validation script only posts a report to the GitHub PR when tests are missing, rather than on every run.
+Fixed PR #2555 to ensure the test discovery validation script only posts a report to the GitHub PR when tests are
+missing, rather than on every run.
 
 ## Problem Statement
 
-The previous implementation always generated and potentially posted validation reports, which created unnecessary noise on PRs where all tests were properly covered. The fix ensures:
+The previous implementation always generated and potentially posted validation reports, which created unnecessary
+noise on PRs where all tests were properly covered. The fix ensures:
 
 1. Script exits with code 1 when tests are missing (CI detects failure)
 2. Detailed report is only printed when tests are missing (no output on success)
@@ -32,7 +34,7 @@ The previous implementation always generated and potentially posted validation r
 
 **Key Behaviors:**
 
-```
+```text
 SUCCESS (exit 0):
   - No output printed
   - Exits silently
@@ -90,12 +92,14 @@ Added comprehensive section documenting `validate_test_coverage.py`:
 ### Script Improvements
 
 **Parameter Convention:**
+
 - Uses `subprocess.run()` for executing gh CLI
 - Captures stdout/stderr with `text=True`
 - Sets timeout=30 seconds
 - Graceful error handling for missing gh CLI or network issues
 
 **Environment Variable Handling:**
+
 ```python
 github_ref = os.environ.get("GITHUB_REF", "")
 # Format: refs/pull/{pr_number}/merge
@@ -103,6 +107,7 @@ github_ref = os.environ.get("GITHUB_REF", "")
 ```
 
 **Report Generation:**
+
 - Markdown format for GitHub comments
 - Lists uncovered test files
 - Provides recommended YAML configuration
@@ -111,6 +116,7 @@ github_ref = os.environ.get("GITHUB_REF", "")
 ### Workflow Improvements
 
 **Exit Code Handling:**
+
 ```yaml
 continue-on-error: true     # Continue even if script fails
 echo "exit_code=$?" >>       # Capture exit code
@@ -118,6 +124,7 @@ steps.validation.outputs.    # Reference in later steps
 ```
 
 **Conditional Posting:**
+
 - Only posts if tests are missing AND in PR context
 - Prevents comment spam on successful PRs
 - Still fails CI to block merging incomplete coverage
@@ -154,18 +161,21 @@ steps.validation.outputs.    # Reference in later steps
 The implementation can be tested with:
 
 1. **Success case** (all tests covered):
+
    ```bash
    python scripts/validate_test_coverage.py
    # Exit code: 0, Output: (none)
    ```
 
 2. **Failure case** (missing tests):
+
    ```bash
    python scripts/validate_test_coverage.py
    # Exit code: 1, Output: Detailed report with recommendations
    ```
 
 3. **PR posting** (in CI):
+
    ```bash
    GITHUB_REF=refs/pull/123/merge python scripts/validate_test_coverage.py --post-pr
    # Posts report to PR #123
@@ -174,16 +184,19 @@ The implementation can be tested with:
 ## CI Behavior
 
 **On Pull Request (Tests OK):**
+
 1. Validation runs (exit 0)
 2. PR comment NOT posted (silent success)
 3. CI continues to next job
 
 **On Pull Request (Tests Missing):**
+
 1. Validation runs (exit 1)
 2. PR comment IS posted (detailed report)
 3. CI fails (blocks merge)
 
 **On Push to Main:**
+
 1. Validation runs
 2. PR comment logic skipped (not a PR event)
 3. CI fails if tests missing (prevents main breakage)
