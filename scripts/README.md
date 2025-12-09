@@ -179,11 +179,11 @@ Example test groups to consider:
 
 ---
 
-#### `regenerate_github_issues.py`
+### `regenerate_github_issues.py`
 
 **Purpose**: Regenerate all github_issue.md files dynamically from their corresponding plan.md files.
 
-### Features
+#### Features
 
 - Generates github_issue.md files from plan.md sources (task-relative, local only)
 - Supports dry-run mode for testing
