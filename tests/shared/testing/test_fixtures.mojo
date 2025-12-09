@@ -5,9 +5,8 @@ the test suite for validating neural network implementations.
 """
 
 from testing import assert_true, assert_equal
+from shared.testing.models import SimpleCNN, LinearModel
 from shared.testing.fixtures import (
-    SimpleCNN,
-    LinearModel,
     create_test_cnn,
     create_linear_model,
     create_test_input,
