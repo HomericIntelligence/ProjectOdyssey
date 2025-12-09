@@ -55,6 +55,17 @@ repos:
         types: [python]
         pass_filenames: false
 
+  # Test coverage validation
+  - repo: local
+    hooks:
+      - id: validate-test-coverage
+        name: Validate Test Coverage
+        description: Ensure all test_*.mojo files are covered by CI matrix
+        entry: python3 scripts/validate_test_coverage.py
+        language: system
+        files: (test_.*\.mojo|comprehensive-tests\.yml)$
+        pass_filenames: false
+
   # Markdown linting
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.12.1
