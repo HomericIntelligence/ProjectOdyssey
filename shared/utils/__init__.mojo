@@ -60,6 +60,7 @@ from .config import (
     save_config,  # Save to file
     merge_configs,  # Merge multiple configs
     ConfigValidator,  # Validate configuration
+    create_validator,  # Create validator instance
 )
 
 # File I/O utilities

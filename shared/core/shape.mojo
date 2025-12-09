@@ -693,7 +693,9 @@ fn flatten_to_2d(tensor: ExTensor) raises -> ExTensor:
     var width = shape[3]
     var flattened_size = channels * height * width
 
-    var new_shape: List[Int] = [batch_size, flattened_size]
+    var new_shape = List[Int]()
+    new_shape.append(batch_size)
+    new_shape.append(flattened_size)
     return reshape(tensor, new_shape)
 
 
