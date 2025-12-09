@@ -103,7 +103,11 @@ fn test_simple_cnn_batch_sizes() raises:
     var cnn = SimpleCNN(1, 8, 10)
 
     for batch_size in range(1, 65, 16):
-        var shape = List[Int](batch_size, 1, 28, 28)
+        var shape = List[Int]()
+        shape.append(batch_size)
+        shape.append(1)
+        shape.append(28)
+        shape.append(28)
         var input = zeros(shape, DType.float32)
         var output = cnn.forward(input)
 
@@ -169,7 +173,9 @@ fn test_linear_model_batch_processing() raises:
     var linear = LinearModel(100, 50)
 
     for batch_size in range(1, 65, 16):
-        var shape = List[Int](batch_size, 100)
+        var shape = List[Int]()
+        shape.append(batch_size)
+        shape.append(100)
         var input = zeros(shape, DType.float32)
         var output = linear.forward(input)
 
