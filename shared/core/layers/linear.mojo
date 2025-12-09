@@ -82,6 +82,7 @@ struct Linear(Copyable, Movable):
         # Compute: output = input @ weight + bias
         # Matrix multiplication: input @ weight
         from shared.core.matrix import matmul
+
         var matmul_result = matmul(input, self.weight)
 
         # Add bias with broadcasting support
