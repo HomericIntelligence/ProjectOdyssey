@@ -349,8 +349,10 @@ fn test_adamw_weight_decay() raises:
         This differs from L2 regularization used in standard Adam.
     """
     # TODO(#1538): Implement when AdamW is available
-    # var params = Tensor(List[Float32](1.0), Shape(1))
-    # var grads = Tensor(List[Float32](0.1), Shape(1))
+    # var params = ExTensor([1], DType.float32)
+    # params._data.bitcast[Float32]()[0] = 1.0
+    # var grads = ExTensor([1], DType.float32)
+    # grads._data.bitcast[Float32]()[0] = 0.1
     # #
     # var optimizer = AdamW(learning_rate=0.001, weight_decay=0.01)
     # #
@@ -358,7 +360,7 @@ fn test_adamw_weight_decay() raises:
     # optimizer.step(params, grads)
     # #
     # # Verify weight decay was applied
-    # assert_less(params[0], 1.0)
+    # assert_less(params._get_float64(0), 1.0)
     pass
 
 
@@ -399,8 +401,10 @@ fn test_rmsprop_parameter_update() raises:
         - params = params - lr * grad / (sqrt(v) + epsilon).
     """
     # TODO(#1538): Implement when RMSprop is available
-    # var params = Tensor(List[Float32](1.0), Shape(1))
-    # var grads = Tensor(List[Float32](0.1), Shape(1))
+    # var params = ExTensor([1], DType.float32)
+    # params._data.bitcast[Float32]()[0] = 1.0
+    # var grads = ExTensor([1], DType.float32)
+    # grads._data.bitcast[Float32]()[0] = 0.1
     # #
     # var optimizer = RMSprop(learning_rate=0.01, alpha=0.99, epsilon=1e-8)
     # #
@@ -410,7 +414,7 @@ fn test_rmsprop_parameter_update() raises:
     # optimizer.step(params, grads)
     # #
     # # Parameter should decrease significantly
-    # assert_less(params[0], 0.95)
+    # assert_less(params._get_float64(0), 0.95)
     pass
 
 

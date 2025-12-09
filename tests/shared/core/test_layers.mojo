@@ -394,14 +394,13 @@ fn test_maxpool2d_max_selection() raises:
     #
     # # Create input with known values
     # # [[1, 2], [3, 4]] -> max = 4
-    # var input = Tensor(
-    #     List[Float32](1.0, 2.0, 3.0, 4.0),
-    #     Shape(1, 1, 2, 2)
-    # )
+    # var data = [1.0, 2.0, 3.0, 4.0]
+    # var input = ExTensor([1, 1, 2, 2], DType.float32)
+    # # Fill with data
     # var output = pool.forward(input)
     #
     # # Output should be single value: 4.0
-    # assert_almost_equal(output[0, 0, 0, 0], 4.0)
+    # assert_almost_equal(output._get_float64(0), 4.0)
     pass
 
 
