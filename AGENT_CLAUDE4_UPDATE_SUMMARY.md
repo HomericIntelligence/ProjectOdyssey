@@ -1,3 +1,4 @@
+
 # Agent Claude 4 Update - Implementation Summary
 
 ## Task Overview
@@ -8,6 +9,7 @@
 ## Objective
 
 Update all 44 agent files in `.claude/agents/` with Claude 4-specific sections following official best practices:
+
 1. Thinking Guidance
 2. Output Preferences
 3. Delegation Patterns
@@ -49,7 +51,9 @@ Successfully updated representative files from each major category:
 #### Thinking Guidance Patterns
 
 **Level 0-1 (Strategic/Orchestrator):**
+
 ```markdown
+
 **When to use extended thinking:**
 - System-wide architectural decisions
 - Cross-section dependency conflicts
@@ -60,10 +64,13 @@ Successfully updated representative files from each major category:
 - Simple delegation: Standard thinking
 - Architecture design: Extended thinking enabled
 - Conflict resolution: Extended thinking enabled
-```
+
+```text
 
 **Level 4 (Engineer):**
+
 ```markdown
+
 **When to use extended thinking:**
 - Complex algorithm implementation
 - Debugging ownership/lifetime issues
@@ -74,10 +81,13 @@ Successfully updated representative files from each major category:
 - Standard implementation: Standard thinking
 - Complex operations: Extended thinking enabled
 - Memory debugging: Extended thinking enabled
-```
+
+```text
 
 **Level 5 (Junior):**
+
 ```markdown
+
 **When to use extended thinking:**
 - Understanding ambiguous specs
 - Learning new patterns
@@ -85,7 +95,8 @@ Successfully updated representative files from each major category:
 
 **Thinking budget:**
 - All tasks: Standard thinking with careful reading
-```
+
+```text
 
 #### Output Preferences Patterns
 
@@ -96,9 +107,11 @@ Successfully updated representative files from each major category:
 - Decisions: Clear rationale sections appropriate to agent level
 
 **File Path Format:**
-```
+
+```text
 /home/mvillmow/ml-odyssey-manual/path/to/file.mojo:line-range
-```
+
+```text
 
 #### Delegation Patterns
 
@@ -115,6 +128,7 @@ Successfully updated representative files from each major category:
 #### Sub-Agent Invocation Pattern
 
 ```markdown
+
 **Example sub-agent invocation:**
 
 Spawn sub-agent: [Clear objective title]
@@ -136,7 +150,8 @@ Spawn sub-agent: [Clear objective title]
 - [Measurable criterion 1]
 - [Measurable criterion 2]
 - [Measurable criterion 3]
-```
+
+```text
 
 ## Automation Script Created
 
@@ -158,15 +173,17 @@ Spawn sub-agent: [Clear objective title]
 - junior (Level 5)
 
 **Usage:**
+
 ```bash
 python3 scripts/update_agents_claude4.py
-```
+```text
 
 ## Remaining Work (39/44 files)
 
 The script can complete the remaining 39 files automatically:
 
-### By Level:
+### By Level
+
 - Level 1 Orchestrators: 5 files
 - Level 2 Design: 3 files
 - Level 3 Specialists: 16 files
@@ -174,13 +191,14 @@ The script can complete the remaining 39 files automatically:
 - Level 5 Juniors: 2 files
 - Code Review Orchestrator: 1 file
 
-### Execution Plan:
+### Execution Plan
 
 1. **Run automation script:**
+
    ```bash
    cd /home/mvillmow/ml-odyssey-manual
    python3 scripts/update_agents_claude4.py
-   ```
+```text
 
 2. **Review samples from each category:**
    - One orchestrator
@@ -202,56 +220,67 @@ The script can complete the remaining 39 files automatically:
    - `agents/templates/level-5-junior-engineer.md`
 
 5. **Validation:**
+
    ```bash
    python3 tests/agents/validate_configs.py .claude/agents/
    python3 tests/agents/test_loading.py .claude/agents/
-   ```
+```text
 
 6. **Commit and create PR:**
+
    ```bash
    git add .claude/agents/*.md docs/dev/ scripts/ agents/templates/
    git commit -m "docs(agents): update all agent files for Claude 4 best practices"
    git push
    gh pr create --title "docs(agents): Update all agent files for Claude 4 best practices" \
+
      --body "Closes #2548" \
      --label "documentation"
-   ```
+
+```text
 
 ## Files Modified
 
-### Agent Files (5):
+### Agent Files (5)
+
 - `.claude/agents/chief-architect.md`
 - `.claude/agents/foundation-orchestrator.md`
 - `.claude/agents/implementation-engineer.md`
 - `.claude/agents/test-engineer.md`
 - `.claude/agents/junior-implementation-engineer.md`
 
-### Documentation (2):
+### Documentation (2)
+
 - `docs/dev/agent-claude4-update-status.md` (NEW)
 - `AGENT_CLAUDE4_UPDATE_SUMMARY.md` (NEW)
 
-### Scripts (1):
+### Scripts (1)
+
 - `scripts/update_agents_claude4.py` (NEW)
 
 ## Quality Standards Met
 
 ✅ Claude 4 Best Practices:
+
 - Extended thinking guidance provided
 - Clear thinking budgets defined
 - Role-appropriate complexity
 
 ✅ Output Preferences:
+
 - Structured Markdown format
 - Level-appropriate style
 - File paths with line numbers
 - Clear decision sections
 
 ✅ Delegation Patterns:
+
 - Skills clearly specified
 - Sub-agent usage appropriate to level
 - Clear "Do NOT use for" guidance
 
 ✅ Sub-Agent Usage:
+
 - Clear spawning criteria
 - Context requirements specified
 - Example invocations provided
@@ -283,12 +312,12 @@ Before finalizing:
 
 ## References
 
-- **Claude 4 Best Practices**: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-4-best-practices
-- **Agent Skills Best Practices**: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
-- **Sub-Agents Guide**: https://code.claude.com/docs/en/sub-agents
-- **Output Styles**: https://code.claude.com/docs/en/output-styles
-- **Hooks Guide**: https://code.claude.com/docs/en/hooks-guide
-- **Issue #2548**: https://github.com/mvillmow/ml-odyssey/issues/2548
+- **Claude 4 Best Practices**: [https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-4-best-practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-4-best-practices)
+- **Agent Skills Best Practices**: [https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
+- **Sub-Agents Guide**: [https://code.claude.com/docs/en/sub-agents](https://code.claude.com/docs/en/sub-agents)
+- **Output Styles**: [https://code.claude.com/docs/en/output-styles](https://code.claude.com/docs/en/output-styles)
+- **Hooks Guide**: [https://code.claude.com/docs/en/hooks-guide](https://code.claude.com/docs/en/hooks-guide)
+- **Issue #2548**: [https://github.com/mvillmow/ml-odyssey/issues/2548](https://github.com/mvillmow/ml-odyssey/issues/2548)
 
 ## Conclusion
 
