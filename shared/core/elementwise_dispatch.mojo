@@ -209,7 +209,9 @@ fn apply_unary[Op: ElementwiseUnaryOp](input: ExTensor) raises -> ExTensor:
 # ============================================================================
 
 
-fn apply_binary[Op: ElementwiseBinaryOp](a: ExTensor, b: ExTensor) raises -> ExTensor:
+fn apply_binary[
+    Op: ElementwiseBinaryOp
+](a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Apply binary operation to all element pairs in two tensors.
 
     Applies the operation defined by Op to each pair of elements from

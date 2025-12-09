@@ -41,7 +41,7 @@ alias MAX_TENSOR_BYTES: Int = 2_000_000_000  # 2 GB max per tensor
 alias WARN_TENSOR_BYTES: Int = 500_000_000  # 500 MB warning threshold
 
 
-struct ExTensor(Copyable, Movable, ImplicitlyCopyable):
+struct ExTensor(Copyable, ImplicitlyCopyable, Movable):
     """Dynamic tensor with runtime-determined shape and data type.
 
         ExTensor provides a flexible tensor implementation for machine learning workloads,
