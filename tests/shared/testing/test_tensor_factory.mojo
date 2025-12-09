@@ -456,11 +456,11 @@ fn test_tensor_factory_workflow() raises:
     var normal = random_normal_tensor(shape, DType.float32, 0.0, 1.0)
 
     # Verify all have correct shape
-    assert_shape_equal(zeros, shape)
-    assert_shape_equal(ones, shape)
-    assert_shape_equal(fives, shape)
-    assert_shape_equal(random, shape)
-    assert_shape_equal(normal, shape)
+    assert_shape_equal(zeros.shape(), shape)
+    assert_shape_equal(ones.shape(), shape)
+    assert_shape_equal(fives.shape(), shape)
+    assert_shape_equal(random.shape(), shape)
+    assert_shape_equal(normal.shape(), shape)
 
     # Verify all have correct dtype
     assert_dtype_equal(zeros.dtype(), DType.float32)

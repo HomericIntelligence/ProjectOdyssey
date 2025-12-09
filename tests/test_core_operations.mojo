@@ -302,10 +302,13 @@ fn test_batch_processing_pipeline() raises:
     var num_classes = 3
 
     # Initialize network
+    var weights_shape = List[Int]()
+    weights_shape.append(num_features)
+    weights_shape.append(num_classes)
     var weights = kaiming_uniform(
         num_features,
         num_classes,
-        List[Int](num_features, num_classes),
+        weights_shape,
         seed_val=1,
     )
 
@@ -317,9 +320,10 @@ fn test_batch_processing_pipeline() raises:
     var num_batches = 10
     for batch_idx in range(num_batches):
         # Generate batch
-        var input = normal(
-            List[Int](batch_size, num_features), seed_val=batch_idx
-        )
+        var input_shape = List[Int]()
+        input_shape.append(batch_size)
+        input_shape.append(num_features)
+        var input = normal(input_shape, seed_val=batch_idx)
         var labels_shape = List[Int]()
         labels_shape.append(batch_size)
         var labels = ExTensor(labels_shape, DType.int32)
