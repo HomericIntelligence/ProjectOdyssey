@@ -11,8 +11,8 @@ build = "mojo package shared -o build/ml-odyssey-shared.mojopkg"
 # Run a single Mojo file (example: training script)
 run = "mojo run"
 
-# Run all Mojo tests
-test-mojo = "mojo test tests/**/*.mojo"
+# Run all Mojo tests with warnings-as-errors
+test-mojo = "mojo test -Werror tests/**/*.mojo"
 
 # Format all Mojo files
 format = "mojo format shared/**/*.mojo tests/**/*.mojo"

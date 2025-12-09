@@ -123,7 +123,7 @@ test: docker-up
 test-python: docker-up
     @just _run "pixi run test-python"
 
-# Run only Mojo tests
+# Run only Mojo tests with warnings-as-errors
 test-mojo: docker-up
     @just _run "pixi run test-mojo"
 

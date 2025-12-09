@@ -108,8 +108,9 @@ jobs:
           total_files=$(find shared -name "*.mojo" -type f | wc -l)
           echo "Total .mojo files in shared/: $total_files"
 
-          # Build the shared package using justfile
-          if just ci-compile 2>&1; then
+          # Build the shared package (compiles all modules properly with relative imports)
+          export REPO_ROOT=$(pwd)
+          if pixi run mojo package -Werror -I "$REPO_ROOT" shared -o /tmp/shared.mojopkg 2>&1; then
             echo "✅ PASSED: shared package compiled successfully"
             echo "compilation_status=success" >> $GITHUB_ENV
           else
@@ -137,10 +138,43 @@ jobs:
           retention-days: 7
 
   # ============================================================================
+  # Test Coverage Validation - Ensure all tests are discovered
+  # ============================================================================
+  validate-test-coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    name: "Test Coverage Validation"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install pyyaml
+
+      - name: Validate test coverage
+        run: |
+          python scripts/validate_test_coverage.py
+
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: test-coverage-validation
+          path: coverage-validation.txt
+          retention-days: 7
+
+  # ============================================================================
   # Comprehensive Mojo Test Suite - Parallelized by Test Group
   # ============================================================================
   test-mojo-comprehensive:
-    needs: [mojo-compilation]  # Only run tests if compilation succeeds
+    needs: [mojo-compilation, validate-test-coverage]  # Only run tests if compilation and validation succeed
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
@@ -201,6 +235,15 @@ jobs:
           - name: "Testing Fixtures"
             path: "tests/shared/testing"
             pattern: "test_*.mojo"
+          - name: "Core Layers"
+            path: "tests/shared/core/layers"
+            pattern: "test_*.mojo"
+          - name: "Data Loaders"
+            path: "tests/shared/data/loaders"
+            pattern: "test_*.mojo"
+          - name: "Data Transforms"
+            path: "tests/shared/data/transforms"
+            pattern: "test_*.mojo"
 
     name: "${{ matrix.test-group.name }}"
 
@@ -249,6 +292,7 @@ jobs:
             test_result="failed"
             exit_code=1
           fi
+
 
           end_time=$(date +%s)
           duration=$((end_time - start_time))
@@ -491,7 +535,7 @@ jobs:
   # Combined Test Report with Metrics
   # ============================================================================
   test-report:
-    needs: [mojo-compilation, test-mojo-comprehensive, test-python, code-quality]
+    needs: [mojo-compilation, validate-test-coverage, test-mojo-comprehensive, test-python, code-quality]
     runs-on: ubuntu-latest
     if: always()
     name: "Test Report"

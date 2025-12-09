@@ -207,9 +207,9 @@ Project enforces zero-warnings policy (documented in `CLAUDE.md`):
 - Warnings indicate potential bugs
 - Prevents warning accumulation
 - Enforces code quality standards
-- PRs with warnings should be rejected
+- PRs with warnings will fail CI and be rejected
 
-**Note:** Mojo v0.25.7 doesn't support `-Werror` flag, so enforcement is via code review and CI monitoring.
+**Update (Issue #2544):** Mojo DOES support `-Werror` flag. All CI workflows now use `-Werror` to treat warnings as errors, making enforcement automatic.
 
 ## Lessons Learned
 

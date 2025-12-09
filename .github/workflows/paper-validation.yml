@@ -309,7 +309,7 @@ jobs:
             if [ -f "$paper_dir/train.py" ]; then
               pixi run python "$paper_dir/train.py" --quick-validation --epochs 1 || true
             elif [ -f "$paper_dir/train.mojo" ]; then
-              pixi run mojo -I . "$paper_dir/train.mojo" --quick-validation --epochs 1 || true
+              pixi run mojo -Werror -I . "$paper_dir/train.mojo" --quick-validation --epochs 1 || true
             fi
           done
 
