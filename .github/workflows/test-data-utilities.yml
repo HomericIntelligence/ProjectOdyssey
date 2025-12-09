@@ -47,12 +47,12 @@ jobs:
         run: |
           echo "Running base dataset tests..."
           if [ -f "tests/shared/data/datasets/test_base_dataset.mojo" ]; then
-            pixi run mojo -Werror -I . tests/shared/data/datasets/test_base_dataset.mojo
+            pixi run mojo -I . tests/shared/data/datasets/test_base_dataset.mojo
           fi
 
           echo "Running tensor dataset tests..."
           if [ -f "tests/shared/data/datasets/test_tensor_dataset.mojo" ]; then
-            pixi run mojo -Werror -I . tests/shared/data/datasets/test_tensor_dataset.mojo
+            pixi run mojo -I . tests/shared/data/datasets/test_tensor_dataset.mojo
           fi
 
       - name: Run Loader Tests
@@ -60,7 +60,7 @@ jobs:
         run: |
           echo "Running base loader tests..."
           if [ -f "tests/shared/data/loaders/test_base_loader.mojo" ]; then
-            pixi run mojo -Werror -I . tests/shared/data/loaders/test_base_loader.mojo
+            pixi run mojo -I . tests/shared/data/loaders/test_base_loader.mojo
           fi
 
       - name: Run Transform Tests
@@ -68,7 +68,7 @@ jobs:
         run: |
           echo "Running transform pipeline tests..."
           if [ -f "tests/shared/data/transforms/test_pipeline.mojo" ]; then
-            pixi run mojo -Werror -I . tests/shared/data/transforms/test_pipeline.mojo
+            pixi run mojo -I . tests/shared/data/transforms/test_pipeline.mojo
           fi
 
       - name: Run Sampler Tests
@@ -76,7 +76,7 @@ jobs:
         run: |
           echo "Running sequential sampler tests..."
           if [ -f "tests/shared/data/samplers/test_sequential.mojo" ]; then
-            pixi run mojo -Werror -I . tests/shared/data/samplers/test_sequential.mojo
+            pixi run mojo -I . tests/shared/data/samplers/test_sequential.mojo
           fi
 
       - name: Run All Data Tests
@@ -84,7 +84,7 @@ jobs:
         run: |
           echo "Running complete data utilities test suite..."
           if [ -f "tests/shared/data/run_all_tests.mojo" ]; then
-            pixi run mojo -Werror -I . tests/shared/data/run_all_tests.mojo
+            pixi run mojo -I . tests/shared/data/run_all_tests.mojo
           fi
 
       - name: Report Results

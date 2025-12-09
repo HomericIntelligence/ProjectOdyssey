@@ -110,7 +110,7 @@ jobs:
 
           # Build the shared package (compiles all modules properly with relative imports)
           export REPO_ROOT=$(pwd)
-          if pixi run mojo package -Werror -I "$REPO_ROOT" shared -o /tmp/shared.mojopkg 2>&1; then
+          if pixi run mojo package -I "$REPO_ROOT" shared -o /tmp/shared.mojopkg 2>&1; then
             echo "✅ PASSED: shared package compiled successfully"
             echo "compilation_status=success" >> $GITHUB_ENV
           else
