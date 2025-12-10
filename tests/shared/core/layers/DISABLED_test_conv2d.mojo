@@ -268,9 +268,13 @@ fn test_conv2d_forward_batch_independence() raises:
     var single_input = zeros(single_input_shape, DType.float32)
 
     # Copy first batch element to single input
-    var total_spatial = 3 * 16 * 16
-    for i in range(total_spatial):
-        single_input._data[i] = batch_input._data[i]
+    # Use proper tensor indexing with channel/height/width dimensions
+    for c in range(3):  # channels
+        for h in range(16):  # height
+            for w in range(16):  # width
+                var idx = c * 16 * 16 + h * 16 + w
+                var src_idx = 0 * (3 * 16 * 16) + idx  # batch 0
+                single_input._data[idx] = batch_input._data[src_idx]
 
     var single_output = layer.forward(single_input)
 
