@@ -290,8 +290,9 @@ struct MobileNetV1:
         # Initial standard convolution: 3×3, 32 filters, stride=2
         var initial_conv_weights_shape: List[Int] = [32, 3, 3, 3]
         self.initial_conv_weights = kaiming_normal(
-            initial_conv_weights_shape,
             fan_in=3 * 9,
+            fan_out=32,
+            shape=initial_conv_weights_shape,
         )
         var initial_bias_shape: List[Int] = [32]
         self.initial_conv_bias = zeros(initial_bias_shape, DType.float32)
@@ -319,9 +320,9 @@ struct MobileNetV1:
         # Final FC layer: 1024 → num_classes
         var fc_weights_shape: List[Int] = [num_classes, 1024]
         self.fc_weights = xavier_normal(
-            fc_weights_shape,
             fan_in=1024,
             fan_out=num_classes,
+            shape=fc_weights_shape,
         )
         var fc_bias_shape: List[Int] = [num_classes]
         self.fc_bias = zeros(fc_bias_shape, DType.float32)
