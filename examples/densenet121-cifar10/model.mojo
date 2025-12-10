@@ -133,7 +133,9 @@ struct DenseLayer:
             1,
         ]
         self.conv1_weights = kaiming_normal(
-            conv1_weights_shape, fan_in=in_channels
+            fan_in=in_channels,
+            fan_out=bottleneck_channels,
+            shape=conv1_weights_shape,
         )
         var conv1_bias_shape: List[Int] = [bottleneck_channels]
         self.conv1_bias = zeros(conv1_bias_shape, DType.float32)
@@ -151,8 +153,9 @@ struct DenseLayer:
             3,
         ]
         self.conv2_weights = kaiming_normal(
-            conv2_weights_shape,
             fan_in=bottleneck_channels * 9,
+            fan_out=growth_rate,
+            shape=conv2_weights_shape,
         )
         var conv2_bias_shape: List[Int] = [growth_rate]
         self.conv2_bias = zeros(conv2_bias_shape, DType.float32)
@@ -292,7 +295,9 @@ struct TransitionLayer:
 
         var conv_weights_shape: List[Int] = [out_channels, in_channels, 1, 1]
         self.conv_weights = kaiming_normal(
-            conv_weights_shape, fan_in=in_channels
+            fan_in=in_channels,
+            fan_out=out_channels,
+            shape=conv_weights_shape,
         )
         var conv_bias_shape: List[Int] = [out_channels]
         self.conv_bias = zeros(conv_bias_shape, DType.float32)
@@ -373,8 +378,9 @@ struct DenseNet121:
         # Initial convolution: 3×3, 64 filters
         var initial_conv_weights_shape: List[Int] = [num_init_features, 3, 3, 3]
         self.initial_conv_weights = kaiming_normal(
-            initial_conv_weights_shape,
             fan_in=3 * 9,
+            fan_out=num_init_features,
+            shape=initial_conv_weights_shape,
         )
         var initial_bias_shape: List[Int] = [num_init_features]
         self.initial_conv_bias = zeros(initial_bias_shape, DType.float32)
@@ -414,9 +420,9 @@ struct DenseNet121:
         # Final FC layer
         var fc_weights_shape: List[Int] = [num_classes, num_features_final]
         self.fc_weights = xavier_normal(
-            fc_weights_shape,
             fan_in=num_features_final,
             fan_out=num_classes,
+            shape=fc_weights_shape,
         )
         var fc_bias_shape: List[Int] = [num_classes]
         self.fc_bias = zeros(fc_bias_shape, DType.float32)
