@@ -148,7 +148,7 @@ For comprehensive build and installation instructions, see:
 ```bash
 # 1. Set up environment
 pixi install
-pre-commit install
+pixi run pre-commit install
 
 # 2. Make changes to shared library
 # Edit files in shared/core/, shared/training/, etc.
