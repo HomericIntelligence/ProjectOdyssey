@@ -506,8 +506,9 @@ struct LayerTester:
         var output = conv2d(input, weights, bias, stride=stride, padding=padding)
 
         # Verify output shape
-        var expected_h = conv2d_output_shape(input_h, kernel_size, stride, padding)
-        var expected_w = conv2d_output_shape(input_w, kernel_size, stride, padding)
+        var output_shape = conv2d_output_shape(input_h, input_w, kernel_size, kernel_size, stride, padding)
+        var expected_h = output_shape[0]
+        var expected_w = output_shape[1]
         assert_shape(
             output,
             [1, out_channels, expected_h, expected_w],

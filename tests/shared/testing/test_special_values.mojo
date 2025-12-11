@@ -31,12 +31,12 @@ from shared.testing.assertions import assert_equal_float, assert_shape, assert_d
 
 fn test_special_value_constants() raises:
     """Test that special value constants have correct values."""
-    assert_equal_float(SPECIAL_VALUE_ZERO, 0.0, "SPECIAL_VALUE_ZERO should be 0.0")
-    assert_equal_float(SPECIAL_VALUE_HALF, 0.5, "SPECIAL_VALUE_HALF should be 0.5")
-    assert_equal_float(SPECIAL_VALUE_ONE, 1.0, "SPECIAL_VALUE_ONE should be 1.0")
-    assert_equal_float(SPECIAL_VALUE_ONE_HALF, 1.5, "SPECIAL_VALUE_ONE_HALF should be 1.5")
-    assert_equal_float(SPECIAL_VALUE_NEG_HALF, -0.5, "SPECIAL_VALUE_NEG_HALF should be -0.5")
-    assert_equal_float(SPECIAL_VALUE_NEG_ONE, -1.0, "SPECIAL_VALUE_NEG_ONE should be -1.0")
+    assert_equal_float(Float32(SPECIAL_VALUE_ZERO), 0.0, "SPECIAL_VALUE_ZERO should be 0.0")
+    assert_equal_float(Float32(SPECIAL_VALUE_HALF), 0.5, "SPECIAL_VALUE_HALF should be 0.5")
+    assert_equal_float(Float32(SPECIAL_VALUE_ONE), 1.0, "SPECIAL_VALUE_ONE should be 1.0")
+    assert_equal_float(Float32(SPECIAL_VALUE_ONE_HALF), 1.5, "SPECIAL_VALUE_ONE_HALF should be 1.5")
+    assert_equal_float(Float32(SPECIAL_VALUE_NEG_HALF), -0.5, "SPECIAL_VALUE_NEG_HALF should be -0.5")
+    assert_equal_float(Float32(SPECIAL_VALUE_NEG_ONE), -1.0, "SPECIAL_VALUE_NEG_ONE should be -1.0")
 
 
 fn test_create_special_value_tensor_zeros() raises:
@@ -110,12 +110,12 @@ fn test_create_alternating_pattern_tensor() raises:
     var val4 = tensor._get_float64(4)
     var val5 = tensor._get_float64(5)
 
-    assert_equal_float(val0, -1.0, "Element 0 should be -1.0")
-    assert_equal_float(val1, -0.5, "Element 1 should be -0.5")
-    assert_equal_float(val2, 0.0, "Element 2 should be 0.0")
-    assert_equal_float(val3, 0.5, "Element 3 should be 0.5")
-    assert_equal_float(val4, 1.0, "Element 4 should be 1.0")
-    assert_equal_float(val5, 1.5, "Element 5 should be 1.5")
+    assert_equal_float(Float32(val0), -1.0, "Element 0 should be -1.0")
+    assert_equal_float(Float32(val1), -0.5, "Element 1 should be -0.5")
+    assert_equal_float(Float32(val2), 0.0, "Element 2 should be 0.0")
+    assert_equal_float(Float32(val3), 0.5, "Element 3 should be 0.5")
+    assert_equal_float(Float32(val4), 1.0, "Element 4 should be 1.0")
+    assert_equal_float(Float32(val5), 1.5, "Element 5 should be 1.5")
 
 
 fn test_create_alternating_pattern_repeats() raises:
@@ -123,20 +123,20 @@ fn test_create_alternating_pattern_repeats() raises:
     var tensor = create_alternating_pattern_tensor([2, 6], DType.float32)
 
     # First cycle: -1.0, -0.5, 0.0, 0.5, 1.0, 1.5
-    assert_equal_float(tensor._get_float64(0), -1.0, "Element 0 should be -1.0")
-    assert_equal_float(tensor._get_float64(1), -0.5, "Element 1 should be -0.5")
-    assert_equal_float(tensor._get_float64(2), 0.0, "Element 2 should be 0.0")
-    assert_equal_float(tensor._get_float64(3), 0.5, "Element 3 should be 0.5")
-    assert_equal_float(tensor._get_float64(4), 1.0, "Element 4 should be 1.0")
-    assert_equal_float(tensor._get_float64(5), 1.5, "Element 5 should be 1.5")
+    assert_equal_float(Float32(tensor._get_float64(0)), -1.0, "Element 0 should be -1.0")
+    assert_equal_float(Float32(tensor._get_float64(1)), -0.5, "Element 1 should be -0.5")
+    assert_equal_float(Float32(tensor._get_float64(2)), 0.0, "Element 2 should be 0.0")
+    assert_equal_float(Float32(tensor._get_float64(3)), 0.5, "Element 3 should be 0.5")
+    assert_equal_float(Float32(tensor._get_float64(4)), 1.0, "Element 4 should be 1.0")
+    assert_equal_float(Float32(tensor._get_float64(5)), 1.5, "Element 5 should be 1.5")
 
     # Second cycle: repeats
-    assert_equal_float(tensor._get_float64(6), -1.0, "Element 6 should be -1.0")
-    assert_equal_float(tensor._get_float64(7), -0.5, "Element 7 should be -0.5")
-    assert_equal_float(tensor._get_float64(8), 0.0, "Element 8 should be 0.0")
-    assert_equal_float(tensor._get_float64(9), 0.5, "Element 9 should be 0.5")
-    assert_equal_float(tensor._get_float64(10), 1.0, "Element 10 should be 1.0")
-    assert_equal_float(tensor._get_float64(11), 1.5, "Element 11 should be 1.5")
+    assert_equal_float(Float32(tensor._get_float64(6)), -1.0, "Element 6 should be -1.0")
+    assert_equal_float(Float32(tensor._get_float64(7)), -0.5, "Element 7 should be -0.5")
+    assert_equal_float(Float32(tensor._get_float64(8)), 0.0, "Element 8 should be 0.0")
+    assert_equal_float(Float32(tensor._get_float64(9)), 0.5, "Element 9 should be 0.5")
+    assert_equal_float(Float32(tensor._get_float64(10)), 1.0, "Element 10 should be 1.0")
+    assert_equal_float(Float32(tensor._get_float64(11)), 1.5, "Element 11 should be 1.5")
 
 
 fn test_verify_special_value_invariants_passes() raises:
@@ -205,7 +205,7 @@ fn test_create_seeded_random_tensor_reproducibility() raises:
     for i in range(numel):
         var val1 = tensor1._get_float64(i)
         var val2 = tensor2._get_float64(i)
-        assert_equal_float(val1, val2, "Element " + String(i) + " should match")
+        assert_equal_float(Float32(val1), Float32(val2), "Element " + String(i) + " should match")
 
 
 fn test_create_seeded_random_tensor_different_seeds() raises:
