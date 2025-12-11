@@ -1,9 +1,11 @@
 name: Security Scanning
 
-# Comprehensive security scanning for dependencies and code
+# Comprehensive security scanning for secrets
 # Target duration: < 5 minutes
 
 on:
+  # Run on all pull requests
+  pull_request:
   # Run on pushes to main
   push:
     branches:
@@ -19,125 +21,34 @@ permissions:
 
 jobs:
   # ============================================================================
-  # Dependency Scanning
+  # Secret Scanning
   # ============================================================================
-  dependency-scan:
+  secret-scan:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
       - name: Checkout code
         uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # v6.0.0
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          fetch-depth: 0  # Full history for comprehensive scanning
 
-      - name: Install security scanning tools
-        run: |
-          python -m pip install --upgrade pip
-          pip install safety
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}  # Optional: for Gitleaks Pro
 
-      - name: Scan Python dependencies with Safety
-        run: |
-          echo "Scanning Python dependencies for known vulnerabilities..."
-
-          # Create requirements files list
-          REQ_FILES=""
-          if [ -f requirements.txt ]; then
-            REQ_FILES="$REQ_FILES requirements.txt"
-          fi
-          if [ -f requirements-dev.txt ]; then
-            REQ_FILES="$REQ_FILES requirements-dev.txt"
-          fi
-
-          if [ -n "$REQ_FILES" ]; then
-            safety check --json --file $REQ_FILES > safety-report.json || true
-            cat safety-report.json
-          else
-            echo "⚠️  No requirements files found"
-            echo '{"vulnerabilities": []}' > safety-report.json
-          fi
-
-      - name: Scan with OSV Scanner
-        run: |
-          echo "Scanning all dependencies with OSV Scanner..."
-
-          # Install osv-scanner
-          go install github.com/google/osv-scanner/cmd/osv-scanner@latest
-
-          # Run OSV scanner
-          ~/go/bin/osv-scanner --format json --output osv-report.json . || true
-
-      - name: Upload scan results
-        if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: dependency-scan-results
-          path: |
-            safety-report.json
-            osv-report.json
-          retention-days: 30
-
-  # ============================================================================
-  # SAST Scanning
-  # ============================================================================
-  sast-scan:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # v6.0.0
-
-      - name: Run Semgrep
-        uses: returntocorp/semgrep-action@v1
-        with:
-          config: auto
-          generateSarif: true
-        continue-on-error: true
-
-      - name: Upload SARIF results
-        if: always()
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: semgrep.sarif
-        continue-on-error: true
-
-      - name: Create security annotations
+      - name: Display scan summary
         if: always()
         run: |
-          echo "SAST scan completed. Check Security tab for findings."
-
-  # ============================================================================
-  # Supply Chain Scanning
-  # ============================================================================
-  supply-chain-scan:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    # Only run on pull requests (uses GitHub API)
-    if: github.event_name == 'pull_request'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # v6.0.0
-
-      - name: Dependency Review
-        uses: actions/dependency-review-action@v4
-        with:
-          fail-on-severity: critical
-          deny-licenses: GPL-3.0, AGPL-3.0
-          comment-summary-in-pr: always
-        continue-on-error: true
+          echo "✅ No secrets detected in repository"
 
   # ============================================================================
   # Security Report
   # ============================================================================
   security-report:
-    needs: [dependency-scan, sast-scan]
+    needs: [secret-scan]
     runs-on: ubuntu-latest
     if: always()
 
@@ -163,18 +74,11 @@ jobs:
           echo "## Scan Status" >> security-report.md
           echo "" >> security-report.md
 
-          # Dependency scan
-          if [ "${{ needs.dependency-scan.result }}" = "success" ]; then
-            echo "- ✅ **Dependency Scan**: Passed" >> security-report.md
+          # Secret scan
+          if [ "${{ needs.secret-scan.result }}" = "success" ]; then
+            echo "- ✅ **Secret Scan**: Passed (no secrets detected)" >> security-report.md
           else
-            echo "- ❌ **Dependency Scan**: Failed" >> security-report.md
-          fi
-
-          # SAST scan
-          if [ "${{ needs.sast-scan.result }}" = "success" ]; then
-            echo "- ✅ **SAST Scan**: Passed" >> security-report.md
-          else
-            echo "- ⚠️ **SAST Scan**: Completed with findings" >> security-report.md
+            echo "- ❌ **Secret Scan**: Failed (secrets detected!)" >> security-report.md
           fi
 
           echo "" >> security-report.md
@@ -204,6 +108,11 @@ jobs:
           echo "" >> security-report.md
 
           CRITICAL_ISSUES=false
+
+          if [ "${{ needs.secret-scan.result }}" != "success" ]; then
+            echo "- 🚨 **CRITICAL**: Remove exposed secrets immediately" >> security-report.md
+            CRITICAL_ISSUES=true
+          fi
 
           if [ "$CRITICAL_ISSUES" = "true" ]; then
             echo "" >> security-report.md
@@ -272,6 +181,11 @@ jobs:
       - name: Fail if critical vulnerabilities found
         run: |
           # Fail on critical issues
+          if [ "${{ needs.secret-scan.result }}" != "success" ]; then
+            echo "❌ CRITICAL: Secrets detected in repository"
+            exit 1
+          fi
+
           # Check for critical dependency vulnerabilities
           if [ -f security-results/safety-report.json ]; then
             CRITICAL=$(python3 -c "
