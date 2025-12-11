@@ -13,6 +13,12 @@ fail = true
 # Verbose output
 verbose = true
 
+# Cache links
+cache = true
+
+# Status codes to accept as valid
+accept = ["200..=204", "503", "504"]
+
 # Treat redirects as errors - we want direct links only
 # By default, lychee only accepts 200 OK
 # Any 3xx redirect will be treated as an error
