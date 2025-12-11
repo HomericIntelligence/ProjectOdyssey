@@ -3,25 +3,25 @@
 Provides functionality to load CIFAR-10 and CIFAR-100 binary format datasets
 
 CIFAR Format Overview:
-    - CIFAR-10: 1 label + 3*32*32 pixel bytes per image (3073 bytes total)
-    - CIFAR-100: 2 labels (coarse + fine) + 3*32*32 pixel bytes (3074 bytes total)
-    - Format: [label(s)][red_pixels][green_pixels][blue_pixels]
+    - CIFAR-10: 1 label + 3*32*32 pixel bytes per image (3073 bytes total).
+    - CIFAR-100: 2 labels (coarse + fine) + 3*32*32 pixel bytes (3074 bytes total).
+    - Format: [label(s)][red_pixels][green_pixels][blue_pixels].
 
 CIFAR-10 Structure:
-    - Images: 32x32 RGB (3 channels)
-    - Labels: 10 classes (0-9)
-    - Training: 50,000 images (5 batches of 10,000)
-    - Test: 10,000 images (1 batch)
+    - Images: 32x32 RGB (3 channels).
+    - Labels: 10 classes (0-9).
+    - Training: 50,000 images (5 batches of 10,000).
+    - Test: 10,000 images (1 batch).
 
 CIFAR-100 Structure:
-    - Images: 32x32 RGB (3 channels)
-    - Labels: 100 fine classes, 20 coarse superclasses
-    - Training: 50,000 images (1 batch)
-    - Test: 10,000 images (1 batch)
+    - Images: 32x32 RGB (3 channels).
+    - Labels: 100 fine classes, 20 coarse superclasses.
+    - Training: 50,000 images (1 batch).
+    - Test: 10,000 images (1 batch).
 
 References:
-    - CIFAR-10/100 Homepage: https://www.cs.toronto.edu/~kriz/cifar.html
-    - Binary format details: https://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz
+    - CIFAR-10/100 Homepage: https://www.cs.toronto.edu/~kriz/cifar.html.
+    - Binary format details: https://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz.
 """
 
 from collections import List
@@ -44,13 +44,13 @@ struct CIFARLoader(Copyable, Movable):
     """Loader for CIFAR-10 and CIFAR-100 binary format files.
 
     Supports loading batches of images and labels from CIFAR binary format
-    Each batch file contains multiple images packed sequentially
+    Each batch file contains multiple images packed sequentially.
 
     Attributes:
-        cifar_version: Version of CIFAR format (10 or 100)
-        image_size: Size of each image (32x32 for standard CIFAR)
-        channels: Number of color channels (3 for RGB)
-        bytes_per_image: Total bytes per image including label(s)
+        cifar_version: Version of CIFAR format (10 or 100).
+        image_size: Size of each image (32x32 for standard CIFAR).
+        channels: Number of color channels (3 for RGB).
+        bytes_per_image: Total bytes per image including label(s).
 
     Example:
         ```mojo
@@ -70,10 +70,10 @@ struct CIFARLoader(Copyable, Movable):
         """Initialize CIFAR loader with specified version.
 
         Args:
-            cifar_version: CIFAR version (10 or 100)
+            cifar_version: CIFAR version (10 or 100).
 
         Raises:
-            Error: If cifar_version is not 10 or 100
+            Error: If cifar_version is not 10 or 100.
         """
         if cifar_version != 10 and cifar_version != 100:
             raise Error(
@@ -110,27 +110,27 @@ struct CIFARLoader(Copyable, Movable):
         """Calculate number of images in file based on file size.
 
         Args:
-            file_size: Size of file in bytes
+            file_size: Size of file in bytes.
 
         Returns:
-            Number of images in file
+            Number of images in file.
         """
         return file_size // self.bytes_per_image
 
     fn load_labels(self, filepath: String) raises -> ExTensor:
         """Load labels from CIFAR binary format file.
 
-        For CIFAR-10, returns shape (num_images,) with single label per image
-        For CIFAR-100, returns shape (num_images, 2) with (coarse, fine) labels
+        For CIFAR-10, returns shape (num_images,) with single label per image.
+        For CIFAR-100, returns shape (num_images, 2) with (coarse, fine) labels.
 
         Args:
-            filepath: Path to CIFAR binary file
+            filepath: Path to CIFAR binary file.
 
         Returns:
-            ExTensor containing labels
+            ExTensor containing labels.
 
         Raises:
-            Error: If file cannot be read or format is invalid
+            Error: If file cannot be read or format is invalid.
         """
         var content: String
         with open(filepath, "r") as f:
@@ -174,17 +174,17 @@ struct CIFARLoader(Copyable, Movable):
     fn load_images(self, filepath: String) raises -> ExTensor:
         """Load images from CIFAR binary format file.
 
-        Returns shape (num_images, channels, image_size, image_size) with uint8 pixel values
-        Pixel data is stored as: [red_pixels][green_pixels][blue_pixels] for each image
+        Returns shape (num_images, channels, image_size, image_size) with uint8 pixel values.
+        Pixel data is stored as: [red_pixels][green_pixels][blue_pixels] for each image.
 
         Args:
-            filepath: Path to CIFAR binary file
+            filepath: Path to CIFAR binary file.
 
         Returns:
-            ExTensor of shape (num_images, 3, 32, 32) with uint8 pixel values
+            ExTensor of shape (num_images, 3, 32, 32) with uint8 pixel values.
 
         Raises:
-            Error: If file cannot be read or format is invalid
+            Error: If file cannot be read or format is invalid.
         """
         var content: String
         with open(filepath, "r") as f:
@@ -226,18 +226,18 @@ struct CIFARLoader(Copyable, Movable):
     fn load_batch(self, filepath: String) raises -> Tuple[ExTensor, ExTensor]:
         """Load a complete batch of images and labels from CIFAR file.
 
-        Convenience function that loads both images and labels in a single call
+        Convenience function that loads both images and labels in a single call.
 
         Args:
-            filepath: Path to CIFAR binary file
+            filepath: Path to CIFAR binary file.
 
         Returns:
             Tuple of (images, labels) where:
-            - images: ExTensor of shape (num_images, 3, 32, 32) with uint8 pixels
-            - labels: ExTensor with shape (num_images,) for CIFAR-10 or (num_images, 2) for CIFAR-100
+            - images: ExTensor of shape (num_images, 3, 32, 32) with uint8 pixels.
+            - labels: ExTensor with shape (num_images,) for CIFAR-10 or (num_images, 2) for CIFAR-100.
 
         Raises:
-            Error: If file cannot be read or format is invalid
+            Error: If file cannot be read or format is invalid.
         """
         var images = self.load_images(filepath)
         var labels = self.load_labels(filepath)

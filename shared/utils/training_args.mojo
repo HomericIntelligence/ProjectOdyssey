@@ -40,13 +40,13 @@ struct TrainingArgs(Copyable, Movable):
     """Container for common training hyperparameters and paths.
 
     Attributes:
-        epochs: Number of training epochs
-        batch_size: Batch size for training
-        learning_rate: Learning rate for optimizer
-        momentum: Momentum factor for SGD
-        data_dir: Path to dataset directory
-        weights_dir: Path to save/load model weights
-        verbose: Whether to print verbose output
+        epochs: Number of training epochs.
+        batch_size: Batch size for training.
+        learning_rate: Learning rate for optimizer.
+        momentum: Momentum factor for SGD.
+        data_dir: Path to dataset directory.
+        weights_dir: Path to save/load model weights.
+        verbose: Whether to print verbose output.
     """
 
     var epochs: Int
@@ -86,14 +86,14 @@ fn parse_training_args() raises -> TrainingArgs:
             --verbose: Enable verbose output
 
     Returns:
-            TrainingArgs struct with parsed and validated values
+            TrainingArgs struct with parsed and validated values.
 
     Raises:
-            Error if argument validation fails
+            Error if argument validation fails.
 
         Example:
             ```mojo
-             Command line: mojo train.mojo --epochs 100 --lr 0.001 --verbose
+           # Command line: mojo train.mojo --epochs 100 --lr 0.001 --verbose
             var args = parse_training_args()
             # args.epochs == 100, args.learning_rate == 0.001, args.verbose == True
             ```
@@ -119,25 +119,25 @@ fn parse_training_args_with_defaults(
     """Parse training arguments with custom defaults and validation.
 
         Allows each training script to specify model-appropriate defaults
-        while still using shared parsing logic. Validates numeric ranges
+        while still using shared parsing logic. Validates numeric ranges.
 
     Args:
-            default_epochs: Default number of epochs (must be positive)
-            default_batch_size: Default batch size (must be positive)
-            default_lr: Default learning rate (must be positive)
-            default_momentum: Default momentum (must be in [0.0, 1.0])
-            default_data_dir: Default dataset directory
-            default_weights_dir: Default weights directory
+            default_epochs: Default number of epochs (must be positive).
+            default_batch_size: Default batch size (must be positive).
+            default_lr: Default learning rate (must be positive).
+            default_momentum: Default momentum (must be in [0.0, 1.0]).
+            default_data_dir: Default dataset directory.
+            default_weights_dir: Default weights directory.
 
     Returns:
-            TrainingArgs struct with parsed and validated values
+            TrainingArgs struct with parsed and validated values.
 
     Raises:
-            Error if argument validation fails
+            Error if argument validation fails.
 
         Example:
             ```mojo
-             AlexNet with custom defaults
+            # AlexNet with custom defaults
             var args = parse_training_args_with_defaults(
                 default_epochs=100,
                 default_batch_size=128,

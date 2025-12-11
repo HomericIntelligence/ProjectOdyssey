@@ -3,19 +3,19 @@
 This module provides a standard interface for composing neural network layers
 and models. The Module trait enables:
 
-- Consistent interface for all layers (Linear, Conv2D, etc.)
-- Easy parameter collection for optimizers
-- Nested module support (models containing layers)
-- Training vs eval mode switching
+- Consistent interface for all layers (Linear, Conv2D, etc.).
+- Easy parameter collection for optimizers.
+- Nested module support (models containing layers).
+- Training vs eval mode switching.
 
 The trait follows a simple interface pattern where implementations can vary
 but must support forward passes, parameter access, and mode switching.
 
 Key Design Principles:
-- Minimal interface: forward(), parameters(), train(), eval()
-- No required default implementations - subclasses implement what they need
-- Training flag for layers that need it (dropout, batch norm)
-- Parameter collection for optimizer integration
+- Minimal interface: forward(), parameters(), train(), eval().
+- No required default implementations - subclasses implement what they need.
+- Training flag for layers that need it (dropout, batch norm).
+- Parameter collection for optimizer integration.
 
 Example:
     ```mojo
@@ -65,17 +65,17 @@ trait Module:
         """Compute forward pass of the module.
 
         Args:
-            input: Input tensor to the module. Shape depends on module type
+            input: Input tensor to the module. Shape depends on module type.
 
         Returns:
-            Output tensor from the module. Shape depends on module type
+            Output tensor from the module. Shape depends on module type.
 
         Raises:
-            Error: If tensor operations fail or shapes are incompatible
+            Error: If tensor operations fail or shapes are incompatible.
 
         Note:
-            This method is required for all Module implementations
-            It defines the core computation of the module
+            This method is required for all Module implementations.
+            It defines the core computation of the module.
         """
         ...
 
@@ -84,20 +84,20 @@ trait Module:
 
         Returns a list of all learnable parameters (weights, biases, etc.)
         that this module manages. The list may be empty for modules with
-        no trainable parameters (e.g., activation functions, pooling)
+        no trainable parameters (e.g., activation functions, pooling).
 
         Returns:
-            List of ExTensor containing all trainable parameters
-            Order should be consistent across calls
+            List of ExTensor containing all trainable parameters.
+            Order should be consistent across calls.
 
         Raises:
-            Error: If parameter collection fails
+            Error: If parameter collection fails.
 
         Note:
-            - Returned parameters are typically references/copies
-            - Order should be deterministic for reproducibility
-            - Nested modules should recursively include sub-module parameters
-            - For optimization: frameworks typically flatten this for gradient updates
+            - Returned parameters are typically references/copies.
+            - Order should be deterministic for reproducibility.
+            - Nested modules should recursively include sub-module parameters.
+            - For optimization: frameworks typically flatten this for gradient updates.
         """
         ...
 
@@ -105,14 +105,14 @@ trait Module:
         """Switch module to training mode.
 
         Sets the module to training mode, enabling features like:
-        - Dropout regularization
-        - Batch normalization with running statistics
-        - Other training-specific behaviors
+        - Dropout regularization.
+        - Batch normalization with running statistics.
+        - Other training-specific behaviors.
 
         Note:
-            - Default (no-op) if module doesn't need mode switching
-            - Can be overridden by layers that need it
-            - Should be called before training loop
+            - Default (no-op) if module doesn't need mode switching.
+            - Can be overridden by layers that need it.
+            - Should be called before training loop.
 
         Example:
             ```mojo
@@ -127,14 +127,14 @@ trait Module:
         """Switch module to evaluation mode.
 
         Sets the module to evaluation (inference) mode, disabling features like:
-        - Dropout regularization
-        - Batch normalization updates
-        - Other training-specific behaviors
+        - Dropout regularization.
+        - Batch normalization updates.
+        - Other training-specific behaviors.
 
         Note:
-            - Default (no-op) if module doesn't need mode switching
-            - Can be overridden by layers that need it
-            - Should be called before inference
+            - Default (no-op) if module doesn't need mode switching.
+            - Can be overridden by layers that need it.
+            - Should be called before inference.
 
         Example:
             ```mojo

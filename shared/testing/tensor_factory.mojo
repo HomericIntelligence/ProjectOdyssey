@@ -46,8 +46,10 @@ fn zeros_tensor(shape: List[Int], dtype: DType) raises -> ExTensor:
         ExTensor with all elements initialized to zero.
 
     Example:
+    ```
         var weights = zeros_tensor([10, 5], DType.float32)
         # Creates 10x5 tensor filled with zeros
+    ```
     """
     return zeros(shape, dtype)
 
@@ -63,8 +65,10 @@ fn ones_tensor(shape: List[Int], dtype: DType) raises -> ExTensor:
         ExTensor with all elements initialized to one.
 
     Example:
+    ```
         var weights = ones_tensor([10, 5], DType.float32)
         # Creates 10x5 tensor filled with ones
+    ```
     """
     return ones(shape, dtype)
 
@@ -83,8 +87,10 @@ fn full_tensor(
         ExTensor with all elements initialized to fill_value (converted to dtype).
 
     Example:
+    ```
         var weights = full_tensor([10, 5], 3.14, DType.float32)
         # Creates 10x5 tensor filled with 3.14
+    ```
     """
     return full(shape, fill_value, dtype)
 

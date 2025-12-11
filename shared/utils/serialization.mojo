@@ -64,8 +64,8 @@ struct NamedTensor(Copyable, Movable):
         """Create named tensor.
 
         Args:
-            name: Parameter name (e.g., "conv1_kernel", "linear_bias")
-            tensor: Tensor data
+            name: Parameter name (e.g., "conv1_kernel", "linear_bias").
+            tensor: Tensor data.
         """
         self.name = name
         self.tensor = tensor
@@ -90,15 +90,15 @@ fn save_tensor(tensor: ExTensor, filepath: String, name: String = "") raises:
     """Save tensor to file in hex format.
 
         Saves tensor with metadata (dtype, shape) and hex-encoded byte data
-        File format is text-based for portability across platforms
+        File format is text-based for portability across platforms.
 
     Args:
-            tensor: Tensor to save
-            filepath: Output file path
-            name: Optional tensor name (defaults to empty string)
+            tensor: Tensor to save.
+            filepath: Output file path.
+            name: Optional tensor name (defaults to empty string).
 
     Raises:
-            Error: If file write fails
+            Error: If file write fails.
 
         Example:
             ```mojo
@@ -134,13 +134,13 @@ fn load_tensor(filepath: String) raises -> ExTensor:
     """Load tensor from file.
 
         Reads hex-encoded tensor data and metadata, reconstructs
-        ExTensor with original dtype and shape
+        ExTensor with original dtype and shape.
 
     Args:
-            filepath: Input file path
+            filepath: Input file path.
 
     Returns:
-            Loaded ExTensor
+            Loaded ExTensor.
 
     Raises:
             Error: If file format is invalid or file doesn't exist.
@@ -190,13 +190,13 @@ fn load_tensor_with_name(filepath: String) raises -> Tuple[String, ExTensor]:
     """Load tensor with its associated name.
 
         Similar to load_tensor but also returns the tensor name
-        from the file (useful for NamedTensor reconstruction)
+        from the file (useful for NamedTensor reconstruction).
 
     Args:
-            filepath: Input file path
+            filepath: Input file path.
 
     Returns:
-            Tuple of (name, tensor)
+            Tuple of (name, tensor).
 
     Raises:
             Error: If file format is invalid or file doesn't exist.
@@ -251,14 +251,14 @@ fn save_named_tensors(tensors: List[NamedTensor], dirpath: String) raises:
     """Save collection of named tensors to directory.
 
         Creates a directory with one .weights file per tensor
-        Useful for saving model checkpoints with multiple parameter groups
+        Useful for saving model checkpoints with multiple parameter groups.
 
     Args:
-            tensors: List of NamedTensor objects
-            dirpath: Output directory path (created if doesn't exist)
+            tensors: List of NamedTensor objects.
+            dirpath: Output directory path (created if doesn't exist).
 
     Raises:
-            Error: If directory creation or file write fails
+            Error: If directory creation or file write fails.
 
         Example:
             ```mojo
@@ -286,13 +286,13 @@ fn load_named_tensors(dirpath: String) raises -> List[NamedTensor]:
     """Load collection of named tensors from directory.
 
         Reads all .weights files from directory and reconstructs
-        NamedTensor objects. Files are loaded in directory order
+        NamedTensor objects. Files are loaded in directory order.
 
     Args:
-            dirpath: Directory containing .weights files
+            dirpath: Directory containing .weights files.
 
     Returns:
-            List of NamedTensor objects
+            List of NamedTensor objects.
 
     Raises:
             Error: If directory doesn't exist or file format is invalid.
@@ -340,15 +340,15 @@ fn save_named_checkpoint(
     """Save model checkpoint with named tensors and optional metadata.
 
         Creates checkpoint directory with tensor files and metadata file
-        Metadata is stored in a separate JSON-like format
+        Metadata is stored in a separate JSON-like format.
 
     Args:
-            tensors: List of NamedTensor objects to save
-            path: Checkpoint directory path (created if doesn't exist)
-            metadata: Optional metadata dictionary (e.g., epoch, loss values)
+            tensors: List of NamedTensor objects to save.
+            path: Checkpoint directory path (created if doesn't exist).
+            metadata: Optional metadata dictionary (e.g., epoch, loss values).
 
     Raises:
-            Error: If directory creation or file write fails
+            Error: If directory creation or file write fails.
 
         Example:
             ```mojo
@@ -384,13 +384,13 @@ fn load_named_checkpoint(
     """Load model checkpoint with named tensors and metadata.
 
         Reads all tensor files from checkpoint directory and metadata if present
-        Returns both the tensors and any associated metadata
+        Returns both the tensors and any associated metadata.
 
     Args:
-            path: Checkpoint directory path
+            path: Checkpoint directory path.
 
     Returns:
-            Tuple of (tensors, metadata)
+            Tuple of (tensors, metadata).
 
     Raises:
             Error: If directory doesn't exist or file format is invalid.
@@ -492,14 +492,14 @@ fn bytes_to_hex(data: UnsafePointer[UInt8], num_bytes: Int) -> String:
     """Convert bytes to hexadecimal string.
 
         Encodes each byte as two hex characters (e.g., 0xFF -> "ff")
-        Used for text-based tensor serialization
+        Used for text-based tensor serialization.
 
     Args:
-            data: Pointer to byte array
-            num_bytes: Number of bytes to convert
+            data: Pointer to byte array.
+            num_bytes: Number of bytes to convert.
 
     Returns:
-            Hex string representation
+            Hex string representation.
 
         Example:
             ```mojo
@@ -524,14 +524,14 @@ fn hex_to_bytes(hex_str: String, tensor: ExTensor) raises:
     """Convert hexadecimal string to bytes and store in tensor.
 
         Decodes hex string back to bytes. Validates that hex string
-        has even length (pairs of hex digits)
+        has even length (pairs of hex digits).
 
     Args:
-            hex_str: Hex string (e.g., "3f800000")
-            tensor: Tensor to store decoded bytes in
+            hex_str: Hex string (e.g., "3f800000").
+            tensor: Tensor to store decoded bytes in.
 
     Raises:
-            Error: If hex string has odd length or contains invalid characters
+            Error: If hex string has odd length or contains invalid characters.
 
         Example:
             ```mojo
@@ -586,13 +586,13 @@ fn get_dtype_size(dtype: DType) -> Int:
 
         Returns the number of bytes required to store a single
         value of the given dtype. Used for calculating tensor
-        byte sizes during serialization
+        byte sizes during serialization.
 
     Args:
-            dtype: Data type
+            dtype: Data type.
 
     Returns:
-            Size in bytes (1, 2, 4, or 8)
+            Size in bytes (1, 2, 4, or 8).
 
         Example:
             ```mojo
@@ -621,16 +621,16 @@ fn parse_dtype(dtype_str: String) raises -> DType:
     """Parse dtype string to DType enum.
 
         Converts string representation (e.g., "float32") to corresponding
-        DType enum value. Case-sensitive match required
+        DType enum value. Case-sensitive match required.
 
     Args:
-            dtype_str: String representation (e.g., "float32", "int64")
+            dtype_str: String representation (e.g., "float32", "int64").
 
     Returns:
-            Corresponding DType
+            Corresponding DType.
 
     Raises:
-            Error: If dtype string is not recognized
+            Error: If dtype string is not recognized.
 
         Example:
             ```mojo
@@ -667,10 +667,10 @@ fn dtype_to_string(dtype: DType) -> String:
     """Convert dtype enum to string representation.
 
     Args:
-            dtype: Data type
+            dtype: Data type.
 
     Returns:
-            String representation (e.g., "float32")
+            String representation (e.g., "float32").
 
         Example:
             ```mojo

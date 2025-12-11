@@ -66,10 +66,10 @@ trait Differentiable:
         """Compute forward pass.
 
         Args:
-            input: Input tensor (batch_size, ...)
+            input: Input tensor (batch_size, ...).
 
         Returns:
-            Output tensor (batch_size, ...)
+            Output tensor (batch_size, ...).
 
         Raises:
             Error: If input shape is invalid.
@@ -212,7 +212,7 @@ trait Serializable:
         """Save component state to file.
 
         Args:
-            path: File path or directory
+            path: File path or directory.
 
         Raises:
             Error: If write fails or path is invalid.
@@ -283,18 +283,20 @@ trait Composable(Differentiable):
             Error: This method is not yet supported due to Mojo limitation.
 
         Workaround:
-            Instead of using compose(), manually chain operations:
+        ```
+                Instead of using compose(), manually chain operations:
 
-            # Instead of:
-            # var combined = layer1.compose(layer2)
+                # Instead of:
+                # var combined = layer1.compose(layer2)
 
-            # Use manual composition:
-            var intermediate = layer1.forward(input)
-            var result = layer2.forward(intermediate)
+                # Use manual composition:
+                var intermediate = layer1.forward(input)
+                var result = layer2.forward(intermediate)
+        ```
 
         See Also:
-            - Issue #2401: Trait compose() blocked by Movable constraint
-            - https://docs.modular.com/mojo/manual/traits/
+            - Issue #2401: Trait compose() blocked by Movable constraint.
+            - https://docs.modular.com/mojo/manual/traits/.
         """
         raise Error(
             "compose() not yet supported - use manual composition instead. "

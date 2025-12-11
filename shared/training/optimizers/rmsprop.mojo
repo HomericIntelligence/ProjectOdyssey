@@ -42,61 +42,61 @@ fn rmsprop_step(
     """Perform a single RMSprop optimization step - pure functional.
 
         Returns new parameters, new square average, and new momentum buffer
-        Caller manages all state including timestep tracking
+        Caller manages all state including timestep tracking.
 
     Args:
-            params: Model parameters to update
-            gradients: Gradients of loss with respect to params
-            square_avg: Running average of squared gradients
-            t: Current timestep (starts at 1, increments each step)
-            learning_rate: Step size for parameter updates
-            alpha: Smoothing constant for running average (default: 0.99)
-            epsilon: Small constant for numerical stability (default: 1e-8)
-            weight_decay: L2 regularization factor (default: 0.0, no regularization)
-            momentum: Momentum factor (default: 0.0, no momentum)
-            buf: Momentum buffer (only used if momentum > 0)
+            params: Model parameters to update.
+            gradients: Gradients of loss with respect to params.
+            square_avg: Running average of squared gradients.
+            t: Current timestep (starts at 1, increments each step).
+            learning_rate: Step size for parameter updates.
+            alpha: Smoothing constant for running average (default: 0.99).
+            epsilon: Small constant for numerical stability (default: 1e-8).
+            weight_decay: L2 regularization factor (default: 0.0, no regularization).
+            momentum: Momentum factor (default: 0.0, no momentum).
+            buf: Momentum buffer (only used if momentum > 0).
 
     Returns:
-            Tuple of (new_params, new_square_avg, new_buf)
+            Tuple of (new_params, new_square_avg, new_buf).
 
-        Example (basic RMSprop):
-            ```mojo
-            from shared.core import ExTensor, zeros_like
-            from shared.training.optimizers import rmsprop_step
+    Example (basic RMSprop):
+        ```mojo
+        from shared.core import ExTensor, zeros_like
+        from shared.training.optimizers import rmsprop_step
 
-            var W = xavier_uniform(784, 128, DType.float32)
-            var square_avg = zeros_like(W)
-            var buf = zeros([0], DType.float32)  # Empty tensor (no momentum)
-            var t = 1
+        var W = xavier_uniform(784, 128, DType.float32)
+        var square_avg = zeros_like(W)
+        var buf = zeros([0], DType.float32)  # Empty tensor (no momentum)
+        var t = 1
 
-            # Training loop
-            for epoch in range(100):
-                var grad_W = ...  # Compute gradients
-                (W, square_avg, buf) = rmsprop_step(W, grad_W, square_avg, t, lr=0.01)
-                t += 1
-            ```
+        # Training loop
+        for epoch in range(100):
+            var grad_W = ...  # Compute gradients
+            (W, square_avg, buf) = rmsprop_step(W, grad_W, square_avg, t, lr=0.01)
+            t += 1
+        ```
 
-        Example (RMSprop with momentum):
-            ```mojo
-            var W = xavier_uniform(784, 128, DType.float32)
-            var square_avg = zeros_like(W)
-            var buf = zeros_like(W)  # Momentum buffer
-            var t = 1
+    Example (RMSprop with momentum):
+        ```mojo
+        var W = xavier_uniform(784, 128, DType.float32)
+        var square_avg = zeros_like(W)
+        var buf = zeros_like(W)  # Momentum buffer
+        var t = 1
 
-            # Training loop with momentum
-            for epoch in range(100):
-                var grad_W = ...  # Compute gradients
-                (W, square_avg, buf) = rmsprop_step(
-                    W, grad_W, square_avg, t,
-                    lr=0.01, momentum=0.9, buf=buf
-                )
-                t += 1
-            ```
+        # Training loop with momentum
+        for epoch in range(100):
+            var grad_W = ...  # Compute gradients
+            (W, square_avg, buf) = rmsprop_step(
+                W, grad_W, square_avg, t,
+                lr=0.01, momentum=0.9, buf=buf
+            )
+            t += 1
+        ```
 
     Note:
-            This is a pure function - it returns new state rather than mutating
-            Caller must capture all three return values and update their variables
-            Timestep t must be tracked by caller and incremented after each step
+            This is a pure function - it returns new state rather than mutating.
+            Caller must capture all three return values and update their variables.
+            Timestep t must be tracked by caller and incremented after each step.
     """
     if params.shape() != gradients.shape():
         raise Error("Parameters and gradients must have the same shape")
@@ -175,32 +175,32 @@ fn rmsprop_step_simple(
 ) raises -> Tuple[ExTensor, ExTensor]:
     """Simplified RMSprop step without weight decay, momentum, or timestep.
 
-        This is a convenience function for basic RMSprop updates
+        This is a convenience function for basic RMSprop updates.
 
     Args:
-            params: Model parameters to update
-            gradients: Gradients of loss with respect to params
-            square_avg: Running average of squared gradients
-            learning_rate: Step size for parameter updates
-            alpha: Smoothing constant for running average (default: 0.99)
-            epsilon: Small constant for numerical stability (default: 1e-8)
+            params: Model parameters to update.
+            gradients: Gradients of loss with respect to params.
+            square_avg: Running average of squared gradients.
+            learning_rate: Step size for parameter updates.
+            alpha: Smoothing constant for running average (default: 0.99).
+            epsilon: Small constant for numerical stability (default: 1e-8).
 
     Returns:
-            Tuple of (new_params, new_square_avg)
+            Tuple of (new_params, new_square_avg).
 
-        Example:
-            ```mojo
-            from shared.core import ExTensor, zeros_like
-            from shared.training.optimizers import rmsprop_step_simple
+    Example:
+        ```mojo
+        from shared.core import ExTensor, zeros_like
+        from shared.training.optimizers import rmsprop_step_simple
 
-            var W = xavier_uniform(784, 128, DType.float32)
-            var square_avg = zeros_like(W)
+        var W = xavier_uniform(784, 128, DType.float32)
+        var square_avg = zeros_like(W)
 
-            # Training loop
-            for epoch in range(100):
-                var grad_W = ...  # Compute gradients
-                (W, square_avg) = rmsprop_step_simple(W, grad_W, square_avg, lr=0.01)
-            ```
+        # Training loop
+        for epoch in range(100):
+            var grad_W = ...  # Compute gradients
+            (W, square_avg) = rmsprop_step_simple(W, grad_W, square_avg, lr=0.01)
+        ```
     """
     var (new_params, new_square_avg, _) = rmsprop_step(
         params,

@@ -17,13 +17,13 @@ fn argmax(tensor: ExTensor) raises -> Int:
     """Find the index of the maximum value in a flattened tensor.
 
     Args:
-        tensor: Input tensor
+        tensor: Input tensor.
 
     Returns:
-        The linear index of the maximum element
+        The linear index of the maximum element.
 
     Raises:
-        Error: If tensor is empty
+        Error: If tensor is empty.
 
     Examples:
         ```mojo
@@ -50,8 +50,8 @@ fn argmax(tensor: ExTensor, axis: Int) raises -> ExTensor:
     """Find indices of maximum values along an axis.
 
     Args:
-        tensor: Input tensor
-        axis: Axis along which to find argmax
+        tensor: Input tensor.
+        axis: Axis along which to find argmax.
 
     Returns:
         A tensor of indices (dtype: int64) with reduced dimensions
@@ -151,8 +151,8 @@ fn top_k_indices(tensor: ExTensor, k: Int) raises -> List[Int]:
     """Find indices of the k largest values in a flattened tensor.
 
     Args:
-        tensor: Input tensor
-        k: Number of top values to find
+        tensor: Input tensor.
+        k: Number of top values to find.
 
     Returns:
         List of indices sorted by their values (descending)
@@ -214,8 +214,8 @@ fn top_k(tensor: ExTensor, k: Int) raises -> Tuple[ExTensor, List[Int]]:
     """Find the k largest values and their indices in a flattened tensor.
 
     Args:
-        tensor: Input tensor
-        k: Number of top values to find
+        tensor: Input tensor.
+        k: Number of top values to find.
 
     Returns:
         A tuple containing:
@@ -250,8 +250,8 @@ fn argsort(tensor: ExTensor, descending: Bool = False) raises -> List[Int]:
     """Return indices that would sort the tensor.
 
     Args:
-        tensor: Input tensor
-        descending: If True, sort in descending order. If False, ascending
+        tensor: Input tensor.
+        descending: If True, sort in descending order. If False, ascending.
 
     Returns:
         List of indices that sort the tensor

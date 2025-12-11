@@ -275,7 +275,7 @@ fn min_reduce(
         # Min of all elements
         var result_shape = List[Int]()
         if keepdims:
-            for i in range(tensor.dim()):
+            for _ in range(tensor.dim()):
                 result_shape.append(1)
         var result = ExTensor(result_shape, tensor.dtype())
 
@@ -401,10 +401,10 @@ fn sum_backward(
         # The gradient value is replicated axis_size times.
 
         # Compute strides for input tensor
-        var ndim = len(input_shape)
-        var strides = compute_strides(input_shape)
+        # FIXME(Unused): var ndim = len(input_shape)
+        # FIXME(Unused): var strides = compute_strides(input_shape)
 
-        var axis_size = input_shape[axis]
+        # FIXME(Unused): var axis_size = input_shape[axis]
 
         # For each position in grad_output, broadcast it to all positions along axis
         for result_idx in range(result.numel()):

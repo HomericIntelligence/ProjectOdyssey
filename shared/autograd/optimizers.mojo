@@ -104,11 +104,11 @@ struct SGD:
         """Update parameters using their gradients from the tape.
 
         Performs one step of gradient descent with optional momentum:
-            v_t = momentum * v_{t-1} + gradient
-            parameter = parameter - learning_rate * v_t
+            `v_t = momentum * v_{t-1} + gradient
+            parameter = parameter - learning_rate * v_t`
 
         Without momentum (momentum=0):
-            parameter = parameter - learning_rate * gradient
+            `parameter = parameter - learning_rate * gradient`
 
         Args:
             parameters: List of Variables to update (model parameters).
@@ -123,11 +123,13 @@ struct SGD:
             Error: Any parameter has incompatible gradient shape.
 
         Examples:
-            # After backward pass
-            loss.backward(tape)
+        ```
+                # After backward pass
+                loss.backward(tape)
 
-            # Update all parameters
-            optimizer.step(model.parameters(), tape)
+                # Update all parameters
+                optimizer.step(model.parameters(), tape)
+        ```
         """
         # Initialize velocity buffers on first call if using momentum
         if self.momentum > 0.0 and not self._initialized:
@@ -290,13 +292,13 @@ struct Adam:
         Internally maintains momentum (m) and variance (v) buffers per parameter.
 
         Algorithm:
-            1. Increment step counter: t = t + 1
+            1. Increment step counter: `t = t + 1`
             2. For each parameter with gradient:
-                - Get gradient g_t
-                - Update first moment: m_t = β₁ * m_{t-1} + (1 - β₁) * g_t
-                - Update second moment: v_t = β₂ * v_{t-1} + (1 - β₂) * g_t²
-                - Compute bias corrections: m̂_t = m_t / (1 - β₁^t), v̂_t = v_t / (1 - β₂^t)
-                - Update parameter: θ_t = θ_{t-1} - α * m̂_t / (√v̂_t + ε)
+                - Get gradient `g_t`
+                - Update first moment: `m_t = β₁ * m_{t-1} + (1 - β₁) * g_t`
+                - Update second moment: `v_t = β₂ * v_{t-1} + (1 - β₂) * g_t²`
+                - Compute bias corrections:` m̂_t = m_t / (1 - β₁^t), v̂_t = v_t / (1 - β₂^t)`
+                - Update parameter: `θ_t = θ_{t-1} - α * m̂_t / (√v̂_t + ε)`
 
         Args:
             parameters: List of Variables to update (model parameters).
@@ -311,11 +313,13 @@ struct Adam:
             Error: Any parameter has incompatible gradient shape.
 
         Examples:
-            # After backward pass
-            loss.backward(tape)
+        ```
+                # After backward pass
+                loss.backward(tape)
 
-            # Update all parameters (multiple calls increment step counter)
-            optimizer.step(model.parameters(), tape)
+                # Update all parameters (multiple calls increment step counter)
+                optimizer.step(model.parameters(), tape)
+        ```
         """
         # Increment step counter
         self.t += 1
@@ -470,6 +474,7 @@ struct AdaGrad:
             G_buffers: Accumulated squared gradients for each parameter.
 
     Examples:
+    ```
             # Basic AdaGrad
             var optimizer = AdaGrad(learning_rate=0.01)
 
@@ -479,6 +484,7 @@ struct AdaGrad:
             # Training step
             optimizer.step(parameters, tape)
             optimizer.zero_grad(tape)
+    ```
     """
 
     var learning_rate: Float64
@@ -496,18 +502,20 @@ struct AdaGrad:
 
         Args:
             learning_rate: Step size for parameter updates (α in literature).
-                          Typical values: 0.01, 0.001.
+                            Typical values: 0.01, 0.001.
             epsilon: Small constant added to accumulated gradient for numerical
                     stability (prevents division by zero).
                     Default: 1e-10.
             weight_decay: L2 regularization coefficient.
-                         0.0 = no weight decay.
-                         1e-4 = typical value for regularization.
-                         Default: 0.0.
+                        0.0 = no weight decay.
+                        1e-4 = typical value for regularization.
+                        Default: 0.0.
 
         Examples:
-            var opt = AdaGrad(learning_rate=0.01)
-            var opt_reg = AdaGrad(learning_rate=0.01, weight_decay=1e-4)
+        ```
+                var opt = AdaGrad(learning_rate=0.01)
+                var opt_reg = AdaGrad(learning_rate=0.01, weight_decay=1e-4)
+        ```
         """
         self.learning_rate = learning_rate
         self.epsilon = epsilon
@@ -520,8 +528,8 @@ struct AdaGrad:
         """Update parameters using AdaGrad adaptive learning rates.
 
         Performs one step of AdaGrad optimization:
-            G_t = G_{t-1} + g_t²
-            θ_t = θ_{t-1} - α * g_t / (√G_t + ε)
+            `G_t = G_{t-1} + g_t²
+            θ_t = θ_{t-1} - α * g_t / (√G_t + ε)`
 
         Args:
             parameters: List of Variables to update (model parameters).
@@ -537,11 +545,13 @@ struct AdaGrad:
             Error: Any parameter has incompatible gradient shape.
 
         Examples:
-            # After backward pass
-            loss.backward(tape)
+        ```
+                # After backward pass
+                loss.backward(tape)
 
-            # Update all parameters with adaptive learning rates
-            optimizer.step(model.parameters(), tape)
+                # Update all parameters with adaptive learning rates
+                optimizer.step(model.parameters(), tape)
+        ```
         """
         for i in range(len(parameters)):
             # Skip parameters that don't require gradients

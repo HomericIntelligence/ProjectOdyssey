@@ -15,14 +15,14 @@ fn cast_tensor(tensor: ExTensor, target_dtype: DType) raises -> ExTensor:
     training. Uses SIMD optimization where possible.
 
     Args:
-        tensor: Source tensor to convert
-        target_dtype: Target dtype
+        tensor: Source tensor to convert.
+        target_dtype: Target dtype.
 
     Returns:
-        New tensor with target dtype
+        New tensor with target dtype.
 
     Raises:
-        Error: If tensor is empty or conversion is not supported
+        Error: If tensor is empty or conversion is not supported.
 
     Example:
         ```mojo
@@ -100,13 +100,13 @@ fn cast_to_bfloat16(tensor: ExTensor) raises -> ExTensor:
     Use this for storing model parameters in BF16 format.
 
     Args:
-        tensor: Source tensor (any floating point dtype)
+        tensor: Source tensor (any floating point dtype).
 
     Returns:
-        Tensor with uint16 storage containing BFloat16 values
+        Tensor with uint16 storage containing BFloat16 values.
 
     Raises:
-        Error: If tensor is empty
+        Error: If tensor is empty.
 
     Example:
         ```mojo
@@ -139,14 +139,14 @@ fn cast_from_bfloat16(
     Assumes input tensor stores BFloat16 values as uint16.
 
     Args:
-        tensor: Source tensor with uint16 BFloat16 storage
-        target_dtype: Target floating point dtype (default: float32)
+        tensor: Source tensor with uint16 BFloat16 storage.
+        target_dtype: Target floating point dtype (default: float32).
 
     Returns:
-        Tensor with target dtype
+        Tensor with target dtype.
 
     Raises:
-        Error: If tensor is not uint16 or target is not floating point
+        Error: If tensor is not uint16 or target is not floating point.
 
     Example:
         ```mojo
@@ -190,10 +190,10 @@ fn get_dtype_size(dtype: DType) -> Int:
     """Get size in bytes for a dtype.
 
     Args:
-        dtype: DType to query
+        dtype: DType to query.
 
     Returns:
-        Size in bytes
+        Size in bytes.
 
     Example:
         ```mojo
@@ -222,10 +222,10 @@ fn is_floating_dtype(dtype: DType) -> Bool:
     """Check if dtype is floating point.
 
     Args:
-        dtype: DType to check
+        dtype: DType to check.
 
     Returns:
-        True if floating point dtype
+        True if floating point dtype.
 
     Example:
         ```mojo
@@ -245,10 +245,10 @@ fn is_integer_dtype(dtype: DType) -> Bool:
     """Check if dtype is integer (signed or unsigned).
 
     Args:
-        dtype: DType to check
+        dtype: DType to check.
 
     Returns:
-        True if integer dtype
+        True if integer dtype.
 
     Example:
         ```mojo

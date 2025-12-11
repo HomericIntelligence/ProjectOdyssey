@@ -68,19 +68,19 @@ struct BFloat16:
     fn from_float32(value: Float32) -> BFloat16:
         """Convert Float32 to BFloat16 using rounding.
 
-         Uses round-to-nearest-even (RNE) for proper IEEE 754 rounding.
-         This is the recommended conversion method.
+        Uses round-to-nearest-even (RNE) for proper IEEE 754 rounding.
+        This is the recommended conversion method.
 
-         Args:
-             value: Float32 value to convert.
+        Args:
+            value: Float32 value to convert.
 
-         Returns:
-             BFloat16 representation.
+        Returns:
+            BFloat16 representation.
 
-         Example:
+        Example:
         ```mojo
-             var bf16 = BFloat16.from_float32(3.14159)
-         ```
+        var bf16 = BFloat16.from_float32(3.14159)
+        ```
         """
         # Handle special cases
         if isnan(value):
@@ -131,19 +131,19 @@ struct BFloat16:
     fn from_float32_truncate(value: Float32) -> BFloat16:
         """Convert Float32 to BFloat16 using simple truncation.
 
-         Faster than rounding but less accurate. Use only when performance
-         is critical and slight accuracy loss is acceptable.
+        Faster than rounding but less accurate. Use only when performance
+        is critical and slight accuracy loss is acceptable.
 
-         Args:
-             value: Float32 value to convert.
+        Args:
+            value: Float32 value to convert.
 
-         Returns:
-             BFloat16 representation.
+        Returns:
+            BFloat16 representation.
 
-         Example:
+        Example:
         ```mojo
-             var bf16 = BFloat16.from_float32_truncate(3.14159)
-         ```
+            var bf16 = BFloat16.from_float32_truncate(3.14159)
+        ```
         """
         # Get bit representation using SIMD bitcast
         var bits32 = bitcast[DType.uint32, 1](SIMD[DType.float32, 1](value))[0]

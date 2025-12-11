@@ -63,11 +63,11 @@ struct ConfusionMatrix(Metric):
         """Initialize NxN confusion matrix.
 
         Args:
-            num_classes: Number of classes
-            class_names: Optional list of class names (default: empty)
+            num_classes: Number of classes.
+            class_names: Optional list of class names (default: empty).
 
         Raises:
-            Error: If tensor size exceeds memory limits
+            Error: If tensor size exceeds memory limits.
         """
         self.num_classes = num_classes
 
@@ -85,11 +85,11 @@ struct ConfusionMatrix(Metric):
         """Update confusion matrix with new batch of predictions.
 
         Args:
-            predictions: Predicted class indices [batch_size] or logits [batch_size, num_classes]
-            labels: True class labels [batch_size]
+            predictions: Predicted class indices [batch_size] or logits [batch_size, num_classes].
+            labels: True class labels [batch_size].
 
         Raises:
-            Error: If shapes are incompatible or labels out of range
+            Error: If shapes are incompatible or labels out of range.
         """
         # Get predicted classes
         var pred_classes: ExTensor
@@ -144,16 +144,16 @@ struct ConfusionMatrix(Metric):
 
         Args:
             mode: Normalization mode:
-                - "row": Normalize by row sum (recall per class)
-                - "column": Normalize by column sum (precision per class)
-                - "total": Normalize by total count
-                - "none": Return raw counts (default)
+                - "row": Normalize by row sum (recall per class).
+                - "column": Normalize by column sum (precision per class).
+                - "total": Normalize by total count.
+                - "none": Return raw counts (default).
 
         Returns:
-            Normalized confusion matrix as Float64 tensor
+            Normalized confusion matrix as Float64 tensor.
 
         Raises:
-            Error: If mode is invalid
+            Error: If mode is invalid.
         """
         var result_shape = List[Int]()
         result_shape.append(self.num_classes)
@@ -229,12 +229,12 @@ struct ConfusionMatrix(Metric):
         """Compute per-class precision.
 
         Precision[i] = matrix[i, i] / sum(matrix[:, i])
-        (Correct predictions for class i / Total predicted as class i)
+        (Correct predictions for class i / Total predicted as class i).
 
         Returns:
-            Tensor of shape [num_classes] with precision for each class
+            Tensor of shape [num_classes] with precision for each class.
 
-        Note: Returns 0.0 for classes with no predictions
+        Note: Returns 0.0 for classes with no predictions.
         """
         var result_shape = List[Int]()
         result_shape.append(self.num_classes)
@@ -263,12 +263,12 @@ struct ConfusionMatrix(Metric):
         """Compute per-class recall.
 
         Recall[i] = matrix[i, i] / sum(matrix[i, :])
-        (Correct predictions for class i / Total samples of class i)
+        (Correct predictions for class i / Total samples of class i).
 
         Returns:
-            Tensor of shape [num_classes] with recall for each class
+            Tensor of shape [num_classes] with recall for each class.
 
-        Note: Returns 0.0 for classes with no samples
+        Note: Returns 0.0 for classes with no samples.
         """
         var result_shape = List[Int]()
         result_shape.append(self.num_classes)
@@ -296,12 +296,12 @@ struct ConfusionMatrix(Metric):
     fn get_f1_score(self) raises -> ExTensor:
         """Compute per-class F1-score.
 
-        F1[i] = 2 * (precision[i] * recall[i]) / (precision[i] + recall[i])
+        F1[i] = 2 * (precision[i] * recall[i]) / (precision[i] + recall[i]).
 
         Returns:
-            Tensor of shape [num_classes] with F1-score for each class
+            Tensor of shape [num_classes] with F1-score for each class.
 
-        Note: Returns 0.0 when precision + recall = 0
+        Note: Returns 0.0 when precision + recall = 0.
         """
         var precision = self.get_precision()
         var recall = self.get_recall()
@@ -327,10 +327,10 @@ fn argmax(var tensor: ExTensor) raises -> ExTensor:
     """Compute argmax along last axis for 2D tensor.
 
     Args:
-            tensor: Input tensor [batch_size, num_classes]
+            tensor: Input tensor [batch_size, num_classes].
 
     Returns:
-            Tensor of indices [batch_size]
+            Tensor of indices [batch_size].
     """
     var shape_vec = tensor.shape()
     if len(shape_vec) != 2:

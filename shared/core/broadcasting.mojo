@@ -24,9 +24,11 @@ fn broadcast_shapes(shape1: List[Int], shape2: List[Int]) raises -> List[Int]:
         4. Output shape is element-wise maximum of input shapes
 
     Examples:
+    ```
         broadcast_shapes([3, 4, 5], [4, 5]) -> [3, 4, 5]
         broadcast_shapes([3, 1, 5], [3, 4, 5]) -> [3, 4, 5]
         broadcast_shapes([3, 4], [5, 4]) -> Error (incompatible)
+    ```
     """
     var ndim1 = len(shape1)
     var ndim2 = len(shape2)
@@ -77,8 +79,10 @@ fn are_shapes_broadcastable(shape1: List[Int], shape2: List[Int]) -> Bool:
         True if shapes are broadcast-compatible, False otherwise.
 
     Examples:
+    ```
         are_shapes_broadcastable([3, 4, 5], [4, 5]) -> True
         are_shapes_broadcastable([3, 4], [5, 4]) -> False
+    ```
     """
     var ndim1 = len(shape1)
     var ndim2 = len(shape2)
@@ -178,9 +182,9 @@ struct BroadcastIterator:
         """Initialize broadcast iterator.
 
         Args:
-            shape: The broadcast output shape
-            strides1: Broadcast strides for first tensor
-            strides2: Broadcast strides for second tensor
+            shape: The broadcast output shape.
+            strides1: Broadcast strides for first tensor.
+            strides2: Broadcast strides for second tensor.
         """
         self.shape = shape^
         self.strides1 = strides1^

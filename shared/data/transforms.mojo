@@ -358,7 +358,7 @@ struct Resize(Copyable, Movable, Transform):
                 # Bounds check
                 if y_int < 0 or y_int >= old_h or x_int < 0 or x_int >= old_w:
                     # Fill with zeros if out of bounds
-                    for c in range(channels):
+                    for _ in range(channels):
                         resized_data.append(Float32(0.0))
                     continue
 
@@ -901,7 +901,7 @@ struct RandomErasing(Copyable, Movable, Transform):
             # Check if this element is in the erased rectangle
             # Calculate (row, col, c) from flat index
             var pixel_idx = i // channels
-            var c = i % channels
+            # FIXME(unused) var c = i % channels
             var col = pixel_idx % width
             var row = pixel_idx // width
 

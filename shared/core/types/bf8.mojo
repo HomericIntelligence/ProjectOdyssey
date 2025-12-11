@@ -41,7 +41,7 @@ struct BF8(Copyable, Movable, Representable, Stringable):
         """Initialize BF8 from raw UInt8 bits.
 
         Args:
-            value: Raw 8-bit representation
+            value: Raw 8-bit representation.
         """
         self.value = value
 
@@ -50,7 +50,7 @@ struct BF8(Copyable, Movable, Representable, Stringable):
         """Convert Float32 to BF8 E5M2 format.
 
         Args:
-            x: Float32 value to convert
+            x: Float32 value to convert.
 
         Returns:
             BF8 representation (with potential precision loss).

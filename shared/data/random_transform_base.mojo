@@ -9,11 +9,12 @@ executed based on its configured probability.
 
 Pattern:
     All Random* transforms that use probability-based application should:
-    1. Use RandomTransformBase to handle probability logic
-    2. Call should_apply() to decide whether to apply the transform
-    3. Keep transform-specific logic separate from probability logic
+    1. Use RandomTransformBase to handle probability logic.
+    2. Call should_apply() to decide whether to apply the transform.
+    3. Keep transform-specific logic separate from probability logic.
 
 Example:
+    ```
     var transform = RandomHorizontalFlip(p=0.5)
     if transform.should_apply():
         # Apply horizontal flip logic
@@ -31,10 +32,10 @@ from random import random_si64
 fn random_float() -> Float64:
     """Generate random float in [0, 1) with high precision.
 
-        Uses 1 billion possible values for better probability distribution
+        Uses 1 billion possible values for better probability distribution.
 
     Returns:
-            Random float in range [0.0, 1.0)
+            Random float in range [0.0, 1.0).
     """
     return Float64(random_si64(0, 1000000000)) / 1000000000.0
 
@@ -49,10 +50,10 @@ struct RandomTransformBase(Copyable, Movable):
 
     Encapsulates probability handling and decision logic for Random* transforms
     All random transforms that apply conditionally based on probability should
-    use this pattern
+    use this pattern.
 
     Fields:
-        p: Probability of applying the transform (0.0 to 1.0)
+        p: Probability of applying the transform (0.0 to 1.0).
 
     Example:
         ```mojo
@@ -68,7 +69,7 @@ struct RandomTransformBase(Copyable, Movable):
         """Create probabilistic transform base.
 
         Args:
-            p: Probability of applying the transform (0.0 to 1.0)
+            p: Probability of applying the transform (0.0 to 1.0).
         """
         self.p = p
 
@@ -76,10 +77,10 @@ struct RandomTransformBase(Copyable, Movable):
         """Determine if transform should be applied based on probability.
 
         Generates a random value in [0, 1) and compares against the
-        configured probability. Returns True if transform should apply
+        configured probability. Returns True if transform should apply.
 
         Returns:
-            True if transform should be applied, False otherwise
+            True if transform should be applied, False otherwise.
         """
         var rand_val = random_float()
         return rand_val < self.p

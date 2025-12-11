@@ -58,15 +58,15 @@ fn save_model_weights(
     """Save model weights to directory.
 
         Saves a list of parameter tensors to individual .weights files in the
-        specified directory. Each tensor is saved with its corresponding name
+        specified directory. Each tensor is saved with its corresponding name.
 
     Args:
-            parameters: List of parameter tensors to save
-            directory: Directory path to save weight files (created if doesn't exist)
-            param_names: List of parameter names (must match length of parameters)
+            parameters: List of parameter tensors to save.
+            directory: Directory path to save weight files (created if doesn't exist).
+            param_names: List of parameter names (must match length of parameters).
 
     Raises:
-            Error: If directory creation fails or file write fails
+            Error: If directory creation fails or file write fails.
 
         Example:
             ```mojo
@@ -103,12 +103,12 @@ fn load_model_weights(
     """Load model weights from directory.
 
         Loads parameter tensors from individual .weights files in the directory
-        and stores them in the provided parameters list
+        and stores them in the provided parameters list.
 
     Args:
-            parameters: List to populate with loaded tensors
-            directory: Directory containing weight files
-            param_names: List of parameter names to load (in order)
+            parameters: List to populate with loaded tensors.
+            directory: Directory containing weight files.
+            param_names: List of parameter names to load (in order).
 
     Raises:
             Error: If directory doesn't exist, file format is invalid, or shape mismatch.
@@ -139,23 +139,23 @@ fn load_model_weights(
 fn get_model_parameter_names(model_type: String) raises -> List[String]:
     """Get standard parameter names for a model architecture.
 
-        Returns the canonical parameter names for supported architectures
-        Useful for consistent naming across save/load operations
+        Returns the canonical parameter names for supported architectures.
+        Useful for consistent naming across save/load operations.
 
     Args:
-            model_type: Architecture name ("lenet5", "alexnet", "vgg16", "resnet18", etc.)
+            model_type: Architecture name ("lenet5", "alexnet", "vgg16", "resnet18", etc.).
 
     Returns:
-            List of parameter names in order
+            List of parameter names in order.
 
     Note:
-            Parameter names must match the struct field names in each model.mojo file
+            Parameter names must match the struct field names in each model.mojo file.
 
-        Example:
-            ```mojo
-            var names = get_model_parameter_names("lenet5")
-            # Returns: ["conv1_kernel", "conv1_bias", "conv2_kernel", "conv2_bias", ...]
-            ```
+    Example:
+        ```mojo
+        var names = get_model_parameter_names("lenet5")
+        # Returns: ["conv1_kernel", "conv1_bias", "conv2_kernel", "conv2_bias", ...]
+        ```
     """
     if model_type == "lenet5":
         var names = List[String]()
@@ -277,11 +277,11 @@ fn validate_shapes(loaded: List[ExTensor], expected: List[ExTensor]) raises:
     """Validate that loaded tensors match expected shapes.
 
         Useful for checking that checkpoint weights are compatible with
-        the current model architecture before assignment
+        the current model architecture before assignment.
 
     Args:
-            loaded: List of loaded tensors
-            expected: List of expected tensors (with correct shapes)
+            loaded: List of loaded tensors.
+            expected: List of expected tensors (with correct shapes).
 
     Raises:
             Error: If any tensor shapes don't match.

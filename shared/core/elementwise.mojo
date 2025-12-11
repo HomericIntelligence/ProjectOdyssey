@@ -85,8 +85,10 @@ fn abs(tensor: ExTensor) raises -> ExTensor:
             A new tensor with absolute values.
 
     Examples:
+    ```
             var a = full(shape, -3.0, DType.float32)
             var b = abs(a)  # All values become 3.0
+    ```
     """
     return dispatch_unary[_abs_op](tensor)
 
@@ -112,8 +114,10 @@ fn sign(tensor: ExTensor) raises -> ExTensor:
             A new tensor with sign values (-1 for negative, 0 for zero, 1 for positive).
 
     Examples:
+    ```
             var a = tensor([-2.0, 0.0, 3.0])
             var b = sign(a)  # [-1.0, 0.0, 1.0]
+    ```
     """
     return dispatch_unary[_sign_op](tensor)
 
@@ -139,8 +143,10 @@ fn exp(tensor: ExTensor) raises -> ExTensor:
             A new tensor with exponential values.
 
     Examples:
+    ```
             var a = zeros(shape, DType.float32)
             var b = exp(a)  # All values become 1.0 (e^0)
+    ```
     """
     return dispatch_float_unary[_exp_op](tensor)
 
@@ -169,8 +175,10 @@ fn log(tensor: ExTensor) raises -> ExTensor:
             Error: If any value is <= 0.
 
     Examples:
+    ```
             var a = ones(shape, DType.float32)
             var b = log(a)  # All values become 0.0 (ln(1))
+    ```
     """
     return dispatch_float_unary[_log_op](tensor)
 
@@ -199,8 +207,10 @@ fn sqrt(tensor: ExTensor) raises -> ExTensor:
             Error: If any value is < 0.
 
     Examples:
+    ```
             var a = full(shape, 4.0, DType.float32)
             var b = sqrt(a)  # All values become 2.0
+    ```
     """
     return dispatch_float_unary[_sqrt_op](tensor)
 
@@ -226,8 +236,10 @@ fn sin(tensor: ExTensor) raises -> ExTensor:
             A new tensor with sine values.
 
     Examples:
+    ```
             var a = zeros(shape, DType.float32)
             var b = sin(a)  # All values become 0.0 (sin(0))
+    ```
     """
     return dispatch_float_unary[_sin_op](tensor)
 
@@ -253,8 +265,10 @@ fn cos(tensor: ExTensor) raises -> ExTensor:
             A new tensor with cosine values.
 
     Examples:
+    ```
             var a = zeros(shape, DType.float32)
             var b = cos(a)  # All values become 1.0 (cos(0))
+    ```
     """
     return dispatch_float_unary[_cos_op](tensor)
 
@@ -280,8 +294,10 @@ fn tanh(tensor: ExTensor) raises -> ExTensor:
             A new tensor with tanh values (range: -1 to 1).
 
     Examples:
+    ```
             var a = zeros(shape, DType.float32)
             var b = tanh(a)  # All values become 0.0 (tanh(0))
+    ```
     """
     return dispatch_float_unary[_tanh_op](tensor)
 
@@ -303,8 +319,10 @@ fn clip(
             Error: If min_val > max_val.
 
     Examples:
+    ```
             var a = tensor([-5.0, 0.0, 10.0])
             var b = clip(a, 0.0, 5.0)  # [0.0, 0.0, 5.0]
+    ```
     """
     if min_val > max_val:
         raise Error("clip requires min_val <= max_val")
@@ -349,8 +367,10 @@ fn ceil(tensor: ExTensor) raises -> ExTensor:
             A new tensor with ceiling values.
 
     Examples:
+    ```
             var a = tensor([1.2, 2.5, 3.9])
             var b = ceil(a)  # [2.0, 3.0, 4.0]
+    ```
     """
     return dispatch_float_unary[_ceil_op](tensor)
 
@@ -376,8 +396,10 @@ fn floor(tensor: ExTensor) raises -> ExTensor:
             A new tensor with floor values.
 
     Examples:
+    ```
             var a = tensor([1.2, 2.5, 3.9])
             var b = floor(a)  # [1.0, 2.0, 3.0]
+    ```
     """
     return dispatch_float_unary[_floor_op](tensor)
 
@@ -403,8 +425,10 @@ fn round(tensor: ExTensor) raises -> ExTensor:
             A new tensor with rounded values.
 
     Examples:
+    ```
             var a = tensor([1.2, 2.5, 3.9])
             var b = round(a)  # [1.0, 2.0, 4.0] (or [1.0, 3.0, 4.0] depending on rounding mode)
+    ```
     """
     return dispatch_float_unary[_round_op](tensor)
 
@@ -430,8 +454,10 @@ fn trunc(tensor: ExTensor) raises -> ExTensor:
             A new tensor with truncated values.
 
     Examples:
+    ```
             var a = tensor([1.9, -2.9, 3.1])
             var b = trunc(a)  # [1.0, -2.0, 3.0]
+    ```
     """
     var result = ExTensor(tensor.shape(), tensor.dtype())
 
@@ -466,6 +492,7 @@ fn logical_and(a: ExTensor, b: ExTensor) raises -> ExTensor:
             Dimensions are compatible if they are equal or one is 1.
 
     Examples:
+    ```
             var a = tensor([0.0, 1.0, 2.0])
             var b = tensor([0.0, 0.0, 1.0])
             var c = logical_and(a, b)  # [False, False, True]
@@ -474,6 +501,7 @@ fn logical_and(a: ExTensor, b: ExTensor) raises -> ExTensor:
             var x = ones([3, 1, 5], DType.float32)
             var y = ones([3, 4, 5], DType.float32)
             var z = logical_and(x, y)  # Shape (3, 4, 5)
+    ```
     """
     if a.dtype() != b.dtype():
         raise Error("logical_and: tensors must have same dtype")
@@ -544,6 +572,7 @@ fn logical_or(a: ExTensor, b: ExTensor) raises -> ExTensor:
             Dimensions are compatible if they are equal or one is 1.
 
     Examples:
+    ```
             var a = tensor([0.0, 1.0, 2.0])
             var b = tensor([0.0, 0.0, 1.0])
             var c = logical_or(a, b)  # [False, True, True]
@@ -552,6 +581,7 @@ fn logical_or(a: ExTensor, b: ExTensor) raises -> ExTensor:
             var x = ones([3, 1, 5], DType.float32)
             var y = ones([3, 4, 5], DType.float32)
             var z = logical_or(x, y)  # Shape (3, 4, 5)
+    ```
     """
     if a.dtype() != b.dtype():
         raise Error("logical_or: tensors must have same dtype")
@@ -614,8 +644,10 @@ fn logical_not(tensor: ExTensor) raises -> ExTensor:
             Boolean tensor (True where input is zero).
 
     Examples:
+    ```
             var a = tensor([0.0, 1.0, 2.0])
             var b = logical_not(a)  # [True, False, False]
+    ```
     """
     var result = ExTensor(tensor.shape(), tensor.dtype())
 
@@ -647,6 +679,7 @@ fn logical_xor(a: ExTensor, b: ExTensor) raises -> ExTensor:
             Dimensions are compatible if they are equal or one is 1.
 
     Examples:
+    ```
             var a = tensor([0.0, 1.0, 0.0, 1.0])
             var b = tensor([0.0, 0.0, 1.0, 1.0])
             var c = logical_xor(a, b)  # [False, True, True, False]
@@ -655,6 +688,7 @@ fn logical_xor(a: ExTensor, b: ExTensor) raises -> ExTensor:
             var x = ones([3, 1, 5], DType.float32)
             var y = ones([3, 4, 5], DType.float32)
             var z = logical_xor(x, y)  # Shape (3, 4, 5)
+    ```
     """
     if a.dtype() != b.dtype():
         raise Error("logical_xor: tensors must have same dtype")
@@ -727,8 +761,10 @@ fn log10(tensor: ExTensor) raises -> ExTensor:
             Error: If any value is <= 0.
 
     Examples:
+    ```
             var a = tensor([1.0, 10.0, 100.0])
             var b = log10(a)  # [0.0, 1.0, 2.0]
+    ```
     """
     var result = ExTensor(tensor.shape(), tensor.dtype())
 
@@ -756,8 +792,10 @@ fn log2(tensor: ExTensor) raises -> ExTensor:
             Error: If any value is <= 0.
 
     Examples:
+    ```
             var a = tensor([1.0, 2.0, 8.0])
             var b = log2(a)  # [0.0, 1.0, 3.0]
+    ```
     """
     var result = ExTensor(tensor.shape(), tensor.dtype())
 
@@ -791,9 +829,11 @@ fn exp_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
             Gradient w.r.t. input (∂L/∂X).
 
     Examples:
+    ```
             var x = ones([3, 4])
             var grad_y = ones([3, 4])
             var grad_x = exp_backward(grad_y, x)  # grad_x = grad_y * exp(x)
+    ```
     """
     var result = ExTensor(grad_output.shape(), grad_output.dtype())
 
@@ -896,10 +936,12 @@ fn abs_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
             Gradient w.r.t. input (∂L/∂X).
 
     Examples:
+    ```
             var x = tensor([-2.0, -1.0, 0.0, 1.0, 2.0])
             var y = abs(x)
             var grad_y = ones([5])
             var grad_x = abs_backward(grad_y, x)  # [-1, -1, 0, 1, 1]
+    ```
     """
     var result = ExTensor(grad_output.shape(), grad_output.dtype())
 
@@ -941,10 +983,12 @@ fn clip_backward(
             Gradient w.r.t. input (∂L/∂X).
 
     Examples:
+    ```
             var x = tensor([-2.0, -1.0, 0.0, 1.0, 2.0])
             var y = clip(x, -1.0, 1.0)  # [-1, -1, 0, 1, 1]
             var grad_y = ones([5])
             var grad_x = clip_backward(grad_y, x, -1.0, 1.0)  # [0, 1, 1, 1, 0]
+    ```
     """
     var result = ExTensor(grad_output.shape(), grad_output.dtype())
 

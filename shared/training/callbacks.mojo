@@ -79,10 +79,10 @@ struct EarlyStopping(Callback, Copyable, Movable):
         """Initialize early stopping callback.
 
         Args:
-            monitor: Metric to monitor (e.g., "val_loss", "val_accuracy")
-            patience: Epochs to wait before stopping
-            min_delta: Minimum improvement threshold
-            mode: "min" for metrics to minimize (loss), "max" for metrics to maximize (accuracy)
+            monitor: Metric to monitor (e.g., "val_loss", "val_accuracy").
+            patience: Epochs to wait before stopping.
+            min_delta: Minimum improvement threshold.
+            mode: "min" for metrics to minimize (loss), "max" for metrics to maximize (accuracy).
         """
         self.monitor = monitor
         self.patience = patience
@@ -124,10 +124,10 @@ struct EarlyStopping(Callback, Copyable, Movable):
         """Check for improvement and decide whether to stop.
 
         Args:
-            state: Training state with current metrics
+            state: Training state with current metrics.
 
         Returns:
-            STOP if patience exhausted, CONTINUE otherwise
+            STOP if patience exhausted, CONTINUE otherwise.
         """
         # Check if monitored metric exists
         if self.monitor not in state.metrics:
@@ -169,7 +169,7 @@ struct EarlyStopping(Callback, Copyable, Movable):
         """Check if training should stop.
 
         Returns:
-            True if patience exhausted, False otherwise
+            True if patience exhausted, False otherwise.
         """
         return self.stopped
 
@@ -239,11 +239,11 @@ struct ModelCheckpoint(Callback, Copyable, Movable):
         """Initialize checkpoint callback.
 
         Args:
-            filepath: Path template for saving checkpoints (supports {epoch} placeholder)
-            monitor: Metric to monitor for best model
-            save_best_only: If True, only save when monitored metric improves
-            save_frequency: Save every N epochs (ignored if save_best_only=True)
-            mode: "min" for metrics to minimize (loss), "max" for metrics to maximize (accuracy)
+            filepath: Path template for saving checkpoints (supports {epoch} placeholder).
+            monitor: Metric to monitor for best model.
+            save_best_only: If True, only save when monitored metric improves.
+            save_frequency: Save every N epochs (ignored if save_best_only=True).
+            mode: "min" for metrics to minimize (loss), "max" for metrics to maximize (accuracy).
         """
         self.filepath = filepath
         self.monitor = monitor
@@ -278,17 +278,17 @@ struct ModelCheckpoint(Callback, Copyable, Movable):
         """Save checkpoint at end of epoch with error handling.
 
         Attempts to save checkpoint based on configuration:
-        - If save_best_only=True: Save only when monitored metric improves
-        - Otherwise: Save every save_frequency epochs
+        - If save_best_only=True: Save only when monitored metric improves.
+        - Otherwise: Save every save_frequency epochs.
 
         If saving fails, logs a warning but continues training to prevent I/O
-        errors from interrupting the training process
+        errors from interrupting the training process.
 
         Args:
-            state: Training state with current epoch number and metrics
+            state: Training state with current epoch number and metrics.
 
         Returns:
-            CONTINUE always (even if checkpoint save fails)
+            CONTINUE always (even if checkpoint save fails).
         """
         var should_save = False
 
@@ -351,7 +351,7 @@ struct ModelCheckpoint(Callback, Copyable, Movable):
         """Get number of checkpoints saved.
 
         Returns:
-            Number of checkpoints saved so far
+            Number of checkpoints saved so far.
         """
         return self.save_count
 
@@ -359,7 +359,7 @@ struct ModelCheckpoint(Callback, Copyable, Movable):
         """Get number of checkpoint save errors.
 
         Returns:
-            Number of failed checkpoint save attempts
+            Number of failed checkpoint save attempts.
         """
         return self.error_count
 
@@ -392,7 +392,7 @@ struct LoggingCallback(Callback, Copyable, Movable):
         """Initialize logging callback.
 
         Args:
-            log_interval: Log every N epochs
+            log_interval: Log every N epochs.
         """
         self.log_interval = log_interval
         self.log_count = 0
@@ -415,10 +415,10 @@ struct LoggingCallback(Callback, Copyable, Movable):
         """Log metrics at end of epoch.
 
         Args:
-            state: Training state with metrics
+            state: Training state with metrics.
 
         Returns:
-            CONTINUE always
+            CONTINUE always.
         """
         if state.epoch % self.log_interval == 0:
             self.log_count += 1
@@ -447,6 +447,6 @@ struct LoggingCallback(Callback, Copyable, Movable):
         """Get number of times logged.
 
         Returns:
-            Number of logging calls made
+            Number of logging calls made.
         """
         return self.log_count

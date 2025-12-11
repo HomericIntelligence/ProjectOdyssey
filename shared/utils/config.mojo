@@ -5,11 +5,11 @@ from YAML and JSON files. Supports nested configurations, environment
 variable substitution, and validation rules.
 
 Example:
-    from shared.utils import Config
+    from shared.utils import Config.
 
-    var config = Config.from_yaml("config.yaml")
-    var lr = config.get_float("learning_rate")
-    var batch_size = config.get_int("batch_size")
+    var config = Config.from_yaml("config.yaml").
+    var lr = config.get_float("learning_rate").
+    var batch_size = config.get_int("batch_size").
     ```
 """
 
@@ -291,7 +291,7 @@ struct Config(Copyable, ImplicitlyCopyable, Movable):
             Error: If key exists but type is not list.
         """
         if key not in self.data:
-            return List[String]()^
+            return []
 
         var val = self.data[key]
         if val.value_type != "list":

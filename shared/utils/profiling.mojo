@@ -627,35 +627,36 @@ fn export_profiling_report(
         True if successful.
     """
     # Determine format and convert report accordingly
-    var content: String
-    if format == "json":
-        content = report.to_json()
-    elif format == "txt" or format == "text":
-        content = report.to_string()
-    elif format == "csv":
-        # CSV format: name,total_ms,calls,avg_ms,min_ms,max_ms,std_dev
-        var csv_content = String(
-            "function_name,total_ms,call_count,avg_ms,min_ms,max_ms,std_dev\n"
-        )
-        for key in report.timing_stats:
-            # Access fields directly to avoid implicit copy
-            csv_content += key + String(",")
-            csv_content += String(report.timing_stats[key].total_ms) + String(
-                ","
-            )
-            csv_content += String(report.timing_stats[key].call_count) + String(
-                ","
-            )
-            csv_content += String(report.timing_stats[key].avg_ms) + String(",")
-            csv_content += String(report.timing_stats[key].min_ms) + String(",")
-            csv_content += String(report.timing_stats[key].max_ms) + String(",")
-            csv_content += String(report.timing_stats[key].std_dev) + String(
-                "\n"
-            )
-        content = csv_content
-    else:
-        # Default to text format
-        content = report.to_string()
+    # FIXME: need to write to a file!
+    # var content: String
+    # if format == "json":
+    #     content = report.to_json()
+    # elif format == "txt" or format == "text":
+    #     content = report.to_string()
+    # elif format == "csv":
+    #     # CSV format: name,total_ms,calls,avg_ms,min_ms,max_ms,std_dev
+    #     var csv_content = String(
+    #         "function_name,total_ms,call_count,avg_ms,min_ms,max_ms,std_dev\n"
+    #     )
+    #     for key in report.timing_stats:
+    #         # Access fields directly to avoid implicit copy
+    #         csv_content += key + String(",")
+    #         csv_content += String(report.timing_stats[key].total_ms) + String(
+    #             ","
+    #         )
+    #         csv_content += String(report.timing_stats[key].call_count) + String(
+    #             ","
+    #         )
+    #         csv_content += String(report.timing_stats[key].avg_ms) + String(",")
+    #         csv_content += String(report.timing_stats[key].min_ms) + String(",")
+    #         csv_content += String(report.timing_stats[key].max_ms) + String(",")
+    #         csv_content += String(report.timing_stats[key].std_dev) + String(
+    #             "\n"
+    #         )
+    #     content = csv_content
+    # else:
+    #     # Default to text format
+    #     content = report.to_string()
 
     # Note: Mojo doesn't have direct file I/O in stdlib yet
     # This is a placeholder implementation that would require external integration

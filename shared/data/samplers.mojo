@@ -35,7 +35,7 @@ trait Sampler:
         """Return an iterator over sample indices.
 
         Returns:
-            List of indices in the order they should be accessed
+            List of indices in the order they should be accessed.
         """
         ...
 
@@ -64,9 +64,9 @@ struct SequentialSampler(Copyable, Movable, Sampler):
         """Create sequential sampler.
 
         Args:
-            data_source_len: Length of the dataset
-            start_index: Starting index (inclusive)
-            end_index: Ending index (exclusive), -1 for end of dataset
+            data_source_len: Length of the dataset.
+            start_index: Starting index (inclusive).
+            end_index: Ending index (exclusive), -1 for end of dataset.
         """
         self.data_source_len = data_source_len
         var normalized = validate_range(start_index, end_index, data_source_len)
@@ -81,9 +81,9 @@ struct SequentialSampler(Copyable, Movable, Sampler):
         """Return sequential indices.
 
         Returns:
-            List of indices from start to end
+            List of indices from start to end.
         """
-        return create_range_indices(self.start_index, self.end_index)^
+        return create_range_indices(self.start_index, self.end_index)
 
 
 # ============================================================================
@@ -112,10 +112,10 @@ struct RandomSampler(Copyable, Movable, Sampler):
         """Create random sampler.
 
         Args:
-            data_source_len: Length of the dataset
-            replacement: Whether to sample with replacement
-            num_samples: Number of samples to draw (None = all)
-            seed_value: Random seed for reproducibility
+            data_source_len: Length of the dataset.
+            replacement: Whether to sample with replacement.
+            num_samples: Number of samples to draw (None = all).
+            seed_value: Random seed for reproducibility.
         """
         self.data_source_len = data_source_len
         self.replacement = replacement
@@ -134,20 +134,17 @@ struct RandomSampler(Copyable, Movable, Sampler):
         """Return random indices.
 
         Returns:
-            List of randomly shuffled or sampled indices
+            List of randomly shuffled or sampled indices.
         """
         set_random_seed(self.seed_value)
 
         if self.replacement:
-            return (
-                sample_with_replacement(self.data_source_len, self.num_samples)^
+            return sample_with_replacement(
+                self.data_source_len, self.num_samples
             )
         else:
-            return (
-                sample_without_replacement(
-                    self.data_source_len, self.num_samples
-                )
-                ^
+            return sample_without_replacement(
+                self.data_source_len, self.num_samples
             )
 
 
@@ -177,13 +174,13 @@ struct WeightedSampler(Copyable, Movable, Sampler):
         """Create weighted sampler.
 
         Args:
-            weights: Weight for each sample
-            num_samples: Number of samples to draw
-            replacement: Whether to sample with replacement
-            seed_value: Random seed for reproducibility
+            weights: Weight for each sample.
+            num_samples: Number of samples to draw.
+            replacement: Whether to sample with replacement.
+            seed_value: Random seed for reproducibility.
 
         Raises:
-            Error if weights are invalid
+            Error if weights are invalid.
         """
         # Validate weights
         var total_weight = Float64(0)
@@ -200,9 +197,6 @@ struct WeightedSampler(Copyable, Movable, Sampler):
         for i in range(len(weights)):
             self.weights.append(weights[i] / total_weight)
 
-        # Transfer ownership
-        weights: List[Float64] = []
-
         self.num_samples = num_samples
         self.replacement = replacement
         self.seed_value = seed_value
@@ -215,7 +209,7 @@ struct WeightedSampler(Copyable, Movable, Sampler):
         """Return weighted random indices.
 
         Returns:
-            List of indices sampled according to weights
+            List of indices sampled according to weights.
         """
         set_random_seed(self.seed_value)
 

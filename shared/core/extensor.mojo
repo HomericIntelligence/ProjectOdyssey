@@ -515,10 +515,9 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable):
             Error: If the total number of elements doesn't match.
 
         Example:
-            ```mojo
+        ```mojo
             var t = zeros([2, 3], DType.float32)
             var reshaped = t.reshape([6])  # (2, 3) -> (6,)
-        ```
         ```
         """
         # Verify total elements match
@@ -556,26 +555,26 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable):
     fn slice(self, start: Int, end: Int, axis: Int = 0) raises -> ExTensor:
         """Extract a slice along the specified axis.
 
-            Creates a view sharing data with the original tensor.
-            Uses reference counting to ensure data remains valid.
+        Creates a view sharing data with the original tensor.
+        Uses reference counting to ensure data remains valid.
 
 
-            Args:
-                start: Starting index (inclusive).
-                end: Ending index (exclusive).
-                axis: Axis to slice along (default: 0, the batch dimension).
+        Args:
+            start: Starting index (inclusive).
+            end: Ending index (exclusive).
+            axis: Axis to slice along (default: 0, the batch dimension).
 
-            Returns:
-                A new tensor containing the slice (shares memory with original).
+        Returns:
+            A new tensor containing the slice (shares memory with original).
 
-            Raises:
-                Error: If indices are out of bounds or axis is invalid.
+        Raises:
+            Error: If indices are out of bounds or axis is invalid.
 
         Example:
-            ```mojo
-            # Extract batch 0-32 from (112800, 1, 28, 28)
-            var batch = dataset.slice(0, 32, axis=0)  # Returns (32, 1, 28, 28)
-            ```
+        ```mojo
+        # Extract batch 0-32 from (112800, 1, 28, 28)
+        var batch = dataset.slice(0, 32, axis=0)  # Returns (32, 1, 28, 28)
+        ```
         """
         # Validate axis
         if axis < 0 or axis >= len(self._shape):
@@ -1776,59 +1775,61 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable):
             Error: If the source tensor is not a floating-point dtype.
 
         Examples:
-            # Aligned size (16 elements = 1 block)
-            var t = zeros([16], DType.float32)
-            var nvfp4_t = t.to_nvfp4()  # Returns uint8 tensor (9 bytes)
-            var restored = nvfp4_t.from_nvfp4()  # Restores 16 elements
+        ```
+                # Aligned size (16 elements = 1 block)
+                var t = zeros([16], DType.float32)
+                var nvfp4_t = t.to_nvfp4()  # Returns uint8 tensor (9 bytes)
+                var restored = nvfp4_t.from_nvfp4()  # Restores 16 elements
 
-            # Non-aligned size (17 elements = 2 blocks with padding)
-            var t2 = zeros([17], DType.float32)
-            var nvfp4_t2 = t2.to_nvfp4()  # Pads to 32 elements, returns 18 bytes
-            var restored2 = nvfp4_t2.from_nvfp4()  # Correctly restores 17 elements!
+                # Non-aligned size (17 elements = 2 blocks with padding)
+                var t2 = zeros([17], DType.float32)
+                var nvfp4_t2 = t2.to_nvfp4()  # Pads to 32 elements, returns 18 bytes
+                var restored2 = nvfp4_t2.from_nvfp4()  # Correctly restores 17 elements!
 
-            # Small tensors (1 element still uses full 16-element block)
-            var scalar = ExTensor([1], DType.float32)
-            var quantized_scalar = scalar.to_nvfp4()  # Returns 9 bytes (padded to 16)
+                # Small tensors (1 element still uses full 16-element block)
+                var scalar = ExTensor([1], DType.float32)
+                var quantized_scalar = scalar.to_nvfp4()  # Returns 9 bytes (padded to 16)
 
-            # Multi-dimensional tensors (flattened for quantization)
-            var activations = ExTensor([128, 256], DType.float32)  # 32768 elements
-            var quantized_activations = activations.to_nvfp4()  # 2048 blocks × 9 bytes = 18432 bytes
+                # Multi-dimensional tensors (flattened for quantization)
+                var activations = ExTensor([128, 256], DType.float32)  # 32768 elements
+                var quantized_activations = activations.to_nvfp4()  # 2048 blocks × 9 bytes = 18432 bytes
 
-            # ML workflow: quantize activations with better accuracy than MXFP4
-            fn quantize_activations(activations: ExTensor) raises -> ExTensor:
-                # NVFP4 provides better accuracy (smaller blocks = better scale granularity)
-                return activations.to_nvfp4()
+                # ML workflow: quantize activations with better accuracy than MXFP4
+                fn quantize_activations(activations: ExTensor) raises -> ExTensor:
+                    # NVFP4 provides better accuracy (smaller blocks = better scale granularity)
+                    return activations.to_nvfp4()
 
-            # ML workflow: quantize gradients with E4M3 scale (recommended by paper)
-            fn quantize_gradients_nvfp4(gradients: ExTensor) raises -> ExTensor:
-                # E4M3 achieves best results according to Dettmers et al. 2023
-                var quantized = gradients.to_nvfp4()
-                return quantized.from_nvfp4()
+                # ML workflow: quantize gradients with E4M3 scale (recommended by paper)
+                fn quantize_gradients_nvfp4(gradients: ExTensor) raises -> ExTensor:
+                    # E4M3 achieves best results according to Dettmers et al. 2023
+                    var quantized = gradients.to_nvfp4()
+                    return quantized.from_nvfp4()
 
-            # Compare accuracy: NVFP4 vs MXFP4
-            fn compare_quantization_accuracy(data: ExTensor) raises:
-                var mxfp4_quantized = data.to_mxfp4().from_mxfp4()
-                var nvfp4_quantized = data.to_nvfp4().from_nvfp4()
-                # NVFP4 typically has lower error due to smaller blocks (16 vs 32)
+                # Compare accuracy: NVFP4 vs MXFP4
+                fn compare_quantization_accuracy(data: ExTensor) raises:
+                    var mxfp4_quantized = data.to_mxfp4().from_mxfp4()
+                    var nvfp4_quantized = data.to_nvfp4().from_nvfp4()
+                    # NVFP4 typically has lower error due to smaller blocks (16 vs 32)
+        ```
 
-        Error Handling:
-            - Empty tensors: Raises "requires a floating-point tensor" if dtype is not FP16/FP32/FP64.
-            - NaN values: Automatically clamped to max representable value (no error).
-            - Infinity values: Automatically clamped to max representable value (no error).
-            - Non-aligned sizes: Automatically padded with zeros (no error, transparent).
-            - OOM conditions: Raises allocation error if insufficient memory for blocks.
+            Error Handling:
+                - Empty tensors: Raises "requires a floating-point tensor" if dtype is not FP16/FP32/FP64.
+                - NaN values: Automatically clamped to max representable value (no error).
+                - Infinity values: Automatically clamped to max representable value (no error).
+                - Non-aligned sizes: Automatically padded with zeros (no error, transparent).
+                - OOM conditions: Raises allocation error if insufficient memory for blocks.
 
-        Performance:
-            - Compression ratio: 14:1 vs Float32 (9 bytes per 16 values).
-            - Time complexity: O(n) where n is number of elements.
-            - Memory overhead: Temporary padding for non-aligned sizes.
-            - Accuracy: Better than MXFP4 due to smaller blocks (per Dettmers et al.).
+            Performance:
+                - Compression ratio: 14:1 vs Float32 (9 bytes per 16 values).
+                - Time complexity: O(n) where n is number of elements.
+                - Memory overhead: Temporary padding for non-aligned sizes.
+                - Accuracy: Better than MXFP4 due to smaller blocks (per Dettmers et al.).
 
-        Note:
-            NVFP4 uses 16-element blocks for better accuracy. Non-aligned tensors are
-            padded with zeros, but original size is preserved in metadata.
-            Memory efficiency: 9 bytes per 16 Float32 values (14:1 compression).
-            FP16 inputs are converted to FP32 before quantization.
+            Note:
+                NVFP4 uses 16-element blocks for better accuracy. Non-aligned tensors are
+                padded with zeros, but original size is preserved in metadata.
+                Memory efficiency: 9 bytes per 16 Float32 values (14:1 compression).
+                FP16 inputs are converted to FP32 before quantization.
         """
         from .types.nvfp4 import NVFP4Block
 
@@ -1906,13 +1907,15 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable):
             Error: If the source tensor is not uint8 dtype or not block-aligned.
 
         Examples:
-            var nvfp4_t = ...  # uint8 tensor with NVFP4 blocks
-            var float_t = nvfp4_t.from_nvfp4()  # Decode to float32, restores original size
+        ```
+                var nvfp4_t = ...  # uint8 tensor with NVFP4 blocks
+                var float_t = nvfp4_t.from_nvfp4()  # Decode to float32, restores original size
+        ```
 
-        Note:
-            This assumes the uint8 tensor contains valid NVFP4 blocks.
-            Use this to decode tensors created by to_nvfp4().
-            Original tensor size is restored from metadata if available.
+            Note:
+                This assumes the uint8 tensor contains valid NVFP4 blocks.
+                Use this to decode tensors created by to_nvfp4().
+                Original tensor size is restored from metadata if available.
         """
         from .types.nvfp4 import NVFP4Block, E4M3Scale
 
@@ -2148,11 +2151,13 @@ fn zeros(shape: List[Int], dtype: DType) raises -> ExTensor:
             A new ExTensor filled with zeros.
 
     Examples:
+    ```
             var t = zeros([3, 4], DType.float32)
             # Creates a 3x4 tensor of float32 zeros.
+    ```
 
-        Performance:
-            O(n) time where n is the number of elements.
+    Performance:
+        O(n) time where n is the number of elements.
     """
     var tensor = ExTensor(shape, dtype)
     tensor._fill_zero()  # Efficiently zero out all bytes
@@ -2170,8 +2175,10 @@ fn ones(shape: List[Int], dtype: DType) raises -> ExTensor:
             A new ExTensor filled with ones.
 
     Examples:
+    ```
             var t = ones([3, 4], DType.float32)
             # Creates a 3x4 tensor of float32 ones.
+    ```
     """
     var tensor = ExTensor(shape, dtype)
 
@@ -2201,7 +2208,8 @@ fn full(shape: List[Int], fill_value: Float64, dtype: DType) raises -> ExTensor:
 
     Examples:
             ```var t = full([3, 4], 42.0, DType.float32)
-            # Creates a 3x4 tensor filled with 42.0```
+            # Creates a 3x4 tensor filled with 42.0
+            ```
     """
     var tensor = ExTensor(shape, dtype)
 
@@ -2233,8 +2241,10 @@ fn empty(shape: List[Int], dtype: DType) raises -> ExTensor:
             Use this for performance when you will immediately write to all elements.
 
     Examples:
+    ```
             var t = empty([3, 4], DType.float32)
             # Creates a 3x4 tensor with undefined values.
+    ```
     """
     # Just allocate without initialization
     var tensor = ExTensor(shape, dtype)
@@ -2256,12 +2266,13 @@ fn arange(
             A new 1D ExTensor with values in range [start, stop) with given step.
 
     Examples:
-           ```
-           var t = arange(0.0, 10.0, 1.0, DType.float32)
-            # Creates [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        ```
+        var t = arange(0.0, 10.0, 1.0, DType.float32)
+        # Creates [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-            var t2 = arange(0.0, 10.0, 2.0, DType.int32)
-            # Creates [0, 2, 4, 6, 8]```
+        var t2 = arange(0.0, 10.0, 2.0, DType.int32)
+        # Creates [0, 2, 4, 6, 8]
+        ```
     """
     # Calculate number of elements
     var num_elements = Int((stop - start) / step)
@@ -2299,11 +2310,13 @@ fn eye(n: Int, m: Int, k: Int, dtype: DType) raises -> ExTensor:
             A new 2D ExTensor with ones on the k-th diagonal.
 
     Examples:
+    ```
             var t = eye(3, 3, 0, DType.float32)
             # Creates 3x3 identity matrix.
 
             var t2 = eye(3, 4, 1, DType.float32)
             # Creates 3x4 matrix with ones on diagonal above main.
+    ```
     """
     var shape = List[Int]()
     shape.append(n)
@@ -2344,11 +2357,12 @@ fn linspace(
             A new 1D ExTensor with num evenly spaced values.
 
     Examples:
-            ```var t = linspace(0.0, 10.0, 11, DType.float32)
-            # Creates [0.0, 1.0, 2.0, ..., 10.0]
+        ```var t = linspace(0.0, 10.0, 11, DType.float32)
+        # Creates [0.0, 1.0, 2.0, ..., 10.0]
 
-            var t2 = linspace(0.0, 1.0, 5, DType.float64)
-            # Creates [0.0, 0.25, 0.5, 0.75, 1.0]```
+        var t2 = linspace(0.0, 1.0, 5, DType.float64)
+        # Creates [0.0, 0.25, 0.5, 0.75, 1.0]
+        ```
     """
     var shape = List[Int]()
     shape.append(num)
@@ -2393,11 +2407,11 @@ fn ones_like(tensor: ExTensor) raises -> ExTensor:
     Returns:
             A new ExTensor filled with ones, same shape and dtype as input.
 
-        Example:
-            ```mojo
-            var x = zeros([3, 4], DType.float32)
-            var y = ones_like(x)  # (3, 4) tensor of ones, float32
-            ```
+    Example:
+        ```mojo
+        var x = zeros([3, 4], DType.float32)
+        var y = ones_like(x)  # (3, 4) tensor of ones, float32
+        ```
     """
     var shape = tensor.shape()
     var dtype = tensor.dtype()
@@ -2413,11 +2427,11 @@ fn zeros_like(tensor: ExTensor) raises -> ExTensor:
     Returns:
             A new ExTensor filled with zeros, same shape and dtype as input.
 
-        Example:
-            ```mojo
-            var x = ones([3, 4], DType.float32)
-            var y = zeros_like(x)  # (3, 4) tensor of zeros, float32
-            ```
+    Example:
+        ```mojo
+        var x = ones([3, 4], DType.float32)
+        var y = zeros_like(x)  # (3, 4) tensor of zeros, float32
+        ```
     """
     var shape = tensor.shape()
     var dtype = tensor.dtype()
@@ -2434,11 +2448,11 @@ fn full_like(tensor: ExTensor, fill_value: Float64) raises -> ExTensor:
     Returns:
             A new ExTensor filled with fill_value, same shape and dtype as input.
 
-        Example:
-            ```mojo
-            var x = ones([3, 4], DType.float32)
-            var y = full_like(x, 3.14)  # (3, 4) tensor of 3.14, float32
-            ```
+    Example:
+        ```mojo
+        var x = ones([3, 4], DType.float32)
+        var y = full_like(x, 3.14)  # (3, 4) tensor of 3.14, float32
+        ```
     """
     var shape = tensor.shape()
     var dtype = tensor.dtype()

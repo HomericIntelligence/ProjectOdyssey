@@ -23,9 +23,11 @@ fn _broadcast_binary[
     This helper eliminates 200+ lines of duplicated broadcasting code and removes
     dtype conversion overhead by using compile-time specialization.
 
-    Args:
+    Parameters:
         dtype: Compile-time dtype parameter.
         op: Binary operation function (e.g., add, subtract, multiply, divide).
+
+    Args:
         a: First tensor.
         b: Second tensor.
 
@@ -98,8 +100,10 @@ fn _dispatch_broadcast_binary[
     This dispatcher performs runtime dtype checking but dispatches to compile-time
     specialized versions, ensuring zero overhead compared to hand-written dtype branches.
 
-    Args:
+    Parameters:
         op: Binary operation function pointer.
+
+    Args:
         a: First tensor.
         b: Second tensor.
 
@@ -463,7 +467,7 @@ fn _reduce_broadcast_dims(
     # Need to sum over first (grad_ndim - orig_ndim) dimensions
     if orig_ndim < grad_ndim:
         var dims_to_sum = grad_ndim - orig_ndim
-        for i in range(dims_to_sum):
+        for _ in range(dims_to_sum):
             # Always sum over axis 0 since shape shrinks each time
             result = sum(result, axis=0, keepdims=False)
 

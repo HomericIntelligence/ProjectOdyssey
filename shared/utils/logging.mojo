@@ -65,10 +65,10 @@ struct LogRecord(Copyable, Movable):
         """Initialize a log record.
 
         Args:
-            logger_name: Name of the logger that created this record
-            level: Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-            message: The log message
-            timestamp: Optional timestamp string
+            logger_name: Name of the logger that created this record.
+            level: Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+            message: The log message.
+            timestamp: Optional timestamp string.
         """
         self.logger_name = logger_name
         self.level = level
@@ -219,7 +219,7 @@ struct FileHandler(Copyable, Handler, Movable):
         """Create file handler that writes to given file.
 
         Args:
-            filepath: Path to log file to write to
+            filepath: Path to log file to write to.
         """
         self.filepath = filepath
         self.formatter = TimestampFormatter()
@@ -234,10 +234,10 @@ struct FileHandler(Copyable, Handler, Movable):
 
         Opens file in append mode, writes the message with newline,
         and closes the file. If file cannot be opened, falls back
-        to print
+        to print.
 
         Args:
-            message: Formatted log message to write
+            message: Formatted log message to write.
         """
         try:
             # Open file in append mode
@@ -270,8 +270,8 @@ struct Logger:
         """Create logger with name and optional level.
 
         Args:
-            name: Logger name (e.g., "training", "evaluation")
-            level: Minimum log level to output (default: INFO)
+            name: Logger name (e.g., "training", "evaluation").
+            level: Minimum log level to output (default: INFO).
         """
         self.name = name
         self.level = level
@@ -280,54 +280,54 @@ struct Logger:
     fn add_handler(mut self, handler: StreamHandler):
         """Add an output handler to this logger.
 
-        Handlers receive all log records that pass the level filter
+        Handlers receive all log records that pass the level filter.
 
         Args:
-            handler: Handler to add
+            handler: Handler to add.
         """
         self.handlers.append(handler)
 
     fn debug(self, message: String):
-        """Log a debug message (lowest priority)
+        """Log a debug message (lowest priority).
 
         Args:
-            message: Message to log
+            message: Message to log.
         """
         if self.level <= LogLevel.DEBUG:
             self._log(LogLevel.DEBUG, message)
 
     fn info(self, message: String):
-        """Log an info message (normal priority)
+        """Log an info message (normal priority).
 
         Args:
-            message: Message to log
+            message: Message to log.
         """
         if self.level <= LogLevel.INFO:
             self._log(LogLevel.INFO, message)
 
     fn warning(self, message: String):
-        """Log a warning message (medium priority)
+        """Log a warning message (medium priority).
 
         Args:
-            message: Message to log
+            message: Message to log.
         """
         if self.level <= LogLevel.WARNING:
             self._log(LogLevel.WARNING, message)
 
     fn error(self, message: String):
-        """Log an error message (high priority)
+        """Log an error message (high priority).
 
         Args:
-            message: Message to log
+            message: Message to log.
         """
         if self.level <= LogLevel.ERROR:
             self._log(LogLevel.ERROR, message)
 
     fn critical(self, message: String):
-        """Log a critical message (highest priority)
+        """Log a critical message (highest priority).
 
         Args:
-            message: Message to log
+            message: Message to log.
         """
         if self.level <= LogLevel.CRITICAL:
             self._log(LogLevel.CRITICAL, message)
@@ -336,8 +336,8 @@ struct Logger:
         """Internal method to create and emit log record.
 
         Args:
-            level: Log level for this message
-            message: Message to log
+            level: Log level for this message.
+            message: Message to log.
         """
         var record = LogRecord(self.name, level, message)
         for handler in self.handlers:
@@ -347,7 +347,7 @@ struct Logger:
         """Change the log level for this logger.
 
         Args:
-            level: New log level threshold
+            level: New log level threshold.
         """
         self.level = level
 
@@ -361,11 +361,11 @@ fn get_logger(name: String, level: Int = LogLevel.INFO) -> Logger:
     """Get or create a named logger.
 
     Args:
-            name: Logger name
-            level: Log level threshold (default: INFO)
+            name: Logger name.
+            level: Log level threshold (default: INFO).
 
     Returns:
-            Logger with specified name and level
+            Logger with specified name and level.
 
         Example:
             ```mojo

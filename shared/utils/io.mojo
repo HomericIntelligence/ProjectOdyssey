@@ -278,10 +278,12 @@ fn save_tensor_to_checkpoint(
     Returns:
             True if save successful, False if error.
 
+        ```
         File format (per tensor):
             Line 1: name
             Line 2: dtype shape_dim0 shape_dim1 ...
             Line 3: hex_data
+        ```
     """
     # Create directory if needed
     if not create_directory(checkpoint_dir):

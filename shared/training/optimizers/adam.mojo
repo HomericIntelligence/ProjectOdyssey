@@ -4,15 +4,17 @@ This module provides the Adam optimizer for updating model parameters
 during training using adaptive learning rates.
 
 Adam combines the benefits of:
-- Momentum: Using exponentially decaying average of past gradients
-- RMSprop: Using exponentially decaying average of past squared gradients
+- Momentum: Using exponentially decaying average of past gradients.
+- RMSprop: Using exponentially decaying average of past squared gradients.
 
 Standard Adam update rule:
+    ```
     m = beta1 * m + (1 - beta1) * gradients
     v = beta2 * v + (1 - beta2) * gradients^2
     m_hat = m / (1 - beta1^t)  # Bias correction
     v_hat = v / (1 - beta2^t)  # Bias correction
     params = params - learning_rate * m_hat / (sqrt(v_hat) + epsilon)
+    ```
 
 Reference:
     Kingma, D. P., & Ba, J. (2014). Adam: A method for stochastic optimization
@@ -45,45 +47,45 @@ fn adam_step(
 ) raises -> Tuple[ExTensor, ExTensor, ExTensor]:
     """Perform a single Adam optimization step - pure functional.
 
-        Returns new parameters, new first moment (m), and new second moment (v)
-        Caller manages all state including timestep tracking
+        Returns new parameters, new first moment (m), and new second moment (v).
+        Caller manages all state including timestep tracking.
 
     Args:
-            params: Model parameters to update
-            gradients: Gradients of loss with respect to params
-            m: First moment estimates (exponential moving average of gradients)
-            v: Second moment estimates (exponential moving average of squared gradients)
-            t: Current timestep (starts at 1, increments each step)
-            learning_rate: Step size for parameter updates
-            beta1: Exponential decay rate for first moment (default: 0.9)
-            beta2: Exponential decay rate for second moment (default: 0.999)
-            epsilon: Small constant for numerical stability (default: 1e-8)
-            weight_decay: L2 regularization factor (default: 0.0, no regularization)
+            params: Model parameters to update.
+            gradients: Gradients of loss with respect to params.
+            m: First moment estimates (exponential moving average of gradients).
+            v: Second moment estimates (exponential moving average of squared gradients).
+            t: Current timestep (starts at 1, increments each step).
+            learning_rate: Step size for parameter updates.
+            beta1: Exponential decay rate for first moment (default: 0.9).
+            beta2: Exponential decay rate for second moment (default: 0.999).
+            epsilon: Small constant for numerical stability (default: 1e-8).
+            weight_decay: L2 regularization factor (default: 0.0, no regularization).
 
     Returns:
-            Tuple of (new_params, new_m, new_v)
+            Tuple of (new_params, new_m, new_v).
 
-        Example (basic Adam):
-            ```mojo
-            from shared.core import ExTensor, zeros_like
-            from shared.training.optimizers import adam_step
+    Example (basic Adam):
+        ```mojo
+        from shared.core import ExTensor, zeros_like
+        from shared.training.optimizers import adam_step
 
-            var W = xavier_uniform(784, 128, DType.float32)
-            var m = zeros_like(W)
-            var v = zeros_like(W)
-            var t = 1
+        var W = xavier_uniform(784, 128, DType.float32)
+        var m = zeros_like(W)
+        var v = zeros_like(W)
+        var t = 1
 
-            # Training loop
-            for epoch in range(100):
-                var grad_W = ...  # Compute gradients
-                (W, m, v) = adam_step(W, grad_W, m, v, t, lr=0.001)
-                t += 1
-            ```
+        # Training loop
+        for epoch in range(100):
+            var grad_W = ...  # Compute gradients
+            (W, m, v) = adam_step(W, grad_W, m, v, t, lr=0.001)
+            t += 1
+        ```
 
     Note:
-            This is a pure function - it returns new state rather than mutating
-            Caller must capture all three return values and update their variables
-            Timestep t must be tracked by caller and incremented after each step
+        This is a pure function - it returns new state rather than mutating.
+        Caller must capture all three return values and update their variables.
+        Timestep t must be tracked by caller and incremented after each step.
     """
     if params.shape() != gradients.shape():
         raise Error("Parameters and gradients must have the same shape")
@@ -165,25 +167,27 @@ fn adam_step_simple(
 ) raises -> Tuple[ExTensor, ExTensor, ExTensor]:
     """Simplified Adam step with default hyperparameters.
 
-        This is a convenience function for basic Adam optimization
+        This is a convenience function for basic Adam optimization.
 
-        Formula:
-            m = 0.9 * m + 0.1 * grad
-            v = 0.999 * v + 0.001 * grad^2
-            m_hat = m / (1 - 0.9^t)
-            v_hat = v / (1 - 0.999^t)
-            params = params - lr * m_hat / (sqrt(v_hat) + 1e-8)
+    Formula:
+    ```
+        m = 0.9 * m + 0.1 * grad
+        v = 0.999 * v + 0.001 * grad^2
+        m_hat = m / (1 - 0.9^t)
+        v_hat = v / (1 - 0.999^t)
+        params = params - lr * m_hat / (sqrt(v_hat) + 1e-8)
+    ```
 
     Args:
-            params: Model parameters to update
-            gradients: Gradients of loss with respect to params
-            m: First moment estimate
-            v: Second moment estimate
-            t: Current timestep (starts at 1)
-            learning_rate: Step size for parameter updates
+            params: Model parameters to update.
+            gradients: Gradients of loss with respect to params.
+            m: First moment estimate.
+            v: Second moment estimate.
+            t: Current timestep (starts at 1).
+            learning_rate: Step size for parameter updates.
 
     Returns:
-            Tuple of (new_params, new_m, new_v)
+            Tuple of (new_params, new_m, new_v).
 
         Example:
             ```mojo

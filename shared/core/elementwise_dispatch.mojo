@@ -84,17 +84,17 @@ trait ElementwiseUnaryOp:
         """Apply operation to a single value.
 
         Args:
-            value: Input value (Float64)
+            value: Input value (Float64).
 
         Returns:
-            Result value (Float64)
+            Result value (Float64).
 
         Note:
             Must handle all Float64 values, including:
-            - Positive/negative numbers
-            - Zero
-            - Infinity
-            - NaN
+            - Positive/negative numbers.
+            - Zero.
+            - Infinity.
+            - NaN.
         """
         ...
 
@@ -141,11 +141,11 @@ trait ElementwiseBinaryOp:
         """Apply operation to two values.
 
         Args:
-            a: First input value (Float64)
-            b: Second input value (Float64)
+            a: First input value (Float64).
+            b: Second input value (Float64).
 
         Returns:
-            Result value (Float64)
+            Result value (Float64).
 
         Note:
             Must handle all Float64 value pairs.
@@ -165,18 +165,19 @@ fn apply_unary[Op: ElementwiseUnaryOp](input: ExTensor) raises -> ExTensor:
     returning a new tensor with the results. Uses dtype preservation.
 
     Args:
-        input: Input tensor
+        input: Input tensor.
 
     Returns:
-        New tensor with operation applied to each element
+        New tensor with operation applied to each element.
 
     Raises:
-        Error: If operation fails (e.g., invalid value for operation)
+        Error: If operation fails (e.g., invalid value for operation).
 
     Type Parameters:
-        Op: Must implement ElementwiseUnaryOp trait
+        Op: Must implement ElementwiseUnaryOp trait.
 
     Example:
+    ```
         # Apply exponential
         var exp_tensor = apply_unary[ExpOp](tensor)
 
@@ -186,11 +187,12 @@ fn apply_unary[Op: ElementwiseUnaryOp](input: ExTensor) raises -> ExTensor:
                 return value + 1.0
 
         var result = apply_unary[MyOp](tensor)
+    ```
 
     Note:
-        - Preserves input dtype in output
-        - Single pass through data (linear time complexity)
-        - Zero-copy for operation implementation
+        - Preserves input dtype in output.
+        - Single pass through data (linear time complexity).
+        - Zero-copy for operation implementation.
     """
     var result = ExTensor(input.shape(), input.dtype())
     var op = Op()
@@ -219,19 +221,20 @@ fn apply_binary[
     Both tensors must have the same shape and dtype.
 
     Args:
-        a: First input tensor
-        b: Second input tensor
+        a: First input tensor.
+        b: Second input tensor.
 
     Returns:
-        New tensor with operation applied to each element pair
+        New tensor with operation applied to each element pair.
 
     Raises:
-        Error: If shapes don't match, dtypes don't match, or operation fails
+        Error: If shapes don't match, dtypes don't match, or operation fails.
 
     Type Parameters:
-        Op: Must implement ElementwiseBinaryOp trait
+        Op: Must implement ElementwiseBinaryOp trait.
 
     Example:
+    ```
         # Add two tensors
         var sum_tensor = apply_binary[AddOp](tensor_a, tensor_b)
 
@@ -244,11 +247,12 @@ fn apply_binary[
                 return a - b
 
         var difference = apply_binary[DiffOp](tensor_a, tensor_b)
+    ```
 
     Note:
-        - Both tensors must have exact same shape and dtype
-        - Output dtype matches input dtype
-        - Single pass through data (linear time complexity)
+        - Both tensors must have exact same shape and dtype.
+        - Output dtype matches input dtype.
+        - Single pass through data (linear time complexity).
     """
     # Validate shapes match
     if len(a.shape()) != len(b.shape()):

@@ -12,8 +12,8 @@ fn equal(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise equality comparison with broadcasting.
 
     Args:
-        a: First tensor
-        b: Second tensor
+        a: First tensor.
+        b: Second tensor.
 
     Returns:
         A new boolean tensor containing a == b
@@ -81,8 +81,8 @@ fn not_equal(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise inequality comparison with broadcasting.
 
     Args:
-        a: First tensor
-        b: Second tensor
+        a: First tensor.
+        b: Second tensor.
 
     Returns:
         A new boolean tensor containing a != b
@@ -150,8 +150,8 @@ fn less(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise less-than comparison with broadcasting.
 
     Args:
-        a: First tensor
-        b: Second tensor
+        a: First tensor.
+        b: Second tensor.
 
     Returns:
         A new boolean tensor containing a < b
@@ -219,8 +219,8 @@ fn less_equal(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise less-than-or-equal comparison with broadcasting.
 
     Args:
-        a: First tensor
-        b: Second tensor
+        a: First tensor.
+        b: Second tensor.
 
     Returns:
         A new boolean tensor containing a <= b
@@ -288,8 +288,8 @@ fn greater(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise greater-than comparison with broadcasting.
 
     Args:
-        a: First tensor
-        b: Second tensor
+        a: First tensor.
+        b: Second tensor.
 
     Returns:
         A new boolean tensor containing a > b
@@ -357,8 +357,8 @@ fn greater_equal(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise greater-than-or-equal comparison with broadcasting.
 
     Args:
-        a: First tensor
-        b: Second tensor
+        a: First tensor.
+        b: Second tensor.
 
     Returns:
         A new boolean tensor containing a >= b

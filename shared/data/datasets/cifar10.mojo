@@ -105,10 +105,10 @@ struct CIFAR10Dataset(Copyable, Movable):
         """Initialize CIFAR10Dataset.
 
         Args:
-            data_dir: Path to directory containing CIFAR-10 IDX format files
+            data_dir: Path to directory containing CIFAR-10 IDX format files.
 
         Raises:
-            Error: If data_dir is empty or invalid
+            Error: If data_dir is empty or invalid.
         """
         if len(data_dir) == 0:
             raise Error("data_dir cannot be empty")
@@ -128,7 +128,7 @@ struct CIFAR10Dataset(Copyable, Movable):
         """Return total number of training samples.
 
         Returns:
-            Number of training samples (50,000 for standard CIFAR-10)
+            Number of training samples (50,000 for standard CIFAR-10).
         """
         return 50000
 
@@ -136,15 +136,15 @@ struct CIFAR10Dataset(Copyable, Movable):
         """Get a sample from the training set.
 
         Args:
-            index: Index of the sample to retrieve
+            index: Index of the sample to retrieve.
 
         Returns:
             Tuple of (image, label) where:
-                - image: ExTensor of shape (3, 32, 32) with float32 values
-                - label: ExTensor of shape (1,) with uint8 class index
+                - image: ExTensor of shape (3, 32, 32) with float32 values.
+                - label: ExTensor of shape (1,) with uint8 class index.
 
         Raises:
-            Error: If index is out of bounds or data cannot be loaded
+            Error: If index is out of bounds or data cannot be loaded.
         """
         # Load training data if not already loaded
         if not self._train_loaded:
@@ -198,15 +198,15 @@ struct CIFAR10Dataset(Copyable, Movable):
 
         Returns:
             Tuple of (images, labels) where:
-                - images: ExTensor of shape (50000, 3, 32, 32) with float32 values
-                - labels: ExTensor of shape (50000,) with uint8 class indices
+                - images: ExTensor of shape (50000, 3, 32, 32) with float32 values.
+                - labels: ExTensor of shape (50000,) with uint8 class indices.
 
         Raises:
-            Error: If data files cannot be loaded
+            Error: If data files cannot be loaded.
 
         Note:
-            Data is loaded once and cached for efficiency
-            Subsequent calls return the cached data
+            Data is loaded once and cached for efficiency.
+            Subsequent calls return the cached data.
         """
         if not self._train_loaded:
             self._load_train_data()
@@ -235,15 +235,15 @@ struct CIFAR10Dataset(Copyable, Movable):
 
         Returns:
             Tuple of (images, labels) where:
-                - images: ExTensor of shape (10000, 3, 32, 32) with float32 values
-                - labels: ExTensor of shape (10000,) with uint8 class indices
+                - images: ExTensor of shape (10000, 3, 32, 32) with float32 values.
+                - labels: ExTensor of shape (10000,) with uint8 class indices.
 
         Raises:
-            Error: If test data files cannot be loaded
+            Error: If test data files cannot be loaded.
 
         Note:
-            Data is loaded once and cached for efficiency
-            Subsequent calls return the cached data
+            Data is loaded once and cached for efficiency.
+            Subsequent calls return the cached data.
         """
         if not self._test_loaded:
             self._load_test_data()
@@ -275,13 +275,13 @@ struct CIFAR10Dataset(Copyable, Movable):
         """Get human-readable class name from class index.
 
         Args:
-            class_idx: Integer class index (0-9)
+            class_idx: Integer class index (0-9).
 
         Returns:
-            Class name string (e.g., "airplane", "cat")
+            Class name string (e.g., "airplane", "cat").
 
         Raises:
-            Error: If class_idx is not in range [0, 9]
+            Error: If class_idx is not in range [0, 9].
         """
         if class_idx < 0 or class_idx >= 10:
             raise Error(
@@ -295,7 +295,7 @@ struct CIFAR10Dataset(Copyable, Movable):
         """Get number of classes in CIFAR-10.
 
         Returns:
-            Number of classes (10)
+            Number of classes (10).
         """
         return 10
 
@@ -303,7 +303,7 @@ struct CIFAR10Dataset(Copyable, Movable):
         """Get number of training samples.
 
         Returns:
-            Number of training samples (50,000)
+            Number of training samples (50,000).
         """
         return 50000
 
@@ -311,7 +311,7 @@ struct CIFAR10Dataset(Copyable, Movable):
         """Get number of test samples.
 
         Returns:
-            Number of test samples (10,000)
+            Number of test samples (10,000).
         """
         return 10000
 
@@ -319,7 +319,7 @@ struct CIFAR10Dataset(Copyable, Movable):
         """Get shape of individual images.
 
         Returns:
-            List containing image dimensions [3, 32, 32] (channels, height, width)
+            List containing image dimensions [3, 32, 32] (channels, height, width).
         """
         var shape: List[Int] = []
         shape.append(3)  # RGB channels

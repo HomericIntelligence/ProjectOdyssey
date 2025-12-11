@@ -97,11 +97,11 @@ struct ComponentTracker(Copyable, Movable):
         """Initialize tracker with specified window size.
 
         Args:
-            window_size: Number of values to keep for moving average
+            window_size: Number of values to keep for moving average.
         """
         self.window_size = window_size
         self.buffer = List[Float32]()
-        for i in range(window_size):
+        for _ in range(window_size):
             self.buffer.append(0.0)
 
         self.buffer_idx = 0
@@ -121,7 +121,7 @@ struct ComponentTracker(Copyable, Movable):
         Uses Welford's algorithm for numerically stable online variance computation.
 
         Args:
-            value: New loss value to add
+            value: New loss value to add.
 
         Reference:
             Welford, B. P. (1962). "Note on a method for calculating corrected sums.
@@ -167,10 +167,10 @@ struct ComponentTracker(Copyable, Movable):
         return sum / Float32(n)
 
     fn get_statistics(self) -> Statistics:
-        """Get statistical summary (mean, std, min, max, count)
+        """Get statistical summary (mean, std, min, max, count).
 
         Returns:
-            Statistics struct with overall statistics (not just window)
+            Statistics struct with overall statistics (not just window).
         """
         var stats = Statistics()
 
@@ -248,7 +248,7 @@ struct LossTracker(Metric):
         """Initialize loss tracker.
 
         Args:
-            window_size: Number of values to keep for moving average (default: 100)
+            window_size: Number of values to keep for moving average (default: 100).
         """
         self.window_size = window_size
         self.components = List[String]()
@@ -277,8 +277,8 @@ struct LossTracker(Metric):
         """Add new loss value for specified component.
 
         Args:
-            loss: Loss value to track
-            component: Component name (default: "total")
+            loss: Loss value to track.
+            component: Component name (default: "total").
         """
         var idx = self._get_or_create_component(component)
         self.trackers[idx].update(loss)
@@ -287,7 +287,7 @@ struct LossTracker(Metric):
         """Get most recent loss value for component.
 
         Args:
-            component: Component name (default: "total")
+            component: Component name (default: "total").
 
         Returns:
             Most recent loss value, or 0.0 if component doesn't exist.
@@ -302,7 +302,7 @@ struct LossTracker(Metric):
         """Get moving average for component.
 
         Args:
-            component: Component name (default: "total")
+            component: Component name (default: "total").
 
         Returns:
             Moving average over window, or 0.0 if component doesn't exist.
@@ -317,10 +317,10 @@ struct LossTracker(Metric):
         """Get statistical summary for component.
 
         Args:
-            component: Component name (default: "total")
+            component: Component name (default: "total").
 
         Returns:
-            Statistics struct with mean, std, min, max, count
+            Statistics struct with mean, std, min, max, count.
         """
         for i in range(len(self.components)):
             if self.components[i] == component:
@@ -329,10 +329,10 @@ struct LossTracker(Metric):
         return Statistics()
 
     fn reset(mut self, component: String = ""):
-        """Reset statistics for component(s)
+        """Reset statistics for component(s).
 
         Args:
-            component: Component name to reset, or "" to reset all (default: "")
+            component: Component name to reset, or "" to reset all (default: "").
         """
         if component == "":
             # Reset all components
@@ -349,21 +349,21 @@ struct LossTracker(Metric):
         """Get list of all tracked components.
 
         Returns:
-            Vector of component names (copy)
+            Vector of component names (copy).
         """
         # Create a copy of the components list
         return List[String](self.components)
 
     # Metric trait implementation (for coordination interface)
     fn update(mut self, predictions: ExTensor, labels: ExTensor) raises:
-        """Update metric with predictions and labels (Metric trait)
+        """Update metric with predictions and labels (Metric trait).
 
         Note: LossTracker doesn't use predictions/labels directly.
         This method exists for trait compliance but should not be called
-        Use update(loss: Float32, component: String) instead
+        Use update(loss: Float32, component: String) instead.
 
         Raises:
-            Error indicating this method should not be used
+            Error indicating this method should not be used.
         """
         raise Error(
             "LossTracker.update(predictions, labels) not applicable - use"
@@ -371,9 +371,9 @@ struct LossTracker(Metric):
         )
 
     fn reset(mut self):
-        """Reset all components (Metric trait version)
+        """Reset all components (Metric trait version).
 
-        Resets statistics for all tracked components
+        Resets statistics for all tracked components.
         """
         # Reset all components
         for i in range(len(self.trackers)):

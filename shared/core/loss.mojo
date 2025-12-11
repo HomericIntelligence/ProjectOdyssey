@@ -338,28 +338,29 @@ fn cross_entropy_backward(
     """Backward pass for cross-entropy loss.
 
         For cross-entropy with softmax, the gradient simplifies to:
-            ∂CE/∂logits = softmax(logits) - targets
+            `∂CE/∂logits = softmax(logits) - targets`
 
         This beautiful result comes from the chain rule and the properties
         of the softmax function.
 
     Args:
-            grad_output: Gradient from upstream (scalar for mean reduction).
-            logits: Original logits passed to forward pass, shape (batch, num_classes).
-            targets: Original one-hot targets, shape (batch, num_classes).
+        grad_output: Gradient from upstream (scalar for mean reduction).
+        logits: Original logits passed to forward pass, shape (batch, num_classes).
+        targets: Original one-hot targets, shape (batch, num_classes).
+        epsilon: Value to check cross entropy for(optional).
 
     Returns:
-            Gradient with respect to logits, shape (batch, num_classes).
+        Gradient with respect to logits, shape (batch, num_classes).
 
-        Example:
-            ```mojo
-            from shared.core import cross_entropy, cross_entropy_backward
+    Example:
+        ```mojo
+        from shared.core import cross_entropy, cross_entropy_backward
 
-            # Forward pass
-            var loss = cross_entropy(logits, targets)
-            # Backward pass (grad_output is usually 1.0 for scalar loss)
-            var grad_logits = cross_entropy_backward(grad_output, logits, targets)
-            ```
+        # Forward pass
+        var loss = cross_entropy(logits, targets)
+        # Backward pass (grad_output is usually 1.0 for scalar loss)
+        var grad_logits = cross_entropy_backward(grad_output, logits, targets)
+        ```
 
     Note:
             The gradient is already averaged over the batch if the forward pass

@@ -150,10 +150,10 @@ fn dtype_to_string(dtype: DType) -> String:
     """Convert DType to human-readable string.
 
     Args:
-        dtype: The DType to convert
+        dtype: The DType to convert.
 
     Returns:
-        String representation of the dtype (e.g., "float32", "int8")
+        String representation of the dtype (e.g., "float32", "int8").
 
     Example:
         ```mojo

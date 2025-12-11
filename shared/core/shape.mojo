@@ -122,14 +122,15 @@ fn view(tensor: ExTensor, new_shape: List[Int]) raises -> ExTensor:
             handles all cases by copying if necessary.
 
     Examples:
+    ```
             # View works for compatible reshapes
             var a = ones([2, 3], DType.float32)  # Contiguous (2, 3)
             var b = view(a, [6])  # Creates view with shape (6,)
 
             # View fails for non-trivial reshapes
             # var c = view(a, [3, 2])  # Would fail - need to transpose memory layout
+    ```
     """
-    var old_shape = tensor.shape()
     var old_numel = tensor.numel()
     var new_numel = 1
     var new_len = len(new_shape)
@@ -160,12 +161,14 @@ fn reshape(tensor: ExTensor, new_shape: List[Int]) raises -> ExTensor:
             Error: If new shape has different number of elements.
 
     Examples:
+    ```
             # Reshape 1D to 2D
             var a = arange(0.0, 12.0, 1.0, DType.float32)  # Shape (12,)
             var b = reshape(a, [3, 4])  # Shape (3, 4)
 
             # With -1 for inferred dimension
             var c = reshape(a, [3, -1])  # Shape (3, 4) - infers 4
+    ```
     """
     # Calculate total elements in new shape (handling -1 for inference)
     var inferred_dim = -1
@@ -237,12 +240,14 @@ fn squeeze(tensor: ExTensor, dim: Int = -999) raises -> ExTensor:
             Error: If specified dim is not size 1.
 
     Examples:
+    ```
             # Squeeze all size-1 dims
             var a = ones([1, 3, 1, 4], DType.float32)  # Shape (1, 3, 1, 4)
             var b = squeeze(a)  # Shape (3, 4)
 
             # Squeeze specific dim
             var c = squeeze(a, 0)  # Shape (3, 1, 4)
+    ```
     """
     var old_shape = tensor.shape()
     var ndim = len(old_shape)
@@ -295,9 +300,11 @@ fn unsqueeze(tensor: ExTensor, dim: Int) raises -> ExTensor:
             Tensor with additional size-1 dimension.
 
     Examples:
+    ```
             var a = ones([3, 4], DType.float32)  # Shape (3, 4)
             var b = unsqueeze(a, 0)  # Shape (1, 3, 4)
             var c = unsqueeze(a, -1)  # Shape (3, 4, 1)
+    ```
     """
     var old_shape = tensor.shape()
     var ndim = len(old_shape)
@@ -346,8 +353,10 @@ fn flatten(tensor: ExTensor) raises -> ExTensor:
             1D tensor with all elements in row-major (C) order.
 
     Examples:
+    ```
             var a = ones([3, 4], DType.float32)  # Shape (3, 4)
             var b = flatten(a)  # Shape (12,)
+    ```
     """
     var numel = tensor.numel()
     var shape_1d = List[Int]()
@@ -370,8 +379,10 @@ fn ravel(tensor: ExTensor) raises -> ExTensor:
             1D tensor with all elements (may be a view if contiguous).
 
     Examples:
+    ```
             var a = ones([2, 3], DType.float32)  # Contiguous
             var b = ravel(a)  # Returns view of shape (6,)
+    ```
     """
     # For contiguous tensors, we can safely flatten as a view
     # For non-contiguous tensors, we need to copy
@@ -397,12 +408,14 @@ fn concatenate(tensors: List[ExTensor], axis: Int = 0) raises -> ExTensor:
             Error: If tensors have incompatible shapes.
 
     Examples:
+    ```
             var a = ones([2, 3], DType.float32)  # 2x3
             var b = ones([3, 3], DType.float32)  # 3x3
             var tensors : List[ExTensor] = []
             tensors.append(a)
             tensors.append(b)
             var c = concatenate(tensors, axis=0)  # Shape (5, 3)
+    ```
     """
     var num_tensors = len(tensors)
     if num_tensors == 0:
@@ -493,12 +506,14 @@ fn stack(tensors: List[ExTensor], axis: Int = 0) raises -> ExTensor:
             Error: If tensors have different shapes.
 
     Examples:
+    ```
             var a = ones([2, 3], DType.float32)  # 2x3
             var b = ones([2, 3], DType.float32)  # 2x3
             var tensors : List[ExTensor] = []
             tensors.append(a)
             tensors.append(b)
             var c = stack(tensors, axis=0)  # Shape (2, 2, 3)
+    ```
     """
     var num_tensors = len(tensors)
     if num_tensors == 0:
@@ -575,6 +590,7 @@ fn conv2d_output_shape(
             output_w = (input_w + 2*padding - dilation*(kernel_w - 1) - 1) // stride + 1
 
     Examples:
+    ```
             # Standard 3x3 convolution with stride=1, padding=1
             var out_h, out_w = conv2d_output_shape(224, 224, 3, 3, 1, 1)  # (224, 224)
 
@@ -583,6 +599,7 @@ fn conv2d_output_shape(
 
             # Dilated convolution (dilation=2)
             var out_h, out_w = conv2d_output_shape(224, 224, 3, 3, 1, 1, dilation=2)  # (222, 222)
+    ```
     """
     var out_h = (
         input_h + 2 * padding - dilation * (kernel_h - 1) - 1
@@ -616,11 +633,13 @@ fn pool_output_shape(
             output_w = (input_w + 2*padding - kernel_size) // stride + 1
 
     Examples:
+    ```
             # 2x2 max pooling with stride=2, no padding
             var out_h, out_w = pool_output_shape(224, 224, 2, 2, 0)  # (112, 112)
 
             # 3x3 pooling with stride=1, padding=1 (same spatial dims)
             var out_h, out_w = pool_output_shape(224, 224, 3, 1, 1)  # (224, 224)
+    ```
     """
     var out_h = (input_h + 2 * padding - kernel_size) // stride + 1
     var out_w = (input_w + 2 * padding - kernel_size) // stride + 1
@@ -643,12 +662,14 @@ fn flatten_size(height: Int, width: Int, channels: Int) -> Int:
             Total number of elements: height * width * channels.
 
     Examples:
+    ```
             # After final pooling layer in CNN
             var fc_input_size = flatten_size(7, 7, 512)  # 25088 for 7x7x512 feature map
             var fc_weight_shape = [4096, 25088]  # Common dense layer size
 
             # After initial conv layer
             var fc_input_size = flatten_size(112, 112, 64)  # 802816 elements
+    ```
     """
     return height * width * channels
 
@@ -669,6 +690,7 @@ fn flatten_to_2d(tensor: ExTensor) raises -> ExTensor:
             Error: If input tensor is not 4D.
 
     Examples:
+    ```
             # After pooling layer, flatten before FC layer
             var pool_out = maxpool2d(x, kernel_size=2, stride=2)  # (32, 64, 7, 7)
             var flattened = flatten_to_2d(pool_out)  # (32, 3136)
@@ -676,6 +698,7 @@ fn flatten_to_2d(tensor: ExTensor) raises -> ExTensor:
             # Use in forward pass
             var fc_input = flatten_to_2d(conv_output)
             var fc_output = linear(fc_input, weights, bias)
+    ```
     """
     var shape = tensor.shape()
 
@@ -731,11 +754,13 @@ fn transposed_conv2d_output_shape(
             output_w = (input_w - 1) * stride - 2 * padding + kernel_w + output_padding
 
     Examples:
+    ```
             # Upsample 7x7 to 14x14 with stride=2
             var out_h, out_w = transposed_conv2d_output_shape(7, 7, 4, 4, 2, 1)  # (14, 14)
 
             # Upsample 14x14 to 28x28 with stride=2
             var out_h, out_w = transposed_conv2d_output_shape(14, 14, 4, 4, 2, 1)  # (28, 28)
+    ```
     """
     var out_h = (input_h - 1) * stride - 2 * padding + kernel_h + output_padding
     var out_w = (input_w - 1) * stride - 2 * padding + kernel_w + output_padding
@@ -758,11 +783,13 @@ fn global_avgpool_output_shape(
             Tuple of (batch, channels, 1, 1).
 
     Examples:
+    ```
             # Global average pooling on feature map
             var shape = global_avgpool_output_shape(32, 512)  # (32, 512, 1, 1)
 
             # Common in classification networks (replaces flatten + FC)
             var shape = global_avgpool_output_shape(16, 2048)  # (16, 2048, 1, 1)
+    ```
     """
     return Tuple[Int, Int, Int, Int](batch, channels, 1, 1)
 
@@ -781,10 +808,12 @@ fn linear_output_shape(batch_size: Int, out_features: Int) -> Tuple[Int, Int]:
             Tuple of (batch_size, out_features).
 
     Examples:
+    ```
             # Classification head: 512 features -> 10 classes
             var shape = linear_output_shape(32, 10)  # (32, 10)
 
             # Hidden layer: 784 features -> 256 hidden units
             var shape = linear_output_shape(64, 256)  # (64, 256)
+    ```
     """
     return Tuple[Int, Int](batch_size, out_features)

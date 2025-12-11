@@ -47,16 +47,16 @@ struct BatchNorm2dLayer(Copyable, Movable):
     ) raises:
         """Initialize BatchNorm2D layer with learnable parameters and running statistics.
 
-        Gamma (scale) is initialized to 1.0 for each channel (identity transform)
-        Beta (shift) is initialized to 0.0
-        Running mean is initialized to 0.0 and running variance to 1.0
+        Gamma (scale) is initialized to 1.0 for each channel (identity transform).
+        Beta (shift) is initialized to 0.0.
+        Running mean is initialized to 0.0 and running variance to 1.0.
 
         Args:
-            num_channels: Number of channels to normalize
+            num_channels: Number of channels to normalize.
             momentum: Momentum for exponential moving average of running statistics
-                     (default: 0.1). Higher values give more weight to current batch
+                     (default: 0.1). Higher values give more weight to current batch.
             eps: Small constant for numerical stability to avoid division by zero
-                (default: 1e-5)
+                (default: 1e-5).
 
         Raises:
             Error if tensor creation fails
@@ -104,31 +104,35 @@ struct BatchNorm2dLayer(Copyable, Movable):
         In inference mode: uses running statistics for normalization
 
         Args:
-            input: Input tensor of shape (batch, channels, height, width)
+            input: Input tensor of shape (batch, channels, height, width).
             training: If True, use batch statistics and update running stats
-                     If False, use running statistics (default: True)
+                     If False, use running statistics (default: True).
 
         Returns:
-            Output tensor of shape (batch, channels, height, width)
+            Output tensor of shape (batch, channels, height, width).
 
         Raises:
-            Error if tensor operations fail
+            Error if tensor operations fail.
 
         Note:
             This method mutates self.running_mean and self.running_var
-            when training=True to track exponential moving averages
+            when training=True to track exponential moving averages.
 
         Formula (training):
+        ```
             mean = mean(x, axis=(0, 2, 3))  # Per channel
             var = var(x, axis=(0, 2, 3))
             x_norm = (x - mean) / sqrt(var + eps)
             output = gamma * x_norm + beta
             running_mean = (1 - momentum) * running_mean + momentum * mean
             running_var = (1 - momentum) * running_var + momentum * var
+        ```
 
         Formula (inference):
+        ```
             x_norm = (x - running_mean) / sqrt(running_var + eps)
             output = gamma * x_norm + beta
+        ```
 
         Example:
             ```mojo
@@ -240,11 +244,11 @@ struct BatchNorm2dLayer(Copyable, Movable):
     fn set_running_stats(
         mut self, running_mean: ExTensor, running_var: ExTensor
     ) raises:
-        """Set running statistics (for loading from checkpoint)
+        """Set running statistics (for loading from checkpoint).
 
         Args:
-            running_mean: Running mean to set, shape (channels,)
-            running_var: Running variance to set, shape (channels,)
+            running_mean: Running mean to set, shape (channels,).
+            running_var: Running variance to set, shape (channels,).
 
         Raises:
             Error if tensor shapes don't match.

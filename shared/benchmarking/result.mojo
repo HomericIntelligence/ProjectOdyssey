@@ -9,12 +9,12 @@ iteration times are recorded in nanoseconds, allowing flexible conversion to
 other time units and statistical analysis.
 
 Features:
-    - Record individual iteration times in nanoseconds
-    - Compute mean execution time using Welford's algorithm (numerically stable)
-    - Compute standard deviation with sample variance (N-1)
-    - Track min/max times across iterations
-    - Support for up to 2^63-1 iterations
-    - Efficient memory usage via Welford's online algorithm
+    - Record individual iteration times in nanoseconds.
+    - Compute mean execution time using Welford's algorithm (numerically stable).
+    - Compute standard deviation with sample variance (N-1).
+    - Track min/max times across iterations.
+    - Support for up to 2^63-1 iterations.
+    - Efficient memory usage via Welford's online algorithm.
 
 Example:
    ```mojo
@@ -44,22 +44,22 @@ struct BenchmarkResult(Copyable, Movable):
     """Results from a benchmark run with iteration-level timing data.
 
     Uses Welford's algorithm for numerically stable online computation of
-    mean and variance as iterations are recorded
+    mean and variance as iterations are recorded.
 
     Attributes:
-        name: Descriptive name for the benchmarked operation
-        iterations: Total number of iterations recorded
-        total_time_ns: Sum of all iteration times in nanoseconds
-        min_time_ns: Minimum iteration time in nanoseconds
-        max_time_ns: Maximum iteration time in nanoseconds
-        mean_time_ns: Mean (average) iteration time in nanoseconds (computed via Welford's)
-        _M2: Second moment accumulator for variance (Welford's algorithm)
+        name: Descriptive name for the benchmarked operation.
+        iterations: Total number of iterations recorded.
+        total_time_ns: Sum of all iteration times in nanoseconds.
+        min_time_ns: Minimum iteration time in nanoseconds.
+        max_time_ns: Maximum iteration time in nanoseconds.
+        mean_time_ns: Mean (average) iteration time in nanoseconds (computed via Welford's).
+        _M2: Second moment accumulator for variance (Welford's algorithm).
 
     Notes:
         - Welford's algorithm: https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance
-        - Variance = _M2 / (iterations - 1) for sample variance (N-1 denominator)
-        - Standard deviation = sqrt(variance)
-        - Mean is computed exactly via accumulated sum
+        - `Variance = _M2 / (iterations - 1) for sample variance (N-1 denominator)`
+        - `Standard deviation = sqrt(variance)`
+        - Mean is computed exactly via accumulated sum.
     """
 
     var name: String
@@ -74,14 +74,14 @@ struct BenchmarkResult(Copyable, Movable):
         """Initialize a benchmark result tracker.
 
         Args:
-            name: Descriptive name for the operation (e.g., "relu_forward")
-            iterations: Expected number of iterations (for documentation)
+            name: Descriptive name for the operation (e.g., "relu_forward").
+            iterations: Expected number of iterations (for documentation).
 
         Notes:
             - iterations parameter is stored for reference but does not limit
-              the number of records() calls
-            - All timing fields initialized to 0
-            - First call to record() will initialize min/max to that time
+              the number of records() calls.
+            - All timing fields initialized to 0.
+            - First call to record() will initialize min/max to that time.
         """
         self.name = name
         self.iterations = iterations
@@ -95,16 +95,16 @@ struct BenchmarkResult(Copyable, Movable):
         """Record a single iteration's execution time in nanoseconds.
 
         Uses Welford's online algorithm to compute mean and variance
-        incrementally without storing all measurements
+        incrementally without storing all measurements.
 
         Args:
-            time_ns: Execution time of one iteration in nanoseconds (must be >= 0)
+            time_ns: Execution time of one iteration in nanoseconds (must be >= 0).
 
         Notes:
-            - First call sets min and max to this time
-            - Subsequent calls update min/max if needed
-            - Mean and variance are updated via Welford's algorithm
-            - Total time is accumulated for reference
+            - First call sets min and max to this time.
+            - Subsequent calls update min/max if needed.
+            - Mean and variance are updated via Welford's algorithm.
+            - Total time is accumulated for reference.
         """
         var n = self.iterations + 1
         self.iterations = n
@@ -134,12 +134,12 @@ struct BenchmarkResult(Copyable, Movable):
         """Compute mean (average) iteration time in nanoseconds.
 
         Returns:
-            Mean execution time as Float64 in nanoseconds
-            Returns 0.0 if no iterations recorded
+            Mean execution time as Float64 in nanoseconds.
+            Returns 0.0 if no iterations recorded.
 
         Notes:
-            - Result is exact (computed from accumulated mean via Welford's)
-            - Safe even for very large iteration counts
+            - Result is exact (computed from accumulated mean via Welford's).
+            - Safe even for very large iteration counts.
         """
         if self.iterations == 0:
             return 0.0
@@ -149,17 +149,17 @@ struct BenchmarkResult(Copyable, Movable):
         """Compute standard deviation of iteration times.
 
         Uses sample variance (N-1 denominator) for unbiased estimation,
-        following standard statistical practice for sample data
+        following standard statistical practice for sample data.
 
         Returns:
-            Standard deviation in nanoseconds as Float64
-            Returns 0.0 if fewer than 2 iterations recorded
+            Standard deviation in nanoseconds as Float64.
+            Returns 0.0 if fewer than 2 iterations recorded.
 
         Notes:
-            - Requires at least 2 iterations to compute meaningful std dev
-            - Uses Welford's _M2 accumulated value
-            - Formula: std = sqrt(_M2 / (n - 1))
-            - Returns 0.0 if iterations <= 1
+            - Requires at least 2 iterations to compute meaningful std dev.
+            - Uses Welford's _M2 accumulated value.
+            - Formula: std = sqrt(_M2 / (n - 1)).
+            - Returns 0.0 if iterations <= 1.
         """
         if self.iterations <= 1:
             return 0.0
@@ -170,12 +170,12 @@ struct BenchmarkResult(Copyable, Movable):
         """Get minimum iteration time in nanoseconds.
 
         Returns:
-            Minimum execution time as Float64 in nanoseconds
-            Returns 0.0 if no iterations recorded
+            Minimum execution time as Float64 in nanoseconds.
+            Returns 0.0 if no iterations recorded.
 
         Notes:
-            - Tracks actual minimum across all recorded iterations
-            - Useful for identifying best-case performance
+            - Tracks actual minimum across all recorded iterations.
+            - Useful for identifying best-case performance.
         """
         if self.iterations == 0:
             return 0.0
@@ -185,12 +185,12 @@ struct BenchmarkResult(Copyable, Movable):
         """Get maximum iteration time in nanoseconds.
 
         Returns:
-            Maximum execution time as Float64 in nanoseconds
-            Returns 0.0 if no iterations recorded
+            Maximum execution time as Float64 in nanoseconds.
+            Returns 0.0 if no iterations recorded.
 
         Notes:
-            - Tracks actual maximum across all recorded iterations
-            - Useful for identifying worst-case performance
+            - Tracks actual maximum across all recorded iterations.
+            - Useful for identifying worst-case performance.
         """
         if self.iterations == 0:
             return 0.0
@@ -200,15 +200,17 @@ struct BenchmarkResult(Copyable, Movable):
         """Format benchmark results as a human-readable string.
 
         Returns:
-            Formatted summary of results with timing in microseconds
+            Formatted summary of results with timing in microseconds.
 
         Example output:
+        ```
             BenchmarkResult: relu_forward
-              Iterations: 1000
-              Mean: 1234.56 us (1234567.89 ns)
-              Std Dev: 45.67 us
-              Min: 1000.00 us
-              Max: 2000.00 us
+                Iterations: 1000
+                Mean: 1234.56 us (1234567.89 ns)
+                Std Dev: 45.67 us
+                Min: 1000.00 us
+                Max: 2000.00 us
+        ```
         """
         var mean_ns = self.mean()
         var mean_us = mean_ns / 1000.0

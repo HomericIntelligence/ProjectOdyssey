@@ -68,15 +68,15 @@ fn create_special_value_tensor(
     """Create tensor filled with a special value.
 
     Args:
-        shape: Tensor dimensions
-        dtype: Data type (FP4, FP8, FP16, FP32, BFloat16, or Int8)
-        value: Special value to fill (must be -1.0, -0.5, 0.0, 0.5, 1.0, or 1.5)
+        shape: Tensor dimensions.
+        dtype: Data type (FP4, FP8, FP16, FP32, BFloat16, or Int8).
+        value: Special value to fill (must be -1.0, -0.5, 0.0, 0.5, 1.0, or 1.5).
 
     Returns:
-        ExTensor filled with the special value
+        ExTensor filled with the special value.
 
     Raises:
-        Error if value is not a special value (-1.0, -0.5, 0.0, 0.5, 1.0, 1.5)
+        Error if value is not a special value (-1.0, -0.5, 0.0, 0.5, 1.0, 1.5).
 
     Example:
         ```mojo
@@ -138,11 +138,11 @@ fn create_alternating_pattern_tensor(
     All values are exactly representable across all dtypes.
 
     Args:
-        shape: Tensor dimensions
-        dtype: Data type (FP4, FP8, FP16, FP32, BFloat16, or Int8)
+        shape: Tensor dimensions.
+        dtype: Data type (FP4, FP8, FP16, FP32, BFloat16, or Int8).
 
     Returns:
-        ExTensor with alternating special value pattern
+        ExTensor with alternating special value pattern.
 
     Example:
         ```mojo
@@ -186,12 +186,12 @@ fn verify_special_value_invariants(
     special values are exactly representable in all dtypes.
 
     Args:
-        tensor: Tensor to check
-        expected_value: Expected special value (-1.0, -0.5, 0.0, 0.5, 1.0, or 1.5)
+        tensor: Tensor to check.
+        expected_value: Expected special value (-1.0, -0.5, 0.0, 0.5, 1.0, or 1.5).
 
     Raises:
-        Error if any element doesn't match expected value exactly
-        Error if expected_value is not a special value
+        Error if any element doesn't match expected value exactly.
+        Error if expected_value is not a special value.
 
     Example:
         ```mojo
@@ -250,17 +250,17 @@ fn create_seeded_random_tensor(
     for testing and gradient checking.
 
     Args:
-        shape: Tensor dimensions
-        dtype: Data type (FP4, FP8, FP16, FP32, BFloat16, or Int8)
-        seed: Random seed for reproducibility (default: 42)
-        low: Minimum value for random range (default: -1.0)
-        high: Maximum value for random range (default: 1.0)
+        shape: Tensor dimensions.
+        dtype: Data type (FP4, FP8, FP16, FP32, BFloat16, or Int8).
+        seed: Random seed for reproducibility (default: 42).
+        low: Minimum value for random range (default: -1.0).
+        high: Maximum value for random range (default: 1.0).
 
     Returns:
-        ExTensor with seeded random values in [low, high]
+        ExTensor with seeded random values in [low, high].
 
     Raises:
-        Error if low >= high (invalid range)
+        Error if low >= high (invalid range).
 
     Example:
         ```mojo
@@ -314,11 +314,11 @@ fn create_zeros_tensor(shape: List[Int], dtype: DType) raises -> ExTensor:
     Convenience wrapper around create_special_value_tensor for zero initialization.
 
     Args:
-        shape: Tensor dimensions
-        dtype: Data type
+        shape: Tensor dimensions.
+        dtype: Data type.
 
     Returns:
-        ExTensor filled with zeros
+        ExTensor filled with zeros.
 
     Example:
         ```mojo
@@ -335,11 +335,11 @@ fn create_ones_tensor(shape: List[Int], dtype: DType) raises -> ExTensor:
     Convenience wrapper around create_special_value_tensor for one initialization.
 
     Args:
-        shape: Tensor dimensions
-        dtype: Data type
+        shape: Tensor dimensions.
+        dtype: Data type.
 
     Returns:
-        ExTensor filled with ones
+        ExTensor filled with ones.
 
     Example:
         ```mojo
@@ -356,11 +356,11 @@ fn create_halves_tensor(shape: List[Int], dtype: DType) raises -> ExTensor:
     Convenience wrapper around create_special_value_tensor for half initialization.
 
     Args:
-        shape: Tensor dimensions
-        dtype: Data type
+        shape: Tensor dimensions.
+        dtype: Data type.
 
     Returns:
-        ExTensor filled with 0.5
+        ExTensor filled with 0.5.
 
     Example:
         ```mojo
@@ -379,11 +379,11 @@ fn create_one_and_half_tensor(
     Convenience wrapper around create_special_value_tensor for 1.5 initialization.
 
     Args:
-        shape: Tensor dimensions
-        dtype: Data type
+        shape: Tensor dimensions.
+        dtype: Data type.
 
     Returns:
-        ExTensor filled with 1.5
+        ExTensor filled with 1.5.
 
     Example:
         ```mojo

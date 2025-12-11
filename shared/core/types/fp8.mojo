@@ -40,7 +40,7 @@ struct FP8(Copyable, Movable, Representable, Stringable):
         """Initialize FP8 from raw UInt8 bits.
 
         Args:
-            value: Raw 8-bit representation
+            value: Raw 8-bit representation.
         """
         self.value = value
 
@@ -49,7 +49,7 @@ struct FP8(Copyable, Movable, Representable, Stringable):
         """Convert Float32 to FP8 E4M3 format.
 
         Args:
-            x: Float32 value to convert
+            x: Float32 value to convert.
 
         Returns:
             FP8 representation (with potential precision loss).

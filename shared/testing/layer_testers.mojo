@@ -102,16 +102,16 @@ struct LayerTester:
         """Test convolutional layer with special values.
 
         Args:
-            in_channels: Input channels
-            out_channels: Output channels
-            kernel_size: Kernel size (assumes square kernel)
-            input_h: Input height
-            input_w: Input width
-            weights: Conv weights (out_channels, in_channels, k, k)
-            bias: Conv bias (out_channels,)
-            dtype: Data type to test
-            stride: Convolution stride (default: 1)
-            padding: Convolution padding (default: 0)
+            in_channels: Input channels.
+            out_channels: Output channels.
+            kernel_size: Kernel size (assumes square kernel).
+            input_h: Input height.
+            input_w: Input width.
+            weights: Conv weights (out_channels, in_channels, k, k).
+            bias: Conv bias (out_channels,).
+            dtype: Data type to test.
+            stride: Convolution stride (default: 1).
+            padding: Convolution padding (default: 0).
 
         Verifies:
             - Output shape is correct
@@ -180,11 +180,11 @@ struct LayerTester:
         """Test fully connected layer with special values.
 
         Args:
-            in_features: Input dimension
-            out_features: Output dimension
-            weights: Linear weights (out_features, in_features)
-            bias: Linear bias (out_features,)
-            dtype: Data type to test
+            in_features: Input dimension.
+            out_features: Output dimension.
+            weights: Linear weights (out_features, in_features).
+            bias: Linear bias (out_features,).
+            dtype: Data type to test.
 
         Verifies:
             - Output shape is correct
@@ -242,14 +242,14 @@ struct LayerTester:
         """Test pooling layer with special values.
 
         Args:
-            channels: Number of channels
-            input_h: Input height
-            input_w: Input width
-            pool_size: Pooling kernel size
-            stride: Pooling stride
-            dtype: Data type to test
-            pool_type: "max" or "avg" (default: "max")
-            padding: Pooling padding (default: 0)
+            channels: Number of channels.
+            input_h: Input height.
+            input_w: Input width.
+            pool_size: Pooling kernel size.
+            stride: Pooling stride.
+            dtype: Data type to test.
+            pool_type: "max" or "avg" (default: "max").
+            padding: Pooling padding (default: 0).
 
         Verifies:
             - Output shape is correct
@@ -320,9 +320,9 @@ struct LayerTester:
         """Test activation layer with special values.
 
         Args:
-            shape: Input/output shape
-            dtype: Data type to test
-            activation: "relu", "sigmoid", "tanh" (default: "relu")
+            shape: Input/output shape.
+            dtype: Data type to test.
+            activation: "relu", "sigmoid", "tanh" (default: "relu").
 
         Verifies:
             - Output shape matches input shape
@@ -405,9 +405,9 @@ struct LayerTester:
         """Test that layer preserves dtype from input to output.
 
         Args:
-            input: Input tensor
-            output: Output tensor
-            layer_name: Name of layer for error messages
+            input: Input tensor.
+            output: Output tensor.
+            layer_name: Name of layer for error messages.
 
         Verifies:
             - Output dtype matches input dtype
@@ -430,8 +430,8 @@ struct LayerTester:
         """Test that layer output contains no NaN or Inf values.
 
         Args:
-            output: Output tensor to check
-            layer_name: Name of layer for error messages
+            output: Output tensor to check.
+            layer_name: Name of layer for error messages.
 
         Verifies:
             - No NaN values in output
@@ -478,16 +478,16 @@ struct LayerTester:
         finite differences.
 
         Args:
-            in_channels: Input channels
-            out_channels: Output channels
-            kernel_size: Kernel size (assumes square kernel)
-            input_h: Input height
-            input_w: Input width
-            weights: Conv weights (out_channels, in_channels, k, k)
-            bias: Conv bias (out_channels,)
-            dtype: Data type to test
-            stride: Convolution stride (default: 1)
-            padding: Convolution padding (default: 0)
+            in_channels: Input channels.
+            out_channels: Output channels.
+            kernel_size: Kernel size (assumes square kernel).
+            input_h: Input height.
+            input_w: Input width.
+            weights: Conv weights (out_channels, in_channels, k, k).
+            bias: Conv bias (out_channels,).
+            dtype: Data type to test.
+            stride: Convolution stride (default: 1).
+            padding: Convolution padding (default: 0).
 
         Verifies:
             - Forward pass runs without error
@@ -539,11 +539,11 @@ struct LayerTester:
 
         # Test gradient checking with small epsilon and tolerance appropriate for dtype
         var epsilon = 1e-5 if dtype == DType.float32 else 1e-4
-        var tolerance = 1e-2 if dtype == DType.float32 else 1e-1
+        # FIXME(unused) var tolerance = 1e-2 if dtype == DType.float32 else 1e-1
 
         # Define forward function for gradient checking
         fn forward(x: ExTensor) raises escaping -> ExTensor:
-            return conv2d(x, weights, bias, stride=stride, padding=padding)^
+            return conv2d(x, weights, bias, stride=stride, padding=padding)
 
         # Since we don't have analytical backward implementation yet,
         # we validate that numerical gradient computation works
@@ -580,11 +580,11 @@ struct LayerTester:
         Validates analytical gradients match numerical gradients.
 
         Args:
-            in_features: Input dimension
-            out_features: Output dimension
-            weights: Linear weights (out_features, in_features)
-            bias: Linear bias (out_features,)
-            dtype: Data type to test
+            in_features: Input dimension.
+            out_features: Output dimension.
+            weights: Linear weights (out_features, in_features).
+            bias: Linear bias (out_features,).
+            dtype: Data type to test.
 
         Verifies:
             - Forward pass runs without error
@@ -622,11 +622,11 @@ struct LayerTester:
 
         # Test gradient checking with small epsilon and tolerance appropriate for dtype
         var epsilon = 1e-5 if dtype == DType.float32 else 1e-4
-        var tolerance = 1e-2 if dtype == DType.float32 else 1e-1
+        # FIXME(unused) var tolerance = 1e-2 if dtype == DType.float32 else 1e-1
 
         # Define forward function for gradient checking
         fn forward(x: ExTensor) raises escaping -> ExTensor:
-            return linear(x, weights, bias)^
+            return linear(x, weights, bias)
 
         # Validate numerical gradient computation
         var numerical_grad = compute_numerical_gradient(forward, input, epsilon)
@@ -661,9 +661,9 @@ struct LayerTester:
         Validates analytical gradients match numerical gradients.
 
         Args:
-            shape: Input/output shape
-            dtype: Data type to test
-            activation: "relu", "sigmoid", "tanh" (default: "relu")
+            shape: Input/output shape.
+            dtype: Data type to test.
+            activation: "relu", "sigmoid", "tanh" (default: "relu").
 
         Verifies:
             - Forward pass runs without error
@@ -710,7 +710,7 @@ struct LayerTester:
 
         # Test gradient checking with appropriate epsilon and tolerance for dtype
         var epsilon = 1e-5 if dtype == DType.float32 else 1e-4
-        var tolerance = 1e-2 if dtype == DType.float32 else 1e-1
+        # FIXME(unused) var tolerance = 1e-2 if dtype == DType.float32 else 1e-1
 
         # Define forward function for gradient checking
         fn forward(x: ExTensor) raises escaping -> ExTensor:
@@ -758,14 +758,14 @@ struct LayerTester:
         Inference mode: Uses frozen running statistics
 
         Args:
-            num_features: Number of features to normalize
-            input_shape: Input tensor shape [batch, channels, height, width] or [batch, features]
-            gamma: Scale parameter (num_features,)
-            beta: Shift parameter (num_features,)
-            running_mean: Running mean statistics
-            running_var: Running variance statistics
-            dtype: Data type to test
-            training_mode: If True, test training mode; else test inference mode
+            num_features: Number of features to normalize.
+            input_shape: Input tensor shape [batch, channels, height, width] or [batch, features].
+            gamma: Scale parameter (num_features,).
+            beta: Shift parameter (num_features,).
+            running_mean: Running mean statistics.
+            running_var: Running variance statistics.
+            dtype: Data type to test.
+            training_mode: If True, test training mode; else test inference mode.
 
         Verifies:
             - Output shape matches input shape
@@ -835,13 +835,13 @@ struct LayerTester:
         Validates analytical gradients match numerical gradients.
 
         Args:
-            num_features: Number of features to normalize
-            input_shape: Input tensor shape
-            gamma: Scale parameter (num_features,)
-            beta: Shift parameter (num_features,)
-            running_mean: Running mean statistics
-            running_var: Running variance statistics
-            dtype: Data type to test
+            num_features: Number of features to normalize.
+            input_shape: Input tensor shape.
+            gamma: Scale parameter (num_features,).
+            beta: Shift parameter (num_features,).
+            running_mean: Running mean statistics.
+            running_var: Running variance statistics.
+            dtype: Data type to test.
 
         Verifies:
             - Forward pass runs without error
@@ -883,8 +883,8 @@ struct LayerTester:
         assert_dtype(input, dtype, "BatchNorm backward: input dtype mismatch")
 
         # Test gradient checking with appropriate epsilon and tolerance for dtype
-        var epsilon = 1e-5 if dtype == DType.float32 else 1e-4
-        var tolerance = 1e-2 if dtype == DType.float32 else 1e-1
+        # FIXME(unused) var epsilon = 1e-5 if dtype == DType.float32 else 1e-4
+        # FIXME(unused) var tolerance = 1e-2 if dtype == DType.float32 else 1e-1
 
         # Note: Actual BatchNorm backward gradient checking would be implemented
         # when BatchNorm forward pass is available

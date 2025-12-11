@@ -49,26 +49,26 @@ fn adamw_step(
 ) raises -> Tuple[ExTensor, ExTensor, ExTensor]:
     """Perform a single AdamW optimization step - pure functional.
 
-        Returns new parameters, new first moment (m), and new second moment (v)
-        Caller manages all state including timestep tracking
+        Returns new parameters, new first moment (m), and new second moment (v).
+        Caller manages all state including timestep tracking.
 
         The key difference from Adam is that weight decay is decoupled from the
-        gradient-based update and applied directly to the parameters
+        gradient-based update and applied directly to the parameters.
 
     Args:
-            params: Model parameters to update
-            gradients: Gradients of loss with respect to params
-            m: First moment estimates (exponential moving average of gradients)
-            v: Second moment estimates (exponential moving average of squared gradients)
-            t: Current timestep (starts at 1, increments each step)
-            learning_rate: Step size for parameter updates
-            beta1: Exponential decay rate for first moment (default: 0.9)
-            beta2: Exponential decay rate for second moment (default: 0.999)
-            epsilon: Small constant for numerical stability (default: 1e-8)
-            weight_decay: Decoupled weight decay factor (default: 0.01)
+            params: Model parameters to update.
+            gradients: Gradients of loss with respect to params.
+            m: First moment estimates (exponential moving average of gradients).
+            v: Second moment estimates (exponential moving average of squared gradients).
+            t: Current timestep (starts at 1, increments each step).
+            learning_rate: Step size for parameter updates.
+            beta1: Exponential decay rate for first moment (default: 0.9).
+            beta2: Exponential decay rate for second moment (default: 0.999).
+            epsilon: Small constant for numerical stability (default: 1e-8).
+            weight_decay: Decoupled weight decay factor (default: 0.01).
 
     Returns:
-            Tuple of (new_params, new_m, new_v)
+            Tuple of (new_params, new_m, new_v).
 
         Example (basic AdamW):
             ```mojo
@@ -88,10 +88,10 @@ fn adamw_step(
             ```
 
     Note:
-            This is a pure function - it returns new state rather than mutating
-            Caller must capture all three return values and update their variables
-            Timestep t must be tracked by caller and incremented after each step
-            Weight decay is applied directly to params (decoupled), not through gradients
+            This is a pure function - it returns new state rather than mutating.
+            Caller must capture all three return values and update their variables.
+            Timestep t must be tracked by caller and incremented after each step.
+            Weight decay is applied directly to params (decoupled), not through gradients.
     """
     if params.shape() != gradients.shape():
         raise Error("Parameters and gradients must have the same shape")
@@ -177,26 +177,28 @@ fn adamw_step_simple(
     """Simplified AdamW step with default hyperparameters.
 
         This is a convenience function for basic AdamW optimization with
-        commonly-used default parameters
+        commonly-used default parameters.
 
-        Formula:
-            m = 0.9 * m + 0.1 * grad
-            v = 0.999 * v + 0.001 * grad^2
-            m_hat = m / (1 - 0.9^t)
-            v_hat = v / (1 - 0.999^t)
-            params = params - lr * m_hat / (sqrt(v_hat) + 1e-8)
-            params = params - 0.01 * params  # Decoupled weight decay
+    Formula:
+    ```
+        m = 0.9 * m + 0.1 * grad
+        v = 0.999 * v + 0.001 * grad^2
+        m_hat = m / (1 - 0.9^t)
+        v_hat = v / (1 - 0.999^t)
+        params = params - lr * m_hat / (sqrt(v_hat) + 1e-8)
+        params = params - 0.01 * params  # Decoupled weight decay
+    ```
 
     Args:
-            params: Model parameters to update
-            gradients: Gradients of loss with respect to params
-            m: First moment estimate
-            v: Second moment estimate
-            t: Current timestep (starts at 1)
-            learning_rate: Step size for parameter updates
+            params: Model parameters to update.
+            gradients: Gradients of loss with respect to params.
+            m: First moment estimate.
+            v: Second moment estimate.
+            t: Current timestep (starts at 1).
+            learning_rate: Step size for parameter updates.
 
     Returns:
-            Tuple of (new_params, new_m, new_v)
+            Tuple of (new_params, new_m, new_v).
 
         Example:
             ```mojo

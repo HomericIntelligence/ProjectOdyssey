@@ -5,25 +5,25 @@ from in_features dimensions to out_features dimensions using learnable weights
 and biases.
 
 Key components:
-- Linear: Fully connected layer with learnable weights and bias
-  Implements: y = xW + b (with broadcasting support for batched inputs)
+- Linear: Fully connected layer with learnable weights and bias.
+  Implements: y = xW + b (with broadcasting support for batched inputs).
 """
 
 from shared.core.extensor import ExTensor, zeros, randn, zeros_like
 
 
 struct Linear(Copyable, Movable):
-    """Linear layer: y = xW + b
+    """Linear layer: y = xW + b.
 
     A fully connected neural network layer that transforms inputs
     from in_features to out_features dimensions with proper matrix
-    multiplication and bias broadcasting
+    multiplication and bias broadcasting.
 
     Attributes:
-        weight: Weight matrix of shape (in_features, out_features)
-        bias: Bias vector of shape (out_features,)
-        in_features: Input feature dimension
-        out_features: Output feature dimension
+        weight: Weight matrix of shape (in_features, out_features).
+        bias: Bias vector of shape (out_features,).
+        in_features: Input feature dimension.
+        out_features: Output feature dimension.
     """
 
     var weight: ExTensor
@@ -34,14 +34,14 @@ struct Linear(Copyable, Movable):
     fn __init__(out self, in_features: Int, out_features: Int) raises:
         """Initialize linear layer with random weights and zero bias.
 
-        Uses Xavier-style initialization for weights. Bias is initialized to zero
+        Uses Xavier-style initialization for weights. Bias is initialized to zero.
 
         Args:
-            in_features: Number of input features
-            out_features: Number of output features
+            in_features: Number of input features.
+            out_features: Number of output features.
 
         Raises:
-            Error if tensor creation fails
+            Error if tensor creation fails.
 
         Example:
             ```mojo
@@ -58,19 +58,19 @@ struct Linear(Copyable, Movable):
         self.bias = zeros([out_features], DType.float32)
 
     fn forward(self, input: ExTensor) raises -> ExTensor:
-        """Forward pass: y = xW + b
+        """Forward pass: y = xW + b.
 
-        Computes the linear transformation: output = input @ weight + bias
-        Supports batched inputs through matrix multiplication broadcasting
+        Computes the linear transformation: output = input @ weight + bias.
+        Supports batched inputs through matrix multiplication broadcasting.
 
         Args:
-            input: Input tensor of shape (batch_size, in_features) or (in_features,)
+            input: Input tensor of shape (batch_size, in_features) or (in_features,).
 
         Returns:
-            Output tensor of shape (batch_size, out_features) or (out_features,)
+            Output tensor of shape (batch_size, out_features) or (out_features,).
 
         Raises:
-            Error if tensor operations fail
+            Error if tensor operations fail.
 
         Example:
             ```mojo

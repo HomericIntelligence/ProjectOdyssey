@@ -24,9 +24,9 @@ fn validate_tensor_shape(
     an error with a descriptive message including the tensor name.
 
     Args:
-        tensor: The tensor to validate
-        expected_shape: The expected shape as a List[Int]
-        name: The name of the tensor (for error messages)
+        tensor: The tensor to validate.
+        expected_shape: The expected shape as a List[Int].
+        name: The name of the tensor (for error messages).
 
     Raises:
         Error: If the tensor shape does not match the expected shape
@@ -73,9 +73,9 @@ fn validate_tensor_dtype(
     an error with a descriptive message including the tensor name.
 
     Args:
-        tensor: The tensor to validate
-        expected_dtype: The expected data type
-        name: The name of the tensor (for error messages)
+        tensor: The tensor to validate.
+        expected_dtype: The expected data type.
+        name: The name of the tensor (for error messages).
 
     Raises:
         Error: If the tensor dtype does not match the expected dtype
@@ -107,10 +107,10 @@ fn validate_matching_tensors(
     verifying that tensors can be used together in element-wise operations.
 
     Args:
-        a: The first tensor
-        b: The second tensor
-        a_name: The name of the first tensor (for error messages)
-        b_name: The name of the second tensor (for error messages)
+        a: The first tensor.
+        b: The second tensor.
+        a_name: The name of the first tensor (for error messages).
+        b_name: The name of the second tensor (for error messages).
 
     Raises:
         Error: If tensors have different shapes or dtypes
@@ -172,8 +172,8 @@ fn validate_2d_input(tensor: ExTensor, name: String) raises:
     """Validate that a tensor is exactly 2-dimensional.
 
     Args:
-        tensor: The tensor to validate
-        name: The name of the tensor (for error messages)
+        tensor: The tensor to validate.
+        name: The name of the tensor (for error messages).
 
     Raises:
         Error: If the tensor is not 2D
@@ -205,8 +205,8 @@ fn validate_4d_input(tensor: ExTensor, name: String) raises:
     """Validate that a tensor is exactly 4-dimensional.
 
     Args:
-        tensor: The tensor to validate
-        name: The name of the tensor (for error messages)
+        tensor: The tensor to validate.
+        name: The name of the tensor (for error messages).
 
     Raises:
         Error: If the tensor is not 4D

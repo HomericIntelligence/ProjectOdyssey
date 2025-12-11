@@ -30,15 +30,15 @@ fn sgd_step(
 ) raises -> Tuple[ExTensor, ExTensor]:
     """Perform a single SGD optimization step - pure functional.
 
-        Returns new parameters and new velocity. Caller manages all state
+        Returns new parameters and new velocity. Caller manages all state.
 
     Args:
-            params: Model parameters to update
-            gradients: Gradients of loss with respect to params
-            velocity: Momentum buffer (use zeros_like(params) if no momentum)
-            learning_rate: Step size for parameter updates
-            momentum: Momentum factor (default: 0.0, no momentum)
-            weight_decay: L2 regularization factor (default: 0.0, no regularization)
+            params: Model parameters to update.
+            gradients: Gradients of loss with respect to params.
+            velocity: Momentum buffer (use zeros_like(params) if no momentum).
+            learning_rate: Step size for parameter updates.
+            momentum: Momentum factor (default: 0.0, no momentum).
+            weight_decay: L2 regularization factor (default: 0.0, no regularization).
 
     Returns:
             Tuple of (new_params, new_velocity)
@@ -69,8 +69,8 @@ fn sgd_step(
             ```
 
     Note:
-            This is a pure function - it returns new state rather than mutating
-            Caller must capture both return values and update their variables
+            This is a pure function - it returns new state rather than mutating.
+            Caller must capture both return values and update their variables.
     """
     if params.shape() != gradients.shape():
         raise Error("Parameters and gradients must have the same shape")
@@ -119,15 +119,15 @@ fn sgd_step_simple(
 ) raises -> ExTensor:
     """Simplified SGD step without momentum or weight decay.
 
-        This is a convenience function for basic gradient descent
+        This is a convenience function for basic gradient descent.
 
         Formula:
-            params = params - learning_rate * gradients
+            params = params - learning_rate * gradients.
 
     Args:
-            params: Model parameters to update
-            gradients: Gradients of loss with respect to params
-            learning_rate: Step size for parameter updates
+            params: Model parameters to update.
+            gradients: Gradients of loss with respect to params.
+            learning_rate: Step size for parameter updates.
 
     Returns:
             Updated parameters
@@ -159,21 +159,21 @@ fn sgd_momentum_update_inplace(
     lr: Float64,
     momentum: Float64,
 ) raises:
-    """SGD parameter update with momentum (in-place mutation)
+    """SGD parameter update with momentum (in-place mutation).
 
-        This function performs in-place updates for efficiency in training loops
-        Mutates both param and velocity tensors directly
+        This function performs in-place updates for efficiency in training loops.
+        Mutates both param and velocity tensors directly.
 
         Formula:
-            velocity = momentum * velocity - lr * grad
-            param = param + velocity
+            `velocity = momentum * velocity - lr * grad`
+            `param = param + velocity`
 
     Args:
-            param: Parameter tensor to update (modified in-place)
-            grad: Gradient tensor
-            velocity: Momentum velocity tensor (modified in-place)
-            lr: Learning rate
-            momentum: Momentum coefficient (typically 0.9)
+            param: Parameter tensor to update (modified in-place).
+            grad: Gradient tensor.
+            velocity: Momentum velocity tensor (modified in-place).
+            lr: Learning rate.
+            momentum: Momentum coefficient (typically 0.9).
 
         Example:
             ```mojo
@@ -190,11 +190,11 @@ fn sgd_momentum_update_inplace(
             ```
 
     Note:
-            - In-place mutation for efficiency
-            - Velocity tensor must be pre-allocated (use zeros_like)
-            - Both param and velocity are modified directly
-            - This is the AlexNet/ResNet standard momentum formulation
-            - Supports float32 and float64 dtypes
+            - In-place mutation for efficiency.
+            - Velocity tensor must be pre-allocated (use zeros_like).
+            - Both param and velocity are modified directly.
+            - This is the AlexNet/ResNet standard momentum formulation.
+            - Supports float32 and float64 dtypes.
     """
     var numel = param.numel()
 
@@ -250,14 +250,14 @@ fn initialize_velocities(
 
         This utility function creates momentum buffers for all parameters in a model
         Each velocity tensor is zero-initialized with the same shape as its
-        corresponding parameter
+        corresponding parameter.
 
     Args:
-            param_shapes: List of parameter shapes to create velocities for
-            dtype: Data type for velocity tensors (default: float32)
+            param_shapes: List of parameter shapes to create velocities for.
+            dtype: Data type for velocity tensors (default: float32).
 
     Returns:
-            List of zero-initialized tensors matching parameter shapes
+            List of zero-initialized tensors matching parameter shapes.
 
         Example:
             ```mojo
@@ -276,8 +276,8 @@ fn initialize_velocities(
             ```
 
     Note:
-            The order of velocities matches the order of shapes provided
-            Ensure you use the same ordering when calling sgd_momentum_update_inplace
+            The order of velocities matches the order of shapes provided.
+            Ensure you use the same ordering when calling sgd_momentum_update_inplace.
     """
     from shared.core.extensor import zeros
 
@@ -299,13 +299,13 @@ fn initialize_velocities_from_params(
     """Create zero-initialized velocity tensors matching a list of parameters.
 
         Convenience function that extracts shapes from existing parameter tensors
-        and creates matching velocity buffers
+        and creates matching velocity buffers.
 
     Args:
-            params: List of parameter tensors
+            params: List of parameter tensors.
 
     Returns:
-            List of zero-initialized velocity tensors with matching shapes and dtypes
+            List of zero-initialized velocity tensors with matching shapes and dtypes.
 
         Example:
             ```mojo

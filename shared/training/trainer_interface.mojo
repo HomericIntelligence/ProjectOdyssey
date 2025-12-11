@@ -127,8 +127,8 @@ struct TrainingMetrics(Copyable, Movable):
         """Update training metrics for current batch.
 
         Args:
-            loss: Current batch loss
-            accuracy: Current batch accuracy
+            loss: Current batch loss.
+            accuracy: Current batch accuracy.
         """
         self.train_loss = loss
         self.train_accuracy = accuracy
@@ -137,8 +137,8 @@ struct TrainingMetrics(Copyable, Movable):
         """Update validation metrics and track best results.
 
         Args:
-            loss: Validation loss
-            accuracy: Validation accuracy
+            loss: Validation loss.
+            accuracy: Validation accuracy.
         """
         self.val_loss = loss
         self.val_accuracy = accuracy
@@ -208,10 +208,10 @@ trait Trainer:
         """Execute training loop for specified number of epochs.
 
         Args:
-            num_epochs: Number of epochs to train
+            num_epochs: Number of epochs to train.
 
         Raises:
-            Error if training fails
+            Error if training fails.
         """
         ...
 
@@ -219,10 +219,10 @@ trait Trainer:
         """Evaluate model on validation set.
 
         Returns:
-            Validation loss
+            Validation loss.
 
         Raises:
-            Error if validation fails
+            Error if validation fails.
         """
         ...
 
@@ -230,11 +230,11 @@ trait Trainer:
         """Train model with periodic validation.
 
         Args:
-            num_epochs: Number of epochs to train
-            validate_every: Validate every N epochs (default=1)
+            num_epochs: Number of epochs to train.
+            validate_every: Validate every N epochs (default=1).
 
         Raises:
-            Error if training or validation fails
+            Error if training or validation fails.
         """
         ...
 
@@ -253,8 +253,8 @@ struct DataBatch(Copyable, Movable):
         """Initialize data batch.
 
         Args:
-            data: Input features tensor (ownership transferred)
-            labels: Labels tensor (ownership transferred)
+            data: Input features tensor (ownership transferred).
+            labels: Labels tensor (ownership transferred).
         """
         self.data = data^
         self.labels = labels^
@@ -282,9 +282,9 @@ struct DataLoader(Copyable, Movable):
         """Initialize data loader.
 
         Args:
-            data: Full dataset features (ownership transferred)
-            labels: Full dataset labels (ownership transferred)
-            batch_size: Batch size
+            data: Full dataset features (ownership transferred).
+            labels: Full dataset labels (ownership transferred).
+            batch_size: Batch size.
         """
         self.data = data^
         self.labels = labels^
@@ -301,7 +301,7 @@ struct DataLoader(Copyable, Movable):
         """Check if more batches available.
 
         Returns:
-            True if more batches available
+            True if more batches available.
         """
         return self.current_batch < self.num_batches
 
@@ -309,10 +309,10 @@ struct DataLoader(Copyable, Movable):
         """Get next batch.
 
         Returns:
-            Next data batch
+            Next data batch.
 
         Raises:
-            Error if no more batches
+            Error if no more batches.
         """
         if not self.has_next():
             raise Error("No more batches available")
@@ -346,11 +346,11 @@ fn create_simple_dataloader(
     """Create a simple dataloader for training.
 
     Args:
-            data: Full dataset features (ownership transferred)
-            labels: Full dataset labels (ownership transferred)
-            batch_size: Batch size
+            data: Full dataset features (ownership transferred).
+            labels: Full dataset labels (ownership transferred).
+            batch_size: Batch size.
 
     Returns:
-            DataLoader instance
+            DataLoader instance.
     """
     return DataLoader(data^, labels^, batch_size)

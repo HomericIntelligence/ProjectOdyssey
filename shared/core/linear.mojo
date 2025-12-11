@@ -23,17 +23,17 @@ alias LinearNoBiasBackwardResult = GradientPair
 
 
 fn linear(x: ExTensor, weights: ExTensor, bias: ExTensor) raises -> ExTensor:
-    """Functional linear transformation: y = xW^T + b
+    """Functional linear transformation: y = xW^T + b.
 
         Pure function - caller manages weights and bias. No internal state
 
     Args:
-            x: Input tensor of shape (batch_size, in_features)
-            weights: Weight matrix of shape (out_features, in_features)
-            bias: Bias vector of shape (out_features,)
+            x: Input tensor of shape (batch_size, in_features).
+            weights: Weight matrix of shape (out_features, in_features).
+            bias: Bias vector of shape (out_features,).
 
     Returns:
-            Output tensor of shape (batch_size, out_features)
+            Output tensor of shape (batch_size, out_features).
 
         Example:
             ```mojo
@@ -48,7 +48,7 @@ fn linear(x: ExTensor, weights: ExTensor, bias: ExTensor) raises -> ExTensor:
             ```
 
     Raises:
-            Error if shapes are incompatible for matrix multiplication
+            Error if shapes are incompatible for matrix multiplication.
     """
     # Compute xW^T
     var out = matmul(x, transpose(weights))
@@ -58,19 +58,19 @@ fn linear(x: ExTensor, weights: ExTensor, bias: ExTensor) raises -> ExTensor:
 
 
 fn linear_no_bias(x: ExTensor, weights: ExTensor) raises -> ExTensor:
-    """Functional linear transformation without bias: y = xW^T
+    """Functional linear transformation without bias: y = xW^T.
 
-        Pure function for linear transformation with no bias term
+        Pure function for linear transformation with no bias term.
 
     Args:
-            x: Input tensor of shape (batch_size, in_features)
-            weights: Weight matrix of shape (out_features, in_features)
+            x: Input tensor of shape (batch_size, in_features).
+            weights: Weight matrix of shape (out_features, in_features).
 
     Returns:
-            Output tensor of shape (batch_size, out_features)
+            Output tensor of shape (batch_size, out_features).
 
     Raises:
-            Error if shapes are incompatible for matrix multiplication
+            Error if shapes are incompatible for matrix multiplication.
     """
     return matmul(x, transpose(weights))
 
@@ -80,7 +80,7 @@ fn linear_backward(
 ) raises -> LinearBackwardResult:
     """Backward pass for linear transformation.
 
-        Computes gradients with respect to input, weights, and bias
+        Computes gradients with respect to input, weights, and bias.
 
         Math:
             Given: y = xW^T + b
@@ -89,15 +89,15 @@ fn linear_backward(
             grad_bias = sum(grad_output, axis=0)
 
     Args:
-            grad_output: Gradient of loss w.r.t. output, shape (batch_size, out_features)
-            x: Input tensor from forward pass, shape (batch_size, in_features)
-            weights: Weight matrix from forward pass, shape (out_features, in_features)
+            grad_output: Gradient of loss w.r.t. output, shape (batch_size, out_features).
+            x: Input tensor from forward pass, shape (batch_size, in_features).
+            weights: Weight matrix from forward pass, shape (out_features, in_features).
 
     Returns:
             LinearBackwardResult containing:
-                - grad_input: Gradient w.r.t. input, shape (batch_size, in_features)
-                - grad_kernel: Gradient w.r.t. weights, shape (out_features, in_features)
-                - grad_bias: Gradient w.r.t. bias, shape (out_features,)
+                - grad_input: Gradient w.r.t. input, shape (batch_size, in_features).
+                - grad_kernel: Gradient w.r.t. weights, shape (out_features, in_features).
+                - grad_bias: Gradient w.r.t. bias, shape (out_features,).
 
         Example:
             ```
@@ -115,7 +115,7 @@ fn linear_backward(
             ```
 
     Raises:
-            Error if tensor shapes are incompatible
+            Error if tensor shapes are incompatible.
     """
     # grad_input = grad_output @ W
     # weights is (out_features, in_features), so we use it directly
@@ -139,20 +139,20 @@ fn linear_no_bias_backward(
 ) raises -> LinearNoBiasBackwardResult:
     """Backward pass for linear transformation without bias.
 
-        Computes gradients with respect to input and weights only
+        Computes gradients with respect to input and weights only.
 
     Args:
-            grad_output: Gradient of loss w.r.t. output, shape (batch_size, out_features)
-            x: Input tensor from forward pass, shape (batch_size, in_features)
-            weights: Weight matrix from forward pass, shape (out_features, in_features)
+            grad_output: Gradient of loss w.r.t. output, shape (batch_size, out_features).
+            x: Input tensor from forward pass, shape (batch_size, in_features).
+            weights: Weight matrix from forward pass, shape (out_features, in_features).
 
     Returns:
             LinearNoBiasBackwardResult containing:
-                - grad_input: Gradient w.r.t. input, shape (batch_size, in_features)
-                - grad_kernel: Gradient w.r.t. weights, shape (out_features, in_features)
+                - grad_input: Gradient w.r.t. input, shape (batch_size, in_features).
+                - grad_kernel: Gradient w.r.t. weights, shape (out_features, in_features).
 
     Raises:
-            Error if tensor shapes are incompatible
+            Error if tensor shapes are incompatible.
     """
     # grad_input = grad_output @ W
     var grad_input = matmul(grad_output, weights)

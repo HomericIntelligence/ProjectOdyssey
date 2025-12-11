@@ -763,10 +763,12 @@ fn save_figure(filepath: String, format: String = "png") -> Bool:
 fn clear_figure():
     """Clear current matplotlib figure."""
     # Create JSON structure for figure clearing
-    var result = String('{"type":"clear_figure"}')
+    # FIXME(unused): var result = String('{"type":"clear_figure"}')
+    pass
 
 
 fn show_figure():
     """Display current matplotlib figure."""
     # Create JSON structure for figure display
-    var result = String('{"type":"show_figure"}')
+    # FIXME(unused): var result = String('{"type":"show_figure"}')
+    pass

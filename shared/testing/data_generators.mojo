@@ -36,24 +36,24 @@ from shared.core.extensor import ExTensor, zeros
 fn random_tensor(
     shape: List[Int], dtype: DType = DType.float32
 ) raises -> ExTensor:
-    """Generate tensor with random values from uniform distribution [0, 1)
+    """Generate tensor with random values from uniform distribution [0, 1).
 
     Args:
-            shape: Shape of the output tensor as a list of dimensions
-            dtype: Data type of tensor elements (default: float32)
+            shape: Shape of the output tensor as a list of dimensions.
+            dtype: Data type of tensor elements (default: float32).
 
     Returns:
-            ExTensor with random values uniformly distributed in [0, 1)
+            ExTensor with random values uniformly distributed in [0, 1).
 
-        Example:
-            ```mojo
-            var weights = random_tensor([10, 5], DType.float32)
-            # Creates 10x5 tensor with random values in [0, 1)
-            ```
+    Example:
+        ```mojo
+        var weights = random_tensor([10, 5], DType.float32)
+        # Creates 10x5 tensor with random values in [0, 1)
+        ```
 
     Note:
             Values are uniformly distributed in [0, 1) regardless of dtype
-            For integer dtypes, values are truncated to Int
+            For integer dtypes, values are truncated to Int.
     """
     # Create empty tensor with the specified shape
     var tensor = zeros(shape, dtype)
@@ -98,13 +98,13 @@ fn random_uniform(
     high: Float64 = 1.0,
     dtype: DType = DType.float32,
 ) raises -> ExTensor:
-    """Generate tensor with random values from uniform distribution [low, high)
+    """Generate tensor with random values from uniform distribution [low, high).
 
     Args:
-            shape: Shape of the output tensor as a list of dimensions
-            low: Lower bound of uniform distribution (inclusive, default: 0.0)
-            high: Upper bound of uniform distribution (exclusive, default: 1.0)
-            dtype: Data type of tensor elements (default: float32)
+            shape: Shape of the output tensor as a list of dimensions.
+            low: Lower bound of uniform distribution (inclusive, default: 0.0).
+            high: Upper bound of uniform distribution (exclusive, default: 1.0).
+            dtype: Data type of tensor elements (default: float32).
 
     Returns:
             ExTensor with random values uniformly distributed in [low, high)
@@ -117,7 +117,7 @@ fn random_uniform(
 
     Note:
             The range [low, high) is linearly scaled from [0, 1)
-            For integer dtypes, values are truncated to Int
+            For integer dtypes, values are truncated to Int.
     """
     # Create empty tensor with the specified shape
     var tensor = zeros(shape, dtype)
@@ -166,15 +166,15 @@ fn random_normal(
     std: Float64 = 1.0,
     dtype: DType = DType.float32,
 ) raises -> ExTensor:
-    """Generate tensor with random values from normal distribution N(mean, std^2)
+    """Generate tensor with random values from normal distribution N(mean, std^2).
 
         Uses Box-Muller transform to convert uniform random values to normal distribution
 
     Args:
-            shape: Shape of the output tensor as a list of dimensions
-            mean: Mean of the normal distribution (default: 0.0)
-            std: Standard deviation of the normal distribution (default: 1.0)
-            dtype: Data type of tensor elements (default: float32)
+            shape: Shape of the output tensor as a list of dimensions.
+            mean: Mean of the normal distribution (default: 0.0).
+            std: Standard deviation of the normal distribution (default: 1.0).
+            dtype: Data type of tensor elements (default: float32).
 
     Returns:
             ExTensor with random values from normal distribution N(mean, std^2)
@@ -187,7 +187,7 @@ fn random_normal(
 
     Note:
             Uses Box-Muller transform for efficiency
-            For integer dtypes, values are truncated to Int after sampling
+            For integer dtypes, values are truncated to Int after sampling.
     """
     # Create empty tensor with the specified shape
     var tensor = zeros(shape, dtype)
@@ -259,10 +259,10 @@ fn synthetic_classification_data(
         class centers and adding noise around each center
 
     Args:
-            num_samples: Total number of samples to generate
-            num_features: Number of features per sample
-            num_classes: Number of classes
-            dtype: Data type for features (labels are always int32)
+            num_samples: Total number of samples to generate.
+            num_features: Number of features per sample.
+            num_classes: Number of classes.
+            dtype: Data type for features (labels are always int32).
 
     Returns:
             Tuple of (features, labels) where:
@@ -277,10 +277,10 @@ fn synthetic_classification_data(
             ```
 
         Algorithm:
-            1. Generate random class centers in [-5, 5]^num_features
-            2. For each sample, assign to random class
-            3. Add Gaussian noise around class center
-            4. Normalize features to zero mean and unit variance
+            1. Generate random class centers in [-5, 5]^num_features.
+            2. For each sample, assign to random class.
+            3. Add Gaussian noise around class center.
+            4. Normalize features to zero mean and unit variance.
     """
     # Validate inputs
     if num_samples <= 0 or num_features <= 0 or num_classes <= 0:

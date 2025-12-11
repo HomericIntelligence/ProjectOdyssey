@@ -16,13 +16,13 @@ fn extract_batch(
         start_idx and containing up to batch_size samples
 
     Args:
-            data: Full dataset tensor of shape (N, ...) where N is number of samples
-            start_idx: Starting index for batch extraction (0-indexed)
-            batch_size: Number of samples to extract
+            data: Full dataset tensor of shape (N, ...) where N is number of samples.
+            start_idx: Starting index for batch extraction (0-indexed).
+            batch_size: Number of samples to extract.
 
     Returns:
             Batch tensor of shape (actual_batch_size, ...) where actual_batch_size
-            is min(batch_size, N - start_idx)
+            is min(batch_size, N - start_idx).
 
         Example:
             ```mojo
@@ -35,9 +35,9 @@ fn extract_batch(
             ```
 
     Note:
-            - Handles edge cases where remaining samples < batch_size
-            - Works with any tensor dimensionality (2D, 3D, 4D, etc.)
-            - Efficient memory copying with proper bounds checking
+            - Handles edge cases where remaining samples < batch_size.
+            - Works with any tensor dimensionality (2D, 3D, 4D, etc.).
+            - Efficient memory copying with proper bounds checking.
     """
     var data_shape = data.shape()
     var num_samples = data_shape[0]
@@ -97,32 +97,32 @@ fn extract_batch_pair(
         data and label tensors
 
     Args:
-            data: Full dataset tensor of shape (N, ...)
-            labels: Full labels tensor of shape (N,) or (N, ...)
-            start_idx: Starting index for batch extraction
-            batch_size: Number of samples to extract
+            data: Full dataset tensor of shape (N, ...).
+            labels: Full labels tensor of shape (N,) or (N, ...).
+            start_idx: Starting index for batch extraction.
+            batch_size: Number of samples to extract.
 
     Returns:
-            Tuple of (batch_data, batch_labels) with matching first dimension
+            Tuple of (batch_data, batch_labels) with matching first dimension.
 
-        Example:
-            ```mojo
-            from shared.data import extract_batch_pair
+    Example:
+        ```mojo
+        from shared.data import extract_batch_pair
 
-            var images = load_images()      # Shape: (50000, 3, 32, 32)
-            var labels = load_labels()      # Shape: (50000,)
+        var images = load_images()      # Shape: (50000, 3, 32, 32)
+        var labels = load_labels()      # Shape: (50000,)
 
-            var (batch_images, batch_labels) = extract_batch_pair(
-                images, labels, start_idx=0, batch_size=128
-            )
-            # batch_images shape: (128, 3, 32, 32)
-            # batch_labels shape: (128,)
-            ```
+        var (batch_images, batch_labels) = extract_batch_pair(
+            images, labels, start_idx=0, batch_size=128
+        )
+        # batch_images shape: (128, 3, 32, 32)
+        # batch_labels shape: (128,)
+        ```
 
     Note:
-            - Ensures data and labels have matching number of samples
-            - Both tensors extracted with same start_idx and batch_size
-            - Efficient for training loops
+            - Ensures data and labels have matching number of samples.
+            - Both tensors extracted with same start_idx and batch_size.
+            - Efficient for training loops.
     """
     # Verify matching sizes
     var data_samples = data.shape()[0]
@@ -148,11 +148,11 @@ fn compute_num_batches(num_samples: Int, batch_size: Int) -> Int:
     """Compute the number of batches needed to process all samples.
 
     Args:
-            num_samples: Total number of samples in dataset
-            batch_size: Number of samples per batch
+            num_samples: Total number of samples in dataset.
+            batch_size: Number of samples per batch.
 
     Returns:
-            Number of batches needed (rounded up)
+            Number of batches needed (rounded up).
 
         Example:
             ```mojo
@@ -163,8 +163,8 @@ fn compute_num_batches(num_samples: Int, batch_size: Int) -> Int:
             ```
 
     Note:
-            - Uses ceiling division: (num_samples + batch_size - 1) // batch_size
-            - Accounts for partial batch at end
+            - Uses ceiling division: (num_samples + batch_size - 1) // batch_size.
+            - Accounts for partial batch at end.
     """
     return (num_samples + batch_size - 1) // batch_size
 
@@ -178,9 +178,9 @@ fn get_batch_indices(
         of the final partial batch
 
     Args:
-            batch_idx: Batch index (0-indexed)
-            batch_size: Desired batch size
-            num_samples: Total number of samples in dataset
+            batch_idx: Batch index (0-indexed).
+            batch_size: Desired batch size.
+            num_samples: Total number of samples in dataset.
 
     Returns:
             Tuple of (start_idx, end_idx, actual_batch_size) where:
@@ -188,20 +188,20 @@ fn get_batch_indices(
             - end_idx: Ending sample index (exclusive)
             - actual_batch_size: Number of samples in this batch
 
-        Example:
-            ```mojo
-            from shared.data import get_batch_indices
+    Example:
+        ```mojo
+        from shared.data import get_batch_indices
 
-            # Get indices for batch 390 of size 128 from 50000 samples
-            var (start, end, size) = get_batch_indices(390, 128, 50000)
-            # Returns: (49920, 50000, 80) - partial batch with 80 samples
-            ```
+        # Get indices for batch 390 of size 128 from 50000 samples
+        var (start, end, size) = get_batch_indices(390, 128, 50000)
+        # Returns: (49920, 50000, 80) - partial batch with 80 samples
+        ```
 
     Note:
-            - Handles partial batches automatically
-            - start_idx = batch_idx * batch_size
-            - end_idx = min(start_idx + batch_size, num_samples)
-            - actual_batch_size = end_idx - start_idx
+            - Handles partial batches automatically.
+            - start_idx = batch_idx * batch_size.
+            - end_idx = min(start_idx + batch_size, num_samples).
+            - actual_batch_size = end_idx - start_idx.
     """
     var start_idx = batch_idx * batch_size
     var end_idx = min(start_idx + batch_size, num_samples)

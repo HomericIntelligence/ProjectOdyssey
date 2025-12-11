@@ -312,8 +312,8 @@ fn normalize_images_rgb(mut images: ExTensor) raises -> ExTensor:
 
     for n in range(batch_size):
         for c in range(channels):
-            var mean_val = Float32(0.0)
-            var std_val = Float32(1.0)
+            var mean_val: Float32
+            var std_val: Float32
 
             if c == 0:  # Red channel
                 mean_val = mean_r

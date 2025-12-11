@@ -91,16 +91,16 @@ Current behavior (aliased to FP16):
 
 
 fn is_reduced_precision(dtype: DType) -> Bool:
-    """Check if dtype uses reduced precision (FP16 or BF16)
+    """Check if dtype uses reduced precision (FP16 or BF16).
 
-        Returns True for any dtype using less than 32-bit floating point
-        Useful for conditional logic in mixed precision training
+        Returns True for any dtype using less than 32-bit floating point.
+        Useful for conditional logic in mixed precision training.
 
     Args:
-            dtype: DType to check
+            dtype: DType to check.
 
     Returns:
-            True if dtype is float16 or bfloat16, False otherwise
+            True if dtype is float16 or bfloat16, False otherwise.
 
         Example:
             ```mojo
@@ -118,14 +118,14 @@ fn is_floating_point(dtype: DType) -> Bool:
     """Check if dtype is a floating point type.
 
     Args:
-            dtype: DType to check
+            dtype: DType to check.
 
     Returns:
-            True if dtype is float16, float32, or float64
+            True if dtype is float16, float32, or float64.
 
         Example:
             ```mojo
-            f is_floating_point(tensor.dtype()):
+        if is_floating_point(tensor.dtype()):
                 # Can use floating point operations
                 var result = tensor / 2.0
             ```
@@ -141,14 +141,14 @@ fn get_dtype_precision_bits(dtype: DType) -> Int:
     """Get the number of mantissa bits for a floating point dtype.
 
         Returns the precision (mantissa bits) for floating point dtypes
-        Useful for understanding numerical precision limits
+        Useful for understanding numerical precision limits.
 
     Args:
-            dtype: DType to query
+            dtype: DType to query.
 
     Returns:
-            Number of mantissa bits (10 for FP16, 23 for FP32, 52 for FP64)
-            Returns 0 for non-floating-point dtypes
+            Number of mantissa bits (10 for FP16, 23 for FP32, 52 for FP64).
+            Returns 0 for non-floating-point dtypes.
 
         Example:
             ```mojo
@@ -173,11 +173,11 @@ fn get_dtype_exponent_bits(dtype: DType) -> Int:
         Useful for understanding numerical range limits
 
     Args:
-            dtype: DType to query
+            dtype: DType to query.
 
     Returns:
-            Number of exponent bits (5 for FP16, 8 for FP32/BF16, 11 for FP64)
-            Returns 0 for non-floating-point dtypes
+            Number of exponent bits (5 for FP16, 8 for FP32/BF16, 11 for FP64).
+            Returns 0 for non-floating-point dtypes.
 
         Example:
             ```mojo
@@ -199,10 +199,10 @@ fn dtype_to_string(dtype: DType) -> String:
     """Convert DType to human-readable string.
 
     Args:
-            dtype: DType to convert
+            dtype: DType to convert.
 
     Returns:
-            String representation (e.g., "float16", "float32", "int32")
+            String representation (e.g., "float16", "float32", "int32").
 
         Example:
             ```mojo
@@ -244,20 +244,20 @@ fn recommend_precision_dtype(
     """Recommend optimal precision dtype based on model size and hardware.
 
         Provides guidance for choosing between FP32, FP16, and BF16 based on
-        model characteristics and hardware capabilities
+        model characteristics and hardware capabilities.
 
     Args:
-            model_size_mb: Model size in megabytes
-            hardware_has_fp16: Whether hardware supports FP16 acceleration
+            model_size_mb: Model size in megabytes.
+            hardware_has_fp16: Whether hardware supports FP16 acceleration.
 
     Returns:
-            Recommended DType (float16, bfloat16, or float32)
+            Recommended DType (float16, bfloat16, or float32).
 
         Recommendations:
-            - Small models (<100MB): FP32 (speed gain minimal)
-            - Medium models (100MB-1GB): FP16 if hardware supports it
-            - Large models (>1GB): FP16/BF16 strongly recommended
-            - No FP16 hardware: FP32 (reduced precision not worth it)
+            - Small models (<100MB): FP32 (speed gain minimal).
+            - Medium models (100MB-1GB): FP16 if hardware supports it.
+            - Large models (>1GB): FP16/BF16 strongly recommended.
+            - No FP16 hardware: FP32 (reduced precision not worth it).
 
         Example:
             ```mojo
@@ -284,10 +284,10 @@ fn print_dtype_info(dtype: DType):
     """Print detailed information about a DType.
 
         Displays precision, range, and memory usage for the given dtype
-        Useful for debugging and understanding dtype characteristics
+        Useful for debugging and understanding dtype characteristics.
 
     Args:
-            dtype: DType to describe
+            dtype: DType to describe.
 
         Example:
             ```mojo

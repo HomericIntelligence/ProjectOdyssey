@@ -155,10 +155,12 @@ struct Variable(Copyable, Movable):
             tape: The gradient tape that recorded operations.
 
         Examples:
-            var x = Variable(data, True, tape)
-            var loss = compute_loss(x, tape)
-            loss.backward(tape)  # Computes gradients for all inputs
-            print(tape.get_grad(x.id))  # dLoss/dx.
+        ```
+                var x = Variable(data, True, tape)
+                var loss = compute_loss(x, tape)
+                loss.backward(tape)  # Computes gradients for all inputs
+                print(tape.get_grad(x.id))  # dLoss/dx
+        ```
         """
         # Initialize gradient of output to ones
         var grad = ones_like(self.data)
@@ -174,8 +176,8 @@ struct Variable(Copyable, Movable):
             The underlying ExTensor (copy).
 
         Examples:
-            var x = Variable(data, True, tape)
-            var y = x.detach()  # y is just an ExTensor, no gradient tracking
+            var x = Variable(data, True, tape).
+            var y = x.detach()  # y is just an ExTensor, no gradient tracking.
         """
         return self.data
 

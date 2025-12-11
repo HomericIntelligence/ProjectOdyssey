@@ -32,10 +32,10 @@ fn sqrt_scalar_f32(x: Float32) -> Float32:
     """Compute square root of a scalar float32.
 
     Args:
-        x: Input float32 value
+        x: Input float32 value.
 
     Returns:
-        Square root of x
+        Square root of x.
 
     Example:
         ```mojo
@@ -51,10 +51,10 @@ fn sqrt_scalar_f64(x: Float64) -> Float64:
     """Compute square root of a scalar float64.
 
     Args:
-        x: Input float64 value
+        x: Input float64 value.
 
     Returns:
-        Square root of x
+        Square root of x.
 
     Example:
         ```mojo
@@ -70,8 +70,8 @@ fn pow_scalar_f32(x: Float32, y: Float32) -> Float32:
     """Compute x^y for scalar float32 values.
 
     Args:
-        x: Base value (float32)
-        y: Exponent value (float32)
+        x: Base value (float32).
+        y: Exponent value (float32).
 
     Returns:
         Result of x^y
@@ -90,8 +90,8 @@ fn pow_scalar_f64(x: Float64, y: Float64) -> Float64:
     """Compute x^y for scalar float64 values.
 
     Args:
-        x: Base value (float64)
-        y: Exponent value (float64)
+        x: Base value (float64).
+        y: Exponent value (float64).
 
     Returns:
         Result of x^y

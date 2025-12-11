@@ -4,6 +4,7 @@ This module provides high-level functions for loading experiment configurations
 with the standard three-tier merge pattern: defaults → paper → experiment.
 
 Example:
+    ```
     from shared.utils.config_loader import load_experiment_config
 
     var config = load_experiment_config("lenet5", "baseline")
@@ -20,13 +21,13 @@ fn load_default_config(config_type: String) raises -> Config:
     """Load a default configuration file.
 
     Args:
-            config_type: Type of config to load (e.g., "training", "model", "data", "paths")
+            config_type: Type of config to load (e.g., "training", "model", "data", "paths").
 
     Returns:
-            Loaded default configuration
+            Loaded default configuration.
 
     Raises:
-            Error if config file not found or invalid
+            Error if config file not found or invalid.
 
         Example:
             ```mojo
@@ -46,14 +47,14 @@ fn load_paper_config(
         Merges: defaults/{config_type}.yaml → papers/{paper_name}/{config_type}.yaml
 
     Args:
-            paper_name: Name of the paper (e.g., "lenet5", "alexnet")
-            config_type: Type of config to load (default: "training")
+            paper_name: Name of the paper (e.g., "lenet5", "alexnet").
+            config_type: Type of config to load (default: "training").
 
     Returns:
-            Merged configuration with paper overrides
+            Merged configuration with paper overrides.
 
     Raises:
-            Error if config files not found or invalid
+            Error if config files not found or invalid.
 
         Example:
             ```mojo
@@ -94,14 +95,14 @@ fn load_experiment_config(
         5. Substitute environment variables
 
     Args:
-            paper_name: Name of the paper (e.g., "lenet5")
-            experiment_name: Name of the experiment (e.g., "baseline", "augmented")
+            paper_name: Name of the paper (e.g., "lenet5").
+            experiment_name: Name of the experiment (e.g., "baseline", "augmented").
 
     Returns:
-            Complete merged and validated configuration
+            Complete merged and validated configuration.
 
     Raises:
-            Error if required config files not found or invalid
+            Error if required config files not found or invalid.
 
         Example:
             ```mojo
@@ -162,14 +163,14 @@ fn load_config_with_validation(
     """Load configuration with validation of required keys.
 
     Args:
-            filepath: Path to configuration file
-            required_keys: List of required configuration keys
+            filepath: Path to configuration file.
+            required_keys: List of required configuration keys.
 
     Returns:
-            Loaded and validated configuration
+            Loaded and validated configuration.
 
     Raises:
-            Error if file not found, invalid, or missing required keys
+            Error if file not found, invalid, or missing required keys.
 
         Example:
             ```mojo
@@ -194,15 +195,15 @@ fn create_experiment_config(
     """Create a new experiment configuration with overrides.
 
         Creates a new experiment config file that extends the paper config
-        with specified overrides
+        with specified overrides.
 
     Args:
-            paper_name: Name of the paper
-            experiment_name: Name of the new experiment
-            overrides: Configuration overrides to apply
+            paper_name: Name of the paper.
+            experiment_name: Name of the new experiment.
+            overrides: Configuration overrides to apply.
 
     Raises:
-            Error if experiment already exists or file cannot be written
+            Error if experiment already exists or file cannot be written.
 
         Example:
             ```mojo
@@ -227,13 +228,13 @@ fn create_experiment_config(
 fn validate_experiment_config(config: Config) raises:
     """Validate that an experiment configuration has all required fields.
 
-        Checks for common required fields across training, model, and data configs
+        Checks for common required fields across training, model, and data configs.
 
     Args:
-            config: Configuration to validate
+            config: Configuration to validate.
 
     Raises:
-            Error if any required field is missing or invalid
+            Error if any required field is missing or invalid.
 
         Example:
             ```mojo

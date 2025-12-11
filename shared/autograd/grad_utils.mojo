@@ -33,26 +33,28 @@ from ..core.extensor import ExTensor
 
 
 fn clip_grad_value_(mut grad: ExTensor, max_value: Float64) raises:
-    """Clip each gradient element to [-max_value, max_value]
+    """Clip each gradient element to [-max_value, max_value].
 
         This is the simplest form of gradient clipping. Each element is
         independently clipped to stay within the specified range
 
     Args:
-            grad: The gradient tensor to clip (modified in-place)
+            grad: The gradient tensor to clip (modified in-place).
             max_value: Maximum absolute value allowed. Elements outside
-                       [-max_value, max_value] are clipped
+                       [-max_value, max_value] are clipped.
 
     Raises:
             Error: If max_value is negative
 
     Examples:
+    ```
             var grad = ones([3, 4], DType.float32)
             clip_grad_value_(grad, max_value=1.0)
             # All elements in grad now in [-1.0, 1.0]
 
             var grad2 = full([2, 3], 5.0, DType.float32)
             clip_grad_value_(grad2, max_value=1.0)
+    ```
     """
     if max_value < 0.0:
         raise Error("max_value must be non-negative, got: " + String(max_value))
@@ -75,9 +77,9 @@ fn clip_grad_norm_(mut grad: ExTensor, max_norm: Float64) raises -> Float64:
         This preserves the direction of the gradient while limiting its magnitude
 
     Args:
-            grad: The gradient tensor to clip (modified in-place if norm exceeds max_norm)
+            grad: The gradient tensor to clip (modified in-place if norm exceeds max_norm).
             max_norm: Maximum allowed L2 norm. If gradient norm exceeds this,
-                      the gradient is scaled down proportionally
+                      the gradient is scaled down proportionally.
 
     Returns:
             The original L2 norm of the gradient (before clipping)
@@ -86,6 +88,7 @@ fn clip_grad_norm_(mut grad: ExTensor, max_norm: Float64) raises -> Float64:
             Error: If max_norm is negative
 
     Examples:
+    ```
             var grad = full([100,], 1.0, DType.float32)
             var norm = clip_grad_norm_(grad, max_norm=1.0)
             # norm is approximately sqrt(100) = 10
@@ -95,6 +98,7 @@ fn clip_grad_norm_(mut grad: ExTensor, max_norm: Float64) raises -> Float64:
             var norm2 = clip_grad_norm_(grad2, max_norm=1.0)
             # norm2 is approximately 0.158
             # Since 0.158 < 1.0, grad2 is unchanged.
+    ```
 
     Note:
             The norm is computed as the L2 (Euclidean) norm: `sqrt(sum(x_i^2))`
@@ -133,17 +137,18 @@ fn clip_grad_global_norm_(
         Global norm: sqrt(sum over all parameters of sum(grad_i^2))
 
     Args:
-            grads: List of gradient tensors (modified in-place if global norm exceeds max_norm)
+            grads: List of gradient tensors (modified in-place if global norm exceeds max_norm).
             max_norm: Maximum allowed global L2 norm. If exceeded, all gradients
-                      are scaled down proportionally
+                      are scaled down proportionally.
 
     Returns:
             The original global L2 norm (before clipping)
 
     Raises:
-            Error: If max_norm is negative or grads list is empty
+            Error: If max_norm is negative or grads list is empty.
 
     Examples:
+    ```
             var grad1 = full([10,], 1.0, DType.float32)
             var grad2 = full([20,], 1.0, DType.float32)
             var grads : List[ExTensor] = [grad1, grad2]
@@ -151,6 +156,7 @@ fn clip_grad_global_norm_(
             var global_norm = clip_grad_global_norm_(grads, max_norm=1.0)
             # global_norm is sqrt(10 + 20) = sqrt(30) ≈ 5.48
             # Both gradients scaled by 1.0/5.48 ≈ 0.182
+    ```
 
     Note:
             This function modifies all tensors in the grads list in-place
@@ -159,7 +165,8 @@ fn clip_grad_global_norm_(
         Reference:
             On the difficulty of training Recurrent Neural Networks
             (Pascanu et al., 2013)
-            https://arxiv.org/abs/1211.1541
+            https://arxiv.org/abs/1211.1541.
+
     """
     if max_norm < 0.0:
         raise Error("max_norm must be non-negative, got: " + String(max_norm))

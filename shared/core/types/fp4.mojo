@@ -68,7 +68,7 @@ struct FP4_E2M1(Copyable, Movable, Representable, Stringable):
         """Initialize FP4_E2M1 from raw 4-bit value.
 
         Args:
-            value: Raw 4-bit representation (only lower 4 bits used)
+            value: Raw 4-bit representation (only lower 4 bits used).
         """
         self.value = value & 0xF  # Mask to 4 bits
 
@@ -77,15 +77,15 @@ struct FP4_E2M1(Copyable, Movable, Representable, Stringable):
         """Convert Float32 to FP4 E2M1 format with given scale.
 
         Args:
-            x: Float32 value to convert
-            scale: Block-level scale factor
+            x: Float32 value to convert.
+            scale: Block-level scale factor.
 
         Returns:
-            FP4_E2M1 representation
+            FP4_E2M1 representation.
 
         Note:
-            The value is divided by scale before encoding
-            Values outside representable range are clamped
+            The value is divided by scale before encoding.
+            Values outside representable range are clamped.
         """
         # Handle special cases
         if isnan(x):
@@ -160,10 +160,10 @@ struct FP4_E2M1(Copyable, Movable, Representable, Stringable):
         """Convert FP4 E2M1 to Float32 with given scale.
 
         Args:
-            scale: Block-level scale factor
+            scale: Block-level scale factor.
 
         Returns:
-            Float32 representation of the scaled E2M1 value
+            Float32 representation of the scaled E2M1 value.
         """
         # Extract components (4 bits total)
         var sign = (self.value >> 3) & 0x1
@@ -210,7 +210,7 @@ struct FP4_E2M1(Copyable, Movable, Representable, Stringable):
         """Detailed representation showing bits and value.
 
         Returns:
-            Detailed string representation
+            Detailed string representation.
         """
         return (
             "FP4_E2M1(bits=0x"
@@ -224,10 +224,10 @@ struct FP4_E2M1(Copyable, Movable, Representable, Stringable):
         """Check equality by comparing raw bits.
 
         Args:
-            other: Other FP4_E2M1 value
+            other: Other FP4_E2M1 value.
 
         Returns:
-            True if bit patterns match
+            True if bit patterns match.
         """
         return self.value == other.value
 
@@ -235,9 +235,9 @@ struct FP4_E2M1(Copyable, Movable, Representable, Stringable):
         """Check inequality.
 
         Args:
-            other: Other FP4_E2M1 value
+            other: Other FP4_E2M1 value.
 
         Returns:
-            True if bit patterns differ
+            True if bit patterns differ.
         """
         return self.value != other.value

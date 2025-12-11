@@ -276,18 +276,20 @@ struct DatasetInfo(Copyable, Movable):
         """Initialize DatasetInfo.
 
         Args:
-            dataset_name: Name of the dataset. Must be one of the supported datasets
+            dataset_name: Name of the dataset. Must be one of the supported datasets.
 
         Raises:
-            Error: If dataset_name is not supported
+            Error: If dataset_name is not supported.
 
         Supported datasets:
+        ```
             - "cifar10"
             - "emnist_balanced"
             - "emnist_byclass"
             - "emnist_bymerge"
             - "emnist_digits"
             - "emnist_letters"
+        ```
         """
         # Initialize field first
         self.dataset_name = dataset_name
@@ -333,9 +335,7 @@ struct DatasetInfo(Copyable, Movable):
             - emnist_bymerge: 36
             - emnist_digits: 10
             - emnist_letters: 52
-
-        Raises:
-            Error: If dataset is not recognized (shouldn't happen after validation)
+            - -1 if dataset is not recognized (shouldn't happen after validation).
         """
         if self.dataset_name == "cifar10":
             return 10
@@ -362,7 +362,7 @@ struct DatasetInfo(Copyable, Movable):
             - emnist_*: [1, 28, 28] (grayscale, height, width)
 
         Note:
-            The shape represents [channels, height, width] in channel-first format
+            The shape represents [channels, height, width] in channel-first format.
         """
         if self.dataset_name == "cifar10":
             var shape = List[Int]()
@@ -382,10 +382,8 @@ struct DatasetInfo(Copyable, Movable):
         """Get list of all class names for the dataset.
 
         Returns:
-            List of class name strings in order
-
-        Raises:
-            Error: If dataset is not recognized (shouldn't happen after validation)
+            List of class name strings in order.
+            -1 error if dataset is not recognized (shouldn't happen after validation).
         """
         if self.dataset_name == "cifar10":
             return CIFAR10_CLASS_NAMES()
@@ -407,13 +405,13 @@ struct DatasetInfo(Copyable, Movable):
         """Get name of a specific class by index.
 
         Args:
-            class_idx: Index of the class (0-based)
+            class_idx: Index of the class (0-based).
 
         Returns:
-            Class name string at the given index
+            Class name string at the given index.
 
         Raises:
-            Error: If class_idx is out of range for the dataset
+            Error: If class_idx is out of range for the dataset.
         """
         if class_idx < 0 or class_idx >= self.num_classes():
             raise Error(
@@ -440,7 +438,7 @@ struct DatasetInfo(Copyable, Movable):
             - emnist_letters: ~103600
 
         Note:
-            These are approximate sizes; actual sizes may vary slightly
+            These are approximate sizes; actual sizes may vary slightly.
         """
         if self.dataset_name == "cifar10":
             return 50000
@@ -470,7 +468,7 @@ struct DatasetInfo(Copyable, Movable):
             - emnist_letters: ~17383
 
         Note:
-            These are approximate sizes; actual sizes may vary slightly
+            These are approximate sizes; actual sizes may vary slightly.
         """
         if self.dataset_name == "cifar10":
             return 10000

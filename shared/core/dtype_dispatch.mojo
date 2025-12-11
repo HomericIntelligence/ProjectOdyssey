@@ -99,23 +99,25 @@ fn elementwise_unary[
         This function is compile-time specialized for a specific dtype and operation.
         Use `dispatch_unary` for runtime dtype dispatch.
 
+    Parameters:
+        dtype: Compile-time dtype parameter.
+        op: Unary operation function pointer.
+
     Args:
-            dtype: Compile-time dtype parameter.
-            op: Unary operation function pointer.
-            tensor: Input tensor.
+        tensor: Input tensor.
 
     Returns:
             New tensor with operation applied element-wise.
 
-        Example:
-            ```mojo
-             Define operation
-            fn my_op[T: DType](x: Scalar[T]) -> Scalar[T]:
-                return max(Scalar[T](0), x)
+    Example:
+        ```mojo
+        # Define operation
+        fn my_op[T: DType](x: Scalar[T]) -> Scalar[T]:
+            return max(Scalar[T](0), x)
 
-            # Apply with compile-time dtype
-            var result = elementwise_unary[DType.float32, my_op](tensor)
-            ```
+        # Apply with compile-time dtype
+        var result = elementwise_unary[DType.float32, my_op](tensor)
+        ```
     """
     var result = ExTensor(tensor._shape, dtype)
     var size = tensor._numel
@@ -138,8 +140,10 @@ fn dispatch_unary[
         specialized versions of the operation, ensuring zero overhead compared to
         hand-written dtype branches.
 
-    Args:
+    Parameters:
             op: Unary operation function pointer.
+
+    Args:
             tensor: Input tensor.
 
     Returns:
@@ -151,7 +155,7 @@ fn dispatch_unary[
 
         Example:
             ```mojo
-            n relu_op[T: DType](x: Scalar[T]) -> Scalar[T]:
+           fn relu_op[T: DType](x: Scalar[T]) -> Scalar[T]:
                 return max(Scalar[T](0), x)
 
             var result = dispatch_unary[relu_op](tensor)  # Works for any dtype
@@ -206,10 +210,10 @@ fn elementwise_binary[
 
         This function is compile-time specialized for a specific dtype and operation.
         Use `dispatch_binary` for runtime dtype dispatch.
-
-    Args:
+    Parameters:
             dtype: Compile-time dtype parameter.
             op: Binary operation function pointer.
+    Args:
             lhs: Left-hand side tensor.
             rhs: Right-hand side tensor (must have same shape as lhs).
 
@@ -221,7 +225,7 @@ fn elementwise_binary[
 
         Example:
             ```mojo
-            n add_op[T: DType](x: Scalar[T], y: Scalar[T]) -> Scalar[T]:
+            fn add_op[T: DType](x: Scalar[T], y: Scalar[T]) -> Scalar[T]:
                 return x + y
 
             var result = elementwise_binary[DType.float32, add_op](a, b)
@@ -254,8 +258,9 @@ fn dispatch_binary[
         This function performs runtime dtype checking but dispatches to compile-time
         specialized versions of the operation.
 
-    Args:
+    Parameters:
             op: Binary operation function pointer.
+    Args:
             lhs: Left-hand side tensor.
             rhs: Right-hand side tensor.
 
@@ -268,7 +273,7 @@ fn dispatch_binary[
 
         Example:
             ```mojo
-            n mul_op[T: DType](x: Scalar[T], y: Scalar[T]) -> Scalar[T]:
+           fn mul_op[T: DType](x: Scalar[T], y: Scalar[T]) -> Scalar[T]:
                 return x * y
 
             var result = dispatch_binary[mul_op](a, b)
@@ -336,9 +341,10 @@ fn elementwise_scalar[
         This function applies a binary operation between a tensor and a scalar value.
         The scalar is converted to the appropriate dtype at compile time.
 
-    Args:
+    Parameters:
             dtype: Compile-time dtype parameter.
             op: Binary operation function pointer.
+    Args:
             tensor: Input tensor.
             scalar: Scalar value (converted to appropriate dtype).
 
@@ -347,10 +353,10 @@ fn elementwise_scalar[
 
         Example:
             ```mojo
-            n mul_op[T: DType](x: Scalar[T], y: Scalar[T]) -> Scalar[T]:
+           fn mul_op[T: DType](x: Scalar[T], y: Scalar[T]) -> Scalar[T]:
                 return x * y
 
-            var result = elementwise_scalar[DType.float32, mul_op](tensor, 2.5)
+        var result = elementwise_scalar[DType.float32, mul_op](tensor, 2.5)
             ```
     """
     var result = ExTensor(tensor._shape, dtype)
@@ -375,8 +381,9 @@ fn dispatch_scalar[
         specialized versions of the operation. The scalar value is automatically
         converted to the tensor's dtype.
 
-    Args:
+    Parameters:
             op: Binary operation function pointer.
+    Args:
             tensor: Input tensor.
             scalar: Scalar value (converted to tensor's dtype).
 
@@ -389,10 +396,10 @@ fn dispatch_scalar[
 
         Example:
             ```mojo
-            n add_op[T: DType](x: Scalar[T], y: Scalar[T]) -> Scalar[T]:
+           fn add_op[T: DType](x: Scalar[T], y: Scalar[T]) -> Scalar[T]:
                 return x + y
 
-            var result = dispatch_scalar[add_op](tensor, 1.0)
+           var result = dispatch_scalar[add_op](tensor, 1.0)
             ```
 
     Note:
@@ -448,8 +455,9 @@ fn dispatch_float_unary[
         one of the supported float types and dispatches to the appropriate
         compile-time specialized version.
 
-    Args:
+    Parameters:
             op: Unary operation function pointer.
+    Args:
             tensor: Input tensor (must be float16/32/64).
 
     Returns:
@@ -461,11 +469,11 @@ fn dispatch_float_unary[
 
         Example:
             ```mojo
-            n sigmoid_op[T: DType](x: Scalar[T]) -> Scalar[T]:
+           fn sigmoid_op[T: DType](x: Scalar[T]) -> Scalar[T]:
                 # Assuming T is float
                 return Scalar[T](1.0) / (Scalar[T](1.0) + exp(-x))
 
-            var result = dispatch_float_unary[sigmoid_op](tensor)
+        var result = dispatch_float_unary[sigmoid_op](tensor)
             ```
 
     Note:
@@ -495,9 +503,9 @@ fn dispatch_float_binary[
         Use this for operations that only support floating-point dtypes.
         This function validates that both input tensors are float types
         and dispatches to the appropriate compile-time specialized version.
-
-    Args:
+    Parameters:
             op: Binary operation function pointer.
+    Args:
             lhs: Left-hand side tensor (must be float16/32/64).
             rhs: Right-hand side tensor (must match lhs dtype).
 
@@ -545,9 +553,9 @@ fn dispatch_float_scalar[
 
         Use this for operations that only support floating-point dtypes.
         The scalar value is automatically converted to the tensor's float dtype.
-
-    Args:
+    Parameters:
             op: Binary operation function pointer.
+    Args:
             tensor: Input tensor (must be float16/32/64).
             scalar: Scalar value (converted to tensor's dtype).
 
@@ -596,8 +604,9 @@ fn _softmax_impl[
     Uses log-sum-exp trick for numerical stability by subtracting max value
     before exponentiation.
 
-    Args:
+    Parameters:
         dtype: Compile-time dtype parameter.
+    Args:
         result: Output tensor (pre-allocated).
         tensor: Input tensor.
         outer_size: Product of dimensions before the softmax axis.
@@ -734,8 +743,9 @@ fn _softmax_backward_impl[
 
     Softmax gradient: grad_input[i] = output[i] * (grad_output[i] - sum_j(grad_output[j] * output[j])).
 
-    Args:
+    Parameters:
         dtype: Compile-time dtype parameter.
+    Args:
         result: Output gradient tensor (pre-allocated).
         grad_output: Upstream gradient.
         output: Softmax forward output.
@@ -837,8 +847,9 @@ fn _gelu_impl[
     Exact: x * 0.5 * (1 + erf(x / sqrt(2))).
     Approximate: 0.5 * x * (1 + tanh(sqrt(2/pi) * (x + 0.044715 * x^3))).
 
-    Args:
+    Parameters:
         dtype: Compile-time dtype parameter.
+    Args:
         result: Output tensor (pre-allocated).
         tensor: Input tensor.
         approximate: Use tanh approximation if True.
@@ -933,8 +944,9 @@ fn _gelu_backward_impl[
 ) raises:
     """Compile-time specialized GELU backward implementation.
 
-    Args:
+    Parameters:
         dtype: Compile-time dtype parameter.
+    Args:
         result: Output gradient tensor (pre-allocated).
         grad_output: Upstream gradient.
         x: Input from forward pass.
@@ -1061,8 +1073,9 @@ fn _hard_sigmoid_impl[dtype: DType](result: ExTensor, tensor: ExTensor) raises:
 
     hard_sigmoid(x) = clip((x + 3) / 6, 0, 1).
 
-    Args:
+    Parameters:
         dtype: Compile-time dtype parameter.
+    Args:
         result: Output tensor (pre-allocated).
         tensor: Input tensor.
     """
@@ -1094,7 +1107,7 @@ fn dispatch_hard_sigmoid(tensor: ExTensor) raises -> ExTensor:
         tensor: Input tensor.
 
     Returns:
-        hard_sigmoid output tensor.
+        Hard_sigmoid output tensor.
 
     Raises:
         Error: If dtype is not float16/32/64.
@@ -1124,8 +1137,9 @@ fn _hard_sigmoid_backward_impl[
 
     Derivative: 1/6 if -3 < x < 3, else 0.
 
-    Args:
+    Parameters:
         dtype: Compile-time dtype parameter.
+    Args:
         result: Output gradient tensor (pre-allocated).
         grad_output: Upstream gradient.
         x: Input from forward pass.
@@ -1198,8 +1212,9 @@ fn _hard_swish_impl[dtype: DType](result: ExTensor, tensor: ExTensor) raises:
                   = x if x >= 3.
                   = x * (x + 3) / 6 otherwise.
 
-    Args:
+    Parameters:
         dtype: Compile-time dtype parameter.
+    Args:
         result: Output tensor (pre-allocated).
         tensor: Input tensor.
     """
@@ -1238,7 +1253,7 @@ fn dispatch_hard_swish(tensor: ExTensor) raises -> ExTensor:
         tensor: Input tensor.
 
     Returns:
-        hard_swish output tensor.
+        Hard_swish output tensor.
 
     Raises:
         Error: If dtype is not float16/32/64.
@@ -1268,8 +1283,9 @@ fn _hard_swish_backward_impl[
 
     Derivative: 0 if x <= -3, 1 if x >= 3, (2x + 3) / 6 otherwise.
 
-    Args:
+    Parameters:
         dtype: Compile-time dtype parameter.
+    Args:
         result: Output gradient tensor (pre-allocated).
         grad_output: Upstream gradient.
         x: Input from forward pass.
@@ -1348,8 +1364,9 @@ fn _hard_tanh_impl[
 
     hard_tanh(x) = clip(x, min_val, max_val).
 
-    Args:
+    Parameters:
         dtype: Compile-time dtype parameter.
+    Args:
         result: Output tensor (pre-allocated).
         tensor: Input tensor.
         min_val: Minimum output value.
@@ -1376,7 +1393,7 @@ fn dispatch_hard_tanh(
         max_val: Maximum output value.
 
     Returns:
-        hard_tanh output tensor.
+        Hard_tanh output tensor.
 
     Raises:
         Error: If dtype is not float16/32/64.
@@ -1411,8 +1428,9 @@ fn _hard_tanh_backward_impl[
 
     Derivative: 1 if min_val < x < max_val, else 0.
 
-    Args:
+    Parameters:
         dtype: Compile-time dtype parameter.
+    Args:
         result: Output gradient tensor (pre-allocated).
         grad_output: Upstream gradient.
         x: Input from forward pass.

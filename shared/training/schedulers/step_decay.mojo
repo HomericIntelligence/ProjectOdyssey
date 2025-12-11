@@ -28,13 +28,13 @@ fn step_lr(
     """Compute learning rate with step decay.
 
     Args:
-            initial_lr: Initial learning rate at epoch 0
-            epoch: Current epoch number (0-indexed)
-            step_size: Number of epochs between each decay step (default: 30)
-            gamma: Multiplicative decay factor (default: 0.1)
+            initial_lr: Initial learning rate at epoch 0.
+            epoch: Current epoch number (0-indexed).
+            step_size: Number of epochs between each decay step (default: 30).
+            gamma: Multiplicative decay factor (default: 0.1).
 
     Returns:
-            Decayed learning rate for current epoch
+            Decayed learning rate for current epoch.
 
         Example:
             ```mojo
@@ -50,12 +50,12 @@ fn step_lr(
             ```
 
     Note:
-            - Pure function (no state management)
-            - Caller passes current epoch and gets back learning rate
-            - Gamma typically 0.1 (10x reduction) or 0.5 (2x reduction)
-            - Step size depends on dataset and model
-              - CIFAR-10: typically 30-50 epochs
-              - ImageNet: typically 30 epochs
+            - Pure function (no state management).
+            - Caller passes current epoch and gets back learning rate.
+            - Gamma typically 0.1 (10x reduction) or 0.5 (2x reduction).
+            - Step size depends on dataset and model.
+              - CIFAR-10: typically 30-50 epochs.
+              - ImageNet: typically 30 epochs.
     """
     if step_size <= 0:
         raise Error("step_size must be positive")
@@ -79,14 +79,14 @@ fn multistep_lr(
 ) raises -> Float32:
     """Compute learning rate with decay at specific milestone epochs.
 
-        Decays learning rate by gamma at each milestone epoch
-        More flexible than step_lr - allows arbitrary decay schedule
+        Decays learning rate by gamma at each milestone epoch.
+        More flexible than step_lr - allows arbitrary decay schedule.
 
     Args:
-            initial_lr: Initial learning rate at epoch 0
-            epoch: Current epoch number (0-indexed)
-            milestones: List of epoch numbers where lr should be decayed
-            gamma: Multiplicative decay factor at each milestone (default: 0.1)
+            initial_lr: Initial learning rate at epoch 0.
+            epoch: Current epoch number (0-indexed).
+            milestones: List of epoch numbers where lr should be decayed.
+            gamma: Multiplicative decay factor at each milestone (default: 0.1).
 
     Returns:
             Decayed learning rate for current epoch
@@ -107,9 +107,9 @@ fn multistep_lr(
             ```
 
     Note:
-            - Used in ResNet paper: decay at epochs [30, 60, 90]
-            - Allows fine-grained control over LR schedule
-            - Milestones should be sorted in ascending order
+            - Used in ResNet paper: decay at epochs [30, 60, 90].
+            - Allows fine-grained control over LR schedule.
+            - Milestones should be sorted in ascending order.
     """
     if gamma <= 0.0 or gamma >= 1.0:
         raise Error("gamma must be in range (0, 1)")
@@ -133,18 +133,18 @@ fn exponential_lr(
 ) raises -> Float32:
     """Compute learning rate with exponential decay.
 
-        Decays learning rate by gamma every epoch (exponential decay)
+        Decays learning rate by gamma every epoch (exponential decay).
 
         Formula:
-            lr = initial_lr * (gamma ** epoch)
+            `lr = initial_lr * (gamma ** epoch)`
 
     Args:
-            initial_lr: Initial learning rate at epoch 0
-            epoch: Current epoch number (0-indexed)
-            gamma: Decay factor per epoch (default: 0.95 for ~5% decay per epoch)
+            initial_lr: Initial learning rate at epoch 0.
+            epoch: Current epoch number (0-indexed).
+            gamma: Decay factor per epoch (default: 0.95 for ~5% decay per epoch).
 
     Returns:
-            Decayed learning rate for current epoch
+            Decayed learning rate for current epoch.
 
         Example:
             ```mojo
@@ -158,10 +158,10 @@ fn exponential_lr(
             ```
 
     Note:
-            - Smoother decay than step_lr
-            - Gamma typically 0.9-0.99 (1-10% decay per epoch)
-            - Less aggressive than step decay
-            - Good for fine-tuning
+            - Smoother decay than step_lr.
+            - Gamma typically 0.9-0.99 (1-10% decay per epoch).
+            - Less aggressive than step decay.
+            - Good for fine-tuning.
     """
     if gamma <= 0.0 or gamma >= 1.0:
         raise Error("gamma must be in range (0, 1)")
@@ -175,17 +175,17 @@ fn exponential_lr(
 
 
 fn constant_lr(initial_lr: Float32, epoch: Int) -> Float32:
-    """Constant learning rate (no decay)
+    """Constant learning rate (no decay).
 
-        Returns the same learning rate for all epochs
-        Useful as baseline or for simple experiments
+        Returns the same learning rate for all epochs.
+        Useful as baseline or for simple experiments.
 
     Args:
-            initial_lr: Learning rate to use
-            epoch: Current epoch (ignored)
+            initial_lr: Learning rate to use.
+            epoch: Current epoch (ignored).
 
     Returns:
-            Constant learning rate
+            Constant learning rate.
 
         Example:
             ```mojo

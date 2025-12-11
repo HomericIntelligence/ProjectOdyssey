@@ -61,7 +61,7 @@ fn initialize_optimizer_state(
     for i in range(len(param_shapes)):
         var param_state: List[ExTensor] = []
 
-        for state_idx in range(num_states):
+        for _ in range(num_states):
             # Copy the shape since List[Int] is not ImplicitlyCopyable
             var shape = List[Int]()
             for j in range(len(param_shapes[i])):
@@ -109,7 +109,7 @@ fn initialize_optimizer_state_from_params(
         var param = params[i]
         var param_state: List[ExTensor] = []
 
-        for state_idx in range(num_states):
+        for _ in range(num_states):
             param_state.append(zeros(param.shape(), param.dtype()))
 
         all_states.append(param_state^)

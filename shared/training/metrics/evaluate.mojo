@@ -33,25 +33,25 @@ fn evaluate_with_predict(
     """Evaluate model using pre-computed predictions.
 
         Lightweight evaluation function for models where predictions have
-        already been computed (e.g., from model.predict() in a loop)
+        already been computed (e.g., from model.predict() in a loop).
 
     Args:
-            predictions: List of predicted class indices
-            labels: Ground truth labels [batch_size]
+            predictions: List of predicted class indices.
+            labels: Ground truth labels [batch_size].
 
     Returns:
-            Accuracy as fraction in [0.0, 1.0]
+            Accuracy as fraction in [0.0, 1.0].
 
     Raises:
-            Error: If predictions and labels have different lengths
+            Error: If predictions and labels have different lengths.
 
-        Example:
-            ```mojo
-            var predictions = List[Int]()
-            for sample in test_images:
-                predictions.append(model.predict(sample))
-            var accuracy = evaluate_with_predict(predictions, test_labels)
-            ```
+    Example:
+        ```mojo
+        var predictions = List[Int]()
+        for sample in test_images:
+            predictions.append(model.predict(sample))
+        var accuracy = evaluate_with_predict(predictions, test_labels)
+        ```
     """
     if len(predictions) != labels._numel:
         raise Error(
@@ -74,23 +74,23 @@ fn evaluate_logits_batch(logits: ExTensor, labels: ExTensor) raises -> Float32:
     """Evaluate using logits (2D) by computing argmax per sample.
 
         Evaluates a batch of logits by computing argmax for each sample
-        and comparing with true labels
+        and comparing with true labels.
 
     Args:
-            logits: Model logits of shape [batch_size, num_classes]
-            labels: Ground truth labels [batch_size]
+            logits: Model logits of shape [batch_size, num_classes].
+            labels: Ground truth labels [batch_size].
 
     Returns:
-            Accuracy as fraction in [0.0, 1.0]
+            Accuracy as fraction in [0.0, 1.0].
 
     Raises:
-            Error: If shapes are incompatible
+            Error: If shapes are incompatible.
 
-        Example:
-            ```mojo
-            var logits = model.forward(test_images, training=False)
-            var accuracy = evaluate_logits_batch(logits, test_labels)
-            ```
+    Example:
+        ```mojo
+        var logits = model.forward(test_images, training=False)
+        var accuracy = evaluate_logits_batch(logits, test_labels)
+        ```
     """
     var shape_vec = logits.shape()
     if len(shape_vec) != 2:
@@ -129,31 +129,31 @@ fn evaluate_logits_batch(logits: ExTensor, labels: ExTensor) raises -> Float32:
 fn compute_accuracy_on_batch(
     predictions: ExTensor, labels: ExTensor
 ) raises -> Float32:
-    """Compute accuracy for a single batch (simple utility)
+    """Compute accuracy for a single batch (simple utility).
 
         Lightweight function for computing accuracy on a single batch without
-        batching logic. Useful for inline accuracy computation during training
+        batching logic. Useful for inline accuracy computation during training.
 
     Args:
             predictions: Model predictions/logits of shape [batch_size, num_classes]
-                        or predicted class indices [batch_size]
-            labels: Ground truth labels [batch_size]
+                        or predicted class indices [batch_size].
+            labels: Ground truth labels [batch_size].
 
     Returns:
-            Accuracy as fraction in [0.0, 1.0]
+            Accuracy as fraction in [0.0, 1.0].
 
     Raises:
             Error: If batch sizes don't match.
 
-        Example:
-            ```mojo
-             During training loop
-            var batch_acc = compute_accuracy_on_batch(logits, batch_labels)
-            print("Batch accuracy: ", batch_acc)
-            ```
+    Example:
+        ```mojo
+        # During training loop
+        var batch_acc = compute_accuracy_on_batch(logits, batch_labels)
+        print("Batch accuracy: ", batch_acc)
+        ```
     """
     var pred_shape = predictions.shape()
-    var batch_size = 0
+    # FIXME(unused) var batch_size = 0
 
     # Determine if predictions are logits (2D) or class indices (1D)
     if len(pred_shape) == 2:

@@ -48,18 +48,18 @@ struct ReLULayer(Copyable, Movable):
         pass
 
     fn forward(self, input: ExTensor) raises -> ExTensor:
-        """Forward pass: y = max(0, x)
+        """Forward pass: y = max(0, x).
 
-        Applies ReLU activation element-wise to the input tensor
+        Applies ReLU activation element-wise to the input tensor.
 
         Args:
-            input: Input tensor of any shape
+            input: Input tensor of any shape.
 
         Returns:
-            Output tensor with ReLU applied, same shape as input
+            Output tensor with ReLU applied, same shape as input.
 
         Raises:
-            Error if tensor operations fail
+            Error if tensor operations fail.
 
         Example:
             ```mojo
@@ -75,20 +75,20 @@ struct ReLULayer(Copyable, Movable):
     ) raises -> ExTensor:
         """Backward pass: compute gradient w.r.t. input.
 
-        Computes the gradient of ReLU with respect to input
-        Gradient is passed through where input > 0, zeroed elsewhere
+        Computes the gradient of ReLU with respect to input.
+        Gradient is passed through where input > 0, zeroed elsewhere.
 
         Args:
-            grad_output: Gradient w.r.t. output from upstream, same shape as input
-            input: Input tensor from forward pass
+            grad_output: Gradient w.r.t. output from upstream, same shape as input.
+            input: Input tensor from forward pass.
 
         Returns:
             Gradient w.r.t. input, same shape as input:
-            - grad_input[i] = grad_output[i] if input[i] > 0
-            - grad_input[i] = 0 if input[i] <= 0
+            - grad_input[i] = grad_output[i] if input[i] > 0.
+            - grad_input[i] = 0 if input[i] <= 0.
 
         Raises:
-            Error if tensor operations fail
+            Error if tensor operations fail.
 
         Example:
             ```mojo

@@ -51,10 +51,10 @@ struct DropoutLayer(Copyable, Movable):
 
         Args:
             dropout_rate: Probability of dropping each element. Must be in [0, 1)
-                         (default: 0.5)
+                         (default: 0.5).
 
         Raises:
-            Error if dropout_rate is not in valid range
+            Error if dropout_rate is not in valid range.
 
         Example:
             ```mojo
@@ -78,7 +78,7 @@ struct DropoutLayer(Copyable, Movable):
 
         Args:
             training: True to enable dropout during forward pass,
-                     False to disable dropout (inference mode)
+                     False to disable dropout (inference mode).
 
         Example:
             ```mojo
@@ -95,22 +95,22 @@ struct DropoutLayer(Copyable, Movable):
         """Forward pass: apply dropout during training, pass through during inference.
 
         During training (training=True):
-        1. Generate random mask where each element is in [0, 1]
-        2. Keep elements where mask > dropout_rate, zero others
-        3. Scale output by 1/(1-dropout_rate) to maintain expected value
-        4. Store mask for backward pass
+        1. Generate random mask where each element is in [0, 1].
+        2. Keep elements where mask > dropout_rate, zero others.
+        3. Scale output by 1/(1-dropout_rate) to maintain expected value.
+        4. Store mask for backward pass.
 
         During inference (training=False):
-        - Return input unchanged (no dropout applied)
+        - Return input unchanged (no dropout applied).
 
         Args:
-            input: Input tensor of any shape
+            input: Input tensor of any shape.
 
         Returns:
-            Output tensor with dropout applied (if training) or unchanged (if inference)
+            Output tensor with dropout applied (if training) or unchanged (if inference).
 
         Raises:
-            Error if tensor operations fail
+            Error if tensor operations fail.
 
         Example:
             ```mojo
@@ -193,18 +193,18 @@ struct DropoutLayer(Copyable, Movable):
         """Backward pass: apply same mask as forward pass.
 
         During training, propagates gradient through kept elements only,
-        using the same scale factor as forward pass
+        using the same scale factor as forward pass.
 
         Args:
-            grad_output: Gradient w.r.t. output from upstream
-            mask: The dropout mask from forward pass (1 for kept, 0 for dropped)
+            grad_output: Gradient w.r.t. output from upstream.
+            mask: The dropout mask from forward pass (1 for kept, 0 for dropped).
 
         Returns:
             Gradient w.r.t. input with dropout mask applied:
-            grad_input = mask * grad_output / (1 - dropout_rate)
+            grad_input = mask * grad_output / (1 - dropout_rate).
 
         Raises:
-            Error if tensor operations fail
+            Error if tensor operations fail.
 
         Example:
             ```mojo

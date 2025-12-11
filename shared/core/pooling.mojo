@@ -348,19 +348,19 @@ fn maxpool2d_backward(
             method: Implementation method (must match forward pass).
 
     Returns:
-            grad_input: Gradient w.r.t. input, shape (batch, channels, in_H, in_W).
+            Gradient w.r.t. input, shape (batch, channels, in_H, in_W).
 
-        Example:
-            ```mojo
-            from shared.core import maxpool2d, maxpool2d_backward
+    Example:
+        ```mojo
+        from shared.core import maxpool2d, maxpool2d_backward
 
-            # Forward pass
-            var output = maxpool2d(x, kernel_size=2, stride=2)
-            # ... compute loss and grad_output ...
+        # Forward pass
+        var output = maxpool2d(x, kernel_size=2, stride=2)
+        # ... compute loss and grad_output ...
 
-            # Backward pass
-            var grad_x = maxpool2d_backward(grad_output, x, kernel_size=2, stride=2)
-            ```
+        # Backward pass
+        var grad_x = maxpool2d_backward(grad_output, x, kernel_size=2, stride=2)
+        ```
 
     Note:
             This implementation recomputes the argmax positions from the forward pass.
@@ -479,19 +479,19 @@ fn avgpool2d_backward(
             method: Implementation method (must match forward pass).
 
     Returns:
-            grad_input: Gradient w.r.t. input, shape (batch, channels, in_H, in_W).
+            Gradient w.r.t. input, shape (batch, channels, in_H, in_W).
 
-        Example:
-            ```mojo
-            from shared.core import avgpool2d, avgpool2d_backward
+    Example:
+        ```mojo
+        from shared.core import avgpool2d, avgpool2d_backward
 
-            # Forward pass
-            var output = avgpool2d(x, kernel_size=2, stride=2)
-            # ... compute loss and grad_output ...
+        # Forward pass
+        var output = avgpool2d(x, kernel_size=2, stride=2)
+        # ... compute loss and grad_output ...
 
-            # Backward pass
-            var grad_x = avgpool2d_backward(grad_output, x, kernel_size=2, stride=2)
-            ```
+        # Backward pass
+        var grad_x = avgpool2d_backward(grad_output, x, kernel_size=2, stride=2)
+        ```
 
     Raises:
             Error: If tensor shapes are incompatible or method is unsupported.
@@ -598,19 +598,19 @@ fn global_avgpool2d_backward(
             method: Implementation method (must match forward pass).
 
     Returns:
-            grad_input: Gradient w.r.t. input, shape (batch, channels, height, width).
+           Gradient w.r.t. input, shape (batch, channels, height, width).
 
-        Example:
-            ```mojo
-            from shared.core import global_avgpool2d, global_avgpool2d_backward
+    Example:
+        ```mojo
+        from shared.core import global_avgpool2d, global_avgpool2d_backward
 
-            # Forward pass
-            var output = global_avgpool2d(x)
-            # ... compute loss and grad_output ...
+        # Forward pass
+        var output = global_avgpool2d(x)
+        # ... compute loss and grad_output ...
 
-            # Backward pass
-            var grad_x = global_avgpool2d_backward(grad_output, x)
-            ```
+        # Backward pass
+        var grad_x = global_avgpool2d_backward(grad_output, x)
+        ```
 
     Raises:
             Error: If tensor shapes are incompatible or method is unsupported.

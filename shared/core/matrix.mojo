@@ -18,8 +18,8 @@ fn matmul(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Matrix multiplication.
 
     Args:
-            a: First tensor (matrix or vector)
-            b: Second tensor (matrix or vector)
+            a: First tensor (matrix or vector).
+            b: Second tensor (matrix or vector).
 
     Returns:
             A new tensor containing the matrix product a @ b
@@ -50,7 +50,7 @@ fn matmul(a: ExTensor, b: ExTensor) raises -> ExTensor:
 
     Note:
             This function always allocates a new result tensor. Input tensors are only read,
-            never modified, so aliasing between a and b is safe
+            never modified, so aliasing between a and b is safe.
     """
     # Check dtype compatibility
     if a.dtype() != b.dtype():
@@ -215,10 +215,10 @@ fn transpose(
         Supports arbitrary axis permutation for N-dimensional tensors, matching NumPy semantics
 
     Args:
-            tensor: Input tensor
+            tensor: Input tensor.
             axes: Optional permutation of axes. If None, reverses all axes (default behavior)
                     Must be a permutation of [0, 1, ..., ndim-1] with no duplicates
-                    Example: axes=[2, 0, 1] permutes (N, H, W, C) -> (C, N, H, W)
+                    Example: axes=[2, 0, 1] permutes (N, H, W, C) -> (C, N, H, W).
 
     Returns:
             A new tensor with permuted dimensions according to axes
@@ -242,7 +242,7 @@ fn transpose(
     Note:
             - If axes is None, defaults to reversing all axes (same as original behavior)
             - Validates axes parameter: no duplicates, correct range, correct length
-            - Matches NumPy transpose semantics for arbitrary permutations
+            - Matches NumPy transpose semantics for arbitrary permutations.
     """
     var ndim = tensor.dim()
     var input_shape = tensor.shape()
@@ -334,8 +334,8 @@ fn dot(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Dot product of tensors.
 
     Args:
-            a: First tensor
-            b: Second tensor
+            a: First tensor.
+            b: Second tensor.
 
     Returns:
             Dot product (scalar for 1D, matrix product for 2D)
@@ -380,8 +380,8 @@ fn outer(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Outer product of two vectors.
 
     Args:
-            a: First 1D tensor (vector)
-            b: Second 1D tensor (vector)
+            a: First 1D tensor (vector).
+            b: Second 1D tensor (vector).
 
     Returns:
             A 2D tensor containing the outer product
@@ -442,9 +442,9 @@ fn matmul_backward(
             - Batched: N-D tensors with batched matmul
 
     Args:
-            grad_output: Gradient from upstream (∂L/∂C)
-            a: First input from forward pass (A)
-            b: Second input from forward pass (B)
+            grad_output: Gradient from upstream (∂L/∂C).
+            a: First input from forward pass (A).
+            b: Second input from forward pass (B).
 
     Returns:
             GradientPair containing (grad_a, grad_b) - gradients w.r.t. inputs
@@ -554,8 +554,8 @@ fn transpose_backward(
         The gradient of transpose is the transpose with inverse permutation
 
     Args:
-            grad_output: Gradient from upstream (∂L/∂Y)
-            axes: The axes permutation used in forward pass. If None, uses default (reverse all)
+            grad_output: Gradient from upstream (∂L/∂Y).
+            axes: The axes permutation used in forward pass. If None, uses default (reverse all).
 
     Returns:
             Gradient w.r.t. input (∂L/∂X)
@@ -582,7 +582,7 @@ fn transpose_backward(
     Note:
             Transpose is self-adjoint: the inverse permutation is used to compute gradients
             For axes=[a1, a2, ..., an], the inverse is computed by finding the permutation
-            that maps back to the original order
+            that maps back to the original order.
     """
     var ndim = grad_output.dim()
 

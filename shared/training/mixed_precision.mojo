@@ -83,12 +83,12 @@ struct GradientScaler(Copyable, Movable):
         """Initialize gradient scaler.
 
         Args:
-            initial_scale: Initial loss scale (power of 2 recommended)
-            growth_factor: Multiplicative factor for scale growth
-            backoff_factor: Multiplicative factor for scale reduction
-            growth_interval: Steps between automatic scale increases
-            min_scale: Minimum allowed scale factor
-            max_scale: Maximum allowed scale factor
+            initial_scale: Initial loss scale (power of 2 recommended).
+            growth_factor: Multiplicative factor for scale growth.
+            backoff_factor: Multiplicative factor for scale reduction.
+            growth_interval: Steps between automatic scale increases.
+            min_scale: Minimum allowed scale factor.
+            max_scale: Maximum allowed scale factor.
         """
         self.scale = initial_scale
         self.growth_factor = growth_factor
@@ -103,13 +103,13 @@ struct GradientScaler(Copyable, Movable):
         """Scale loss by current scale factor.
 
         Args:
-            loss: Unscaled loss tensor (typically scalar)
+            loss: Unscaled loss tensor (typically scalar).
 
         Returns:
-            Scaled loss tensor
+            Scaled loss tensor.
 
         Raises:
-            Error: If loss is empty or scale is invalid
+            Error: If loss is empty or scale is invalid.
 
         Example:
             ```mojo
@@ -133,13 +133,13 @@ struct GradientScaler(Copyable, Movable):
         """Unscale gradients by dividing by scale factor.
 
         Args:
-            gradients: Scaled gradients from backward pass
+            gradients: Scaled gradients from backward pass.
 
         Returns:
-            Unscaled gradients ready for optimizer
+            Unscaled gradients ready for optimizer.
 
         Raises:
-            Error: If gradients are empty or scale is zero
+            Error: If gradients are empty or scale is zero.
 
         Example:
             ```mojo
@@ -206,7 +206,7 @@ struct GradientScaler(Copyable, Movable):
         """Get current scale factor.
 
         Returns:
-            Current loss scale value
+            Current loss scale value.
         """
         return self.scale
 
@@ -214,7 +214,7 @@ struct GradientScaler(Copyable, Movable):
         """Get total number of steps taken.
 
         Returns:
-            Number of successful optimizer steps
+            Number of successful optimizer steps.
         """
         return self._num_steps
 
@@ -223,16 +223,15 @@ fn convert_to_fp32_master(params: ExTensor) raises -> ExTensor:
     """Convert model parameters to FP32 master weights with SIMD optimization.
 
         Creates FP32 copy of parameters for optimizer state management
-        Use when training with FP16/BF16 but need FP32 precision for updates
-
+        Use when training with FP16/BF16 but need FP32 precision for updates.
     Args:
-            params: Model parameters (any dtype)
+            params: Model parameters (any dtype).
 
     Returns:
-            FP32 copy of parameters
+            FP32 copy of parameters.
 
     Raises:
-            Error: If params is empty
+            Error: If params is empty.
 
         Example:
             ```mojo
@@ -283,11 +282,11 @@ fn update_model_from_master(
     """Update model parameters from FP32 master weights with SIMD optimization.
 
         Copies FP32 master weights back to model parameters with dtype conversion
-        Call after optimizer updates master weights
+        Call after optimizer updates master weights.
 
     Args:
-            model_params: Model parameters to update (FP16/BF16)
-            master_params: Updated master weights (FP32)
+            model_params: Model parameters to update (FP16/BF16).
+            master_params: Updated master weights (FP32).
 
     Raises:
             Error: If tensors are empty or shapes don't match.
@@ -340,13 +339,13 @@ fn check_gradients_finite(gradients: ExTensor) raises -> Bool:
     """Check if gradients contain only finite values.
 
         Returns True if gradients are all finite (no NaN or Inf)
-        Use to validate gradients before optimizer step
+        Use to validate gradients before optimizer step.
 
     Args:
-            gradients: Gradient tensor to check
+            gradients: Gradient tensor to check.
 
     Returns:
-            True if all gradients are finite, False otherwise
+            True if all gradients are finite, False otherwise.
 
         Example:
             ```mojo
@@ -369,14 +368,14 @@ fn clip_gradients_by_norm(
         Useful for preventing gradient explosion in mixed precision
 
     Args:
-            gradients: Gradient tensor
-            max_norm: Maximum allowed gradient norm
+            gradients: Gradient tensor.
+            max_norm: Maximum allowed gradient norm.
 
     Returns:
-            Clipped gradients
+            Clipped gradients.
 
     Raises:
-            Error: If max_norm is non-positive or gradients are empty
+            Error: If max_norm is non-positive or gradients are empty.
 
         Example:
             ```mojo
@@ -418,18 +417,18 @@ fn clip_gradients_by_value(
     """Clip gradients by value range with SIMD optimization.
 
         Clamps each gradient value to [min_value, max_value]
-        Simpler than norm clipping but less theoretically motivated
+        Simpler than norm clipping but less theoretically motivated.
 
     Args:
-            gradients: Gradient tensor
-            min_value: Minimum allowed gradient value
-            max_value: Maximum allowed gradient value
+            gradients: Gradient tensor.
+            min_value: Minimum allowed gradient value.
+            max_value: Maximum allowed gradient value.
 
     Returns:
-            Clipped gradients
+            Clipped gradients.
 
     Raises:
-            Error: If min_value >= max_value or gradients are empty
+            Error: If min_value >= max_value or gradients are empty.
 
         Example:
             ```mojo

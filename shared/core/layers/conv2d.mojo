@@ -15,20 +15,20 @@ from shared.core.conv import conv2d, conv2d_backward, Conv2dBackwardResult
 
 
 struct Conv2dLayer(Copyable, Movable):
-    """2D Convolutional layer: y = conv2d(x, weight, bias, stride, padding)
+    """2D Convolutional layer: y = conv2d(x, weight, bias, stride, padding).
 
     A 2D convolutional neural network layer that applies learnable filters
-    to spatially structured inputs (images)
+    to spatially structured inputs (images).
 
     Attributes:
-        weight: Filter weights of shape (out_channels, in_channels, kernel_h, kernel_w)
-        bias: Bias vector of shape (out_channels,)
-        in_channels: Number of input channels
-        out_channels: Number of output channels (filters)
-        kernel_h: Kernel height
-        kernel_w: Kernel width
-        stride: Stride for convolution
-        padding: Zero-padding added to input
+        weight: Filter weights of shape (out_channels, in_channels, kernel_h, kernel_w).
+        bias: Bias vector of shape (out_channels,).
+        in_channels: Number of input channels.
+        out_channels: Number of output channels (filters).
+        kernel_h: Kernel height.
+        kernel_w: Kernel width.
+        stride: Stride for convolution.
+        padding: Zero-padding added to input.
     """
 
     var weight: ExTensor
@@ -51,19 +51,19 @@ struct Conv2dLayer(Copyable, Movable):
     ) raises:
         """Initialize Conv2D layer with He/Kaiming weights and zero bias.
 
-        Uses He initialization for weights (scaled by sqrt(2 / (in_channels * kH * kW)))
-        Bias is initialized to zero
+        Uses He initialization for weights (scaled by sqrt(2 / (in_channels * kH * kW))).
+        Bias is initialized to zero.
 
         Args:
-            in_channels: Number of input channels
-            out_channels: Number of output channels (filters)
-            kernel_h: Height of convolutional kernel
-            kernel_w: Width of convolutional kernel
-            stride: Stride for convolution (default: 1)
-            padding: Zero-padding added to input (default: 0)
+            in_channels: Number of input channels.
+            out_channels: Number of output channels (filters).
+            kernel_h: Height of convolutional kernel.
+            kernel_w: Width of convolutional kernel.
+            stride: Stride for convolution (default: 1).
+            padding: Zero-padding added to input (default: 0).
 
         Raises:
-            Error if tensor creation fails
+            Error if tensor creation fails.
 
         Example:
             ```mojo
@@ -101,23 +101,23 @@ struct Conv2dLayer(Copyable, Movable):
         self.bias = zeros(bias_shape, DType.float32)
 
     fn forward(self, input: ExTensor) raises -> ExTensor:
-        """Forward pass: y = conv2d(x, weight, bias, stride, padding)
+        """Forward pass: y = conv2d(x, weight, bias, stride, padding).
 
-        Applies the learned convolutional filters to the input
+        Applies the learned convolutional filters to the input.
 
         Args:
-            input: Input tensor of shape (batch, in_channels, height, width)
+            input: Input tensor of shape (batch, in_channels, height, width).
 
         Returns:
-            Output tensor of shape (batch, out_channels, out_height, out_width)
+            Output tensor of shape (batch, out_channels, out_height, out_width).
 
         Raises:
-            Error if tensor operations fail
+            Error if tensor operations fail.
 
         Note:
             The output spatial dimensions are computed as:
-            - out_height = (height + 2*padding - kernel_h) // stride + 1
-            - out_width = (width + 2*padding - kernel_w) // stride + 1
+            - `out_height = (height + 2*padding - kernel_h) // stride + 1`
+            - `out_width = (width + 2*padding - kernel_w) // stride + 1`
 
         Example:
             ```mojo
@@ -133,20 +133,20 @@ struct Conv2dLayer(Copyable, Movable):
     ) raises -> Tuple[ExTensor, ExTensor, ExTensor]:
         """Backward pass: compute gradients w.r.t. input, weight, and bias.
 
-        Computes gradients needed for training via backpropagation
+        Computes gradients needed for training via backpropagation.
 
         Args:
-            grad_output: Gradient w.r.t. output, shape (batch, out_channels, out_H, out_W)
-            input: Input from forward pass, shape (batch, in_channels, in_H, in_W)
+            grad_output: Gradient w.r.t. output, shape (batch, out_channels, out_H, out_W).
+            input: Input from forward pass, shape (batch, in_channels, in_H, in_W).
 
         Returns:
             Tuple of (grad_input, grad_weight, grad_bias):
-            - grad_input: Gradient w.r.t. input, shape (batch, in_channels, in_H, in_W)
-            - grad_weight: Gradient w.r.t. weight, shape (out_channels, in_channels, kH, kW)
-            - grad_bias: Gradient w.r.t. bias, shape (out_channels,)
+            - grad_input: Gradient w.r.t. input, shape (batch, in_channels, in_H, in_W).
+            - grad_weight: Gradient w.r.t. weight, shape (out_channels, in_channels, kH, kW).
+            - grad_bias: Gradient w.r.t. bias, shape (out_channels,).
 
         Raises:
-            Error if tensor operations fail
+            Error if tensor operations fail.
 
         Example:
             ```mojo

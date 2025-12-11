@@ -34,9 +34,9 @@ struct Batch(Copyable, Movable):
         """Create a batch.
 
         Args:
-            data: Batch data tensor
-            labels: Batch labels tensor
-            indices: Original indices of samples in the batch
+            data: Batch data tensor.
+            labels: Batch labels tensor.
+            indices: Original indices of samples in the batch.
         """
         self.data = data^
         self.labels = labels^
@@ -52,10 +52,10 @@ struct Batch(Copyable, Movable):
 struct BaseLoader[D: Dataset & Copyable & Movable](Copyable, Movable):
     """Base data loader with core functionality.
 
-    Provides the foundation for all data loading operations
+    Provides the foundation for all data loading operations.
 
     Parameters:
-        D: Dataset type that conforms to the Dataset trait and is Copyable & Movable
+        D: Dataset type that conforms to the Dataset trait and is Copyable & Movable.
     """
 
     var dataset: Self.D
@@ -72,12 +72,12 @@ struct BaseLoader[D: Dataset & Copyable & Movable](Copyable, Movable):
         """Create base loader.
 
         Args:
-            dataset: Dataset to load from
-            batch_size: Number of samples per batch
-            drop_last: Whether to drop the last incomplete batch
+            dataset: Dataset to load from.
+            batch_size: Number of samples per batch.
+            drop_last: Whether to drop the last incomplete batch.
 
         Raises:
-            Error if batch_size is invalid
+            Error if batch_size is invalid.
         """
         if batch_size <= 0:
             raise Error(
@@ -110,11 +110,11 @@ struct BatchLoader[
 ](Copyable, Movable):
     """Data loader with batching and optional shuffling.
 
-    Loads data in batches, optionally shuffling the order of samples
+    Loads data in batches, optionally shuffling the order of samples.
 
     Parameters:
-        D: Dataset type that conforms to the Dataset trait and is Copyable & Movable
-        S: Sampler type that conforms to the Sampler trait and is Copyable & Movable
+        D: Dataset type that conforms to the Dataset trait and is Copyable & Movable.
+        S: Sampler type that conforms to the Sampler trait and is Copyable & Movable.
     """
 
     var dataset: Self.D
@@ -135,14 +135,14 @@ struct BatchLoader[
         """Create batch loader.
 
         Args:
-            dataset: Dataset to load from
-            sampler: Sampler to use for generating indices
-            batch_size: Number of samples per batch
-            shuffle: Whether to shuffle data (informational, sampler controls actual behavior)
-            drop_last: Whether to drop the last incomplete batch
+            dataset: Dataset to load from.
+            sampler: Sampler to use for generating indices.
+            batch_size: Number of samples per batch.
+            shuffle: Whether to shuffle data (informational, sampler controls actual behavior).
+            drop_last: Whether to drop the last incomplete batch.
 
         Raises:
-            Error if batch_size is invalid
+            Error if batch_size is invalid.
         """
         # Validate batch size
         if batch_size <= 0:
@@ -175,7 +175,7 @@ struct BatchLoader[
         """Iterate over batches.
 
         Returns:
-            List of batches for the epoch
+            List of batches for the epoch.
         """
         var batches = List[Batch](capacity=self.__len__())
         var indices = self.sampler.__iter__()
