@@ -41,7 +41,7 @@ Usage:
 """
 
 from shared.core.extensor import ExTensor
-from shared.core.tensor_factory import zeros
+from shared.testing.tensor_factory import zeros
 from random import seed as random_seed, random_float64
 
 
@@ -115,7 +115,7 @@ fn create_special_value_tensor(
     # Fill with special value
     var numel = 1
     for dim in shape:
-        numel *= dim[]
+        numel *= dim
 
     # Set all elements to the special value
     for i in range(numel):
@@ -156,7 +156,7 @@ fn create_alternating_pattern_tensor(
     # Calculate total number of elements
     var numel = 1
     for dim in shape:
-        numel *= dim[]
+        numel *= dim
 
     # Special values in alternating pattern (6 values for positive/negative coverage)
     var values = List[Float64]()
@@ -281,7 +281,7 @@ fn create_seeded_random_tensor(
     # Calculate total number of elements
     var numel = 1
     for dim in shape:
-        numel *= dim[]
+        numel *= dim
 
     # Fill with seeded random values
     var range_size = high - low
