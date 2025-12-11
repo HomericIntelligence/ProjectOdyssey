@@ -36,8 +36,11 @@ from shared.core import ExTensor, zeros, ones
 from time import perf_counter_ns
 from collections import List
 
-# TODO: Import optimized kernels when implemented
-# from shared.core.matmul import matmul_v1, matmul_v2, matmul_v3, matmul_v4
+from shared.core.matmul import (
+    matmul_typed as _matmul_typed_impl,
+    matmul_simd as _matmul_simd_impl,
+    matmul_tiled as _matmul_tiled_impl,
+)
 
 
 # ============================================================================
@@ -45,7 +48,7 @@ from collections import List
 # ============================================================================
 
 
-fn matmul_v0[
+fn matmul_naive[
     dtype: DType
 ](a: ExTensor, b: ExTensor, mut result: ExTensor) raises:
     """Stage 0: Baseline naive implementation (Float64 conversion).
@@ -68,52 +71,38 @@ fn matmul_v0[
             result._set_float64(i * b_cols + j, sum_val)
 
 
-fn matmul_v1[
+fn matmul_typed[
     dtype: DType
 ](a: ExTensor, b: ExTensor, mut result: ExTensor) raises:
     """Stage 1: Dtype-specific kernel (eliminates Float64 conversion).
 
-    TODO: Implement dtype-specific kernel using direct typed pointer access.
-    Expected speedup: 3-5x over v0
+    Uses real implementation from shared.core.matmul.
+    Expected speedup: 3-5x over naive
     """
-    # Placeholder: delegate to baseline for now
-    matmul_v0[dtype](a, b, result)
+    _matmul_typed_impl(a, b, result)
 
 
-fn matmul_v2[
+fn matmul_simd[
     dtype: DType
 ](a: ExTensor, b: ExTensor, mut result: ExTensor) raises:
     """Stage 2: SIMD vectorization (vectorize J-loop).
 
-    TODO: Implement SIMD-vectorized kernel using vectorize() on J-loop.
-    Expected speedup: 4-8x over v1 (15-40x cumulative)
+    Uses real implementation from shared.core.matmul.
+    Expected speedup: 4-8x over typed (15-40x cumulative)
     """
-    # Placeholder: delegate to baseline for now
-    matmul_v0[dtype](a, b, result)
+    _matmul_simd_impl(a, b, result)
 
 
-fn matmul_v3[
+fn matmul_tiled[
     dtype: DType
 ](a: ExTensor, b: ExTensor, mut result: ExTensor) raises:
-    """Stage 3: Cache-aware blocking/tiling (improve cache locality).
+    """Stage 3: Cache-aware blocking/tiling (production kernel).
 
-    TODO: Implement cache-blocked GEMM with 2D/3D tiling.
-    Expected speedup: 3-5x over v2 (50-150x cumulative)
+    Uses real implementation from shared.core.matmul.
+    This is the fastest kernel and is used by matmul() in production.
+    Expected speedup: 3-5x over simd (50-150x cumulative)
     """
-    # Placeholder: delegate to baseline for now
-    matmul_v0[dtype](a, b, result)
-
-
-fn matmul_v4[
-    dtype: DType
-](a: ExTensor, b: ExTensor, mut result: ExTensor) raises:
-    """Stage 4: Advanced optimizations (transpose + register blocking).
-
-    TODO: Implement fully optimized GEMM with B transpose and micro-tiling.
-    Expected speedup: 2-3x over v3 (100-400x cumulative)
-    """
-    # Placeholder: delegate to baseline for now
-    matmul_v0[dtype](a, b, result)
+    _matmul_tiled_impl(a, b, result)
 
 
 # ============================================================================
@@ -153,15 +142,13 @@ fn verify_stage[
 
     # Run the stage-specific kernel
     if stage_id == 0:
-        matmul_v0[dtype](a, b, result)
+        matmul_naive[dtype](a, b, result)
     elif stage_id == 1:
-        matmul_v1[dtype](a, b, result)
+        matmul_typed[dtype](a, b, result)
     elif stage_id == 2:
-        matmul_v2[dtype](a, b, result)
+        matmul_simd[dtype](a, b, result)
     elif stage_id == 3:
-        matmul_v3[dtype](a, b, result)
-    elif stage_id == 4:
-        matmul_v4[dtype](a, b, result)
+        matmul_tiled[dtype](a, b, result)
     else:
         raise Error("Invalid stage ID: " + String(stage_id))
 
@@ -212,14 +199,13 @@ fn verify_all_stages[dtype: DType](size: Int) raises:
 
     # Generate reference result using baseline (v0)
     var reference = ExTensor(shape, dtype)
-    matmul_v0[dtype](a, b, reference)
+    matmul_naive[dtype](a, b, reference)
 
     # Verify each stage
     verify_stage[dtype](0, "Stage 0 (baseline)", a, b, reference)
     verify_stage[dtype](1, "Stage 1 (dtype-specific)", a, b, reference)
     verify_stage[dtype](2, "Stage 2 (SIMD)", a, b, reference)
     verify_stage[dtype](3, "Stage 3 (cache-tiled)", a, b, reference)
-    verify_stage[dtype](4, "Stage 4 (advanced)", a, b, reference)
 
 
 # ============================================================================
@@ -252,15 +238,13 @@ fn bench_stage[
     # Warmup (3 iterations)
     for _ in range(3):
         if stage_id == 0:
-            matmul_v0[dtype](a, b, result)
+            matmul_naive[dtype](a, b, result)
         elif stage_id == 1:
-            matmul_v1[dtype](a, b, result)
+            matmul_typed[dtype](a, b, result)
         elif stage_id == 2:
-            matmul_v2[dtype](a, b, result)
+            matmul_simd[dtype](a, b, result)
         elif stage_id == 3:
-            matmul_v3[dtype](a, b, result)
-        elif stage_id == 4:
-            matmul_v4[dtype](a, b, result)
+            matmul_tiled[dtype](a, b, result)
 
     # Measure
     var total_ns: Int = 0
@@ -268,15 +252,13 @@ fn bench_stage[
         var start = perf_counter_ns()
 
         if stage_id == 0:
-            matmul_v0[dtype](a, b, result)
+            matmul_naive[dtype](a, b, result)
         elif stage_id == 1:
-            matmul_v1[dtype](a, b, result)
+            matmul_typed[dtype](a, b, result)
         elif stage_id == 2:
-            matmul_v2[dtype](a, b, result)
+            matmul_simd[dtype](a, b, result)
         elif stage_id == 3:
-            matmul_v3[dtype](a, b, result)
-        elif stage_id == 4:
-            matmul_v4[dtype](a, b, result)
+            matmul_tiled[dtype](a, b, result)
 
         var end = perf_counter_ns()
         total_ns += Int(end - start)
@@ -537,72 +519,78 @@ fn run_benchmarks[
     # Determine which stages to run
     var stages_to_run = List[Int]()
     if stage == -1:
-        # Run all stages
-        for s in range(5):
+        # Run all stages (0-3)
+        for s in range(4):
             stages_to_run.append(s)
     else:
         # Run specific stage
         stages_to_run.append(stage)
 
-    # Print header
+    # Print separate table for each matrix size
     print("\nBenchmark Results:")
     print("=" * 90)
 
-    var header = "| Stage |"
-    for size in sizes:
-        header += " " + String(size) + "x" + String(size) + " |"
-    header += " GFLOPS | Speedup |"
-    print(header)
+    # Store stage names
+    var stage_names = List[String]()
+    stage_names.append("naive")
+    stage_names.append("typed")
+    stage_names.append("simd")
+    stage_names.append("tiled")
 
-    var separator = "|-------|"
-    for _ in range(len(sizes)):
-        separator += "---------|"
-    separator += "--------|---------|"
-    print(separator)
+    # Benchmark each size separately
+    for size_idx in range(len(sizes)):
+        var size = sizes[size_idx]
 
-    # Benchmark each stage
-    var baseline_time: Float64 = 0.0
+        print("\n" + String(size) + "x" + String(size) + " Matrix:")
+        print("-" * 90)
+        print("| Stage       | Time      | GFLOPS | Incremental | Cumulative |")
+        print("|-------------|-----------|--------|-------------|------------|")
 
-    for s in stages_to_run:
-        var row = "| v" + String(s) + "    |"
+        var baseline_time: Float64 = 0.0
+        var prev_time: Float64 = 0.0
 
-        var times = List[Float64]()
-
-        # Benchmark each size
-        for size in sizes:
+        # Benchmark each stage for this size
+        for s in stages_to_run:
             var time_ms = bench_stage[dtype](s, size, iterations)
-            times.append(time_ms)
 
-            row += " " + format_time(time_ms) + " |"
-
-            # Track baseline for speedup calculation (use first size)
-            if s == 0 and baseline_time == 0.0:
-                baseline_time = time_ms
-
-        # Calculate GFLOPS (use largest size if 1024 is in list, else use last size)
-        var gflops_size = sizes[len(sizes) - 1]
-        var gflops_time = times[len(times) - 1]
-
-        for i in range(len(sizes)):
-            if sizes[i] == 1024:
-                gflops_size = 1024
-                gflops_time = times[i]
-
-        var gflops = calculate_gflops(gflops_size, gflops_time)
-
-        # Calculate speedup (based on first size for consistency)
-        var speedup: Float64
-        if s == 0 or baseline_time == 0.0:
-            speedup = 1.0
+            # Track baseline and previous stage for speedup
             if s == 0:
-                baseline_time = times[0]
-        else:
-            speedup = baseline_time / times[0]
+                baseline_time = time_ms
+                prev_time = time_ms
 
-        row += " " + format_gflops(gflops) + " | " + format_speedup(speedup) + " |"
-        print(row)
+            # Calculate GFLOPS for this size
+            var gflops = calculate_gflops(size, time_ms)
 
-    print("=" * 90)
+            # Calculate incremental speedup (vs previous stage)
+            var incr_speedup: Float64
+            if s == 0:
+                incr_speedup = 1.0
+            else:
+                incr_speedup = prev_time / time_ms
+
+            # Calculate cumulative speedup (vs baseline)
+            var cum_speedup: Float64
+            if s == 0:
+                cum_speedup = 1.0
+            else:
+                cum_speedup = baseline_time / time_ms
+
+            # Format stage name (padded to 11 chars)
+            var stage_name = stage_names[s]
+            var padding = 11 - len(stage_name)
+            for _ in range(padding):
+                stage_name += " "
+
+            var row = "| " + stage_name + " | " + format_time(time_ms)
+            row += " | " + format_gflops(gflops)
+            row += " | " + format_speedup(incr_speedup) + "     "
+            row += " | " + format_speedup(cum_speedup) + "    |"
+            print(row)
+
+            # Update prev_time for next iteration
+            prev_time = time_ms
+
+    print("\n" + "=" * 90)
     print("")
 
 
@@ -682,16 +670,19 @@ fn main() raises:
         run_benchmarks[DType.float16](stage, sizes, iterations)
 
     print("Summary:")
-    print("  - Stage 0 (baseline): Naive implementation with Float64 conversion")
-    print("  - Stage 1 (dtype-specific): Eliminates type conversion (TODO)")
-    print("  - Stage 2 (SIMD): Vectorizes inner loop (TODO)")
-    print("  - Stage 3 (cache-tiled): Cache-aware blocking (TODO)")
-    print("  - Stage 4 (advanced): Transpose + register blocking (TODO)")
+    print("  - naive: Baseline implementation with Float64 conversion")
+    print("  - typed: Dtype-specific kernels (eliminates type conversion)")
+    print("  - simd: SIMD vectorization of inner loop")
+    print("  - tiled: Cache-aware blocking/tiling (production kernel)")
     print("")
-    print("Expected speedups:")
-    print("  - v1: 3-5x over v0")
-    print("  - v2: 15-40x over v0 (cumulative)")
-    print("  - v3: 50-150x over v0 (cumulative)")
-    print("  - v4: 100-400x over v0 (cumulative)")
+    print("Expected incremental speedups (each stage vs previous):")
+    print("  - typed: 1.5-2x over naive")
+    print("  - simd: 5-10x over typed")
+    print("  - tiled: 3-5x over simd")
+    print("")
+    print("Expected cumulative speedups (vs naive):")
+    print("  - typed: 1.5-2x")
+    print("  - simd: 10-20x")
+    print("  - tiled: 30-100x")
     print("")
     print("=" * 90)
