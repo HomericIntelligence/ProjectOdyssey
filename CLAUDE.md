@@ -7,7 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ML Odyssey is a Mojo-based AI research platform for reproducing classic research papers. The project uses a
 comprehensive 4-level hierarchical planning structure with automated GitHub issue creation.
 
-**Current Status**: Planning phase - repository structure and GitHub issues are being established before implementation begins.
+**Current Status**: Planning phase - repository structure and GitHub issues are being
+established before implementation begins.
 
 ## ⚠️ CRITICAL RULES - READ FIRST
 
@@ -118,7 +119,6 @@ Use the `skill-name` skill to [action]:
 - **Invoke when**: [trigger condition]
 - **The skill handles**: [specific automation]
 ```text
-
 **Pattern 2: Conditional Delegation** - Agent decides based on conditions
 
 ```markdown
@@ -127,7 +127,6 @@ If [condition]:
 Otherwise:
   - [alternative approach]
 ```text
-
 **Pattern 3: Multi-Skill Workflow** - Agent orchestrates multiple skills
 
 ```markdown
@@ -136,7 +135,6 @@ To accomplish [goal]:
 2. Use the `skill-2` skill to [step 2]
 3. Review results and [decision]
 ```text
-
 **Pattern 4: Skill Selection** - Orchestrator chooses skill based on analysis
 
 ```markdown
@@ -144,26 +142,34 @@ Analyze [context]:
 - If [scenario A]: Use `skill-A`
 - If [scenario B]: Use `skill-B`
 ```text
-
 **Pattern 5: Background vs Foreground** - Distinguishing automatic vs explicit invocation
 
 ```markdown
 Background automation: `ci-run-precommit` (runs automatically)
 Foreground tasks: `gh-create-pr-linked` (invoke explicitly)
 ```text
-
 **Available Skills** (82 total across 11 categories):
 
-- **GitHub**: gh-review-pr, gh-fix-pr-feedback, gh-create-pr-linked, gh-check-ci-status, gh-implement-issue, gh-reply-review-comment, gh-get-review-comments, gh-batch-merge-by-labels, verify-pr-ready
+- **GitHub**: gh-review-pr, gh-fix-pr-feedback, gh-create-pr-linked, gh-check-ci-status,
+  gh-implement-issue, gh-reply-review-comment, gh-get-review-comments, gh-batch-merge-by-labels,
+  verify-pr-ready
 - **Worktree**: worktree-create, worktree-cleanup, worktree-switch, worktree-sync
-- **Phase Workflow**: phase-plan-generate, phase-test-tdd, phase-implement, phase-package, phase-cleanup
-- **Mojo**: mojo-format, mojo-test-runner, mojo-build-package, mojo-simd-optimize, mojo-memory-check, mojo-type-safety, mojo-lint-syntax, validate-mojo-patterns, check-memory-safety, analyze-simd-usage
-- **Agent System**: agent-validate-config, agent-test-delegation, agent-run-orchestrator, agent-coverage-check, agent-hierarchy-diagram
-- **Documentation**: doc-generate-adr, doc-issue-readme, doc-validate-markdown, doc-update-blog
-- **CI/CD**: ci-run-precommit, ci-validate-workflow, ci-fix-failures, ci-package-workflow, ci-analyze-failure-logs, build-run-local
+- **Phase Workflow**: phase-plan-generate, phase-test-tdd, phase-implement, phase-package,
+  phase-cleanup
+- **Mojo**: mojo-format, mojo-test-runner, mojo-build-package, mojo-simd-optimize,
+  mojo-memory-check, mojo-type-safety, mojo-lint-syntax, validate-mojo-patterns,
+  check-memory-safety, analyze-simd-usage
+- **Agent System**: agent-validate-config, agent-test-delegation, agent-run-orchestrator,
+  agent-coverage-check, agent-hierarchy-diagram
+- **Documentation**: doc-generate-adr, doc-issue-readme, doc-validate-markdown,
+  doc-update-blog
+- **CI/CD**: ci-run-precommit, ci-validate-workflow, ci-fix-failures, ci-package-workflow,
+  ci-analyze-failure-logs, build-run-local
 - **Plan**: plan-regenerate-issues, plan-validate-structure, plan-create-component
-- **Quality**: quality-run-linters, quality-fix-formatting, quality-security-scan, quality-coverage-report, quality-complexity-check
-- **Testing & Analysis**: test-diff-analyzer, extract-test-failures, generate-fix-suggestions, track-implementation-progress
+- **Quality**: quality-run-linters, quality-fix-formatting, quality-security-scan,
+  quality-coverage-report, quality-complexity-check
+- **Testing & Analysis**: test-diff-analyzer, extract-test-failures, generate-fix-suggestions,
+  track-implementation-progress
 - **Review**: review-pr-changes, create-review-checklist
 
 See `.claude/skills/` for complete implementations. Skills use YAML frontmatter with `mcp_fallback` for MCP integration.
@@ -185,10 +191,11 @@ See `.claude/skills/` for complete implementations. Skills use YAML frontmatter 
 
 Relevant links:
 
-- [Core Principles of Software Development](https://softjourn.com/insights/core-principles-of-software-development)
-- [7 Common Programming Principles](https://www.geeksforgeeks.org/blogs/7-common-programming-principles-that-every-developer-must-follow/)
-- [Software Development Principles](https://coderower.com/blogs/software-development-principles-software-engineering)
-- [Clean Coding Principles](https://www.pullchecklist.com/posts/clean-coding-principles)
+- [Core Principles of Software Development](<https://softjourn.com/insights/core-principles-of-software-development>)
+- [7 Common Programming Principles](<https://www.geeksforgeeks.org/blogs/>
+  7-common-programming-principles-that-every-developer-must-follow/)
+- [Software Development Principles](<https://coderower.com/blogs/software-development-principles-software-engineering>)
+- [Clean Coding Principles](<https://www.pullchecklist.com/posts/clean-coding-principles>)
 
 ### Documentation Rules
 
@@ -241,19 +248,22 @@ Relevant links:
 - Regex support not production-ready (mojo-regex is alpha stage)
 - Python is the right tool for automation - not a temporary workaround
 
-**See**: [ADR-001: Language Selection for Tooling](docs/adr/ADR-001-language-selection-tooling.md) for complete language selection strategy, technical evidence (test results), and justification requirements
+**See**: [ADR-001: Language Selection for Tooling](docs/adr/ADR-001-language-selection-tooling.md)
+for complete language selection strategy, technical evidence (test results), and justification
+requirements
 
 See `/agents/README.md` for complete agent documentation and `/agents/hierarchy.md` for visual hierarchy.
 
 ## Claude 4 & Claude Code Optimization
 
-This section provides guidance on optimizing interactions with Claude 4 (Sonnet and Opus) and Claude Code features
-including extended thinking, agent skills, sub-agents, hooks, and output styles.
+This section provides guidance on optimizing interactions with Claude 4 (Sonnet and Opus) and
+Claude Code features including extended thinking, agent skills, sub-agents, hooks, and output
+styles.
 
 ### Extended Thinking
 
-**When to Use Extended Thinking**: Claude 4 models support extended thinking for complex reasoning tasks. Use extended
-thinking when:
+**When to Use Extended Thinking**: Claude 4 models support extended thinking for complex
+reasoning tasks. Use extended thinking when:
 
 - Analyzing complex codebases or architectural decisions
 - Debugging multi-layered issues with unclear root causes
@@ -279,8 +289,7 @@ Extended thinking helps here because:
 - Mojo-specific ownership and lifetime considerations
 - Performance implications (inlining, SIMD optimization)
 - API ergonomics and consistency with stdlib
-```
-
+```text
 **Example - Skip Extended Thinking for Boilerplate**:
 
 ```markdown
@@ -290,19 +299,18 @@ Skip extended thinking because:
 - Clear pattern already established
 - Straightforward copy-paste-modify workflow
 - No architectural decisions needed
-```
-
+```text
 ### Thinking Budget Guidelines
 
 Extended thinking consumes tokens. Use appropriate budgets based on task complexity:
 
-| Task Type | Recommended Budget | Examples | Rationale |
-|-----------|-------------------|----------|-----------|
-| **Simple edits** | No extended thinking | Fix typo, update docstring, format code | Clear, mechanical changes |
-| **Standard features** | 5K-10K tokens | Add test, implement function per spec | Well-defined with examples |
-| **Complex refactoring** | 10K-20K tokens | Restructure module, migrate API patterns | Multiple interdependencies |
-| **Architectural decisions** | 20K-50K tokens | Choose design pattern, evaluate tradeoffs | Requires deep analysis |
-| **System-wide analysis** | 50K+ tokens | Diagnose CI failures across multiple files | Complex root cause analysis |
+| Task Type | Budget | Examples | Rationale |
+|-----------|--------|----------|-----------|
+| **Simple** | None | Fix typo | Mechanical changes |
+| **Standard** | 5K-10K | Add test, function | Well-defined |
+| **Complex** | 10K-20K | Restructure, migrate | Dependencies |
+| **Architecture** | 20K-50K | Design pattern | Deep analysis |
+| **System-wide** | 50K+ | CI failures | Root cause |
 
 **Budget Conservation Tips**:
 
@@ -328,8 +336,7 @@ Is the task well-defined with predictable steps?
     ├─ Does it need adaptive decision-making? → Use sub-agent
     ├─ Is the workflow dynamic/context-dependent? → Use sub-agent
     └─ Does it need extended thinking? → Use sub-agent
-```
-
+```text
 **Agent Skills** - Use for automation with predictable workflows:
 
 - **Characteristics**: Declarative YAML, fixed steps, composable, fast
@@ -345,7 +352,7 @@ Is the task well-defined with predictable steps?
 **Example - When to Use a Skill**:
 
 ```markdown
-Task: Create a PR linked to issue #2549, run pre-commit hooks, and enable auto-merge
+Task: Create PR linked to issue #2549, run pre-commit hooks, enable auto-merge
 
 ✅ Use Agent Skills:
 1. Use `gh-create-pr-linked` skill (predictable GitHub API workflow)
@@ -353,12 +360,11 @@ Task: Create a PR linked to issue #2549, run pre-commit hooks, and enable auto-m
 3. Use `gh-check-ci-status` skill (polling with clear success/failure states)
 
 Why skills work: Every step is well-defined, no exploration needed
-```
-
+```text
 **Example - When to Use a Sub-Agent**:
 
 ```markdown
-Task: Review PR #2549 and suggest improvements to the new Claude 4 documentation section
+Task: Review PR #2549 and suggest improvements to new Claude 4 documentation
 
 ✅ Use Sub-Agent (Review Engineer):
 - Needs to read and understand the new documentation
@@ -366,21 +372,19 @@ Task: Review PR #2549 and suggest improvements to the new Claude 4 documentation
 - Evaluate clarity, completeness, and accuracy
 - Provide actionable feedback with examples
 
-Why sub-agent needed: Requires comprehension, judgment, and adaptive reasoning
-```
-
+Why sub-agent needed: Requires comprehension, judgment, adaptive reasoning
+```text
 **Hybrid Approach** - Sub-agents can delegate to skills:
 
 ```markdown
 Sub-Agent: Documentation Engineer implementing issue #2549
 
 Workflow:
-1. [Sub-agent] Read Claude 4 docs, analyze requirements, draft new section
+1. [Sub-agent] Read Claude 4 docs, analyze requirements, draft section
 2. [Sub-agent] Use `doc-validate-markdown` skill to check formatting
 3. [Sub-agent] Use `gh-create-pr-linked` skill to create PR
 4. [Sub-agent] Use `ci-check-status` skill to verify CI passes
-```
-
+```text
 ### Hooks Best Practices
 
 Hooks enable proactive automation and safety checks. Use hooks for guardrails and background tasks.
@@ -405,8 +409,7 @@ Hooks enable proactive automation and safety checks. Use hooks for guardrails an
   condition: "!body.includes('Closes #')"
   action: "block"
   message: "PR must reference an issue: add 'Closes #<number>' to description."
-```
-
+```text
 **Automation Hooks** - Background tasks that run automatically:
 
 ```yaml
@@ -426,25 +429,24 @@ Hooks enable proactive automation and safety checks. Use hooks for guardrails an
   condition: "changed_files.includes('shared/core/')"
   action: "add_reviewers"
   reviewers: ["core-team"]
-```
-
+```text
 **Hook Design Principles**:
 
 1. **Fail fast** - Catch errors early in the development cycle
 2. **Clear messages** - Explain WHY the hook triggered and HOW to fix
-3. **Strict enforcement** - NEVER use `--no-verify`. Fix hook failures instead of bypassing them.
+3. **Strict enforcement** - NEVER use `--no-verify`. Fix hook failures instead of bypassing.
 4. **Idempotent** - Hooks should be safe to run multiple times
 
 **Common Hooks for ML Odyssey**:
 
 | Hook Type | Trigger | Purpose | Implementation |
 |-----------|---------|---------|----------------|
-| **Safety** | `on_mojo_compile` | Enforce zero-warnings | Fail if warnings detected |
-| **Safety** | `on_pr_create` | Require issue link | Block if no "Closes #" found |
-| **Safety** | `on_git_push` | Block direct main pushes | Fail if branch == main && !is_pr |
-| **Automation** | `on_file_save` | Auto-format Mojo | Run `mojo format` on .mojo files |
-| **Automation** | `on_git_commit` | Run pre-commit | Execute pre-commit hooks |
-| **Automation** | `on_pr_merge` | Cleanup worktree | Remove merged branch worktree |
+| **Safety** | compile | Zero-warnings | Fail on warnings |
+| **Safety** | pr_create | Issue link | Block if missing |
+| **Safety** | git_push | Block main | Fail if direct |
+| **Automation** | file_save | Auto-format | Run mojo format |
+| **Automation** | git_commit | Pre-commit | Execute hooks |
+| **Automation** | pr_merge | Cleanup | Remove worktree |
 
 See `.claude/shared/error-handling.md` for retry strategies and timeout handling in hooks.
 
@@ -464,8 +466,7 @@ Consistent output styles improve clarity and actionability. Follow these guideli
 ❌ BAD: Updated CLAUDE.md (ambiguous - which CLAUDE.md?)
 
 ❌ BAD: Fixed the tensor file (too vague)
-```
-
+```text
 **DO**: Include relevant code snippets with context:
 
 ```markdown
@@ -481,9 +482,8 @@ fn __init__(out self, shape: List[Int], dtype: DType):
         numel *= dim
     self._data = DTypePointer[dtype].alloc(numel)
 
-❌ BAD: Changed the constructor (no code shown)
-```
-
+❌ BAD: Changed the constructor
+```text
 #### Issue and PR Formatting
 
 **DO**: Use structured markdown with clear sections:
@@ -510,9 +510,8 @@ Added comprehensive Claude 4 optimization guidance to CLAUDE.md
 - [x] Cross-references point to existing sections
 - [x] Integrated seamlessly with existing content
 
-❌ BAD: Added some docs about Claude 4 stuff
-```
-
+❌ BAD: Added some docs
+```text
 **DO**: Link to related issues and PRs explicitly:
 
 ```markdown
@@ -523,8 +522,7 @@ Related Issues:
 - Depends on #2544 (Agent hierarchy)
 
 ❌ BAD: Fixes the issue about Claude docs
-```
-
+```text
 #### Code Review Output
 
 **DO**: Provide specific, actionable feedback with examples:
@@ -536,7 +534,7 @@ Related Issues:
 
 **Location**: `/home/user/ml-odyssey/shared/core/extensor.mojo:120-145`
 
-**Problem**: Methods use both `mut self` and `self` inconsistently for read-only operations
+**Problem**: Methods use both `mut self` and `self` inconsistently
 
 **Recommendation**: Use implicit `read` (just `self`) for read-only methods:
 
@@ -544,15 +542,14 @@ Related Issues:
 fn shape(mut self) -> List[Int]:  # ❌ mut not needed
     return self._shape
 
-# Should be (consistent with read-only convention)
+# Should be
 fn shape(self) -> List[Int]:  # ✅ Implicit read
     return self._shape
 
 **Impact**: Misleading API - suggests mutation when none occurs
 
-❌ BAD: The shape method is wrong, fix it
-```
-
+❌ BAD: The shape method is wrong
+```text
 **DO**: Prioritize feedback by severity:
 
 ```markdown
@@ -571,43 +568,28 @@ fn shape(self) -> List[Int]:  # ✅ Implicit read
 2. Consider caching numel() computation
 
 ❌ BAD: Here's 20 random issues in no particular order
-```
-
+```text
 #### Terminal Output
 
 **DO**: Use structured formatting for command output:
 
 ```bash
-✅ GOOD:
-
 $ mojo test tests/shared/core/test_tensor.mojo
 Testing: /home/user/ml-odyssey/tests/shared/core/test_tensor.mojo
   test_tensor_creation ... PASSED
   test_tensor_indexing ... PASSED
   test_tensor_reshape ... PASSED
 All tests passed (3/3)
-
-❌ BAD: Ran tests, they passed
-```
-
+```text
 **DO**: Include error context when reporting failures:
 
-```markdown
-✅ GOOD:
-
-Build failed with error:
-
+```bash
 $ mojo build shared/core/extensor.mojo
-error: ExTensor.mojo:145:16: cannot transfer ownership of non-copyable type
+error: ExTensor.mojo:145:16: cannot transfer ownership of
+  non-copyable type
     return self._data
            ^
-
-Context: Method signature declares return type as DTypePointer but tries to copy
-Fix: Add transfer operator: return self._data^
-
-❌ BAD: Build failed
-```
-
+```text
 ### Tool Use Optimization
 
 Efficient tool use reduces latency and token consumption. Follow these patterns:
@@ -629,8 +611,7 @@ read_file_1 = Read("/path/to/file1.mojo")
 read_file_2 = Read("/path/to/file2.mojo")
 # Wait for result...
 read_file_3 = Read("/path/to/file3.mojo")
-```
-
+```text
 **DO**: Group related grep searches:
 
 ```python
@@ -644,20 +625,18 @@ grep_tests = Grep(pattern="test_.*", glob="test_*.mojo")
 grep_functions = Grep(pattern="fn .*", glob="*.mojo")
 # Process results, then...
 grep_structs = Grep(pattern="struct .*", glob="*.mojo")
-```
-
+```text
 #### Bash Command Patterns
 
 **DO**: Use absolute paths in bash commands (cwd resets between calls):
 
 ```bash
 # ✅ GOOD - Absolute paths
-cd /home/user/ml-odyssey && mojo test tests/shared/core/test_tensor.mojo
+cd /home/user/ml-odyssey && pixi run mojo test tests/shared/core/test_tensor.mojo
 
 # ❌ BAD - Relative paths (cwd not guaranteed)
-cd ml-odyssey && mojo test tests/shared/core/test_tensor.mojo
-```
-
+cd ml-odyssey && pixi run mojo test tests/shared/core/test_tensor.mojo
+```text
 **DO**: Combine related commands with && for atomicity:
 
 ```bash
@@ -671,33 +650,31 @@ cd /home/user/ml-odyssey && \
 cd /home/user/ml-odyssey
 git checkout -b 2549-claude-md  # Might run in different directory!
 git add CLAUDE.md
-```
-
+```text
 **DO**: Capture output explicitly when needed:
 
 ```bash
 # ✅ GOOD - Capture and parse output
 cd /home/user/ml-odyssey && \
-  mojo test tests/ 2>&1 | tee test_output.log && \
+  pixi run mojo test tests/ 2>&1 | tee test_output.log && \
   grep -c PASSED test_output.log
 
 # ❌ BAD - Output lost between calls
-cd /home/user/ml-odyssey && mojo test tests/
+cd /home/user/ml-odyssey && pixi run mojo test tests/
 # Output is gone, can't analyze it
-```
-
+```text
 #### Tool Selection
 
 Use the right tool for the job:
 
 | Task | Tool | Rationale |
 |------|------|-----------|
-| **Read single file** | `Read` | Fastest, includes line numbers |
-| **Search for pattern** | `Grep` | Optimized regex search across files |
-| **Find files by name** | `Glob` | Fast file discovery |
-| **Run commands** | `Bash` | Execute arbitrary shell commands |
-| **Edit specific lines** | `Edit` | Precise string replacement |
-| **Write new file** | `Write` | Create or overwrite entire file |
+| Read file | Read | Fast, includes lines |
+| Search pattern | Grep | Optimized regex |
+| Find files | Glob | Fast discovery |
+| Run commands | Bash | Execute shell |
+| Edit lines | Edit | Precise replace |
+| Write file | Write | Create/overwrite |
 
 **DO**: Use the most specific tool:
 
@@ -710,8 +687,7 @@ for file in files:
 # ❌ BAD - Use Bash for file discovery
 result = Bash("find . -name 'test_*.mojo'")
 # Now have to parse shell output
-```
-
+```text
 ### Agentic Loop Patterns
 
 Claude Code supports iterative exploration through agentic loops. Use this pattern for complex tasks:
@@ -729,8 +705,7 @@ Exploration Tasks:
 
 Tools: Read, Grep, Glob, Bash (git log)
 Output: Problem understanding, constraints, existing patterns
-```
-
+```text
 **Phase 2: Planning** - Design the solution:
 
 ```markdown
@@ -742,8 +717,7 @@ Planning Tasks:
 
 Tools: Extended thinking, structured reasoning
 Output: Implementation plan, task breakdown, success criteria
-```
-
+```text
 **Phase 3: Execution** - Implement the solution:
 
 ```markdown
@@ -755,8 +729,7 @@ Execution Tasks:
 
 Tools: Edit, Write, Bash, agent skills
 Output: Working implementation, passing tests, merged PR
-```
-
+```text
 **Example - Agentic Loop for Issue #2549**:
 
 ```markdown
@@ -789,8 +762,7 @@ Iteration 4: Verification & Refinement
 - Confirm integration with existing content
 - Enable auto-merge if CI passes
 Output: PR ready for merge, issue resolved
-```
-
+```text
 **Key Principles**:
 
 1. **Iterate, don't perfect upfront** - Start with exploration, refine through execution
@@ -823,11 +795,13 @@ Output: PR ready for merge, issue resolved
 
 ### Further Reading
 
-- [Claude 4 Best Practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-4-best-practices)
-- [Agent Skills Best Practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
-- [Sub-Agents Guide](https://code.claude.com/docs/en/sub-agents)
-- [Output Styles](https://code.claude.com/docs/en/output-styles)
-- [Hooks Guide](https://code.claude.com/docs/en/hooks-guide)
+- [Claude 4 Best Practices](<https://platform.claude.com/docs/en/build-with-claude/>
+  prompt-engineering/claude-4-best-practices)
+- [Agent Skills Best Practices](<https://platform.claude.com/docs/en/agents-and-tools/>
+  agent-skills/best-practices)
+- [Sub-Agents Guide](<https://code.claude.com/docs/en/sub-agents>)
+- [Output Styles](<https://code.claude.com/docs/en/output-styles>)
+- [Hooks Guide](<https://code.claude.com/docs/en/hooks-guide>)
 
 ## Delegation to Agent Hub
 
@@ -849,7 +823,8 @@ All agents and skills reference these shared files to avoid duplication:
 
 ### MCP Integration
 
-**DEPRECATED**: GitHub MCP integration is being removed. Use `gh` CLI directly for all GitHub operations to avoid token overhead.
+**DEPRECATED**: GitHub MCP integration is being removed. Use `gh` CLI directly for all
+GitHub operations to avoid token overhead.
 
 Skills with `mcp_fallback` in YAML frontmatter will be updated to use direct CLI calls only.
 
@@ -873,17 +848,14 @@ Skills with `mcp_fallback` in YAML frontmatter will be updated to use direct CLI
 This project uses Pixi for environment management:
 
 ```bash
-
 # Pixi is already configured - dependencies are in pixi.toml
 # Mojo is the primary language target for future implementations
-
 ```text
-
 ## Common Commands
 
 ### Justfile Build System
 
-The project uses [Just](https://just.systems/) as a unified command runner for local development and CI/CD consistency.
+The project uses [Just](<https://just.systems/>) as a unified command runner for local development and CI/CD consistency.
 
 #### Quick Reference
 
@@ -918,8 +890,7 @@ just infer lenet5 ./weights  # Run inference
 just docker-up             # Start development environment
 just docker-down           # Stop environment
 just docker-shell          # Open shell in container
-```
-
+```text
 ### Why Use Justfile?
 
 1. **Consistency**: Same commands work locally and in CI
@@ -939,8 +910,7 @@ GitHub Actions workflows use justfile recipes to ensure consistency:
 # Example from build-validation.yml
 - name: Build package
   run: just ci-build
-```
-
+```text
 This ensures developers can run `just ci-validate` locally to reproduce CI results exactly.
 
 **See**: `justfile` for complete recipe list and implementation details.
@@ -985,7 +955,6 @@ for script in tests/agents/test_*.py tests/agents/validate_*.py; do
     python3 "$script" .claude/agents/
 done
 ```text
-
 ### Test Coverage
 
 - Configuration validation (YAML frontmatter, required fields, tool specifications)
@@ -994,34 +963,29 @@ done
 - Workflow integration (5-phase coverage, parallel execution)
 - Mojo patterns (fn vs def, struct vs class, SIMD, memory management)
 
-**CI Integration**: The `.github/workflows/test-agents.yml` workflow runs these tests automatically on all PRs
-affecting agent configurations.
+**CI Integration**: The `.github/workflows/test-agents.yml` workflow runs these tests
+automatically on all PRs affecting agent configurations.
 
 ### Pre-commit Hooks
 
-Pre-commit hooks automatically check code quality before commits. The hooks include `mojo format` for Mojo code and
-markdown linting for documentation.
+Pre-commit hooks automatically check code quality before commits. The hooks include `mojo format`
+for Mojo code and markdown linting for documentation.
 
 ```bash
-
 # Install pre-commit hooks (one-time setup)
-
 pre-commit install
 
 # Run hooks manually on all files
-
 pre-commit run --all-files
 
 # Run hooks manually on staged files only
-
 pre-commit run
 
 # NEVER skip hooks with --no-verify
 # If a hook fails, fix the code instead
 # If a specific hook is broken, use SKIP=hook-id:
-SKIP=trailing-whitespace git commit -m "message"  # Document why in commit message
+SKIP=trailing-whitespace git commit -m "message"
 ```text
-
 ### Pre-Commit Hook Policy - STRICT ENFORCEMENT
 
 `--no-verify` is **ABSOLUTELY PROHIBITED**. No exceptions.
@@ -1048,14 +1012,15 @@ SKIP=trailing-whitespace git commit -m "message"  # Document why in commit messa
 ### Configured Hooks
 
 - `mojo format` - Auto-format Mojo code (`.mojo`, `.🔥` files)
-- `markdownlint-cli2` - Lint markdown files (currently disabled, will enable after fixing existing files)
+- `markdownlint-cli2` - Lint markdown files
 - `trailing-whitespace` - Remove trailing whitespace
 - `end-of-file-fixer` - Ensure files end with newline
 - `check-yaml` - Validate YAML syntax
-- `check-added-large-files` - Prevent large files from being committed (max 1MB)
+- `check-added-large-files` - Prevent large files (max 1MB)
 - `mixed-line-ending` - Fix mixed line endings
 
-**CI Enforcement**: The `.github/workflows/pre-commit.yml` workflow runs these checks on all PRs and pushes to `main`.
+**CI Enforcement**: The `.github/workflows/pre-commit.yml` workflow runs these checks on
+all PRs and pushes to `main`.
 
 **See:** [Git Commit Policy](.claude/shared/git-commit-policy.md) for complete enforcement rules.
 
@@ -1068,11 +1033,11 @@ ml-odyssey/
 ├── agents/                      # Team documentation
 │   ├── README.md                # Quick start guide
 │   ├── hierarchy.md             # Visual hierarchy diagram
-│   ├── agent-hierarchy.md       # Complete agent specifications
+│   ├── agent-hierarchy.md       # Agent specifications
 │   ├── delegation-rules.md      # Coordination patterns
 │   └── templates/               # Agent configuration templates
 ├── notes/
-│   └── review/                  # Comprehensive specs & architectural decisions
+│   └── review/                  # Comprehensive specs & decisions
 │       ├── agent-architecture-review.md
 │       ├── skills-design.md
 │       └── orchestration-patterns.md
@@ -1080,7 +1045,6 @@ ml-odyssey/
 ├── logs/                        # Execution logs and state files
 └── .clinerules                 # Claude Code conventions
 ```text
-
 ### Planning Hierarchy
 
 **4 Levels** (managed through GitHub issues):
@@ -1139,8 +1103,7 @@ gh issue view <number> --comments
 
 # Get structured data
 gh issue view <number> --json title,body,comments,labels,state
-```
-
+```text
 **Writing to Issues**:
 
 ```bash
@@ -1158,8 +1121,7 @@ gh issue comment <number> --body "$(cat <<'EOF'
 - [x] Tests pass
 EOF
 )"
-```
-
+```text
 ### Important Rules
 
 - ✅ DO: Post issue-specific findings and decisions as comments
@@ -1194,6 +1156,118 @@ Every component follows a hierarchical workflow with clear dependencies:
 - Cleanup collects issues discovered during the parallel phases
 - Each phase has a separate GitHub issue with detailed instructions
 
+## Testing Strategy
+
+ML Odyssey uses a comprehensive two-tier testing strategy designed for fast PR validation
+and thorough weekly integration testing.
+
+### Two-Tier Testing Architecture
+
+**Tier 1: Layerwise Unit Tests** (Run on every PR)
+
+- Fast, deterministic tests using FP-representable special values (0.0, 0.5, 1.0, 1.5, -1.0, -0.5)
+- Tests each layer independently (forward AND backward passes)
+- Validates analytical gradients against numerical gradients
+- Small tensor sizes to prevent timeouts
+- Runtime: ~12 minutes across all 7 models
+- Location: `tests/models/test_<model>_layers.mojo`
+
+**Tier 2: End-to-End Integration Tests** (Run weekly only)
+
+- Full model validation with real datasets (EMNIST, CIFAR-10)
+- Tests complete forward-backward pipeline
+- Validates training convergence (5 epochs, ≥20% loss decrease)
+- Runtime: ~20 minutes per model
+- Schedule: Weekly on Sundays at 3 AM UTC
+- Location: `tests/models/test_<model>_e2e.mojo`
+
+### Test Coverage by Model
+
+All 7 models have comprehensive test coverage:
+
+| Model | Layers | Layerwise Tests | E2E Tests | Runtime (Layerwise) |
+|-------|--------|-----------------|-----------|---------------------|
+| LeNet-5 | 12 ops | 25 tests | 7 tests | ~45-55s |
+| AlexNet | 15 ops | 42 tests | 9 tests | <60s |
+| VGG-16 | 25 ops (13 conv) | 16 tests* | 10 tests | ~90s |
+| ResNet-18 | Residual blocks | 12 tests | 9 tests | ~90s |
+| MobileNetV1 | Depthwise sep. | 26 tests | 15 tests | ~90s |
+| DenseNet-121 | 58 conv | 14 tests** | 13 tests | ~108s |
+| GoogLeNet | Inception modules | 18 tests | 15 tests | ~90s |
+
+\* Heavy deduplication (13 conv → 5 unique tests)
+\*\* Extreme deduplication (58 conv → 14 unique tests, 88% reduction)
+
+### Special FP-Representable Values
+
+Layerwise tests use special values that are exactly representable across all dtypes:
+
+- `0.0`, `0.5`, `1.0`, `1.5` - Positive values for forward pass testing
+- `-1.0`, `-0.5` - Negative values for ReLU gradient testing
+- Seeded random tensors - For gradient checking reproducibility
+
+These values work identically in FP4, FP8, BF8, FP16, FP32, BFloat16, Int8, ensuring
+consistent behavior across precision levels.
+
+### Gradient Checking
+
+All parametric layers (Conv, Linear, BatchNorm) validate backward passes:
+
+- Compares analytical gradients to numerical gradients (finite differences)
+- Uses seeded random tensors for reproducibility (seed=42)
+- Epsilon=1e-5, tolerance=1e-2 for float32
+- Small tensor sizes (8×8 for conv) to prevent timeout
+
+### Test Organization
+
+```text
+tests/
+├── models/
+│   ├── test_lenet5_layers.mojo      # Layerwise unit tests
+│   ├── test_lenet5_e2e.mojo         # E2E integration tests
+│   ├── test_alexnet_layers.mojo
+│   ├── test_alexnet_e2e.mojo
+│   └── ... (7 models total)
+├── shared/
+│   └── testing/
+│       ├── special_values.mojo      # FP-representable test values
+│       ├── layer_testers.mojo       # Reusable layer testing patterns
+│       ├── dtype_utils.mojo         # DType iteration utilities
+│       └── gradient_checker.mojo    # Numerical gradient validation
+```text
+### CI/CD Workflows
+
+**PR CI** (`.github/workflows/comprehensive-tests.yml`):
+
+- Runs layerwise tests for all 7 models
+- Target runtime: < 12 minutes
+- 21 parallel test groups
+- No dataset downloads required
+
+**Weekly E2E** (`.github/workflows/model-e2e-tests-weekly.yml`):
+
+- Runs E2E tests for all 7 models
+- Downloads EMNIST and CIFAR-10 datasets
+- Generates weekly report with 365-day retention
+- Schedule: Sundays at 3 AM UTC
+
+### Running Tests Locally
+
+```bash
+# Run layerwise tests for a specific model
+pixi run mojo test tests/models/test_lenet5_layers.mojo
+
+# Run E2E tests (requires datasets)
+pixi run mojo test tests/models/test_lenet5_e2e.mojo
+
+# Run all tests for a model
+pixi run mojo test tests/models/test_lenet5_*.mojo
+
+# Run all layerwise tests
+pixi run mojo test tests/models/test_*_layers.mojo
+```text
+See [Testing Strategy Guide](docs/dev/testing-strategy.md) for comprehensive documentation.
+
 ## GitHub Issue Structure
 
 All planning is done through GitHub issues with clear structure:
@@ -1218,8 +1292,7 @@ Brief description (2-3 sentences)
 
 ## Notes
 Additional context
-```
-
+```text
 ### Issue Labels
 
 - `planning` - Design phase
@@ -1293,7 +1366,7 @@ See `.claude/shared/github-issue-workflow.md` for complete workflow patterns.
 
    Detailed explanation of changes.
 
-   🤖 Generated with [Claude Code](https://claude.com/claude-code)
+   🤖 Generated with [Claude Code](<https://claude.com/claude-code>)
 
    Co-Authored-By: Claude <noreply@anthropic.com>
    EOF
@@ -1335,9 +1408,8 @@ See `.claude/shared/github-issue-workflow.md` for complete workflow patterns.
 git checkout main
 git add <files>
 git commit -m "changes"
-git push origin main  # ❌ BLOCKED - GitHub will reject this
-```
-
+git push origin main  # Will be rejected - main is protected
+```text
 **Even These Are WRONG:**
 
 ```bash
@@ -1389,7 +1461,8 @@ gh pr merge --auto --rebase
 - Enable auto-merge so it merges immediately when CI passes
 - Example: PR #2689 (cleanup) followed emergency fix commit 4446eba2
 
-### Commit Message Format
+=======
+## Commit Message Format
 
 Follow conventional commits:
 
@@ -1460,7 +1533,6 @@ def function_name(param: str) -> bool:
     """Clear docstring with purpose, params, returns."""
     pass
 ```text
-
 ### Requirements
 
 - Python 3.7+
@@ -1487,27 +1559,22 @@ All markdown files must follow these standards to pass `markdownlint-cli2` linti
 Some text before.
 
 ```python
-
 def hello():
     print("world")
-
 ```text
 Some text after.
 
 ```text
-
 ### Incorrect
 
 ```markdown
 Some text before.
 ```text
-
 def hello():
 
 ```text
 Some text after.
 ```text
-
 ### Language Examples
 
 - Python: ` ```python `
@@ -1533,7 +1600,6 @@ Some text before.
 
 Some text after.
 ```text
-
 ### Incorrect
 
 ```markdown
@@ -1542,7 +1608,6 @@ Some text before.
 - Item 2
 Some text after.
 ```text
-
 ### Headings (MD022)
 
 **Rule**: Headings must be surrounded by blank lines (one blank line before and after)
@@ -1556,7 +1621,6 @@ Some content here.
 
 More content here.
 ```text
-
 ### Incorrect
 
 ```markdown
@@ -1564,25 +1628,24 @@ Some content here.
 ## Section Heading
 More content here.
 ```text
-
 ### Line Length (MD013)
 
-**Rule**: Lines should not exceed 120 characters (except for URLs or code blocks)
+**Rule**: Lines should not exceed 120 characters
 
 ### Guidelines
 
 - Break long lines at 120 characters
-- For long sentences, break at natural boundaries (clauses, lists, etc.)
+- Break at natural boundaries (clauses, lists, etc.)
 - Code in code blocks is exempt
-- URLs in links are exempt (use reference-style links if needed)
+- URLs in links are exempt
 
 ### Example
 
 ```markdown
-This is a very long sentence that exceeds the 120 character limit and should be broken into
-multiple lines at a natural boundary point for better readability.
+This is a very long sentence that exceeds the 120 character limit
+and should be broken into multiple lines at a natural boundary point
+for better readability.
 ```text
-
 ### Best Practices
 
 1. **Always add blank lines around code blocks and lists** - This is the #1 cause of linting failures
@@ -1605,7 +1668,6 @@ Before committing markdown files:
 ### Running Markdown Linting Locally
 
 ```bash
-
 # Check specific file
 npx markdownlint-cli2 path/to/file.md
 
@@ -1614,9 +1676,7 @@ pre-commit run markdownlint-cli2 --all-files
 
 # View detailed errors
 npx markdownlint-cli2 path/to/file.md 2>&1
-
 ```text
-
 ## Debugging
 
 ### Check Logs
@@ -1628,7 +1688,6 @@ tail -100 logs/*.log
 # View specific log
 cat logs/<script>_*.log
 ```text
-
 ## Troubleshooting
 
 ### GitHub CLI Issues
@@ -1640,7 +1699,6 @@ gh auth status
 # If missing scopes, refresh authentication
 gh auth refresh -h github.com
 ```text
-
 ### Issue Access Problems
 
 - Check GitHub CLI auth: `gh auth status`

@@ -5,6 +5,7 @@ Provides tools for validating neural network implementations:
 - Data generators for synthetic test datasets
 - Gradient checking (numerical vs analytical)
 - Consolidated test models and fixtures
+- Data type utilities for comprehensive multi-dtype testing
 
 Modules:
     assertions: Comprehensive assertion functions for testing
@@ -12,6 +13,9 @@ Modules:
     gradient_checker: Validate backward passes using finite differences
     models: Consolidated test model implementations (SimpleCNN, LinearModel, SimpleMLP, etc.)
     fixtures: Test model factories, tensor utilities, and assertion helpers
+    special_values: FP-representable test values (0.0, 0.5, 1.0, 1.5) for layerwise testing
+    layer_testers: Reusable layer testing patterns (conv, linear, pooling, activation)
+    dtype_utils: DType iteration utilities for testing across multiple precisions
 
 Test Models:
     SimpleCNN: Minimal CNN for image processing tests
@@ -92,4 +96,31 @@ from .fixtures import (
     assert_tensor_dtype,
     assert_tensor_all_finite,
     assert_tensor_not_all_zeros,
+)
+
+from .special_values import (
+    SPECIAL_VALUE_ZERO,
+    SPECIAL_VALUE_HALF,
+    SPECIAL_VALUE_ONE,
+    SPECIAL_VALUE_ONE_HALF,
+    SPECIAL_VALUE_NEG_HALF,
+    SPECIAL_VALUE_NEG_ONE,
+    create_special_value_tensor,
+    create_alternating_pattern_tensor,
+    create_seeded_random_tensor,
+    verify_special_value_invariants,
+    create_zeros_tensor,
+    create_ones_tensor,
+    create_halves_tensor,
+    create_one_and_half_tensor,
+)
+
+from .layer_testers import LayerTester
+
+from .dtype_utils import (
+    get_test_dtypes,
+    get_float_dtypes,
+    get_precision_dtypes,
+    get_float32_only,
+    dtype_to_string,
 )

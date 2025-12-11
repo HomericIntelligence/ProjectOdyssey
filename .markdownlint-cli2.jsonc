@@ -1,0 +1,7 @@
+{
+  "config": {
+    "MD013": { "line_length": 120 },
+    "MD051": false,
+    "link-fragments": false
+  }
+}
