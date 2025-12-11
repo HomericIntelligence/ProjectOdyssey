@@ -5,10 +5,10 @@ demonstrating a 100-400x speedup journey from naive scalar to fully optimized GE
 
 Optimization Stages:
     Stage 0 (baseline): Naive triple-nested loop with Float64 conversion
-    Stage 1 (matmul_v1): Dtype-specific kernels eliminating conversion overhead (3-5x)
-    Stage 2 (matmul_v2): SIMD vectorization of inner loop (15-40x cumulative)
-    Stage 3 (matmul_v3): Cache-aware blocking/tiling (50-150x cumulative)
-    Stage 4 (matmul_v4): Advanced optimizations - transpose + register blocking (100-400x)
+    Stage 1 (matmul_typed): Dtype-specific kernels eliminating conversion overhead (3-5x)
+    Stage 2 (matmul_simd): SIMD vectorization of inner loop (15-40x cumulative)
+    Stage 3 (matmul_tiled): Cache-aware blocking/tiling (50-150x cumulative)
+    Stage 4 (matmul): Advanced optimizations - transpose + register blocking (100-400x)
 
 Performance Characteristics:
     - All kernels support Float32 and Float64 dtypes
@@ -17,13 +17,13 @@ Performance Characteristics:
     - Register blocking uses MICRO_M=4, MICRO_N=16 for optimal register utilization
 
 Usage:
-    from shared.core.matmul import matmul_v4, matmul_optimized
+    from shared.core.matmul import matmul, matmul_optimized
 
     var a = zeros([1024, 512], DType.float32)
     var b = zeros([512, 1024], DType.float32)
     var c = zeros([1024, 1024], DType.float32)
 
-    # Use the optimized kernel (dispatches to v4)
+    # Use the optimized kernel (dispatches to matmul)
     matmul_optimized(a, b, c)
 
 References:
@@ -60,7 +60,7 @@ alias TRANSPOSE_THRESHOLD: Int = 64
 # ============================================================================
 
 
-fn matmul_v1(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
+fn matmul_typed(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
     """Dtype-specific matrix multiplication kernel.
 
     Eliminates Float64 conversion overhead by using direct typed memory access.
@@ -80,13 +80,13 @@ fn matmul_v1(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
         - Expected speedup: 3-5x over Stage 0
     """
     if a.dtype() != b.dtype() or a.dtype() != c.dtype():
-        raise Error("matmul_v1: all tensors must have the same dtype")
+        raise Error("matmul_typed: all tensors must have the same dtype")
 
     var a_shape = a.shape()
     var b_shape = b.shape()
 
     if len(a_shape) != 2 or len(b_shape) != 2:
-        raise Error("matmul_v1: requires 2D tensors")
+        raise Error("matmul_typed: requires 2D tensors")
 
     var M = a_shape[0]
     var K = a_shape[1]
@@ -94,7 +94,7 @@ fn matmul_v1(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
 
     if K != b_shape[0]:
         raise Error(
-            "matmul_v1: incompatible dimensions for matmul: "
+            "matmul_typed: incompatible dimensions for matmul: "
             + String(K)
             + " != "
             + String(b_shape[0])
@@ -102,15 +102,15 @@ fn matmul_v1(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
 
     # Dispatch to dtype-specific implementation
     if a.dtype() == DType.float32:
-        _matmul_v1_float32(a, b, c, M, K, N)
+        _matmul_typed_float32(a, b, c, M, K, N)
     elif a.dtype() == DType.float64:
-        _matmul_v1_float64(a, b, c, M, K, N)
+        _matmul_typed_float64(a, b, c, M, K, N)
     else:
-        raise Error("matmul_v1: only float32 and float64 are supported")
+        raise Error("matmul_typed: only float32 and float64 are supported")
 
 
 @always_inline
-fn _matmul_v1_float32(
+fn _matmul_typed_float32(
     a: ExTensor, b: ExTensor, mut c: ExTensor, M: Int, K: Int, N: Int
 ) raises:
     """Float32-specific matmul implementation."""
@@ -127,7 +127,7 @@ fn _matmul_v1_float32(
 
 
 @always_inline
-fn _matmul_v1_float64(
+fn _matmul_typed_float64(
     a: ExTensor, b: ExTensor, mut c: ExTensor, M: Int, K: Int, N: Int
 ) raises:
     """Float64-specific matmul implementation."""
@@ -148,7 +148,7 @@ fn _matmul_v1_float64(
 # ============================================================================
 
 
-fn matmul_v2(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
+fn matmul_simd(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
     """SIMD-vectorized matrix multiplication kernel.
 
     Vectorizes the J-loop (columns of C and B) for contiguous memory access.
@@ -169,13 +169,13 @@ fn matmul_v2(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
         - Expected speedup: 4-8x over Stage 1 (15-40x cumulative)
     """
     if a.dtype() != b.dtype() or a.dtype() != c.dtype():
-        raise Error("matmul_v2: all tensors must have the same dtype")
+        raise Error("matmul_simd: all tensors must have the same dtype")
 
     var a_shape = a.shape()
     var b_shape = b.shape()
 
     if len(a_shape) != 2 or len(b_shape) != 2:
-        raise Error("matmul_v2: requires 2D tensors")
+        raise Error("matmul_simd: requires 2D tensors")
 
     var M = a_shape[0]
     var K = a_shape[1]
@@ -183,7 +183,7 @@ fn matmul_v2(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
 
     if K != b_shape[0]:
         raise Error(
-            "matmul_v2: incompatible dimensions for matmul: "
+            "matmul_simd: incompatible dimensions for matmul: "
             + String(K)
             + " != "
             + String(b_shape[0])
@@ -191,15 +191,15 @@ fn matmul_v2(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
 
     # Dispatch to dtype-specific implementation
     if a.dtype() == DType.float32:
-        _matmul_v2_float32(a, b, c, M, K, N)
+        _matmul_simd_float32(a, b, c, M, K, N)
     elif a.dtype() == DType.float64:
-        _matmul_v2_float64(a, b, c, M, K, N)
+        _matmul_simd_float64(a, b, c, M, K, N)
     else:
-        raise Error("matmul_v2: only float32 and float64 are supported")
+        raise Error("matmul_simd: only float32 and float64 are supported")
 
 
 @always_inline
-fn _matmul_v2_float32(
+fn _matmul_simd_float32(
     a: ExTensor, b: ExTensor, mut c: ExTensor, M: Int, K: Int, N: Int
 ) raises:
     """Float32-specific SIMD matmul implementation."""
@@ -212,7 +212,7 @@ fn _matmul_v2_float32(
     for i in range(M):
         # Vectorize J loop for contiguous access in C and B
         @parameter
-        fn vec_j[width: Int](j: Int) capturing:
+        fn vec_j[width: Int](j: Int) unified {mut}:
             var c_vec = SIMD[DType.float32, width](0)
             for k in range(K):
                 var a_scalar = a_ptr.load(i * K + k)
@@ -220,11 +220,11 @@ fn _matmul_v2_float32(
                 c_vec += a_scalar * b_vec
             c_ptr.store[width=width](i * N + j, c_vec)
 
-        vectorize[vec_j, simd_width](N)
+        vectorize[simd_width](N, vec_j)
 
 
 @always_inline
-fn _matmul_v2_float64(
+fn _matmul_simd_float64(
     a: ExTensor, b: ExTensor, mut c: ExTensor, M: Int, K: Int, N: Int
 ) raises:
     """Float64-specific SIMD matmul implementation."""
@@ -237,7 +237,7 @@ fn _matmul_v2_float64(
     for i in range(M):
         # Vectorize J loop for contiguous access in C and B
         @parameter
-        fn vec_j[width: Int](j: Int) capturing:
+        fn vec_j[width: Int](j: Int) unified {mut}:
             var c_vec = SIMD[DType.float64, width](0)
             for k in range(K):
                 var a_scalar = a_ptr.load(i * K + k)
@@ -245,7 +245,7 @@ fn _matmul_v2_float64(
                 c_vec += a_scalar * b_vec
             c_ptr.store[width=width](i * N + j, c_vec)
 
-        vectorize[vec_j, simd_width](N)
+        vectorize[simd_width](N, vec_j)
 
 
 # ============================================================================
@@ -253,7 +253,7 @@ fn _matmul_v2_float64(
 # ============================================================================
 
 
-fn matmul_v3(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
+fn matmul_tiled(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
     """Cache-blocked matrix multiplication with SIMD.
 
     Implements 2D tiling to improve cache locality. Block sizes are tuned
@@ -274,13 +274,13 @@ fn matmul_v3(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
         - Expected speedup: 3-5x over Stage 2 (50-150x cumulative)
     """
     if a.dtype() != b.dtype() or a.dtype() != c.dtype():
-        raise Error("matmul_v3: all tensors must have the same dtype")
+        raise Error("matmul_tiled: all tensors must have the same dtype")
 
     var a_shape = a.shape()
     var b_shape = b.shape()
 
     if len(a_shape) != 2 or len(b_shape) != 2:
-        raise Error("matmul_v3: requires 2D tensors")
+        raise Error("matmul_tiled: requires 2D tensors")
 
     var M = a_shape[0]
     var K = a_shape[1]
@@ -288,7 +288,7 @@ fn matmul_v3(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
 
     if K != b_shape[0]:
         raise Error(
-            "matmul_v3: incompatible dimensions for matmul: "
+            "matmul_tiled: incompatible dimensions for matmul: "
             + String(K)
             + " != "
             + String(b_shape[0])
@@ -299,11 +299,11 @@ fn matmul_v3(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
 
     # Dispatch to dtype-specific implementation
     if a.dtype() == DType.float32:
-        _matmul_v3_float32(a, b, c, M, K, N)
+        _matmul_tiled_float32(a, b, c, M, K, N)
     elif a.dtype() == DType.float64:
-        _matmul_v3_float64(a, b, c, M, K, N)
+        _matmul_tiled_float64(a, b, c, M, K, N)
     else:
-        raise Error("matmul_v3: only float32 and float64 are supported")
+        raise Error("matmul_tiled: only float32 and float64 are supported")
 
 
 @always_inline
@@ -313,7 +313,7 @@ fn _zero_matrix(mut c: ExTensor, size: Int):
 
 
 @always_inline
-fn _matmul_v3_float32(
+fn _matmul_tiled_float32(
     a: ExTensor, b: ExTensor, mut c: ExTensor, M: Int, K: Int, N: Int
 ) raises:
     """Float32-specific cache-blocked SIMD matmul implementation."""
@@ -337,7 +337,7 @@ fn _matmul_v3_float32(
                 # Micro-kernel with SIMD within block
                 for i in range(i0, i1):
                     @parameter
-                    fn vec_inner[width: Int](j_off: Int) capturing:
+                    fn vec_inner[width: Int](j_off: Int) unified {mut}:
                         var j = j0 + j_off
                         var c_vec = c_ptr.load[width=width](i * N + j)
                         for k in range(k0, k1):
@@ -346,11 +346,11 @@ fn _matmul_v3_float32(
                             c_vec += a_val * b_vec
                         c_ptr.store[width=width](i * N + j, c_vec)
 
-                    vectorize[vec_inner, simd_width](block_n)
+                    vectorize[simd_width](block_n, vec_inner)
 
 
 @always_inline
-fn _matmul_v3_float64(
+fn _matmul_tiled_float64(
     a: ExTensor, b: ExTensor, mut c: ExTensor, M: Int, K: Int, N: Int
 ) raises:
     """Float64-specific cache-blocked SIMD matmul implementation."""
@@ -374,7 +374,7 @@ fn _matmul_v3_float64(
                 # Micro-kernel with SIMD within block
                 for i in range(i0, i1):
                     @parameter
-                    fn vec_inner[width: Int](j_off: Int) capturing:
+                    fn vec_inner[width: Int](j_off: Int) unified {mut}:
                         var j = j0 + j_off
                         var c_vec = c_ptr.load[width=width](i * N + j)
                         for k in range(k0, k1):
@@ -383,7 +383,7 @@ fn _matmul_v3_float64(
                             c_vec += a_val * b_vec
                         c_ptr.store[width=width](i * N + j, c_vec)
 
-                    vectorize[vec_inner, simd_width](block_n)
+                    vectorize[simd_width](block_n, vec_inner)
 
 
 # ============================================================================
@@ -391,7 +391,7 @@ fn _matmul_v3_float64(
 # ============================================================================
 
 
-fn matmul_v4(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
+fn matmul_transpose(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
     """Fully optimized GEMM with transpose and register blocking.
 
     Combines all optimizations for maximum performance:
@@ -418,16 +418,16 @@ fn matmul_v4(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
     Trade-offs:
         - Extra O(K*N) memory for transposed B
         - Transpose overhead amortized for large matrices
-        - Falls back to v3 for small matrices (below threshold)
+        - Falls back to matmul_tiled for small matrices (below threshold)
     """
     if a.dtype() != b.dtype() or a.dtype() != c.dtype():
-        raise Error("matmul_v4: all tensors must have the same dtype")
+        raise Error("matmul: all tensors must have the same dtype")
 
     var a_shape = a.shape()
     var b_shape = b.shape()
 
     if len(a_shape) != 2 or len(b_shape) != 2:
-        raise Error("matmul_v4: requires 2D tensors")
+        raise Error("matmul: requires 2D tensors")
 
     var M = a_shape[0]
     var K = a_shape[1]
@@ -435,15 +435,15 @@ fn matmul_v4(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
 
     if K != b_shape[0]:
         raise Error(
-            "matmul_v4: incompatible dimensions for matmul: "
+            "matmul: incompatible dimensions for matmul: "
             + String(K)
             + " != "
             + String(b_shape[0])
         )
 
-    # For small matrices, fall back to v3 (transpose overhead not worth it)
+    # For small matrices, fall back to matmul_tiled (transpose overhead not worth it)
     if M < TRANSPOSE_THRESHOLD or N < TRANSPOSE_THRESHOLD or K < TRANSPOSE_THRESHOLD:
-        matmul_v3(a, b, c)
+        matmul_tiled(a, b, c)
         return
 
     # Zero initialize C (required for accumulation)
@@ -451,11 +451,11 @@ fn matmul_v4(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
 
     # Dispatch to dtype-specific implementation
     if a.dtype() == DType.float32:
-        _matmul_v4_float32(a, b, c, M, K, N)
+        _matmul_float32(a, b, c, M, K, N)
     elif a.dtype() == DType.float64:
-        _matmul_v4_float64(a, b, c, M, K, N)
+        _matmul_float64(a, b, c, M, K, N)
     else:
-        raise Error("matmul_v4: only float32 and float64 are supported")
+        raise Error("matmul: only float32 and float64 are supported")
 
 
 @always_inline
@@ -507,7 +507,7 @@ fn _transpose_matrix_float64(b: ExTensor, K: Int, N: Int) raises -> ExTensor:
 
 
 @always_inline
-fn _matmul_v4_float32(
+fn _matmul_float32(
     a: ExTensor, b: ExTensor, mut c: ExTensor, M: Int, K: Int, N: Int
 ) raises:
     """Float32-specific fully optimized GEMM with transpose and register blocking."""
@@ -542,7 +542,7 @@ fn _matmul_v4_float32(
                     # SIMD dot product using transposed B
                     # A[i, :] dot B^T[j, :] = A[i, :] dot B[:, j]
                     @parameter
-                    fn vec_k[width: Int](k: Int) capturing:
+                    fn vec_k[width: Int](k: Int) unified {mut}:
                         var bt_vec = bt_ptr.load[width=width](j * K + k)
 
                         var a0_vec = a_ptr.load[width=width]((i + 0) * K + k)
@@ -555,7 +555,7 @@ fn _matmul_v4_float32(
                         c2 += (a2_vec * bt_vec).reduce_add()
                         c3 += (a3_vec * bt_vec).reduce_add()
 
-                    vectorize[vec_k, simd_width](K)
+                    vectorize[simd_width](K, vec_k)
 
                     # Store accumulated results
                     c_ptr.store((i + 0) * N + j, c_ptr.load((i + 0) * N + j) + c0)
@@ -571,19 +571,19 @@ fn _matmul_v4_float32(
                     var c_val: Float32 = 0.0
 
                     @parameter
-                    fn vec_k_rem[width: Int](k: Int) capturing:
+                    fn vec_k_rem[width: Int](k: Int) unified {mut}:
                         var a_vec = a_ptr.load[width=width](i * K + k)
                         var bt_vec = bt_ptr.load[width=width](j * K + k)
                         c_val += (a_vec * bt_vec).reduce_add()
 
-                    vectorize[vec_k_rem, simd_width](K)
+                    vectorize[simd_width](K, vec_k_rem)
                     c_ptr.store(i * N + j, c_ptr.load(i * N + j) + c_val)
 
                 i += 1
 
 
 @always_inline
-fn _matmul_v4_float64(
+fn _matmul_float64(
     a: ExTensor, b: ExTensor, mut c: ExTensor, M: Int, K: Int, N: Int
 ) raises:
     """Float64-specific fully optimized GEMM with transpose and register blocking."""
@@ -614,7 +614,7 @@ fn _matmul_v4_float64(
                     var c3: Float64 = 0.0
 
                     @parameter
-                    fn vec_k[width: Int](k: Int) capturing:
+                    fn vec_k[width: Int](k: Int) unified {mut}:
                         var bt_vec = bt_ptr.load[width=width](j * K + k)
 
                         var a0_vec = a_ptr.load[width=width]((i + 0) * K + k)
@@ -627,7 +627,7 @@ fn _matmul_v4_float64(
                         c2 += (a2_vec * bt_vec).reduce_add()
                         c3 += (a3_vec * bt_vec).reduce_add()
 
-                    vectorize[vec_k, simd_width](K)
+                    vectorize[simd_width](K, vec_k)
 
                     c_ptr.store((i + 0) * N + j, c_ptr.load((i + 0) * N + j) + c0)
                     c_ptr.store((i + 1) * N + j, c_ptr.load((i + 1) * N + j) + c1)
@@ -642,12 +642,12 @@ fn _matmul_v4_float64(
                     var c_val: Float64 = 0.0
 
                     @parameter
-                    fn vec_k_rem[width: Int](k: Int) capturing:
+                    fn vec_k_rem[width: Int](k: Int) unified {mut}:
                         var a_vec = a_ptr.load[width=width](i * K + k)
                         var bt_vec = bt_ptr.load[width=width](j * K + k)
                         c_val += (a_vec * bt_vec).reduce_add()
 
-                    vectorize[vec_k_rem, simd_width](K)
+                    vectorize[simd_width](K, vec_k_rem)
                     c_ptr.store(i * N + j, c_ptr.load(i * N + j) + c_val)
 
                 i += 1
@@ -658,10 +658,27 @@ fn _matmul_v4_float64(
 # ============================================================================
 
 
+fn matmul(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
+    """Production matrix multiplication - uses best performing kernel.
+
+    This is the main production function that users should call.
+    Currently delegates to matmul_tiled as it provides the best performance.
+
+    Args:
+        a: First matrix (M x K)
+        b: Second matrix (K x N)
+        c: Output matrix (M x N), must be pre-allocated
+
+    Raises:
+        Error if dimensions are incompatible or dtypes don't match.
+    """
+    matmul_tiled(a, b, c)
+
+
 fn matmul_optimized(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
     """Dispatch to the most optimized matmul kernel.
 
-    Selects matmul_v4 for large matrices, falling back to simpler
+    Selects the optimized matmul kernel for large matrices, falling back to simpler
     implementations for small matrices where overhead outweighs benefits.
 
     Args:
@@ -676,7 +693,7 @@ fn matmul_optimized(a: ExTensor, b: ExTensor, mut c: ExTensor) raises:
         This is the recommended entry point for optimized matrix multiplication.
         It automatically selects the best kernel based on matrix dimensions.
     """
-    matmul_v4(a, b, c)
+    matmul(a, b, c)
 
 
 # ============================================================================
@@ -803,18 +820,18 @@ fn verify_matmul_correctness(M: Int, K: Int, N: Int) raises -> Bool:
     var c4 = ExTensor(c_shape, DType.float32)
 
     # Run all stages
-    matmul_v1(a, b, c1)
-    matmul_v2(a, b, c2)
-    matmul_v3(a, b, c3)
-    matmul_v4(a, b, c4)
+    matmul_typed(a, b, c1)
+    matmul_simd(a, b, c2)
+    matmul_tiled(a, b, c3)
+    matmul(a, b, c4)
 
-    # Verify v2 matches v1
+    # Verify simd matches typed
     assert_matrices_equal(c2, c1, rtol=1e-5, atol=1e-8)
 
-    # Verify v3 matches v1
+    # Verify tiled matches typed
     assert_matrices_equal(c3, c1, rtol=1e-5, atol=1e-8)
 
-    # Verify v4 matches v1 (with looser tolerance due to operation reordering)
+    # Verify matmul matches typed (with looser tolerance due to operation reordering)
     assert_matrices_equal(c4, c1, rtol=1e-4, atol=1e-6)
 
     return True
