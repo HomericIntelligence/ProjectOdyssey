@@ -56,7 +56,7 @@ from math import isnan, isinf
 # ============================================================================
 
 
-fn create_conv1_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
+fn create_conv1_parameters(dtype: DType) raises -> Tuple[ExTensor, ExTensor]:
     """Create Conv1 layer parameters (3→64, 11x11 kernel)."""
     var in_channels = 3
     var out_channels = 64
@@ -74,7 +74,7 @@ fn create_conv1_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
     return kernel, bias
 
 
-fn create_conv2_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
+fn create_conv2_parameters(dtype: DType) raises -> Tuple[ExTensor, ExTensor]:
     """Create Conv2 layer parameters (64→192, 5x5 kernel)."""
     var in_channels = 64
     var out_channels = 192
@@ -92,7 +92,7 @@ fn create_conv2_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
     return kernel, bias
 
 
-fn create_conv3_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
+fn create_conv3_parameters(dtype: DType) raises -> Tuple[ExTensor, ExTensor]:
     """Create Conv3 layer parameters (192→384, 3x3 kernel)."""
     var in_channels = 192
     var out_channels = 384
@@ -110,7 +110,7 @@ fn create_conv3_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
     return kernel, bias
 
 
-fn create_conv4_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
+fn create_conv4_parameters(dtype: DType) raises -> Tuple[ExTensor, ExTensor]:
     """Create Conv4 layer parameters (384→384, 3x3 kernel)."""
     var in_channels = 384
     var out_channels = 384
@@ -128,7 +128,7 @@ fn create_conv4_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
     return kernel, bias
 
 
-fn create_conv5_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
+fn create_conv5_parameters(dtype: DType) raises -> Tuple[ExTensor, ExTensor]:
     """Create Conv5 layer parameters (384→256, 3x3 kernel)."""
     var in_channels = 384
     var out_channels = 256
@@ -146,7 +146,7 @@ fn create_conv5_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
     return kernel, bias
 
 
-fn create_fc1_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
+fn create_fc1_parameters(dtype: DType) raises -> Tuple[ExTensor, ExTensor]:
     """Create FC1 layer parameters (9216→4096)."""
     var in_features = 9216  # 256 * 6 * 6
     var out_features = 4096
@@ -161,7 +161,7 @@ fn create_fc1_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
     return weights, bias
 
 
-fn create_fc2_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
+fn create_fc2_parameters(dtype: DType) raises -> Tuple[ExTensor, ExTensor]:
     """Create FC2 layer parameters (4096→4096)."""
     var in_features = 4096
     var out_features = 4096
@@ -176,7 +176,7 @@ fn create_fc2_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
     return weights, bias
 
 
-fn create_fc3_parameters(dtype: DType) raises -> tuple[ExTensor, ExTensor]:
+fn create_fc3_parameters(dtype: DType) raises -> Tuple[ExTensor, ExTensor]:
     """Create FC3 layer parameters (4096→1000)."""
     var in_features = 4096
     var out_features = 1000
@@ -754,10 +754,10 @@ fn test_flatten_operation_float32() raises:
     # Verify shape
     assert_shape(flattened, [1, 9216], "Flatten shape mismatch")
 
-    // Verify dtype preserved
+    # Verify dtype preserved
     assert_dtype(flattened, dtype, "Flatten dtype mismatch")
 
-    // Verify all values preserved
+    # Verify all values preserved
     for i in range(flattened.numel()):
         var val = flattened._get_float64(i)
         assert_false(isnan(val), "Flatten produced NaN")
@@ -789,95 +789,95 @@ fn test_all_layers_sequence_float32() raises:
     var dtype = DType.float32
     var batch_size = 1
 
-    // Input: (1, 3, 224, 224) - typical ImageNet size
+    # Input: (1, 3, 224, 224) - typical ImageNet size
     var input = create_special_value_tensor([batch_size, 3, 224, 224], dtype, SPECIAL_VALUE_ONE)
     assert_shape(input, [batch_size, 3, 224, 224], "Input shape")
 
-    // Conv1: (1, 3, 224, 224) -> (1, 64, 55, 55) with stride 4
+    # Conv1: (1, 3, 224, 224) -> (1, 64, 55, 55) with stride 4
     var kernel1, bias1 = create_conv1_parameters(dtype)
     var conv1_out = conv2d(input, kernel1, bias1, stride=4, padding=2)
     assert_shape(conv1_out, [batch_size, 64, 55, 55], "Conv1 output shape")
 
-    // ReLU1: (1, 64, 55, 55) -> (1, 64, 55, 55)
+    # ReLU1: (1, 64, 55, 55) -> (1, 64, 55, 55)
     var relu1_out = relu(conv1_out)
     assert_shape(relu1_out, [batch_size, 64, 55, 55], "ReLU1 output shape")
 
-    // MaxPool1: (1, 64, 55, 55) -> (1, 64, 27, 27) with 3x3, stride 2
+    # MaxPool1: (1, 64, 55, 55) -> (1, 64, 27, 27) with 3x3, stride 2
     var pool1_out = maxpool2d(relu1_out, kernel_size=3, stride=2, padding=0)
     assert_shape(pool1_out, [batch_size, 64, 27, 27], "MaxPool1 output shape")
 
-    // Conv2: (1, 64, 27, 27) -> (1, 192, 27, 27)
+    # Conv2: (1, 64, 27, 27) -> (1, 192, 27, 27)
     var kernel2, bias2 = create_conv2_parameters(dtype)
     var conv2_out = conv2d(pool1_out, kernel2, bias2, stride=1, padding=2)
     assert_shape(conv2_out, [batch_size, 192, 27, 27], "Conv2 output shape")
 
-    // ReLU2: (1, 192, 27, 27) -> (1, 192, 27, 27)
+    # ReLU2: (1, 192, 27, 27) -> (1, 192, 27, 27)
     var relu2_out = relu(conv2_out)
     assert_shape(relu2_out, [batch_size, 192, 27, 27], "ReLU2 output shape")
 
-    // MaxPool2: (1, 192, 27, 27) -> (1, 192, 13, 13) with 3x3, stride 2
+    # MaxPool2: (1, 192, 27, 27) -> (1, 192, 13, 13) with 3x3, stride 2
     var pool2_out = maxpool2d(relu2_out, kernel_size=3, stride=2, padding=0)
     assert_shape(pool2_out, [batch_size, 192, 13, 13], "MaxPool2 output shape")
 
-    // Conv3: (1, 192, 13, 13) -> (1, 384, 13, 13)
+    # Conv3: (1, 192, 13, 13) -> (1, 384, 13, 13)
     var kernel3, bias3 = create_conv3_parameters(dtype)
     var conv3_out = conv2d(pool2_out, kernel3, bias3, stride=1, padding=1)
     assert_shape(conv3_out, [batch_size, 384, 13, 13], "Conv3 output shape")
 
-    // ReLU3: (1, 384, 13, 13) -> (1, 384, 13, 13)
+    # ReLU3: (1, 384, 13, 13) -> (1, 384, 13, 13)
     var relu3_out = relu(conv3_out)
     assert_shape(relu3_out, [batch_size, 384, 13, 13], "ReLU3 output shape")
 
-    // Conv4: (1, 384, 13, 13) -> (1, 384, 13, 13)
+    # Conv4: (1, 384, 13, 13) -> (1, 384, 13, 13)
     var kernel4, bias4 = create_conv4_parameters(dtype)
     var conv4_out = conv2d(relu3_out, kernel4, bias4, stride=1, padding=1)
     assert_shape(conv4_out, [batch_size, 384, 13, 13], "Conv4 output shape")
 
-    // ReLU4: (1, 384, 13, 13) -> (1, 384, 13, 13)
+    # ReLU4: (1, 384, 13, 13) -> (1, 384, 13, 13)
     var relu4_out = relu(conv4_out)
     assert_shape(relu4_out, [batch_size, 384, 13, 13], "ReLU4 output shape")
 
-    // Conv5: (1, 384, 13, 13) -> (1, 256, 13, 13)
+    # Conv5: (1, 384, 13, 13) -> (1, 256, 13, 13)
     var kernel5, bias5 = create_conv5_parameters(dtype)
     var conv5_out = conv2d(relu4_out, kernel5, bias5, stride=1, padding=1)
     assert_shape(conv5_out, [batch_size, 256, 13, 13], "Conv5 output shape")
 
-    // ReLU5: (1, 256, 13, 13) -> (1, 256, 13, 13)
+    # ReLU5: (1, 256, 13, 13) -> (1, 256, 13, 13)
     var relu5_out = relu(conv5_out)
     assert_shape(relu5_out, [batch_size, 256, 13, 13], "ReLU5 output shape")
 
-    // MaxPool3: (1, 256, 13, 13) -> (1, 256, 6, 6) with 3x3, stride 2
+    # MaxPool3: (1, 256, 13, 13) -> (1, 256, 6, 6) with 3x3, stride 2
     var pool3_out = maxpool2d(relu5_out, kernel_size=3, stride=2, padding=0)
     assert_shape(pool3_out, [batch_size, 256, 6, 6], "MaxPool3 output shape")
 
-    // Flatten: (1, 256, 6, 6) -> (1, 9216)
+    # Flatten: (1, 256, 6, 6) -> (1, 9216)
     var flattened = pool3_out.reshape([batch_size, 9216])
     assert_shape(flattened, [batch_size, 9216], "Flatten output shape")
 
-    // FC1: (1, 9216) -> (1, 4096)
+    # FC1: (1, 9216) -> (1, 4096)
     var fc1_weights, fc1_bias = create_fc1_parameters(dtype)
     var fc1_out = linear(flattened, fc1_weights, fc1_bias)
     assert_shape(fc1_out, [batch_size, 4096], "FC1 output shape")
 
-    // ReLU6: (1, 4096) -> (1, 4096)
+    # ReLU6: (1, 4096) -> (1, 4096)
     var relu6_out = relu(fc1_out)
     assert_shape(relu6_out, [batch_size, 4096], "ReLU6 output shape")
 
-    // FC2: (1, 4096) -> (1, 4096)
+    # FC2: (1, 4096) -> (1, 4096)
     var fc2_weights, fc2_bias = create_fc2_parameters(dtype)
     var fc2_out = linear(relu6_out, fc2_weights, fc2_bias)
     assert_shape(fc2_out, [batch_size, 4096], "FC2 output shape")
 
-    // ReLU7: (1, 4096) -> (1, 4096)
+    # ReLU7: (1, 4096) -> (1, 4096)
     var relu7_out = relu(fc2_out)
     assert_shape(relu7_out, [batch_size, 4096], "ReLU7 output shape")
 
-    // FC3: (1, 4096) -> (1, 1000)
+    # FC3: (1, 4096) -> (1, 1000)
     var fc3_weights, fc3_bias = create_fc3_parameters(dtype)
     var output = linear(relu7_out, fc3_weights, fc3_bias)
     assert_shape(output, [batch_size, 1000], "FC3 (final output) shape")
 
-    // Verify all outputs are valid (no NaN/Inf)
+    # Verify all outputs are valid (no NaN/Inf)
     for i in range(output.numel()):
         var val = output._get_float64(i)
         assert_false(isnan(val), "Output contains NaN")
@@ -892,7 +892,7 @@ fn test_all_layers_sequence_float32() raises:
 fn main() raises:
     print("Starting AlexNet Layerwise Tests...")
 
-    // Conv1 tests
+    # Conv1 tests
     print("  test_conv1_forward_float32...", end="")
     test_conv1_forward_float32()
     print(" OK")
@@ -905,7 +905,7 @@ fn main() raises:
     test_conv1_backward_float32()
     print(" OK")
 
-    // Conv2 tests
+    # Conv2 tests
     print("  test_conv2_forward_float32...", end="")
     test_conv2_forward_float32()
     print(" OK")
@@ -918,7 +918,7 @@ fn main() raises:
     test_conv2_backward_float32()
     print(" OK")
 
-    // Conv3 tests
+    # Conv3 tests
     print("  test_conv3_forward_float32...", end="")
     test_conv3_forward_float32()
     print(" OK")
@@ -931,7 +931,7 @@ fn main() raises:
     test_conv3_backward_float32()
     print(" OK")
 
-    // Conv4 tests
+    # Conv4 tests
     print("  test_conv4_forward_float32...", end="")
     test_conv4_forward_float32()
     print(" OK")
@@ -940,7 +940,7 @@ fn main() raises:
     test_conv4_backward_float32()
     print(" OK")
 
-    // Conv5 tests
+    # Conv5 tests
     print("  test_conv5_forward_float32...", end="")
     test_conv5_forward_float32()
     print(" OK")
@@ -949,7 +949,7 @@ fn main() raises:
     test_conv5_backward_float32()
     print(" OK")
 
-    // ReLU tests
+    # ReLU tests
     print("  test_relu_forward_float32...", end="")
     test_relu_forward_float32()
     print(" OK")
@@ -962,7 +962,7 @@ fn main() raises:
     test_relu_backward_float32()
     print(" OK")
 
-    // MaxPool tests
+    # MaxPool tests
     print("  test_maxpool1_forward_float32...", end="")
     test_maxpool1_forward_float32()
     print(" OK")
@@ -987,7 +987,7 @@ fn main() raises:
     test_maxpool3_forward_float16()
     print(" OK")
 
-    // FC1 tests
+    # FC1 tests
     print("  test_fc1_forward_float32...", end="")
     test_fc1_forward_float32()
     print(" OK")
@@ -1000,7 +1000,7 @@ fn main() raises:
     test_fc1_backward_float32()
     print(" OK")
 
-    // FC2 tests
+    # FC2 tests
     print("  test_fc2_forward_float32...", end="")
     test_fc2_forward_float32()
     print(" OK")
@@ -1013,7 +1013,7 @@ fn main() raises:
     test_fc2_backward_float32()
     print(" OK")
 
-    // FC3 tests
+    # FC3 tests
     print("  test_fc3_forward_float32...", end="")
     test_fc3_forward_float32()
     print(" OK")
@@ -1026,7 +1026,7 @@ fn main() raises:
     test_fc3_backward_float32()
     print(" OK")
 
-    // Flatten tests
+    # Flatten tests
     print("  test_flatten_operation_float32...", end="")
     test_flatten_operation_float32()
     print(" OK")
@@ -1035,7 +1035,7 @@ fn main() raises:
     test_flatten_operation_float16()
     print(" OK")
 
-    // Sequential data flow test
+    # Sequential data flow test
     print("  test_all_layers_sequence_float32...", end="")
     test_all_layers_sequence_float32()
     print(" OK")

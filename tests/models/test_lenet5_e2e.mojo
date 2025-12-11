@@ -344,23 +344,23 @@ fn test_parameter_shapes() raises:
     """Test that all parameters have correct shapes."""
     var model = LeNet5(num_classes=10)
 
-    // Conv1: (6, 1, 5, 5)
+    # Conv1: (6, 1, 5, 5)
     var conv1_kernel = model.conv1_kernel
     assert_shape(conv1_kernel, [6, 1, 5, 5], "Conv1 kernel shape")
 
-    // Conv1 bias: (6,)
+    # Conv1 bias: (6,)
     var conv1_bias = model.conv1_bias
     assert_shape(conv1_bias, [6], "Conv1 bias shape")
 
-    // Conv2: (16, 6, 5, 5)
+    # Conv2: (16, 6, 5, 5)
     var conv2_kernel = model.conv2_kernel
     assert_shape(conv2_kernel, [16, 6, 5, 5], "Conv2 kernel shape")
 
-    // Conv2 bias: (16,)
+    # Conv2 bias: (16,)
     var conv2_bias = model.conv2_bias
     assert_shape(conv2_bias, [16], "Conv2 bias shape")
 
-    // FC layers verified to exist
+    # FC layers verified to exist
     assert_true(model.fc1_weights.numel() > 0, "FC1 weights empty")
     assert_true(model.fc1_bias.numel() > 0, "FC1 bias empty")
     assert_true(model.fc2_weights.numel() > 0, "FC2 weights empty")
@@ -373,28 +373,28 @@ fn test_zero_grad() raises:
     """Test zero_grad method (no-op for LeNet5)."""
     var model = LeNet5(num_classes=10)
 
-    // zero_grad is a no-op for LeNet5 (gradients are computed fresh)
-    // Just verify it doesn't crash
+    # zero_grad is a no-op for LeNet5 (gradients are computed fresh)
+    # Just verify it doesn't crash
     model.zero_grad()
 
-    // Verify parameters still exist
+    # Verify parameters still exist
     var params = model.parameters()
     assert_true(params.size() == 10, "Parameters lost after zero_grad")
 
 
-// ============================================================================
-// Weight Update Tests
-// ============================================================================
+# ============================================================================
+# Weight Update Tests
+# ============================================================================
 
 
 fn test_update_parameters() raises:
     """Test parameter update method (SGD)."""
     var model = LeNet5(num_classes=10)
 
-    // Save original parameters
+    # Save original parameters
     var orig_conv1 = model.conv1_kernel._get_float64(0)
 
-    // Create dummy gradients (same shapes as parameters)
+    # Create dummy gradients (same shapes as parameters)
     var grad_conv1_kernel = ones(model.conv1_kernel.shape(), DType.float32)
     var grad_conv1_bias = ones(model.conv1_bias.shape(), DType.float32)
     var grad_conv2_kernel = ones(model.conv2_kernel.shape(), DType.float32)
@@ -406,7 +406,7 @@ fn test_update_parameters() raises:
     var grad_fc3_weights = ones(model.fc3_weights.shape(), DType.float32)
     var grad_fc3_bias = ones(model.fc3_bias.shape(), DType.float32)
 
-    // Update parameters with learning rate 0.01
+    # Update parameters with learning rate 0.01
     model.update_parameters(
         learning_rate=0.01,
         grad_conv1_kernel=grad_conv1_kernel,
@@ -421,7 +421,7 @@ fn test_update_parameters() raises:
         grad_fc3_bias=grad_fc3_bias,
     )
 
-    // Verify parameter changed (updated in direction opposite to gradient)
+    # Verify parameter changed (updated in direction opposite to gradient)
     var new_conv1 = model.conv1_kernel._get_float64(0)
     var expected = orig_conv1 - 0.01 * 1.0  // param - lr * grad
     assert_close_float(
@@ -430,9 +430,9 @@ fn test_update_parameters() raises:
     )
 
 
-// ============================================================================
-// Architecture Verification
-// ============================================================================
+# ============================================================================
+# Architecture Verification
+# ============================================================================
 
 
 fn test_flattened_size_computation() raises:
@@ -448,21 +448,21 @@ fn test_flattened_size_computation() raises:
     """
     var flattened_size = compute_flattened_size()
 
-    // Expected: 16 * 4 * 4 = 256
+    # Expected: 16 * 4 * 4 = 256
     assert_true(flattened_size == 256, "Flattened size mismatch")
 
 
 fn test_num_classes_customizable() raises:
     """Test that num_classes parameter works correctly."""
-    // Test EMNIST (47 classes)
+    # Test EMNIST (47 classes)
     var model_emnist = LeNet5(num_classes=47)
     assert_true(model_emnist.num_classes == 47, "EMNIST num_classes mismatch")
 
-    // Test MNIST (10 classes)
+    # Test MNIST (10 classes)
     var model_mnist = LeNet5(num_classes=10)
     assert_true(model_mnist.num_classes == 10, "MNIST num_classes mismatch")
 
-    // Verify output shapes match num_classes
+    # Verify output shapes match num_classes
     var input = create_seeded_random_tensor([1, 1, 28, 28], DType.float32, seed=42)
 
     var output_emnist = model_emnist.forward(input)
@@ -472,37 +472,37 @@ fn test_num_classes_customizable() raises:
     assert_shape(output_mnist, [1, 10], "MNIST output shape")
 
 
-// ============================================================================
-// Integration Test: Full Forward Pass
-// ============================================================================
+# ============================================================================
+# Integration Test: Full Forward Pass
+# ============================================================================
 
 
 fn test_full_forward_pipeline() raises:
     """Test complete forward pass: input -> output through all 12 layers."""
     var model = LeNet5(num_classes=10)
 
-    // Create realistic batch
+    # Create realistic batch
     var batch_size = 4
     var input = create_seeded_random_tensor(
         [batch_size, 1, 28, 28], DType.float32, seed=42, low=-1.0, high=1.0
     )
 
-    // Forward pass (goes through all 12 operations)
+    # Forward pass (goes through all 12 operations)
     var output = model.forward(input)
 
-    // Verify output
+    # Verify output
     assert_shape(output, [batch_size, 10], "Full pipeline output shape")
     assert_dtype(output, DType.float32, "Full pipeline output dtype")
 
-    // Verify output is valid
+    # Verify output is valid
     for i in range(output.numel()):
         var val = output._get_float64(i)
         assert_false(isnan(val), "Full pipeline output contains NaN at " + String(i))
         assert_false(isinf(val), "Full pipeline output contains Inf at " + String(i))
 
-    // Verify output range is reasonable (unconstrained logits)
-    // Logits should generally be in range [-10, 10] for reasonable models
-    // but this is not strict - just check they're not extreme
+    # Verify output range is reasonable (unconstrained logits)
+    # Logits should generally be in range [-10, 10] for reasonable models
+    # but this is not strict - just check they're not extreme
     var min_val = 1e10
     var max_val = -1e10
     for i in range(output.numel()):
@@ -517,14 +517,14 @@ fn test_model_initialization() raises:
     """Test model initializes with valid random weights."""
     var model = LeNet5(num_classes=10)
 
-    // Verify all weights are initialized
+    # Verify all weights are initialized
     assert_true(model.conv1_kernel.numel() > 0, "Conv1 kernel not initialized")
     assert_true(model.conv2_kernel.numel() > 0, "Conv2 kernel not initialized")
     assert_true(model.fc1_weights.numel() > 0, "FC1 weights not initialized")
     assert_true(model.fc2_weights.numel() > 0, "FC2 weights not initialized")
     assert_true(model.fc3_weights.numel() > 0, "FC3 weights not initialized")
 
-    // Verify biases are initialized to zero
+    # Verify biases are initialized to zero
     for i in range(model.conv1_bias.numel()):
         var val = model.conv1_bias._get_float64(i)
         assert_close_float(val, 0.0, 1e-10, "Conv1 bias not zero")
@@ -534,9 +534,9 @@ fn test_model_initialization() raises:
         assert_close_float(val, 0.0, 1e-10, "Conv2 bias not zero")
 
 
-// ============================================================================
-// Main Test Runner
-// ============================================================================
+# ============================================================================
+# Main Test Runner
+# ============================================================================
 
 
 fn main() raises:

@@ -143,8 +143,9 @@ struct LayerTester:
         var output = conv2d(input, weights, bias, stride=stride, padding=padding)
 
         # Verify shape
-        var expected_h = conv2d_output_shape(input_h, kernel_size, stride, padding)
-        var expected_w = conv2d_output_shape(input_w, kernel_size, stride, padding)
+        var output_shape = conv2d_output_shape(input_h, input_w, kernel_size, kernel_size, stride, padding)
+        var expected_h = output_shape[0]
+        var expected_w = output_shape[1]
         assert_shape(
             output,
             [1, out_channels, expected_h, expected_w],
@@ -280,8 +281,9 @@ struct LayerTester:
             output = avgpool2d(input, pool_size, stride, padding=padding)
 
         # Verify shape
-        var expected_h = pool_output_shape(input_h, pool_size, stride, padding)
-        var expected_w = pool_output_shape(input_w, pool_size, stride, padding)
+        var output_shape = pool_output_shape(input_h, input_w, pool_size, stride, padding)
+        var expected_h = output_shape[0]
+        var expected_w = output_shape[1]
         assert_shape(
             output,
             [1, channels, expected_h, expected_w],

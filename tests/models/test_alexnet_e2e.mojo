@@ -36,7 +36,7 @@ from math import isnan, isinf
 # ============================================================================
 
 
-fn create_alexnet_parameters(dtype: DType) raises -> tuple[
+fn create_alexnet_parameters(dtype: DType) raises -> Tuple[
     ExTensor,
     ExTensor,
     ExTensor,
@@ -64,39 +64,39 @@ fn create_alexnet_parameters(dtype: DType) raises -> tuple[
     )
     var c1_b = zeros([64], dtype)
 
-    // Conv2: 64->192, 5x5
+    # Conv2: 64->192, 5x5
     var c2_k = kaiming_uniform(
         64 * 5 * 5, 192 * 5 * 5, [192, 64, 5, 5], dtype=dtype
     )
     var c2_b = zeros([192], dtype)
 
-    // Conv3: 192->384, 3x3
+    # Conv3: 192->384, 3x3
     var c3_k = kaiming_uniform(
         192 * 3 * 3, 384 * 3 * 3, [384, 192, 3, 3], dtype=dtype
     )
     var c3_b = zeros([384], dtype)
 
-    // Conv4: 384->384, 3x3
+    # Conv4: 384->384, 3x3
     var c4_k = kaiming_uniform(
         384 * 3 * 3, 384 * 3 * 3, [384, 384, 3, 3], dtype=dtype
     )
     var c4_b = zeros([384], dtype)
 
-    // Conv5: 384->256, 3x3
+    # Conv5: 384->256, 3x3
     var c5_k = kaiming_uniform(
         384 * 3 * 3, 256 * 3 * 3, [256, 384, 3, 3], dtype=dtype
     )
     var c5_b = zeros([256], dtype)
 
-    // FC1: 9216->4096
+    # FC1: 9216->4096
     var fc1_w = kaiming_uniform(9216, 4096, [4096, 9216], dtype=dtype)
     var fc1_b = zeros([4096], dtype)
 
-    // FC2: 4096->4096
+    # FC2: 4096->4096
     var fc2_w = kaiming_uniform(4096, 4096, [4096, 4096], dtype=dtype)
     var fc2_b = zeros([4096], dtype)
 
-    // FC3: 4096->1000
+    # FC3: 4096->1000
     var fc3_w = kaiming_uniform(4096, 1000, [1000, 4096], dtype=dtype)
     var fc3_b = zeros([1000], dtype)
 
@@ -140,30 +140,30 @@ fn alexnet_forward(
     fc3_b: ExTensor,
 ) raises -> ExTensor:
     """Forward pass through AlexNet."""
-    // Conv1 + ReLU + MaxPool
+    # Conv1 + ReLU + MaxPool
     var c1 = conv2d(x, c1_k, c1_b, stride=4, padding=2)
     var r1 = relu(c1)
     var p1 = maxpool2d(r1, kernel_size=3, stride=2, padding=0)
 
-    // Conv2 + ReLU + MaxPool
+    # Conv2 + ReLU + MaxPool
     var c2 = conv2d(p1, c2_k, c2_b, stride=1, padding=2)
     var r2 = relu(c2)
     var p2 = maxpool2d(r2, kernel_size=3, stride=2, padding=0)
 
-    // Conv3 + ReLU
+    # Conv3 + ReLU
     var c3 = conv2d(p2, c3_k, c3_b, stride=1, padding=1)
     var r3 = relu(c3)
 
-    // Conv4 + ReLU
+    # Conv4 + ReLU
     var c4 = conv2d(r3, c4_k, c4_b, stride=1, padding=1)
     var r4 = relu(c4)
 
-    // Conv5 + ReLU + MaxPool
+    # Conv5 + ReLU + MaxPool
     var c5 = conv2d(r4, c5_k, c5_b, stride=1, padding=1)
     var r5 = relu(c5)
     var p3 = maxpool2d(r5, kernel_size=3, stride=2, padding=0)
 
-    // Flatten
+    # Flatten
     var batch_size = p3.shape()[0]
     var flat_size = 1
     var shape = p3.shape()
@@ -171,15 +171,15 @@ fn alexnet_forward(
         flat_size *= shape[i]
     var flattened = p3.reshape([batch_size, flat_size])
 
-    // FC1 + ReLU
+    # FC1 + ReLU
     var f1 = linear(flattened, fc1_w, fc1_b)
     var rf1 = relu(f1)
 
-    // FC2 + ReLU
+    # FC2 + ReLU
     var f2 = linear(rf1, fc2_w, fc2_b)
     var rf2 = relu(f2)
 
-    // FC3 (output logits)
+    # FC3 (output logits)
     var output = linear(rf2, fc3_w, fc3_b)
 
     return output^
@@ -194,17 +194,17 @@ fn test_forward_output_shape_224x224() raises:
     """Test forward pass produces correct output shape (batch, 1000) with 224x224 input."""
     var dtype = DType.float32
 
-    // Create parameters
+    # Create parameters
     var (c1_k, c1_b, c2_k, c2_b, c3_k, c3_b, c4_k, c4_b, c5_k, c5_b, fc1_w, fc1_b, fc2_w, fc2_b, fc3_w, fc3_b) = create_alexnet_parameters(
         dtype
     )
 
-    // Create batch of inputs: (2, 3, 224, 224)
+    # Create batch of inputs: (2, 3, 224, 224)
     var input = create_seeded_random_tensor(
         [2, 3, 224, 224], dtype, seed=42
     )
 
-    // Forward pass
+    # Forward pass
     var output = alexnet_forward(
         input,
         c1_k,
@@ -225,13 +225,13 @@ fn test_forward_output_shape_224x224() raises:
         fc3_b,
     )
 
-    // Verify output shape: (2, 1000)
+    # Verify output shape: (2, 1000)
     assert_shape(output, [2, 1000], "AlexNet output shape mismatch (224x224)")
 
-    // Verify dtype preserved
+    # Verify dtype preserved
     assert_dtype(output, dtype, "AlexNet output dtype mismatch")
 
-    // Verify no NaN/Inf
+    # Verify no NaN/Inf
     for i in range(output.numel()):
         var val = output._get_float64(i)
         assert_false(isnan(val), "AlexNet output contains NaN at " + String(i))
@@ -246,10 +246,10 @@ fn test_forward_single_sample_224x224() raises:
         dtype
     )
 
-    // Create single input
+    # Create single input
     var input = create_seeded_random_tensor([1, 3, 224, 224], dtype, seed=123)
 
-    // Forward pass
+    # Forward pass
     var output = alexnet_forward(
         input,
         c1_k,
@@ -270,10 +270,10 @@ fn test_forward_single_sample_224x224() raises:
         fc3_b,
     )
 
-    // Verify output shape: (1, 1000)
+    # Verify output shape: (1, 1000)
     assert_shape(output, [1, 1000], "Single sample output shape mismatch")
 
-    // Verify dtype
+    # Verify dtype
     assert_dtype(output, dtype, "Single sample output dtype mismatch")
 
 
@@ -285,7 +285,7 @@ fn test_forward_batch_sizes() raises:
         dtype
     )
 
-    // Test batch size 1
+    # Test batch size 1
     var input1 = create_seeded_random_tensor([1, 3, 224, 224], dtype, seed=1)
     var output1 = alexnet_forward(
         input1,
@@ -308,7 +308,7 @@ fn test_forward_batch_sizes() raises:
     )
     assert_shape(output1, [1, 1000], "Batch size 1 output shape")
 
-    // Test batch size 4
+    # Test batch size 4
     var input4 = create_seeded_random_tensor([4, 3, 224, 224], dtype, seed=2)
     var output4 = alexnet_forward(
         input4,
@@ -340,10 +340,10 @@ fn test_forward_deterministic() raises:
         dtype
     )
 
-    // Create input
+    # Create input
     var input = create_seeded_random_tensor([2, 3, 224, 224], dtype, seed=999)
 
-    // Forward pass twice
+    # Forward pass twice
     var output1 = alexnet_forward(
         input,
         c1_k,
@@ -383,7 +383,7 @@ fn test_forward_deterministic() raises:
         fc3_b,
     )
 
-    // Outputs should be identical (deterministic)
+    # Outputs should be identical (deterministic)
     for i in range(output1.numel()):
         var val1 = output1._get_float64(i)
         var val2 = output2._get_float64(i)
@@ -403,7 +403,7 @@ fn test_shape_propagation_through_conv_layers() raises:
         dtype
     )
 
-    // Input: (1, 3, 224, 224)
+    # Input: (1, 3, 224, 224)
     var input = create_seeded_random_tensor([1, 3, 224, 224], dtype, seed=42)
     var s = input.shape()
     assert_equal(s[0], 1)
@@ -411,7 +411,7 @@ fn test_shape_propagation_through_conv_layers() raises:
     assert_equal(s[2], 224)
     assert_equal(s[3], 224)
 
-    // Conv1 (stride=4, padding=2): (224-11+2*2)/4 + 1 = 55
+    # Conv1 (stride=4, padding=2): (224-11+2*2)/4 + 1 = 55
     var c1 = conv2d(input, c1_k, c1_b, stride=4, padding=2)
     s = c1.shape()
     assert_equal(s[0], 1)
@@ -419,13 +419,13 @@ fn test_shape_propagation_through_conv_layers() raises:
     assert_equal(s[2], 55)
     assert_equal(s[3], 55)
 
-    // ReLU1: Same shape
+    # ReLU1: Same shape
     var r1 = relu(c1)
     s = r1.shape()
     assert_equal(s[2], 55)
     assert_equal(s[3], 55)
 
-    // MaxPool1 (3x3, stride=2): (55-3)/2 + 1 = 27
+    # MaxPool1 (3x3, stride=2): (55-3)/2 + 1 = 27
     var p1 = maxpool2d(r1, kernel_size=3, stride=2, padding=0)
     s = p1.shape()
     assert_equal(s[0], 1)
@@ -433,19 +433,19 @@ fn test_shape_propagation_through_conv_layers() raises:
     assert_equal(s[2], 27)
     assert_equal(s[3], 27)
 
-    // Conv2 (stride=1, padding=2): 27 stays 27
+    # Conv2 (stride=1, padding=2): 27 stays 27
     var c2 = conv2d(p1, c2_k, c2_b, stride=1, padding=2)
     s = c2.shape()
     assert_equal(s[2], 27)
     assert_equal(s[3], 27)
 
-    // ReLU2: Same shape
+    # ReLU2: Same shape
     var r2 = relu(c2)
     s = r2.shape()
     assert_equal(s[2], 27)
     assert_equal(s[3], 27)
 
-    // MaxPool2 (3x3, stride=2): (27-3)/2 + 1 = 13
+    # MaxPool2 (3x3, stride=2): (27-3)/2 + 1 = 13
     var p2 = maxpool2d(r2, kernel_size=3, stride=2, padding=0)
     s = p2.shape()
     assert_equal(s[0], 1)
@@ -462,32 +462,32 @@ fn test_shape_propagation_through_fc_layers() raises:
         dtype
     )
 
-    // Create flattened input: (2, 9216) from (2, 256, 6, 6)
+    # Create flattened input: (2, 9216) from (2, 256, 6, 6)
     var flattened = create_seeded_random_tensor([2, 9216], dtype, seed=42)
 
-    // FC1: (2, 9216) -> (2, 4096)
+    # FC1: (2, 9216) -> (2, 4096)
     var f1 = linear(flattened, fc1_w, fc1_b)
     var s = f1.shape()
     assert_equal(s[0], 2)
     assert_equal(s[1], 4096)
 
-    // ReLU: Same shape
+    # ReLU: Same shape
     var rf1 = relu(f1)
     s = rf1.shape()
     assert_equal(s[1], 4096)
 
-    // FC2: (2, 4096) -> (2, 4096)
+    # FC2: (2, 4096) -> (2, 4096)
     var f2 = linear(rf1, fc2_w, fc2_b)
     s = f2.shape()
     assert_equal(s[0], 2)
     assert_equal(s[1], 4096)
 
-    // ReLU: Same shape
+    # ReLU: Same shape
     var rf2 = relu(f2)
     s = rf2.shape()
     assert_equal(s[1], 4096)
 
-    // FC3: (2, 4096) -> (2, 1000)
+    # FC3: (2, 4096) -> (2, 1000)
     var output = linear(rf2, fc3_w, fc3_b)
     s = output.shape()
     assert_equal(s[0], 2)
@@ -507,7 +507,7 @@ fn test_parameters_initialization() raises:
         dtype
     )
 
-    // Verify all parameters exist and have correct shapes
+    # Verify all parameters exist and have correct shapes
     assert_shape(c1_k, [64, 3, 11, 11], "Conv1 kernel shape")
     assert_shape(c1_b, [64], "Conv1 bias shape")
     assert_shape(c2_k, [192, 64, 5, 5], "Conv2 kernel shape")
@@ -525,7 +525,7 @@ fn test_parameters_initialization() raises:
     assert_shape(fc3_w, [1000, 4096], "FC3 weights shape")
     assert_shape(fc3_b, [1000], "FC3 bias shape")
 
-    // Verify biases are initialized to zero
+    # Verify biases are initialized to zero
     for i in range(c1_b.numel()):
         var val = c1_b._get_float64(i)
         assert_close_float(val, 0.0, 1e-10, "Conv1 bias not zero")
@@ -540,7 +540,7 @@ fn test_multiple_dtypes() raises:
     input_shape.append(224)
     input_shape.append(224)
 
-    // Test float32
+    # Test float32
     var input_f32 = create_seeded_random_tensor(input_shape, DType.float32, seed=42)
     var (c1_k_f32, c1_b_f32, c2_k_f32, c2_b_f32, c3_k_f32, c3_b_f32, c4_k_f32, c4_b_f32, c5_k_f32, c5_b_f32, fc1_w_f32, fc1_b_f32, fc2_w_f32, fc2_b_f32, fc3_w_f32, fc3_b_f32) = create_alexnet_parameters(
         DType.float32
@@ -567,7 +567,7 @@ fn test_multiple_dtypes() raises:
     assert_shape(output_f32, [1, 1000], "float32 output shape")
     assert_dtype(output_f32, DType.float32, "float32 output dtype")
 
-    // Test float16
+    # Test float16
     var input_f16 = create_seeded_random_tensor(input_shape, DType.float16, seed=42)
     var (c1_k_f16, c1_b_f16, c2_k_f16, c2_b_f16, c3_k_f16, c3_b_f16, c4_k_f16, c4_b_f16, c5_k_f16, c5_b_f16, fc1_w_f16, fc1_b_f16, fc2_w_f16, fc2_b_f16, fc3_w_f16, fc3_b_f16) = create_alexnet_parameters(
         DType.float16
@@ -619,13 +619,13 @@ fn test_full_forward_pipeline() raises:
         dtype
     )
 
-    // Create realistic batch
+    # Create realistic batch
     var batch_size = 4
     var input = create_seeded_random_tensor(
         [batch_size, 3, 224, 224], dtype, seed=42, low=-1.0, high=1.0
     )
 
-    // Forward pass (goes through all 16 operations)
+    # Forward pass (goes through all 16 operations)
     var output = alexnet_forward(
         input,
         c1_k,
@@ -646,11 +646,11 @@ fn test_full_forward_pipeline() raises:
         fc3_b,
     )
 
-    // Verify output
+    # Verify output
     assert_shape(output, [batch_size, 1000], "Full pipeline output shape")
     assert_dtype(output, dtype, "Full pipeline output dtype")
 
-    // Verify output is valid
+    # Verify output is valid
     var has_valid_values = false
     for i in range(output.numel()):
         var val = output._get_float64(i)
@@ -659,7 +659,7 @@ fn test_full_forward_pipeline() raises:
         if val != 0.0:
             has_valid_values = true
 
-    // Verify we have actual outputs (not all zeros)
+    # Verify we have actual outputs (not all zeros)
     assert_true(has_valid_values, "Forward pass produced all zeros")
 
 
