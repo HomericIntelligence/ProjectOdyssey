@@ -71,14 +71,8 @@ fn _broadcast_binary[
         result_strides[i] = stride
         stride *= result_shape[i]
 
-    # Reverse to get correct order (left-to-right)
-    # Pre-allocate final strides list with dummy values
-    var result_strides_final = List[Int]()
-    for _ in range(ndim):
-        result_strides_final.append(0)
-
-    for i in range(ndim - 1, -1, -1):
-        result_strides_final[i] = result_strides[ndim - 1 - i]
+    # Use strides directly (already in correct left-to-right order)
+    var result_strides_final = result_strides^
 
     # Get typed pointers for zero-overhead access
     var a_ptr = a._data.bitcast[Scalar[dtype]]()
