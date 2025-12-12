@@ -20,7 +20,7 @@ Issues covered:
 - #253-257: Activations module integration
 """
 
-from math import exp, erf, sqrt, tanh as math_tanh, log as math_log
+from math import exp, erf, sqrt, tanh as math_tanh
 from collections import List
 from .extensor import ExTensor, full, zeros_like
 from .arithmetic import add, subtract, multiply
@@ -54,17 +54,7 @@ from .activation_ops import exp_scalar_f32, exp_scalar_f64
 
 @always_inline
 fn _relu_op[T: DType](x: Scalar[T]) -> Scalar[T]:
-    """ReLU operation: max(0, x).
-
-    Parameters:
-        T: Data type of the scalar (float16, float32, float64, int8, etc.).
-
-    Args:
-        x: Input scalar value.
-
-    Returns:
-        max(0, x).
-    """
+    """ReLU operation: max(0, x)."""
     return max(Scalar[T](0), x)
 
 
@@ -84,9 +74,6 @@ fn relu(tensor: ExTensor) raises -> ExTensor:
     Returns:
             New tensor with ReLU applied element-wise.
 
-    Raises:
-            Error: If operation fails.
-
     Examples:
     ```
         var x = ExTensor(...)  # [-2, -1, 0, 1, 2]
@@ -94,33 +81,6 @@ fn relu(tensor: ExTensor) raises -> ExTensor:
     ```
     """
     return dispatch_unary[_relu_op](tensor)
-
-
-@always_inline
-fn _relu6_op[T: DType](x: Scalar[T]) -> Scalar[T]:
-    """ReLU6 operation: min(max(0, x), 6)."""
-    return min(max(Scalar[T](0), x), Scalar[T](6))
-
-
-fn relu6(tensor: ExTensor) raises -> ExTensor:
-    """Apply ReLU6 activation: min(max(0, x), 6).
-
-    ReLU6 clamps values to [0, 6], commonly used in MobileNet architectures.
-    Supported dtypes: float16, float32, float64, int8, int16, int32, int64.
-
-    Args:
-        tensor: Input tensor of any shape.
-
-    Returns:
-        New tensor with ReLU6 applied element-wise.
-
-    Examples:
-    ```mojo
-        var x = ExTensor(...)  # [-2, 0, 3, 8, 10]
-        var y = relu6(x)       # [0, 0, 3, 6, 6]
-    ```
-    """
-    return dispatch_unary[_relu6_op](tensor)
 
 
 fn leaky_relu(tensor: ExTensor, alpha: Float64 = 0.01) raises -> ExTensor:
@@ -137,9 +97,6 @@ fn leaky_relu(tensor: ExTensor, alpha: Float64 = 0.01) raises -> ExTensor:
 
     Returns:
             New tensor with Leaky ReLU applied element-wise.
-
-    Raises:
-            Error: If operation fails.
 
     Examples:
     ```mojo
@@ -194,32 +151,6 @@ fn leaky_relu(tensor: ExTensor, alpha: Float64 = 0.01) raises -> ExTensor:
     return result
 
 
-@always_inline
-fn _prelu_impl[
-    dtype: DType
-](result: ExTensor, tensor: ExTensor, alpha: ExTensor, is_scalar: Bool) raises:
-    """Dtype-generic implementation of PReLU forward pass.
-
-    Parameters:
-            dtype: Compile-time dtype parameter.
-            result: Output tensor (pre-allocated with same shape as input).
-            tensor: Input tensor.
-            alpha: Learnable slope parameter (scalar or element-wise).
-            is_scalar: Whether alpha is a scalar or element-wise.
-
-    Note:
-            This is an internal helper - use prelu() for the public API.
-    """
-    var data_ptr = tensor._data.bitcast[Scalar[dtype]]()
-    var alpha_ptr = alpha._data.bitcast[Scalar[dtype]]()
-    var result_ptr = result._data.bitcast[Scalar[dtype]]()
-
-    for i in range(tensor._numel):
-        var val = data_ptr[i]
-        var a = alpha_ptr[0] if is_scalar else alpha_ptr[i]
-        result_ptr[i] = max(a * val, val)
-
-
 fn prelu(tensor: ExTensor, alpha: ExTensor) raises -> ExTensor:
     """Apply PReLU (Parametric ReLU) activation: max(alpha*x, x).
 
@@ -257,11 +188,26 @@ fn prelu(tensor: ExTensor, alpha: ExTensor) raises -> ExTensor:
     var is_scalar = alpha._numel == 1
 
     if tensor._dtype == DType.float16:
-        _prelu_impl[DType.float16](result, tensor, alpha, is_scalar)
+        for i in range(tensor._numel):
+            var val = tensor._data.bitcast[Float16]()[i]
+            var a = alpha._data.bitcast[Float16]()[
+                0
+            ] if is_scalar else alpha._data.bitcast[Float16]()[i]
+            result._data.bitcast[Float16]()[i] = max(a * val, val)
     elif tensor._dtype == DType.float32:
-        _prelu_impl[DType.float32](result, tensor, alpha, is_scalar)
+        for i in range(tensor._numel):
+            var val = tensor._data.bitcast[Float32]()[i]
+            var a = alpha._data.bitcast[Float32]()[
+                0
+            ] if is_scalar else alpha._data.bitcast[Float32]()[i]
+            result._data.bitcast[Float32]()[i] = max(a * val, val)
     elif tensor._dtype == DType.float64:
-        _prelu_impl[DType.float64](result, tensor, alpha, is_scalar)
+        for i in range(tensor._numel):
+            var val = tensor._data.bitcast[Float64]()[i]
+            var a = alpha._data.bitcast[Float64]()[
+                0
+            ] if is_scalar else alpha._data.bitcast[Float64]()[i]
+            result._data.bitcast[Float64]()[i] = max(a * val, val)
     else:
         raise Error(
             "prelu: only float16, float32, and float64 dtypes supported"
@@ -279,14 +225,7 @@ fn prelu(tensor: ExTensor, alpha: ExTensor) raises -> ExTensor:
 fn _sigmoid_op[T: DType](x: Scalar[T]) -> Scalar[T]:
     """Sigmoid operation with numerical stability: 1 / (1 + exp(-x)).
 
-    Parameters:
-        T: Data type of the scalar (float16, float32, float64).
-
-    Args:
-        x: Input scalar value.
-
-    Returns:
-        Sigmoid(x) = 1 / (1 + exp(-x)), with clipping for numerical stability.
+    Note: For Float16, cast tensor once at function level instead of per-element.
     """
     # Numerically stable sigmoid with clipping
     if x > Scalar[T](20.0):
@@ -294,15 +233,7 @@ fn _sigmoid_op[T: DType](x: Scalar[T]) -> Scalar[T]:
     elif x < Scalar[T](-20.0):
         return Scalar[T](0.0)
     else:
-
-        @parameter
-        if T == DType.float16:
-            # Upcast to Float32 for computation, then cast back
-            var x_f32 = Float32(x)
-            var result_f32 = Float32(1.0) / (Float32(1.0) + exp(-x_f32))
-            return Scalar[T](result_f32)
-        else:
-            return Scalar[T](1.0) / (Scalar[T](1.0) + exp(-x))
+        return Scalar[T](1.0) / (Scalar[T](1.0) + exp(-x))
 
 
 fn sigmoid(tensor: ExTensor) raises -> ExTensor:
@@ -315,6 +246,9 @@ fn sigmoid(tensor: ExTensor) raises -> ExTensor:
     - `x > 20: sigmoid(x) = 1.0`
     - `x < -20: sigmoid(x) = 0.0`
 
+    For Float16 tensors, upcast to Float32 for computation, then downcast result
+    to maintain numerical stability while preserving output dtype.
+
     Supported dtypes: float16, float32, float64.
 
     Args:
@@ -323,34 +257,47 @@ fn sigmoid(tensor: ExTensor) raises -> ExTensor:
     Returns:
             New tensor with sigmoid applied element-wise, values in (0, 1).
 
-    Raises:
-            Error: If operation fails.
-
     Examples:
     ```
             var x = ExTensor(...)  # [-2, 0, 2]
             var y = sigmoid(x)     # [0.119, 0.5, 0.881]
     ```
     """
-    return dispatch_float_unary[_sigmoid_op](tensor)
+    # Special handling for Float16: cast tensor once at start instead of per-element
+    if tensor._dtype == DType.float16:
+        # Cast entire tensor to float32 for computation
+        var tensor_f32 = ExTensor(tensor._shape, DType.float32)
+        var in_ptr = tensor._data.bitcast[Float16]()
+        var f32_ptr = tensor_f32._data.bitcast[Float32]()
+
+        for i in range(tensor._numel):
+            f32_ptr[i] = Float32(in_ptr[i])
+
+        # Apply sigmoid on float32 tensor
+        var result_f32 = dispatch_float_unary[_sigmoid_op](tensor_f32)
+
+        # Cast result back to float16
+        var result = ExTensor(tensor._shape, DType.float16)
+        var result_f32_ptr = result_f32._data.bitcast[Float32]()
+        var result_f16_ptr = result._data.bitcast[Float16]()
+
+        for i in range(tensor._numel):
+            result_f16_ptr[i] = Float16(result_f32_ptr[i])
+
+        return result^
+    else:
+        # For float32 and float64, use standard dispatch
+        return dispatch_float_unary[_sigmoid_op](tensor)
 
 
 @always_inline
 fn _tanh_op[T: DType](x: Scalar[T]) -> Scalar[T]:
-    """Tanh operation for float dtypes.
-
-    Parameters:
-        T: Data type of the scalar (float16, float32, float64).
-
-    Args:
-        x: Input scalar value.
-
-    Returns:
-        tanh(x), computed using the math library function.
-    """
+    """Tanh operation for float dtypes."""
 
     @parameter
-    if T == DType.float16 or T == DType.float32:
+    if T == DType.float16:
+        return Scalar[T](math_tanh(Float32(x)))
+    elif T == DType.float32:
         return Scalar[T](math_tanh(Float32(x)))
     else:  # float64
         return Scalar[T](math_tanh(Float64(x)))
@@ -369,9 +316,6 @@ fn tanh(tensor: ExTensor) raises -> ExTensor:
 
     Returns:
             New tensor with tanh applied element-wise, values in (-1, 1).
-
-    Raises:
-            Error: If operation fails.
 
     Examples:
     ```
@@ -456,9 +400,6 @@ fn gelu(tensor: ExTensor, approximate: Bool = False) raises -> ExTensor:
     Returns:
             New tensor with GELU applied element-wise.
 
-    Raises:
-            Error: If operation fails.
-
     Examples:
     ```
             var x = ExTensor(...)     # [-2, 0, 2]
@@ -476,18 +417,7 @@ fn gelu(tensor: ExTensor, approximate: Bool = False) raises -> ExTensor:
 
 @always_inline
 fn _relu_backward_op[T: DType](grad: Scalar[T], x: Scalar[T]) -> Scalar[T]:
-    """ReLU backward: grad * (x > 0).
-
-    Parameters:
-        T: Data type of the scalars (float16, float32, float64, int8, etc.).
-
-    Args:
-        grad: Gradient of loss w.r.t. output (∂L/∂output).
-        x: Input to forward pass (cached from forward).
-
-    Returns:
-        Gradient w.r.t. input (∂L/∂input) = grad if x > 0 else 0.
-    """
+    """ReLU backward: grad * (x > 0)."""
     return grad if x > Scalar[T](0) else Scalar[T](0)
 
 
@@ -504,9 +434,6 @@ fn relu_backward(
 
     Returns:
             Gradient with respect to input (dL/dx).
-
-    Raises:
-            Error: If operation fails.
 
     Examples:
     ```
@@ -554,9 +481,6 @@ fn leaky_relu_backward(
 
     Returns:
             Gradient with respect to input (dL/dx).
-
-    Raises:
-            Error: If operation fails.
     """
     if grad_output._dtype != x._dtype:
         raise Error(
@@ -634,9 +558,6 @@ fn prelu_backward(
 
     Returns:
             GradientPair containing (grad_input, grad_alpha).
-
-    Raises:
-            Error: If operation fails.
     """
     if grad_output._dtype != x._dtype or grad_output._dtype != alpha._dtype:
         raise Error("prelu_backward: all tensors must have same dtype")
@@ -667,18 +588,7 @@ fn prelu_backward(
 
 @always_inline
 fn _sigmoid_backward_op[T: DType](grad: Scalar[T], y: Scalar[T]) -> Scalar[T]:
-    """Sigmoid backward: grad * y * (1 - y).
-
-    Parameters:
-        T: Data type of the scalars (float16, float32, float64).
-
-    Args:
-        grad: Gradient of loss w.r.t. output (∂L/∂output).
-        y: Output from forward pass sigmoid(x).
-
-    Returns:
-        Gradient w.r.t. input = grad * y * (1 - y).
-    """
+    """Sigmoid backward: grad * y * (1 - y)."""
     return grad * y * (Scalar[T](1.0) - y)
 
 
@@ -697,9 +607,6 @@ fn sigmoid_backward(
     Returns:
             Gradient with respect to input (dL/dx).
 
-    Raises:
-            Error: If operation fails.
-
     Note:
             Takes output instead of input to avoid recomputing sigmoid.
     """
@@ -717,18 +624,7 @@ fn sigmoid_backward(
 
 @always_inline
 fn _tanh_backward_op[T: DType](grad: Scalar[T], y: Scalar[T]) -> Scalar[T]:
-    """Tanh backward: grad * (1 - y^2).
-
-    Parameters:
-        T: Data type of the scalars (float16, float32, float64).
-
-    Args:
-        grad: Gradient of loss w.r.t. output (∂L/∂output).
-        y: Output from forward pass tanh(x).
-
-    Returns:
-        Gradient w.r.t. input = grad * (1 - y^2).
-    """
+    """Tanh backward: grad * (1 - y^2)."""
     return grad * (Scalar[T](1.0) - y * y)
 
 
@@ -746,9 +642,6 @@ fn tanh_backward(
 
     Returns:
             Gradient with respect to input (dL/dx).
-
-    Raises:
-            Error: If operation fails.
 
     Note:
             Takes output instead of input to avoid recomputing tanh.
@@ -782,9 +675,6 @@ fn gelu_backward(
 
     Returns:
             Gradient with respect to input (dL/dx).
-
-    Raises:
-            Error: If operation fails.
     """
     if grad_output._dtype != x._dtype:
         raise Error("gelu_backward: grad_output and x must have same dtype")
@@ -869,9 +759,6 @@ fn swish(tensor: ExTensor) raises -> ExTensor:
     Returns:
             Output tensor with swish applied element-wise.
 
-    Raises:
-            Error: If operation fails.
-
         Reference:
             Ramachandran et al., "Searching for Activation Functions" (2017).
     """
@@ -880,92 +767,41 @@ fn swish(tensor: ExTensor) raises -> ExTensor:
     return multiply(tensor, sig)
 
 
-fn softplus(tensor: ExTensor, beta: Float64 = 1.0) raises -> ExTensor:
-    """Softplus activation function with fused kernel (7x allocation reduction).
-
-    Computes softplus(x) = (1/beta) * log(1 + exp(beta * x)) element-wise.
-    Uses numerically stable formula: max(0, x) + log(1 + exp(-|x|)) when beta=1.
-
-    This fused implementation allocates only 1 output tensor instead of 7
-    intermediate tensors, providing significant memory and performance benefits.
-
-    Args:
-        tensor: Input tensor of any shape.
-        beta: Sharpness parameter (default: 1.0). Higher values make it closer to ReLU.
-
-    Returns:
-        Output tensor with softplus applied element-wise.
-
-    Performance:
-        Before (unfused): 7 tensor allocations per call
-        After (fused): 1 tensor allocation per call (7x reduction)
-    """
-    var result = zeros_like(tensor)
-    var data_ptr = tensor._data
-    var result_ptr = result._data
-    var size = tensor.numel()
-
-    if tensor.dtype() == DType.float32:
-        for i in range(size):
-            var x = data_ptr.bitcast[Float32]()[i]
-            # Numerically stable: max(0, x) + log(1 + exp(-|x|))
-            var x_pos = max(x, Float32(0.0))
-            var x_abs = abs(x)
-            var exp_neg_abs = exp_scalar_f32(-x_abs)
-            var log_term = math_log(Float64(1.0 + exp_neg_abs))
-            result_ptr.bitcast[Float32]()[i] = x_pos + Float32(log_term)
-    elif tensor.dtype() == DType.float64:
-        for i in range(size):
-            var x = data_ptr.bitcast[Float64]()[i]
-            var x_pos = max(x, Float64(0.0))
-            var x_abs = abs(x)
-            var exp_neg_abs = exp_scalar_f64(-x_abs)
-            var log_term = math_log(Float64(1.0) + exp_neg_abs)
-            result_ptr.bitcast[Float64]()[i] = x_pos + log_term
-    elif tensor.dtype() == DType.float16:
-        for i in range(size):
-            var x = Float32(data_ptr.bitcast[Float16]()[i])
-            var x_pos = max(x, Float32(0.0))
-            var x_abs = abs(x)
-            var exp_neg_abs = exp_scalar_f32(-x_abs)
-            var log_term = math_log(Float64(1.0 + exp_neg_abs))
-            result_ptr.bitcast[Float16]()[i] = Float16(
-                x_pos + Float32(log_term)
-            )
-    else:
-        raise Error(
-            "softplus only supports float16, float32, float64, got: "
-            + String(tensor.dtype())
-        )
-
-    return result^
-
-
 fn mish(tensor: ExTensor) raises -> ExTensor:
     """Mish activation function.
 
-    Mish is a smooth, self-regularized non-monotonic activation function
-    that has shown improvements over ReLU and Swish in some tasks.
+        Mish is a smooth, self-regularized non-monotonic activation function
+        that has shown improvements over ReLU and Swish in some tasks.
 
-    Formula:
-        mish(x) = x * tanh(softplus(x)).
-        where softplus(x) = log(1 + exp(x)).
+        Formula:
+            mish(x) = x * tanh(softplus(x)).
+            where softplus(x) = log(1 + exp(x)).
 
     Args:
-        tensor: Input tensor of any shape.
+            tensor: Input tensor of any shape.
 
     Returns:
-        Output tensor with mish applied element-wise.
+            Output tensor with mish applied element-wise.
 
-    Raises:
-            Error: If operation fails.
-
-    Reference:
-        Misra, "Mish: A Self Regularized Non-Monotonic Activation Function" (2019).
+        Reference:
+            Misra, "Mish: A Self Regularized Non-Monotonic Activation Function" (2019).
     """
-    # Use fused softplus (1 allocation instead of 7)
-    var sp = softplus(tensor)
-    var tanh_softplus = tanh(sp)
+    from .elementwise import clip, abs as abs_fn, exp as tensor_exp
+
+    # Stable softplus: sp(x) = max(0, x) + log(1 + exp(-|x|))
+    var x_pos = clip(tensor, 0.0, 1e10)  # max(0, x)
+    var x_abs = abs_fn(tensor)  # |x|
+    var neg_x_abs: ExTensor = multiply(
+        x_abs, full(x_abs._shape, -1.0, x_abs._dtype)
+    )  # -|x|
+    var exp_neg_abs: ExTensor = tensor_exp(neg_x_abs)  # exp(-|x|)
+    var one_plus_exp = add(
+        exp_neg_abs, full(exp_neg_abs._shape, 1.0, exp_neg_abs._dtype)
+    )
+    var log_term = log(one_plus_exp)
+    var softplus = add(x_pos, log_term)  # max(0,x) + log(1 + exp(-|x|))
+
+    var tanh_softplus = tanh(softplus)
     return multiply(tensor, tanh_softplus)
 
 
@@ -985,9 +821,6 @@ fn elu(tensor: ExTensor, alpha: Float64 = 1.0) raises -> ExTensor:
 
     Returns:
             Output tensor with ELU applied element-wise.
-
-    Raises:
-            Error: If operation fails.
 
         Reference:
             Clevert et al., "Fast and Accurate Deep Network Learning by.
@@ -1055,9 +888,6 @@ fn swish_backward(
 
     Returns:
             Gradient with respect to input.
-
-    Raises:
-            Error: If operation fails.
     """
     # Compute sigmoid(x)
     var sig = sigmoid(x)
@@ -1085,9 +915,6 @@ fn mish_backward(
 
     Returns:
             Gradient with respect to input.
-
-    Raises:
-            Error: If operation fails.
     """
     from .elementwise import clip, abs as abs_fn, exp as tensor_exp
 
@@ -1137,9 +964,6 @@ fn elu_backward(
 
     Returns:
             Gradient with respect to input.
-
-    Raises:
-            Error: If operation fails.
     """
     var result = zeros_like(x)
     var x_ptr = x._data
@@ -1215,9 +1039,6 @@ fn hard_sigmoid(tensor: ExTensor) raises -> ExTensor:
     Returns:
             Output tensor with hard_sigmoid applied element-wise, values in [0, 1].
 
-    Raises:
-            Error: If operation fails.
-
         Reference:
             Howard et al., "Searching for MobileNetV3" (2019).
     """
@@ -1243,9 +1064,6 @@ fn hard_swish(tensor: ExTensor) raises -> ExTensor:
 
     Returns:
             Output tensor with hard_swish applied element-wise.
-
-    Raises:
-            Error: If operation fails.
 
         Reference:
             Howard et al., "Searching for MobileNetV3" (2019).
@@ -1276,9 +1094,6 @@ fn hard_tanh(
     Returns:
             Output tensor with hard_tanh applied element-wise.
 
-    Raises:
-            Error: If operation fails.
-
         Reference:
             Standard activation function used in various architectures.
     """
@@ -1305,9 +1120,6 @@ fn hard_sigmoid_backward(
 
     Returns:
             Gradient with respect to input.
-
-    Raises:
-            Error: If operation fails.
     """
     if grad_output._dtype != x._dtype:
         raise Error(
@@ -1339,9 +1151,6 @@ fn hard_swish_backward(
 
     Returns:
             Gradient with respect to input.
-
-    Raises:
-            Error: If operation fails.
     """
     if grad_output._dtype != x._dtype:
         raise Error(
@@ -1375,9 +1184,6 @@ fn hard_tanh_backward(
 
     Returns:
             Gradient with respect to input.
-
-    Raises:
-            Error: If operation fails.
     """
     if grad_output._dtype != x._dtype:
         raise Error(
