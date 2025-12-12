@@ -65,5 +65,36 @@ def get_agents_dir() -> Path:
     return agents_dir
 
 
+class Colors:
+    """ANSI color codes for terminal output."""
+
+    HEADER = "\033[95m"
+    OKBLUE = "\033[94m"
+    OKCYAN = "\033[96m"
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
+
+    @staticmethod
+    def disable() -> None:
+        """Disable colors for non-terminal output.
+
+        Sets all color codes to empty strings, useful for piping
+        output to files or non-TTY streams.
+        """
+        Colors.HEADER = ""
+        Colors.OKBLUE = ""
+        Colors.OKCYAN = ""
+        Colors.OKGREEN = ""
+        Colors.WARNING = ""
+        Colors.FAIL = ""
+        Colors.ENDC = ""
+        Colors.BOLD = ""
+        Colors.UNDERLINE = ""
+
+
 # NOTE: get_plan_dir() removed - planning now done through GitHub issues
 # See .claude/shared/github-issue-workflow.md for the new workflow

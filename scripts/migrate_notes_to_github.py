@@ -40,27 +40,7 @@ try:
 except ImportError:
     HAS_TQDM = False
 
-from common import get_repo_root
-
-
-class Colors:
-    """ANSI color codes for terminal output"""
-
-    HEADER = "\033[95m"
-    OKBLUE = "\033[94m"
-    OKCYAN = "\033[96m"
-    OKGREEN = "\033[92m"
-    WARNING = "\033[93m"
-    FAIL = "\033[91m"
-    ENDC = "\033[0m"
-    BOLD = "\033[1m"
-
-    @staticmethod
-    def disable():
-        """Disable colors for non-terminal output"""
-        Colors.HEADER = Colors.OKBLUE = Colors.OKCYAN = ""
-        Colors.OKGREEN = Colors.WARNING = Colors.FAIL = ""
-        Colors.ENDC = Colors.BOLD = ""
+from common import Colors, get_repo_root
 
 
 def check_github_rate_limit() -> Tuple[int, float]:
