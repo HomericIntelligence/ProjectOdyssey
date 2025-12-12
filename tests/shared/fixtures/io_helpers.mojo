@@ -81,9 +81,18 @@ fn cleanup_temp_dir(path: String) raises:
     if len(path) == 0:
         raise Error("Cannot cleanup empty path")
 
-    # Basic safety check - only remove paths in /tmp
-    if not path.startswith("/tmp/"):
-        raise Error("cleanup_temp_dir only works with /tmp paths for safety")
+    # Safety check - verify path is in system temp directory
+    # Get system temp directory using Python's tempfile module
+    var tempfile = Python.import_module("tempfile")
+    var temp_base = String(tempfile.gettempdir())
+
+    # Verify the path is within the system temp directory
+    if not path.startswith(temp_base):
+        raise Error(
+            "cleanup_temp_dir only works with system temp paths for safety. "
+            "Expected path within: "
+            + temp_base
+        )
 
     # Use Python's shutil.rmtree for recursive directory removal
     var shutil = Python.import_module("shutil")
