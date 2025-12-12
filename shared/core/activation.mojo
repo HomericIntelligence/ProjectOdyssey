@@ -20,7 +20,7 @@ Issues covered:
 - #253-257: Activations module integration
 """
 
-from math import exp, erf, sqrt, tanh as math_tanh
+from math import exp, erf, sqrt, tanh as math_tanh, log as math_log
 from collections import List
 from .extensor import ExTensor, full, zeros_like
 from .arithmetic import add, subtract, multiply
@@ -903,7 +903,7 @@ fn softplus(tensor: ExTensor, beta: Float64 = 1.0) raises -> ExTensor:
             var x_pos = max(x, Float32(0.0))
             var x_abs = abs(x)
             var exp_neg_abs = exp_scalar_f32(-x_abs)
-            var log_term = log(Float64(1.0 + exp_neg_abs))
+            var log_term = math_log(Float64(1.0 + exp_neg_abs))
             result_ptr.bitcast[Float32]()[i] = x_pos + Float32(log_term)
     elif tensor.dtype() == DType.float64:
         for i in range(size):
@@ -911,7 +911,7 @@ fn softplus(tensor: ExTensor, beta: Float64 = 1.0) raises -> ExTensor:
             var x_pos = max(x, Float64(0.0))
             var x_abs = abs(x)
             var exp_neg_abs = exp_scalar_f64(-x_abs)
-            var log_term = log(Float64(1.0) + exp_neg_abs)
+            var log_term = math_log(Float64(1.0) + exp_neg_abs)
             result_ptr.bitcast[Float64]()[i] = x_pos + log_term
     elif tensor.dtype() == DType.float16:
         for i in range(size):
@@ -919,14 +919,14 @@ fn softplus(tensor: ExTensor, beta: Float64 = 1.0) raises -> ExTensor:
             var x_pos = max(x, Float32(0.0))
             var x_abs = abs(x)
             var exp_neg_abs = exp_scalar_f32(-x_abs)
-            var log_term = log(Float64(1.0 + exp_neg_abs))
+            var log_term = math_log(Float64(1.0 + exp_neg_abs))
             result_ptr.bitcast[Float16]()[i] = Float16(
                 x_pos + Float32(log_term)
             )
     else:
         raise Error(
             "softplus only supports float16, float32, float64, got: "
-            + str(tensor.dtype())
+            + String(tensor.dtype())
         )
 
     return result^
