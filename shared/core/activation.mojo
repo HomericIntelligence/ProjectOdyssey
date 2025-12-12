@@ -83,6 +83,33 @@ fn relu(tensor: ExTensor) raises -> ExTensor:
     return dispatch_unary[_relu_op](tensor)
 
 
+@always_inline
+fn _relu6_op[T: DType](x: Scalar[T]) -> Scalar[T]:
+    """ReLU6 operation: min(max(0, x), 6)."""
+    return min(max(Scalar[T](0), x), Scalar[T](6))
+
+
+fn relu6(tensor: ExTensor) raises -> ExTensor:
+    """Apply ReLU6 activation: min(max(0, x), 6).
+
+    ReLU6 clamps values to [0, 6], commonly used in MobileNet architectures.
+    Supported dtypes: float16, float32, float64, int8, int16, int32, int64.
+
+    Args:
+        tensor: Input tensor of any shape.
+
+    Returns:
+        New tensor with ReLU6 applied element-wise.
+
+    Examples:
+    ```mojo
+        var x = ExTensor(...)  # [-2, 0, 3, 8, 10]
+        var y = relu6(x)       # [0, 0, 3, 6, 6]
+    ```
+    """
+    return dispatch_unary[_relu6_op](tensor)
+
+
 fn leaky_relu(tensor: ExTensor, alpha: Float64 = 0.01) raises -> ExTensor:
     """Apply Leaky ReLU activation: max(alpha*x, x).
 
