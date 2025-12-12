@@ -165,9 +165,7 @@ fn test_vgg16_conv64_backward() raises:
     var grad_output = ones(output.shape(), DType.float32)
 
     # Backward pass
-    var _result = conv2d_backward(
-        grad_output, input, kernel, stride, padding
-    )
+    var _result = conv2d_backward(grad_output, input, kernel, stride, padding)
     var grad_input = _result.grad_input
 
     # Verify gradient shapes
@@ -271,9 +269,7 @@ fn test_vgg16_conv128_backward() raises:
     var grad_output = ones(output.shape(), DType.float32)
 
     # Backward pass
-    var _result = conv2d_backward(
-        grad_output, input, kernel, stride, padding
-    )
+    var _result = conv2d_backward(grad_output, input, kernel, stride, padding)
     var grad_input = _result.grad_input
 
     # Verify gradient shapes
@@ -378,9 +374,7 @@ fn test_vgg16_conv256_backward() raises:
     var grad_output = ones(output.shape(), DType.float32)
 
     # Backward pass
-    var _result = conv2d_backward(
-        grad_output, input, kernel, stride, padding
-    )
+    var _result = conv2d_backward(grad_output, input, kernel, stride, padding)
     var grad_input = _result.grad_input
 
     # Verify gradient shapes
@@ -486,9 +480,7 @@ fn test_vgg16_conv512_backward() raises:
     var grad_output = ones(output.shape(), DType.float32)
 
     # Backward pass
-    var _result = conv2d_backward(
-        grad_output, input, kernel, stride, padding
-    )
+    var _result = conv2d_backward(grad_output, input, kernel, stride, padding)
     var grad_input = _result.grad_input
 
     # Verify gradient shapes
