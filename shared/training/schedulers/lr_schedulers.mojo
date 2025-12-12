@@ -43,8 +43,11 @@ struct StepLR(Copyable, LRScheduler, Movable):
     """
 
     var base_lr: Float64
+    """Initial learning rate."""
     var step_size: Int
+    """Number of epochs between LR reductions."""
     var gamma: Float64
+    """Multiplicative factor for LR reduction."""
 
     fn __init__(out self, base_lr: Float64, step_size: Int, gamma: Float64):
         """Initialize StepLR scheduler.
@@ -109,8 +112,11 @@ struct CosineAnnealingLR(Copyable, LRScheduler, Movable):
     """
 
     var base_lr: Float64
+    """Initial learning rate."""
     var T_max: Int
+    """Maximum number of epochs (period)."""
     var eta_min: Float64
+    """Minimum learning rate."""
 
     fn __init__(out self, base_lr: Float64, T_max: Int, eta_min: Float64 = 0.0):
         """Initialize Cosine Annealing scheduler.
@@ -179,7 +185,9 @@ struct WarmupLR(Copyable, LRScheduler, Movable):
     """
 
     var base_lr: Float64
+    """Target learning rate after warmup."""
     var warmup_epochs: Int
+    """Number of epochs for warmup phase."""
 
     fn __init__(out self, base_lr: Float64, warmup_epochs: Int):
         """Initialize Warmup scheduler.
@@ -250,12 +258,19 @@ struct ReduceLROnPlateau(Copyable, LRScheduler, Movable):
     """
 
     var base_lr: Float64
+    """Initial learning rate."""
     var mode: Int
+    """Optimization mode (MODE_MIN=0 for loss, MODE_MAX=1 for accuracy)."""
     var factor: Float64
+    """Multiplicative factor for LR reduction."""
     var patience: Int
+    """Number of epochs without improvement before reducing LR."""
     var best_metric: Float64
+    """Best metric value seen so far."""
     var epochs_without_improvement: Int
+    """Counter for epochs without improvement."""
     var current_lr: Float64
+    """Current learning rate (updated by step())."""
 
     fn __init__(
         out self,

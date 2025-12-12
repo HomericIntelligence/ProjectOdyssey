@@ -53,6 +53,7 @@ struct PrecisionMode(Copyable, ImplicitlyCopyable, Movable, Stringable):
     """
 
     var value: Int
+    """Internal value representing the precision mode."""
 
     alias FP32 = PrecisionMode(value=0)
     alias FP16 = PrecisionMode(value=1)
@@ -117,13 +118,21 @@ struct PrecisionConfig(Copyable, Movable):
     """
 
     var mode: PrecisionMode
+    """Precision mode (FP32, FP16, BF16, FP8)."""
     var compute_dtype: DType
+    """DType for forward/backward passes."""
     var storage_dtype: DType
+    """DType for model weights."""
     var master_dtype: DType
+    """DType for optimizer state (always float32)."""
     var use_gradient_scaler: Bool
+    """Whether to use gradient scaling."""
     var scaler: GradientScaler
+    """Gradient scaler for loss/gradient scaling."""
     var _overflow_count: Int
+    """Number of gradient overflows detected."""
     var _step_count: Int
+    """Total number of training steps."""
 
     fn __init__(
         out self,
