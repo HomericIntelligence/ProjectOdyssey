@@ -687,6 +687,35 @@ fn he_normal(
 # ============================================================================
 
 
+fn _compute_fan_from_shape(shape: List[Int]) raises -> Tuple[Int, Int]:
+    """Compute (fan_in, fan_out) from tensor shape for weight initialization.
+
+    Args:
+            shape: Tensor shape - must be 2D [out_features, in_features] for linear
+                   or 4D [out_channels, in_channels, kH, kW] for conv.
+
+    Returns:
+            Tuple of (fan_in, fan_out).
+
+    Raises:
+            Error if shape is not 2D or 4D.
+    """
+    if len(shape) == 2:
+        # Linear layer: [out_features, in_features]
+        return (shape[1], shape[0])
+    elif len(shape) == 4:
+        # Conv layer: [out_channels, in_channels, kH, kW]
+        var out_channels = shape[0]
+        var in_channels = shape[1]
+        var kH = shape[2]
+        var kW = shape[3]
+        return (in_channels * kH * kW, out_channels * kH * kW)
+    else:
+        raise Error(
+            "Shape must be 2D (linear) or 4D (conv) for auto fan computation"
+        )
+
+
 fn he_uniform(
     shape: List[Int], dtype: DType = DType.float32
 ) raises -> ExTensor:
@@ -707,25 +736,9 @@ fn he_uniform(
     Returns:
             Initialized tensor.
     """
-    var fan_in: Int
-    var fan_out: Int
-
-    if len(shape) == 2:
-        # Linear layer: [out_features, in_features]
-        fan_out = shape[0]
-        fan_in = shape[1]
-    elif len(shape) == 4:
-        # Conv layer: [out_channels, in_channels, kH, kW]
-        var out_channels = shape[0]
-        var in_channels = shape[1]
-        var kH = shape[2]
-        var kW = shape[3]
-        fan_in = in_channels * kH * kW
-        fan_out = out_channels * kH * kW
-    else:
-        raise Error(
-            "Shape must be 2D (linear) or 4D (conv) for auto fan computation"
-        )
+    var fans = _compute_fan_from_shape(shape)
+    var fan_in = fans[0]
+    var fan_out = fans[1]
 
     return kaiming_uniform(fan_in, fan_out, shape, "fan_in", dtype, -1)
 
@@ -750,24 +763,8 @@ fn xavier_uniform(
     Returns:
             Initialized tensor.
     """
-    var fan_in: Int
-    var fan_out: Int
-
-    if len(shape) == 2:
-        # Linear layer: [out_features, in_features]
-        fan_out = shape[0]
-        fan_in = shape[1]
-    elif len(shape) == 4:
-        # Conv layer: [out_channels, in_channels, kH, kW]
-        var out_channels = shape[0]
-        var in_channels = shape[1]
-        var kH = shape[2]
-        var kW = shape[3]
-        fan_in = in_channels * kH * kW
-        fan_out = out_channels * kH * kW
-    else:
-        raise Error(
-            "Shape must be 2D (linear) or 4D (conv) for auto fan computation"
-        )
+    var fans = _compute_fan_from_shape(shape)
+    var fan_in = fans[0]
+    var fan_out = fans[1]
 
     return xavier_uniform(fan_in, fan_out, shape, dtype, -1)
