@@ -16,7 +16,7 @@ from shared.core.pooling import maxpool2d
 from shared.core.linear import linear, linear_backward
 from shared.core.activation import relu, relu_backward
 from shared.core.initializers import kaiming_uniform
-from shared.core.reduction import cross_entropy_loss
+from shared.core.loss import cross_entropy
 from shared.testing.assertions import (
     assert_shape,
     assert_dtype,
@@ -39,9 +39,6 @@ from math import isnan, isinf
 fn create_alexnet_parameters(
     dtype: DType,
 ) raises -> Tuple[
-    ExTensor,
-    ExTensor,
-    ExTensor,
     ExTensor,
     ExTensor,
     ExTensor,
@@ -449,7 +446,13 @@ fn test_forward_deterministic() raises:
     for i in range(output1.numel()):
         var val1 = output1._get_float64(i)
         var val2 = output2._get_float64(i)
-        assert_close_float(val1, val2, 0.0, "Forward pass non-deterministic")
+        assert_close_float(
+            val1,
+            val2,
+            rtol=0.0,
+            atol=0.0,
+            message="Forward pass non-deterministic",
+        )
 
 
 # ============================================================================
@@ -635,7 +638,7 @@ fn test_parameters_initialization() raises:
     # Verify biases are initialized to zero
     for i in range(c1_b.numel()):
         var val = c1_b._get_float64(i)
-        assert_close_float(val, 0.0, 1e-10, "Conv1 bias not zero")
+        assert_close_float(val, 0.0, atol=1e-10, message="Conv1 bias not zero")
 
 
 fn test_multiple_dtypes() raises:
@@ -807,7 +810,7 @@ fn test_full_forward_pipeline() raises:
     assert_dtype(output, dtype, "Full pipeline output dtype")
 
     # Verify output is valid
-    var has_valid_values = false
+    var has_valid_values = False
     for i in range(output.numel()):
         var val = output._get_float64(i)
         assert_false(
@@ -817,7 +820,7 @@ fn test_full_forward_pipeline() raises:
             isinf(val), "Full pipeline output contains Inf at " + String(i)
         )
         if val != 0.0:
-            has_valid_values = true
+            has_valid_values = True
 
     # Verify we have actual outputs (not all zeros)
     assert_true(has_valid_values, "Forward pass produced all zeros")

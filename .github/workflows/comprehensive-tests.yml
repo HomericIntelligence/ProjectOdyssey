@@ -404,7 +404,7 @@ jobs:
         run: |
           mkdir -p datasets/cifar10
           python3 scripts/download_cifar10.py datasets/cifar10
-          python3 scripts/download_emnist.py datasets/emnist
+          python3 scripts/download_emnist.py --output-dir datasets/emnist
 
       - name: Install Just
         uses: extractions/setup-just@v2
