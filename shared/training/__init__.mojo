@@ -72,6 +72,7 @@ struct SGD(Movable, Optimizer):
     """
 
     var learning_rate: Float32
+    """Learning rate for gradient descent."""
 
     fn __init__(out self, learning_rate: Float32):
         """Initialize SGD optimizer.
@@ -119,6 +120,7 @@ struct MSELoss(Loss, Movable):
     """
 
     var reduction: String
+    """Type of reduction ('mean' or 'sum')."""
 
     fn __init__(out self, reduction: String = "mean"):
         """Initialize MSE loss.
@@ -208,8 +210,11 @@ struct TrainingLoop[
     """
 
     var model: Self.M
+    """Model implementing Model trait."""
     var optimizer: Self.O
+    """Optimizer implementing Optimizer trait."""
     var loss_fn: Self.L
+    """Loss function implementing Loss trait."""
 
     fn __init__(
         out self, var model: Self.M, var optimizer: Self.O, var loss_fn: Self.L
@@ -361,6 +366,7 @@ struct CrossEntropyLoss(Loss, Movable):
     """
 
     var reduction: String
+    """Type of reduction ('mean' or 'sum')."""
 
     fn __init__(out self, reduction: String = "mean"):
         """Initialize cross entropy loss.

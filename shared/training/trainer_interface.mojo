@@ -62,15 +62,17 @@ struct TrainerConfig(Copyable, Movable):
     var validate_interval: Int
     """Validate every N epochs (0 = every epoch)."""
     var save_checkpoints: Bool
-    """Whether to save checkpoints."""
+    """Whether to save model checkpoints."""
     var checkpoint_interval: Int
     """Save checkpoint every N epochs."""
+
+    # Mixed precision training settings
     var use_mixed_precision: Bool
     """Enable FP16/BF16 training."""
     var precision_dtype: DType
-    """DType for mixed precision training."""
+    """DType for mixed precision (float16 or float32, bfloat16 when available)."""
     var loss_scale: Float32
-    """Initial loss scale for gradient scaling."""
+    """Initial loss scale for gradient scaling (default: 65536.0)."""
     var gradient_clip_norm: Float32
     """Clip gradients by norm (0 = no clipping)."""
 
@@ -279,11 +281,11 @@ struct DataBatch(Copyable, Movable):
     """
 
     var data: ExTensor
-    """Input features tensor."""
+    """Input features [batch_size, feature_dim]."""
     var labels: ExTensor
-    """Labels tensor."""
+    """Labels [batch_size] or [batch_size, num_classes]."""
     var batch_size: Int
-    """Size of this batch."""
+    """Batch size."""
 
     fn __init__(out self, var data: ExTensor, var labels: ExTensor):
         """Initialize data batch.

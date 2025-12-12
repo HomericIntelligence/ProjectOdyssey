@@ -48,7 +48,7 @@ struct EvaluationResult(Copyable, Movable):
     """
 
     var accuracy: Float32
-    """Overall accuracy as fraction in [0.0, 1.0]."""
+    """Overall accuracy as a fraction in [0.0, 1.0]."""
     var num_correct: Int
     """Total number of correct predictions."""
     var num_total: Int

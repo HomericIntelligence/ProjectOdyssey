@@ -92,25 +92,29 @@ struct ComponentTracker(Copyable, Movable):
     """
 
     var window_size: Int
-    """Size of circular buffer for moving average."""
+    """Size of moving average window."""
     var buffer: List[Float32]
-    """Circular buffer of loss values."""
+    """Circular buffer for moving average."""
     var buffer_idx: Int
     """Current index in circular buffer."""
     var buffer_full: Bool
-    """Whether circular buffer has wrapped around."""
+    """Whether buffer has been filled at least once."""
+
+    # Welford's algorithm state
     var count: Int
-    """Total number of values processed (Welford's algorithm)."""
+    """Total number of values added."""
     var mean: Float64
-    """Running mean value (Welford's algorithm)."""
+    """Running mean value."""
     var m2: Float64
-    """Sum of squared differences from mean (Welford's algorithm)."""
+    """Sum of squared differences from mean."""
+
+    # Min/max tracking
     var min_value: Float32
-    """Minimum loss value seen."""
+    """Minimum value seen."""
     var max_value: Float32
-    """Maximum loss value seen."""
+    """Maximum value seen."""
     var last_value: Float32
-    """Most recent loss value."""
+    """Most recent value."""
 
     fn __init__(out self, window_size: Int):
         """Initialize tracker with specified window size.
