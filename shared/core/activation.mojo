@@ -339,9 +339,7 @@ fn _tanh_op[T: DType](x: Scalar[T]) -> Scalar[T]:
     """
 
     @parameter
-    if T == DType.float16:
-        return Scalar[T](math_tanh(Float32(x)))
-    elif T == DType.float32:
+    if T == DType.float16 or T == DType.float32:
         return Scalar[T](math_tanh(Float32(x)))
     else:  # float64
         return Scalar[T](math_tanh(Float64(x)))
