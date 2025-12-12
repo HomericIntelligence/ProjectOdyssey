@@ -15,7 +15,7 @@ All functions are designed for use in test setup/teardown.
 
 from pathlib import Path
 from sys import argv
-from python import Python
+from python import Python, PythonObject
 
 
 # ============================================================================
@@ -419,7 +419,7 @@ fn get_filename(path: String) -> String:
     if last_slash == -1:
         return path
     else:
-        return path[last_slash + 1 :]
+        return String(path[last_slash + 1 :])
 
 
 fn get_extension(path: String) -> String:
@@ -451,7 +451,7 @@ fn get_extension(path: String) -> String:
     if last_dot == -1:
         return ""
     else:
-        return path[last_dot:]
+        return String(path[last_dot:])
 
 
 # ============================================================================
