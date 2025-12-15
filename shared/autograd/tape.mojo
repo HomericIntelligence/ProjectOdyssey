@@ -533,160 +533,6 @@ struct GradientTape:
                 self._backward_tanh_by_idx(node_idx, grad_output)
             # Add more operations as needed.
 
-    fn _backward_add(mut self, node: TapeNode, grad_output: ExTensor) raises:
-        """Backward pass for addition: d(a+b)/da = 1, d(a+b)/db = 1."""
-        # grad_input = grad_output (gradient flows unchanged)
-        # Use add_backward from shared.core
-        if len(node.saved.tensors) < 2:
-            return
-
-        var a = node.saved.tensors[0]
-        var b = node.saved.tensors[1]
-        var result = add_backward(grad_output, a, b)
-
-        if len(node.input_ids) >= 1:
-            self.registry.set_grad(node.input_ids[0], result.grad_a)
-        if len(node.input_ids) >= 2:
-            self.registry.set_grad(node.input_ids[1], result.grad_b)
-
-    fn _backward_subtract(
-        mut self, node: TapeNode, grad_output: ExTensor
-    ) raises:
-        """Backward pass for subtraction: d(a-b)/da = 1, d(a-b)/db = -1."""
-        if len(node.saved.tensors) < 2:
-            return
-
-        var a = node.saved.tensors[0]
-        var b = node.saved.tensors[1]
-        var result = subtract_backward(grad_output, a, b)
-
-        if len(node.input_ids) >= 1:
-            self.registry.set_grad(node.input_ids[0], result.grad_a)
-        if len(node.input_ids) >= 2:
-            self.registry.set_grad(node.input_ids[1], result.grad_b)
-
-    fn _backward_multiply(
-        mut self, node: TapeNode, grad_output: ExTensor
-    ) raises:
-        """Backward pass for multiplication: d(a*b)/da = b, d(a*b)/db = a."""
-        if len(node.saved.tensors) < 2:
-            return
-
-        var a = node.saved.tensors[0]
-        var b = node.saved.tensors[1]
-        var result = multiply_backward(grad_output, a, b)
-
-        if len(node.input_ids) >= 1:
-            self.registry.set_grad(node.input_ids[0], result.grad_a)
-        if len(node.input_ids) >= 2:
-            self.registry.set_grad(node.input_ids[1], result.grad_b)
-
-    fn _backward_divide(mut self, node: TapeNode, grad_output: ExTensor) raises:
-        """Backward pass for division: d(a/b)/da = 1/b, d(a/b)/db = -a/b^2."""
-        if len(node.saved.tensors) < 2:
-            return
-
-        var a = node.saved.tensors[0]
-        var b = node.saved.tensors[1]
-        var result = divide_backward(grad_output, a, b)
-
-        if len(node.input_ids) >= 1:
-            self.registry.set_grad(node.input_ids[0], result.grad_a)
-        if len(node.input_ids) >= 2:
-            self.registry.set_grad(node.input_ids[1], result.grad_b)
-
-    fn _backward_sum(mut self, node: TapeNode, grad_output: ExTensor) raises:
-        """Backward pass for sum reduction."""
-        if len(node.saved.tensors) < 1:
-            return
-
-        var x = node.saved.tensors[0]
-        var axis = -1  # Default: full reduction
-        if len(node.saved.scalars) >= 1:
-            axis = Int(node.saved.scalars[0])
-
-        var grad_input = sum_backward(grad_output, x, axis)
-
-        if len(node.input_ids) >= 1:
-            self.registry.set_grad(node.input_ids[0], grad_input)
-
-    fn _backward_mean(mut self, node: TapeNode, grad_output: ExTensor) raises:
-        """Backward pass for mean reduction."""
-        if len(node.saved.tensors) < 1:
-            return
-
-        var x = node.saved.tensors[0]
-        var axis = -1  # Default: full reduction
-        if len(node.saved.scalars) >= 1:
-            axis = Int(node.saved.scalars[0])
-
-        var grad_input = mean_backward(grad_output, x, axis)
-
-        if len(node.input_ids) >= 1:
-            self.registry.set_grad(node.input_ids[0], grad_input)
-
-    fn _backward_matmul(mut self, node: TapeNode, grad_output: ExTensor) raises:
-        """Backward pass for matrix multiplication."""
-        if len(node.saved.tensors) < 2:
-            return
-
-        var a = node.saved.tensors[0]
-        var b = node.saved.tensors[1]
-        var result = matmul_backward(grad_output, a, b)
-
-        if len(node.input_ids) >= 1:
-            self.registry.set_grad(node.input_ids[0], result.grad_a)
-        if len(node.input_ids) >= 2:
-            self.registry.set_grad(node.input_ids[1], result.grad_b)
-
-    fn _backward_relu(mut self, node: TapeNode, grad_output: ExTensor) raises:
-        """Backward pass for ReLU activation."""
-        if len(node.saved.tensors) < 1:
-            return
-
-        var x = node.saved.tensors[0]
-        var grad_input = relu_backward(grad_output, x)
-
-        if len(node.input_ids) >= 1:
-            self.registry.set_grad(node.input_ids[0], grad_input)
-
-    fn _backward_sigmoid(
-        mut self, node: TapeNode, grad_output: ExTensor
-    ) raises:
-        """Backward pass for sigmoid activation."""
-        if len(node.saved.tensors) < 1:
-            return
-
-        # saved tensor is the output of sigmoid
-        var output = node.saved.tensors[0]
-        var grad_input = sigmoid_backward(grad_output, output)
-
-        if len(node.input_ids) >= 1:
-            self.registry.set_grad(node.input_ids[0], grad_input)
-
-    fn _backward_tanh(mut self, node: TapeNode, grad_output: ExTensor) raises:
-        """Backward pass for tanh activation."""
-        if len(node.saved.tensors) < 1:
-            return
-
-        # saved tensor is the output of tanh
-        var output = node.saved.tensors[0]
-        var grad_input = tanh_backward(grad_output, output)
-
-        if len(node.input_ids) >= 1:
-            self.registry.set_grad(node.input_ids[0], grad_input)
-
-    fn _backward_neg(mut self, node: TapeNode, grad_output: ExTensor) raises:
-        """Backward pass for negation: d(-x)/dx = -1."""
-        # Negate the gradient
-        var grad_input = zeros_like(grad_output)
-        var size = grad_output.numel()
-        for i in range(size):
-            grad_input._data[i] = -grad_output._data[i]
-
-        if len(node.input_ids) >= 1:
-            self.registry.set_grad(node.input_ids[0], grad_input^)
-
     fn get_grad(self, var_id: Int) raises -> ExTensor:
         """Get the computed gradient for a variable.
 
@@ -701,7 +547,12 @@ struct GradientTape:
         """
         return self.registry.get_grad(var_id)
 
-    # Index-based backward helpers (avoid TapeNode copying)
+    # ========================================================================
+    # Backward Pass Implementations (Index-based helpers)
+    # ========================================================================
+    # These methods implement the chain rule for each operation type.
+    # They are called by the backward() dispatch loop.
+
     fn _backward_add_by_idx(mut self, idx: Int, grad_output: ExTensor) raises:
         """Backward pass for addition by node index."""
         if len(self.nodes[idx].saved.tensors) < 2:
