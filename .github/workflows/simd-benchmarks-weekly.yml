@@ -35,7 +35,7 @@ jobs:
           cache: true
 
       - name: Cache Pixi environments
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.pixi
           key: pixi-${{ runner.os }}-${{ hashFiles('pixi.toml') }}
@@ -119,7 +119,7 @@ jobs:
 
       - name: Upload benchmark results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: simd-benchmark-results-${{ github.run_number }}
           path: benchmark-results/
