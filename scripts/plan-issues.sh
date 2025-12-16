@@ -180,13 +180,14 @@ At the end of your response, include:
 - Steps used: Y/50"
 
     # Set tools based on mode
+    # Always use default permission mode - 'plan' mode doesn't work with -p (print)
+    # Control capabilities through --allowedTools instead
     if $AUTO_MODE; then
         ALLOWED_TOOLS="Read,Glob,Grep,WebFetch,WebSearch,Bash"
-        PERMISSION_MODE="default"
     else
         ALLOWED_TOOLS="Read,Glob,Grep,WebFetch,WebSearch"
-        PERMISSION_MODE="plan"
     fi
+    PERMISSION_MODE="default"
 
     # Save command for debugging
     cat > "$cmd_file" << CMDEOF
