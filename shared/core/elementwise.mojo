@@ -1059,6 +1059,241 @@ fn log2(tensor: ExTensor) raises -> ExTensor:
 # Backward Pass (Gradient Computation)
 # ============================================================================
 
+# ============================================================================
+# Dtype-specialized backward pass helpers
+# ============================================================================
+
+
+fn _exp_backward_impl[
+    dtype: DType
+](result: ExTensor, grad_output: ExTensor, x: ExTensor, numel: Int):
+    """Dtype-specialized exp backward: grad * exp(x)."""
+    var grad_ptr = grad_output._data.bitcast[Scalar[dtype]]()
+    var x_ptr = x._data.bitcast[Scalar[dtype]]()
+    var out_ptr = result._data.bitcast[Scalar[dtype]]()
+    for i in range(numel):
+        out_ptr[i] = grad_ptr[i] * math_exp(x_ptr[i])
+
+
+fn _dispatch_exp_backward(
+    result: ExTensor, grad_output: ExTensor, x: ExTensor, numel: Int
+) raises:
+    """Runtime dispatch for exp backward pass."""
+    var dtype = grad_output.dtype()
+    if dtype == DType.float16:
+        _exp_backward_impl[DType.float16](result, grad_output, x, numel)
+    elif dtype == DType.float32:
+        _exp_backward_impl[DType.float32](result, grad_output, x, numel)
+    elif dtype == DType.float64:
+        _exp_backward_impl[DType.float64](result, grad_output, x, numel)
+    else:
+        raise Error("exp_backward: unsupported dtype")
+
+
+fn _log_backward_impl[
+    dtype: DType
+](result: ExTensor, grad_output: ExTensor, x: ExTensor, numel: Int):
+    """Dtype-specialized log backward: grad / (x + epsilon)."""
+    alias epsilon = Scalar[dtype](1e-10)
+    var grad_ptr = grad_output._data.bitcast[Scalar[dtype]]()
+    var x_ptr = x._data.bitcast[Scalar[dtype]]()
+    var out_ptr = result._data.bitcast[Scalar[dtype]]()
+    for i in range(numel):
+        out_ptr[i] = grad_ptr[i] / (x_ptr[i] + epsilon)
+
+
+fn _dispatch_log_backward(
+    result: ExTensor, grad_output: ExTensor, x: ExTensor, numel: Int
+) raises:
+    """Runtime dispatch for log backward pass."""
+    var dtype = grad_output.dtype()
+    if dtype == DType.float16:
+        _log_backward_impl[DType.float16](result, grad_output, x, numel)
+    elif dtype == DType.float32:
+        _log_backward_impl[DType.float32](result, grad_output, x, numel)
+    elif dtype == DType.float64:
+        _log_backward_impl[DType.float64](result, grad_output, x, numel)
+    else:
+        raise Error("log_backward: unsupported dtype")
+
+
+fn _sqrt_backward_impl[
+    dtype: DType
+](result: ExTensor, grad_output: ExTensor, x: ExTensor, numel: Int):
+    """Dtype-specialized sqrt backward: grad / (2 * sqrt(x) + epsilon)."""
+    alias epsilon = Scalar[dtype](1e-10)
+    alias two = Scalar[dtype](2.0)
+    var grad_ptr = grad_output._data.bitcast[Scalar[dtype]]()
+    var x_ptr = x._data.bitcast[Scalar[dtype]]()
+    var out_ptr = result._data.bitcast[Scalar[dtype]]()
+    for i in range(numel):
+        out_ptr[i] = grad_ptr[i] / (two * math_sqrt(x_ptr[i]) + epsilon)
+
+
+fn _dispatch_sqrt_backward(
+    result: ExTensor, grad_output: ExTensor, x: ExTensor, numel: Int
+) raises:
+    """Runtime dispatch for sqrt backward pass."""
+    var dtype = grad_output.dtype()
+    if dtype == DType.float16:
+        _sqrt_backward_impl[DType.float16](result, grad_output, x, numel)
+    elif dtype == DType.float32:
+        _sqrt_backward_impl[DType.float32](result, grad_output, x, numel)
+    elif dtype == DType.float64:
+        _sqrt_backward_impl[DType.float64](result, grad_output, x, numel)
+    else:
+        raise Error("sqrt_backward: unsupported dtype")
+
+
+fn _abs_backward_impl[
+    dtype: DType
+](result: ExTensor, grad_output: ExTensor, x: ExTensor, numel: Int):
+    """Dtype-specialized abs backward: grad * sign(x)."""
+    alias zero = Scalar[dtype](0)
+    alias one = Scalar[dtype](1)
+    alias neg_one = Scalar[dtype](-1)
+    var grad_ptr = grad_output._data.bitcast[Scalar[dtype]]()
+    var x_ptr = x._data.bitcast[Scalar[dtype]]()
+    var out_ptr = result._data.bitcast[Scalar[dtype]]()
+    for i in range(numel):
+        var x_val = x_ptr[i]
+        var sign_x = zero
+        if x_val > zero:
+            sign_x = one
+        elif x_val < zero:
+            sign_x = neg_one
+        out_ptr[i] = grad_ptr[i] * sign_x
+
+
+fn _dispatch_abs_backward(
+    result: ExTensor, grad_output: ExTensor, x: ExTensor, numel: Int
+) raises:
+    """Runtime dispatch for abs backward pass."""
+    var dtype = grad_output.dtype()
+    if dtype == DType.float16:
+        _abs_backward_impl[DType.float16](result, grad_output, x, numel)
+    elif dtype == DType.float32:
+        _abs_backward_impl[DType.float32](result, grad_output, x, numel)
+    elif dtype == DType.float64:
+        _abs_backward_impl[DType.float64](result, grad_output, x, numel)
+    elif dtype == DType.int8:
+        _abs_backward_impl[DType.int8](result, grad_output, x, numel)
+    elif dtype == DType.int16:
+        _abs_backward_impl[DType.int16](result, grad_output, x, numel)
+    elif dtype == DType.int32:
+        _abs_backward_impl[DType.int32](result, grad_output, x, numel)
+    elif dtype == DType.int64:
+        _abs_backward_impl[DType.int64](result, grad_output, x, numel)
+    else:
+        raise Error("abs_backward: unsupported dtype")
+
+
+fn _clip_backward_impl[
+    dtype: DType
+](
+    result: ExTensor,
+    grad_output: ExTensor,
+    x: ExTensor,
+    min_val: Float64,
+    max_val: Float64,
+    numel: Int,
+):
+    """Dtype-specialized clip backward: grad where min <= x <= max, else 0."""
+    alias zero = Scalar[dtype](0)
+    var min_t = Scalar[dtype](min_val)
+    var max_t = Scalar[dtype](max_val)
+    var grad_ptr = grad_output._data.bitcast[Scalar[dtype]]()
+    var x_ptr = x._data.bitcast[Scalar[dtype]]()
+    var out_ptr = result._data.bitcast[Scalar[dtype]]()
+    for i in range(numel):
+        var x_val = x_ptr[i]
+        if x_val >= min_t and x_val <= max_t:
+            out_ptr[i] = grad_ptr[i]
+        else:
+            out_ptr[i] = zero
+
+
+fn _dispatch_clip_backward(
+    result: ExTensor,
+    grad_output: ExTensor,
+    x: ExTensor,
+    min_val: Float64,
+    max_val: Float64,
+    numel: Int,
+) raises:
+    """Runtime dispatch for clip backward pass."""
+    var dtype = grad_output.dtype()
+    if dtype == DType.float16:
+        _clip_backward_impl[DType.float16](
+            result, grad_output, x, min_val, max_val, numel
+        )
+    elif dtype == DType.float32:
+        _clip_backward_impl[DType.float32](
+            result, grad_output, x, min_val, max_val, numel
+        )
+    elif dtype == DType.float64:
+        _clip_backward_impl[DType.float64](
+            result, grad_output, x, min_val, max_val, numel
+        )
+    else:
+        raise Error("clip_backward: unsupported dtype")
+
+
+fn _log10_backward_impl[
+    dtype: DType
+](result: ExTensor, grad_output: ExTensor, x: ExTensor, numel: Int):
+    """Dtype-specialized log10 backward: grad / (x * ln(10) + epsilon)."""
+    alias epsilon = Scalar[dtype](1e-10)
+    alias ln10 = Scalar[dtype](2.302585092994046)
+    var grad_ptr = grad_output._data.bitcast[Scalar[dtype]]()
+    var x_ptr = x._data.bitcast[Scalar[dtype]]()
+    var out_ptr = result._data.bitcast[Scalar[dtype]]()
+    for i in range(numel):
+        out_ptr[i] = grad_ptr[i] / (x_ptr[i] * ln10 + epsilon)
+
+
+fn _dispatch_log10_backward(
+    result: ExTensor, grad_output: ExTensor, x: ExTensor, numel: Int
+) raises:
+    """Runtime dispatch for log10 backward pass."""
+    var dtype = grad_output.dtype()
+    if dtype == DType.float16:
+        _log10_backward_impl[DType.float16](result, grad_output, x, numel)
+    elif dtype == DType.float32:
+        _log10_backward_impl[DType.float32](result, grad_output, x, numel)
+    elif dtype == DType.float64:
+        _log10_backward_impl[DType.float64](result, grad_output, x, numel)
+    else:
+        raise Error("log10_backward: unsupported dtype")
+
+
+fn _log2_backward_impl[
+    dtype: DType
+](result: ExTensor, grad_output: ExTensor, x: ExTensor, numel: Int):
+    """Dtype-specialized log2 backward: grad / (x * ln(2) + epsilon)."""
+    alias epsilon = Scalar[dtype](1e-10)
+    alias ln2 = Scalar[dtype](0.6931471805599453)
+    var grad_ptr = grad_output._data.bitcast[Scalar[dtype]]()
+    var x_ptr = x._data.bitcast[Scalar[dtype]]()
+    var out_ptr = result._data.bitcast[Scalar[dtype]]()
+    for i in range(numel):
+        out_ptr[i] = grad_ptr[i] / (x_ptr[i] * ln2 + epsilon)
+
+
+fn _dispatch_log2_backward(
+    result: ExTensor, grad_output: ExTensor, x: ExTensor, numel: Int
+) raises:
+    """Runtime dispatch for log2 backward pass."""
+    var dtype = grad_output.dtype()
+    if dtype == DType.float16:
+        _log2_backward_impl[DType.float16](result, grad_output, x, numel)
+    elif dtype == DType.float32:
+        _log2_backward_impl[DType.float32](result, grad_output, x, numel)
+    elif dtype == DType.float64:
+        _log2_backward_impl[DType.float64](result, grad_output, x, numel)
+    else:
+        raise Error("log2_backward: unsupported dtype")
+
 
 fn exp_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
     """Compute gradient for exponential function.
@@ -1081,13 +1316,7 @@ fn exp_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
     ```
     """
     var result = ExTensor(grad_output.shape(), grad_output.dtype())
-
-    for i in range(grad_output.numel()):
-        var grad = grad_output._get_float64(i)
-        var x_val = x._get_float64(i)
-        # Compute exp(x) for the gradient
-        result._set_float64(i, grad * math_exp(x_val))
-
+    _dispatch_exp_backward(result, grad_output, x, grad_output.numel())
     return result
 
 
@@ -1115,16 +1344,8 @@ fn log_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
         Numerical Stability:
             Uses epsilon = 1e-10 to prevent division by zero.
     """
-    alias EPSILON = 1e-10
-
     var result = ExTensor(grad_output.shape(), grad_output.dtype())
-
-    for i in range(grad_output.numel()):
-        var grad = grad_output._get_float64(i)
-        var x_val = x._get_float64(i)
-        # Add epsilon for numerical stability
-        result._set_float64(i, grad / (x_val + EPSILON))
-
+    _dispatch_log_backward(result, grad_output, x, grad_output.numel())
     return result
 
 
@@ -1149,17 +1370,8 @@ fn sqrt_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
         Numerical Stability:
             Uses epsilon = 1e-10 to prevent division by zero when sqrt(X) ≈ 0.
     """
-    alias EPSILON = 1e-10
-
     var result = ExTensor(grad_output.shape(), grad_output.dtype())
-
-    for i in range(grad_output.numel()):
-        var grad = grad_output._get_float64(i)
-        var x_val = x._get_float64(i)
-        # grad / (2 * sqrt(x))
-        # Add epsilon for numerical stability
-        result._set_float64(i, grad / (2.0 * math_sqrt(x_val) + EPSILON))
-
+    _dispatch_sqrt_backward(result, grad_output, x, grad_output.numel())
     return result
 
 
@@ -1189,21 +1401,7 @@ fn abs_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
     ```
     """
     var result = ExTensor(grad_output.shape(), grad_output.dtype())
-
-    for i in range(grad_output.numel()):
-        var grad = grad_output._get_float64(i)
-        var x_val = x._get_float64(i)
-
-        # Compute sign(x): 1 if x > 0, -1 if x < 0, 0 if x = 0
-        var sign_x: Float64 = 0.0
-        if x_val > 0.0:
-            sign_x = 1.0
-        elif x_val < 0.0:
-            sign_x = -1.0
-        # else: sign_x = 0.0 (at x=0, gradient is undefined, use 0)
-
-        result._set_float64(i, grad * sign_x)
-
+    _dispatch_abs_backward(result, grad_output, x, grad_output.numel())
     return result
 
 
@@ -1236,17 +1434,9 @@ fn clip_backward(
     ```
     """
     var result = ExTensor(grad_output.shape(), grad_output.dtype())
-
-    for i in range(grad_output.numel()):
-        var grad = grad_output._get_float64(i)
-        var x_val = x._get_float64(i)
-
-        # Gradient flows through only if min <= x <= max
-        if x_val >= min_val and x_val <= max_val:
-            result._set_float64(i, grad)
-        else:
-            result._set_float64(i, 0.0)
-
+    _dispatch_clip_backward(
+        result, grad_output, x, min_val, max_val, grad_output.numel()
+    )
     return result
 
 
@@ -1266,16 +1456,8 @@ fn log10_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
         Numerical Stability:
             Uses epsilon = 1e-10 to prevent division by zero.
     """
-    alias EPSILON = 1e-10
-    alias LN10 = 2.302585092994046  # ln(10)
-
     var result = ExTensor(grad_output.shape(), grad_output.dtype())
-
-    for i in range(grad_output.numel()):
-        var grad = grad_output._get_float64(i)
-        var x_val = x._get_float64(i)
-        result._set_float64(i, grad / (x_val * LN10 + EPSILON))
-
+    _dispatch_log10_backward(result, grad_output, x, grad_output.numel())
     return result
 
 
@@ -1295,14 +1477,6 @@ fn log2_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
         Numerical Stability:
             Uses epsilon = 1e-10 to prevent division by zero.
     """
-    alias EPSILON = 1e-10
-    alias LN2 = 0.6931471805599453  # ln(2)
-
     var result = ExTensor(grad_output.shape(), grad_output.dtype())
-
-    for i in range(grad_output.numel()):
-        var grad = grad_output._get_float64(i)
-        var x_val = x._get_float64(i)
-        result._set_float64(i, grad / (x_val * LN2 + EPSILON))
-
+    _dispatch_log2_backward(result, grad_output, x, grad_output.numel())
     return result
