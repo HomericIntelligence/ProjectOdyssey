@@ -90,7 +90,12 @@ fn _dispatch_matmul_1d_2d(
 fn _matmul_2d_2d_impl[
     dtype: DType
 ](
-    result: ExTensor, a: ExTensor, b: ExTensor, a_rows: Int, a_cols: Int, b_cols: Int
+    result: ExTensor,
+    a: ExTensor,
+    b: ExTensor,
+    a_rows: Int,
+    a_cols: Int,
+    b_cols: Int,
 ):
     """Dtype-specialized 2D @ 2D matmul."""
     var a_ptr = a._data.bitcast[Scalar[dtype]]()
@@ -106,7 +111,12 @@ fn _matmul_2d_2d_impl[
 
 
 fn _dispatch_matmul_2d_2d(
-    result: ExTensor, a: ExTensor, b: ExTensor, a_rows: Int, a_cols: Int, b_cols: Int
+    result: ExTensor,
+    a: ExTensor,
+    b: ExTensor,
+    a_rows: Int,
+    a_cols: Int,
+    b_cols: Int,
 ) raises:
     """Runtime dispatch for 2D @ 2D matmul."""
     var dt = a.dtype()
@@ -319,7 +329,9 @@ fn _dispatch_transpose_copy(
         raise Error("transpose: unsupported dtype")
 
 
-fn _dot_impl[dtype: DType](result: ExTensor, a: ExTensor, b: ExTensor, length: Int):
+fn _dot_impl[
+    dtype: DType
+](result: ExTensor, a: ExTensor, b: ExTensor, length: Int):
     """Dtype-specialized dot product."""
     var a_ptr = a._data.bitcast[Scalar[dtype]]()
     var b_ptr = b._data.bitcast[Scalar[dtype]]()
@@ -706,7 +718,13 @@ fn transpose(
     input_strides = temp_strides^
 
     _dispatch_transpose_copy(
-        result, tensor, ndim, result_shape, input_strides, perm.value(), result.numel()
+        result,
+        tensor,
+        ndim,
+        result_shape,
+        input_strides,
+        perm.value(),
+        result.numel(),
     )
     return result^
 

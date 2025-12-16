@@ -65,7 +65,9 @@ fn _sum_axis_impl[
         for inner in range(inner_size):
             var sum_val: Scalar[dtype] = 0
             for k in range(axis_size):
-                var input_idx = outer * axis_size * inner_size + k * inner_size + inner
+                var input_idx = (
+                    outer * axis_size * inner_size + k * inner_size + inner
+                )
                 sum_val += in_ptr[input_idx]
             var result_idx = outer * inner_size + inner
             out_ptr[result_idx] = sum_val
@@ -81,15 +83,25 @@ fn _dispatch_sum_axis(
     """Runtime dispatch for sum along axis."""
     var dt = tensor.dtype()
     if dt == DType.float16:
-        _sum_axis_impl[DType.float16](result, tensor, outer_size, axis_size, inner_size)
+        _sum_axis_impl[DType.float16](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     elif dt == DType.float32:
-        _sum_axis_impl[DType.float32](result, tensor, outer_size, axis_size, inner_size)
+        _sum_axis_impl[DType.float32](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     elif dt == DType.float64:
-        _sum_axis_impl[DType.float64](result, tensor, outer_size, axis_size, inner_size)
+        _sum_axis_impl[DType.float64](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     elif dt == DType.int32:
-        _sum_axis_impl[DType.int32](result, tensor, outer_size, axis_size, inner_size)
+        _sum_axis_impl[DType.int32](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     elif dt == DType.int64:
-        _sum_axis_impl[DType.int64](result, tensor, outer_size, axis_size, inner_size)
+        _sum_axis_impl[DType.int64](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     else:
         raise Error("sum: unsupported dtype")
 
@@ -166,7 +178,9 @@ fn _max_axis_impl[
             var first_idx = outer * axis_size * inner_size + inner
             var max_val = in_ptr[first_idx]
             for k in range(1, axis_size):
-                var input_idx = outer * axis_size * inner_size + k * inner_size + inner
+                var input_idx = (
+                    outer * axis_size * inner_size + k * inner_size + inner
+                )
                 var val = in_ptr[input_idx]
                 if val > max_val:
                     max_val = val
@@ -184,15 +198,25 @@ fn _dispatch_max_axis(
     """Runtime dispatch for max along axis."""
     var dt = tensor.dtype()
     if dt == DType.float16:
-        _max_axis_impl[DType.float16](result, tensor, outer_size, axis_size, inner_size)
+        _max_axis_impl[DType.float16](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     elif dt == DType.float32:
-        _max_axis_impl[DType.float32](result, tensor, outer_size, axis_size, inner_size)
+        _max_axis_impl[DType.float32](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     elif dt == DType.float64:
-        _max_axis_impl[DType.float64](result, tensor, outer_size, axis_size, inner_size)
+        _max_axis_impl[DType.float64](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     elif dt == DType.int32:
-        _max_axis_impl[DType.int32](result, tensor, outer_size, axis_size, inner_size)
+        _max_axis_impl[DType.int32](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     elif dt == DType.int64:
-        _max_axis_impl[DType.int64](result, tensor, outer_size, axis_size, inner_size)
+        _max_axis_impl[DType.int64](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     else:
         raise Error("max_reduce: unsupported dtype")
 
@@ -244,7 +268,9 @@ fn _min_axis_impl[
             var first_idx = outer * axis_size * inner_size + inner
             var min_val = in_ptr[first_idx]
             for k in range(1, axis_size):
-                var input_idx = outer * axis_size * inner_size + k * inner_size + inner
+                var input_idx = (
+                    outer * axis_size * inner_size + k * inner_size + inner
+                )
                 var val = in_ptr[input_idx]
                 if val < min_val:
                     min_val = val
@@ -262,15 +288,25 @@ fn _dispatch_min_axis(
     """Runtime dispatch for min along axis."""
     var dt = tensor.dtype()
     if dt == DType.float16:
-        _min_axis_impl[DType.float16](result, tensor, outer_size, axis_size, inner_size)
+        _min_axis_impl[DType.float16](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     elif dt == DType.float32:
-        _min_axis_impl[DType.float32](result, tensor, outer_size, axis_size, inner_size)
+        _min_axis_impl[DType.float32](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     elif dt == DType.float64:
-        _min_axis_impl[DType.float64](result, tensor, outer_size, axis_size, inner_size)
+        _min_axis_impl[DType.float64](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     elif dt == DType.int32:
-        _min_axis_impl[DType.int32](result, tensor, outer_size, axis_size, inner_size)
+        _min_axis_impl[DType.int32](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     elif dt == DType.int64:
-        _min_axis_impl[DType.int64](result, tensor, outer_size, axis_size, inner_size)
+        _min_axis_impl[DType.int64](
+            result, tensor, outer_size, axis_size, inner_size
+        )
     else:
         raise Error("min_reduce: unsupported dtype")
 
@@ -369,7 +405,9 @@ fn mean(
         var sum_result = sum(tensor, axis, keepdims)
 
         # Divide by count along the reduction axis
-        _dispatch_mean_divide(sum_result, sum_result.numel(), tensor.shape()[axis])
+        _dispatch_mean_divide(
+            sum_result, sum_result.numel(), tensor.shape()[axis]
+        )
 
         return sum_result^
 
