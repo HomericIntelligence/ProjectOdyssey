@@ -63,7 +63,7 @@ jobs:
           cache: true
 
       - name: Cache Pixi environments
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.pixi
           key: pixi-${{ runner.os }}-${{ hashFiles('pixi.toml') }}
@@ -124,7 +124,7 @@ jobs:
 
       - name: Upload benchmark results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: benchmark-results-${{ matrix.benchmark-suite }}
           path: benchmark-results/
@@ -148,7 +148,7 @@ jobs:
           python-version: '3.11'
 
       - name: Download current benchmark results
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           pattern: benchmark-results-*
           path: current-results/
@@ -204,7 +204,7 @@ jobs:
           echo "Regression analysis pending implementation" > regression-results/report.txt
 
       - name: Upload regression results
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: regression-results
           path: regression-results/
@@ -223,13 +223,13 @@ jobs:
         uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # v6.0.0
 
       - name: Download all benchmark results
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           pattern: benchmark-results-*
           path: all-results/
 
       - name: Download regression results
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: regression-results
           path: regression-results/
@@ -299,7 +299,7 @@ jobs:
           cat benchmark-report.md
 
       - name: Upload benchmark report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: benchmark-report
           path: benchmark-report.md

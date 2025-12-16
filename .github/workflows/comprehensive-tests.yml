@@ -82,7 +82,7 @@ jobs:
           cache: true
 
       - name: Cache Pixi environments
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.pixi
           key: pixi-${{ runner.os }}-${{ hashFiles('pixi.toml') }}
@@ -93,7 +93,7 @@ jobs:
         run: pixi run mojo --version
 
       - name: Install Just
-        uses: extractions/setup-just@v2
+        uses: extractions/setup-just@v3
 
       - name: Compile shared package
         run: |
@@ -130,7 +130,7 @@ jobs:
 
       - name: Upload compilation results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: mojo-compilation-results
           path: compilation-results/
@@ -262,7 +262,7 @@ jobs:
           cache: true
 
       - name: Cache Pixi environments
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.pixi
           key: pixi-${{ runner.os }}-${{ hashFiles('pixi.toml') }}
@@ -270,7 +270,7 @@ jobs:
             pixi-${{ runner.os }}-
 
       - name: Install Just
-        uses: extractions/setup-just@v2
+        uses: extractions/setup-just@v3
 
       - name: Run test group
         # Integration tests may have segfaults on CI runners due to memory constraints
@@ -320,7 +320,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: test-results-${{ matrix.test-group.name }}
           path: test-results/
@@ -347,14 +347,14 @@ jobs:
           cache: true
 
       - name: Install Just
-        uses: extractions/setup-just@v2
+        uses: extractions/setup-just@v3
 
       - name: Run Configs tests
         run: just ci-test-group tests/configs "test_*.mojo"
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: test-results-Configs
           path: test-results/
@@ -385,14 +385,14 @@ jobs:
           cache: true
 
       - name: Install Just
-        uses: extractions/setup-just@v2
+        uses: extractions/setup-just@v3
 
       - name: Run Benchmarks tests
         run: just ci-test-group tests/shared/benchmarks "bench_*.mojo"
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: test-results-Benchmarks
           path: test-results/
@@ -419,14 +419,14 @@ jobs:
           cache: true
 
       - name: Install Just
-        uses: extractions/setup-just@v2
+        uses: extractions/setup-just@v3
 
       - name: Run Core Layers tests
         run: just ci-test-group tests/shared/core/layers "test_*.mojo"
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: test-results-Core-Layers
           path: test-results/
@@ -453,14 +453,14 @@ jobs:
           cache: true
 
       - name: Install Just
-        uses: extractions/setup-just@v2
+        uses: extractions/setup-just@v3
 
       - name: Run Example Arithmetic tests
         run: just ci-test-group examples "test_arithmetic.mojo"
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: test-results-Example-Arithmetic
           path: test-results/
@@ -533,7 +533,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: test-results-Python-Tests
           path: test-results/
@@ -614,7 +614,7 @@ jobs:
           cat quality-reports/complexity.md
 
       - name: Upload quality reports
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: code-quality-reports
           path: quality-reports/
@@ -668,7 +668,7 @@ jobs:
           cat simd-reports/analysis.md
 
       - name: Upload SIMD analysis
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: simd-analysis
           path: simd-reports/
@@ -688,7 +688,7 @@ jobs:
         uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # v6.0.0
 
       - name: Download all test results
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           path: all-results/
           pattern: "*"
@@ -787,7 +787,7 @@ jobs:
           cat test-report.md
 
       - name: Upload combined report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: comprehensive-test-report
           path: test-report.md

@@ -38,7 +38,7 @@ jobs:
           cache: true
 
       - name: Cache Pixi environments
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.pixi
           key: pixi-${{ runner.os }}-${{ hashFiles('pixi.toml') }}
@@ -46,7 +46,7 @@ jobs:
             pixi-${{ runner.os }}-
 
       - name: Install Just
-        uses: extractions/setup-just@v2
+        uses: extractions/setup-just@v3
 
       - name: Build Mojo packages
         run: |
@@ -89,7 +89,7 @@ jobs:
           echo "Commit: ${{ github.sha }}" >> build-artifacts/mojo/build-manifest.txt
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: mojo-build-artifacts
           path: build-artifacts/mojo/
@@ -153,7 +153,7 @@ jobs:
           fi
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: python-build-artifacts
           path: dist/
@@ -213,7 +213,7 @@ jobs:
           fi
 
       - name: Upload docs artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: docs-build-artifacts
           path: site/
@@ -232,7 +232,7 @@ jobs:
         uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # v6.0.0
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           path: all-artifacts/
 
@@ -316,7 +316,7 @@ jobs:
           cat build-report.md
 
       - name: Upload build report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: build-validation-report
           path: build-report.md
