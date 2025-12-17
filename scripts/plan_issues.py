@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import dataclasses
 import datetime as dt
+import io
 import json
 import os
 import pathlib
@@ -27,7 +28,8 @@ import tempfile
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import Optional, Iterable
+from contextlib import redirect_stdout, redirect_stderr
+from typing import Optional
 
 # ---------------------------------------------------------------------
 # Constants (match bash defaults)
@@ -232,21 +234,12 @@ class Planner:
         if cp.returncode != 0:
             raise RuntimeError(cp.stderr)
 
-        issues = [i["number"] for i in json.loads(cp.stdout)]
+        issues = sorted([i["number"] for i in json.loads(cp.stdout)])
         return issues[:limit] if limit else issues
 
     # --------------------------------------------------------------
 
-    def _write_state(self, state_file: pathlib.Path, status: str) -> None:
-        """Write state file with restrictive permissions."""
-        state_file.write_text(status)
-        state_file.chmod(0o600)
-
     def process_issue(self, issue: int, idx: int, total: int) -> Result:
-        state_file = self.tempdir / f"issue-{issue}.state"
-        if state_file.exists() and not self.opts.replan:
-            return Result(issue, "skipped")
-
         try:
             log("INFO", f"[{idx}/{total}] Issue #{issue}")
             data = gh_issue_json(issue)
@@ -271,8 +264,16 @@ class Planner:
                         if "Limit reached" in comment_body:
                             log("INFO", "Existing plan was rate-limited, will replan...")
                             break  # Continue to generate new plan
-                        self._write_state(state_file, "skipped")
                         return Result(issue, "skipped")
+
+            # Dry-run: show what would be done without calling Claude
+            if self.opts.dry_run:
+                log("INFO", f"[DRY RUN] Would generate plan for #{issue}: {title}")
+                log("INFO", "Plan preview (first 20 lines):")
+                prompt = self.build_prompt(issue, title, body)
+                for line in prompt.split("\n")[:20]:
+                    print(f"    {line}")
+                return Result(issue, "dry-run")
 
             plan = self.generate_plan(issue, title, body)
 
@@ -282,20 +283,12 @@ class Planner:
             if not self.opts.auto:
                 plan = self.review_plan(plan)
                 if not plan.strip():
-                    self._write_state(state_file, "skipped")
                     return Result(issue, "skipped")
 
-            if self.opts.dry_run:
-                self.show_diff(issue, plan)
-                self._write_state(state_file, "dry-run")
-                return Result(issue, "dry-run")
-
             self.post_plan(issue, plan)
-            self._write_state(state_file, "posted")
             return Result(issue, "posted")
 
         except Exception as e:
-            self._write_state(state_file, "error")
             return Result(issue, "error", str(e))
 
     # --------------------------------------------------------------
@@ -325,31 +318,54 @@ class Planner:
             self.throttle()
 
             start_time = time.time()
+            log("INFO", f"Generating plan with Claude Opus (timeout: {self.opts.timeout}s)...")
+
+            # Use streaming subprocess with live output (like bash's tee)
+            proc = subprocess.Popen(
+                [
+                    "claude",
+                    "--model",
+                    "opus",
+                    "--permission-mode",
+                    "default",
+                    "--allowedTools",
+                    allowed_tools,
+                    "--add-dir",
+                    str(self.repo_root),
+                    "--system-prompt",
+                    self.system_prompt,
+                    "-p",
+                    prompt,
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+            )
+
+            output_lines: list[str] = []
+            timed_out = False
+
+            print("  -------- Claude Output --------", flush=True)
             try:
-                cp = run(
-                    [
-                        "claude",
-                        "--model",
-                        "opus",
-                        "--permission-mode",
-                        "default",
-                        "--allowedTools",
-                        allowed_tools,
-                        "--add-dir",
-                        str(self.repo_root),
-                        "--system-prompt",
-                        self.system_prompt,
-                        "-p",
-                        prompt,
-                    ],
-                    timeout=self.opts.timeout,
-                )
-            except subprocess.TimeoutExpired:
+                assert proc.stdout is not None
+                deadline = time.time() + self.opts.timeout
+                for line in proc.stdout:
+                    if time.time() > deadline:
+                        proc.kill()
+                        timed_out = True
+                        break
+                    print(line, end="", flush=True)
+                    output_lines.append(line)
+            finally:
+                proc.wait()
+                print("  --------------------------------", flush=True)
+
+            if timed_out:
                 log("WARN", f"Claude timed out after {self.opts.timeout}s, retrying...")
                 continue
 
             elapsed = time.time() - start_time
-            combined = cp.stdout + cp.stderr
+            combined = "".join(output_lines)
 
             # Check for Claude CLI JSON error response
             if '"type":"result","subtype":"error"' in combined:
@@ -364,12 +380,12 @@ class Planner:
                 wait_until(reset)
                 continue
 
-            if cp.returncode == 0:
+            if proc.returncode == 0:
                 log("INFO", f"Generation completed in {elapsed:.0f}s")
-                log("INFO", f"Plan size: {len(cp.stdout)} bytes")
-                return cp.stdout
+                log("INFO", f"Plan size: {len(combined)} bytes")
+                return combined
 
-            log("WARN", f"Claude returned exit code {cp.returncode}, retrying...")
+            log("WARN", f"Claude returned exit code {proc.returncode}, retrying...")
             time.sleep(2**attempt)
 
         raise RuntimeError("Claude retries exceeded")
@@ -455,12 +471,6 @@ End with:
         if proc.returncode != 0:
             raise RuntimeError("Failed to post comment")
 
-    # --------------------------------------------------------------
-
-    def show_diff(self, issue: int, plan: str) -> None:
-        log("INFO", f"[DRY RUN] Issue #{issue}")
-        print(plan[:2000])
-
 
 # ---------------------------------------------------------------------
 # CLI
@@ -468,19 +478,32 @@ End with:
 
 
 def main() -> int:
-    p = argparse.ArgumentParser()
-    p.add_argument("--limit", type=int)
-    p.add_argument("--issues")
-    p.add_argument("--auto", action="store_true")
-    p.add_argument("--replan", action="store_true")
-    p.add_argument("--replan-reason")
-    p.add_argument("--dry-run", action="store_true")
-    p.add_argument("--cleanup", action="store_true")
-    p.add_argument("--parallel", action="store_true")
-    p.add_argument("--max-parallel", type=int, default=4)
-    p.add_argument("--timeout", type=int, default=600)
-    p.add_argument("--throttle", type=float, default=0.0)
-    p.add_argument("--json", action="store_true")
+    p = argparse.ArgumentParser(
+        description="Generate and post implementation plans for GitHub issues using Claude",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""\
+Examples:
+  %(prog)s --limit 5                    First 5 open issues
+  %(prog)s --issues 123,456             Specific issues only
+  %(prog)s --auto --replan              Auto mode, allow replanning
+  %(prog)s --issues 123 --replan-reason 'Need to add error handling'
+  %(prog)s --dry-run --issues 123       Preview without calling Claude
+  %(prog)s --auto --parallel            Parallel processing (4 jobs)
+  %(prog)s --auto --parallel --max-parallel 8   8 concurrent jobs
+""",
+    )
+    p.add_argument("--limit", type=int, metavar="N", help="Only process first N issues")
+    p.add_argument("--issues", metavar="N,M,...", help="Only process specific issue numbers")
+    p.add_argument("--auto", action="store_true", help="Non-interactive mode: skip editor, auto-post")
+    p.add_argument("--replan", action="store_true", help="Re-plan issues with existing plans")
+    p.add_argument("--replan-reason", metavar="TXT", help="Re-plan with context (implies --replan)")
+    p.add_argument("--dry-run", action="store_true", help="Preview which issues would be processed")
+    p.add_argument("--cleanup", action="store_true", help="Delete temp directory on completion")
+    p.add_argument("--parallel", action="store_true", help="Process issues in parallel (requires --auto)")
+    p.add_argument("--max-parallel", type=int, default=4, metavar="N", help="Max concurrent jobs (default: 4)")
+    p.add_argument("--timeout", type=int, default=600, metavar="SEC", help="Timeout per issue (default: 600)")
+    p.add_argument("--throttle", type=float, default=0.0, metavar="SEC", help="Seconds between API calls")
+    p.add_argument("--json", action="store_true", help="Output results as JSON")
 
     args = p.parse_args()
 
@@ -517,37 +540,94 @@ def main() -> int:
     repo_root = pathlib.Path(__file__).resolve().parents[1]
     tempdir = pathlib.Path(tempfile.mkdtemp(prefix="plan-issues-"))
     tempdir.chmod(0o700)  # Restrict to owner only
+
+    # Startup status messages (match bash output)
     log("INFO", f"Temp directory: {tempdir}")
+    log(
+        "INFO",
+        f"Mode: {'AUTO (non-interactive, plans auto-posted)' if opts.auto else 'INTERACTIVE (editor review before posting)'}",
+    )
+    if opts.parallel:
+        log("INFO", f"Parallel: ENABLED ({opts.max_parallel} jobs)")
+    if opts.dry_run:
+        log("INFO", "Dry-run: ENABLED (no changes will be made to GitHub)")
+    if opts.cleanup:
+        log("INFO", "Cleanup: ENABLED (temp files deleted on success)")
+    if opts.replan:
+        log("INFO", "Replan: ENABLED (will re-plan issues with existing plans)")
+        if opts.replan_reason:
+            log("INFO", f"Replan reason: {opts.replan_reason}")
+    else:
+        log("INFO", "Replan: DISABLED (will skip issues with existing plans)")
 
     planner = Planner(repo_root, tempdir, opts)
     issue_list = planner.fetch_issues(issues, args.limit)
 
+    print()
+    print("==========================================")
+    print("  Issue Planning Script")
+    print(f"  Total issues to process: {len(issue_list)}")
+    if opts.parallel:
+        print(f"  Parallel jobs: {opts.max_parallel}")
+    print("==========================================")
+    print()
+
     results: list[Result] = []
 
     if opts.parallel:
+        # Capture output per-issue to print in order at the end
+        def process_with_capture(issue: int, idx: int, total: int) -> tuple[Result, str]:
+            buffer = io.StringIO()
+            with redirect_stdout(buffer), redirect_stderr(buffer):
+                result = planner.process_issue(issue, idx, total)
+            return (result, buffer.getvalue())
+
         with ThreadPoolExecutor(max_workers=opts.max_parallel) as ex:
             futures = {
-                ex.submit(planner.process_issue, issue, i + 1, len(issue_list)): issue
-                for i, issue in enumerate(issue_list)
+                ex.submit(process_with_capture, issue, i + 1, len(issue_list)): i for i, issue in enumerate(issue_list)
             }
+            # Collect all results indexed by position
+            indexed_results: dict[int, tuple[Result, str]] = {}
             for f in as_completed(futures):
-                results.append(f.result())
+                idx = futures[f]
+                result, output = f.result()
+                indexed_results[idx] = (result, output)
+
+            # Print output in issue order
+            for i in range(len(issue_list)):
+                result, output = indexed_results[i]
+                print(output, end="")
+                results.append(result)
     else:
         for i, issue in enumerate(issue_list):
             results.append(planner.process_issue(issue, i + 1, len(issue_list)))
 
+    # Summary with proper error/skip distinction
     if opts.json_output:
         print(json.dumps([dataclasses.asdict(r) for r in results], indent=2))
     else:
         posted = sum(1 for r in results if r.status == "posted")
-        skipped = len(results) - posted
-        log("INFO", f"Posted: {posted}")
-        log("INFO", f"Skipped: {skipped}")
+        errored = sum(1 for r in results if r.status == "error")
+        skipped = sum(1 for r in results if r.status in ("skipped", "dry-run"))
+
+        print()
+        print("==========================================")
+        print("  Summary")
+        print(f"  Posted:  {posted}")
+        print(f"  Skipped: {skipped}")
+        print(f"  Errors:  {errored}")
+        print(f"  Total:   {len(results)}")
+        if not opts.cleanup:
+            print()
+            print(f"  Temp directory: {tempdir}")
+        print("==========================================")
 
     if opts.cleanup:
         shutil.rmtree(tempdir, ignore_errors=True)
 
-    return 0
+    # Return non-zero exit code if any errors occurred
+    error_count = sum(1 for r in results if r.status == "error")
+    return 1 if error_count > 0 else 0
 
 
 if __name__ == "__main__":
