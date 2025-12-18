@@ -46,6 +46,7 @@ PR_MAX_WAIT = 3600  # 1 hour max wait for CI
 PLAN_COMMENT_HEADER = "## Detailed Implementation Plan"
 MAX_RETRIES = 3
 STATUS_REFRESH_INTERVAL = 0.1
+API_DELAY_DEFAULT = 1.0  # seconds between GitHub API calls to avoid rate limiting
 
 # Rate limit detection
 RATE_LIMIT_RE = re.compile(
@@ -476,6 +477,7 @@ class Options:
     timeout: int
     cleanup: bool
     state_dir: pathlib.Path | None
+    api_delay: float  # seconds between GitHub API calls
 
 
 # ---------------------------------------------------------------------
@@ -739,8 +741,63 @@ class IssueImplementer:
         self.status_tracker = status_tracker
         self.state_file = (opts.state_dir or tempdir) / "implementation_state.json"
 
-        self._throttle_lock = threading.Lock()
-        self._last_call = 0.0
+        self._api_lock = threading.Lock()
+        self._last_api_call = 0.0
+
+    def _gh_call(self, args: list[str], retries: int = MAX_RETRIES) -> subprocess.CompletedProcess:
+        """Make a rate-limited GitHub CLI call with retries."""
+        with self._api_lock:
+            # Wait for rate limit delay
+            elapsed = time.time() - self._last_api_call
+            if elapsed < self.opts.api_delay:
+                time.sleep(self.opts.api_delay - elapsed)
+            self._last_api_call = time.time()
+
+        # Execute with retries
+        for attempt in range(1, retries + 1):
+            cp = run(args)
+            if cp.returncode == 0:
+                return cp
+
+            # Check for network/rate limit errors
+            stderr_lower = cp.stderr.lower()
+            is_network_error = any(
+                msg in stderr_lower
+                for msg in ["connection", "network", "timeout", "eof", "dns", "resolve", "rate limit"]
+            )
+            if is_network_error and attempt < retries:
+                delay = 2**attempt
+                log("WARN", f"API call failed (attempt {attempt}/{retries}), retrying in {delay}s...")
+                time.sleep(delay)
+                continue
+            break
+        return cp
+
+    def _fetch_issue_title(self, issue_num: int) -> str:
+        """Fetch title for a single issue (rate-limited)."""
+        cp = self._gh_call(["gh", "issue", "view", str(issue_num), "--json", "title"])
+        if cp.returncode == 0:
+            return json.loads(cp.stdout).get("title", f"Issue #{issue_num}")
+        return f"Issue #{issue_num}"
+
+    def fetch_titles_for_issues(self, issue_nums: list[int]) -> None:
+        """Fetch titles for a list of issues (rate-limited, with progress)."""
+        if not issue_nums:
+            return
+
+        # Filter to only issues that don't have titles yet
+        to_fetch = [n for n in issue_nums if n in self.state.issues and not self.state.issues[n].title]
+        if not to_fetch:
+            return
+
+        log("INFO", f"Fetching titles for {len(to_fetch)} issues...")
+        for idx, issue_num in enumerate(to_fetch, 1):
+            if idx % 5 == 0 or idx == len(to_fetch):
+                print(f"\r  Fetching: {idx}/{len(to_fetch)}", end="", flush=True)
+            title = self._fetch_issue_title(issue_num)
+            if issue_num in self.state.issues:
+                self.state.issues[issue_num].title = title
+        print()  # Newline after progress
 
     def parse_epic(self, epic_number: int) -> dict[int, IssueInfo]:
         """Parse an epic issue to extract issues with dependencies."""
@@ -816,37 +873,7 @@ class IssueImplementer:
                     status=status,
                 )
 
-        # Fetch titles for each issue (with retry for network errors)
-        log("INFO", f"Found {len(issues)} issues, fetching titles...")
-        failed_titles = 0
-        total_issues = len(issues)
-        for idx, (issue_num, info) in enumerate(issues.items(), 1):
-            # Show progress every 10 issues or for the last one
-            if idx % 10 == 0 or idx == total_issues:
-                print(f"\r  Fetching titles: {idx}/{total_issues}", end="", flush=True)
-            elif idx == 1:
-                print(f"\r  Fetching titles: {idx}/{total_issues}", end="", flush=True)
-            for attempt in range(1, MAX_RETRIES + 1):
-                cp = run(["gh", "issue", "view", str(issue_num), "--json", "title"])
-                if cp.returncode == 0:
-                    info.title = json.loads(cp.stdout).get("title", "")
-                    break
-                # Check for network error
-                stderr_lower = cp.stderr.lower()
-                is_network_error = any(
-                    msg in stderr_lower for msg in ["connection", "network", "timeout", "eof", "dns", "resolve"]
-                )
-                if is_network_error and attempt < MAX_RETRIES:
-                    time.sleep(2**attempt)
-                    continue
-                # Give up on this title
-                failed_titles += 1
-                info.title = f"Issue #{issue_num}"
-                break
-        print()  # Newline after progress
-        if failed_titles > 0:
-            log("WARN", f"Could not fetch titles for {failed_titles} issues (network issues)")
-
+        # Titles are fetched lazily when needed (to avoid rate limiting)
         log("INFO", f"Parsed {len(issues)} issues from epic #{epic_number}")
         return issues
 
@@ -1059,6 +1086,10 @@ Focus on what functionality was added or fixed. Do not include implementation de
             issue_info = self.state.issues.get(issue)
             if not issue_info:
                 return WorkerResult(issue, "error", None, "Issue not found in state", 0)
+
+            # Fetch title if not already fetched (lazy loading)
+            if not issue_info.title:
+                issue_info.title = self._fetch_issue_title(issue)
 
             title = issue_info.title or f"Issue #{issue}"
             log("INFO", f"Implementing #{issue}: {title}")
@@ -1355,6 +1386,13 @@ Examples:
     )
     p.add_argument("--cleanup", action="store_true", help="Cleanup stale worktrees and exit")
     p.add_argument("--state-dir", type=pathlib.Path, help="Directory to persist state")
+    p.add_argument(
+        "--api-delay",
+        type=float,
+        default=API_DELAY_DEFAULT,
+        metavar="SEC",
+        help=f"Delay between GitHub API calls (default: {API_DELAY_DEFAULT}s)",
+    )
 
     args = p.parse_args()
 
@@ -1379,6 +1417,7 @@ Examples:
         timeout=args.timeout,
         cleanup=args.cleanup,
         state_dir=args.state_dir,
+        api_delay=args.api_delay,
     )
 
     repo_root = pathlib.Path(__file__).resolve().parents[1]
@@ -1474,15 +1513,18 @@ Examples:
     print("==========================================")
     print()
 
-    if opts.dry_run:
+    if opts.dry_run or opts.analyze:
         print_analysis(resolver, state)
         ready = resolver.get_ready_issues()
-        print(f"\n[DRY RUN] Would start with {len(ready)} ready issues:")
-        for issue_num in ready[:10]:
-            info = state.issues.get(issue_num)
-            print(f"  #{issue_num} - {info.title if info else 'Unknown'}")
-        if len(ready) > 10:
-            print(f"  ... ({len(ready) - 10} more)")
+        if opts.dry_run:
+            # Fetch titles only for issues we'll display (first 10)
+            implementer.fetch_titles_for_issues(ready[:10])
+            print(f"\n[DRY RUN] Would start with {len(ready)} ready issues:")
+            for issue_num in ready[:10]:
+                info = state.issues.get(issue_num)
+                print(f"  #{issue_num} - {info.title if info else 'Unknown'}")
+            if len(ready) > 10:
+                print(f"  ... ({len(ready) - 10} more)")
         return 0
 
     results: list[WorkerResult] = []
