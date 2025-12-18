@@ -30,10 +30,18 @@ from shared.core.reduction import (
     mean,
     max_reduce,
     min_reduce,
+    variance,
+    std,
+    median,
+    percentile,
     sum_backward,
     mean_backward,
     max_reduce_backward,
     min_reduce_backward,
+    variance_backward,
+    std_backward,
+    median_backward,
+    percentile_backward,
 )
 from shared.testing import check_gradient
 
@@ -283,6 +291,263 @@ fn test_min_reduce_backward_gradient() raises:
 
 
 # ============================================================================
+# Variance Reduction Tests
+# ============================================================================
+
+
+fn test_var_forward_uniform() raises:
+    """Test variance of uniform values (should be 0)."""
+    var shape = List[Int]()
+    shape.append(5)
+    var x = ones(shape, DType.float32)
+
+    var result = variance(x, axis=-1)
+    assert_close_float(result._get_float64(0), 0.0, rtol=1e-5, atol=1e-7)
+
+
+fn test_var_forward_simple() raises:
+    """Test variance with known result."""
+    var shape = List[Int]()
+    shape.append(3)
+    var x = zeros(shape, DType.float32)
+    x._data.bitcast[Float32]()[0] = 1.0
+    x._data.bitcast[Float32]()[1] = 2.0
+    x._data.bitcast[Float32]()[2] = 3.0
+
+    # Mean = 2.0, var = ((1-2)^2 + (2-2)^2 + (3-2)^2) / 3 = 2/3
+    var result = variance(x, axis=-1, ddof=0)
+    assert_close_float(result._get_float64(0), 2.0 / 3.0, rtol=1e-5, atol=1e-7)
+
+
+fn test_var_forward_with_ddof() raises:
+    """Test sample variance with ddof=1."""
+    var shape = List[Int]()
+    shape.append(3)
+    var x = zeros(shape, DType.float32)
+    x._data.bitcast[Float32]()[0] = 1.0
+    x._data.bitcast[Float32]()[1] = 2.0
+    x._data.bitcast[Float32]()[2] = 3.0
+
+    # Sample variance with ddof=1: var = 2 / 2 = 1.0
+    var result = variance(x, axis=-1, ddof=1)
+    assert_close_float(result._get_float64(0), 1.0, rtol=1e-5, atol=1e-7)
+
+
+fn test_var_forward_axis() raises:
+    """Test variance along specific axis."""
+    var shape = List[Int]()
+    shape.append(2)
+    shape.append(3)
+    var x = zeros(shape, DType.float32)
+    x._data.bitcast[Float32]()[0] = 1.0
+    x._data.bitcast[Float32]()[1] = 2.0
+    x._data.bitcast[Float32]()[2] = 3.0
+    x._data.bitcast[Float32]()[3] = 4.0
+    x._data.bitcast[Float32]()[4] = 5.0
+    x._data.bitcast[Float32]()[5] = 6.0
+
+    var result = variance(x, axis=1, ddof=0)
+    var result_shape = result.shape()
+    assert_equal(result_shape[0], 2)
+
+
+fn test_var_backward_shapes() raises:
+    """Test that var_backward returns correct gradient shape."""
+    var shape = List[Int]()
+    shape.append(2)
+    shape.append(3)
+    var x = zeros(shape, DType.float32)
+    for i in range(6):
+        x._data.bitcast[Float32]()[i] = Float32(i) + 1.0
+
+    var result = variance(x, axis=1, ddof=0)
+    var grad_output = ones_like(result)
+    var grad_input = variance_backward(grad_output, x, axis=1, ddof=0)
+
+    var gi_shape = grad_input.shape()
+    assert_equal(gi_shape[0], 2)
+    assert_equal(gi_shape[1], 3)
+
+
+fn test_var_backward_gradient() raises:
+    """Test var_backward with numerical gradient checking."""
+    var shape = List[Int]()
+    shape.append(2)
+    shape.append(3)
+    var x = zeros(shape, DType.float32)
+    x._data.bitcast[Float32]()[0] = 0.5
+    x._data.bitcast[Float32]()[1] = -0.3
+    x._data.bitcast[Float32]()[2] = 1.2
+    x._data.bitcast[Float32]()[3] = -0.8
+    x._data.bitcast[Float32]()[4] = 0.1
+    x._data.bitcast[Float32]()[5] = 0.7
+
+    fn forward(inp: ExTensor) raises escaping -> ExTensor:
+        return variance(inp, axis=1, ddof=0)
+
+    var y = forward(x)
+    var grad_out = ones_like(y)
+
+    fn backward(grad: ExTensor, inp: ExTensor) raises escaping -> ExTensor:
+        return variance_backward(grad, inp, axis=1, ddof=0)
+
+    check_gradient(forward, backward, x, grad_out, rtol=2e-3, atol=1e-6)
+
+
+# ============================================================================
+# Standard Deviation Tests
+# ============================================================================
+
+
+fn test_std_forward_simple() raises:
+    """Test standard deviation with known result."""
+    var shape = List[Int]()
+    shape.append(3)
+    var x = zeros(shape, DType.float32)
+    x._data.bitcast[Float32]()[0] = 1.0
+    x._data.bitcast[Float32]()[1] = 2.0
+    x._data.bitcast[Float32]()[2] = 3.0
+
+    # std = sqrt(var) = sqrt(2/3)
+    var result = std(x, axis=-1, ddof=0)
+    var expected = (2.0 / 3.0) ** 0.5
+    assert_close_float(result._get_float64(0), expected, rtol=1e-5, atol=1e-7)
+
+
+fn test_std_backward_gradient() raises:
+    """Test std_backward with numerical gradient checking."""
+    var shape = List[Int]()
+    shape.append(2)
+    shape.append(3)
+    var x = zeros(shape, DType.float32)
+    x._data.bitcast[Float32]()[0] = 0.5
+    x._data.bitcast[Float32]()[1] = 0.3
+    x._data.bitcast[Float32]()[2] = 1.2
+    x._data.bitcast[Float32]()[3] = 0.8
+    x._data.bitcast[Float32]()[4] = 0.1
+    x._data.bitcast[Float32]()[5] = 0.7
+
+    fn forward(inp: ExTensor) raises escaping -> ExTensor:
+        return std(inp, axis=1, ddof=0)
+
+    var y = forward(x)
+    var grad_out = ones_like(y)
+
+    fn backward(grad: ExTensor, inp: ExTensor) raises escaping -> ExTensor:
+        return std_backward(grad, inp, axis=1, ddof=0)
+
+    check_gradient(forward, backward, x, grad_out, rtol=2e-3, atol=1e-6)
+
+
+# ============================================================================
+# Median Tests
+# ============================================================================
+
+
+fn test_median_forward_odd() raises:
+    """Test median with odd count."""
+    var shape = List[Int]()
+    shape.append(5)
+    var x = zeros(shape, DType.float32)
+    x._data.bitcast[Float32]()[0] = 3.0
+    x._data.bitcast[Float32]()[1] = 1.0
+    x._data.bitcast[Float32]()[2] = 4.0
+    x._data.bitcast[Float32]()[3] = 2.0
+    x._data.bitcast[Float32]()[4] = 5.0
+
+    var result = median(x, axis=-1)
+    assert_close_float(result._get_float64(0), 3.0, rtol=1e-5, atol=1e-7)
+
+
+fn test_median_forward_even() raises:
+    """Test median with even count (average of two middle values)."""
+    var shape = List[Int]()
+    shape.append(4)
+    var x = zeros(shape, DType.float32)
+    x._data.bitcast[Float32]()[0] = 1.0
+    x._data.bitcast[Float32]()[1] = 2.0
+    x._data.bitcast[Float32]()[2] = 3.0
+    x._data.bitcast[Float32]()[3] = 4.0
+
+    var result = median(x, axis=-1)
+    assert_close_float(result._get_float64(0), 2.5, rtol=1e-5, atol=1e-7)
+
+
+fn test_median_backward_shapes() raises:
+    """Test that median_backward returns correct gradient shape."""
+    var shape = List[Int]()
+    shape.append(2)
+    shape.append(3)
+    var x = zeros(shape, DType.float32)
+    for i in range(6):
+        x._data.bitcast[Float32]()[i] = Float32(i) + 1.0
+
+    var result = median(x, axis=1)
+    var grad_output = ones_like(result)
+    var grad_input = median_backward(grad_output, x, axis=1)
+
+    var gi_shape = grad_input.shape()
+    assert_equal(gi_shape[0], 2)
+    assert_equal(gi_shape[1], 3)
+
+
+# ============================================================================
+# Percentile Tests
+# ============================================================================
+
+
+fn test_percentile_forward_p50() raises:
+    """Test that 50th percentile equals median."""
+    var shape = List[Int]()
+    shape.append(5)
+    var x = zeros(shape, DType.float32)
+    x._data.bitcast[Float32]()[0] = 1.0
+    x._data.bitcast[Float32]()[1] = 2.0
+    x._data.bitcast[Float32]()[2] = 3.0
+    x._data.bitcast[Float32]()[3] = 4.0
+    x._data.bitcast[Float32]()[4] = 5.0
+
+    var result = percentile(x, 50.0, axis=-1)
+    assert_close_float(result._get_float64(0), 3.0, rtol=1e-5, atol=1e-7)
+
+
+fn test_percentile_forward_p0_p100() raises:
+    """Test that 0th and 100th percentiles equal min and max."""
+    var shape = List[Int]()
+    shape.append(5)
+    var x = zeros(shape, DType.float32)
+    x._data.bitcast[Float32]()[0] = 1.0
+    x._data.bitcast[Float32]()[1] = 2.0
+    x._data.bitcast[Float32]()[2] = 3.0
+    x._data.bitcast[Float32]()[3] = 4.0
+    x._data.bitcast[Float32]()[4] = 5.0
+
+    var p0 = percentile(x, 0.0, axis=-1)
+    assert_close_float(p0._get_float64(0), 1.0, rtol=1e-5, atol=1e-7)
+
+    var p100 = percentile(x, 100.0, axis=-1)
+    assert_close_float(p100._get_float64(0), 5.0, rtol=1e-5, atol=1e-7)
+
+
+fn test_percentile_backward_shapes() raises:
+    """Test that percentile_backward returns correct gradient shape."""
+    var shape = List[Int]()
+    shape.append(2)
+    shape.append(3)
+    var x = zeros(shape, DType.float32)
+    for i in range(6):
+        x._data.bitcast[Float32]()[i] = Float32(i) + 1.0
+
+    var result = percentile(x, 50.0, axis=1)
+    var grad_output = ones_like(result)
+    var grad_input = percentile_backward(grad_output, x, 50.0, axis=1)
+
+    var gi_shape = grad_input.shape()
+    assert_equal(gi_shape[0], 2)
+    assert_equal(gi_shape[1], 3)
+
+
+# ============================================================================
 # Main Test Runner
 # ============================================================================
 
@@ -318,5 +583,51 @@ fn main() raises:
 
     test_min_reduce_backward_gradient()
     print("✓ test_min_reduce_backward_gradient")
+
+    # Variance tests
+    test_var_forward_uniform()
+    print("✓ test_var_forward_uniform")
+
+    test_var_forward_simple()
+    print("✓ test_var_forward_simple")
+
+    test_var_forward_with_ddof()
+    print("✓ test_var_forward_with_ddof")
+
+    test_var_forward_axis()
+    print("✓ test_var_forward_axis")
+
+    test_var_backward_shapes()
+    print("✓ test_var_backward_shapes")
+
+    test_var_backward_gradient()
+    print("✓ test_var_backward_gradient")
+
+    # Standard deviation tests
+    test_std_forward_simple()
+    print("✓ test_std_forward_simple")
+
+    test_std_backward_gradient()
+    print("✓ test_std_backward_gradient")
+
+    # Median tests
+    test_median_forward_odd()
+    print("✓ test_median_forward_odd")
+
+    test_median_forward_even()
+    print("✓ test_median_forward_even")
+
+    test_median_backward_shapes()
+    print("✓ test_median_backward_shapes")
+
+    # Percentile tests
+    test_percentile_forward_p50()
+    print("✓ test_percentile_forward_p50")
+
+    test_percentile_forward_p0_p100()
+    print("✓ test_percentile_forward_p0_p100")
+
+    test_percentile_backward_shapes()
+    print("✓ test_percentile_backward_shapes")
 
     print("\nAll reduction tests passed!")
