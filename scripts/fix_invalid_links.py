@@ -15,6 +15,8 @@ import sys
 from pathlib import Path
 from typing import Tuple
 
+from common import get_repo_root
+
 
 def fix_system_path_links(content: str) -> Tuple[str, int]:
     """
@@ -87,7 +89,11 @@ def main():
     if dry_run:
         print("DRY RUN MODE - No files will be modified\n")
 
-    repo_root = Path(__file__).parent.parent
+    try:
+        repo_root = get_repo_root()
+    except RuntimeError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
 
     # Find all markdown files
     md_files = list(repo_root.glob("**/*.md"))
