@@ -357,6 +357,9 @@ from .mixed_precision import (
 # Export precision configuration
 from .precision_config import PrecisionConfig, PrecisionMode
 
+# Export training configuration (Issue #2602)
+from .config import TrainingConfig
+
 
 # Export CrossEntropyLoss wrapper (wraps core.loss.cross_entropy)
 struct CrossEntropyLoss(Loss, Movable):
