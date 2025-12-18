@@ -26,8 +26,9 @@ import shutil
 import struct
 import subprocess
 import sys
+import time
 from pathlib import Path
-from typing import Tuple
+from typing import List, Optional, Tuple
 
 try:
     import numpy as np
@@ -38,16 +39,26 @@ except ImportError:
     np = None
 
 # EMNIST download URLs (with fallbacks)
-# Primary URL (NIST official - may have availability issues)
+# Primary URL (NIST official - may have availability issues from GitHub Actions)
 EMNIST_PRIMARY_URL = "https://biometrics.nist.gov/cs_links/EMNIST/gzip.zip"
 
-# Fallback mirrors (if primary fails)
+# Fallback mirrors (if primary fails - especially for CI environments)
 EMNIST_FALLBACK_URLS = [
-    # Add more mirrors as they become available
+    # Kaggle mirror (alternative source)
+    "https://www.itl.nist.gov/iaui/vip/cs_links/EMNIST/gzip.zip",
 ]
 
 # All URLs to try in order
 EMNIST_URLS = [EMNIST_PRIMARY_URL] + EMNIST_FALLBACK_URLS
+
+# User-Agent header to avoid bot blocking (especially from NIST server)
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+)
+
+# Retry configuration
+MAX_RETRIES = 3
+RETRY_DELAYS = [1, 2, 4]  # Exponential backoff: 1s, 2s, 4s
 
 # Available splits
 EMNIST_SPLITS = [
@@ -60,30 +71,64 @@ EMNIST_SPLITS = [
 ]
 
 
-def download_file(url: str, output_path: Path) -> None:
+def download_file_with_retry(url: str, output_path: Path, max_retries: int = MAX_RETRIES) -> None:
     """
-    Download file using wget or curl.
+    Download file using wget or curl with retry logic and User-Agent header.
+
+    Uses exponential backoff for retries to handle transient failures
+    (especially 403 errors from NIST server in GitHub Actions).
 
     Args:
         url: URL to download from
         output_path: Path to save downloaded file
+        max_retries: Maximum number of retry attempts
 
     Raises:
-        RuntimeError: If download fails
+        RuntimeError: If download fails after all retries
     """
-    print(f"Downloading {url}...")
+    last_error: Optional[str] = None
 
-    # Try wget first
-    result = subprocess.run(["wget", "-q", "-O", str(output_path), url], capture_output=True)
+    for attempt in range(max_retries):
+        if attempt > 0:
+            delay = RETRY_DELAYS[min(attempt - 1, len(RETRY_DELAYS) - 1)]
+            print(f"  Retry {attempt}/{max_retries - 1} after {delay}s delay...")
+            time.sleep(delay)
 
-    if result.returncode != 0:
-        # Fall back to curl
-        result = subprocess.run(["curl", "-s", "-L", "-o", str(output_path), url], capture_output=True)
+        print(f"Downloading {url}..." + (f" (attempt {attempt + 1}/{max_retries})" if attempt > 0 else ""))
 
-        if result.returncode != 0:
-            raise RuntimeError(f"Failed to download {url}. Install wget or curl.")
+        # Try wget first with User-Agent header
+        result = subprocess.run(
+            ["wget", "-q", "-O", str(output_path), f"--user-agent={USER_AGENT}", url],
+            capture_output=True,
+        )
 
-    print(f"Downloaded to {output_path}")
+        if result.returncode == 0:
+            print(f"Downloaded to {output_path}")
+            return
+
+        # Fall back to curl with User-Agent header
+        result = subprocess.run(
+            ["curl", "-s", "-L", "-A", USER_AGENT, "-o", str(output_path), url],
+            capture_output=True,
+        )
+
+        if result.returncode == 0:
+            print(f"Downloaded to {output_path}")
+            return
+
+        # Check for specific error codes
+        stderr = result.stderr.decode("utf-8", errors="replace") if result.stderr else ""
+        last_error = f"wget/curl failed with exit code {result.returncode}"
+        if "403" in stderr or "Forbidden" in stderr:
+            last_error = "HTTP 403 Forbidden (server may be blocking automated requests)"
+        elif "404" in stderr or "Not Found" in stderr:
+            last_error = "HTTP 404 Not Found"
+        elif "Connection refused" in stderr:
+            last_error = "Connection refused"
+
+        print(f"  Download failed: {last_error}")
+
+    raise RuntimeError(f"Failed to download {url} after {max_retries} attempts. Last error: {last_error}")
 
 
 def extract_gzip(gzip_path: Path, output_dir: Path) -> None:
@@ -219,7 +264,7 @@ def main():
 
     for url in EMNIST_URLS:
         try:
-            download_file(url, gzip_zip)
+            download_file_with_retry(url, gzip_zip)
             download_success = True
             break
         except Exception as e:
