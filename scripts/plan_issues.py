@@ -446,6 +446,38 @@ def gh_issue_json(issue: int) -> dict:
     raise RuntimeError(ERR_UNEXPECTED_GH_ISSUE)
 
 
+def delete_plan_comments(issue: int, comments: list[dict]) -> int:
+    """Delete existing plan comments from an issue.
+
+    Args:
+        issue: GitHub issue number.
+        comments: List of comment dictionaries from gh issue view.
+
+    Returns:
+        Number of comments deleted.
+
+    """
+    deleted = 0
+    for c in comments:
+        comment_body = c.get("body") or ""
+        if PLAN_HEADER in comment_body:
+            # Extract numeric comment ID from URL
+            url = c.get("url") or ""
+            comment_id = url.split("-")[-1] if "-" in url else ""
+            if not comment_id.isdigit():
+                log("WARN", f"Could not extract comment ID from URL: {url}")
+                continue
+
+            log("INFO", f"Deleting existing plan comment {comment_id} from #{issue}")
+            cp = run(["gh", "api", "-X", "DELETE", f"/repos/{{owner}}/{{repo}}/issues/comments/{comment_id}"])
+            if cp.returncode == 0:
+                deleted += 1
+            else:
+                log("WARN", f"Failed to delete comment {comment_id}: {cp.stderr.strip()}")
+
+    return deleted
+
+
 # ---------------------------------------------------------------------
 # Options
 # ---------------------------------------------------------------------
@@ -624,16 +656,40 @@ class Planner:
 
             # Check for existing plan (with rate-limit detection)
             update_status("Checking", "existing plan")
-            if not self.opts.replan:
-                for c in data.get("comments", []):
+            comments = data.get("comments", [])
+
+            if self.opts.replan:
+                # When replanning, delete existing plan comments first
+                if not self.opts.dry_run:
+                    update_status("Deleting", "old plans")
+                    deleted = delete_plan_comments(issue, comments)
+                    if deleted > 0:
+                        log("INFO", f"Deleted {deleted} existing plan comment(s)")
+            else:
+                # Check if a valid (non-rate-limited) plan already exists
+                has_valid_plan = False
+                has_rate_limited_plan = False
+                for c in comments:
                     comment_body = c.get("body") or ""
-                    if "## Detailed Implementation Plan" in comment_body:
-                        # Check if existing plan was rate-limited (should retry)
+                    if PLAN_HEADER in comment_body:
                         if "Limit reached" in comment_body:
-                            log("INFO", "Existing plan was rate-limited, will replan...")
-                            break  # Continue to generate new plan
-                        update_status("Skipped", "has plan")
-                        return Result(issue, "skipped")
+                            has_rate_limited_plan = True
+                        else:
+                            has_valid_plan = True
+                            break  # Found valid plan, no need to check more
+
+                if has_valid_plan:
+                    update_status("Skipped", "has plan")
+                    return Result(issue, "skipped")
+
+                if has_rate_limited_plan:
+                    log("INFO", "Existing plan was rate-limited, will replan...")
+                    # Delete rate-limited plan comments before generating new one
+                    if not self.opts.dry_run:
+                        update_status("Deleting", "rate-limited plans")
+                        deleted = delete_plan_comments(issue, comments)
+                        if deleted > 0:
+                            log("INFO", f"Deleted {deleted} rate-limited plan comment(s)")
 
             # Dry-run: show what would be done without calling Claude
             if self.opts.dry_run:
