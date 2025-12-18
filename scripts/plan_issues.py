@@ -96,33 +96,45 @@ class StatusTracker:
     def __init__(self, max_workers: int):
         self._lock = threading.Lock()
         self._max_workers = max_workers
-        self._slots: dict[int, tuple[int, str, str]] = {}  # slot -> (issue, stage, info)
+        # slot -> (issue, stage, info, stage_start_time)
+        self._slots: dict[int, tuple[int, str, str, float]] = {}
         self._stop_event = threading.Event()
         self._display_thread: Optional[threading.Thread] = None
         self._lines_printed = 0
+        self._update_event = threading.Event()  # Signal immediate refresh
 
     def acquire_slot(self, issue: int) -> int:
         """Acquire a display slot for an issue. Returns slot number."""
         with self._lock:
             for slot in range(self._max_workers):
                 if slot not in self._slots:
-                    self._slots[slot] = (issue, "Starting", "")
+                    self._slots[slot] = (issue, "Starting", "", time.time())
+                    self._update_event.set()  # Trigger immediate refresh
                     return slot
             # Fallback: use issue number mod max_workers
             slot = issue % self._max_workers
-            self._slots[slot] = (issue, "Starting", "")
+            self._slots[slot] = (issue, "Starting", "", time.time())
+            self._update_event.set()
             return slot
 
     def update(self, slot: int, issue: int, stage: str, info: str = "") -> None:
-        """Update the status for a slot."""
+        """Update the status for a slot. Triggers immediate display refresh."""
         with self._lock:
-            self._slots[slot] = (issue, stage, info)
+            self._slots[slot] = (issue, stage, info, time.time())
+            self._update_event.set()  # Trigger immediate refresh
 
     def release_slot(self, slot: int) -> None:
         """Release a slot when done."""
         with self._lock:
             if slot in self._slots:
                 del self._slots[slot]
+            self._update_event.set()
+
+    def _format_elapsed(self, start_time: float) -> str:
+        """Format elapsed time as MM:SS."""
+        elapsed = int(time.time() - start_time)
+        minutes, seconds = divmod(elapsed, 60)
+        return f"{minutes:02d}:{seconds:02d}"
 
     def _render_status(self) -> list[str]:
         """Render current status as list of lines."""
@@ -130,9 +142,10 @@ class StatusTracker:
             lines = []
             for slot in range(self._max_workers):
                 if slot in self._slots:
-                    issue, stage, info = self._slots[slot]
+                    issue, stage, info, start_time = self._slots[slot]
+                    elapsed = self._format_elapsed(start_time)
                     info_str = f" - {info}" if info else ""
-                    lines.append(f"  Thread {slot}: [{stage:12}] #{issue}{info_str}")
+                    lines.append(f"  Thread {slot}: [{stage:12}] #{issue} ({elapsed}){info_str}")
                 else:
                     lines.append(f"  Thread {slot}: [Idle        ]")
             return lines
@@ -153,7 +166,10 @@ class StatusTracker:
             sys.stdout.flush()
 
             self._lines_printed = len(lines)
-            self._stop_event.wait(STATUS_REFRESH_INTERVAL)
+
+            # Wait for either timeout or explicit update signal
+            self._update_event.wait(STATUS_REFRESH_INTERVAL)
+            self._update_event.clear()
 
     def start_display(self) -> None:
         """Start the background display thread."""
@@ -163,6 +179,7 @@ class StatusTracker:
     def stop_display(self) -> None:
         """Stop the background display thread."""
         self._stop_event.set()
+        self._update_event.set()  # Wake up the display thread
         if self._display_thread:
             self._display_thread.join(timeout=1.0)
         # Clear the status display
