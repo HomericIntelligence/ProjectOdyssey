@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from common import get_agents_dir
+from common import get_agents_dir, get_repo_root
 
 from agent_utils import AgentInfo, load_all_agents
 
@@ -182,21 +182,19 @@ Examples:
     )
 
     args = parser.parse_args()
-    # Use get_agents_dir() if no custom path specified
-    if args.agents_dir is None:
-        args.agents_dir = get_agents_dir()
 
-    # Find repository root
-    repo_root = Path.cwd()
-    while repo_root != repo_root.parent:
-        if (repo_root / ".claude").exists():
-            break
-        repo_root = repo_root.parent
-    else:
-        print("Error: Could not find .claude directory", file=sys.stderr)
+    # Get repository root
+    try:
+        repo_root = get_repo_root()
+    except RuntimeError as e:
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
-    agents_dir = repo_root / args.agents_dir
+    # Determine agents directory
+    if args.agents_dir is None:
+        agents_dir = get_agents_dir()
+    else:
+        agents_dir = repo_root / args.agents_dir
 
     if not agents_dir.exists():
         print(f"Error: Agents directory not found: {agents_dir}", file=sys.stderr)

@@ -12,6 +12,8 @@ import sys
 from pathlib import Path
 from typing import List, Tuple
 
+from common import get_repo_root
+
 # Phase 2: Test files
 PHASE_2_FILES = [
     "tests/shared/core/test_extensor_operators.mojo",
@@ -124,8 +126,12 @@ def process_phase(phase_name: str, file_list: List[str], repo_root: Path) -> Tup
 
 def main():
     """Main entry point."""
-    # Get repository root (assume script is in scripts/ directory)
-    repo_root = Path(__file__).parent.parent.resolve()
+    # Get repository root
+    try:
+        repo_root = get_repo_root()
+    except RuntimeError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
     print(f"Repository root: {repo_root}")
 
     # Process all phases
