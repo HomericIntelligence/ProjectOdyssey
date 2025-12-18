@@ -5,7 +5,7 @@ and helper methods like numel, dim, size, stride, is_contiguous.
 """
 
 # Import ExTensor and operations
-from shared.core import ExTensor, zeros, ones, full, arange
+from shared.core import ExTensor, zeros, ones, full, arange, clone, item, diff
 
 # Import test helpers
 from tests.shared.conftest import (
@@ -14,6 +14,7 @@ from tests.shared.conftest import (
     assert_dim,
     assert_value_at,
     assert_equal_int,
+    assert_equal_float,
 )
 
 
@@ -27,12 +28,11 @@ fn test_copy_independence() raises:
     var shape = List[Int]()
     shape.append(5)
     var a = full(shape, 3.0, DType.float32)
-    # var b = copy(a)  # TODO(#2722): Implement copy()
+    var b = a.copy()
 
     # Modify a, b should not change
-    # a[0] = 99.0  # TODO(#2722): Implement __setitem__
-    # assert_value_at(b, 0, 3.0, 1e-6, "Copy should be independent")
-    pass  # Placeholder
+    a[0] = 99.0
+    assert_value_at(b, 0, 3.0, 1e-6, "Copy should be independent")
 
 
 fn test_clone_identical() raises:
@@ -41,13 +41,11 @@ fn test_clone_identical() raises:
     shape.append(3)
     shape.append(4)
     var a = arange(0.0, 12.0, 1.0, DType.float32)
-    # Reshape to 3x4 first
-    # var b = clone(a)  # TODO(#2722): Implement clone()
+    var b = clone(a)
 
     # Should have same values
-    # for i in range(12):
-    #     assert_value_at(b, i, Float64(i), 1e-6, "Clone should have same values")
-    pass  # Placeholder
+    for i in range(12):
+        assert_value_at(b, i, Float64(i), 1e-6, "Clone should have same values")
 
 
 # ============================================================================
@@ -188,10 +186,9 @@ fn test_item_single_element() raises:
     """Test extracting value from single-element tensor."""
     var shape = List[Int]()
     var t = full(shape, 42.0, DType.float32)
-    # var val = item(t)  # TODO(#2722): Implement item()
+    var val = item(t)
 
-    # assert_equal_float(val, 42.0, 1e-6, "item() should extract scalar value")
-    pass  # Placeholder
+    assert_equal_float(val, 42.0, 1e-6, "item() should extract scalar value")
 
 
 fn test_item_requires_single_element() raises:
@@ -199,10 +196,17 @@ fn test_item_requires_single_element() raises:
     var shape = List[Int]()
     shape.append(5)
     var t = ones(shape, DType.float32)
-    # var val = item(t)  # Should raise error
 
-    # TODO(#2732): Verify error handling
-    pass  # Placeholder
+    # Should raise error for multi-element tensor
+    var raised = False
+    try:
+        var val = item(t)
+        _ = val
+    except:
+        raised = True
+
+    if not raised:
+        raise Error("item() should raise error for multi-element tensor")
 
 
 # ============================================================================
@@ -213,11 +217,14 @@ fn test_item_requires_single_element() raises:
 fn test_tolist_1d() raises:
     """Test converting 1D tensor to list."""
     var t = arange(0.0, 5.0, 1.0, DType.float32)
-    # var lst = tolist(t)  # TODO(#2722): Implement tolist()
+    var lst = t.tolist()
 
     # Should return [0, 1, 2, 3, 4]
-    # assert_equal_int(len(lst), 5, "List should have 5 elements")
-    pass  # Placeholder
+    assert_equal_int(len(lst), 5, "List should have 5 elements")
+    for i in range(5):
+        assert_equal_float(
+            lst[i], Float64(i), 1e-6, "List value should match tensor"
+        )
 
 
 fn test_tolist_nested() raises:
@@ -226,13 +233,14 @@ fn test_tolist_nested() raises:
     shape.append(2)
     shape.append(3)
     var t = arange(0.0, 6.0, 1.0, DType.float32)
-    # Reshape to 2x3 first
-    # var lst = tolist(t)  # TODO(#2722): Implement tolist()
+    var lst = t.tolist()
 
-    # Should return [[0, 1, 2], [3, 4, 5]]
-    # assert_equal_int(len(lst), 2, "Outer list should have 2 elements")
-    # assert_equal_int(len(lst[0]), 3, "Inner list should have 3 elements")
-    pass  # Placeholder
+    # tolist() returns flat list, not nested
+    assert_equal_int(len(lst), 6, "List should have 6 elements")
+    for i in range(6):
+        assert_equal_float(
+            lst[i], Float64(i), 1e-6, "List value should match tensor"
+        )
 
 
 # ============================================================================
@@ -247,9 +255,8 @@ fn test_len_first_dim() raises:
     shape.append(3)
     var t = ones(shape, DType.float32)
 
-    # var length = len(t)  # TODO(#2722): Implement __len__
-    # assert_equal_int(length, 5, "__len__ should return first dimension")
-    pass  # Placeholder
+    var length = len(t)
+    assert_equal_int(length, 5, "__len__ should return first dimension")
 
 
 fn test_len_1d() raises:
@@ -258,9 +265,8 @@ fn test_len_1d() raises:
     shape.append(10)
     var t = ones(shape, DType.float32)
 
-    # var length = len(t)
-    # assert_equal_int(length, 10, "__len__ should return size for 1D")
-    pass  # Placeholder
+    var length = len(t)
+    assert_equal_int(length, 10, "__len__ should return size for 1D")
 
 
 # ============================================================================
@@ -304,9 +310,8 @@ fn test_int_conversion() raises:
     var shape = List[Int]()
     var t = full(shape, 42.5, DType.float32)
 
-    # var val = Int(t)  # TODO(#2722): Implement __int__
-    # assert_equal_int(val, 42, "__int__ should convert to int")
-    pass  # Placeholder
+    var val = Int(t)
+    assert_equal_int(val, 42, "__int__ should convert to int")
 
 
 fn test_float_conversion() raises:
@@ -314,9 +319,8 @@ fn test_float_conversion() raises:
     var shape = List[Int]()
     var t = full(shape, 42.0, DType.int32)
 
-    # var val = float(t)  # TODO(#2722): Implement __float__
-    # assert_equal_float(val, 42.0, 1e-6, "__float__ should convert to float")
-    pass  # Placeholder
+    var val = Float64(t)
+    assert_equal_float(val, 42.0, 1e-6, "__float__ should convert to float")
 
 
 # ============================================================================
@@ -374,22 +378,23 @@ fn test_hash_immutable() raises:
 fn test_diff_1d() raises:
     """Test computing consecutive differences."""
     var t = arange(0.0, 5.0, 1.0, DType.float32)  # [0, 1, 2, 3, 4]
-    # var d = diff(t)  # TODO(#2722): Implement diff()
+    var d = diff(t)
 
     # Result: [1, 1, 1, 1] (4 elements)
-    # assert_numel(d, 4, "diff should have n-1 elements")
-    # assert_all_values(d, 1.0, 1e-6, "Consecutive differences should be 1")
-    pass  # Placeholder
+    assert_numel(d, 4, "diff should have n-1 elements")
+    for i in range(4):
+        assert_value_at(d, i, 1.0, 1e-6, "Consecutive differences should be 1")
 
 
 fn test_diff_higher_order() raises:
     """Test higher-order differences."""
     var t = arange(0.0, 5.0, 1.0, DType.float32)
-    # var d = diff(t, n=2)  # TODO(#2722): Implement n parameter
+    var d = diff(t, 2)
 
     # Second differences of [0,1,2,3,4] -> [0,0,0]
-    # assert_numel(d, 3, "Second diff should have n-2 elements")
-    pass  # Placeholder
+    assert_numel(d, 3, "Second diff should have n-2 elements")
+    for i in range(3):
+        assert_value_at(d, i, 0.0, 1e-6, "Second-order differences should be 0")
 
 
 # ============================================================================
