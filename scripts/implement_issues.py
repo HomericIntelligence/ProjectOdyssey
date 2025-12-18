@@ -746,9 +746,35 @@ class IssueImplementer:
         """Parse an epic issue to extract issues with dependencies."""
         log("INFO", f"Parsing epic #{epic_number}...")
 
-        cp = run(["gh", "issue", "view", str(epic_number), "--json", "body,title"])
-        if cp.returncode != 0:
-            raise RuntimeError(f"Failed to fetch epic #{epic_number}: {cp.stderr}")
+        # Retry with exponential backoff for network errors
+        for attempt in range(1, MAX_RETRIES + 1):
+            cp = run(["gh", "issue", "view", str(epic_number), "--json", "body,title"])
+            if cp.returncode == 0:
+                break
+
+            # Check for network-related errors
+            stderr_lower = cp.stderr.lower()
+            is_network_error = any(
+                msg in stderr_lower for msg in ["connection", "network", "timeout", "eof", "dns", "resolve"]
+            )
+
+            if is_network_error:
+                if attempt < MAX_RETRIES:
+                    delay = 2**attempt
+                    log("WARN", f"Network error fetching epic #{epic_number} (attempt {attempt}/{MAX_RETRIES})")
+                    log("INFO", f"Retrying in {delay}s...")
+                    time.sleep(delay)
+                    continue
+                else:
+                    log("ERROR", "Network connection failed. Please check:")
+                    log("ERROR", "  1. Your internet connection")
+                    log("ERROR", "  2. GitHub status: https://githubstatus.com")
+                    log("ERROR", "  3. Your VPN/proxy settings")
+                    sys.exit(1)
+            else:
+                # Non-network error, fail immediately
+                log("ERROR", f"Failed to fetch epic #{epic_number}: {cp.stderr}")
+                sys.exit(1)
 
         data = json.loads(cp.stdout)
         body = data.get("body", "")
@@ -790,12 +816,29 @@ class IssueImplementer:
                     status=status,
                 )
 
-        # Fetch titles for each issue
+        # Fetch titles for each issue (with retry for network errors)
         log("INFO", f"Found {len(issues)} issues, fetching titles...")
+        failed_titles = 0
         for issue_num, info in issues.items():
-            cp = run(["gh", "issue", "view", str(issue_num), "--json", "title"])
-            if cp.returncode == 0:
-                info.title = json.loads(cp.stdout).get("title", "")
+            for attempt in range(1, MAX_RETRIES + 1):
+                cp = run(["gh", "issue", "view", str(issue_num), "--json", "title"])
+                if cp.returncode == 0:
+                    info.title = json.loads(cp.stdout).get("title", "")
+                    break
+                # Check for network error
+                stderr_lower = cp.stderr.lower()
+                is_network_error = any(
+                    msg in stderr_lower for msg in ["connection", "network", "timeout", "eof", "dns", "resolve"]
+                )
+                if is_network_error and attempt < MAX_RETRIES:
+                    time.sleep(2**attempt)
+                    continue
+                # Give up on this title
+                failed_titles += 1
+                info.title = f"Issue #{issue_num}"
+                break
+        if failed_titles > 0:
+            log("WARN", f"Could not fetch titles for {failed_titles} issues (network issues)")
 
         log("INFO", f"Parsed {len(issues)} issues from epic #{epic_number}")
         return issues
