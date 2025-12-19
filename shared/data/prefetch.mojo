@@ -41,11 +41,14 @@ struct PrefetchBuffer(Copyable, Movable):
     var capacity: Int
     """Maximum number of batches to buffer."""
 
-    fn __init__(out self, capacity: Int = 2):
+    fn __init__(out self, capacity: Int = 2) raises:
         """Create a prefetch buffer.
 
         Args:
             capacity: Maximum number of batches to hold (default 2).
+
+        Raises:
+            Error: If capacity is not positive.
         """
         if capacity <= 0:
             raise Error(
@@ -181,7 +184,7 @@ struct PrefetchDataLoader[
         return self.base_loader.__iter__()
 
     fn _prefetch_batches(
-        mut self, batches: List[Batch], prefetch_factor: Int
+        mut self, var batches: List[Batch], prefetch_factor: Int
     ) raises -> List[Batch]:
         """Process batches with prefetch awareness.
 
@@ -189,7 +192,7 @@ struct PrefetchDataLoader[
         Currently returns batches as-is since true async isn't available.
 
         Args:
-            batches: List of batches to process.
+            batches: List of batches to process (ownership transferred).
             prefetch_factor: Prefetch buffer size.
 
         Returns:
@@ -206,4 +209,4 @@ struct PrefetchDataLoader[
         # - Clear interface for future async upgrades
         # - Benchmark point for measuring any async benefits
 
-        return batches
+        return batches^

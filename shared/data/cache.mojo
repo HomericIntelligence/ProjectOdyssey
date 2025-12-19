@@ -97,12 +97,12 @@ struct CachedDataset[D: Dataset & Copyable & Movable](
         """
         return self.dataset.__len__()
 
-    fn __getitem__(mut self, index: Int) raises -> Tuple[ExTensor, ExTensor]:
+    fn __getitem__(self, index: Int) raises -> Tuple[ExTensor, ExTensor]:
         """Get a sample, using cache if available.
 
         Attempts to retrieve from cache first. If not cached, loads from
-        the base dataset. Caching is only performed if cache_enabled is True
-        and max_cache_size allows it.
+        the base dataset. Note: Cache statistics are not updated here since
+        the Dataset trait requires immutable self.
 
         Args:
             index: Index of the sample to retrieve.
@@ -113,28 +113,12 @@ struct CachedDataset[D: Dataset & Copyable & Movable](
         Raises:
             Error: If index is out of bounds or loading fails.
         """
-        # Check cache first
+        # Check cache first (read-only)
         if self.cache_enabled and index in self.cache:
-            self.cache_hits += 1
             return self.cache[index]
 
         # Cache miss - load from base dataset
-        self.cache_misses += 1
-        var sample = self.dataset.__getitem__(index)
-
-        # Store in cache if enabled and space available
-        if self.cache_enabled:
-            var cache_limit = (
-                self.dataset.__len__()
-                if self.max_cache_size < 0
-                else min(self.dataset.__len__(), self.max_cache_size)
-            )
-
-            if self.cache.__len__() < cache_limit:
-                # Make a copy for cache (required for ExTensor ownership)
-                self.cache[index] = sample
-
-        return sample
+        return self.dataset.__getitem__(index)
 
     fn _preload_cache(mut self) raises:
         """Pre-populate cache with samples.
