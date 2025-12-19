@@ -105,7 +105,7 @@ fn train_one_epoch(
     var num_batches = 0
 
     # Setup metrics for epoch
-    # FIXME(#2713): var accuracy_metric = AccuracyMetric()
+    var accuracy_metric = AccuracyMetric()
     var loss_tracker = LossTracker(window_size=log_interval)
 
     # Reset dataloader
@@ -239,13 +239,16 @@ struct TrainingLoop:
         print("Epoch [", epoch, "/", total_epochs, "]")
 
         for batch_idx in range(num_batches):
-            # FIXME(#2713): var start_idx = batch_idx * batch_size
-            # FIXME(#2713): var end_idx = min(start_idx + batch_size, num_samples)
-            # FIXME(#2713): var actual_batch_size = end_idx - start_idx
+            var start_idx = batch_idx * batch_size
+            var end_idx = min(start_idx + batch_size, num_samples)
+            var actual_batch_size = end_idx - start_idx
 
-            # Extract batch slice (when slicing fully supported, use that)
-            # For now, pass full data - model-specific code handles batching
-            var batch_loss = compute_batch_loss(train_data, train_labels)
+            # Extract batch slice using ExTensor.slice()
+            var batch_data = train_data.slice(start_idx, end_idx, axis=0)
+            var batch_labels = train_labels.slice(start_idx, end_idx, axis=0)
+
+            # Compute loss on batch
+            var batch_loss = compute_batch_loss(batch_data, batch_labels)
             total_loss += batch_loss
 
             # Print progress every log_interval batches
@@ -259,9 +262,6 @@ struct TrainingLoop:
                     "] - Loss: ",
                     avg_loss,
                 )
-
-            # TODO(#2721): Remove after tensor slicing is optimized
-            # break.
 
         var avg_loss = total_loss / Float32(num_batches)
         print("  Average Loss: ", avg_loss)
