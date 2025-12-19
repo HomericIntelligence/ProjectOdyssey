@@ -334,8 +334,9 @@ struct GradientTape:
 struct NoGradContext(Copyable, Movable):
     """Context manager for disabling gradient computation.
 
-    NOTE: Full implementation blocked by Mojo limitation.
-    UnsafePointer with parametric mutability is not yet supported.
+    WARNING: This is currently a stub implementation that does not function.
+    The full context manager is blocked by Mojo's UnsafePointer limitation
+    (parametric mutability not yet supported). See issue #2400.
 
     Workaround: Manually manage gradient tracking with requires_grad=False
     on Variables that shouldn't track gradients. Alternatively, use
@@ -355,38 +356,18 @@ struct NoGradContext(Copyable, Movable):
         to the global gradient tape. Mojo's UnsafePointer does not yet support
         parametric mutability, making it impossible to create a context that
         preserves the mutability state of the tape across scope boundaries.
-
-    Related Issue: #2400
     """
 
     fn __init__(out self):
-        """Initialize NoGradContext (stub).
-
-        This is a stub implementation. The full context manager is blocked
-        by Mojo's UnsafePointer parametric mutability limitation.
-
-        Note:
-            This constructor does not perform any initialization due to the
-            implementation limitation documented in the struct docstring.
-        """
+        """Initialize no-grad context."""
         pass
 
     fn __enter__(mut self) -> None:
-        """Enter no-grad context (stub).
-
-        Note:
-            TODO(#2400): Implement gradient tracking disable when Mojo supports
-            UnsafePointer with parametric mutability. For now, use:
-                tape.disable()
-        """
+        """Enter no-grad context (disable gradient tracking)."""
+        # TODO(#2400): Implement gradient tracking disable
         pass
 
     fn __exit__(mut self) -> None:
-        """Exit no-grad context (stub).
-
-        Note:
-            TODO(#2400): Implement gradient tracking restore when Mojo supports
-            UnsafePointer with parametric mutability. For now, use:
-                tape.enable()
-        """
+        """Exit no-grad context (restore gradient tracking)."""
+        # TODO(#2400): Implement gradient tracking restore
         pass
