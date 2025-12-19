@@ -86,19 +86,21 @@ def write_secure(path: pathlib.Path, content: str) -> None:
 # ---------------------------------------------------------------------
 
 
-# Global verbose flag (set from Options)
+# Global verbose/debug flags (set from Options)
 _verbose_mode = False
+_debug_mode = False
 
 
-def set_verbose(verbose: bool) -> None:
-    """Set the global verbose mode."""
-    global _verbose_mode
+def set_verbose(verbose: bool, debug: bool = False) -> None:
+    """Set the global verbose and debug modes."""
+    global _verbose_mode, _debug_mode
     _verbose_mode = verbose
+    _debug_mode = debug
 
 
 def log(level: str, msg: str) -> None:
     """Log a message with timestamp and level prefix."""
-    if level == "DEBUG" and not _verbose_mode:
+    if level == "DEBUG" and not _debug_mode:
         return
     ts = time.strftime("%H:%M:%S")
     out = sys.stderr if level in {"WARN", "ERROR"} else sys.stdout
@@ -1793,13 +1795,18 @@ Examples:
         "--verbose",
         "-v",
         action="store_true",
-        help="Enable verbose/debug output",
+        help="Enable verbose INFO output",
+    )
+    p.add_argument(
+        "--debug",
+        action="store_true",
+        help="Enable DEBUG output (requires --verbose)",
     )
 
     args = p.parse_args()
 
-    # Set verbose mode
-    set_verbose(args.verbose)
+    # Set verbose/debug mode
+    set_verbose(args.verbose, args.debug)
 
     # Parse issue numbers if provided
     issues: list[int] | None = None
@@ -1948,7 +1955,6 @@ Examples:
             futures: dict = {}
             active_count = 0
             stall_count = 0  # Track iterations without progress
-            last_debug_time = 0.0  # Rate-limit debug output
 
             while True:
                 status_tracker.update_main("Processing", f"{len(results)} done")
@@ -1980,14 +1986,10 @@ Examples:
                 spawned_this_iteration = 0
                 available = actual_workers - active_count
 
-                # Rate-limited debug output (once per second)
-                now = time.time()
-                if now - last_debug_time >= 1.0:
-                    log(
-                        "DEBUG",
-                        f"Loop: ready={len(ready)} futures={len(futures)} active={active_count} avail={available} done={len(results)}",
-                    )
-                    last_debug_time = now
+                log(
+                    "DEBUG",
+                    f"Loop: ready={len(ready)} futures={len(futures)} active={active_count} avail={available} done={len(results)}",
+                )
                 for issue_num in ready[:available]:
                     slot = status_tracker.acquire_slot(issue_num)
                     resolver.mark_in_progress(issue_num)
