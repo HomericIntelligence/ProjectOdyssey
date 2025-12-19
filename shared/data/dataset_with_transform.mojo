@@ -16,10 +16,11 @@ Example:
 
 from shared.core.extensor import ExTensor
 from .datasets import Dataset
+from .transforms import Transform
 
 
 struct TransformedDataset[
-    D: Dataset & Copyable & Movable, T: Copyable & Movable
+    D: Dataset & Copyable & Movable, T: Transform & Copyable & Movable
 ](Copyable, Dataset, Movable):
     """Dataset wrapper that applies transforms to data.
 
