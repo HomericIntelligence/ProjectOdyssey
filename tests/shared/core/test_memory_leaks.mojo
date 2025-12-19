@@ -37,8 +37,7 @@ fn test_copy_increments_refcount() raises:
     var tensor2 = tensor1
     assert_equal_int(tensor1._refcount[], 2, "Refcount should be 2 after copy")
     assert_true(
-        tensor1._data == tensor2._data,
-        "Copied tensors should share data"
+        tensor1._data == tensor2._data, "Copied tensors should share data"
     )
 
 
@@ -48,7 +47,9 @@ fn test_multiple_copies_refcount() raises:
     var tensor2 = tensor1
     var tensor3 = tensor1
     var tensor4 = tensor2
-    assert_equal_int(tensor1._refcount[], 4, "Refcount should be 4 after 3 copies")
+    assert_equal_int(
+        tensor1._refcount[], 4, "Refcount should be 4 after 3 copies"
+    )
 
 
 fn test_scope_exit_decrements_refcount() raises:
@@ -186,7 +187,9 @@ fn test_view_modification_affects_original() raises:
     var view = original.reshape(shape)
     view._data.bitcast[Float32]()[0] = 99.0
     var value = original._data.bitcast[Float32]()[0]
-    assert_true(value == 99.0, "Modification through view should affect original")
+    assert_true(
+        value == 99.0, "Modification through view should affect original"
+    )
 
 
 # ============================================================================
@@ -206,7 +209,9 @@ fn test_empty_tensor_lifecycle() raises:
     """Test empty tensor (0 elements) creation and destruction."""
     for _ in range(100):
         var empty = zeros(List[Int](), DType.float32)
-        assert_equal_int(empty._refcount[], 1, "Empty tensor should have refcount 1")
+        assert_equal_int(
+            empty._refcount[], 1, "Empty tensor should have refcount 1"
+        )
     assert_true(True, "Empty tensor lifecycle test completed")
 
 
@@ -251,7 +256,9 @@ fn test_view_destructor_does_not_decrement_refcount() raises:
     var view = original.reshape(shape)
     assert_true(view._is_view, "Should be view")
     assert_equal_int(
-        original._refcount[], 2, "View creation via copy() should increment refcount"
+        original._refcount[],
+        2,
+        "View creation via copy() should increment refcount",
     )
 
 
