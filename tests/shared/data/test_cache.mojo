@@ -133,7 +133,9 @@ fn test_cached_dataset_disabled_cache() raises:
     var labels = zeros(label_shape, DType.float32)
 
     var base_dataset = ExTensorDataset(data^, labels^)
-    var cached = CachedDataset(base_dataset^, max_cache_size=-1, cache_enabled=False)
+    var cached = CachedDataset(
+        base_dataset^, max_cache_size=-1, cache_enabled=False
+    )
 
     var _d, _l = cached._get_and_cache(0)
 

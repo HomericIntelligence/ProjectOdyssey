@@ -146,7 +146,10 @@ struct CachedDataset[D: Dataset & Copyable & Movable](
 
         # Add to cache if enabled and within limits
         if self.cache_enabled:
-            var can_cache = self.max_cache_size < 0 or self.cache.__len__() < self.max_cache_size
+            var can_cache = (
+                self.max_cache_size < 0
+                or self.cache.__len__() < self.max_cache_size
+            )
             if can_cache:
                 self.cache[index] = (data, label)
 
