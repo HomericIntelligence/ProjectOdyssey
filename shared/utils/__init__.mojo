@@ -90,6 +90,17 @@ from .visualization import (
     save_figure,  # Save matplotlib figure
 )
 
+# Progress bar utilities
+from .progress_bar import (
+    ProgressBar,  # Simple progress bar
+    ProgressBarWithMetrics,  # Progress bar with metrics display
+    ProgressBarWithETA,  # Progress bar with time estimation
+    format_duration,  # Format seconds as human-readable string
+    create_progress_bar,  # Factory function
+    create_progress_bar_with_metrics,  # Factory with metrics
+    create_progress_bar_with_eta,  # Factory with ETA
+)
+
 # Random seed utilities
 from .random import (
     set_seed,  # Set random seed globally
