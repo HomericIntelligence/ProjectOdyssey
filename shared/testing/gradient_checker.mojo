@@ -428,7 +428,9 @@ fn assert_gradients_close(
     # Compare element-wise
     var max_diff: Float64 = 0.0
     var max_rel_diff: Float64 = 0.0
-    # FIXME(#2711, unused) var worst_idx: Int = -1
+    var worst_idx: Int = -1
+    var worst_tolerance: Float64 = 0.0
+    var tolerance_exceeded: Bool = False
 
     for i in range(analytical.numel()):
         var a = analytical._get_float64(i)
@@ -447,7 +449,8 @@ fn assert_gradients_close(
 
         if abs_diff > max_diff:
             max_diff = abs_diff
-            # FIXME(#2711, unused) worst_idx = i
+            worst_idx = i
+            worst_tolerance = tolerance
 
         # Compute relative difference for reporting (using max_abs from above)
         if max_abs > 1e-10:
@@ -456,13 +459,19 @@ fn assert_gradients_close(
                 max_rel_diff = rel_diff
 
         if abs_diff > tolerance:
-            # Build error message with detailed values
-            var msg = message + ": gradient mismatch at index " + String(i)
-            msg += "\n  Analytical: " + String(a)
-            msg += "\n  Numerical:  " + String(n)
-            msg += "\n  Difference: " + String(abs_diff)
-            msg += "\n  Tolerance:  " + String(tolerance)
-            raise Error(msg)
+            tolerance_exceeded = True
+
+    # Report error after finding worst element
+    if tolerance_exceeded:
+        var a = analytical._get_float64(worst_idx)
+        var n = numerical._get_float64(worst_idx)
+        var msg = message + ": worst gradient mismatch at index " + String(worst_idx)
+        msg += "\n  Analytical: " + String(a)
+        msg += "\n  Numerical:  " + String(n)
+        msg += "\n  Difference: " + String(max_diff)
+        msg += "\n  Tolerance:  " + String(worst_tolerance)
+        msg += "\n  Total elements: " + String(analytical.numel())
+        raise Error(msg)
 
 
 fn _deep_copy(tensor: ExTensor) raises -> ExTensor:
