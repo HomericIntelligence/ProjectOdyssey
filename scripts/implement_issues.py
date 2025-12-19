@@ -102,6 +102,11 @@ def log(level: str, msg: str) -> None:
         return
     ts = time.strftime("%H:%M:%S")
     out = sys.stderr if level in {"WARN", "ERROR"} else sys.stdout
+    # Clear current line and move to new line before printing
+    # This ensures log messages don't overlap with status line
+    if sys.stdout.isatty():
+        sys.stdout.write("\r\033[K")  # Clear the status line
+        sys.stdout.flush()
     print(f"[{level}] {ts} {msg}", file=out, flush=True)
 
 
