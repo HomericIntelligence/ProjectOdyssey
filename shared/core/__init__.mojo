@@ -127,9 +127,6 @@ from .extensor import (
     nan_tensor,
     inf_tensor,
     neg_inf_tensor,
-    clone,
-    item,
-    diff,
 )
 
 # ============================================================================
