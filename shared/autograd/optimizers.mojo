@@ -197,6 +197,75 @@ struct SGD:
         # Clear the gradient registry
         tape.registry.clear()
 
+    fn state_dict(self) raises -> Dict[String, ExTensor]:
+        """Get SGD optimizer state as dictionary.
+
+        Returns:
+            Dictionary with keys:
+            - "learning_rate": 1-element Float64 tensor
+            - "momentum": 1-element Float64 tensor
+            - "velocity_{i}": velocity buffers for each parameter
+
+        Raises:
+            Error: If operation fails.
+        """
+        var state = Dict[String, ExTensor]()
+
+        # Serialize hyperparameters as 1-element tensors
+        var scalar_shape = List[Int]()
+        scalar_shape.append(1)
+
+        var lr_tensor = ExTensor(scalar_shape, DType.float64)
+        lr_tensor._set_float64(0, self.learning_rate)
+        state["learning_rate"] = lr_tensor^
+
+        var mom_tensor = ExTensor(scalar_shape, DType.float64)
+        mom_tensor._set_float64(0, self.momentum)
+        state["momentum"] = mom_tensor^
+
+        # Serialize velocity buffers
+        for i in range(len(self.velocities)):
+            var key = "velocity_" + String(i)
+            state[key] = self.velocities[i]
+
+        return state^
+
+    fn load_state_dict(mut self, state: Dict[String, ExTensor]) raises:
+        """Load SGD optimizer state from dictionary.
+
+        Args:
+            state: Dictionary with "learning_rate", "momentum", and "velocity_*" keys.
+
+        Raises:
+            Error: If required keys are missing or shapes invalid.
+        """
+        # Restore hyperparameters
+        self.learning_rate = state["learning_rate"]._get_float64(0)
+        self.momentum = state["momentum"]._get_float64(0)
+
+        # Restore velocity buffers
+        self.velocities = List[ExTensor]()
+        var i = 0
+        while ("velocity_" + String(i)) in state:
+            self.velocities.append(state["velocity_" + String(i)])
+            i += 1
+
+        if len(self.velocities) > 0:
+            self._initialized = True
+
+    fn state_keys(self) -> List[String]:
+        """Get expected state dict keys for SGD.
+
+        Returns:
+            List of keys: ["learning_rate", "momentum", "velocity_0", ...]
+        """
+        var keys = List[String]()
+        keys.append("learning_rate")
+        keys.append("momentum")
+        for i in range(len(self.velocities)):
+            keys.append("velocity_" + String(i))
+        return keys^
+
 
 struct Adam:
     """Adam (Adaptive Moment Estimation) optimizer.
@@ -471,6 +540,133 @@ struct Adam:
         # Clear the gradient registry
         tape.registry.clear()
 
+    fn state_dict(self) raises -> Dict[String, ExTensor]:
+        """Get Adam optimizer state as dictionary.
+
+        Critical: Includes step counter `t` needed for bias correction.
+
+        Returns:
+            Dictionary with keys:
+            - "t": step counter as 1-element Int64 tensor
+            - "learning_rate": 1-element Float64 tensor
+            - "beta1", "beta2", "epsilon": hyperparameters as 1-element Float64 tensors
+            - "weight_decay": 1-element Float64 tensor
+            - "m_{i}": first moment buffers for each parameter ID
+            - "v_{i}": second moment buffers for each parameter ID
+            - "has_buffer_{i}": flag tensors (0 or 1) for each parameter ID
+
+        Raises:
+            Error: If operation fails.
+
+        Note:
+            The step counter `t` is essential for correct bias correction on resumed training.
+            Without preserving it, the learning rate computation will be incorrect.
+        """
+        var state = Dict[String, ExTensor]()
+
+        # Serialize step counter as 1-element Int64 tensor
+        var scalar_shape = List[Int]()
+        scalar_shape.append(1)
+
+        var t_tensor = ExTensor(scalar_shape, DType.int64)
+        t_tensor._set_int64(0, self.t)
+        state["t"] = t_tensor^
+
+        # Serialize hyperparameters
+        var lr_tensor = ExTensor(scalar_shape, DType.float64)
+        lr_tensor._set_float64(0, self.learning_rate)
+        state["learning_rate"] = lr_tensor^
+
+        var b1_tensor = ExTensor(scalar_shape, DType.float64)
+        b1_tensor._set_float64(0, self.beta1)
+        state["beta1"] = b1_tensor^
+
+        var b2_tensor = ExTensor(scalar_shape, DType.float64)
+        b2_tensor._set_float64(0, self.beta2)
+        state["beta2"] = b2_tensor^
+
+        var eps_tensor = ExTensor(scalar_shape, DType.float64)
+        eps_tensor._set_float64(0, self.epsilon)
+        state["epsilon"] = eps_tensor^
+
+        var wd_tensor = ExTensor(scalar_shape, DType.float64)
+        wd_tensor._set_float64(0, self.weight_decay)
+        state["weight_decay"] = wd_tensor^
+
+        # Serialize moment buffers and has_buffer flags
+        for i in range(len(self.m_buffers)):
+            var m_key = "m_" + String(i)
+            state[m_key] = self.m_buffers[i]
+
+            var v_key = "v_" + String(i)
+            state[v_key] = self.v_buffers[i]
+
+            var flag_key = "has_buffer_" + String(i)
+            var flag_tensor = ExTensor(scalar_shape, DType.int64)
+            flag_tensor._set_int64(0, 1 if self.has_buffer[i] else 0)
+            state[flag_key] = flag_tensor^
+
+        return state^
+
+    fn load_state_dict(mut self, state: Dict[String, ExTensor]) raises:
+        """Load Adam optimizer state from dictionary.
+
+        Args:
+            state: Dictionary with "t", hyperparameters, and moment buffers.
+
+        Raises:
+            Error: If required keys are missing or shapes invalid.
+
+        Note:
+            Restores the step counter which is critical for bias correction.
+        """
+        # Restore step counter
+        self.t = state["t"]._get_int64(0)
+
+        # Restore hyperparameters
+        self.learning_rate = state["learning_rate"]._get_float64(0)
+        self.beta1 = state["beta1"]._get_float64(0)
+        self.beta2 = state["beta2"]._get_float64(0)
+        self.epsilon = state["epsilon"]._get_float64(0)
+        self.weight_decay = state["weight_decay"]._get_float64(0)
+
+        # Restore moment buffers
+        self.m_buffers = List[ExTensor]()
+        self.v_buffers = List[ExTensor]()
+        self.has_buffer = List[Bool]()
+
+        var i = 0
+        while ("m_" + String(i)) in state:
+            self.m_buffers.append(state["m_" + String(i)])
+            self.v_buffers.append(state["v_" + String(i)])
+
+            var flag_val = state["has_buffer_" + String(i)]._get_int64(0)
+            self.has_buffer.append(flag_val != 0)
+
+            i += 1
+
+    fn state_keys(self) -> List[String]:
+        """Get expected state dict keys for Adam.
+
+        Returns:
+            List of keys: ["t", "learning_rate", "beta1", "beta2", "epsilon",
+            "weight_decay", "m_0", "v_0", "has_buffer_0", ...]
+        """
+        var keys = List[String]()
+        keys.append("t")
+        keys.append("learning_rate")
+        keys.append("beta1")
+        keys.append("beta2")
+        keys.append("epsilon")
+        keys.append("weight_decay")
+
+        for i in range(len(self.m_buffers)):
+            keys.append("m_" + String(i))
+            keys.append("v_" + String(i))
+            keys.append("has_buffer_" + String(i))
+
+        return keys^
+
 
 struct AdaGrad:
     """AdaGrad (Adaptive Gradient) optimizer.
@@ -656,6 +852,83 @@ struct AdaGrad:
             optimizer.reset_accumulators()
         """
         self.G_buffers.clear()
+
+    fn state_dict(self) raises -> Dict[String, ExTensor]:
+        """Get AdaGrad optimizer state as dictionary.
+
+        Returns:
+            Dictionary with keys:
+            - "learning_rate": 1-element Float64 tensor
+            - "epsilon": 1-element Float64 tensor
+            - "weight_decay": 1-element Float64 tensor
+            - "G_{id}": accumulated squared gradient buffers for each parameter ID
+
+        Raises:
+            Error: If operation fails.
+        """
+        var state = Dict[String, ExTensor]()
+
+        # Serialize hyperparameters
+        var scalar_shape = List[Int]()
+        scalar_shape.append(1)
+
+        var lr_tensor = ExTensor(scalar_shape, DType.float64)
+        lr_tensor._set_float64(0, self.learning_rate)
+        state["learning_rate"] = lr_tensor^
+
+        var eps_tensor = ExTensor(scalar_shape, DType.float64)
+        eps_tensor._set_float64(0, self.epsilon)
+        state["epsilon"] = eps_tensor^
+
+        var wd_tensor = ExTensor(scalar_shape, DType.float64)
+        wd_tensor._set_float64(0, self.weight_decay)
+        state["weight_decay"] = wd_tensor^
+
+        # Serialize G_buffers (Dict[Int, ExTensor] -> convert keys to strings)
+        for key_ref in self.G_buffers.keys():
+            var key_int = Int(key_ref)
+            var g_key = "G_" + String(key_int)
+            state[g_key] = self.G_buffers[key_int]
+
+        return state^
+
+    fn load_state_dict(mut self, state: Dict[String, ExTensor]) raises:
+        """Load AdaGrad optimizer state from dictionary.
+
+        Args:
+            state: Dictionary with hyperparameters and G_* buffers.
+
+        Raises:
+            Error: If required keys are missing or shapes invalid.
+        """
+        # Restore hyperparameters
+        self.learning_rate = state["learning_rate"]._get_float64(0)
+        self.epsilon = state["epsilon"]._get_float64(0)
+        self.weight_decay = state["weight_decay"]._get_float64(0)
+
+        # Restore G_buffers (convert string keys back to Int)
+        self.G_buffers = Dict[Int, ExTensor]()
+        var i = 0
+        while ("G_" + String(i)) in state:
+            self.G_buffers[i] = state["G_" + String(i)]
+            i += 1
+
+    fn state_keys(self) -> List[String]:
+        """Get expected state dict keys for AdaGrad.
+
+        Returns:
+            List of keys: ["learning_rate", "epsilon", "weight_decay", "G_0", ...]
+        """
+        var keys = List[String]()
+        keys.append("learning_rate")
+        keys.append("epsilon")
+        keys.append("weight_decay")
+
+        for key_ref in self.G_buffers.keys():
+            var key_int = Int(key_ref)
+            keys.append("G_" + String(key_int))
+
+        return keys^
 
 
 struct RMSprop:
@@ -870,3 +1143,119 @@ struct RMSprop:
             these accumulators across optimization steps.
         """
         tape.registry.clear()
+
+    fn state_dict(self) raises -> Dict[String, ExTensor]:
+        """Get RMSprop optimizer state as dictionary.
+
+        Returns:
+            Dictionary with keys:
+            - "learning_rate": 1-element Float64 tensor
+            - "alpha": 1-element Float64 tensor
+            - "epsilon": 1-element Float64 tensor
+            - "weight_decay": 1-element Float64 tensor
+            - "momentum": 1-element Float64 tensor
+            - "v_{id}": running average of squared gradients for each parameter ID
+            - "m_{id}": momentum buffers (only if momentum > 0) for each parameter ID
+            - "has_buffer_{id}": flag tensors for each parameter ID
+
+        Raises:
+            Error: If operation fails.
+        """
+        var state = Dict[String, ExTensor]()
+
+        # Serialize hyperparameters
+        var scalar_shape = List[Int]()
+        scalar_shape.append(1)
+
+        var lr_tensor = ExTensor(scalar_shape, DType.float64)
+        lr_tensor._set_float64(0, self.learning_rate)
+        state["learning_rate"] = lr_tensor^
+
+        var alpha_tensor = ExTensor(scalar_shape, DType.float64)
+        alpha_tensor._set_float64(0, self.alpha)
+        state["alpha"] = alpha_tensor^
+
+        var eps_tensor = ExTensor(scalar_shape, DType.float64)
+        eps_tensor._set_float64(0, self.epsilon)
+        state["epsilon"] = eps_tensor^
+
+        var wd_tensor = ExTensor(scalar_shape, DType.float64)
+        wd_tensor._set_float64(0, self.weight_decay)
+        state["weight_decay"] = wd_tensor^
+
+        var mom_tensor = ExTensor(scalar_shape, DType.float64)
+        mom_tensor._set_float64(0, self.momentum)
+        state["momentum"] = mom_tensor^
+
+        # Serialize v_buffers and m_buffers with has_buffer flags
+        for i in range(len(self.v_buffers)):
+            var v_key = "v_" + String(i)
+            state[v_key] = self.v_buffers[i]
+
+            # Serialize m_buffers only if momentum > 0
+            if self.momentum > 0.0 and i < len(self.m_buffers):
+                var m_key = "m_" + String(i)
+                state[m_key] = self.m_buffers[i]
+
+            var flag_key = "has_buffer_" + String(i)
+            var flag_tensor = ExTensor(scalar_shape, DType.int64)
+            flag_tensor._set_int64(0, 1 if self.has_buffer[i] else 0)
+            state[flag_key] = flag_tensor^
+
+        return state^
+
+    fn load_state_dict(mut self, state: Dict[String, ExTensor]) raises:
+        """Load RMSprop optimizer state from dictionary.
+
+        Args:
+            state: Dictionary with hyperparameters and buffer tensors.
+
+        Raises:
+            Error: If required keys are missing or shapes invalid.
+        """
+        # Restore hyperparameters
+        self.learning_rate = state["learning_rate"]._get_float64(0)
+        self.alpha = state["alpha"]._get_float64(0)
+        self.epsilon = state["epsilon"]._get_float64(0)
+        self.weight_decay = state["weight_decay"]._get_float64(0)
+        self.momentum = state["momentum"]._get_float64(0)
+
+        # Restore v_buffers and m_buffers
+        self.v_buffers = List[ExTensor]()
+        self.m_buffers = List[ExTensor]()
+        self.has_buffer = List[Bool]()
+
+        var i = 0
+        while ("v_" + String(i)) in state:
+            self.v_buffers.append(state["v_" + String(i)])
+
+            # Restore m_buffers if momentum > 0
+            if self.momentum > 0.0 and ("m_" + String(i)) in state:
+                self.m_buffers.append(state["m_" + String(i)])
+
+            var flag_val = state["has_buffer_" + String(i)]._get_int64(0)
+            self.has_buffer.append(flag_val != 0)
+
+            i += 1
+
+    fn state_keys(self) -> List[String]:
+        """Get expected state dict keys for RMSprop.
+
+        Returns:
+            List of keys: ["learning_rate", "alpha", "epsilon", "weight_decay",
+            "momentum", "v_0", "has_buffer_0", ...]
+        """
+        var keys = List[String]()
+        keys.append("learning_rate")
+        keys.append("alpha")
+        keys.append("epsilon")
+        keys.append("weight_decay")
+        keys.append("momentum")
+
+        for i in range(len(self.v_buffers)):
+            keys.append("v_" + String(i))
+            if self.momentum > 0.0 and i < len(self.m_buffers):
+                keys.append("m_" + String(i))
+            keys.append("has_buffer_" + String(i))
+
+        return keys^

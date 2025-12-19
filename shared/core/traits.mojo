@@ -549,3 +549,93 @@ trait Optimizer:
             May be called before parameter zero_grad().
         """
         ...
+
+
+trait StateDictSerializable:
+    """Interface for objects that can serialize/deserialize state as dictionaries.
+
+    Extends Serializable with structured state representation for:
+    - Model parameters (weights, biases)
+    - Optimizer state (momentum buffers, Adam moments, step counter)
+    - Training state (epoch, metrics)
+
+    State dictionaries use named tensors where keys are parameter names
+    and values are ExTensor objects. This enables:
+    - Flexible checkpoint structure
+    - Parameter validation on load
+    - Support for format versioning
+    - Easy model analysis and debugging
+
+    Example:
+        ```mojo
+        struct MyModel(StateDictSerializable):
+            var weights: ExTensor
+            var bias: ExTensor
+
+            fn state_dict(self) raises -> Dict[String, ExTensor]:
+                var state = Dict[String, ExTensor]()
+                state["weights"] = self.weights
+                state["bias"] = self.bias
+                return state^
+
+            fn load_state_dict(mut self, state: Dict[String, ExTensor]) raises:
+                # Validate keys
+                var expected = self.state_keys()
+                for i in range(len(expected)):
+                    if expected[i] not in state:
+                        raise Error("Missing: " + expected[i])
+
+                # Load state
+                self.weights = state["weights"]
+                self.bias = state["bias"]
+
+            fn state_keys(self) -> List[String]:
+                var keys = List[String]()
+                keys.append("weights")
+                keys.append("bias")
+                return keys^
+        ```
+    """
+
+    fn state_dict(self) raises -> Dict[String, ExTensor]:
+        """Get complete state as dictionary of named tensors.
+
+        Returns:
+            Dictionary mapping parameter names to ExTensor objects.
+            Should include all state needed to restore the object.
+
+        Raises:
+            Error: If operation fails.
+
+        Note:
+            Keys should follow naming convention: layer_name_param_name
+            e.g., "conv1_kernel", "conv1_bias", "adam_m_0", "adam_v_0"
+        """
+        ...
+
+    fn load_state_dict(mut self, state: Dict[String, ExTensor]) raises:
+        """Load state from dictionary, validating shapes and keys.
+
+        Args:
+            state: Dictionary of named tensors to load.
+
+        Raises:
+            Error: If required keys are missing or shapes don't match.
+
+        Note:
+            Should validate state_keys() before loading.
+            Should check tensor shapes match original parameters.
+        """
+        ...
+
+    fn state_keys(self) -> List[String]:
+        """Return ordered list of expected state keys for validation.
+
+        Returns:
+            Ordered list of parameter names expected in state_dict.
+
+        Note:
+            Order should match state_dict() return order.
+            Used by load_state_dict() for validation.
+        """
+        ...

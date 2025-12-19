@@ -435,6 +435,138 @@ struct LeNet5(Model, Movable):
         # No persistent gradient accumulators to reset
         pass
 
+    fn state_dict(self) raises -> Dict[String, ExTensor]:
+        """Get LeNet5 model state as dictionary.
+
+        Returns:
+            Dictionary with 10 keys (one per parameter):
+            - "conv1_kernel": Conv1 weights (6, 1, 5, 5)
+            - "conv1_bias": Conv1 bias (6,)
+            - "conv2_kernel": Conv2 weights (16, 6, 5, 5)
+            - "conv2_bias": Conv2 bias (16,)
+            - "fc1_weights": FC1 weights (120, flattened_size)
+            - "fc1_bias": FC1 bias (120,)
+            - "fc2_weights": FC2 weights (84, 120)
+            - "fc2_bias": FC2 bias (84,)
+            - "fc3_weights": FC3 weights (num_classes, 84)
+            - "fc3_bias": FC3 bias (num_classes,)
+
+        Example:
+            ```mojo
+            var state = model.state_dict()
+            # Save to disk
+            for key_ref in state.keys():
+                var key = String(key_ref)
+                save_tensor(state[key], "checkpoints/model/" + key + ".weights")
+            ```
+        """
+        var state = Dict[String, ExTensor]()
+        state["conv1_kernel"] = self.conv1_kernel
+        state["conv1_bias"] = self.conv1_bias
+        state["conv2_kernel"] = self.conv2_kernel
+        state["conv2_bias"] = self.conv2_bias
+        state["fc1_weights"] = self.fc1_weights
+        state["fc1_bias"] = self.fc1_bias
+        state["fc2_weights"] = self.fc2_weights
+        state["fc2_bias"] = self.fc2_bias
+        state["fc3_weights"] = self.fc3_weights
+        state["fc3_bias"] = self.fc3_bias
+        return state^
+
+    fn load_state_dict(mut self, state: Dict[String, ExTensor]) raises:
+        """Load LeNet5 model state from dictionary.
+
+        Validates that all required keys are present and shapes match.
+
+        Args:
+            state: Dictionary with all 10 parameter tensors.
+
+        Raises:
+            Error: If required keys are missing or tensor shapes don't match.
+
+        Example:
+            ```mojo
+            var state = Dict[String, ExTensor]()
+            # Load tensors from disk
+            state["conv1_kernel"] = load_tensor("checkpoints/model/conv1_kernel.weights")
+            # ... load other parameters ...
+
+            model.load_state_dict(state)
+            ```
+        """
+        # Validate all keys are present
+        var expected = self.state_keys()
+        for i in range(len(expected)):
+            var key = expected[i]
+            if key not in state:
+                raise Error("Missing key in state_dict: " + key)
+
+        # Validate shapes match
+        var expected_shapes = Dict[String, List[Int]]()
+        expected_shapes["conv1_kernel"] = self.conv1_kernel.shape()
+        expected_shapes["conv1_bias"] = self.conv1_bias.shape()
+        expected_shapes["conv2_kernel"] = self.conv2_kernel.shape()
+        expected_shapes["conv2_bias"] = self.conv2_bias.shape()
+        expected_shapes["fc1_weights"] = self.fc1_weights.shape()
+        expected_shapes["fc1_bias"] = self.fc1_bias.shape()
+        expected_shapes["fc2_weights"] = self.fc2_weights.shape()
+        expected_shapes["fc2_bias"] = self.fc2_bias.shape()
+        expected_shapes["fc3_weights"] = self.fc3_weights.shape()
+        expected_shapes["fc3_bias"] = self.fc3_bias.shape()
+
+        for i in range(len(expected)):
+            var key = expected[i]
+            var tensor = state[key]
+            var expected_shape = expected_shapes[key]
+
+            # Check shape match
+            var actual_shape = tensor.shape()
+            if len(actual_shape) != len(expected_shape):
+                raise Error("Shape mismatch for " + key + ": expected rank " +
+                           String(len(expected_shape)) + " but got " +
+                           String(len(actual_shape)))
+
+            for j in range(len(expected_shape)):
+                if actual_shape[j] != expected_shape[j]:
+                    raise Error("Shape mismatch for " + key + " at dim " +
+                               String(j) + ": expected " +
+                               String(expected_shape[j]) + " but got " +
+                               String(actual_shape[j]))
+
+        # Load parameters
+        self.conv1_kernel = state["conv1_kernel"]
+        self.conv1_bias = state["conv1_bias"]
+        self.conv2_kernel = state["conv2_kernel"]
+        self.conv2_bias = state["conv2_bias"]
+        self.fc1_weights = state["fc1_weights"]
+        self.fc1_bias = state["fc1_bias"]
+        self.fc2_weights = state["fc2_weights"]
+        self.fc2_bias = state["fc2_bias"]
+        self.fc3_weights = state["fc3_weights"]
+        self.fc3_bias = state["fc3_bias"]
+
+    fn state_keys(self) -> List[String]:
+        """Get ordered list of state dict keys.
+
+        Returns:
+            List of 10 keys in order.
+
+        Note:
+            Used by load_state_dict() to validate state before loading.
+        """
+        var keys = List[String]()
+        keys.append("conv1_kernel")
+        keys.append("conv1_bias")
+        keys.append("conv2_kernel")
+        keys.append("conv2_bias")
+        keys.append("fc1_weights")
+        keys.append("fc1_bias")
+        keys.append("fc2_weights")
+        keys.append("fc2_bias")
+        keys.append("fc3_weights")
+        keys.append("fc3_bias")
+        return keys^
+
 
 fn _sgd_update(mut param: ExTensor, grad: ExTensor, lr: Float32) raises:
     """SGD parameter update: param = param - lr * grad"""
