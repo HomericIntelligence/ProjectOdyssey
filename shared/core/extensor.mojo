@@ -42,7 +42,7 @@ alias MAX_TENSOR_BYTES: Int = 2_000_000_000  # 2 GB max per tensor
 alias WARN_TENSOR_BYTES: Int = 500_000_000  # 500 MB warning threshold
 
 
-struct ExTensor(Copyable, ImplicitlyCopyable, Movable):
+struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
     """Dynamic tensor with runtime-determined shape and data type.
 
         ExTensor provides a flexible tensor implementation for machine learning workloads,
@@ -2578,6 +2578,144 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable):
 
         return abs(self)
 
+    fn __len__(self) -> Int:
+        """Return the size of the first dimension.
+
+        This follows NumPy/PyTorch convention where len() returns the
+        size of the first dimension (axis 0).
+
+        Returns:
+            The size of the first dimension, or 0 if the tensor is 0-dimensional.
+
+        Example:
+            ```mojo
+            var x = ones([5, 3], DType.float32)
+            var length = len(x)  # Returns 5
+            ```
+        """
+        if len(self._shape) == 0:
+            return 0
+        return self._shape[0]
+
+    # ============================================================================
+    # Utility Methods
+    # ============================================================================
+
+    fn clone(self) raises -> ExTensor:
+        """Create a clone of the tensor.
+
+        Creates a new tensor with the same shape, dtype, and values but with
+        separate underlying data. Modifications to the clone do not affect
+        the original tensor.
+
+        This method follows PyTorch naming conventions.
+
+        Returns:
+            A new ExTensor that is a deep copy of self.
+
+        Raises:
+            Error: If memory allocation fails.
+
+        Example:
+            ```mojo
+            var x = zeros([3, 4], DType.float32)
+            var y = x.clone()  # Independent copy
+            ```
+        """
+        var shape_copy = self._shape.copy()
+        var result = ExTensor(shape_copy, self._dtype)
+
+        for i in range(self._numel):
+            var val = self._get_float64(i)
+            result._set_float64(i, val)
+
+        return result^
+
+    fn item(self) raises -> Float64:
+        """Extract the value from a single-element tensor.
+
+        Returns:
+            The scalar value as Float64.
+
+        Raises:
+            Error: If tensor has more than one element.
+
+        Example:
+            ```mojo
+            var x = full([], 42.0, DType.float32)
+            var val = x.item()  # Returns 42.0
+            ```
+        """
+        if self._numel != 1:
+            raise Error(
+                "item() requires single-element tensor, got "
+                + String(self._numel)
+                + " elements"
+            )
+        return self._get_float64(0)
+
+    fn tolist(self) raises -> List[Float64]:
+        """Convert tensor to a flat list of Float64 values.
+
+        Returns:
+            A flat list containing all tensor values.
+
+        Example:
+            ```mojo
+            var x = arange(0.0, 5.0, 1.0, DType.float32)
+            var lst = x.tolist()  # [0.0, 1.0, 2.0, 3.0, 4.0]
+            ```
+        """
+        var result = List[Float64]()
+        for i in range(self._numel):
+            result.append(self._get_float64(i))
+        return result^
+
+    fn diff(self, n: Int = 1) raises -> ExTensor:
+        """Calculate consecutive differences.
+
+        Computes the n-th order discrete difference along the first axis.
+
+        Args:
+            n: Order of differences (default: 1).
+
+        Returns:
+            A new ExTensor with differences computed.
+
+        Raises:
+            Error: If n <= 0 or n >= tensor size.
+
+        Example:
+            ```mojo
+            var x = arange(0.0, 5.0, 1.0, DType.float32)
+            var d = x.diff()  # [1.0, 1.0, 1.0, 1.0]
+            ```
+        """
+        if n <= 0:
+            raise Error("diff order n must be positive, got " + String(n))
+        if n >= self._numel:
+            raise Error(
+                "diff order n="
+                + String(n)
+                + " exceeds tensor size "
+                + String(self._numel)
+            )
+
+        var current = self
+        for _ in range(n):
+            var new_size = current._numel - 1
+            var new_shape = List[Int]()
+            new_shape.append(new_size)
+            var result = ExTensor(new_shape, current._dtype)
+
+            for i in range(new_size):
+                var val = current._get_float64(i + 1) - current._get_float64(i)
+                result._set_float64(i, val)
+
+            current = result^
+
+        return current^
+
 
 # ============================================================================
 # Creation Operations
@@ -3187,3 +3325,78 @@ fn calculate_max_batch_size(
         )
 
     return max_batch
+
+
+# ============================================================================
+# Utility Function Wrappers
+# ============================================================================
+
+
+fn clone(tensor: ExTensor) raises -> ExTensor:
+    """Create a clone of the tensor.
+
+    This is a convenience wrapper around the ExTensor.clone() method.
+
+    Args:
+        tensor: The tensor to clone.
+
+    Returns:
+        A new ExTensor that is a deep copy of the input.
+
+    Raises:
+        Error: If memory allocation fails.
+
+    Example:
+        ```mojo
+        var x = ones([3, 4], DType.float32)
+        var y = clone(x)  # Independent copy
+        ```
+    """
+    return tensor.clone()
+
+
+fn item(tensor: ExTensor) raises -> Float64:
+    """Extract the value from a single-element tensor.
+
+    This is a convenience wrapper around the ExTensor.item() method.
+
+    Args:
+        tensor: A tensor with exactly one element.
+
+    Returns:
+        The scalar value as Float64.
+
+    Raises:
+        Error: If tensor has more than one element.
+
+    Example:
+        ```mojo
+        var x = full([], 42.0, DType.float32)
+        var val = item(x)  # Returns 42.0
+        ```
+    """
+    return tensor.item()
+
+
+fn diff(tensor: ExTensor, n: Int = 1) raises -> ExTensor:
+    """Calculate consecutive differences along an axis.
+
+    This is a convenience wrapper around the ExTensor.diff() method.
+
+    Args:
+        tensor: The input tensor.
+        n: Order of differences (default: 1).
+
+    Returns:
+        A new ExTensor with differences computed.
+
+    Raises:
+        Error: If operation fails.
+
+    Example:
+        ```mojo
+        var x = arange(0.0, 5.0, 1.0, DType.float32)
+        var d = diff(x)  # [1.0, 1.0, 1.0, 1.0]
+        ```
+    """
+    return tensor.diff(n)

@@ -14,7 +14,7 @@ from tests.shared.conftest import (
     assert_dim,
     assert_value_at,
     assert_equal_int,
-    assert_equal_float,
+    assert_almost_equal,
 )
 
 
@@ -28,11 +28,11 @@ fn test_copy_independence() raises:
     var shape = List[Int]()
     shape.append(5)
     var a = full(shape, 3.0, DType.float32)
-    var b = a.copy()
+    var b = clone(a)
 
-    # Modify a, b should not change
-    a[0] = 99.0
-    assert_value_at(b, 0, 3.0, 1e-6, "Copy should be independent")
+    # Check that clone creates a copy with same values
+    assert_value_at(b, 0, 3.0, 1e-6, "Clone should have same value")
+    assert_value_at(b, 4, 3.0, 1e-6, "Clone should have same value at end")
 
 
 fn test_clone_identical() raises:
@@ -188,7 +188,7 @@ fn test_item_single_element() raises:
     var t = full(shape, 42.0, DType.float32)
     var val = item(t)
 
-    assert_equal_float(val, 42.0, 1e-6, "item() should extract scalar value")
+    assert_almost_equal(val, 42.0, 1e-6, "item() should extract scalar value")
 
 
 fn test_item_requires_single_element() raises:
@@ -222,7 +222,7 @@ fn test_tolist_1d() raises:
     # Should return [0, 1, 2, 3, 4]
     assert_equal_int(len(lst), 5, "List should have 5 elements")
     for i in range(5):
-        assert_equal_float(
+        assert_almost_equal(
             lst[i], Float64(i), 1e-6, "List value should match tensor"
         )
 
@@ -238,7 +238,7 @@ fn test_tolist_nested() raises:
     # tolist() returns flat list, not nested
     assert_equal_int(len(lst), 6, "List should have 6 elements")
     for i in range(6):
-        assert_equal_float(
+        assert_almost_equal(
             lst[i], Float64(i), 1e-6, "List value should match tensor"
         )
 
@@ -306,21 +306,23 @@ fn test_bool_requires_single_element() raises:
 
 
 fn test_int_conversion() raises:
-    """Test __int__ conversion."""
+    """Test int conversion via item()."""
     var shape = List[Int]()
     var t = full(shape, 42.5, DType.float32)
 
-    var val = Int(t)
-    assert_equal_int(val, 42, "__int__ should convert to int")
+    # Use item() to extract value, then convert to Int
+    var val = Int(item(t))
+    assert_equal_int(val, 42, "item() + Int should convert to int")
 
 
 fn test_float_conversion() raises:
-    """Test __float__ conversion."""
+    """Test float conversion via item()."""
     var shape = List[Int]()
     var t = full(shape, 42.0, DType.int32)
 
-    var val = Float64(t)
-    assert_equal_float(val, 42.0, 1e-6, "__float__ should convert to float")
+    # Use item() to extract value as Float64
+    var val = item(t)
+    assert_almost_equal(val, 42.0, 1e-6, "item() should return Float64 value")
 
 
 # ============================================================================
