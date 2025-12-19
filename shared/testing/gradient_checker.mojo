@@ -78,7 +78,7 @@ fn check_gradients(
 
         Example:
             ```mojo
-            n my_forward(x: ExTensor) -> ExTensor:
+            fn my_forward(x: ExTensor) -> ExTensor:
                 return x * x  # f(x) = x²
 
             fn my_backward(grad_out: ExTensor, x: ExTensor) -> ExTensor:
@@ -515,7 +515,7 @@ fn check_gradient(
 
         Example:
             ```mojo
-            n test_relu_gradient() raises:
+            fn test_relu_gradient() raises:
                 var x = ExTensor(List[Int](), DType.float32)
                 # ... initialize x with test values ...
 
