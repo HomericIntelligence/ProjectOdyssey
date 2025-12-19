@@ -56,7 +56,7 @@ fn test_cached_dataset_length() raises:
 fn test_cached_dataset_stores_samples() raises:
     """Test that CachedDataset stores samples in cache.
 
-    Accessing a sample should add it to the cache.
+    Accessing a sample via _get_and_cache should add it to the cache.
     """
     var data_shape: List[Int] = [5, 1, 8, 8]
     var label_shape: List[Int] = [5, 10]
@@ -67,8 +67,8 @@ fn test_cached_dataset_stores_samples() raises:
     var base_dataset = ExTensorDataset(data^, labels^)
     var cached = CachedDataset(base_dataset^, max_cache_size=-1)
 
-    # Access a sample
-    var sample_data, sample_labels = cached[0]
+    # Access a sample via mutable method
+    var _, _ = cached._get_and_cache(0)
 
     # Check that it's in cache
     assert_equal(cached.cache.__len__(), 1)
@@ -89,12 +89,12 @@ fn test_cached_dataset_cache_hit() raises:
     var cached = CachedDataset(base_dataset^, max_cache_size=-1)
 
     # First access - cache miss
-    var _d1, _l1 = cached[0]
+    var _d1, _l1 = cached._get_and_cache(0)
     assert_equal(cached.cache_hits, 0)
     assert_equal(cached.cache_misses, 1)
 
     # Second access - cache hit
-    var _d2, _l2 = cached[0]
+    var _d2, _l2 = cached._get_and_cache(0)
     assert_equal(cached.cache_hits, 1)
     assert_equal(cached.cache_misses, 1)
 
@@ -113,9 +113,9 @@ fn test_cached_dataset_max_cache_size() raises:
     var base_dataset = ExTensorDataset(data^, labels^)
     var cached = CachedDataset(base_dataset^, max_cache_size=3)
 
-    # Access 5 samples
+    # Access 5 samples via mutable method
     for i in range(5):
-        var _d, _l = cached[i]
+        var _d, _l = cached._get_and_cache(i)
 
     # Cache size should be limited to 3
     assert_equal(cached.cache.__len__(), 3)
@@ -135,7 +135,7 @@ fn test_cached_dataset_disabled_cache() raises:
     var base_dataset = ExTensorDataset(data^, labels^)
     var cached = CachedDataset(base_dataset^, max_cache_size=-1, cache_enabled=False)
 
-    var _d, _l = cached[0]
+    var _d, _l = cached._get_and_cache(0)
 
     # Cache should be empty
     assert_true(cached.cache.__len__() == 0)
@@ -176,7 +176,7 @@ fn test_cached_dataset_clear_cache() raises:
     var cached = CachedDataset(base_dataset^, max_cache_size=-1)
 
     # Add to cache
-    var _d, _l = cached[0]
+    var _d, _l = cached._get_and_cache(0)
     assert_equal(cached.cache.__len__(), 1)
 
     # Clear
@@ -228,8 +228,8 @@ fn test_cached_dataset_hit_rate() raises:
     assert_equal(cached.get_hit_rate(), Float32(0.0))
 
     # 2 accesses to same sample - 1 hit, 1 miss
-    var _d1, _l1 = cached[0]
-    var _d2, _l2 = cached[0]
+    var _d1, _l1 = cached._get_and_cache(0)
+    var _d2, _l2 = cached._get_and_cache(0)
 
     var hit_rate = cached.get_hit_rate()
     assert_almost_equal(hit_rate, Float32(0.5), Float32(0.01))
@@ -249,8 +249,8 @@ fn test_cached_dataset_get_stats() raises:
     var base_dataset = ExTensorDataset(data^, labels^)
     var cached = CachedDataset(base_dataset^, max_cache_size=-1)
 
-    var _d1, _l1 = cached[0]
-    var _d2, _l2 = cached[0]
+    var _d1, _l1 = cached._get_and_cache(0)
+    var _d2, _l2 = cached._get_and_cache(0)
 
     var cache_size, hits, misses = cached.get_cache_stats()
 
@@ -262,15 +262,26 @@ fn test_cached_dataset_get_stats() raises:
 fn main() raises:
     """Run all tests."""
     print("Testing CachedDataset...")
+    print("  test_cached_dataset_creation...")
     test_cached_dataset_creation()
+    print("  test_cached_dataset_length...")
     test_cached_dataset_length()
+    print("  test_cached_dataset_stores_samples...")
     test_cached_dataset_stores_samples()
+    print("  test_cached_dataset_cache_hit...")
     test_cached_dataset_cache_hit()
+    print("  test_cached_dataset_max_cache_size...")
     test_cached_dataset_max_cache_size()
+    print("  test_cached_dataset_disabled_cache...")
     test_cached_dataset_disabled_cache()
+    print("  test_cached_dataset_preload_cache...")
     test_cached_dataset_preload_cache()
+    print("  test_cached_dataset_clear_cache...")
     test_cached_dataset_clear_cache()
+    print("  test_cached_dataset_enable_disable...")
     test_cached_dataset_enable_disable()
+    print("  test_cached_dataset_hit_rate...")
     test_cached_dataset_hit_rate()
+    print("  test_cached_dataset_get_stats...")
     test_cached_dataset_get_stats()
     print("All CachedDataset tests passed!")

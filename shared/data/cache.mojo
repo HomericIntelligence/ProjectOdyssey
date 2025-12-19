@@ -120,6 +120,38 @@ struct CachedDataset[D: Dataset & Copyable & Movable](
         # Cache miss - load from base dataset
         return self.dataset.__getitem__(index)
 
+    fn _get_and_cache(mut self, index: Int) raises -> Tuple[ExTensor, ExTensor]:
+        """Get a sample with mutable access, enabling cache updates.
+
+        Unlike __getitem__, this method can update cache and statistics.
+        Use this when you need lazy caching behavior.
+
+        Args:
+            index: Index of the sample to retrieve.
+
+        Returns:
+            Tuple of (data, labels).
+
+        Raises:
+            Error: If index is out of bounds or loading fails.
+        """
+        # Check cache first
+        if self.cache_enabled and index in self.cache:
+            self.cache_hits += 1
+            return self.cache[index]
+
+        # Cache miss
+        self.cache_misses += 1
+        var data, label = self.dataset.__getitem__(index)
+
+        # Add to cache if enabled and within limits
+        if self.cache_enabled:
+            var can_cache = self.max_cache_size < 0 or self.cache.__len__() < self.max_cache_size
+            if can_cache:
+                self.cache[index] = (data, label)
+
+        return (data, label)
+
     fn _preload_cache(mut self) raises:
         """Pre-populate cache with samples.
 
@@ -141,8 +173,8 @@ struct CachedDataset[D: Dataset & Copyable & Movable](
         )
 
         for i in range(limit):
-            # Use __getitem__ which will auto-cache if space available
-            _ = self.__getitem__(i)
+            # Use _get_and_cache to actually populate the cache
+            _ = self._get_and_cache(i)
 
     fn clear_cache(mut self):
         """Clear all cached samples."""
