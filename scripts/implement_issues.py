@@ -19,7 +19,6 @@ import atexit
 import dataclasses
 import datetime as dt
 import json
-import os
 import pathlib
 import re
 import shutil
@@ -87,9 +86,19 @@ def write_secure(path: pathlib.Path, content: str) -> None:
 # ---------------------------------------------------------------------
 
 
+# Global verbose flag (set from Options)
+_verbose_mode = False
+
+
+def set_verbose(verbose: bool) -> None:
+    """Set the global verbose mode."""
+    global _verbose_mode
+    _verbose_mode = verbose
+
+
 def log(level: str, msg: str) -> None:
     """Log a message with timestamp and level prefix."""
-    if level == "DEBUG" and not os.environ.get("DEBUG"):
+    if level == "DEBUG" and not _verbose_mode:
         return
     ts = time.strftime("%H:%M:%S")
     out = sys.stderr if level in {"WARN", "ERROR"} else sys.stdout
@@ -478,6 +487,7 @@ class Options:
     cleanup: bool
     state_dir: pathlib.Path | None
     api_delay: float  # seconds between GitHub API calls
+    verbose: bool  # Enable verbose/debug output
 
 
 # ---------------------------------------------------------------------
@@ -956,6 +966,8 @@ class IssueImplementer:
         ]
 
         log_file = self.tempdir / f"issue-{issue}-claude.log"
+        log("DEBUG", f"  Claude command: {' '.join(cmd[:6])}...")
+        log("DEBUG", f"  Claude log file: {log_file}")
 
         try:
             proc = subprocess.Popen(
@@ -968,15 +980,25 @@ class IssueImplementer:
 
             output_lines = []
             deadline = time.time() + self.opts.timeout
+            line_count = 0
 
             with log_file.open("w") as log_handle:
                 for line in proc.stdout:
                     if time.time() > deadline:
                         proc.kill()
+                        log("DEBUG", "  Claude timed out")
                         return False, "Timeout exceeded"
 
                     log_handle.write(line)
                     output_lines.append(line)
+                    line_count += 1
+
+                    # In verbose mode, print Claude output (but not too much)
+                    if self.opts.verbose:
+                        # Print significant lines
+                        stripped = line.strip()
+                        if stripped and not stripped.startswith("{") and len(stripped) < 200:
+                            print(f"    [Claude] {stripped[:100]}", flush=True)
 
                     # Update status based on output patterns
                     if "Editing" in line or "Writing" in line:
@@ -985,6 +1007,7 @@ class IssueImplementer:
                         self._update_status(slot, issue, "Claude", "running cmd")
 
             proc.wait()
+            log("DEBUG", f"  Claude finished with {line_count} lines, exit code {proc.returncode}")
             combined = "".join(output_lines)
 
             # Check for rate limit
@@ -1032,6 +1055,218 @@ Focus on what functionality was added or fixed. Do not include implementation de
             log("WARN", f"  Failed to get summary: {e}")
 
         return "Implementation completed."
+
+    def _check_existing_pr(self, issue: int) -> dict | None:
+        """Check if a PR already exists for this issue.
+
+        Returns PR info dict if found, None otherwise.
+        Checks both by issue number in title/body AND by branch name pattern.
+        """
+        # First try searching by issue number in title/body
+        cp = self._gh_call(
+            [
+                "gh",
+                "pr",
+                "list",
+                "--search",
+                f"#{issue} in:title,body",
+                "--json",
+                "number,state,headRefName,statusCheckRollup",
+            ]
+        )
+        if cp.returncode == 0:
+            try:
+                prs = json.loads(cp.stdout)
+                # Find open PR for this issue
+                for pr in prs:
+                    if pr.get("state") == "OPEN":
+                        return pr
+                # Check for merged PRs too
+                for pr in prs:
+                    if pr.get("state") == "MERGED":
+                        return pr
+            except json.JSONDecodeError:
+                pass
+
+        # Also check by branch name pattern (issue number prefix)
+        cp = self._gh_call(
+            ["gh", "pr", "list", "--state", "all", "--json", "number,state,headRefName,statusCheckRollup"]
+        )
+        if cp.returncode == 0:
+            try:
+                prs = json.loads(cp.stdout)
+                for pr in prs:
+                    branch = pr.get("headRefName", "")
+                    # Check if branch starts with issue number
+                    if branch.startswith(f"{issue}-") or branch.startswith(f"{issue}_"):
+                        state = pr.get("state", "")
+                        if state == "OPEN":
+                            log("DEBUG", f"  Found existing PR by branch: #{pr['number']} ({branch})")
+                            return pr
+                        elif state == "MERGED":
+                            log("DEBUG", f"  Found merged PR by branch: #{pr['number']} ({branch})")
+                            return pr
+            except json.JSONDecodeError:
+                pass
+
+        return None
+
+    def _analyze_and_fix_pr(self, pr_info: dict, issue: int, slot: int) -> WorkerResult:
+        """Analyze CI failures on an existing PR and attempt to fix them."""
+        start_time = time.time()
+        pr_number = pr_info["number"]
+        branch = pr_info.get("headRefName", "")
+
+        self._update_status(slot, issue, "PR", f"analyzing #{pr_number}")
+        log("INFO", f"  Found existing PR #{pr_number} for issue #{issue}")
+        log("DEBUG", f"  PR branch: {branch}")
+
+        # Check CI status
+        checks = pr_info.get("statusCheckRollup", []) or []
+        failing = [c for c in checks if c.get("conclusion") == "FAILURE"]
+        log("DEBUG", f"  Total checks: {len(checks)}, failing: {len(failing)}")
+
+        if not failing:
+            # No failures - PR is in good state, move to next issue
+            log("DEBUG", "  No CI failures detected, PR is in good state")
+            log("INFO", f"  PR #{pr_number} has no CI failures - moving to next issue")
+            duration = time.time() - start_time
+            return WorkerResult(issue, "completed", pr_number, None, duration)
+
+        # Get failure details
+        self._update_status(slot, issue, "CI", "fetching logs")
+        failure_info = []
+        for check in failing:
+            name = check.get("name", "unknown")
+            failure_info.append(f"- {name}: FAILURE")
+            log("DEBUG", f"  Failing check: {name}")
+
+        log("INFO", f"  CI failures: {len(failing)} checks failed")
+
+        # Get or create worktree for the branch
+        log("DEBUG", f"  Setting up worktree for branch: {branch}")
+        self._update_status(slot, issue, "Worktree", "setting up")
+        worktree = self.worktree_manager.create(issue, branch)
+        log("DEBUG", f"  Worktree created: {worktree}")
+        self.state.in_progress[issue] = str(worktree)
+        self.state.pr_numbers[issue] = pr_number
+        self.state.save(self.state_file)
+
+        # Checkout the PR branch
+        log("DEBUG", f"  Fetching origin/{branch}")
+        cp = run(["git", "fetch", "origin", branch], cwd=worktree)
+        log("DEBUG", f"  git fetch returned: {cp.returncode}")
+        log("DEBUG", f"  Checking out branch: {branch}")
+        cp = run(["git", "checkout", branch], cwd=worktree)
+        if cp.returncode != 0:
+            log("DEBUG", f"  Checkout failed, trying checkout -b: {cp.stderr}")
+            cp = run(["git", "checkout", "-b", branch, f"origin/{branch}"], cwd=worktree)
+        log("DEBUG", f"  git checkout returned: {cp.returncode}")
+
+        # Fetch CI logs
+        log("DEBUG", "  Fetching CI run info")
+        self._update_status(slot, issue, "CI", "analyzing failures")
+        cp = run(["gh", "run", "list", "--branch", branch, "--limit", "1", "--json", "databaseId"])
+        run_id = None
+        if cp.returncode == 0:
+            try:
+                runs = json.loads(cp.stdout)
+                if runs:
+                    run_id = runs[0].get("databaseId")
+                    log("DEBUG", f"  Found CI run ID: {run_id}")
+            except json.JSONDecodeError:
+                log("DEBUG", "  Failed to parse CI run list")
+
+        log_content = ""
+        if run_id:
+            log("DEBUG", f"  Fetching failed logs for run {run_id}")
+            cp = run(["gh", "run", "view", str(run_id), "--log-failed"], timeout=60)
+            if cp.returncode == 0:
+                log_content = cp.stdout[-5000:]  # Last 5000 chars
+                log("DEBUG", f"  Got {len(log_content)} chars of logs")
+            else:
+                log("DEBUG", f"  Failed to get logs: {cp.stderr}")
+        else:
+            log("DEBUG", "  No CI run ID found")
+
+        # Build fix prompt
+        log("DEBUG", "  Building fix prompt for Claude")
+        fix_prompt = f"""You are fixing CI failures for GitHub issue #{issue}.
+
+PR #{pr_number} has failing CI checks:
+{chr(10).join(failure_info)}
+
+Here are the relevant failure logs:
+```
+{log_content}
+```
+
+Please:
+1. Analyze the failure logs to understand what's broken
+2. Fix the issues in the code
+3. Run tests locally if possible to verify
+4. Ensure your fixes follow the existing code patterns
+
+When done, all files should be saved.
+"""
+
+        # Run Claude to fix
+        log("DEBUG", "  Spawning Claude agent to fix issues")
+        self._update_status(slot, issue, "Fix", "running Claude")
+        success, output = self._spawn_claude_agent(worktree, fix_prompt, slot, issue)
+        log("DEBUG", f"  Claude returned: success={success}, output_len={len(output)}")
+
+        if not success:
+            log("DEBUG", f"  Claude failed: {output[-200:]}")
+            self._post_issue_update(issue, f"⚠️ Failed to fix CI failures automatically.\n\nError: {output[-200:]}")
+            duration = time.time() - start_time
+            return WorkerResult(issue, "paused", pr_number, "fix failed", duration)
+
+        # Check for changes
+        log("DEBUG", "  Checking for changes")
+        cp = run(["git", "status", "--porcelain"], cwd=worktree)
+        if not cp.stdout.strip():
+            log("DEBUG", "  No changes made by Claude")
+            self._post_issue_update(issue, "ℹ️ No changes needed - CI may need manual investigation.")
+            duration = time.time() - start_time
+            return WorkerResult(issue, "paused", pr_number, "no changes made", duration)
+
+        # Commit and push
+        log("DEBUG", "  Committing and pushing changes")
+        self._update_status(slot, issue, "Git", "pushing fix")
+        run(["git", "add", "-A"], cwd=worktree)
+        run(["git", "commit", "-m", "fix: Address CI failures\n\nAutomated fix by implement_issues.py"], cwd=worktree)
+        cp = run(["git", "push", "origin", branch], cwd=worktree)
+
+        if cp.returncode != 0:
+            log("DEBUG", f"  Push failed: {cp.stderr}")
+            self._post_issue_update(issue, f"⚠️ Failed to push fix: {cp.stderr}")
+            duration = time.time() - start_time
+            return WorkerResult(issue, "paused", pr_number, "push failed", duration)
+
+        log("DEBUG", "  Push successful, moving to next issue")
+        self._post_issue_update(issue, f"🔧 Pushed fix to PR #{pr_number}. Moving to next issue.")
+
+        # Cleanup worktree since we're moving on
+        self.worktree_manager.remove(issue)
+        del self.state.in_progress[issue]
+        self.state.save(self.state_file)
+
+        duration = time.time() - start_time
+        log("INFO", f"  Fixed PR #{pr_number} - moving to next issue")
+        return WorkerResult(issue, "completed", pr_number, None, duration)
+
+    def _post_issue_update(self, issue: int, message: str) -> None:
+        """Post an update comment to the GitHub issue."""
+        comment = f"{message}\n\n---\n*Automated by implement_issues.py at {time.strftime('%Y-%m-%d %H:%M:%S')}*"
+        proc = subprocess.Popen(
+            ["gh", "issue", "comment", str(issue), "--body-file", "-"],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        proc.communicate(input=comment)
 
     def _poll_pr_status(self, pr_number: int, slot: int, issue: int) -> str:
         """Poll PR status until merged, failed, or timeout.
@@ -1093,6 +1328,19 @@ Focus on what functionality was added or fixed. Do not include implementation de
 
             title = issue_info.title or f"Issue #{issue}"
             log("INFO", f"Implementing #{issue}: {title}")
+
+            # 0. Check for existing PR first
+            self._update_status(slot, issue, "PR", "checking existing")
+            existing_pr = self._check_existing_pr(issue)
+            if existing_pr:
+                state = existing_pr.get("state", "")
+                if state == "MERGED":
+                    log("INFO", f"  Issue #{issue} already has merged PR #{existing_pr['number']}")
+                    self._post_issue_update(issue, f"✅ Already completed via PR #{existing_pr['number']}")
+                    return WorkerResult(issue, "completed", existing_pr["number"], None, time.time() - start_time)
+                elif state == "OPEN":
+                    # Existing open PR - analyze and fix if needed
+                    return self._analyze_and_fix_pr(existing_pr, issue, slot)
 
             # 1. Check/create plan
             plan = self._check_or_create_plan(issue, slot)
@@ -1216,37 +1464,23 @@ When you're done, ensure all files are saved.
             # 11. Enable auto-merge
             run(["gh", "pr", "merge", str(pr_number), "--auto", "--rebase"])
 
-            # 12. Wait for CI
-            self._update_status(slot, issue, "PR", "waiting for CI")
-            pr_status = self._poll_pr_status(pr_number, slot, issue)
+            # 12. Cleanup worktree and move to next issue (don't wait for CI)
+            self._update_status(slot, issue, "Cleanup", "removing worktree")
+            self.worktree_manager.remove(issue)
+            del self.state.in_progress[issue]
+            self.state.save(self.state_file)
 
-            if pr_status == "merged":
-                # 13. Cleanup worktree
-                self._update_status(slot, issue, "Cleanup", "removing worktree")
-                self.worktree_manager.remove(issue)
-                del self.state.in_progress[issue]
-                self.state.save(self.state_file)
-
-                duration = time.time() - start_time
-                log("INFO", f"  Completed #{issue} in {duration:.0f}s (PR #{pr_number})")
-                return WorkerResult(issue, "completed", pr_number, None, duration)
-            else:
-                # CI failed - pause for manual intervention
-                self._update_status(slot, issue, "Paused", pr_status)
-                self.state.paused_issues[issue] = PausedIssue(
-                    worktree=str(worktree),
-                    pr=pr_number,
-                    reason=f"CI {pr_status}",
-                )
-                del self.state.in_progress[issue]
-                self.state.save(self.state_file)
-
-                duration = time.time() - start_time
-                log("WARN", f"  Paused #{issue} - {pr_status} (PR #{pr_number})")
-                return WorkerResult(issue, "paused", pr_number, pr_status, duration)
+            duration = time.time() - start_time
+            log("INFO", f"  Created PR #{pr_number} for #{issue} in {duration:.0f}s - moving to next issue")
+            self._post_issue_update(issue, f"✅ Created PR #{pr_number}. Auto-merge enabled.")
+            return WorkerResult(issue, "completed", pr_number, None, duration)
 
         except Exception as e:
             log("ERROR", f"  Issue #{issue} failed: {e}")
+
+            # Post failure to GitHub issue
+            error_msg = str(e)[:200]
+            self._post_issue_update(issue, f"❌ Implementation failed:\n\n```\n{error_msg}\n```")
 
             # Cleanup on failure if worktree was created
             if issue in self.state.in_progress:
@@ -1393,8 +1627,17 @@ Examples:
         metavar="SEC",
         help=f"Delay between GitHub API calls (default: {API_DELAY_DEFAULT}s)",
     )
+    p.add_argument(
+        "--verbose",
+        "-v",
+        action="store_true",
+        help="Enable verbose/debug output",
+    )
 
     args = p.parse_args()
+
+    # Set verbose mode
+    set_verbose(args.verbose)
 
     # Parse issue numbers if provided
     issues: list[int] | None = None
@@ -1418,6 +1661,7 @@ Examples:
         cleanup=args.cleanup,
         state_dir=args.state_dir,
         api_delay=args.api_delay,
+        verbose=args.verbose,
     )
 
     repo_root = pathlib.Path(__file__).resolve().parents[1]
@@ -1463,8 +1707,6 @@ Examples:
         state.started_at = dt.datetime.now().isoformat()
 
     # Parse epic and build issues dict
-    status_tracker = StatusTracker(opts.parallel)
-
     if not state.issues:
         # Create a temporary implementer just for parsing
         temp_implementer = IssueImplementer(repo_root, tempdir, opts, state, None, worktree_manager, None)
@@ -1498,6 +1740,13 @@ Examples:
         print_analysis(resolver, state)
         return 0
 
+    # Calculate actual worker count (don't spawn more threads than issues)
+    pending_count = len(state.issues) - len(state.completed_issues) - len(state.paused_issues)
+    actual_workers = min(opts.parallel, max(1, pending_count))
+
+    # Create status tracker with correct worker count
+    status_tracker = StatusTracker(actual_workers)
+
     # Create implementer
     implementer = IssueImplementer(repo_root, tempdir, opts, state, resolver, worktree_manager, status_tracker)
 
@@ -1506,7 +1755,8 @@ Examples:
     print("  ML Odyssey Issue Implementer")
     print(f"  Epic: #{opts.epic}")
     print(f"  Total issues: {len(state.issues)}")
-    mode = "Sequential" if opts.parallel == 1 else f"Parallel ({opts.parallel} workers)"
+    print(f"  Pending: {pending_count}")
+    mode = "Sequential" if actual_workers == 1 else f"Parallel ({actual_workers} workers)"
     if opts.dry_run:
         mode += " (DRY RUN)"
     print(f"  Mode: {mode}")
@@ -1532,9 +1782,11 @@ Examples:
     status_tracker.start_display()
 
     try:
-        with ThreadPoolExecutor(max_workers=opts.parallel) as executor:
+        with ThreadPoolExecutor(max_workers=actual_workers) as executor:
             futures: dict = {}
             active_count = 0
+            stall_count = 0  # Track iterations without progress
+            last_debug_time = 0.0  # Rate-limit debug output
 
             while True:
                 status_tracker.update_main("Processing", f"{len(results)} done")
@@ -1542,26 +1794,46 @@ Examples:
                 # Get ready issues
                 ready = resolver.get_ready_issues()
 
-                # Filter out issues already in progress
+                # Filter out issues already in progress (in futures)
                 ready = [n for n in ready if n not in futures.values()]
 
                 # Spawn new tasks up to max_parallel
-                available = opts.parallel - active_count
+                spawned_this_iteration = 0
+                available = actual_workers - active_count
+
+                # Rate-limited debug output (once per second)
+                now = time.time()
+                if now - last_debug_time >= 1.0:
+                    log(
+                        "DEBUG",
+                        f"Loop: ready={len(ready)} futures={len(futures)} active={active_count} avail={available} done={len(results)}",
+                    )
+                    last_debug_time = now
                 for issue_num in ready[:available]:
                     slot = status_tracker.acquire_slot(issue_num)
                     resolver.mark_in_progress(issue_num)
                     future = executor.submit(implementer.implement_issue, issue_num, slot)
                     futures[future] = issue_num
                     active_count += 1
+                    spawned_this_iteration += 1
                     status_tracker.update_main("Spawning", f"#{issue_num}")
 
-                # Check for completed futures
-                if not futures:
-                    # No futures and no ready issues - we're done or blocked
-                    if not ready:
+                # Check termination conditions
+                if not futures and not ready:
+                    # Nothing running and nothing ready - we're done or blocked
+                    log("INFO", "All processable issues completed or blocked")
+                    break
+
+                if not futures and ready and spawned_this_iteration == 0:
+                    # Ready issues exist but we couldn't spawn any - something's wrong
+                    stall_count += 1
+                    if stall_count > 5:
+                        log("WARN", f"Stalled with {len(ready)} ready issues but cannot spawn. Exiting.")
                         break
                     time.sleep(1)
                     continue
+                else:
+                    stall_count = 0
 
                 # Wait for at least one completion
                 done_futures = []
@@ -1570,29 +1842,40 @@ Examples:
                         done_futures.append(future)
 
                 if not done_futures:
-                    time.sleep(1)
+                    time.sleep(1.0)  # Poll interval
                     continue
 
                 for future in done_futures:
                     issue_num = futures.pop(future)
                     active_count -= 1
-                    result = future.result()
+
+                    try:
+                        result = future.result()
+                    except Exception as e:
+                        log("ERROR", f"Future for #{issue_num} raised exception: {e}")
+                        result = WorkerResult(issue_num, "paused", None, str(e), 0)
+
                     results.append(result)
                     status_tracker.increment_completed()
 
                     if result.status == "completed":
                         resolver.mark_completed(issue_num)
+                        log("DEBUG", f"Main loop: marked #{issue_num} as completed")
                     else:
                         resolver.mark_paused(issue_num)
+                        log("DEBUG", f"Main loop: marked #{issue_num} as paused ({result.status})")
 
-                    # Release slot
-                    for slot in range(opts.parallel):
-                        with status_tracker._lock:
+                    # Release slot (find slot first, then release without holding lock)
+                    slot_to_release = None
+                    with status_tracker._lock:
+                        for slot in range(actual_workers):
                             if slot in status_tracker._slots:
                                 item, _, _, _ = status_tracker._slots[slot]
                                 if item == issue_num:
-                                    status_tracker.release_slot(slot)
+                                    slot_to_release = slot
                                     break
+                    if slot_to_release is not None:
+                        status_tracker.release_slot(slot_to_release)
 
     finally:
         status_tracker.stop_display()
