@@ -549,3 +549,14 @@ trait Optimizer:
             May be called before parameter zero_grad().
         """
         ...
+
+    fn get_learning_rate(self) -> Float64:
+        """Get the current learning rate.
+
+        Returns:
+            Current learning rate as Float64.
+
+        Note:
+            Used by TrainingLoop to access learning rate for autograd optimizer.
+        """
+        ...
