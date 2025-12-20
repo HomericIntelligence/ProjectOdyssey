@@ -153,7 +153,12 @@ fn conv2d(
                                     ):
                                         # Get input and kernel values
                                         var in_idx = (
-                                            b * (in_channels * in_height * in_width)
+                                            b
+                                            * (
+                                                in_channels
+                                                * in_height
+                                                * in_width
+                                            )
                                             + ic * (in_height * in_width)
                                             + in_h * in_width
                                             + in_w
@@ -168,9 +173,9 @@ fn conv2d(
                                         var in_val = x._data.bitcast[Float32]()[
                                             in_idx
                                         ]
-                                        var k_val = kernel._data.bitcast[Float32]()[
-                                            k_idx
-                                        ]
+                                        var k_val = kernel._data.bitcast[
+                                            Float32
+                                        ]()[k_idx]
 
                                         sum_val += in_val * k_val
 
@@ -219,7 +224,12 @@ fn conv2d(
                                     ):
                                         # Get input and kernel values
                                         var in_idx = (
-                                            b * (in_channels * in_height * in_width)
+                                            b
+                                            * (
+                                                in_channels
+                                                * in_height
+                                                * in_width
+                                            )
                                             + ic * (in_height * in_width)
                                             + in_h * in_width
                                             + in_w
@@ -234,9 +244,9 @@ fn conv2d(
                                         var in_val = x._data.bitcast[Float32]()[
                                             in_idx
                                         ]
-                                        var k_val = kernel._data.bitcast[Float32]()[
-                                            k_idx
-                                        ]
+                                        var k_val = kernel._data.bitcast[
+                                            Float32
+                                        ]()[k_idx]
 
                                         sum_val += in_val * k_val
 
