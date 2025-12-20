@@ -189,7 +189,7 @@ jobs:
           # Core Tests - Split into domain-specific groups for parallelization
           - name: "Core Tensors"
             path: "tests/shared/core"
-            pattern: "test_tensors.mojo test_arithmetic.mojo test_arithmetic_backward.mojo test_broadcasting.mojo test_shape.mojo test_shape_regression.mojo test_creation.mojo test_reduction.mojo test_reduction_forward.mojo test_reduction_edge_cases.mojo test_matrix.mojo test_matmul.mojo test_pooling.mojo test_properties.mojo"
+            pattern: "test_tensors.mojo test_arithmetic.mojo test_arithmetic_backward.mojo test_broadcasting.mojo test_shape.mojo test_shape_regression.mojo test_shape_edge_cases.mojo test_creation.mojo test_reduction.mojo test_reduction_forward.mojo test_reduction_edge_cases.mojo test_matrix.mojo test_matrix_edge_cases.mojo test_matmul.mojo test_pooling.mojo test_properties.mojo test_high_dimensional.mojo"
           - name: "Core Activations"
             path: "tests/shared/core"
             pattern: "test_activations.mojo test_activation_funcs.mojo test_activation_ops.mojo test_advanced_activations.mojo"
@@ -210,7 +210,7 @@ jobs:
             pattern: "test_layers.mojo test_linear.mojo test_conv.mojo test_normalization.mojo test_dropout.mojo test_module.mojo"
           - name: "Core Elementwise"
             path: "tests/shared/core"
-            pattern: "test_elementwise.mojo test_elementwise_dispatch.mojo test_elementwise_forward.mojo test_comparison_ops.mojo test_edge_cases.mojo"
+            pattern: "test_elementwise.mojo test_elementwise_dispatch.mojo test_elementwise_forward.mojo test_elementwise_edge_cases.mojo test_comparison_ops.mojo test_edge_cases.mojo"
           - name: "Core ExTensor"
             path: "tests/shared/core"
             pattern: "test_extensor_new_methods.mojo test_extensor_operators.mojo test_extensor_slicing.mojo test_memory_leaks.mojo"

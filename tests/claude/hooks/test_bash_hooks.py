@@ -43,7 +43,8 @@ def run_hook(cmd: str) -> bool:
         try:
             json.loads(proc.stdout.decode()).get("reason", "")
         except json.JSONDecodeError:
-            pass
+            reason = ""
+            print(reason)
         return False
 
 
