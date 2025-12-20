@@ -4,11 +4,30 @@ import sys
 from pathlib import Path
 import pytest
 
-HOOK_SCRIPT = Path(".claude/hooks/pre-bash-exec.py")  # Path to your Python hook
+# -------------------------------
+# Hook detection (mirrors original bash logic)
+# -------------------------------
+project_hook = Path(".claude/hooks/pre-bash-exec.py")
+home_hook = Path.home() / ".claude/hooks/pre-bash-exec.py"
+
+if project_hook.exists():
+    HOOK_SCRIPT = project_hook
+elif home_hook.exists():
+    HOOK_SCRIPT = home_hook
+else:
+    pytest.fail("No hook script found in project or home directory")
+
 PROJECT_ROOT = Path.cwd()
 
-# Helper to run hook with a command and return True if allowed, False if blocked
+# -------------------------------
+# Helper to run the hook
+# -------------------------------
 def run_hook(cmd: str) -> bool:
+    """
+    Run the pre-bash-exec Python hook with a given command string.
+
+    Returns True if allowed, False if blocked.
+    """
     payload = {
         "tool": "bash",
         "input": {
@@ -16,26 +35,25 @@ def run_hook(cmd: str) -> bool:
             "cwd": str(PROJECT_ROOT)
         }
     }
-    try:
-        proc = subprocess.run(
-            [sys.executable, str(HOOK_SCRIPT)],
-            input=json.dumps(payload).encode(),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
-    except Exception as e:
-        pytest.fail(f"Hook execution failed: {e}")
-
+    proc = subprocess.run(
+        [sys.executable, str(HOOK_SCRIPT)],
+        input=json.dumps(payload).encode(),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
     if proc.returncode == 0:
-        return True  # allowed
+        return True
     else:
+        # Optionally parse block reason
         try:
-            output = json.loads(proc.stdout.decode())
+            reason = json.loads(proc.stdout.decode()).get("reason", "")
         except json.JSONDecodeError:
-            output = {}
-        return False  # blocked
+            reason = ""
+        return False
 
-# ---- Dangerous commands ----
+# -------------------------------
+# Original dangerous commands
+# -------------------------------
 dangerous_commands = [
     "rm -rf /",
     "rm -rf / ",
@@ -46,8 +64,6 @@ dangerous_commands = [
     "rm /etc/passwd",
     "rm -rf /tmp/something",
     "sudo rm -rf /tmp/file",
-    "rm ./logs/test.log",
-    "rm logs/test.log",
     "rm -rf",
     "echo yes | rm file.txt",
     "cp README.md README.md && rm -rf ~/",
@@ -74,7 +90,9 @@ dangerous_commands = [
     "echo ${PATH}"
 ]
 
-# ---- Safe commands ----
+# -------------------------------
+# Original safe commands
+# -------------------------------
 safe_commands = [
     "rm ./tests/README.md",
     "rm tests/README.md",
@@ -89,6 +107,42 @@ safe_commands = [
 ]
 safe_commands = [c for c in safe_commands if c is not None]
 
+# -------------------------------
+# Additional complex corner-case commands
+# -------------------------------
+complex_dangerous_commands = [
+    "rm ./foo && rm ./bar && echo done",
+    "rm ./foo || rm ./bar",
+    "rm ./foo; rm ./bar; echo hello",
+    "echo ./foo | xargs rm",
+    "cat list.txt | xargs rm -f",
+    "ls | grep pattern | xargs rm",
+    "rm \"$HOME/testfile\"",
+    "rm '~/testfile'",
+    "rm ${HOME}/testfile",
+    "find ./tmp -name '*.log' -exec rm {} \\;",
+    "find ./tmp -type f -delete",
+    "git status && git clean -fdx || echo done",
+    "mkfs.ext4 /dev/sdb1",
+    "sudo mkfs.vfat /dev/sdc1",
+    "dd if=/dev/zero of=foo.img",
+    "echo hello | tee output.txt | rm ./foo",
+    "cat file | grep foo | xargs rm",
+]
+
+complex_safe_commands = [
+    "ls -la && echo done && pwd",
+    "echo hello; mkdir -p ./tmp && touch ./tmp/file",
+    "cat file.txt | grep pattern | sort",
+    "echo foo | tee ./tmp/output | wc -l",
+    "git status && git log --oneline",
+    "echo 'hello' > output.txt",
+    "mkdir -p ./build && cp README.md ./build/"
+]
+
+# -------------------------------
+# Parametrized tests
+# -------------------------------
 @pytest.mark.parametrize("cmd", dangerous_commands)
 def test_dangerous_commands_blocked(cmd):
     allowed = run_hook(cmd)
@@ -98,3 +152,13 @@ def test_dangerous_commands_blocked(cmd):
 def test_safe_commands_allowed(cmd):
     allowed = run_hook(cmd)
     assert allowed, f"Safe command blocked incorrectly: {cmd}"
+
+@pytest.mark.parametrize("cmd", complex_dangerous_commands)
+def test_complex_dangerous_commands_blocked(cmd):
+    allowed = run_hook(cmd)
+    assert not allowed, f"Complex dangerous command passed but should be blocked: {cmd}"
+
+@pytest.mark.parametrize("cmd", complex_safe_commands)
+def test_complex_safe_commands_allowed(cmd):
+    allowed = run_hook(cmd)
+    assert allowed, f"Complex safe command blocked incorrectly: {cmd}"

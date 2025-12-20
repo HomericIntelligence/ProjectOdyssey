@@ -511,6 +511,10 @@ jobs:
           if [ -d "tests/unit" ] && [ -n "$(find tests/unit -name 'test_*.py' 2>/dev/null)" ]; then
             TEST_PATHS="$TEST_PATHS tests/unit/"
           fi
+          # Claude hook tests
+          if [ -d "tests/claude " ] && [ -n "$(find tests/claude -name 'test_*.py' 2>/dev/null)" ]; then
+            TEST_PATHS="$TEST_PATHS tests/claude/"
+          fi
 
           # Integration tests (agents, foundation)
           [ -f "tests/agents/test_integration.py" ] && TEST_PATHS="$TEST_PATHS tests/agents/test_integration.py"

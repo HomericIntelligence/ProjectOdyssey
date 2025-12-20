@@ -2,9 +2,16 @@
 """
 Claude pretooluse-input hook in Python
 Blocks destructive bash commands.
+
 Contract:
  - exit 0  => allow
  - exit !=0 => block (must emit JSON)
+
+Features:
+ - Handles multi-command bash input separated by ;, &&, ||, or |, respecting quotes.
+ - Detects destructive commands inside pipelines and compound commands.
+ - Blocks dangerous system-level commands, recursive permission/ownership changes,
+   destructive `rm` usage, and destructive `find`, `xargs`, `git clean`, `rsync` usage.
 """
 
 import json
@@ -16,29 +23,73 @@ from pathlib import Path
 EXIT_ALLOW = 0
 EXIT_BLOCK = 1
 
+
 def block(msg: str):
+    """Emit JSON reason and exit with block code."""
     print(json.dumps({"action": "block", "reason": msg}))
     sys.exit(EXIT_BLOCK)
 
 def validate_path(p: str, project_root: Path, home_dir: Path):
-    # Expand ~ and $HOME
+    """
+    Validate file paths for destructive commands.
+
+    Blocks:
+     - Filesystem root "/"
+     - Any .git directories
+     - Home directory outside project root
+     - Paths outside project root
+     - Any rm target that does not exist
+    """
     p = os.path.expandvars(os.path.expanduser(p))
     p = Path(p).resolve()
 
-    # Block dangerous locations
     if p == Path("/"):
         block("targeting filesystem root")
-    if ".git" in str(p.parts):
+    if ".git" in p.parts:
         block("targeting .git directory")
 
-    # Block everything in HOME except project root
     try:
         p.relative_to(project_root)
     except ValueError:
         if home_dir in p.parents or p == home_dir:
             block("targeting home directory outside project root")
-        # Block anything outside project root
         block(f"outside project root: {p}")
+
+    # New: rm target must exist
+    if not p.exists():
+        block(f"rm target does not exist: {p}")
+
+def split_commands(cmd: str):
+    """
+    Split a bash command string into individual subcommands.
+
+    Handles compound commands separated by:
+      - ';'  : sequential commands
+      - '&&' : logical AND
+      - '||' : logical OR
+      - '|'  : pipeline
+    Respects quoted arguments.
+
+    Example:
+        "echo hi | rm file.txt && echo bye"
+    Returns:
+        ["echo hi", "rm file.txt", "echo bye"]
+    """
+    tokens = shlex.split(cmd, posix=True)
+    parts = []
+    current = []
+    # Iterate over each token and split on separators
+    for t in tokens:
+        if t in (";", "&&", "||", "|"):
+            if current:
+                parts.append(" ".join(current))
+                current = []
+        else:
+            current.append(t)
+    if current:
+        parts.append(" ".join(current))
+    return parts
+
 
 def main():
     payload = json.load(sys.stdin)
@@ -56,22 +107,19 @@ def main():
     project_root = Path(os.environ.get("PROJECT_ROOT", Path(cwd).resolve()))
     home_dir = Path.home()
 
-    # Split multi-command input on ;, &&, ||, | while respecting quotes
+    # Split multi-command input correctly
     try:
-        # shlex.split does not handle ;, &&, ||, | directly, so split manually first
-        import re
-        split_pattern = r'(;|&&|\|\|?\|)'
-        parts = [p.strip() for p in re.split(split_pattern, cmd) if p.strip() and not re.match(split_pattern, p)]
+        parts = split_commands(cmd)
     except Exception:
         block("failed to parse command")
 
     for subcmd in parts:
-        # Remove sudo
+        # Remove sudo prefix
         if subcmd.startswith("sudo "):
             subcmd = subcmd[5:].strip()
 
         # Dangerous shell expansions
-        if "$(" in subcmd or "`" in subcmd or "${" in subcmd:
+        if any(x in subcmd for x in ("$(", "`", "${")):
             block("dangerous shell expansion detected")
 
         # Tokenize arguments
@@ -94,32 +142,45 @@ def main():
                 block("rm with no paths")
             for p in args:
                 validate_path(p, project_root, home_dir)
+
         elif cmdword == "find":
-            if "-delete" in tokens or "-exec" in tokens and "rm" in tokens:
+            # Detect destructive find usage
+            if "-delete" in tokens or ("-exec" in tokens and "rm" in tokens):
                 block("destructive find usage")
+
         elif cmdword == "xargs":
+            # Detect xargs with rm
             if "rm" in tokens:
                 block("xargs rm is blocked")
+
         elif cmdword == "git":
+            # Block git clean with dangerous flags
             if "clean" in tokens and any(f in tokens for f in ("-f", "-d", "-x", "-fdx")):
                 block("git clean with force flags")
+
         elif cmdword == "rsync":
             if "--delete" in tokens:
                 block("rsync --delete is blocked")
+
         elif cmdword in ("chmod", "chown", "chgrp"):
             if "-R" in tokens:
                 block("recursive permission or ownership change blocked")
-        elif cmdword in ("dd", "mkfs", "wipefs", "mount", "umount"):
+
+        elif cmdword in ("dd", "wipefs", "mount", "umount") or cmdword.startswith("mkfs"):
             block("dangerous system-level command blocked")
+
         elif cmdword == "tar":
             for t in tokens[1:]:
-                if "x" in t and t.startswith("-"):
+                # Block extraction flags like -xf
+                if t.startswith("-") and "x" in t:
                     block("tar extraction blocked")
+
         elif cmdword == "unzip":
             block("unzip blocked")
 
     # All checks passed
     sys.exit(EXIT_ALLOW)
+
 
 if __name__ == "__main__":
     main()
