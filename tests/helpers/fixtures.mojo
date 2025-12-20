@@ -12,7 +12,9 @@ from shared.testing.data_generators import random_tensor as shared_random_tensor
 from shared.testing.data_generators import random_uniform
 
 
-fn random_tensor(shape: List[Int], dtype: DType = DType.float32) raises -> ExTensor:
+fn random_tensor(
+    shape: List[Int], dtype: DType = DType.float32
+) raises -> ExTensor:
     """Create a tensor with random values from uniform distribution [0, 1).
 
     Args:
@@ -34,7 +36,9 @@ fn random_tensor(shape: List[Int], dtype: DType = DType.float32) raises -> ExTen
     return shared_random_tensor(shape, dtype)
 
 
-fn sequential_tensor(shape: List[Int], dtype: DType = DType.float32) raises -> ExTensor:
+fn sequential_tensor(
+    shape: List[Int], dtype: DType = DType.float32
+) raises -> ExTensor:
     """Create tensor with sequential values 0, 1, 2, 3, ...
 
     Tensor is filled with sequential values in row-major order, then reshaped
