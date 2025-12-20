@@ -32,6 +32,7 @@ alias ATOL_FP8 = 1e-2
 # Multi-Precision Test Constants
 # ============================================================================
 
+
 fn get_test_dtypes() -> List[DType]:
     """Get list of data types to test across.
 
@@ -88,7 +89,8 @@ fn get_atol(dtype: DType) -> Float64:
 # Test Timing Utilities
 # ============================================================================
 
-fn measure_time[func: fn() raises -> None]() raises -> Float64:
+
+fn measure_time[func: fn () raises -> None]() raises -> Float64:
     """Measure execution time of a function in milliseconds.
 
     Returns:
@@ -115,7 +117,9 @@ fn measure_time[func: fn() raises -> None]() raises -> Float64:
     return 0.0
 
 
-fn measure_throughput[func: fn() raises -> None](n_iterations: Int) raises -> Float64:
+fn measure_throughput[
+    func: fn () raises -> None
+](n_iterations: Int) raises -> Float64:
     """Measure throughput (operations per second) of a function.
 
     Args:
@@ -148,6 +152,7 @@ fn measure_throughput[func: fn() raises -> None](n_iterations: Int) raises -> Fl
 # ============================================================================
 # Test Fixtures Helper
 # ============================================================================
+
 
 struct TestFixtures:
     """Helper struct for creating common test tensors.
@@ -200,7 +205,9 @@ struct TestFixtures:
             # Returns 10x10 tensor with random values
             ```
         """
-        from tests.helpers.fixtures import random_tensor as fixture_random_tensor
+        from tests.helpers.fixtures import (
+            random_tensor as fixture_random_tensor,
+        )
 
         var shape = List[Int]()
         shape.append(rows)

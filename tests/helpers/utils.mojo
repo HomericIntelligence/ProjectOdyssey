@@ -192,8 +192,11 @@ fn compare_tensors(a: ExTensor, b: ExTensor) -> String:
                 max_diff = diff
                 max_diff_idx = i
 
-        result += ", Max diff: " + String(max_diff) + " at index " + String(
-            max_diff_idx
+        result += (
+            ", Max diff: "
+            + String(max_diff)
+            + " at index "
+            + String(max_diff_idx)
         )
     else:
         result += ", Max diff: Cannot compare (shape or numel mismatch)"
@@ -201,7 +204,7 @@ fn compare_tensors(a: ExTensor, b: ExTensor) -> String:
     return result
 
 
-fn benchmark[func: fn() raises -> None](iterations: Int) -> Float64:
+fn benchmark[func: fn () raises -> None](iterations: Int) -> Float64:
     """Simple performance testing helper.
 
     Args:

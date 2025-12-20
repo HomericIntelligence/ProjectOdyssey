@@ -64,14 +64,14 @@ fn test_sequential_tensor() raises:
     var tensor = sequential_tensor(shape, DType.float32)
 
     # Verify values: 0, 1, 2, 3, 4, 5
-    var expected_values = [
-        0.0, 1.0, 2.0, 3.0, 4.0, 5.0
-    ]
+    var expected_values = [0.0, 1.0, 2.0, 3.0, 4.0, 5.0]
 
     for i in range(6):
         var val = tensor._get_float64(i)
         if val != expected_values[i]:
-            raise Error("sequential_tensor value mismatch at index " + String(i))
+            raise Error(
+                "sequential_tensor value mismatch at index " + String(i)
+            )
 
 
 fn test_nan_tensor() raises:

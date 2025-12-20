@@ -72,6 +72,7 @@ fn test_compare_tensors_different_shapes() raises:
 
 fn test_benchmark_function() raises:
     """Test benchmark function execution."""
+
     fn dummy_test() raises:
         pass
 
