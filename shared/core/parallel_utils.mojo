@@ -14,7 +14,9 @@ alias PARALLEL_BATCH_THRESHOLD: Int = 4
 alias DEFAULT_NUM_WORKERS: Int = 0
 
 
-fn should_parallelize(batch_size: Int, threshold: Int = PARALLEL_BATCH_THRESHOLD) -> Bool:
+fn should_parallelize(
+    batch_size: Int, threshold: Int = PARALLEL_BATCH_THRESHOLD
+) -> Bool:
     """Determine if batch size warrants parallel execution.
 
     Args:
@@ -28,7 +30,7 @@ fn should_parallelize(batch_size: Int, threshold: Int = PARALLEL_BATCH_THRESHOLD
 
 
 fn parallel_for_batch[
-    func: fn(Int) capturing -> None
+    func: fn (Int) capturing -> None
 ](batch_size: Int, num_workers: Int = DEFAULT_NUM_WORKERS):
     """Execute function across batch indices in parallel.
 
