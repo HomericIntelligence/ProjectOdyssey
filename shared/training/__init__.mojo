@@ -117,6 +117,14 @@ struct SGD(Movable, Optimizer):
         """
         pass
 
+    fn get_learning_rate(self) -> Float64:
+        """Get the current learning rate.
+
+        Returns:
+            Current learning rate as Float64.
+        """
+        return Float64(self.learning_rate)
+
 
 # MSELoss - Mean Squared Error Loss
 struct MSELoss(Loss, Movable):
@@ -296,14 +304,14 @@ struct TrainingLoop[
         var params = self.model.parameters()
 
         # Create autograd SGD optimizer and perform parameter update
-        var lr = Float64(self.optimizer.learning_rate)
+        var lr = self.optimizer.get_learning_rate()
         var autograd_sgd = AutogradSGD(lr)
 
         # Convert parameters to Variables for optimizer
         var var_params: List[Variable] = []
         for i in range(len(params)):
             var p = Variable(params[i], True, i)
-            var_params.append(p)
+            var_params.append(p^)
 
         # Update parameters using autograd optimizer
         autograd_sgd.step(var_params, self.tape)
