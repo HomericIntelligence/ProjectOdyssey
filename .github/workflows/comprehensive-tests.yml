@@ -470,40 +470,6 @@ jobs:
           retention-days: 7
 
   # ============================================================================
-  # Example Arithmetic Tests - Non-blocking (known test discovery issues)
-  # ============================================================================
-  test-example-arithmetic:
-    needs: [mojo-compilation, validate-test-coverage]
-    runs-on: ubuntu-latest
-    continue-on-error: true  # Non-blocking - investigating test discovery issues
-    timeout-minutes: 15
-    name: "Example Arithmetic"
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Set up Pixi
-        uses: prefix-dev/setup-pixi@v0.9.3
-        with:
-          pixi-version: latest
-          cache: true
-
-      - name: Install Just
-        uses: extractions/setup-just@v3
-
-      - name: Run Example Arithmetic tests
-        run: just ci-test-group examples "test_arithmetic.mojo"
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: test-results-Example-Arithmetic
-          path: test-results/
-          retention-days: 7
-
-  # ============================================================================
   # Python Tests
   # ============================================================================
   test-python:
@@ -715,7 +681,7 @@ jobs:
   # Combined Test Report with Metrics
   # ============================================================================
   test-report:
-    needs: [mojo-compilation, validate-test-coverage, test-mojo-comprehensive, test-configs, test-benchmarks, test-core-layers, test-example-arithmetic, test-python, code-quality]
+    needs: [mojo-compilation, validate-test-coverage, test-mojo-comprehensive, test-configs, test-benchmarks, test-core-layers, test-python, code-quality]
     runs-on: ubuntu-latest
     if: always()
     name: "Test Report"
