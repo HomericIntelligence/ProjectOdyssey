@@ -13,7 +13,7 @@ receives_from: []
 
 ## Identity
 
-Level 0 meta-orchestrator responsible for strategic decisions across the entire ml-odyssey repository
+Level 0 meta-orchestrator responsible for strategic decisions across the entire ProjectOdyssey repository
 ecosystem. Set system-wide architectural patterns, select research papers, and coordinate all 6 section
 orchestrators.
 

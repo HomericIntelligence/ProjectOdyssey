@@ -194,7 +194,7 @@ If you see import errors:
 
 ```bash
 # Ensure you're in the repository root
-cd /path/to/ml-odyssey
+cd /path/to/ProjectOdyssey
 
 # Verify shared library exists
 ls shared/

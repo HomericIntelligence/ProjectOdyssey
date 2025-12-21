@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document defines the complete 6-level agent hierarchy for the ml-odyssey project. Each level has
+This document defines the complete 6-level agent hierarchy for the ProjectOdyssey project. Each level has
 distinct responsibilities, scope, and delegation patterns.
 
 ## Hierarchy Diagram

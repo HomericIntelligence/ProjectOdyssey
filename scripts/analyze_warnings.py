@@ -81,7 +81,7 @@ def print_summary(categories):
     sorted_files = sorted(file_counts.items(), key=lambda x: x[1], reverse=True)
     for file_path, count in sorted_files[:10]:
         # Show just the filename relative to shared/
-        short_path = file_path.replace("/home/mvillmow/ml-odyssey/", "")
+        short_path = file_path.replace("/home/mvillmow/ProjectOdyssey/", "")
         print(f"{count:4d} warnings - {short_path}")
 
     print()

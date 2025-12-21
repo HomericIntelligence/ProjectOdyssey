@@ -30,7 +30,7 @@ def run_markdownlint():
                 "--ignore",
                 "notes/review/**",
             ],
-            cwd="/home/mvillmow/ml-odyssey",
+            cwd="/home/mvillmow/ProjectOdyssey",
             capture_output=True,
             text=True,
             timeout=120,
@@ -108,7 +108,7 @@ def main():
     print(f"Total files with errors: {len(errors_by_file)}")
 
     # Save for processing
-    with open("/home/mvillmow/ml-odyssey/markdown_errors.json", "w") as f:
+    with open("/home/mvillmow/ProjectOdyssey/markdown_errors.json", "w") as f:
         json.dump(
             {
                 "by_type": {k: v for k, v in errors_by_type.items()},

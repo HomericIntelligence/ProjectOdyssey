@@ -24,7 +24,7 @@ Create distributable packages including Mojo packages (.mojopkg), archives, and 
 pixi run mojo build -o packages/module.mojopkg shared/module/
 
 # Create distribution archive
-tar -czf dist/ml-odyssey-v0.1.0.tar.gz packages/ examples/ README.md
+tar -czf dist/ProjectOdyssey-v0.1.0.tar.gz packages/ examples/ README.md
 
 # Test installation
 pixi run mojo run -I packages test_import.mojo
@@ -62,7 +62,7 @@ packages/
 **Distribution archive**:
 
 ```text
-ml-odyssey-v0.1.0/
+ProjectOdyssey-v0.1.0/
 ├── packages/
 ├── examples/
 ├── docs/
@@ -89,10 +89,10 @@ done
 
 ```bash
 # Tar.gz (Linux/Mac)
-tar -czf dist/ml-odyssey-v0.1.0.tar.gz packages/ examples/ docs/
+tar -czf dist/ProjectOdyssey-v0.1.0.tar.gz packages/ examples/ docs/
 
 # Zip (cross-platform)
-zip -r dist/ml-odyssey-v0.1.0.zip packages/ examples/ docs/
+zip -r dist/ProjectOdyssey-v0.1.0.zip packages/ examples/ docs/
 ```
 
 ## Quality Checklist

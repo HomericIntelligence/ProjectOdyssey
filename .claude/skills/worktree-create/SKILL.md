@@ -24,13 +24,13 @@ Create separate working directories on different branches without stashing chang
 
 # Example
 ./scripts/create_worktree.sh 42 "implement-tensor-ops"
-# Creates: ../ml-odyssey-42-implement-tensor-ops/
+# Creates: ../ProjectOdyssey-42-implement-tensor-ops/
 
 # List all worktrees
 git worktree list
 
 # Switch worktrees
-cd ../ml-odyssey-42-implement-tensor-ops
+cd ../ProjectOdyssey-42-implement-tensor-ops
 ```
 
 ## Workflow
@@ -54,10 +54,10 @@ cd ../ml-odyssey-42-implement-tensor-ops
 
 ```text
 parent-directory/
-├── ml-odyssey/                    # Main worktree (main branch)
-├── ml-odyssey-42-tensor-ops/      # Issue #42 worktree
-├── ml-odyssey-73-bugfix/          # Issue #73 worktree
-└── ml-odyssey-99-experiment/      # Experimental worktree
+├── ProjectOdyssey/                    # Main worktree (main branch)
+├── ProjectOdyssey-42-tensor-ops/      # Issue #42 worktree
+├── ProjectOdyssey-73-bugfix/          # Issue #73 worktree
+└── ProjectOdyssey-99-experiment/      # Experimental worktree
 ```
 
 ## Best Practices
@@ -76,15 +76,15 @@ When working on related issues (e.g., Plan → Test/Impl/Package → Cleanup pha
 
 ```bash
 # Phase 1: Plan (sequential, must complete first)
-git worktree add ../ml-odyssey-62-plan-agents 62-plan-agents
+git worktree add ../ProjectOdyssey-62-plan-agents 62-plan-agents
 
 # Phase 2: Parallel development (after Plan complete)
-git worktree add ../ml-odyssey-63-test-agents 63-test-agents
-git worktree add ../ml-odyssey-64-impl-agents 64-impl-agents
-git worktree add ../ml-odyssey-65-pkg-agents 65-pkg-agents
+git worktree add ../ProjectOdyssey-63-test-agents 63-test-agents
+git worktree add ../ProjectOdyssey-64-impl-agents 64-impl-agents
+git worktree add ../ProjectOdyssey-65-pkg-agents 65-pkg-agents
 
 # Phase 3: Cleanup (after parallel phases complete)
-git worktree add ../ml-odyssey-66-cleanup-agents 66-cleanup-agents
+git worktree add ../ProjectOdyssey-66-cleanup-agents 66-cleanup-agents
 ```
 
 ### Coordination Patterns

@@ -24,13 +24,13 @@ Keep worktrees synchronized with remote changes.
 git fetch origin
 
 # Update main worktree
-cd ../ml-odyssey && git pull origin main
+cd ../ProjectOdyssey && git pull origin main
 
 # Update feature worktree (rebase approach)
-cd ../ml-odyssey-42-feature && git rebase origin/main
+cd ../ProjectOdyssey-42-feature && git rebase origin/main
 
 # Update feature worktree (merge approach)
-cd ../ml-odyssey-42-feature && git merge origin/main
+cd ../ProjectOdyssey-42-feature && git merge origin/main
 
 # Auto-sync all worktrees
 ./scripts/sync_all_worktrees.sh

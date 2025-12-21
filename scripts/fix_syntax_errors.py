@@ -53,7 +53,7 @@ def fix_trailing_periods_in_code(content: str) -> tuple[str, int]:
 
 
 def main():
-    base_path = Path("/home/mvillmow/ml-odyssey")
+    base_path = Path("/home/mvillmow/ProjectOdyssey")
     files = list((base_path / "shared").rglob("*.mojo"))
 
     total_fixes = 0

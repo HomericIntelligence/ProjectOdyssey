@@ -26,7 +26,7 @@ Create a new directory for your first model:
 ```bash
 ```bash
 
-cd ml-odyssey
+cd ProjectOdyssey
 mkdir -p examples/first_model
 cd examples/first_model
 
@@ -398,7 +398,7 @@ self.model = Sequential([
 ```bash
 
 # Ensure you're in the right directory
-cd ml-odyssey/examples/first_model
+cd ProjectOdyssey/examples/first_model
 
 # Verify shared library is accessible
 ls ../../shared/

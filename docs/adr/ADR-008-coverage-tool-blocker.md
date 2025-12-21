@@ -4,7 +4,7 @@
 
 **Date**: 2025-12-10
 
-**Issue Reference**: [Issue #2583](https://github.com/mvillmow/ml-odyssey/issues/2583) - Coverage Report Parsing Documentation
+**Issue Reference**: [Issue #2583](https://github.com/mvillmow/ProjectOdyssey/issues/2583) - Coverage Report Parsing Documentation
 
 **Decision Owner**: Documentation Specialist
 
@@ -701,8 +701,8 @@ print("This check will be enabled once Mojo coverage tools are available.")
 
 ## Files Modified
 
-- `/home/mvillmow/ml-odyssey-manual/scripts/check_coverage.py` (lines 26-46, 95-122)
-- `/home/mvillmow/ml-odyssey-manual/docs/adr/ADR-008-coverage-tool-blocker.md` (new file)
+- `/home/mvillmow/ProjectOdyssey-manual/scripts/check_coverage.py` (lines 26-46, 95-122)
+- `/home/mvillmow/ProjectOdyssey-manual/docs/adr/ADR-008-coverage-tool-blocker.md` (new file)
 
 ## Verification
 

@@ -3,7 +3,7 @@ requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ml-odyssey"
+name = "ProjectOdyssey"
 version = "0.1.0"
 description = "Mojo-based AI research platform for reproducing classic research papers"
 readme = "README.md"

@@ -470,9 +470,9 @@ Consistent output styles improve clarity and actionability. Follow these guideli
 **DO**: Use absolute file paths with line numbers when referencing code:
 
 ```markdown
-✅ GOOD: Updated /home/mvillmow/ml-odyssey-manual/CLAUDE.md:173-185
+✅ GOOD: Updated /home/mvillmow/ProjectOdyssey-manual/CLAUDE.md:173-185
 
-✅ GOOD: Modified ExTensor initialization in /home/user/ml-odyssey/shared/core/extensor.mojo:45
+✅ GOOD: Modified ExTensor initialization in /home/user/ProjectOdyssey/shared/core/extensor.mojo:45
 
 ❌ BAD: Updated CLAUDE.md (ambiguous - which CLAUDE.md?)
 
@@ -483,7 +483,7 @@ Consistent output styles improve clarity and actionability. Follow these guideli
 
 ```markdown
 ✅ GOOD:
-File: /home/user/ml-odyssey/shared/core/extensor.mojo:45-52
+File: /home/user/ProjectOdyssey/shared/core/extensor.mojo:45-52
 
 fn __init__(out self, shape: List[Int], dtype: DType):
     """Initialize tensor with given shape and dtype."""
@@ -515,7 +515,7 @@ Added comprehensive Claude 4 optimization guidance to CLAUDE.md
 - Added "Output Style Guidelines" for code references and reviews
 
 ## Files Modified
-- `/home/user/ml-odyssey/CLAUDE.md` (lines 173-500, added 327 lines)
+- `/home/user/ProjectOdyssey/CLAUDE.md` (lines 173-500, added 327 lines)
 
 ## Verification
 - [x] Markdown linting passes
@@ -547,7 +547,7 @@ Related Issues:
 
 **Issue**: Inconsistent parameter naming in ExTensor methods
 
-**Location**: `/home/user/ml-odyssey/shared/core/extensor.mojo:120-145`
+**Location**: `/home/user/ProjectOdyssey/shared/core/extensor.mojo:120-145`
 
 **Problem**: Methods use both `mut self` and `self` inconsistently
 
@@ -592,7 +592,7 @@ fn shape(self) -> List[Int]:  # ✅ Implicit read
 
 ```bash
 $ mojo test tests/shared/core/test_tensor.mojo
-Testing: /home/user/ml-odyssey/tests/shared/core/test_tensor.mojo
+Testing: /home/user/ProjectOdyssey/tests/shared/core/test_tensor.mojo
   test_tensor_creation ... PASSED
   test_tensor_indexing ... PASSED
   test_tensor_reshape ... PASSED
@@ -653,23 +653,23 @@ grep_structs = Grep(pattern="struct .*", glob="*.mojo")
 
 ```bash
 # ✅ GOOD - Absolute paths
-cd /home/user/ml-odyssey && pixi run mojo test tests/shared/core/test_tensor.mojo
+cd /home/user/ProjectOdyssey && pixi run mojo test tests/shared/core/test_tensor.mojo
 
 # ❌ BAD - Relative paths (cwd not guaranteed)
-cd ml-odyssey && pixi run mojo test tests/shared/core/test_tensor.mojo
+cd ProjectOdyssey && pixi run mojo test tests/shared/core/test_tensor.mojo
 ```
 
 **DO**: Combine related commands with && for atomicity:
 
 ```bash
 # ✅ GOOD - Atomic operation
-cd /home/user/ml-odyssey && \
+cd /home/user/ProjectOdyssey && \
   git checkout -b 2549-claude-md && \
   git add CLAUDE.md && \
   git commit -m "docs: add Claude 4 optimization guidance"
 
 # ❌ BAD - Multiple separate bash calls (cwd resets)
-cd /home/user/ml-odyssey
+cd /home/user/ProjectOdyssey
 git checkout -b 2549-claude-md  # Might run in different directory!
 git add CLAUDE.md
 ```
@@ -678,12 +678,12 @@ git add CLAUDE.md
 
 ```bash
 # ✅ GOOD - Capture and parse output
-cd /home/user/ml-odyssey && \
+cd /home/user/ProjectOdyssey && \
   pixi run mojo test tests/ 2>&1 | tee test_output.log && \
   grep -c PASSED test_output.log
 
 # ❌ BAD - Output lost between calls
-cd /home/user/ml-odyssey && pixi run mojo test tests/
+cd /home/user/ProjectOdyssey && pixi run mojo test tests/
 # Output is gone, can't analyze it
 ```
 
@@ -1061,7 +1061,7 @@ all PRs and pushes to `main`.
 ### Project Structure
 
 ```text
-ml-odyssey/
+ProjectOdyssey/
 ├── agents/                      # Team documentation
 │   ├── README.md                # Quick start guide
 │   ├── hierarchy.md             # Visual hierarchy diagram

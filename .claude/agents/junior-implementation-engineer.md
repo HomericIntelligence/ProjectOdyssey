@@ -107,7 +107,7 @@ mistakes (ownership violations, constructor signatures, syntax errors).
 
 **Code examples:** Simple examples with file paths
 
-- Use absolute paths: `/home/mvillmow/ml-odyssey-manual/path/to/file.mojo:line`
+- Use absolute paths: `/home/mvillmow/ProjectOdyssey-manual/path/to/file.mojo:line`
 - Reference existing code as examples
 - Show before/after for changes
 - Include test verification

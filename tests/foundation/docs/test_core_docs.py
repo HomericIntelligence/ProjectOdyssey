@@ -130,7 +130,7 @@ class TestProjectStructure:
 ## Directory Layout
 
 ```text
-ml-odyssey/
+ProjectOdyssey/
 ├── shared/
 ├── papers/
 └── tests/

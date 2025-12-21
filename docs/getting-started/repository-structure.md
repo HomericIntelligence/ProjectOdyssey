@@ -130,7 +130,7 @@ mojo benchmarks/scripts/compare_results.mojo \
 
 ```text
 
-ml-odyssey/
+ProjectOdyssey/
 ├── papers/          # ML paper implementations
 ├── shared/          # Reusable ML components
 ├── benchmarks/      # Performance benchmarking

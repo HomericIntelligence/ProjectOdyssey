@@ -16,7 +16,7 @@
 
 ## Overview
 
-Git worktrees allow multiple branches to be checked out simultaneously in separate directories. For the ml-odyssey
+Git worktrees allow multiple branches to be checked out simultaneously in separate directories. For the ProjectOdyssey
 agent hierarchy, worktrees enable:
 
 - **Parallel execution**: Multiple agents work simultaneously on different phases
@@ -88,9 +88,9 @@ git worktree add worktrees/issue-64-impl-agents abc123 -b 64-impl-agents
 git worktree list
 
 # Output
-# /home/user/ml-odyssey          abc123 [main]
-# /home/user/ml-odyssey/worktrees/issue-62-plan-agents  def456 [62-plan-agents]
-# /home/user/ml-odyssey/worktrees/issue-63-test-agents  ghi789 [63-test-agents]
+# /home/user/ProjectOdyssey          abc123 [main]
+# /home/user/ProjectOdyssey/worktrees/issue-62-plan-agents  def456 [62-plan-agents]
+# /home/user/ProjectOdyssey/worktrees/issue-63-test-agents  ghi789 [63-test-agents]
 ```text
 
 ### Removing Worktrees
@@ -190,7 +190,7 @@ git worktree add worktrees/issue-66-cleanup-agents -b 66-cleanup-agents
 ### Directory Structure
 
 ```text
-ml-odyssey/                          # Main repository
+ProjectOdyssey/                          # Main repository
 ├── .git/                            # Git metadata
 ├── worktrees/                       # Worktree directory
 │   ├── issue-62-plan-agents/        # Plan phase
@@ -701,7 +701,7 @@ git worktree add worktrees/issue-64-impl-agents-v2 -b 64-impl-agents
 
 ```bash
 $ git worktree add worktrees/issue-64-impl-agents -b 64-impl-agents
-fatal: '64-impl-agents' is already checked out at '/home/user/ml-odyssey/worktrees/issue-64-impl-agents'
+fatal: '64-impl-agents' is already checked out at '/home/user/ProjectOdyssey/worktrees/issue-64-impl-agents'
 ```text
 
 ### Solution

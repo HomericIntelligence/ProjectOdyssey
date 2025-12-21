@@ -23,7 +23,7 @@ Navigate between isolated worktree directories quickly.
 git worktree list
 
 # Switch worktree (simple cd)
-cd ../ml-odyssey-42-feature
+cd ../ProjectOdyssey-42-feature
 
 # Verify current worktree
 git worktree list | grep "*"
@@ -54,7 +54,7 @@ alias wtcd='cd $(git worktree list | fzf | awk "{print \$1}")'
 
 ```bash
 # Create persistent session per worktree
-tmux new -s issue-42 -c ../ml-odyssey-42-feature
+tmux new -s issue-42 -c ../ProjectOdyssey-42-feature
 
 # Switch sessions
 tmux attach -t issue-42

@@ -21,10 +21,10 @@ From root MDs (backed up `notes/root-backup/`). Links to [phases.md](phases.md).
 **Docker (Recommended)**:
 
 ```bash
-git clone https://github.com/mvillmow/ml-odyssey.git
-cd ml-odyssey
-docker-compose up -d ml-odyssey-dev
-docker-compose exec ml-odyssey-dev bash
+git clone https://github.com/mvillmow/ProjectOdyssey.git
+cd ProjectOdyssey
+docker-compose up -d ProjectOdyssey-dev
+docker-compose exec ProjectOdyssey-dev bash
 pixi run pytest tests/
 ```
 

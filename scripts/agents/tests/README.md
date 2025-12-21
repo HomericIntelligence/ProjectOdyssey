@@ -374,4 +374,4 @@ When adding new agent features:
 
 ## License
 
-Same as parent project (ml-odyssey).
+Same as parent project (ProjectOdyssey).

@@ -3,7 +3,7 @@
 Fix invalid absolute path links in markdown files.
 
 This script fixes two types of invalid links:
-1. Full system paths: /home/mvillmow/ml-odyssey-manual/... -> relative paths
+1. Full system paths: /home/mvillmow/ProjectOdyssey-manual/... -> relative paths
 2. Absolute paths starting with /: /agents/... -> agents/...
 
 Usage:
@@ -20,11 +20,11 @@ from common import get_repo_root
 
 def fix_system_path_links(content: str) -> Tuple[str, int]:
     """
-    Fix links with full system paths like /home/mvillmow/ml-odyssey-manual/...
+    Fix links with full system paths like /home/mvillmow/ProjectOdyssey-manual/...
 
     These should be converted to relative paths without the system path prefix.
     """
-    pattern = r"\]\(/home/mvillmow/ml-odyssey-manual/([^)]+)\)"
+    pattern = r"\]\(/home/mvillmow/ProjectOdyssey-manual/([^)]+)\)"
     replacement = r"](\1)"
 
     new_content, count = re.subn(pattern, replacement, content)

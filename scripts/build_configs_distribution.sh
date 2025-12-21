@@ -66,12 +66,12 @@ cd configs-VERSION
 
 1. Copy configs/ directory to your ML Odyssey root:
    ```bash
-   cp -r configs /path/to/ml-odyssey/
+   cp -r configs /path/to/ProjectOdyssey/
    ```
 
 2. Copy utilities to shared/utils/:
    ```bash
-   cp utils/*.mojo /path/to/ml-odyssey/shared/utils/
+   cp utils/*.mojo /path/to/ProjectOdyssey/shared/utils/
    ```
 
 3. Verify installation:

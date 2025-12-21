@@ -108,7 +108,7 @@ See [common-constraints.md](../shared/common-constraints.md) for minimal changes
 
 **Code examples:** Always include full file paths and line numbers
 
-- Use absolute paths: `/home/mvillmow/ml-odyssey-manual/path/to/test_file.mojo:line-range`
+- Use absolute paths: `/home/mvillmow/ProjectOdyssey-manual/path/to/test_file.mojo:line-range`
 - Include line numbers when referencing existing tests
 - Show complete test function signatures
 - Include test data examples
