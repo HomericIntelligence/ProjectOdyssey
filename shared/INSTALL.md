@@ -553,13 +553,13 @@ pixi install
 pre-commit install
 
 # Install shared library in development mode
-mojo package shared --install
+pixi run mojo package shared --install
 
 # Run tests to verify setup
-mojo test tests/shared/
+pixi run mojo test tests/shared/
 
 # Format code
-mojo format shared/
+pixi run mojo format shared/
 ```text
 
 ### IDE Setup
@@ -568,12 +568,12 @@ mojo format shared/
 
 1. Install Mojo extension
 1. Set Mojo path in settings
-1. Configure formatter: `mojo format`
+1. Configure formatter: `pixi run mojo format`
 
 ### Other Editors
 
 - Configure LSP for Mojo (if available)
-- Set formatter to `mojo format`
+- Set formatter to `pixi run mojo format`
 - Configure syntax highlighting
 
 ## Next Steps

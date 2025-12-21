@@ -569,7 +569,6 @@ Escalate when:
 
 1. **Scope Exceeds Authority**: Decision impacts levels above
 1. **Resource Conflicts**: Multiple agents need same resource
-1. **Timeline Issues**: Work blocked or significantly delayed
 1. **Quality Concerns**: Standards violated or quality at risk
 1. **Technical Disagreements**: Agents cannot reach consensus
 1. **Requirements Unclear**: Specifications incomplete or contradictory
@@ -797,7 +796,6 @@ should reference this section rather than duplicating content.
 
 ### Impact
 
-- Timeline: [X days delayed]
 - Dependencies: [What other tasks are blocked]
 - Scope: [Can we proceed with other work?]
 

@@ -47,7 +47,7 @@ if [[ "$CHECK_MODE" == true ]]; then
     NEEDS_FORMAT=0
 
     while IFS= read -r file; do
-        if ! mojo format --check "$file" 2>/dev/null; then
+        if ! pixi run mojo format --check "$file" 2>/dev/null; then
             echo "❌ Needs formatting: $file"
             ((NEEDS_FORMAT++))
         fi
@@ -68,7 +68,7 @@ else
 
     while IFS= read -r file; do
         echo "Formatting: $file"
-        if mojo format "$file"; then
+        if pixi run mojo format "$file"; then
             ((FORMATTED++))
         else
             echo "⚠️  Failed to format: $file"

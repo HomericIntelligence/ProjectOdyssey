@@ -39,7 +39,7 @@ Writes simple tests with concrete test data (no complex mocking), runs tests loc
 |-------|---|
 | `mojo-test-runner` | Executing Mojo tests |
 | `quality-coverage-report` | Checking test coverage |
-| `ci-run-precommit` | Pre-commit checks |
+| `run-precommit` | Pre-commit checks |
 | `mojo-format` | Formatting test code |
 | `gh-create-pr-linked` | When tests complete |
 

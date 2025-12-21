@@ -86,10 +86,10 @@ gh pr checks <pr-number> --web
 
 ```bash
 # Run the same pre-commit checks that CI runs
-pre-commit run --all-files
+just pre-commit-all
 
 # Or if using pixi
-pixi run pre-commit run --all-files
+just pre-commit-all
 ```text
 
 **Why**: Sometimes local pre-commit passes but CI fails (different Mojo version, different environment).
@@ -327,7 +327,7 @@ gh api repos/.../pulls/PR/comments --jq '.[] | select(.in_reply_to_id)' | jq -s 
 
 ```bash
 # Check local
-pre-commit run --all-files
+just pre-commit-all
 # ✓ Passed
 
 # Check CI

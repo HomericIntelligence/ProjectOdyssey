@@ -9,7 +9,7 @@ Use this template to create Section Orchestrator agents that coordinate work wit
 name: [section]-orchestrator
 description: Coordinate [section name] including [key responsibilities]
 tools: Read,Write,Edit,Bash,Grep,Glob
-model: sonnet
+model: opus
 ---
 
 # [Section Name] Orchestrator

@@ -28,16 +28,16 @@ ERRORS=0
 
 # 1. Mojo Format
 if command -v mojo &> /dev/null; then
-    echo "📝 Running mojo format..."
+    echo "📝 Running pixi run mojo format..."
     if [[ "$MODE" == "check" ]]; then
-        if ! find src -name "*.mojo" -exec mojo format --check {} \; 2>/dev/null; then
+        if ! find src -name "*.mojo" -exec pixi run mojo format --check {} \; 2>/dev/null; then
             echo "❌ Mojo format check failed"
             ((ERRORS++))
         else
             echo "✅ Mojo format passed"
         fi
     else
-        if find src -name "*.mojo" -exec mojo format {} \; 2>/dev/null; then
+        if find src -name "*.mojo" -exec pixi run mojo format {} \; 2>/dev/null; then
             echo "✅ Mojo formatted"
         else
             echo "⚠️  Mojo format had issues"
@@ -45,7 +45,7 @@ if command -v mojo &> /dev/null; then
     fi
     echo ""
 else
-    echo "⚠️  Mojo not found, skipping mojo format"
+    echo "⚠️  Mojo not found, skipping pixi run mojo format"
     echo ""
 fi
 
@@ -75,7 +75,7 @@ fi
 # 3. Pre-commit hooks
 if command -v pre-commit &> /dev/null; then
     echo "📝 Running pre-commit hooks..."
-    if pre-commit run --all-files; then
+    if just pre-commit-all; then
         echo "✅ Pre-commit hooks passed"
     else
         if [[ "$MODE" == "check" ]]; then

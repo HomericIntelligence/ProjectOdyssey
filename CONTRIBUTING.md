@@ -23,7 +23,7 @@ We use [Pixi](https://pixi.sh/) for environment management. This ensures everyon
 # Create and activate the development environment
 pixi shell
 
-```text
+```
 
 ### Verify Your Setup
 
@@ -38,7 +38,7 @@ python3 --version
 # Verify pre-commit hooks are installed
 pre-commit install
 
-```text
+```
 
 ## Running Tests
 
@@ -58,13 +58,13 @@ pixi run test --verbose
 # Run tests with coverage
 pixi run test --cov=ml_odyssey --cov-report=html
 
-```text
+```
 
 ## Code Style Guidelines
 
 ### Mojo Code Style
 
-We use `mojo format` for consistent code formatting. Pre-commit hooks will automatically run this on staged files.
+We use `pixi run mojo format` for consistent code formatting. Pre-commit hooks will automatically run this on staged files.
 
 ### Key principles for Mojo code
 
@@ -90,7 +90,7 @@ fn add(x: Int32, y: Int32) -> Int32:
     """
     return x + y
 
-```text
+```
 
 ### Python Code Style
 
@@ -121,7 +121,7 @@ def calculate_mean(values: list[float]) -> float:
         raise ValueError("Cannot calculate mean of empty list")
     return sum(values) / len(values)
 
-```text
+```
 
 ### Documentation Style
 
@@ -144,11 +144,12 @@ All documentation files follow markdown standards and must pass `markdownlint-cl
 
 To install the package:
 
-```bash
+\```bash
 
-pip install ProjectOdyssey
+just install
 
-```text
+\```
+
 ## Usage
 
 Use the library like this:
@@ -157,11 +158,10 @@ Use the library like this:
 - Step 2: Configure
 - Step 3: Run
 
-```text
-
 (No additional configuration needed - Pixi manages everything)
 
-```text
+```
+
 ### Pre-commit Hooks
 
 Pre-commit hooks automatically check code quality before commits. They run:
@@ -180,11 +180,11 @@ pre-commit install
 
 # Run hooks on all files
 
-pre-commit run --all-files
+just pre-commit-all
 
 # Run hooks on staged files only
 
-pre-commit run
+just precommit
 
 # NEVER use --no-verify to bypass hooks
 # If a hook fails, fix the code instead
@@ -194,7 +194,7 @@ SKIP=hook-name git commit -m "message"
 
 # Document in commit message WHY you're skipping a hook
 
-```text
+```
 
 ### Hook Failure Policy
 
@@ -204,7 +204,7 @@ Pre-commit hooks exist to enforce code quality. **Never bypass them with `--no-v
 
 1. **Read the error** - Hooks tell you exactly what's wrong
 2. **Fix the issue** - Update your code to pass the check
-3. **Verify locally** - Run `pre-commit run --all-files` before committing
+3. **Verify locally** - Run `just pre-commit-all` before committing
 4. **Commit properly** - Let hooks validate your changes
 
 **Broken hook?** If a hook itself is broken (not your code):
@@ -233,7 +233,8 @@ Pre-commit hooks exist to enforce code quality. **Never bypass them with `--no-v
 
 gh pr create --issue <issue-number>
 
-```text
+```
+
 This automatically links your PR to the issue.
 
 Fill out the PR template with:
@@ -262,7 +263,8 @@ gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments/COMMENT_ID/replies \
   --method POST \
   -f body="✅ Fixed - [brief description]"
 
-```text
+```
+
 Keep responses short and start with ✅ to indicate the issue is resolved.
 
 After making changes, verify CI passes before requesting re-review.
@@ -341,7 +343,8 @@ def test_add_negative_integers():
     """Test adding two negative integers."""
     assert add(-2, -3) == -5
 
-```text
+```
+
 ### Test Coverage
 
 - Aim for high code coverage on core functionality (>80%)

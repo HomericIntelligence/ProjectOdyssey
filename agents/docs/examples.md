@@ -87,8 +87,6 @@ I'll help you plan the GELU activation addition. Let me break this down into com
 - Unit tests comparing with PyTorch
 - API documentation and usage examples
 
-**Timeline Estimate:** 1-2 weeks
-
 Would you like me to:
 a) Create the GitHub issue and detailed plan?
 b) Delegate to Architecture Design Agent for detailed design?
@@ -269,7 +267,6 @@ I'll delegate to these specialists:
 4. Documentation Review Specialist - API docs and examples
 5. Security Review Specialist - Random number generation security
 
-**Timeline:** Reviews will complete in parallel, expect feedback within 2-4 hours.
 ```text
 
 ### Follow-up Steps
@@ -533,8 +530,6 @@ I'll create comprehensive documentation for BatchNorm2D. Let me plan the docs st
 
 **Delegation:** Documentation Engineer will write the docs.
 
-**Timeline:** 2-3 days for complete documentation.
-
 Ready to proceed?
 ```text
 
@@ -661,8 +656,6 @@ I'll analyze the rectangular kernel bug. Let me investigate...
 - Change 1: Add kernel_height, kernel_width fields
 - Change 2: Update __init__ to accept both or single kernel_size
 - Change 3: Fix loop in _apply_kernel_simd (2 lines)
-
-**Timeline:** 2-4 hours for fix + tests
 
 **Delegation:**
 - Test Engineer: Write failing test for rectangular kernels
@@ -806,8 +799,6 @@ I'll analyze Conv2D performance and create an optimization plan.
 **Delegation:**
 - Performance Engineer: Implement optimizations
 - Test Engineer: Verify correctness maintained
-
-**Timeline:** 1-2 weeks
 
 Ready to proceed?
 ```text

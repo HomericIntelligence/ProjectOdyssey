@@ -26,7 +26,7 @@ flake8 .
 black --check .  # Format checker
 
 # Mojo formatting (enforced by pre-commit)
-mojo format file.mojo
+pixi run mojo format file.mojo
 
 # All linters via pixi
 pixi run quality-run-linters

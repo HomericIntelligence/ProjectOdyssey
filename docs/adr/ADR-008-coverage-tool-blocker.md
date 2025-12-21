@@ -308,8 +308,6 @@ These trade-offs are **preferable** to:
 
 ### When Mojo Coverage Becomes Available
 
-**Expected Timeline**: Unknown (external dependency on Mojo team)
-
 **Monitoring Strategy**: Passive monitoring only
 
 - Check Mojo release notes for coverage-related features

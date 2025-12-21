@@ -9,7 +9,7 @@ Use this template to create the Chief Architect agent that makes system-wide str
 name: chief-architect
 description: Strategic architecture decisions, research paper selection, system-wide coordination, and repository ecosystem management
 tools: Read,Write,Edit,Bash,Grep,Glob
-model: sonnet
+model: opus
 ---
 
 # Chief Architect Agent

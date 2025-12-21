@@ -66,7 +66,7 @@ grep -r "inout self\|@value\|DynamicVector\|->" *.mojo | grep -v "result\|fn"
 ## Validation Workflow
 
 1. **Check syntax**: Run mojo compiler on files
-2. **Fix format**: Run `mojo format` to auto-fix style
+2. **Fix format**: Run `pixi run mojo format` to auto-fix style
 3. **Verify patterns**: Check for deprecated patterns
 4. **Type check**: Ensure all types are correct
 5. **Ownership check**: Verify ownership semantics

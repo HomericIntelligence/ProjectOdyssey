@@ -83,8 +83,8 @@ git commit -m "fix: address linting issues"
 Checks: indentation, spacing, line length, operators, blank lines
 
 ```bash
-mojo format src/tensor.mojo        # Fix
-mojo format --check src/tensor.mojo  # Check only
+pixi run mojo format src/tensor.mojo        # Fix
+pixi run mojo format --check src/tensor.mojo  # Check only
 ```
 
 ### Markdownlint
@@ -101,8 +101,8 @@ npx markdownlint-cli2 --fix "**/*.md"  # Fix auto-fixable
 Checks: trailing whitespace, file endings, YAML syntax, large files, line endings
 
 ```bash
-pre-commit run --all-files        # Run all
-pre-commit run trailing-whitespace --all-files  # Specific
+just pre-commit-all        # Run all
+pixi run pre-commit trailing-whitespace --all-files  # Specific
 ```
 
 ## CI Integration
@@ -112,9 +112,7 @@ Linters run automatically in GitHub Actions:
 ```yaml
 - name: Run Linters
   run: |
-    pre-commit run --all-files
-    mojo format --check src/**/*.mojo
-    npx markdownlint-cli2 "**/*.md"
+    just pre-commit-all
 ```
 
 ## Workflow Integration
@@ -173,4 +171,4 @@ gh pr create --issue 42
 
 - Configuration: `.pre-commit-config.yaml`, `.markdownlint.yaml`
 - Related skill: `quality-fix-formatting` for manual fixes
-- Related skill: `ci-run-precommit` for pre-commit details
+- Related skill: `run-precommit` for pre-commit details

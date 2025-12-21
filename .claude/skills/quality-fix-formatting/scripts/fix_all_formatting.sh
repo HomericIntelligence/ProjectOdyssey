@@ -18,7 +18,7 @@ if command -v mojo &> /dev/null; then
         echo "$MOJO_FILES" | while read -r file; do
             if [[ -f "$file" ]]; then
                 echo "  Formatting: $file"
-                mojo format "$file"
+                pixi run mojo format "$file"
             fi
         done
         echo "✅ Mojo files formatted"
@@ -46,7 +46,7 @@ fi
 # 3. Run pre-commit hooks
 if command -v pre-commit &> /dev/null; then
     echo "📝 Running pre-commit hooks..."
-    if pre-commit run --all-files 2>&1 | tail -20; then
+    if just pre-commit-all 2>&1 | tail -20; then
         echo "✅ Pre-commit hooks applied"
     else
         echo "✅ Pre-commit hooks fixed issues"

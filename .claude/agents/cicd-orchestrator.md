@@ -32,10 +32,10 @@ Design pipelines, establish quality gates, automate testing, and enable safe dep
 
 | Skill | When to Invoke |
 |-------|----------------|
-| `ci-run-precommit` | Validating code before commit |
-| `ci-validate-workflow` | Creating/modifying GitHub Actions workflows |
-| `ci-fix-failures` | Investigating CI failures |
-| `ci-package-workflow` | Setting up automated package building |
+| `run-precommit` | Validating code before commit |
+| `validate-workflow` | Creating/modifying GitHub Actions workflows |
+| `fix-ci-failures` | Investigating CI failures |
+| `install-workflow` | Setting up automated package building |
 | `quality-security-scan` | Running vulnerability detection |
 
 ## Constraints

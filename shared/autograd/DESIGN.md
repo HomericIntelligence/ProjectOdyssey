@@ -155,8 +155,6 @@ tape.backward(loss)
 - Significant engineering effort
 - May need Mojo stdlib improvements
 
-**Timeline**: TBD, depends on Mojo ecosystem maturity
-
 ## Current Recommendation
 
 **For immediate use**, provide:

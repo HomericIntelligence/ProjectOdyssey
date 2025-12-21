@@ -311,7 +311,7 @@ The CI/CD strategy uses GitHub Actions with the following principles:
 
 **Hook Types**:
 
-- `mojo format` - Auto-format Mojo code (`.mojo`, `.🔥` files)
+- `pixi run mojo format` - Auto-format Mojo code (`.mojo`, `.🔥` files)
 - `markdownlint-cli2` - Lint markdown files
 - `trailing-whitespace` - Remove trailing whitespace
 - `end-of-file-fixer` - Ensure files end with newline
@@ -422,10 +422,10 @@ All CI workflows use justfile recipes for consistent command execution between l
 
 # Use justfile recipes
 - name: Build package
-  run: just ci-build
+  run: just build
 
 - name: Run test group
-  run: just ci-test-group "tests/shared/core" "test_*.mojo"
+  run: just test-group "tests/shared/core" "test_*.mojo"
 
 - name: Run all tests
   run: just ci-test-mojo
@@ -440,12 +440,12 @@ All CI workflows use justfile recipes for consistent command execution between l
 
 **Available CI Recipes**:
 
-- `just ci-build` - Build shared package with compilation validation
+- `just build` - Build shared package with compilation validation
 - `just ci-compile` - Compile package (validation only, no output artifact)
-- `just ci-test-group PATH PATTERN` - Run specific test group
+- `just test-group PATH PATTERN` - Run specific test group
 - `just ci-test-mojo` - Run all Mojo tests
 - `just ci-validate` - Full validation (build + test)
-- `just ci-lint` - Run pre-commit hooks
+- `just pre-commit` - Run pre-commit hooks
 
 **See**: `/justfile` for complete implementation and `CLAUDE.md` for developer documentation.
 

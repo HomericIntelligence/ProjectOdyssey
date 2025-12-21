@@ -44,7 +44,7 @@ complex, multi-dimensional tasks.
 name: [ORCHESTRATOR-NAME]
 description: [One-line description: coordinates X specialists to accomplish Y by routing Z]
 tools: Read,Grep,Glob  # Adjust based on needs
-model: sonnet
+model: opus
 ---
 ```text
 

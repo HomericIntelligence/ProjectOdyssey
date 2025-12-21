@@ -1,5 +1,5 @@
 ---
-name: ci-fix-failures
+name: fix-ci-failures
 description: Diagnose and fix CI/CD failures by analyzing logs, reproducing locally, and applying fixes. Use when CI checks fail on pull requests.
 mcp_fallback: none
 category: ci
@@ -43,8 +43,8 @@ gh run view <run-id> --log-failed
 
 | Failure | Command | Fix |
 |---------|---------|-----|
-| Trailing whitespace | `pre-commit run --all-files` | Stage and re-commit |
-| Test failure | `mojo test tests/` | Fix code, re-run tests |
+| Trailing whitespace | `just pre-commit-all` | Stage and re-commit |
+| Test failure | `pixi run mojo test tests/` | Fix code, re-run tests |
 | Markdown lint | `npx markdownlint-cli2 --fix "**/*.md"` | Commit fixes |
 | Build error | Check imports/deps | Update and rebuild |
 
@@ -104,5 +104,5 @@ gh pr checks 123 --watch
 ## References
 
 - Related skill: `quality-run-linters` for linting
-- Related skill: `ci-run-precommit` for pre-commit hooks
+- Related skill: `run-precommit` for pre-commit hooks
 - Workflow configuration: `.github/workflows/`
