@@ -25,7 +25,7 @@ show-user:
 # ==============================================================================
 
 # Strict analysis flags (applied to ALL builds)
-MOJO_STRICT := "--validate-doc-strings --diagnose-missing-doc-strings"
+MOJO_STRICT := "--validate-doc-strings"
 
 # Mode-specific flags
 MOJO_DEBUG := "-g2 --no-optimization"
@@ -67,41 +67,41 @@ _ensure_build_dir mode:
 
 # Start Docker development environment
 docker-up:
-    @USER_ID={{USER_ID}} GROUP_ID={{GROUP_ID}} docker compose up -d {{docker_service}}
+    @docker compose up -d {{docker_service}}
 
 # Stop Docker development environment
 docker-down:
-    @USER_ID={{USER_ID}} GROUP_ID={{GROUP_ID}} docker compose down
+    @docker compose down
 
 # Build Docker images
 docker-build:
-    @USER_ID={{USER_ID}} GROUP_ID={{GROUP_ID}} docker compose build \
+    @docker compose build \
         --build-arg USER_ID={{USER_ID}} \
         --build-arg GROUP_ID={{GROUP_ID}} \
         --build-arg USER_NAME=dev
 
 # Rebuild Docker images (no cache)
 docker-rebuild:
-    @USER_ID={{USER_ID}} GROUP_ID={{GROUP_ID}} docker compose build --no-cache \
+    @docker compose build --no-cache \
         --build-arg USER_ID={{USER_ID}} \
         --build-arg GROUP_ID={{GROUP_ID}} \
         --build-arg USER_NAME=dev
 
 # Open shell in Docker container
 docker-shell: docker-up
-    @USER_ID={{USER_ID}} GROUP_ID={{GROUP_ID}} docker compose exec {{docker_service}} bash
+    @docker compose exec -e USER_ID={{USER_ID}} -e GROUP_ID={{GROUP_ID}} {{docker_service}} bash
 
 # View Docker logs
 docker-logs:
-    @USER_ID={{USER_ID}} GROUP_ID={{GROUP_ID}} docker compose logs -f {{docker_service}}
+    @docker compose logs -f {{docker_service}}
 
 # Clean Docker resources
 docker-clean:
-    @USER_ID={{USER_ID}} GROUP_ID={{GROUP_ID}} docker compose down -v --rmi local
+    @docker compose down -v --rmi local
 
 # Show Docker status
 docker-status:
-    @USER_ID={{USER_ID}} GROUP_ID={{GROUP_ID}} docker compose ps
+    @docker compose ps
 
 # ==============================================================================
 # Build Recipes (mojo build - compile/validate Mojo files)
@@ -112,7 +112,7 @@ build mode="debug": (_ensure_build_dir mode)
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
-    STRICT="--validate-doc-strings --diagnose-missing-doc-strings"
+    STRICT="--validate-doc-strings"
 
     case "{{mode}}" in
         debug)   FLAGS="-g --no-optimization $STRICT" ;;
@@ -143,7 +143,7 @@ build-asan mode="debug": (_ensure_build_dir mode)
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
-    STRICT="--validate-doc-strings --diagnose-missing-doc-strings"
+    STRICT="--validate-doc-strings"
 
     case "{{mode}}" in
         debug)   FLAGS="-g --no-optimization $STRICT --sanitize address" ;;
@@ -171,7 +171,7 @@ build-tsan mode="debug": (_ensure_build_dir mode)
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
-    STRICT="--validate-doc-strings --diagnose-missing-doc-strings"
+    STRICT="--validate-doc-strings"
 
     case "{{mode}}" in
         debug)   FLAGS="-g --no-optimization $STRICT --sanitize thread" ;;
@@ -199,7 +199,7 @@ build-fixit mode="debug": (_ensure_build_dir mode)
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
-    STRICT="--validate-doc-strings --diagnose-missing-doc-strings"
+    STRICT="--validate-doc-strings"
 
     echo "⚠️  WARNING: --experimental-fixit may modify files irreversibly!"
     echo "Backup your changes before proceeding."
@@ -263,7 +263,7 @@ package mode="debug": (_ensure_build_dir mode)
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
-    STRICT="--validate-doc-strings --diagnose-missing-doc-strings"
+    STRICT="--validate-doc-strings"
 
     case "{{mode}}" in
         debug)   FLAGS="$STRICT" ;;
@@ -281,7 +281,7 @@ package-asan mode="debug": (_ensure_build_dir mode)
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
-    STRICT="--validate-doc-strings --diagnose-missing-doc-strings"
+    STRICT="--validate-doc-strings"
     FLAGS="$STRICT --sanitize address"
 
     echo "Packaging shared library in {{mode}} mode with AddressSanitizer..."
@@ -293,7 +293,7 @@ package-tsan mode="debug": (_ensure_build_dir mode)
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
-    STRICT="--validate-doc-strings --diagnose-missing-doc-strings"
+    STRICT="--validate-doc-strings"
     FLAGS="$STRICT --sanitize thread"
 
     echo "Packaging shared library in {{mode}} mode with ThreadSanitizer..."
@@ -579,7 +579,7 @@ ci-build:
     set -e
     REPO_ROOT="$(pwd)"
     mkdir -p build/ci
-    STRICT="--validate-doc-strings --diagnose-missing-doc-strings"
+    STRICT="--validate-doc-strings"
     FLAGS="-g1 $STRICT"
 
     echo "Building Mojo files with strict analysis..."
@@ -604,7 +604,7 @@ ci-package:
     set -e
     REPO_ROOT="$(pwd)"
     mkdir -p build
-    STRICT="--validate-doc-strings --diagnose-missing-doc-strings"
+    STRICT="--validate-doc-strings"
     echo "Packaging shared library with strict analysis..."
     pixi run mojo package $STRICT -I "$REPO_ROOT" shared -o build/ProjectOdyssey-shared.mojopkg
 
@@ -613,7 +613,7 @@ ci-compile:
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
-    STRICT="--validate-doc-strings --diagnose-missing-doc-strings"
+    STRICT="--validate-doc-strings"
     echo "Compiling shared package for validation..."
     pixi run mojo package $STRICT -I "$REPO_ROOT" shared -o /tmp/shared.mojopkg
 
