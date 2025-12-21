@@ -43,7 +43,7 @@ mocking), and ensures all tests integrate with CI/CD pipeline.
 | `phase-test-tdd` | Starting TDD workflow, test scaffolding |
 | `mojo-test-runner` | Running Mojo test suites |
 | `quality-coverage-report` | Generating test coverage analysis |
-| `ci-run-precommit` | Pre-commit validation |
+| `run-precommit` | Pre-commit validation |
 | `gh-create-pr-linked` | When tests complete |
 
 ## Constraints
@@ -127,7 +127,7 @@ See [common-constraints.md](../shared/common-constraints.md) for minimal changes
 - `phase-test-tdd` - Starting TDD workflow and test scaffolding
 - `mojo-test-runner` - Running Mojo test suites locally
 - `quality-coverage-report` - Generating test coverage analysis
-- `ci-run-precommit` - Pre-commit validation
+- `run-precommit` - Pre-commit validation
 - `gh-create-pr-linked` - Creating PRs linked to issues
 
 **Use sub-agents for:**

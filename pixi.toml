@@ -12,10 +12,11 @@ build = "mojo package shared -o build/ProjectOdyssey-shared.mojopkg"
 run = "mojo run"
 
 # Run all Mojo tests
-test-mojo = "mojo test tests/**/*.mojo"
+test-mojo = "mojo run tests/**/*.mojo"
 
 # Format all Mojo files
-format = "mojo format shared/**/*.mojo tests/**/*.mojo"
+format = "mojo format shared/**/*.mojo tests/**/*.mojo benchmarks/**/*.mojo examples/**/*.mojo papers/**/*.mojo scripts/**/*.mojo"
+format-python = "ruff format"
 
 # Run Python tests
 test-python = "pytest tests/ -v --timeout=300"

@@ -308,17 +308,3 @@ gh api repos/mvillmow/ProjectOdyssey/pulls/1559/comments \
 ```text
 
 ### Expected: 5 replies, one for each comment.
-
-## Summary
-
-- **Review comment replies** are for responding to specific code review feedback
-- **PR-level comments** are for general PR updates
-- Always reply to EACH review comment individually
-- Always verify your replies were posted
-- Always check CI status after pushing changes
-- Report actual results, not attempted actions
-
-## Related
-
-- Issue #1573: Agent Improvements: PR Review Comment Handling
-- Verification Checklist: [verification-checklist.md](./verification-checklist.md)

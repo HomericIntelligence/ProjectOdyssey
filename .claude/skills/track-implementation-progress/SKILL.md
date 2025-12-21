@@ -109,7 +109,6 @@ Report progress with:
 5. **In Progress** - Currently being worked on
 6. **Blockers** - What's preventing progress
 7. **Next Steps** - Recommended priorities
-8. **Timeline** - Estimated completion date
 
 ## Progress Report Template
 

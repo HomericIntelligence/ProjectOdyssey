@@ -26,7 +26,7 @@ gh issue view <number> --json body --jq '.body'
 # Verify code quality
 pixi run mojo test -I . tests/
 pixi run mojo build -I . <module>
-pre-commit run --all-files
+just pre-commit-all
 
 # Check for warnings (zero-warnings policy)
 # Any output = fix before committing
@@ -93,7 +93,7 @@ Before code review approval:
 - [ ] All tests passing
 - [ ] 80% test coverage minimum
 - [ ] No compiler warnings (zero-warnings policy)
-- [ ] `mojo format` applied
+- [ ] `pixi run mojo format` applied
 - [ ] Docstrings complete
 - [ ] No TODOs/FIXMEs (or documented)
 - [ ] Performance meets requirements

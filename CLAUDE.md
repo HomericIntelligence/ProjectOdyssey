@@ -148,7 +148,7 @@ Analyze [context]:
 **Pattern 5: Background vs Foreground** - Distinguishing automatic vs explicit invocation
 
 ```markdown
-Background automation: `ci-run-precommit` (runs automatically)
+Background automation: `run-precommit` (runs automatically)
 Foreground tasks: `gh-create-pr-linked` (invoke explicitly)
 ```
 
@@ -167,8 +167,8 @@ Foreground tasks: `gh-create-pr-linked` (invoke explicitly)
   agent-coverage-check, agent-hierarchy-diagram
 - **Documentation**: doc-generate-adr, doc-issue-readme, doc-validate-markdown,
   doc-update-blog
-- **CI/CD**: ci-run-precommit, ci-validate-workflow, ci-fix-failures, ci-package-workflow,
-  ci-analyze-failure-logs, build-run-local
+- **CI/CD**: run-precommit, validate-workflow, fix-ci-failures, install-workflow,
+  analyze-ci-failure-logs, build-run-local
 - **Plan**: plan-regenerate-issues, plan-validate-structure, plan-create-component
 - **Quality**: quality-run-linters, quality-fix-formatting, quality-security-scan,
   quality-coverage-report, quality-complexity-check
@@ -347,7 +347,7 @@ Is the task well-defined with predictable steps?
 
 - **Characteristics**: Declarative YAML, fixed steps, composable, fast
 - **Best for**: GitHub API calls, running tests, formatting code, CI workflows
-- **Examples**: `gh-create-pr-linked`, `mojo-format`, `ci-run-precommit`
+- **Examples**: `gh-create-pr-linked`, `mojo-format`, `run-precommit`
 
 **Sub-Agents** - Use for tasks requiring reasoning and adaptation:
 
@@ -358,11 +358,11 @@ Is the task well-defined with predictable steps?
 **Example - When to Use a Skill**:
 
 ```markdown
-Task: Create PR linked to issue #2549, run pre-commit hooks, enable auto-merge
+Task: Create PR linked to issue #2549, run pixi run pre-commit hooks, enable auto-merge
 
 ✅ Use Agent Skills:
 1. Use `gh-create-pr-linked` skill (predictable GitHub API workflow)
-2. Use `ci-run-precommit` skill (fixed command sequence)
+2. Use `run-precommit` skill (fixed command sequence)
 3. Use `gh-check-ci-status` skill (polling with clear success/failure states)
 
 Why skills work: Every step is well-defined, no exploration needed
@@ -429,10 +429,10 @@ Hooks enable proactive automation and safety checks. Use hooks for guardrails an
   action: "run_skill"
   skill: "mojo-format"
 
-# Example: Run pre-commit hooks before commit
+# Example: Run pixi run pre-commit hooks before commit
 - trigger: "on_git_commit"
   action: "run_skill"
-  skill: "ci-run-precommit"
+  skill: "run-precommit"
 
 # Example: Auto-assign reviewers based on changed files
 - trigger: "on_pr_create"
@@ -455,7 +455,7 @@ Hooks enable proactive automation and safety checks. Use hooks for guardrails an
 | **Safety** | compile | Zero-warnings | Fail on warnings |
 | **Safety** | pr_create | Issue link | Block if missing |
 | **Safety** | git_push | Block main | Fail if direct |
-| **Automation** | file_save | Auto-format | Run mojo format |
+| **Automation** | file_save | Auto-format | Run pixi run mojo format |
 | **Automation** | git_commit | Pre-commit | Execute hooks |
 | **Automation** | pr_merge | Cleanup | Remove worktree |
 
@@ -778,7 +778,7 @@ Output: Section outline, examples drafted, verification plan
 Iteration 3: Execution
 - Insert new section using Edit tool
 - Add cross-references to existing sections
-- Run markdown linting (pre-commit run markdownlint-cli2)
+- Run markdown linting (just lint-markdown)
 - Fix any linting errors
 - Create PR with "Closes #2549"
 Output: Updated CLAUDE.md, passing linting, PR created
@@ -903,11 +903,12 @@ just format                # Format all files
 
 # CI-specific commands (match GitHub Actions)
 just ci-validate           # Full CI validation (build + test)
-just ci-build              # Build shared package
+just build              # Build shared package
 just ci-compile            # Compile package (validation only)
 just ci-test-mojo          # Run all Mojo tests
-just ci-test-group PATH PATTERN  # Run specific test group
-just ci-lint               # Run pre-commit hooks
+just test-group PATH PATTERN  # Run specific test group
+just pre-commit               # Run pre-commit hooks
+just pre-commit-all               # Run pre-commit hooks on all files
 
 # Training and inference
 just train                 # Train LeNet-5 with defaults
@@ -934,11 +935,11 @@ GitHub Actions workflows use justfile recipes to ensure consistency:
 ```yaml
 # Example from comprehensive-tests.yml
 - name: Run test group
-  run: just ci-test-group "tests/shared/core" "test_*.mojo"
+  run: just test-group "tests/shared/core" "test_*.mojo"
 
 # Example from build-validation.yml
 - name: Build package
-  run: just ci-build
+  run: just build
 ```
 
 This ensures developers can run `just ci-validate` locally to reproduce CI results exactly.
@@ -999,18 +1000,18 @@ automatically on all PRs affecting agent configurations.
 
 ### Pre-commit Hooks
 
-Pre-commit hooks automatically check code quality before commits. The hooks include `mojo format`
+Pre-commit hooks automatically check code quality before commits. The hooks include `pixi run mojo format`
 for Mojo code and markdown linting for documentation.
 
 ```bash
 # Install pre-commit hooks (one-time setup)
-pre-commit install
+pixi run pre-commit install
 
 # Run hooks manually on all files
-pre-commit run --all-files
+just pre-commit-all
 
 # Run hooks manually on staged files only
-pre-commit run
+just precommit
 
 # NEVER skip hooks with --no-verify
 # If a hook fails, fix the code instead
@@ -1026,7 +1027,7 @@ SKIP=trailing-whitespace git commit -m "message"
 
 1. Read the error message to understand what failed
 2. Fix the code to pass the hook
-3. Re-run `pre-commit run` to verify fixes
+3. Re-run `just precommit` to verify fixes
 4. Commit again
 
 **Valid alternatives to --no-verify:**
@@ -1693,7 +1694,7 @@ Before committing markdown files:
 npx markdownlint-cli2 path/to/file.md
 
 # Check all markdown files
-pre-commit run markdownlint-cli2 --all-files
+just lint-markdown-all
 
 # View detailed errors
 npx markdownlint-cli2 path/to/file.md 2>&1

@@ -65,7 +65,7 @@ struct TypeSafeStruct:
 - Use `def` for prototyping and flexibility
 - Leverage SIMD operations for parallel processing
 - Always include type annotations
-- All code must pass `mojo format` before committing (enforced by pre-commit hooks)
+- All code must pass `pixi run mojo format` before committing (enforced by pixi run pre-commit hooks)
 
 ## Quick Troubleshooting
 
@@ -98,7 +98,7 @@ python3 scripts/create_issues.py --dry-run
 
 ```bash
 # Run hooks manually
-pre-commit run --all-files
+just pre-commit-all
 
 # Mojo format issues
 pixi run mojo format path/to/file.mojo

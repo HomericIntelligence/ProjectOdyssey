@@ -1,5 +1,5 @@
 ---
-name: ci-run-precommit
+name: run-precommit
 description: Run pre-commit hooks locally or in CI to validate code quality before committing. Use to ensure commits meet quality standards and CI will pass.
 mcp_fallback: none
 category: ci
@@ -20,13 +20,13 @@ Validate code quality with pre-commit hooks before committing.
 
 ```bash
 # Install hooks (one-time)
-pre-commit install
+pixi run pre-commit install
 
 # Run on all files
-pre-commit run --all-files
+just pre-commit-all
 
 # Run on staged files
-pre-commit run
+just precommit
 
 # NEVER use --no-verify to bypass hooks
 # Fix the code instead to pass hooks
@@ -53,7 +53,7 @@ SKIP=hook-name git commit -m "message"  # Document why in message
 # ... edit files ...
 
 # 2. Run hooks on staged files
-pre-commit run
+just precommit
 
 # 3. If hooks auto-fixed files
 git add .              # Stage fixed files
@@ -118,26 +118,26 @@ Pre-commit runs in GitHub Actions:
 
 ```yaml
 jobs:
-  pre-commit:
+  precommit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
       - run: pip install pre-commit
-      - run: pre-commit run --all-files
+      - run: just pre-commit-all
 ```
 
 ## Advanced Usage
 
 ```bash
 # Run specific hook only
-pre-commit run trailing-whitespace --all-files
+pixi run pre-commit trailing-whitespace --all-files
 
 # Run on specific file
-pre-commit run --files src/tensor.mojo
+pixi run pre-commit --files src/tensor.mojo
 
 # Update hook versions
-pre-commit autoupdate
+pixi run pre-commit autoupdate
 
 # Skip a specific broken hook (document reason in commit message)
 SKIP=hook-name git commit -m "fix: reason for skipping hook-name"

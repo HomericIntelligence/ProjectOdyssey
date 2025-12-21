@@ -1,5 +1,5 @@
 ---
-name: ci-package-workflow
+name: install-workflow
 description: Create GitHub Actions workflows for automated package building and distribution. Use in package phase to automate .mojopkg building and release creation.
 mcp_fallback: none
 category: ci
@@ -124,6 +124,6 @@ on:
 
 ## References
 
-- Related skill: `ci-validate-workflow` for syntax validation
+- Related skill: `validate-workflow` for syntax validation
 - Workflow examples: `.github/workflows/`
 - GitHub Actions docs: <https://docs.github.com/en/actions>

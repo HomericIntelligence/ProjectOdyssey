@@ -28,8 +28,7 @@ git checkout -b <issue>-<description>
 # - Run tests: mojo test tests/
 
 # 3. Quality checks
-pre-commit run --all-files
-mojo format src/**/*.mojo
+just pre-commit-all
 
 # 4. Commit and PR
 git add . && git commit -m "feat: description
@@ -82,7 +81,7 @@ Before creating PR:
 
 - [ ] Issue requirements met
 - [ ] Tests written and passing
-- [ ] Code formatted (mojo format)
+- [ ] Code formatted (pixi run mojo format)
 - [ ] Pre-commit hooks pass
 - [ ] No warnings or unused variables
 - [ ] Documentation updated

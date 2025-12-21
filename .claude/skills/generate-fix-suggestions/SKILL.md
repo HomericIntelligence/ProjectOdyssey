@@ -131,5 +131,5 @@ Report suggestions with:
 ## References
 
 - See extract-test-failures for error extraction
-- See ci-analyze-failure-logs for CI-specific analysis
+- See analyze-ci-failure-logs for CI-specific analysis
 - See CLAUDE.md for code standards and error handling

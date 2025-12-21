@@ -643,7 +643,7 @@ mojo benchmarks/scripts/run_benchmarks.mojo
 
 # Format code
 
-pre-commit run --all-files
+just pre-commit-all
 
 ```text
 

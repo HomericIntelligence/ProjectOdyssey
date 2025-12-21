@@ -9,7 +9,7 @@ Use this template to create Module Design agents that handle module-level archit
 name: [design-area]-design
 description: Design [module/component] [design area] including [key responsibilities]
 tools: Read,Write,Edit,Bash,Grep,Glob
-model: sonnet
+model: opus
 ---
 
 # [Design Area] Design Agent

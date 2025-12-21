@@ -9,7 +9,7 @@ Use this template to create Junior Engineer agents that handle simple, well-defi
 name: junior-[engineer-type]-engineer
 description: [Action verb] simple [task type], generate boilerplate, apply templates, and [other simple tasks]
 tools: Read,Write,Edit,Bash,Grep,Glob
-model: sonnet
+model: haiku
 ---
 
 # Junior [Engineer Type] Engineer

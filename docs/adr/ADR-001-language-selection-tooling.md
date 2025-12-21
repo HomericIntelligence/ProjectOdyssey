@@ -766,8 +766,6 @@ Based on Issue #8 testing with Mojo v0.25.7:
 - Advanced string methods (partial)
 - Error handling (basic)
 
-**Estimated Timeline for Scripting Maturity**: Q2-Q3 2026
-
 ### Appendix B: Language Selection Decision Tree
 
 ```text

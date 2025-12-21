@@ -804,7 +804,7 @@ doc-validate-markdown/
 
 ### 7. CI/CD Skills
 
-#### ci-run-precommit
+#### run-precommit
 
 **Priority**: High
 **Description**: Run pre-commit hooks locally.
@@ -821,13 +821,13 @@ doc-validate-markdown/
 ### File Structure
 
 ```text
-ci-run-precommit/
+run-precommit/
 ├── SKILL.md (pre-commit execution)
 └── scripts/
     └── run_precommit.sh
 ```text
 
-#### ci-validate-workflow
+#### validate-workflow
 
 **Priority**: Medium
 **Description**: Validate GitHub Actions workflow files.
@@ -844,13 +844,13 @@ ci-run-precommit/
 ### File Structure
 
 ```text
-ci-validate-workflow/
+validate-workflow/
 ├── SKILL.md (workflow validation)
 └── scripts/
     └── validate_workflow.sh
 ```text
 
-#### ci-fix-failures
+#### fix-ci-failures
 
 **Priority**: High
 **Description**: Diagnose and fix CI failures.
@@ -867,13 +867,13 @@ ci-validate-workflow/
 ### File Structure
 
 ```text
-ci-fix-failures/
+fix-ci-failures/
 ├── SKILL.md (failure diagnosis)
 └── scripts/
     └── analyze_failures.sh
 ```text
 
-#### ci-package-workflow
+#### install-workflow
 
 **Priority**: Medium
 **Description**: Create CI/CD packaging workflows.
@@ -890,7 +890,7 @@ ci-fix-failures/
 ### File Structure
 
 ```text
-ci-package-workflow/
+install-workflow/
 ├── SKILL.md (workflow generation)
 └── templates/
     └── package_workflow.yml
@@ -1163,7 +1163,7 @@ These skills provide additional capabilities:
 1. **Quality Tools**
    - quality-run-linters
    - quality-fix-formatting
-   - ci-run-precommit
+   - run-precommit
 
 ### Phase 4: Optimization (Week 4)
 
@@ -1173,9 +1173,9 @@ These skills provide additional capabilities:
    - mojo-type-safety
 
 1. **CI/CD Suite**
-   - ci-validate-workflow
-   - ci-fix-failures
-   - ci-package-workflow
+   - validate-workflow
+   - fix-ci-failures
+   - install-workflow
 
 1. **Plan Management**
    - plan-regenerate-issues
@@ -1199,7 +1199,7 @@ These skills provide additional capabilities:
 2. gh-get-review-comments → Collect feedback
 3. gh-fix-pr-feedback → Apply fixes
 4. quality-fix-formatting → Clean up code
-5. ci-run-precommit → Validate changes
+5. run-precommit → Validate changes
 6. gh-reply-review-comment → Respond to reviewers
 ```text
 
@@ -1221,11 +1221,11 @@ These skills provide additional capabilities:
 
 ```text
 1. gh-check-ci-status → Get failure details
-2. ci-fix-failures → Diagnose issue
+2. fix-ci-failures → Diagnose issue
 3. quality-fix-formatting → Fix formatting
-4. ci-run-precommit → Validate locally
+4. run-precommit → Validate locally
 5. worktree-sync → Update branch
-6. ci-validate-workflow → Check workflow
+6. validate-workflow → Check workflow
 ```text
 
 ### Skill Dependencies

@@ -23,7 +23,7 @@ If pre-commit hooks fail when you try to commit:
 
 1. **Read the error message** - Hooks tell you exactly what's wrong
 2. **Fix the code** - Update your code to pass the check
-3. **Verify the fix** - Run `pre-commit run` or `pre-commit run --all-files`
+3. **Verify the fix** - Run `just precommit` or `just pre-commit-all`
 4. **Commit again** - Let the hooks validate your changes
 
 ### Auto-Fix Hooks
@@ -76,12 +76,12 @@ If you're stuck with a hook failure:
 
 1. Read the hook's error message carefully
 2. Check `.pre-commit-config.yaml` for hook configuration
-3. Run the hook manually: `pre-commit run hook-name --all-files`
+3. Run the hook manually: `pixi run pre-commit hook-name --all-files`
 4. Ask for help in issue/PR comments
 
 ## References
 
 - Pre-commit configuration: `.pre-commit-config.yaml`
-- Pre-commit hooks skill: `.claude/skills/ci-run-precommit/SKILL.md`
+- Pre-commit hooks skill: `.claude/skills/run-precommit/SKILL.md`
 - Formatting skill: `.claude/skills/quality-fix-formatting/SKILL.md`
 - Main project docs: `CLAUDE.md` section "Pre-commit Hooks"

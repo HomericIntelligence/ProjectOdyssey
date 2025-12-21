@@ -1,5 +1,5 @@
 ---
-name: ci-analyze-failure-logs
+name: analyze-ci-failure-logs
 description: "Parse and analyze CI failure logs to identify root causes and error patterns. Use when CI builds fail to understand what broke."
 category: ci
 ---
@@ -91,4 +91,4 @@ Provide analysis with:
 
 - GitHub Actions documentation: workflow logs and artifacts
 - CLAUDE.md: zero-warnings policy and standards
-- See ci-fix-failures skill for implementing fixes
+- See fix-ci-failures skill for implementing fixes

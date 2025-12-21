@@ -1,5 +1,5 @@
 ---
-name: ci-validate-workflow
+name: validate-workflow
 description: Validate GitHub Actions workflow files for syntax, best practices, and correctness. Use before committing workflow changes or when workflows fail.
 mcp_fallback: none
 category: ci
@@ -99,7 +99,7 @@ jobs:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip
 
-      - run: pre-commit run --all-files
+      - run: just pre-commit-all
 ```
 
 ## Validation Workflow
@@ -141,4 +141,4 @@ git commit -m "ci: update workflow"
 
 - GitHub Actions docs: <https://docs.github.com/en/actions>
 - Workflow syntax: <https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax>
-- Related skill: `ci-fix-failures` for debugging failures
+- Related skill: `fix-ci-failures` for debugging failures

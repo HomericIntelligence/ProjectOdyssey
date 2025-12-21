@@ -100,5 +100,5 @@ Report failures with:
 ## References
 
 - See test-diff-analyzer for identifying flaky tests
-- See ci-analyze-failure-logs for CI-specific failures
+- See analyze-ci-failure-logs for CI-specific failures
 - See generate-fix-suggestions for automated fixes

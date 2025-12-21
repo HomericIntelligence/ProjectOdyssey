@@ -24,8 +24,6 @@ This catalog lists all 44 agents in the ML Odyssey hierarchical agent system. Ea
 - **Capabilities**: What it can do
 - **Example Use Cases**: Concrete scenarios
 
-**Total Agents**: 44 agents across 6 levels (1 L0 + 6 L1 + 4 L2 + 24 L3 + 6 L4 + 3 L5)
-
 ## Quick Reference Table
 
 Representative sample of 44 agents (see detailed sections below for complete list):

@@ -668,8 +668,6 @@ Shared Library Orchestrator (Cleanup):
 - 5 PRs - One per phase
 - All merged to main
 
-**Timeline**: 3-4 weeks for complete implementation
-
 ---
 
 ## Workflow 2: Fixing a Bug
@@ -792,8 +790,6 @@ Documentation Engineer:
 - 3 Issues (#200-202) - Plan, Test+Impl combined, Cleanup
 - 2 PRs - One for fix, one for cleanup
 - Merged to main
-
-**Timeline**: 1 day
 
 ---
 
@@ -941,8 +937,6 @@ Architecture Design Agent:
 - API docs for simd_helpers
 - Migration guide for future implementations
 
-**Timeline**: 2-3 weeks
-
 ---
 
 ## Workflow 4: Reviewing Pull Requests
@@ -1026,8 +1020,6 @@ Merge:
 - Feedback addressed
 - PR merged with high confidence in quality
 
-**Timeline**: 1-2 days
-
 ---
 
 ## Workflow 5: Implementing a Research Paper
@@ -1092,7 +1084,6 @@ Component Specialists (Level 3):
 - Module specifications: Posted as comments on GitHub issues #400-403
 - Interface definitions
 - Integration plan
-- Timeline: 8-12 weeks for full implementation
 
 #### Phase 2-4: Test/Implementation/Packaging (Parallel)
 
@@ -1214,8 +1205,6 @@ All agents participate in cleanup:
 - 20+ PRs
 - All merged to main
 
-**Timeline**: 3 months
-
 ---
 
 ## Workflow 6: Performance Optimization
@@ -1294,8 +1283,6 @@ Documentation Engineer:
 - No accuracy regression
 - Documentation of optimization techniques
 
-**Timeline**: 1-2 weeks
-
 ---
 
 ## Workflow 7: Adding Documentation
@@ -1356,8 +1343,6 @@ Documentation Specialist:
 - `docs/getting-started.md` - Comprehensive guide
 - Example code in `examples/quickstart/`
 - Validated on fresh system
-
-**Timeline**: 3-5 days
 
 ---
 
@@ -1437,21 +1422,19 @@ Documentation Engineer:
 - All vulnerabilities fixed
 - Security checklist for future development
 
-**Timeline**: 1-2 weeks
-
 ---
 
 ## Quick Reference
 
 ### Workflow Complexity Guide
 
-| Complexity | Phases Used | Agent Levels | Timeline | Example |
-|------------|-------------|--------------|----------|---------|
-| Very Low | Plan + Impl | 3-4 | Hours | Typo fix, simple docs |
-| Low | Plan + Test + Impl | 3-4 | 1-2 days | Bug fix, simple feature |
-| Medium | Full 5-phase | 1-4 | 1-3 weeks | Refactoring, optimization |
-| High | Full 5-phase | 0-5 | 4-8 weeks | New component, complex feature |
-| Very High | Full 5-phase, multiple modules | 0-5 | 2-4 months | Research paper, major subsystem |
+| Complexity | Phases Used | Agent Levels | Example |
+|------------|-------------|--------------|---------|
+| Very Low | Plan + Impl | 3-4 | Typo fix, simple docs |
+| Low | Plan + Test + Impl | 3-4 | Bug fix, simple feature |
+| Medium | Full 5-phase | 1-4 | Refactoring, optimization |
+| High | Full 5-phase | 0-5 | New component, complex feature |
+| Very High | Full 5-phase, multiple modules | 0-5 | Research paper, major subsystem |
 
 ### Phase Participation by Agent Level
 

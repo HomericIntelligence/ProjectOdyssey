@@ -1,6 +1,6 @@
 ---
 name: worktree-cleanup
-description: "Remove merged or stale git worktrees. Use after PRs are merged or when worktrees are no longer needed."
+description: "Remove merged or stale git worktrees. Use after PRs are merged, work is done, or when worktrees are no longer needed."
 mcp_fallback: none
 category: worktree
 ---
@@ -19,26 +19,20 @@ Remove worktrees safely to free disk space and maintain organization.
 ## Quick Reference
 
 ```bash
-# Remove single worktree by issue number
-./scripts/remove_worktree.sh 42
-
-# Or by path
-git worktree remove ../ProjectOdyssey-42-feature
+# Remove single worktree by path
+git worktree remove worktrees/ProjectOdyssey-42-feature
 
 # Auto-clean all merged worktrees
 ./scripts/cleanup_merged_worktrees.sh
-
-# Force remove (with uncommitted changes)
-git worktree remove --force ../ProjectOdyssey-42-feature
 ```
 
 ## Workflow
 
-1. **Verify state** - Check no uncommitted changes: `cd ../ProjectOdyssey-42 && git status`
-2. **Switch away** - Don't be in the worktree you're removing
-3. **Remove worktree** - Use removal script or git command
-4. **Verify** - Run `git worktree list` to confirm removal
-5. **Delete branch** - Optionally delete remote branch after cleanup
+1. **Verify state** - Check no uncommitted changes: `cd worktrees/ProjectOdyssey-42 && git status`
+1. **Commit changes** - Make sure all changes are committed and the task is finished
+1. **Switch away** - Don't be in the worktree you're removing
+1. **Remove worktree** - Use git command
+1. **Verify** - Run `git worktree list` to confirm removal
 
 ## Safety Checks
 
@@ -53,18 +47,14 @@ Before removing a worktree:
 
 | Error | Solution |
 |-------|----------|
-| "Worktree has uncommitted changes" | Commit/stash changes or use `--force` |
+| "Worktree has uncommitted changes" | Commit changes |
 | "Not a worktree" | Verify path with `git worktree list` |
 | "Worktree is main" | Don't remove primary worktree |
-| Directory still exists | Manually remove with `rm -rf` after `git worktree remove` |
 
 ## Scripts Available
 
-- `scripts/remove_worktree.sh` - Remove single worktree
 - `scripts/cleanup_merged_worktrees.sh` - Auto-clean merged worktrees
-- `scripts/list_stale_worktrees.sh` - Find old/stale worktrees
 
 ## References
 
 - See `worktree-create` skill for creating worktrees
-- [worktree-strategy.md](../../../notes/review/worktree-strategy.md)

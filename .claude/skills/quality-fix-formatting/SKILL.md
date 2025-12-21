@@ -23,16 +23,16 @@ Automatically fix code formatting issues across file types.
 ./scripts/fix_all_formatting.sh
 
 # Fix specific types
-mojo format src/**/*.mojo
+pixi run mojo format src/**/*.mojo
 npx markdownlint-cli2 --fix "**/*.md"
-pre-commit run --all-files
+just pre-commit-all
 ```
 
 ## Auto-Fix Capabilities
 
 | Tool | Coverage | Manual Fixes |
 |------|----------|--------------|
-| mojo format | 100% | None |
+| pixi run mojo format | 100% | None |
 | markdownlint | 70% | Language tags, line length |
 | pre-commit | 100% | None |
 
@@ -42,13 +42,13 @@ pre-commit run --all-files
 
 ```bash
 # Format all Mojo files
-mojo format src/**/*.mojo
+pixi run mojo format src/**/*.mojo
 
 # Format single file
-mojo format src/tensor.mojo
+pixi run mojo format src/tensor.mojo
 
 # Check without fixing
-mojo format --check src/**/*.mojo
+pixi run mojo format --check src/**/*.mojo
 ```
 
 Fixes: indentation, spacing, line wrapping, blank lines
@@ -69,11 +69,11 @@ Manual fixes: language tags, line length
 ### Pre-commit Hooks (100% auto-fix)
 
 ```bash
-# Run all hooks
-pre-commit run --all-files
+# Run hooks on changed files
+just pre-commit
 
-# Run specific hook
-pre-commit run trailing-whitespace --all-files
+# Run hooks on all files
+just pre-commit-all
 ```
 
 Auto-fixes: trailing whitespace, missing newlines, line endings, YAML
@@ -174,7 +174,7 @@ CI checks formatting but doesn't fix:
 ```yaml
 - name: Check Formatting
   run: |
-    mojo format --check src/**/*.mojo
+    pixi run mojo format --check src/**/*.mojo
     npx markdownlint-cli2 "**/*.md"
 ```
 
@@ -201,5 +201,5 @@ Fix locally and push if CI fails.
 
 - [Git Commit Policy](../../shared/git-commit-policy.md) - Hook bypass prohibition
 - Configuration: `.pre-commit-config.yaml`, `.markdownlint.yaml`
-- Related skill: `ci-run-precommit` for pre-commit hooks
+- Related skill: `run-precommit` for pre-commit hooks
 - Related skill: `quality-run-linters` for complete linting

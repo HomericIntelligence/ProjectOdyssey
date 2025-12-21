@@ -88,7 +88,7 @@ Report batch merge results with:
 
 | Problem | Solution |
 |---------|----------|
-| CI failing | Skip that PR, check ci-analyze-failure-logs |
+| CI failing | Skip that PR, check analyze-ci-failure-logs |
 | Merge conflict | Resolve manually, cannot batch merge |
 | No permissions | Check gh auth status and repo access |
 | Branch protection | Verify all required rules met |

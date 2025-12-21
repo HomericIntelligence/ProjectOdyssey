@@ -20,19 +20,19 @@ Format Mojo code files to ensure consistent style.
 
 ```bash
 # Format single file
-mojo format path/to/file.mojo
+pixi run mojo format path/to/file.mojo
 
 # Format directory
-./scripts/format_mojo.sh src/
+pixi run mojo format `find src/ -name "*.mojo"`
 
 # Check without modifying
-mojo format --check path/to/file.mojo
+pixi run mojo format --check path/to/file.mojo
 ```
 
 ## Workflow
 
 1. **Identify files** - Single file or directory
-2. **Run formatter** - `mojo format <path>`
+2. **Run formatter** - `pixi run mojo format <path>`
 3. **Verify changes** - Review formatted output
 4. **Commit** - Stage and commit formatted code
 
