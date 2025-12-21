@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
     vim \
     uuid \
     sudo \
+    cargo \
     && rm -rf /var/lib/apt/lists/*
 
 # ---------------------------
@@ -31,7 +32,7 @@ RUN groupadd -g ${GROUP_ID} ${USER_NAME} && \
 
 # Set environment for dev user
 ENV HOME=/home/${USER_NAME}
-ENV PATH="$HOME/.pixi/bin:$PATH"
+ENV PATH="$HOME/.pixi/bin:$PATH:$HOME/.cargo/bin"
 
 # ---------------------------
 # Stage 2: Development environment
@@ -42,22 +43,17 @@ FROM base AS development
 USER ${USER_NAME}
 WORKDIR /workspace
 
+# Ensure Pixi home and cache directories exist
+ENV PIXI_HOME=/home/${USER_NAME}/.pixi
+ENV PIXI_CACHE_DIR=/home/${USER_NAME}/.cache/pixi
+RUN mkdir -p $PIXI_HOME $PIXI_CACHE_DIR $HOME/.cache/rattler && \
+    chmod -R 700 $PIXI_HOME $PIXI_CACHE_DIR $HOME/.cache/rattler
+
 # Install Pixi as dev user
 RUN curl -fsSL https://pixi.sh/install.sh | bash
 
-# Ensure Rattler/Conda cache is writable
-RUN mkdir -p $HOME/.cache/rattler/cache && \
-    chmod -R 700 $HOME/.cache/rattler
-
 # Copy project dependency files
 COPY --chown=${USER_NAME}:${USER_NAME} pixi.toml pixi.lock pyproject.toml requirements.txt requirements-dev.txt ./
-
-# Install project dependencies
-RUN pixi install
-
-# Pre-commit
-COPY --chown=${USER_NAME}:${USER_NAME} .pre-commit-config.yaml ./
-RUN pixi run pre-commit install --install-hooks || true
 
 # Copy the rest of the workspace
 COPY --chown=${USER_NAME}:${USER_NAME} . .
@@ -65,8 +61,22 @@ COPY --chown=${USER_NAME}:${USER_NAME} . .
 # Set Python path
 ENV PYTHONPATH=/workspace:${PYTHONPATH:-}
 
+# Install just tool
+RUN cargo install just --version 1.14.0
+
+# Install project dependencies
+RUN pixi install
+
+# Install pre-commit inside Pixi environment
+RUN pixi run pip install --upgrade pip pre-commit
+
+# Copy and install pre-commit hooks
+COPY --chown=${USER_NAME}:${USER_NAME} .pre-commit-config.yaml ./
+RUN pixi run pre-commit install --install-hooks || true
+
 # Default shell
 CMD ["pixi", "shell"]
+
 
 # ---------------------------
 # Stage 3: CI / Testing

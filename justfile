@@ -5,7 +5,7 @@
 default: help
 
 # Docker service name
-docker_service := "ml-odyssey-dev"
+docker_service := "projectodyssey-dev"
 
 # Repository root
 repo_root := justfile_directory()
