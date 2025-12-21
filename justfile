@@ -10,8 +10,15 @@ docker_service := "projectodyssey-dev"
 # Repository root
 repo_root := justfile_directory()
 
-USER_ID := `id -u`
-GROUP_ID := `id -g`
+# ==============================================================================
+# Automatically detect host UID/GID if not set
+# ==============================================================================
+USER_ID := `sh -c 'echo ${USER_ID:-$(id -u)}'`
+GROUP_ID := `sh -c 'echo ${GROUP_ID:-$(id -g)}'`
+
+show-user:
+	@echo "USER_ID = {{USER_ID}}"
+	@echo "GROUP_ID = {{GROUP_ID}}"
 
 # ==============================================================================
 # Mojo Compiler Flags
@@ -36,13 +43,18 @@ MOJO_TSAN := "--sanitize thread"
 # Run command in Docker or natively based on NATIVE env var
 [private]
 _run cmd:
-    #!/usr/bin/env bash
-    set -e
-    if [[ "${NATIVE:-}" == "1" ]]; then
-        eval "{{cmd}}"
-    else
-        USER_ID={{USER_ID}} GROUP_ID={{GROUP_ID}} docker compose exec -T {{docker_service}} bash -c "{{cmd}}"
-    fi
+	#!/usr/bin/env bash
+	set -e
+	if [[ "${NATIVE:-}" == "1" ]]; then
+		eval "{{cmd}}"
+	else
+		# Check if container is running
+		if ! docker compose ps -q {{docker_service}} | xargs docker inspect -f '{{"{{"}}.State.Running{{"}}"}}' | grep -q true; then
+			echo "Container {{docker_service}} not running. Starting..."
+			docker compose up -d {{docker_service}}
+		fi
+		docker compose exec -e USER_ID={{USER_ID}} -e GROUP_ID={{GROUP_ID}} -T {{docker_service}} bash -c "{{cmd}}"
+	fi
 
 # Ensure build directory exists
 [private]
@@ -96,7 +108,7 @@ docker-status:
 # ==============================================================================
 
 # Build/compile Mojo files with mode-specific flags
-build mode="debug": docker-up (_ensure_build_dir mode)
+build mode="debug": (_ensure_build_dir mode)
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
@@ -127,7 +139,7 @@ build mode="debug": docker-up (_ensure_build_dir mode)
     echo "Build complete. Outputs in build/{{mode}}/"
 
 # Build with AddressSanitizer (memory error detection)
-build-asan mode="debug": docker-up (_ensure_build_dir mode)
+build-asan mode="debug": (_ensure_build_dir mode)
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
@@ -155,7 +167,7 @@ build-asan mode="debug": docker-up (_ensure_build_dir mode)
         done
 
 # Build with ThreadSanitizer (threading error detection)
-build-tsan mode="debug": docker-up (_ensure_build_dir mode)
+build-tsan mode="debug": (_ensure_build_dir mode)
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
@@ -183,7 +195,7 @@ build-tsan mode="debug": docker-up (_ensure_build_dir mode)
         done
 
 # Build with experimental fixit (DESTRUCTIVE - auto-applies fixes!)
-build-fixit mode="debug": docker-up (_ensure_build_dir mode)
+build-fixit mode="debug": (_ensure_build_dir mode)
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
@@ -247,7 +259,7 @@ native-build-release:
 # ==============================================================================
 
 # Package shared library with mode-specific flags
-package mode="debug": docker-up (_ensure_build_dir mode)
+package mode="debug": (_ensure_build_dir mode)
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
@@ -265,7 +277,7 @@ package mode="debug": docker-up (_ensure_build_dir mode)
     pixi run mojo package $FLAGS -I "$REPO_ROOT" shared -o build/{{mode}}/ProjectOdyssey-shared.mojopkg
 
 # Package with AddressSanitizer
-package-asan mode="debug": docker-up (_ensure_build_dir mode)
+package-asan mode="debug": (_ensure_build_dir mode)
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
@@ -277,7 +289,7 @@ package-asan mode="debug": docker-up (_ensure_build_dir mode)
     pixi run mojo package $FLAGS -I "$REPO_ROOT" shared -o build/{{mode}}/ProjectOdyssey-shared.mojopkg
 
 # Package with ThreadSanitizer
-package-tsan mode="debug": docker-up (_ensure_build_dir mode)
+package-tsan mode="debug": (_ensure_build_dir mode)
     #!/usr/bin/env bash
     set -e
     REPO_ROOT="$(pwd)"
@@ -314,25 +326,25 @@ native-package-release:
 # ==============================================================================
 
 # Run all tests
-test: docker-up
+test:
     @echo "Running all tests..."
     @just _run "pixi run test-mojo || echo 'Mojo tests complete'"
     @just _run "pixi run test-python || echo 'Python tests complete'"
 
 # Run only Python tests
-test-python: docker-up
+test-python:
     @just _run "pixi run test-python"
 
 # Run only Mojo tests with warnings-as-errors
-test-mojo: docker-up
+test-mojo:
     @just _run "pixi run test-mojo"
 
 # Run tests with coverage
-test-coverage: docker-up
+test-coverage:
     @just _run "pixi run pytest tests/ --cov=. --cov-report=term"
 
 # Run integration tests
-test-integration: docker-up
+test-integration:
     @just _run "pixi run pytest tests/integration/ -v || echo 'No integration tests'"
 
 # Native test variants
@@ -353,13 +365,13 @@ native-test-coverage:
 # ==============================================================================
 
 # Run all linters
-lint: docker-up
+lint:
     @echo "Running all linters..."
     @just lint-python || true
     @just lint-markdown || true
 
 # Lint Python files
-lint-python: docker-up
+lint-python:
     @just _run "python -m py_compile \$(find . -name '*.py' -not -path './.pixi/*' | head -10) || echo 'Python lint complete'"
 
 # Lint Markdown files
@@ -367,7 +379,7 @@ lint-markdown:
     @npx markdownlint-cli2 "**/*.md" --config .markdownlint.json || echo "Markdown lint complete"
 
 # Format all files
-format: docker-up
+format:
     @echo "Formatting files..."
     @just _run "pixi run black . || echo 'Format complete'"
 
@@ -421,13 +433,8 @@ native-infer model="lenet5" checkpoint="lenet5_weights":
 # Development
 # ==============================================================================
 
-# Start development environment
-dev: docker-up
-    @echo "Development environment ready"
-    @echo "Run 'just shell' to open a shell"
-
 # Open development shell
-shell: docker-up
+shell:
     @docker compose exec {{docker_service}} bash
 
 # Serve documentation
@@ -448,17 +455,20 @@ native-shell:
 
 # Run pre-commit hooks
 pre-commit:
+    @pre-commit run
+
+pre-commit-all:
     @pre-commit run --all-files
 
 # Run CI pipeline
-ci: docker-up
+ci:
     @echo "Running CI pipeline..."
     @just lint || true
     @just test || true
     @echo "CI complete"
 
 # Run full CI with coverage
-ci-full: docker-up
+ci-full:
     @echo "Running full CI..."
     @just lint || true
     @just test-coverage || true
