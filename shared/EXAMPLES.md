@@ -28,7 +28,7 @@ Get started with the shared library in 5 minutes:
 ### 1. Install (30 seconds)
 
 ```bash
-cd ml-odyssey
+cd ProjectOdyssey
 mojo package shared --install
 mojo run scripts/verify_installation.mojo
 ```text

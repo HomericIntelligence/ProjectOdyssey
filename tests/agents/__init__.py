@@ -1,5 +1,5 @@
 """
-Agent testing infrastructure for ml-odyssey.
+Agent testing infrastructure for ProjectOdyssey.
 
 This package provides validation and testing tools for the 6-level agent hierarchy.
 """

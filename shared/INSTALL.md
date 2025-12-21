@@ -22,8 +22,8 @@ This method is best for contributors who want to modify the shared library code.
 
 ```bash
 # Clone the repository
-git clone https://github.com/mvillmow/ml-odyssey.git
-cd ml-odyssey
+git clone https://github.com/mvillmow/ProjectOdyssey.git
+cd ProjectOdyssey
 
 # Install in development mode (creates symlinks)
 mojo package shared --install
@@ -83,7 +83,7 @@ name = "your-paper-implementation"
 version = "0.1.0"
 
 [dependencies]
-ml-odyssey-shared = { path = "../ml-odyssey/shared" }
+ProjectOdyssey-shared = { path = "../ProjectOdyssey/shared" }
 ```text
 
 Then use in your code:
@@ -100,7 +100,7 @@ from shared import Linear, SGD, Tensor
 
 ### Use When
 
-- Working in a monorepo with ml-odyssey
+- Working in a monorepo with ProjectOdyssey
 - Local development across multiple projects
 - Quick prototyping
 
@@ -248,7 +248,7 @@ mojo package shared --install
 
 ### Solution
 
-1. Verify installation: `mojo list` should show `ml-odyssey-shared`
+1. Verify installation: `mojo list` should show `ProjectOdyssey-shared`
 1. Reinstall: `mojo package shared --install`
 1. Check MOJO_PATH: `echo $MOJO_PATH`
 1. Verify using: `mojo run scripts/verify_installation.mojo`
@@ -324,7 +324,7 @@ mojo check shared/
 mojo list
 
 # Uninstall old version
-mojo uninstall ml-odyssey-shared
+mojo uninstall ProjectOdyssey-shared
 
 # Reinstall correct version
 mojo package shared --install
@@ -494,10 +494,10 @@ Run it: `mojo run test_import.mojo`
 
 ```bash
 # Uninstall the package
-mojo uninstall ml-odyssey-shared
+mojo uninstall ProjectOdyssey-shared
 
 # Verify removal
-mojo list | grep ml-odyssey
+mojo list | grep ProjectOdyssey
 ```text
 
 ### Clean Build Artifacts
@@ -543,8 +543,8 @@ Set up a complete development environment:
 
 ```bash
 # Clone repository
-git clone https://github.com/mvillmow/ml-odyssey.git
-cd ml-odyssey
+git clone https://github.com/mvillmow/ProjectOdyssey.git
+cd ProjectOdyssey
 
 # Install development dependencies
 pixi install
@@ -591,7 +591,7 @@ After installation:
 
 - **Documentation**: Check [README.md](README.md) for overview
 - **Examples**: See [EXAMPLES.md](EXAMPLES.md) for code samples
-- **Issues**: Report bugs on [GitHub Issues](https://github.com/mvillmow/ml-odyssey/issues)
+- **Issues**: Report bugs on [GitHub Issues](https://github.com/mvillmow/ProjectOdyssey/issues)
 - **Discussions**: Ask questions in GitHub Discussions
 
 ### Reporting Issues

@@ -17,7 +17,7 @@
 
 ## Overview
 
-This document provides concrete examples of common development workflows using the ml-odyssey agent hierarchy.
+This document provides concrete examples of common development workflows using the ProjectOdyssey agent hierarchy.
 Each workflow shows:
 
 - Which agents are involved
@@ -594,7 +594,7 @@ Week 3:
 
 ```text
 Git Worktree Setup:
-  cd /home/user/ml-odyssey
+  cd /home/user/ProjectOdyssey
   git checkout main
   git pull  # Gets merged Test/Impl/Package branches
   git worktree add worktrees/issue-154-cleanup-batchnorm -b 154-cleanup-batchnorm
@@ -1302,7 +1302,7 @@ Documentation Engineer:
 
 ### Scenario
 
-Add: Comprehensive getting started guide for the ml-odyssey project.
+Add: Comprehensive getting started guide for the ProjectOdyssey project.
 
 ### Complexity
 

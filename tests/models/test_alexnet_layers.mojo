@@ -1054,7 +1054,7 @@ fn main() raises:
 
     # FIXME(#2701): test_conv1_forward_float16 disabled - float16 precision insufficient
     # for 11x11 kernel accumulation (363 multiplications per output element).
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2701
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2701
     print("  test_conv1_forward_float16... FIXME(#2701)")
 
     print("  test_conv1_backward_float32...", end="")
@@ -1068,11 +1068,11 @@ fn main() raises:
 
     # FIXME(#2701): test_conv2_forward_float16 disabled - float16 precision insufficient
     # for 5x5 kernel with 64 input channels (1600 multiplications per output element).
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2701
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2701
     print("  test_conv2_forward_float16... FIXME(#2701)")
 
     # FIXME(#2704): test_conv2_backward_float32 disabled - gradient checking timeout.
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2704
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
     print("  test_conv2_backward_float32... FIXME(#2704)")
 
     # Conv3 tests
@@ -1082,12 +1082,12 @@ fn main() raises:
 
     # FIXME(#2701): test_conv3_forward_float16 disabled - float16 precision insufficient
     # for 3x3 kernel with 192 input channels (1728 multiplications per output element).
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2701
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2701
     print("  test_conv3_forward_float16... FIXME(#2701)")
 
     # FIXME(#2704): test_conv3_backward_float32 disabled - gradient checking timeout
     # (192 input channels * 3x3 kernel requires many forward passes).
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2704
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
     print("  test_conv3_backward_float32... FIXME(#2704)")
 
     # Conv4 tests
@@ -1096,7 +1096,7 @@ fn main() raises:
     print(" OK")
 
     # FIXME(#2704): test_conv4_backward_float32 disabled - gradient checking timeout.
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2704
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
     print("  test_conv4_backward_float32... FIXME(#2704)")
 
     # Conv5 tests
@@ -1105,7 +1105,7 @@ fn main() raises:
     print(" OK")
 
     # FIXME(#2704): test_conv5_backward_float32 disabled - gradient checking timeout.
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2704
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
     print("  test_conv5_backward_float32... FIXME(#2704)")
 
     # ReLU tests
@@ -1156,7 +1156,7 @@ fn main() raises:
     print(" OK")
 
     # FIXME(#2704): test_fc1_backward_float32 disabled - gradient checking timeout.
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2704
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
     print("  test_fc1_backward_float32... FIXME(#2704)")
 
     # FC2 tests
@@ -1169,7 +1169,7 @@ fn main() raises:
     print(" OK")
 
     # FIXME(#2704): test_fc2_backward_float32 disabled - gradient checking timeout.
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2704
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
     print("  test_fc2_backward_float32... FIXME(#2704)")
 
     # FC3 tests
@@ -1182,15 +1182,15 @@ fn main() raises:
     print(" OK")
 
     # FIXME(#2704): test_fc3_backward_float32 disabled - gradient checking timeout.
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2704
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
     print("  test_fc3_backward_float32... FIXME(#2704)")
 
     # FIXME(#2705): test_flatten_operation_float32 disabled - runtime crash.
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2705
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2705
     print("  test_flatten_operation_float32... FIXME(#2705)")
 
     # FIXME(#2705): test_flatten_operation_float16 disabled - same crash.
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2705
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2705
     print("  test_flatten_operation_float16... FIXME(#2705)")
 
     # Sequential data flow test

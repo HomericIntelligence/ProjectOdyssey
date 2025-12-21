@@ -19,7 +19,7 @@ def run_command(cmd, description):
     print(f"[*] {description}")
     print(f"    Command: {' '.join(cmd)}")
     try:
-        result = subprocess.run(cmd, cwd="/home/mvillmow/ml-odyssey", capture_output=True, text=True, check=True)
+        result = subprocess.run(cmd, cwd="/home/mvillmow/ProjectOdyssey", capture_output=True, text=True, check=True)
         if result.stdout:
             print(f"    Output: {result.stdout.strip()}")
         return result
@@ -101,7 +101,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"""
     print("Next Steps:")
     print("=" * 70)
     print("1. Monitor CI status: gh pr checks (after ~30 seconds)")
-    print("2. Review PR at: https://github.com/mvillmow/ml-odyssey/pulls")
+    print("2. Review PR at: https://github.com/mvillmow/ProjectOdyssey/pulls")
     print("3. Address any review comments")
     print("=" * 70)
 

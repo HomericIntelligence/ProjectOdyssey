@@ -1,5 +1,5 @@
 [project]
-name = "ml-odyssey-data"
+name = "ProjectOdyssey-data"
 version = "0.1.0"
 description = "Data utilities for ML Odyssey - datasets, loaders, and transformations"
 authors = ["ML Odyssey Contributors"]

@@ -5,7 +5,7 @@
 default: help
 
 # Docker service name
-docker_service := "ml-odyssey-dev"
+docker_service := "projectodyssey-dev"
 
 # Repository root
 repo_root := justfile_directory()
@@ -262,7 +262,7 @@ package mode="debug": docker-up (_ensure_build_dir mode)
 
     echo "Packaging shared library in {{mode}} mode..."
     echo "Flags: $FLAGS"
-    pixi run mojo package $FLAGS -I "$REPO_ROOT" shared -o build/{{mode}}/ml-odyssey-shared.mojopkg
+    pixi run mojo package $FLAGS -I "$REPO_ROOT" shared -o build/{{mode}}/ProjectOdyssey-shared.mojopkg
 
 # Package with AddressSanitizer
 package-asan mode="debug": docker-up (_ensure_build_dir mode)
@@ -274,7 +274,7 @@ package-asan mode="debug": docker-up (_ensure_build_dir mode)
 
     echo "Packaging shared library in {{mode}} mode with AddressSanitizer..."
     echo "Flags: $FLAGS"
-    pixi run mojo package $FLAGS -I "$REPO_ROOT" shared -o build/{{mode}}/ml-odyssey-shared.mojopkg
+    pixi run mojo package $FLAGS -I "$REPO_ROOT" shared -o build/{{mode}}/ProjectOdyssey-shared.mojopkg
 
 # Package with ThreadSanitizer
 package-tsan mode="debug": docker-up (_ensure_build_dir mode)
@@ -286,7 +286,7 @@ package-tsan mode="debug": docker-up (_ensure_build_dir mode)
 
     echo "Packaging shared library in {{mode}} mode with ThreadSanitizer..."
     echo "Flags: $FLAGS"
-    pixi run mojo package $FLAGS -I "$REPO_ROOT" shared -o build/{{mode}}/ml-odyssey-shared.mojopkg
+    pixi run mojo package $FLAGS -I "$REPO_ROOT" shared -o build/{{mode}}/ProjectOdyssey-shared.mojopkg
 
 # Package debug version
 package-debug: (package "debug")
@@ -596,7 +596,7 @@ ci-package:
     mkdir -p build
     STRICT="--validate-doc-strings --diagnose-missing-doc-strings"
     echo "Packaging shared library with strict analysis..."
-    pixi run mojo package $STRICT -I "$REPO_ROOT" shared -o build/ml-odyssey-shared.mojopkg
+    pixi run mojo package $STRICT -I "$REPO_ROOT" shared -o build/ProjectOdyssey-shared.mojopkg
 
 # CI: Compile/validate shared package (no output kept)
 ci-compile:

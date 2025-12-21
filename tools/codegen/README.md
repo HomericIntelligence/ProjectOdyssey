@@ -73,6 +73,6 @@ Per [ADR-001](../../docs/adr/ADR-001-language-selection-tooling.md):
 
 ## References
 
-- [Issue #67](https://github.com/mvillmow/ml-odyssey/issues/67): Tools planning
-- [Issue #69](https://github.com/mvillmow/ml-odyssey/issues/69): Tools implementation
+- [Issue #67](https://github.com/mvillmow/ProjectOdyssey/issues/67): Tools planning
+- [Issue #69](https://github.com/mvillmow/ProjectOdyssey/issues/69): Tools implementation
 - [ADR-001](../../docs/adr/ADR-001-language-selection-tooling.md): Language strategy

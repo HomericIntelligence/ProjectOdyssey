@@ -362,14 +362,14 @@ jobs:
           #### Using pip (Python packages)
 
           ```bash
-          pip install ml-odyssey
+          pip install ProjectOdyssey
           ```
 
           #### From source
 
           ```bash
           git clone https://github.com/${{ github.repository }}.git
-          cd ml-odyssey
+          cd ProjectOdyssey
           git checkout ${{ needs.validate-version.outputs.version }}
           pixi install
           ```
@@ -382,7 +382,7 @@ jobs:
 
           - [Installation Guide](INSTALL.md)
           - [README](README.md)
-          - [Project Documentation](https://mvillmow.github.io/ml-odyssey/)
+          - [Project Documentation](https://mvillmow.github.io/ProjectOdyssey/)
 
           ---
 

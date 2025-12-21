@@ -792,7 +792,7 @@ fn main() raises:
 
     # FIXME(#2702): test_fc1_backward_float32 disabled - gradient checking crashes in
     # Mojo runtime (closure/memory issue with O(400) forward passes).
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2702
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2702
     print("  test_fc1_backward_float32... FIXME(#2702)")
 
     # FC2 tests
@@ -805,7 +805,7 @@ fn main() raises:
     print(" OK")
 
     # FIXME(#2702): test_fc2_backward_float32 disabled - same issue as fc1.
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2702
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2702
     print("  test_fc2_backward_float32... FIXME(#2702)")
 
     # FC3 tests
@@ -815,19 +815,19 @@ fn main() raises:
 
     # FIXME(#2703): test_fc3_forward_float16 disabled - float16 precision insufficient
     # for FC layer with 84 inputs (840 multiplications per output element).
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2703
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2703
     print("  test_fc3_forward_float16... FIXME(#2703)")
 
     # FIXME(#2702): test_fc3_backward_float32 disabled - same issue as fc1.
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2702
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2702
     print("  test_fc3_backward_float32... FIXME(#2702)")
 
     # FIXME(#2705): test_flatten_operation_float32 disabled - runtime crash in reshape.
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2705
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2705
     print("  test_flatten_operation_float32... FIXME(#2705)")
 
     # FIXME(#2705): test_flatten_operation_float16 disabled - same reshape crash.
-    # See: https://github.com/mvillmow/ml-odyssey/issues/2705
+    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2705
     print("  test_flatten_operation_float16... FIXME(#2705)")
 
     # Sequential data flow test

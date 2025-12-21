@@ -490,7 +490,7 @@ Is this training code needed by multiple papers?
 - Models Library: `shared/models/README.md`
 - Main Shared Library: `shared/README.md`
 - Mojo Language Guide: <https://docs.modular.com/mojo/>
-- Project Documentation: `/home/mvillmow/ml-odyssey-manual/worktrees/issue-22-plan/CLAUDE.md`
+- Project Documentation: `/home/mvillmow/ProjectOdyssey-manual/worktrees/issue-22-plan/CLAUDE.md`
 
 ## Mixed Precision Training
 

@@ -146,7 +146,7 @@ To install the package:
 
 ```bash
 
-pip install ml-odyssey
+pip install ProjectOdyssey
 
 ```text
 ## Usage

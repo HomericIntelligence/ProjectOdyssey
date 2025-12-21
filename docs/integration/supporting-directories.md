@@ -659,10 +659,10 @@ ls -la tools/paper-scaffold/scaffold.py
 chmod +x tools/paper-scaffold/scaffold.py
 
 # Add to Python path
-export PYTHONPATH="${PYTHONPATH}:/home/user/ml-odyssey/tools"
+export PYTHONPATH="${PYTHONPATH}:/home/user/ProjectOdyssey/tools"
 
 # Run with explicit path
-python /home/user/ml-odyssey/tools/paper-scaffold/scaffold.py
+python /home/user/ProjectOdyssey/tools/paper-scaffold/scaffold.py
 
 ```text
 

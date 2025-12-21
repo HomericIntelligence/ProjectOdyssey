@@ -10,7 +10,7 @@ See `.claude/shared/github-issue-workflow.md` for the workflow.
 ## Repository Structure
 
 ```text
-ml-odyssey/
+ProjectOdyssey/
 ├── notes/
 │   └── blog/                    # Development blog entries
 ├── docs/

@@ -165,7 +165,7 @@ Successfully implemented all configuration files following plan specifications:
 
 ```toml
 [project]
-name = "ml-odyssey"
+name = "ProjectOdyssey"
 version = "0.1.0"
 description = "Mojo-based AI Research Platform"
 channels = ["conda-forge"]
@@ -537,7 +537,7 @@ Write the actual overview section content for README.md following specifications
 
 ## Implementation Details
 
-Overview section implemented in `/home/user/ml-odyssey/README.md:1-25`:
+Overview section implemented in `/home/user/ProjectOdyssey/README.md:1-25`:
 
 ### 1. Project Header and Description
 

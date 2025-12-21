@@ -71,7 +71,7 @@ The package is configured via `mojo.toml` (or `mojoproject.toml`) in the reposit
 
 ```toml
 [package]
-name = "ml-odyssey-shared"
+name = "ProjectOdyssey-shared"
 version = "0.1.0"
 description = "Shared library for ML Odyssey paper implementations"
 authors = ["ML Odyssey Team"]
@@ -97,7 +97,7 @@ examples = "examples/shared"
 The build system expects this structure:
 
 ```text
-ml-odyssey/
+ProjectOdyssey/
 ├── mojo.toml                  # Package configuration
 ├── shared/                    # Source directory
 │   ├── __init__.mojo          # Package root
@@ -150,11 +150,11 @@ mojo package shared --install
 rm -rf build/ dist/
 
 # Remove installed package
-mojo uninstall ml-odyssey-shared
+mojo uninstall ProjectOdyssey-shared
 
 # Full clean
 rm -rf build/ dist/
-mojo uninstall ml-odyssey-shared
+mojo uninstall ProjectOdyssey-shared
 ```text
 
 ## Build Options
@@ -214,7 +214,7 @@ mojo test tests/shared/ -v
 mojo run scripts/verify_installation.mojo
 
 # Check installed packages
-mojo list | grep ml-odyssey
+mojo list | grep ProjectOdyssey
 ```text
 
 ### Import Tests
@@ -253,7 +253,7 @@ When Mojo package registry is available:
 mojo publish dist/ml_odyssey_shared-0.1.0.mojopkg
 
 # Install from registry
-mojo install ml-odyssey-shared
+mojo install ProjectOdyssey-shared
 ```text
 
 ## Build Targets

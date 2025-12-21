@@ -1,12 +1,12 @@
 [workspace]
 channels = ["https://conda.modular.com/max-nightly", "conda-forge"]
-name = "ml-odyssey"
+name = "ProjectOdyssey"
 platforms = ["linux-64"]
 version = "0.1.0"
 
 [tasks]
 # Build the shared Mojo package
-build = "mojo package shared -o build/ml-odyssey-shared.mojopkg"
+build = "mojo package shared -o build/ProjectOdyssey-shared.mojopkg"
 
 # Run a single Mojo file (example: training script)
 run = "mojo run"

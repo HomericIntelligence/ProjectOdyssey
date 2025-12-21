@@ -23,18 +23,18 @@ Remove worktrees safely to free disk space and maintain organization.
 ./scripts/remove_worktree.sh 42
 
 # Or by path
-git worktree remove ../ml-odyssey-42-feature
+git worktree remove ../ProjectOdyssey-42-feature
 
 # Auto-clean all merged worktrees
 ./scripts/cleanup_merged_worktrees.sh
 
 # Force remove (with uncommitted changes)
-git worktree remove --force ../ml-odyssey-42-feature
+git worktree remove --force ../ProjectOdyssey-42-feature
 ```
 
 ## Workflow
 
-1. **Verify state** - Check no uncommitted changes: `cd ../ml-odyssey-42 && git status`
+1. **Verify state** - Check no uncommitted changes: `cd ../ProjectOdyssey-42 && git status`
 2. **Switch away** - Don't be in the worktree you're removing
 3. **Remove worktree** - Use removal script or git command
 4. **Verify** - Run `git worktree list` to confirm removal

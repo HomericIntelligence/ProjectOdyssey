@@ -3,7 +3,7 @@
 
 set -e
 
-cd /home/mvillmow/ml-odyssey
+cd /home/mvillmow/ProjectOdyssey
 
 echo "================================================================================"
 echo "Applying fix for issue #2128: YAML Parsing for Values Containing Colons"

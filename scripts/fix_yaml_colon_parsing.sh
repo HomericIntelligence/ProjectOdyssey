@@ -3,7 +3,7 @@
 
 set -e
 
-cd /home/mvillmow/ml-odyssey
+cd /home/mvillmow/ProjectOdyssey
 
 # Create and switch to feature branch
 git checkout -b 2128-fix-yaml-colon-parsing

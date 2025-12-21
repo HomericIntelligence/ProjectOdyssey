@@ -221,7 +221,7 @@ def main():
     repo_root = get_repo_root()
     if not repo_root:
         print(f"\n{Color.RED}Error: Not in a git repository{Color.RESET}")
-        print("Please run from ml-odyssey directory")
+        print("Please run from ProjectOdyssey directory")
         return 1
 
     # Run checks
