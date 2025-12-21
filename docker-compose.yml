@@ -12,15 +12,16 @@ services:
     image: projectodyssey:dev
     volumes:
       - .:/workspace:delegated
-      - /workspace/.pixi
-      - pixi-cache:/home/dev/.pixi
+      - pixi-cache:${HOME}/.pixi
       - pre-commit-cache:/home/dev/.cache/pre-commit
       - ${HOME}/.gitconfig:/home/dev/.gitconfig:ro
     environment:
+      - HOME=/home/dev
       - USER_ID=${USER_ID}
       - GROUP_ID=${GROUP_ID}
       - ENVIRONMENT=development
       - TERM=xterm-256color
+      - PIXI_HOME=${HOME}/.pixi
     working_dir: /workspace
     stdin_open: true
     tty: true
@@ -39,11 +40,14 @@ services:
     image: projectodyssey:ci
     volumes:
       - .:/workspace
+      - pixi-cache:${HOME}/.pixi
     environment:
+      - HOME=/home/dev
       - USER_ID=${USER_ID}
       - GROUP_ID=${GROUP_ID}
       - ENVIRONMENT=ci
       - CI=true
+      - PIXI_HOME=${HOME}/.pixi
     working_dir: /workspace
 
   # Production environment
@@ -60,9 +64,11 @@ services:
     volumes:
       - .:/workspace:ro
     environment:
+      - HOME=/home/dev
       - USER_ID=${USER_ID}
       - GROUP_ID=${GROUP_ID}
       - ENVIRONMENT=production
+      - PIXI_HOME=${HOME}/.pixi
     working_dir: /workspace
 
 volumes:
