@@ -525,16 +525,6 @@ ci-build:
 
     echo "✅ Build complete"
 
-# CI: Package shared library with strict analysis (mojo package)
-ci-package:
-    #!/usr/bin/env bash
-    set -e
-    REPO_ROOT="$(pwd)"
-    mkdir -p build
-    STRICT="--validate-doc-strings"
-    echo "Packaging shared library with strict analysis..."
-    pixi run mojo package $STRICT -I "$REPO_ROOT" shared -o build/ProjectOdyssey-shared.mojopkg
-
 # CI: Run all Mojo tests
 test-mojo:
     #!/usr/bin/env bash
@@ -562,7 +552,7 @@ test-mojo:
 validate:
     @echo "Running full CI validation..."
     @just ci-build
-    @just ci-package
+    @just package
     @just test-mojo
     @echo "✅ Validation complete"
 

@@ -57,7 +57,7 @@ achieving a **72% reduction** in warning count.
 
 ## Build Verification
 
-Both `just build` (Docker) and `just native-build` (Native) produce **identical warning counts**,
+Both `just build` (Docker) and `just native build` (Native) produce **identical warning counts**,
 confirming fixes apply to both build targets.
 
 ```bash
