@@ -16,7 +16,7 @@ repos:
       - id: mojo-format
         name: Mojo Format
         description: Format Mojo source files using mojo format (skips if mojo not available)
-        entry: bash -c 'if command -v mojo &> /dev/null; then mojo format "$@"; else echo "⚠️  Mojo not found, skipping format"; exit 0; fi' --
+        entry: mojo format --
         language: system
         files: ^(benchmarks|examples|papers|scripts|shared|tests)/.*\.(mojo|🔥)$
         pass_filenames: true
@@ -28,7 +28,7 @@ repos:
         files: ^(benchmarks|examples|papers|scripts|shared|tests)/.*\.(mojo|🔥)$
         types: [text]
 
-  # Security checks and Python formatting/linting
+  # Security checks
   - repo: local
     hooks:
       - id: check-shell-injection
@@ -38,6 +38,10 @@ repos:
         language: pygrep
         files: \.py$
         types: [python]
+
+  # Python formatting and linting
+  - repo: local
+    hooks:
       - id: ruff-format-python
         name: Ruff Format Python
         description: Format Python files in scripts/, examples/, tests/, tools/ and all subdirectories using pixi run ruff format
@@ -73,7 +77,6 @@ repos:
       - id: markdownlint-cli2
         name: Markdown Lint
         description: Lint markdown files for consistency
-        exclude: ^notes/(plan|issues|review|blog)/
         args: ['--config', '.markdownlint.json']
 
   # General file checks

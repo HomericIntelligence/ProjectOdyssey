@@ -441,7 +441,7 @@ All CI workflows use justfile recipes for consistent command execution between l
 **Available CI Recipes**:
 
 - `just build` - Build shared package with compilation validation
-- `just ci-package` - Compile package (validation only, no output artifact)
+- `just package` - Compile package (validation only, no output artifact)
 - `just test-group PATH PATTERN` - Run specific test group
 - `just test-mojo` - Run all Mojo tests
 - `just validate` - Full validation (build + test)

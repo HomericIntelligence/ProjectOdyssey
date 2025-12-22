@@ -778,7 +778,7 @@ Output: Section outline, examples drafted, verification plan
 Iteration 3: Execution
 - Insert new section using Edit tool
 - Add cross-references to existing sections
-- Run markdown linting (just lint-markdown)
+- Run markdown linting (just pre-commit-all)
 - Fix any linting errors
 - Create PR with "Closes #2549"
 Output: Updated CLAUDE.md, passing linting, PR created
@@ -898,7 +898,6 @@ just help
 just build                  # Build project in debug mode
 just test                   # Run all tests
 just test-mojo             # Run only Mojo tests
-just lint                  # Run all linters
 just format                # Format all files
 
 # CI-specific commands (match GitHub Actions)
@@ -1691,13 +1690,13 @@ Before committing markdown files:
 
 ```bash
 # Check specific file
-npx markdownlint-cli2 path/to/file.md
+pixi run npx markdownlint-cli2 path/to/file.md
 
 # Check all markdown files
-just lint-markdown-all
+zust pre-commit-all
 
 # View detailed errors
-npx markdownlint-cli2 path/to/file.md 2>&1
+pixi run npx markdownlint-cli2 path/to/file.md 2>&1
 ```
 
 ## Debugging
