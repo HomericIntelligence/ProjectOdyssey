@@ -55,7 +55,7 @@ jobs:
           # Check if shared package exists
           if [ -d "shared" ]; then
             echo "Building shared package using justfile..."
-            just ci-build
+            just build ci
             echo "✅ Shared package built successfully"
           else
             echo "⚠️  No shared package found yet"
@@ -77,22 +77,22 @@ jobs:
       - name: Create build artifacts
         run: |
           echo "Creating build artifacts..."
-          mkdir -p build-artifacts/mojo
+          mkdir -p build/ci
 
           # Copy compiled artifacts if they exist
           if [ -d "/tmp" ] && [ -n "$(find /tmp -name '*.o' -o -name '*.so' 2>/dev/null)" ]; then
-            cp /tmp/*.o /tmp/*.so build-artifacts/mojo/ 2>/dev/null || true
+            cp /tmp/*.o /tmp/*.so build/ci/ 2>/dev/null || true
           fi
 
           # Create build manifest
-          echo "Build completed at: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" > build-artifacts/mojo/build-manifest.txt
-          echo "Commit: ${{ github.sha }}" >> build-artifacts/mojo/build-manifest.txt
+          echo "Build completed at: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" > build/ci/build-manifest.txt
+          echo "Commit: ${{ github.sha }}" >> build/ci/build-manifest.txt
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v6
         with:
           name: mojo-build-artifacts
-          path: build-artifacts/mojo/
+          path: build/ci/
           retention-days: 7
 
   # ============================================================================

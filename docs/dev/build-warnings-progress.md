@@ -62,10 +62,10 @@ confirming fixes apply to both build targets.
 
 ```bash
 # Docker build
-just build debug  # 850 warnings
+just build debug
 
 # Native build
-NATIVE=1 just build debug  # 850 warnings
+just native build debug
 ```
 
 ## Tools Created
