@@ -1,0 +1,681 @@
+#!/usr/bin/env python3
+"""
+Autonomous Mojo repair with Claude Code.
+
+Key properties:
+- Parallel agents
+- Per-agent worktrees
+- Branch-per-agent isolation
+- Safe rebase + push-with-lease
+- Automatic merge into fix-mojo-build
+- KISS + DRY enforced
+"""
+
+import argparse
+import concurrent.futures
+import json
+import shutil
+import subprocess
+import threading
+import uuid
+from pathlib import Path
+from datetime import datetime, timezone
+
+# ---------------- Configuration ----------------
+
+MAX_WORKERS_DEFAULT = 6
+BUILD_TIMEOUT = 120
+CLAUDE_TIMEOUT = 900
+MAX_REBASE_ATTEMPTS = 3
+
+BASE_BRANCH = "fix-mojo-build"
+REMOTE = "origin"
+
+ROOT = Path.cwd()
+WORKTREE_BASE = ROOT / "worktrees"
+LOG_DIR = ROOT / ".claude" / "logs"
+
+print_lock = threading.Lock()
+stop_processing = threading.Event()
+active_workers = threading.Semaphore(MAX_WORKERS_DEFAULT)
+dry_run = False  # Set via --dry-run flag
+verbose = False  # Set via --verbose flag
+
+
+def ts() -> str:
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def log(msg: str):
+    with print_lock:
+        print(msg, flush=True)
+
+
+def write_log(path: Path, msg: str):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as f:
+        f.write(f"[{ts()}] {msg.rstrip()}\n")
+
+
+def run(cmd, cwd=None, timeout=None):
+    return subprocess.run(
+        cmd,
+        cwd=cwd,
+        text=True,
+        capture_output=True,
+        timeout=timeout,
+    )
+
+
+# ---------------- Build ----------------
+
+
+def build_cmd(root, file):
+    return [
+        "pixi",
+        "run",
+        "mojo",
+        "build",
+        "-g",
+        "--no-optimization",
+        "--validate-doc-strings",
+        "-I",
+        root,
+        file,
+        "-o",
+        f"build/debug/{Path(file).stem}",
+    ]
+
+
+def build_ok(cwd, root, file, log_path) -> bool:
+    r = run(build_cmd(root, file), cwd=cwd, timeout=BUILD_TIMEOUT)
+    write_log(log_path, r.stderr)
+    if r.returncode == 0:
+        write_log(log_path, "BUILD OK")
+        return True
+    write_log(log_path, f"BUILD FAILED (exit={r.returncode})")
+    return False
+
+
+# ---------------- Git helpers ----------------
+
+
+def ensure_base_branch():
+    run(["git", "fetch", REMOTE])
+    r = run(["git", "show-ref", "--verify", f"refs/remotes/{REMOTE}/{BASE_BRANCH}"])
+    if r.returncode != 0:
+        raise RuntimeError(f"{REMOTE}/{BASE_BRANCH} does not exist")
+
+
+def create_worktree(branch):
+    path = WORKTREE_BASE / branch
+    if path.exists():
+        shutil.rmtree(path, ignore_errors=True)
+
+    run(
+        [
+            "git",
+            "worktree",
+            "add",
+            "--force",
+            "-b",
+            branch,
+            path,
+            f"{REMOTE}/{BASE_BRANCH}",
+        ]
+    )
+    return path
+
+
+def cleanup_worktree(path):
+    run(["git", "worktree", "remove", "--force", path])
+    shutil.rmtree(path, ignore_errors=True)
+
+
+def ensure_clean_git(cwd, log_path) -> bool:
+    r = run(["git", "status", "--porcelain"], cwd=cwd)
+    if r.stdout.strip():
+        write_log(log_path, "DIRTY WORKTREE — aborting")
+        return False
+    return True
+
+
+def has_commit(cwd) -> bool:
+    r = run(["git", "rev-parse", "--verify", "HEAD"], cwd=cwd)
+    return r.returncode == 0
+
+
+def rebase_onto_base(cwd, log_path) -> bool:
+    run(["git", "fetch", REMOTE], cwd=cwd)
+    r = run(["git", "rebase", f"{REMOTE}/{BASE_BRANCH}"], cwd=cwd)
+    if r.returncode == 0:
+        write_log(log_path, "REBASE OK")
+        return True
+
+    write_log(log_path, "REBASE FAILED — aborting")
+    write_log(log_path, r.stderr)
+    run(["git", "rebase", "--abort"], cwd=cwd)
+    return False
+
+
+def push_with_lease(cwd, log_path) -> bool:
+    r = run(
+        [
+            "git",
+            "push",
+            "--force-with-lease",
+            REMOTE,
+            f"HEAD:{BASE_BRANCH}",
+        ],
+        cwd=cwd,
+    )
+
+    if r.returncode == 0:
+        write_log(log_path, "PUSH OK (merged into fix-mojo-build)")
+        return True
+
+    write_log(log_path, "PUSH REJECTED — will retry")
+    write_log(log_path, r.stderr)
+    return False
+
+
+# ---------------- Claude ----------------
+
+
+def load_text(path: Path) -> str:
+    return path.read_text(encoding="utf-8").strip()
+
+
+def build_agents_json(agent_dir: Path) -> str:
+    agents = {}
+    for p in agent_dir.glob("*.md"):
+        if p.name == "chief-architect.md":
+            continue
+        agents[p.stem] = {
+            "description": p.stem.replace("-", " "),
+            "prompt": load_text(p),
+        }
+    return json.dumps(agents, ensure_ascii=False)
+
+
+def build_prompt(file: str, root: str) -> str:
+    """Build comprehensive Claude 4 prompt for Mojo build fixing."""
+    return f"""<task_context>
+<role>
+You are an autonomous Mojo build repair agent working in parallel with other agents.
+Your changes will be automatically merged if they pass validation.
+</role>
+
+<why_this_matters>
+- Failed builds block the entire CI/CD pipeline
+- Incorrect fixes introduce bugs that affect downstream code
+- Multiple agents work in parallel - your changes must not conflict
+- This is an automated workflow - no human review before merge
+</why_this_matters>
+
+<file_to_fix>
+{file}
+</file_to_fix>
+
+<working_directory>
+{root}
+</working_directory>
+</task_context>
+
+<critical_first_step>
+BEFORE doing anything else:
+1. Run the build command to see if the file already compiles successfully
+2. If it compiles (exit code 0, no errors), do NOT make any changes - just exit
+3. Only proceed with fixes if there are actual compilation errors
+
+Build command:
+pixi run mojo build -g --no-optimization --validate-doc-strings -I {root} {file} -o build/debug/{Path(file).stem}
+</critical_first_step>
+
+<mojo_language_rules>
+<reference_documentation>
+CRITICAL: Read these files BEFORE making any changes:
+
+1. .claude/shared/mojo-guidelines.md
+   - Mojo v0.25.7+ syntax and parameter conventions
+   - Constructor patterns (out self, mut self)
+   - Ownership transfer (^ operator)
+   - List initialization syntax
+   - Deprecated patterns to avoid
+
+2. .claude/shared/mojo-anti-patterns.md
+   - 64+ test failure patterns from real PRs
+   - Ownership violations
+   - Constructor signature mistakes
+   - Uninitialized data issues
+   - Type system gotchas
+
+3. .claude/skills/ directory
+   - Mojo-specific skills for common operations
+   - validate-mojo-patterns, mojo-format, mojo-lint-syntax
+   - Use these skills when appropriate
+
+Read ALL relevant documentation before attempting fixes.
+</reference_documentation>
+</mojo_language_rules>
+
+<fix_principles>
+<code_quality>
+- KISS (Keep It Simple): Make the smallest possible fix
+  Context: Minimal changes are easier to verify and less likely to introduce bugs
+
+- DRY (Don't Repeat Yourself): Never duplicate code
+  Context: Duplication creates maintenance burden and drift
+
+- Preserve Intent: Keep existing APIs and behavior unchanged
+  Context: API changes break callers throughout the codebase
+</code_quality>
+
+<constraints>
+- NEVER delete files (they may be referenced elsewhere)
+- NEVER refactor or reorganize (outside scope of build fixes)
+- NEVER add features or enhancements (only fix what's broken)
+</constraints>
+
+<conflict_resolution>
+When resolving git merge conflicts:
+1. Prefer the fix-mojo-build branch version (it's the validated baseline)
+2. Only override if you're certain your fix is correct
+3. Test thoroughly after resolving conflicts
+</conflict_resolution>
+</fix_principles>
+
+<workflow>
+<phase name="verify">
+<step number="1">
+Run build command to check current status
+</step>
+<step number="2">
+If compilation succeeds (exit code 0), STOP - no fixes needed
+</step>
+<step number="3">
+If compilation fails, capture and analyze the error output
+</step>
+</phase>
+
+<phase name="analyze">
+<extended_thinking>
+After reading the error output, use extended thinking to:
+- Identify the root cause of the compilation failure
+- Determine if this is a known anti-pattern (check list above)
+- Plan the minimal fix that resolves the error
+- Consider if there are related errors in nearby code
+- Verify your understanding before making changes
+</extended_thinking>
+</phase>
+
+<phase name="implement">
+<step number="1">
+Read the file and understand the context around the error
+</step>
+<step number="2">
+Make the smallest change that fixes the root cause
+- Follow Mojo v0.25.7+ syntax patterns
+- Avoid known anti-patterns
+- Use existing patterns from the codebase
+</step>
+<step number="3">
+Build again to verify the fix works
+</step>
+<step number="4">
+If build still fails, iterate:
+- Re-analyze the new error
+- Refine your fix
+- Try again
+- Don't give up until the build succeeds
+</step>
+</phase>
+
+<phase name="finalize">
+<step number="1">
+Verify the final build succeeds with no warnings
+</step>
+<step number="2">
+Create a git commit with descriptive message:
+Format:
+fix(module): Brief description
+
+- Root cause: [what was broken]
+- Solution: [how it was fixed]
+- Patterns used: [any Mojo patterns applied]
+</step>
+</phase>
+</workflow>
+
+<tool_usage_optimization>
+<parallel_execution>
+When you need to read multiple files, run independent commands, or gather information
+from multiple sources, execute these operations IN PARALLEL.
+
+Example: If analyzing an error requires reading 3 related files, make 3 Read tool
+calls simultaneously rather than sequentially.
+
+This is CRITICAL for performance - the script runs many files in parallel, and
+each agent should maximize its own parallelism.
+</parallel_execution>
+
+<reflection_after_tool_use>
+After receiving results from ANY tool (especially build output or error messages):
+1. Take time to THINK about what the results mean
+2. Plan your next action based on the new information
+3. Don't rush to the next step without understanding
+4. Use extended thinking for complex or unclear situations
+</reflection_after_tool_use>
+</tool_usage_optimization>
+
+<token_budget_policy>
+<ignore_context_limits>
+Your context window will be automatically managed. DO NOT stop work early due to
+token budget concerns. Even if you're approaching your context limit:
+- Continue working until the task is COMPLETE
+- Save state to files if needed
+- Don't artificially stop just because the end is approaching
+- Complete the build fix no matter how many iterations it takes
+</ignore_context_limits>
+</token_budget_policy>
+
+<success_criteria>
+The task is ONLY complete when ALL of these are true:
+1. ✅ File compiles successfully (exit code 0)
+2. ✅ No compilation errors in stderr
+3. ✅ No new warnings introduced
+4. ✅ Changes are minimal and targeted
+5. ✅ Existing APIs and behavior preserved
+6. ✅ Git commit created with clear message
+7. ✅ Commit message explains root cause and solution
+
+Do NOT stop until all criteria are met.
+</success_criteria>
+
+<examples>
+<example_1>
+Error: "cannot transfer ownership of temporary rvalue"
+
+Root cause: List[Int]() is a temporary, can't transfer to var parameter
+
+Fix:
+```mojo
+# Before (WRONG)
+var tensor = ExTensor(List[Int](), DType.int32)
+
+# After (CORRECT)
+var shape = List[Int]()
+var tensor = ExTensor(shape, DType.int32)
+```
+
+Commit message:
+fix(core): resolve ownership transfer error in tensor creation
+
+- Root cause: Temporary rvalue List[Int]() cannot transfer ownership
+- Solution: Create named variable for shape before passing to constructor
+- Pattern: Ownership transfer to var parameters requires named variable
+</example_1>
+
+<example_2>
+Error: "fn __init__(mut self, ...) should use out self"
+
+Root cause: Constructor uses deprecated mut self convention
+
+Fix:
+```mojo
+# Before (WRONG)
+fn __init__(mut self, value: Int):
+    self.value = value
+
+# After (CORRECT)
+fn __init__(out self, value: Int):
+    self.value = value
+```
+
+Commit message:
+fix(layers): update constructor to use out self parameter
+
+- Root cause: Constructor used deprecated mut self convention
+- Solution: Changed to out self per Mojo v0.25.7+ guidelines
+- Pattern: All __init__ methods must use out self
+</example_2>
+</examples>
+</task_context>"""
+
+
+def run_claude(prompt, agents_json, architect_prompt, cwd, log_path):
+    """Run Claude with the given prompt in the specified working directory."""
+    if dry_run:
+        write_log(log_path, "DRY RUN - Would run Claude here")
+        write_log(log_path, f"Prompt length: {len(prompt)} chars")
+        if verbose:
+            log(f"DRY RUN - Would process with {len(prompt)} char prompt")
+        return
+
+    allow_tools = [
+        "Read",
+        "Edit",
+        "Web",
+        "Bash(pixi:*)",
+        "Bash(mojo:*)",
+        "Bash(git status)",
+        "Bash(git diff)",
+        "Bash(git add:*)",
+        "Bash(git commit:*)",
+    ]
+
+    # Reference the chief-architect file instead of passing content
+    architect_file = Path(".claude/agents/chief-architect.md")
+    system_prompt_addition = f"See {architect_file} for chief architect guidance."
+
+    # Build command - pass prompt via stdin to avoid ARG_MAX
+    cmd = [
+        "claude",
+        "-p",
+        "--permission-mode",
+        "dontAsk",
+        "--dangerously-skip-permissions",
+        "--append-system-prompt",
+        system_prompt_addition,
+        "--allowedTools",
+        ",".join(allow_tools),
+        "--add-dir",
+        ".claude",
+    ]
+
+    write_log(log_path, "RUNNING CLAUDE")
+    if verbose:
+        log(f"Running Claude with {len(prompt)} char prompt in {cwd}")
+
+    # Pass prompt via stdin
+    r = subprocess.run(
+        cmd,
+        cwd=cwd,
+        text=True,
+        input=prompt,
+        capture_output=True,
+        timeout=CLAUDE_TIMEOUT,
+    )
+
+    write_log(log_path, r.stdout)
+    write_log(log_path, r.stderr)
+
+    if verbose:
+        if r.returncode == 0:
+            log(f"✓ Claude completed successfully in {cwd}")
+        else:
+            log(f"✗ Claude failed (exit={r.returncode}) in {cwd}")
+
+
+# ---------------- Worker ----------------
+
+
+def worker_wrapper(file, root, agents_json, architect_prompt):
+    """Wrapper that respects semaphore and stop event."""
+    if stop_processing.is_set():
+        log(f"Skipping {file} - processing stopped")
+        return
+
+    # Don't acquire semaphore in wrapper - let ThreadPoolExecutor handle it
+    try:
+        process_file(file, root, agents_json, architect_prompt)
+    except Exception as e:
+        log(f"ERROR processing {file}: {e}")
+        if "rate limit" in str(e).lower() or "quota" in str(e).lower():
+            log("Claude Code limit hit - stopping all processing")
+            stop_processing.set()
+            raise
+
+
+def process_file(file, root, agents_json, architect_prompt):
+    """Process a single file with isolated worktree and Claude agent."""
+    agent_id = uuid.uuid4().hex[:8]
+    branch = f"{BASE_BRANCH}-agent-{agent_id}"
+    log_path = LOG_DIR / f"{branch}.log"
+
+    write_log(log_path, f"FILE {file}")
+    write_log(log_path, f"BRANCH {branch}")
+
+    if verbose:
+        log(f"[{agent_id}] Processing {file}")
+
+    wt = create_worktree(branch)
+
+    try:
+        # CRITICAL: Check if file already compiles
+        write_log(log_path, "Checking if file compiles...")
+        if verbose:
+            log(f"[{agent_id}] Checking build status...")
+
+        if build_ok(wt, root, file, log_path):
+            write_log(log_path, "File already compiles - skipping fixes")
+            if verbose:
+                log(f"[{agent_id}] ✓ {file} already compiles")
+            return
+
+        write_log(log_path, "File has compilation errors - running Claude")
+        if verbose:
+            log(f"[{agent_id}] ✗ {file} has errors - fixing...")
+
+        # Build comprehensive prompt
+        prompt = build_prompt(file, root)
+
+        # Run Claude with enhanced prompt
+        run_claude(prompt, agents_json, architect_prompt, wt, log_path)
+
+        # Check if Claude made a commit
+        if not has_commit(wt):
+            write_log(log_path, "NO COMMIT — Claude did not fix the file")
+            return
+
+        # Rebase and push loop
+        for attempt in range(MAX_REBASE_ATTEMPTS):
+            write_log(log_path, f"Rebase attempt {attempt + 1}/{MAX_REBASE_ATTEMPTS}")
+
+            if not rebase_onto_base(wt, log_path):
+                write_log(log_path, "Rebase failed - running Claude to resolve conflicts")
+                run_claude(prompt, agents_json, architect_prompt, wt, log_path)
+                continue
+
+            # Verify build still passes after rebase
+            if not build_ok(wt, root, file, log_path):
+                write_log(log_path, "Build failed after rebase - abandoning")
+                return
+
+            # Verify git state is clean
+            if not ensure_clean_git(wt, log_path):
+                write_log(log_path, "Dirty worktree - abandoning")
+                return
+
+            # Try to push
+            if push_with_lease(wt, log_path):
+                write_log(log_path, f"SUCCESS - {file} fixed and merged")
+                return
+
+            write_log(log_path, f"Push rejected - will retry (attempt {attempt + 1})")
+
+        write_log(log_path, f"GAVE UP after {MAX_REBASE_ATTEMPTS} attempts")
+
+    except Exception as e:
+        write_log(log_path, f"EXCEPTION: {e}")
+        if "rate limit" in str(e).lower() or "quota" in str(e).lower():
+            log("⚠️  Claude Code limit hit - stopping all processing")
+            stop_processing.set()
+            raise
+    finally:
+        cleanup_worktree(wt)
+
+
+# ---------------- Main ----------------
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", "-i", required=True, help="File containing list of files to process")
+    parser.add_argument("--root", "-r", required=True, help="Root directory for include paths")
+    parser.add_argument("--workers", "-w", type=int, default=MAX_WORKERS_DEFAULT, help="Number of parallel workers")
+    parser.add_argument("--dry-run", action="store_true", help="Test run without actually calling Claude")
+    parser.add_argument("--limit", "-n", type=int, help="Only process first N files (for testing)")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging")
+    args = parser.parse_args()
+
+    # Set global flags
+    global dry_run, verbose
+    dry_run = args.dry_run
+    verbose = args.verbose
+
+    if dry_run:
+        log("🔍 DRY RUN MODE - Will not execute Claude or make changes")
+
+    if verbose:
+        log("📢 VERBOSE MODE - Detailed logging enabled")
+
+    ensure_base_branch()
+
+    files = Path(args.input).read_text().splitlines()
+    WORKTREE_BASE.mkdir(parents=True, exist_ok=True)
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+
+    agent_dir = Path(".claude/agents")
+    architect_prompt = load_text(agent_dir / "chief-architect.md")
+    agents_json = build_agents_json(agent_dir)
+
+    # Update the global semaphore with the actual worker count
+    global active_workers
+    active_workers = threading.Semaphore(args.workers)
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as pool:
+        # Filter out empty lines
+        files_to_process = [f for f in files if f.strip()]
+
+        # Apply limit if specified
+        if args.limit:
+            files_to_process = files_to_process[: args.limit]
+            log(f"⚠️  LIMIT MODE - Processing only first {args.limit} files")
+
+        log(f"Processing {len(files_to_process)} files with {args.workers} workers")
+
+        # Submit jobs incrementally with stop-processing check
+        futures = []
+        for file in files_to_process:
+            if stop_processing.is_set():
+                log("Stopping - Claude Code limit reached")
+                break
+            future = pool.submit(worker_wrapper, file, args.root, agents_json, architect_prompt)
+            futures.append(future)
+
+        # Wait for completion
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                future.result()
+            except Exception as e:
+                log(f"Worker failed: {e}")
+
+        if stop_processing.is_set():
+            log("⚠️  Processing stopped due to Claude Code limit")
+        else:
+            log(f"✓ Completed processing {len(files_to_process)} files")
+
+
+if __name__ == "__main__":
+    main()
