@@ -67,8 +67,7 @@ struct SavedTensors(Copyable, Movable):
     fn add_tensor(mut self, tensor: ExTensor) raises:
         """Save a tensor for backward pass.
 
-        Returns:
-            None. Modifies self in-place by appending tensor to internal storage.
+        Modifies self in-place by appending tensor to internal storage.
 
         Raises:
             Error: If operation fails.

@@ -292,9 +292,11 @@ struct GradientTape:
             Error: If operation fails.
 
         Examples:
+        ```
             var loss = compute_loss(x)
             var ones = ones_like(loss.data)
             tape.backward(loss.id, ones)  # Populates x.grad
+        ```
         """
         # Set the gradient of the output
         self.registry.set_grad(output_id, output_grad)

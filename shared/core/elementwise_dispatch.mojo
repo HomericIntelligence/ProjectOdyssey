@@ -298,7 +298,7 @@ struct ExpOp(ElementwiseUnaryOp):
             value: Input value.
 
         Returns:
-            e^value.
+            Returns e^value.
         """
         return math_exp(value)
 
@@ -320,7 +320,7 @@ struct LogOp(ElementwiseUnaryOp):
             value: Input value.
 
         Returns:
-            ln(value), -inf for 0, NaN for negative.
+            Returns ln(value), -inf for 0, NaN for negative.
         """
         # Return -inf for 0, NaN for negative (matches IEEE 754 behavior)
         return math_log(value)
@@ -343,7 +343,7 @@ struct SqrtOp(ElementwiseUnaryOp):
             value: Input value.
 
         Returns:
-            sqrt(value), NaN for negative values.
+            Return sqrt(value), NaN for negative values.
         """
         # math_sqrt returns NaN for negative inputs (IEEE 754 behavior)
         return math_sqrt(value)
@@ -363,7 +363,7 @@ struct SinOp(ElementwiseUnaryOp):
             value: Input value in radians.
 
         Returns:
-            sin(value).
+            Return sin(value).
         """
         return math_sin(value)
 
@@ -382,7 +382,7 @@ struct CosOp(ElementwiseUnaryOp):
             value: Input value in radians.
 
         Returns:
-            cos(value).
+            Return cos(value).
         """
         return math_cos(value)
 
@@ -401,7 +401,7 @@ struct TanhOp(ElementwiseUnaryOp):
             value: Input value.
 
         Returns:
-            tanh(value).
+            Return tanh(value).
         """
         return math_tanh(value)
 
@@ -464,7 +464,7 @@ struct ReciprocalOp(ElementwiseUnaryOp):
             value: Input value.
 
         Returns:
-            1/value, inf for zero.
+            Return 1/value, inf for zero.
         """
         # Division by zero returns inf (IEEE 754 behavior)
         return 1.0 / value
@@ -484,7 +484,7 @@ struct SquareOp(ElementwiseUnaryOp):
             value: Input value.
 
         Returns:
-            x squared.
+            Return x squared.
         """
         return value * value
 
@@ -503,7 +503,7 @@ struct SignOp(ElementwiseUnaryOp):
             value: Input value.
 
         Returns:
-            1.0 if positive, -1.0 if negative, 0.0 otherwise.
+            Return 1.0 if positive, -1.0 if negative, 0.0 otherwise.
         """
         if value > 0.0:
             return 1.0
@@ -533,7 +533,7 @@ struct AddOp(ElementwiseBinaryOp):
             b: Second input value.
 
         Returns:
-            a + b.
+            Return a + b.
         """
         return a + b
 
@@ -553,7 +553,7 @@ struct SubtractOp(ElementwiseBinaryOp):
             b: Second input value.
 
         Returns:
-            a - b.
+            Return a - b.
         """
         return a - b
 
@@ -573,7 +573,7 @@ struct MultiplyOp(ElementwiseBinaryOp):
             b: Second input value.
 
         Returns:
-            a * b.
+            Return a * b.
         """
         return a * b
 
@@ -596,7 +596,7 @@ struct DivideOp(ElementwiseBinaryOp):
             b: Second input value.
 
         Returns:
-            a / b, inf for division by zero.
+            Return a / b, inf for division by zero.
         """
         # Division by zero returns inf (IEEE 754 behavior)
         return a / b
@@ -620,12 +620,14 @@ struct PowerOp(ElementwiseBinaryOp):
             b: Exponent value.
 
         Returns:
-            a^b using IEEE 754 semantics.
+            Return a^b using IEEE 754 semantics.
 
         Uses IEEE 754 semantics:
+        ```
         - 0^negative = inf
         - negative^non-integer = NaN
         - 0^0 = 1 (by convention)
+        ```
         """
         # Use exp and log for general case: a^b = exp(b * ln(a))
         # This naturally handles edge cases with IEEE 754 semantics:
@@ -703,7 +705,7 @@ struct EqualOp(ElementwiseBinaryOp):
             b: Second input value.
 
         Returns:
-            1.0 if a == b, else 0.0.
+            Return 1.0 if a == b, else 0.0.
         """
         if a == b:
             return 1.0
@@ -726,7 +728,7 @@ struct GreaterOp(ElementwiseBinaryOp):
             b: Second input value.
 
         Returns:
-            1.0 if a > b, else 0.0.
+            Return 1.0 if a > b, else 0.0.
         """
         if a > b:
             return 1.0
@@ -749,7 +751,7 @@ struct GreaterEqualOp(ElementwiseBinaryOp):
             b: Second input value.
 
         Returns:
-            1.0 if a >= b, else 0.0.
+            Return 1.0 if a >= b, else 0.0.
         """
         if a >= b:
             return 1.0
@@ -772,7 +774,7 @@ struct LessOp(ElementwiseBinaryOp):
             b: Second input value.
 
         Returns:
-            1.0 if a < b, else 0.0.
+            Return 1.0 if a < b, else 0.0.
         """
         if a < b:
             return 1.0
@@ -795,7 +797,7 @@ struct LessEqualOp(ElementwiseBinaryOp):
             b: Second input value.
 
         Returns:
-            1.0 if a <= b, else 0.0.
+            Return 1.0 if a <= b, else 0.0.
         """
         if a <= b:
             return 1.0
@@ -818,7 +820,7 @@ struct LogicalAndOp(ElementwiseBinaryOp):
             b: Second input value.
 
         Returns:
-            1.0 if both non-zero, else 0.0.
+            Return 1.0 if both non-zero, else 0.0.
         """
         if (a != 0.0) and (b != 0.0):
             return 1.0
@@ -841,7 +843,7 @@ struct LogicalOrOp(ElementwiseBinaryOp):
             b: Second input value.
 
         Returns:
-            1.0 if either non-zero, else 0.0.
+            Return 1.0 if either non-zero, else 0.0.
         """
         if (a != 0.0) or (b != 0.0):
             return 1.0

@@ -515,9 +515,11 @@ fn test_normal_distribution(sample_count: Int = 1000) -> Bool:
             True if KS test passes (D < critical value), False otherwise.
 
     Note:
+    ```
             Uses KS critical value ≈ 0.0418 for n=1000 at α=0.05.
             For smaller samples, uses approximate formula:
             D_critical ≈ 1.36 / sqrt(n)
+    ```
     """
     from math import sqrt, erf, log, pi, exp
 

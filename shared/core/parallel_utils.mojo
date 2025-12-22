@@ -20,11 +20,11 @@ fn should_parallelize(
     """Determine if batch size warrants parallel execution.
 
     Args:
-        batch_size: Number of batch elements
-        threshold: Minimum batch size for parallelization
+        batch_size: Number of batch elements.
+        threshold: Minimum batch size for parallelization.
 
     Returns:
-        True if parallelization is beneficial
+        True if parallelization is beneficial.
     """
     return batch_size >= threshold
 
@@ -34,10 +34,11 @@ fn parallel_for_batch[
 ](batch_size: Int, num_workers: Int = DEFAULT_NUM_WORKERS):
     """Execute function across batch indices in parallel.
 
+    Parameters:
+        func: Function to execute for each batch index.
     Args:
-        func: Function to execute for each batch index
-        batch_size: Number of batch elements
-        num_workers: Number of worker threads (0 = auto)
+        batch_size: Number of batch elements.
+        num_workers: Number of worker threads (0 = auto).
     """
     if num_workers > 0:
         parallelize[func](batch_size, num_workers)

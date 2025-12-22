@@ -816,19 +816,19 @@ fn outer(a: ExTensor, b: ExTensor) raises -> ExTensor:
 fn inner(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Generalized inner product of two tensors.
 
-    For 1D tensors: equivalent to dot product (returns scalar)
-    For 2D tensors: matrix inner product (sum over last axes)
-    For ND tensors: sum over last axis of a and second-to-last axis of b
+    For 1D tensors: equivalent to dot product (returns scalar).
+    For 2D tensors: matrix inner product (sum over last axes).
+    For ND tensors: sum over last axis of a and second-to-last axis of b.
 
     Args:
-        a: First tensor
-        b: Second tensor
+        a: First tensor.
+        b: Second tensor.
 
     Returns:
-        Inner product result tensor
+        Inner product result tensor.
 
     Raises:
-        Error if shapes are incompatible
+        Error if shapes are incompatible.
 
     Examples:
         ```
@@ -910,15 +910,15 @@ fn tensordot(a: ExTensor, b: ExTensor, axes: Int) raises -> ExTensor:
     Contracts the last `axes` dimensions of `a` with the first `axes` dimensions of `b`.
 
     Args:
-        a: First tensor
-        b: Second tensor
-        axes: Number of axes to contract
+        a: First tensor.
+        b: Second tensor.
+        axes: Number of axes to contract.
 
     Returns:
-        Contracted tensor result
+        Contracted tensor result.
 
     Raises:
-        Error if shapes are incompatible
+        Error if shapes are incompatible.
 
     Examples:
         ```
@@ -1075,7 +1075,7 @@ fn _matmul_2d_2d_grad_a_impl[
         grad_out_cols: Number of columns in grad_output (= number of rows in B^T).
         b_rows: Number of rows in B (= number of columns in B^T).
 
-    Computation: grad_a[i, j] = sum_n (grad_output[i, n] * B[j, n])
+    Computation: `grad_a[i, j] = sum_n (grad_output[i, n] * B[j, n])`
     """
     var grad_ptr = grad_output._data.bitcast[Scalar[dtype]]()
     var b_ptr = b._data.bitcast[Scalar[dtype]]()
@@ -1116,7 +1116,7 @@ fn _matmul_2d_2d_grad_b_impl[
         a_cols: Number of columns in A.
         grad_out_cols: Number of columns in grad_output.
 
-    Computation: grad_b[j, n] = sum_i (A[i, j] * grad_output[i, n])
+    Computation: `grad_b[j, n] = sum_i (A[i, j] * grad_output[i, n])`
     """
     var a_ptr = a._data.bitcast[Scalar[dtype]]()
     var grad_ptr = grad_output._data.bitcast[Scalar[dtype]]()

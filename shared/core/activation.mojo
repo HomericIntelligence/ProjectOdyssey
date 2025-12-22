@@ -202,6 +202,7 @@ fn _prelu_impl[
 
     Parameters:
             dtype: Compile-time dtype parameter.
+    Args:
             result: Output tensor (pre-allocated with same shape as input).
             tensor: Input tensor.
             alpha: Learnable slope parameter (scalar or element-wise).
@@ -934,8 +935,8 @@ fn swish(tensor: ExTensor) raises -> ExTensor:
 fn softplus(tensor: ExTensor, beta: Float64 = 1.0) raises -> ExTensor:
     """Softplus activation function with fused kernel (7x allocation reduction).
 
-    Computes softplus(x) = (1/beta) * log(1 + exp(beta * x)) element-wise.
-    Uses numerically stable formula: max(0, x) + log(1 + exp(-|x|)) when beta=1.
+    Computes `softplus(x) = (1/beta) * log(1 + exp(beta * x))` element-wise.
+    Uses numerically stable formula: `max(0, x) + log(1 + exp(-|x|)) when beta=1`.
 
     This fused implementation allocates only 1 output tensor instead of 7
     intermediate tensors, providing significant memory and performance benefits.
@@ -948,8 +949,8 @@ fn softplus(tensor: ExTensor, beta: Float64 = 1.0) raises -> ExTensor:
         Output tensor with softplus applied element-wise.
 
     Performance:
-        Before (unfused): 7 tensor allocations per call
-        After (fused): 1 tensor allocation per call (7x reduction)
+        Before (unfused): 7 tensor allocations per call.
+        After (fused): 1 tensor allocation per call (7x reduction).
     """
     var result = zeros_like(tensor)
     var data_ptr = tensor._data

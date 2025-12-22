@@ -36,9 +36,6 @@ trait Sampler:
 
         Returns:
             List of indices in the order they should be accessed.
-
-        Raises:
-            Error: If iteration fails.
         """
         ...
 

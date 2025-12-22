@@ -118,6 +118,7 @@ fn evaluate_model[
         Error: If batch sizes don't match or shapes are incompatible.
 
     Examples:
+    ```
         Generic evaluation with any model
 
         var result = evaluate_model(model, test_images, test_labels, batch_size=100)
@@ -128,6 +129,7 @@ fn evaluate_model[
         for i in range(num_classes):
             var class_acc = Float32(result.correct_per_class[i]) / Float32(result.total_per_class[i])
             print("Class ", i, " accuracy: ", class_acc)
+    ```
     """
     var num_samples = images.shape()[0]
     var num_batches = compute_num_batches(num_samples, batch_size)
@@ -255,10 +257,12 @@ fn evaluate_model_simple[
         Error: If batch sizes don't match or shapes are incompatible.
 
     Examples:
+    ```
         Simple overall accuracy
 
         var accuracy = evaluate_model_simple(model, test_images, test_labels)
         print("Test Accuracy: ", accuracy * 100.0, "%")
+    ```
     """
     var num_samples = images.shape()[0]
     var num_batches = compute_num_batches(num_samples, batch_size)
@@ -353,10 +357,12 @@ fn evaluate_topk[
         Error: If k > num_classes or shapes are incompatible.
 
     Examples:
+    ```
         Top-5 accuracy for ImageNet-like tasks
 
         var top5_acc = evaluate_topk(model, test_images, test_labels, k=5)
         print("Top-5 Accuracy: ", top5_acc * 100.0, "%")
+    ```
     """
     if k > num_classes:
         raise Error("evaluate_topk: k must be <= num_classes")
