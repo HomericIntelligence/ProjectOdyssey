@@ -549,6 +549,7 @@ fn uniform(
             Error: If low >= high.
 
     Examples:
+    ```
             # Default range [-0.1, 0.1]
             var weights = uniform([100, 50])
 
@@ -557,7 +558,7 @@ fn uniform(
 
             # With fixed seed
             var w_repro = uniform([50, 50], seed_val=42)
-
+    ```
     """
     if low >= high:
         raise Error("uniform: low must be less than high")
@@ -604,6 +605,7 @@ fn normal(
             Error: If std <= 0.
 
     Examples:
+    ```
             # Default: N(0, 0.01)
             var weights = normal([100, 50])
 
@@ -612,7 +614,7 @@ fn normal(
 
             # With fixed seed
             var w_repro = normal([50, 50], seed_val=42)
-
+    ```
     """
     if std <= 0.0:
         raise Error("normal: standard deviation must be positive")
@@ -650,6 +652,7 @@ fn constant(
         Error: If operation fails.
 
     Examples:
+    ```
             # Initialize with ones
             var ones = constant([10, 10], 1.0)
 
@@ -658,7 +661,7 @@ fn constant(
 
             # Initialize bias with 0.01
             var bias = constant(List[Int](), 0.01)
-
+    ```
     """
     var result = ExTensor(shape, dtype)
     _dispatch_fill_constant(result, value)

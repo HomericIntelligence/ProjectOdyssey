@@ -222,10 +222,12 @@ fn create_metric_summary(results: List[MetricResult]) -> String:
         Formatted string with all metrics.
 
     Example output:
+    ```
         Metrics Summary:
             accuracy: 0.9234
             loss: 0.1523
             f1_score: 0.9102
+    ```
     """
     var summary = "Metrics Summary:\n"
 

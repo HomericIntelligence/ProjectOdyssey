@@ -116,11 +116,11 @@ trait ReduceOp:
         - apply(apply(a, b), c) == apply(a, apply(b, c))
 
         Args:
-            acc: Current accumulator value
-            val: Next value to accumulate
+            acc: Current accumulator value.
+            val: Next value to accumulate.
 
         Returns:
-            Updated accumulator value
+            Updated accumulator value.
         """
         ...
 
@@ -133,11 +133,11 @@ trait ReduceOp:
         - The number of values that were accumulated
 
         Args:
-            acc: Final accumulated value
-            count: Number of values that were accumulated
+            acc: Final accumulated value.
+            count: Number of values that were accumulated.
 
         Returns:
-            Final result value
+            Final result value.
         """
         ...
 
@@ -148,7 +148,7 @@ trait ReduceOp:
         backward pass because gradients only flow to the extremum elements.
 
         Returns:
-            True if this is max/min, False otherwise
+            True if this is max/min, False otherwise.
         """
         ...
 
@@ -159,18 +159,20 @@ trait ReduceOp:
         For non-extremum operations, this is never called.
 
         Args:
-            val: Candidate value
-            current_best: Current best value
+            val: Candidate value.
+            current_best: Current best value.
 
         Returns:
-            True if val should replace current_best, False otherwise
+            True if val should replace current_best, False otherwise.
 
         Examples:
+        ```
             # For max operation
             return val > current_best
 
             # For min operation
             return val < current_best
+        ```
         """
         ...
 
@@ -197,6 +199,7 @@ trait ReduceBackwardOp:
         - For extremum ops, must only allocate gradient to extremum elements
 
     Example:
+    ```
         struct SumBackwardOp(ReduceBackwardOp):
             '''Backward for sum: gradient flows equally to all inputs.'''
             fn __init__(out self): pass
@@ -205,6 +208,7 @@ trait ReduceBackwardOp:
                 return grad_output_val  # Gradient unchanged
 
         var grad = reduce_backward[SumBackwardOp](grad_output, input, axis)
+    ```
     """
 
     fn __init__(out self):
@@ -222,28 +226,28 @@ trait ReduceBackwardOp:
 
         This function must implement the backward pass for the corresponding
         forward reduction operation. It receives:
-        - The upstream gradient (from grad_output)
-        - The original input value at this position
-        - All values along the reduction axis (for extremum operations)
-        - The count of values in the reduction
+        - The upstream gradient (from grad_output).
+        - The original input value at this position.
+        - All values along the reduction axis (for extremum operations).
+        - The count of values in the reduction.
 
         For sum/mean operations:
             Simply scale the gradient according to the reduction semantics.
 
         For extremum operations (max/min):
-            - Find the extremum value in axis_values
-            - Count how many elements have the extremum value
-            - Only allocate gradient to extremum elements (split equally)
-            - Return 0.0 for non-extremum elements
+            - Find the extremum value in axis_values.
+            - Count how many elements have the extremum value.
+            - Only allocate gradient to extremum elements (split equally).
+            - Return 0.0 for non-extremum elements.
 
         Args:
-            grad_output_val: Upstream gradient for this reduction result
-            input_val: Original input value at this position
-            axis_values: All values along the reduction axis
-            count: Number of elements in the reduction
+            grad_output_val: Upstream gradient for this reduction result.
+            input_val: Original input value at this position.
+            axis_values: All values along the reduction axis.
+            count: Number of elements in the reduction.
 
         Returns:
-            Gradient for this input element
+            Gradient for this input element.
         """
         ...
 

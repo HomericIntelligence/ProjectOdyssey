@@ -398,7 +398,7 @@ struct DataLoader(Copyable, Movable):
 
 fn create_simple_dataloader(
     var data: ExTensor, var labels: ExTensor, batch_size: Int
-) -> DataLoader:
+) raises -> DataLoader:
     """Create a simple dataloader for training.
 
     Args:

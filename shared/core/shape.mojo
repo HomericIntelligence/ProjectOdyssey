@@ -873,13 +873,13 @@ fn tile(tensor: ExTensor, reps: List[Int]) raises -> ExTensor:
     var padded_reps = List[Int]()
 
     # Pad input shape on the left
-    for i in range(out_ndim - ndim):
+    for _ in range(out_ndim - ndim):
         padded_shape.append(1)
     for i in range(ndim):
         padded_shape.append(shape[i])
 
     # Pad reps on the left
-    for i in range(out_ndim - nreps):
+    for _ in range(out_ndim - nreps):
         padded_reps.append(1)
     for i in range(nreps):
         padded_reps.append(reps[i])
@@ -916,7 +916,7 @@ fn tile(tensor: ExTensor, reps: List[Int]) raises -> ExTensor:
             src_idx += src_coord * src_stride
 
         # Adjust for original tensor dimensions
-        var adjusted_idx = 0
+        # FIXME(unused) var adjusted_idx = 0
         if out_ndim > ndim:
             # Remove padding from source index calculation
             var temp_idx = src_idx
@@ -1133,7 +1133,7 @@ fn permute(tensor: ExTensor, dims: List[Int]) raises -> ExTensor:
 
     # Validate dims is a permutation of [0..ndim-1]
     var seen = List[Bool]()
-    for i in range(ndim):
+    for _ in range(ndim):
         seen.append(False)
 
     for i in range(ndim):
@@ -1176,7 +1176,7 @@ fn permute(tensor: ExTensor, dims: List[Int]) raises -> ExTensor:
 
         # Compute source coordinates by inverse permutation
         var src_coords = List[Int]()
-        for j in range(ndim):
+        for _ in range(ndim):
             src_coords.append(0)  # Initialize
 
         for j in range(ndim):

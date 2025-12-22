@@ -16,7 +16,7 @@ repos:
       - id: mojo-format
         name: Mojo Format
         description: Format Mojo source files using mojo format (skips if mojo not available)
-        entry: mojo format --
+        entry: pixi run mojo format
         language: system
         files: ^(benchmarks|examples|papers|scripts|shared|tests)/.*\.(mojo|🔥)$
         pass_filenames: true

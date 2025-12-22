@@ -1441,9 +1441,11 @@ fn sin_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
             Gradient w.r.t. input (∂L/∂X).
 
     Examples:
+    ```
             var x = full([3, 4], pi/2)
             var grad_y = ones([3, 4])
             var grad_x = sin_backward(grad_y, x)  # grad_x = grad_y * cos(pi/2) ≈ 0
+    ```
     """
     var result = ExTensor(grad_output.shape(), grad_output.dtype())
     _dispatch_sin_backward(result, grad_output, x, grad_output.numel())
@@ -1464,9 +1466,11 @@ fn cos_backward(grad_output: ExTensor, x: ExTensor) raises -> ExTensor:
             Gradient w.r.t. input (∂L/∂X).
 
     Examples:
+    ```
             var x = full([3, 4], 0.0)
             var grad_y = ones([3, 4])
             var grad_x = cos_backward(grad_y, x)  # grad_x = grad_y * (-sin(0)) = 0
+    ```
     """
     var result = ExTensor(grad_output.shape(), grad_output.dtype())
     _dispatch_cos_backward(result, grad_output, x, grad_output.numel())
