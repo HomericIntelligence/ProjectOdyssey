@@ -33,7 +33,7 @@ comptime DEFAULT_NUM_CLASSES = 47
 
 # EMNIST Balanced class mapping (47 classes)
 # 0-9: digits, 10-35: uppercase letters, 36-46: lowercase letters (select)
-comptime CLASS_NAMES = List[String](
+comptime CLASS_NAMES: List[String] = [
     "0",
     "1",
     "2",
@@ -81,7 +81,7 @@ comptime CLASS_NAMES = List[String](
     "q",
     "r",
     "t",  # 36-46 (select lowercase)
-)
+]
 
 
 struct InferenceConfig:
@@ -188,8 +188,6 @@ fn evaluate_test_set(
 
     print("Evaluating on", num_samples, "test samples...")
 
-    # Use batched processing to avoid memory issues
-    var eval_batch_size = 32
     var predictions = List[Int]()
 
     # Collect predictions for all samples
