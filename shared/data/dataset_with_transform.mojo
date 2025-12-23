@@ -15,8 +15,8 @@ Example:
 """
 
 from shared.core.extensor import ExTensor
-from .datasets import Dataset
-from .transforms import Transform
+from shared.data._datasets_core import Dataset
+from shared.data.transforms import Transform
 
 
 struct TransformedDataset[
