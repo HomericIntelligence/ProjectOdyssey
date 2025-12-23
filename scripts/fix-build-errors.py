@@ -31,7 +31,7 @@ REMOTE = "origin"
 
 ROOT = Path.cwd()
 WORKTREE_BASE = ROOT / "worktrees"
-LOG_DIR = ROOT / ".claude" / "logs"
+LOG_DIR = ROOT / "build" / "logs"
 
 print_lock = threading.Lock()
 stop_processing = threading.Event()
@@ -86,12 +86,42 @@ def build_cmd(root, file):
 
 
 def build_ok(cwd, root, file, log_path) -> bool:
+    write_log(log_path, f"Building: {file}")
+
+    if verbose:
+        cmd_str = " ".join(str(c) for c in build_cmd(root, file))
+        log(f"  Running: {cmd_str}")
+
     r = run(build_cmd(root, file), cwd=cwd, timeout=BUILD_TIMEOUT)
-    write_log(log_path, r.stderr)
-    if r.returncode == 0:
-        write_log(log_path, "BUILD OK")
+
+    write_log(log_path, "Build output:")
+    write_log(log_path, r.stderr if r.stderr else "(no output)")
+    write_log(log_path, f"Build exit code: {r.returncode}")
+
+    if verbose and r.stderr:
+        # Show first 10 lines of build errors/warnings
+        error_lines = r.stderr.split("\n")[:10]
+        log("  Build errors/warnings (first 10 lines):")
+        for line in error_lines:
+            log(f"    {line}")
+
+    # Check for warnings in stderr (case-insensitive)
+    has_warnings = False
+    if r.stderr and "warning:" in r.stderr.lower():
+        has_warnings = True
+        write_log(log_path, "BUILD HAS WARNINGS")
+
+    if r.returncode == 0 and not has_warnings:
+        write_log(log_path, "BUILD OK (no errors, no warnings)")
         return True
-    write_log(log_path, f"BUILD FAILED (exit={r.returncode})")
+
+    if has_warnings:
+        write_log(log_path, "BUILD FAILED (warnings present)")
+        if verbose:
+            log("  ✗ Build has warnings - must be fixed")
+    else:
+        write_log(log_path, f"BUILD FAILED (exit={r.returncode})")
+
     return False
 
 
@@ -125,12 +155,26 @@ def create_worktree(branch):
     """Create worktree branching from latest main."""
     path = WORKTREE_BASE / branch
     if path.exists():
+        if verbose:
+            log(f"  Removing existing worktree directory: {path}")
         shutil.rmtree(path, ignore_errors=True)
 
     # Fetch latest main before creating worktree
-    run(["git", "fetch", REMOTE, BASE_BRANCH])
+    if verbose:
+        log(f"  Fetching latest {REMOTE}/{BASE_BRANCH}")
+    r = run(["git", "fetch", REMOTE, BASE_BRANCH])
+    if r.returncode != 0:
+        raise RuntimeError(f"Failed to fetch {REMOTE}/{BASE_BRANCH}: {r.stderr}")
 
-    run(
+    # Delete existing branch if it exists (git branch -D is idempotent)
+    if verbose:
+        log(f"  Deleting branch {branch} if it exists")
+    run(["git", "branch", "-D", branch])  # Ignore errors - branch may not exist
+
+    # Create worktree with new branch
+    if verbose:
+        log(f"  Creating worktree at {path} with branch {branch}")
+    r = run(
         [
             "git",
             "worktree",
@@ -138,10 +182,16 @@ def create_worktree(branch):
             "--force",
             "-b",
             branch,
-            path,
+            str(path),
             f"{REMOTE}/{BASE_BRANCH}",
         ]
     )
+    if r.returncode != 0:
+        raise RuntimeError(f"Failed to create worktree: {r.stderr}")
+
+    if verbose:
+        log(f"  ✓ Worktree created at {path}")
+
     return path
 
 
@@ -291,8 +341,10 @@ Each agent creates a separate pull request for review.
 <critical_first_step>
 BEFORE doing anything else:
 1. Run the build command to see if the file already compiles successfully
-2. If it compiles (exit code 0, no errors), do NOT make any changes - just exit
-3. Only proceed with fixes if there are actual compilation errors
+2. If it compiles (exit code 0, no errors, no warnings), do NOT make any changes - just exit
+3. Proceed with fixes if there are compilation errors OR warnings
+
+IMPORTANT: The build must produce ZERO warnings. Warnings are NOT acceptable and must be fixed.
 
 Build command:
 pixi run mojo build -g --no-optimization --validate-doc-strings -I {root} {file} -o build/debug/{Path(file).stem}
@@ -351,20 +403,20 @@ Read ALL relevant documentation before attempting fixes.
 Run build command to check current status
 </step>
 <step number="2">
-If compilation succeeds (exit code 0), STOP - no fixes needed
+If compilation succeeds (exit code 0) AND produces zero warnings, STOP - no fixes needed
 </step>
 <step number="3">
-If compilation fails, capture and analyze the error output
+If compilation fails OR produces warnings, capture and analyze the error/warning output
 </step>
 </phase>
 
 <phase name="analyze">
 <extended_thinking>
-After reading the error output, use extended thinking to:
-- Identify the root cause of the compilation failure
+After reading the error/warning output, use extended thinking to:
+- Identify the root cause of the compilation failure or warning
 - Determine if this is a known anti-pattern (check list above)
-- Plan the minimal fix that resolves the error
-- Consider if there are related errors in nearby code
+- Plan the minimal fix that resolves the error/warning
+- Consider if there are related errors/warnings in nearby code
 - Verify your understanding before making changes
 </extended_thinking>
 </phase>
@@ -393,7 +445,10 @@ If build still fails, iterate:
 
 <phase name="finalize">
 <step number="1">
-Verify the final build succeeds with no warnings
+Verify the final build succeeds with ZERO warnings
+- Exit code must be 0
+- Stderr must contain NO warning messages
+- If any warnings remain, go back to analyze phase and fix them
 </step>
 <step number="2">
 Create a git commit with descriptive message:
@@ -443,13 +498,13 @@ token budget concerns. Even if you're approaching your context limit:
 The task is ONLY complete when ALL of these are true:
 1. ✅ File compiles successfully (exit code 0)
 2. ✅ No compilation errors in stderr
-3. ✅ No new warnings introduced
+3. ✅ ZERO warnings in stderr (ALL warnings must be fixed, not just avoiding new ones)
 4. ✅ Changes are minimal and targeted
 5. ✅ Existing APIs and behavior preserved
 6. ✅ Git commit created with clear message
 7. ✅ Commit message explains root cause and solution
 
-Do NOT stop until all criteria are met.
+CRITICAL: Do NOT stop until all criteria are met, especially the ZERO warnings requirement.
 </success_criteria>
 
 <examples>
@@ -516,6 +571,7 @@ def run_claude(prompt, agents_json, architect_prompt, cwd, log_path):
         "Read",
         "Edit",
         "Web",
+        "Bash(gh:*)",
         "Bash(pixi:*)",
         "Bash(mojo:*)",
         "Bash(git status)",
@@ -543,9 +599,23 @@ def run_claude(prompt, agents_json, architect_prompt, cwd, log_path):
         ".claude",
     ]
 
+    write_log(log_path, "=" * 80)
+    write_log(log_path, "CLAUDE PROMPT (INPUT)")
+    write_log(log_path, "=" * 80)
+    write_log(log_path, prompt)
+    write_log(log_path, "=" * 80)
     write_log(log_path, "RUNNING CLAUDE")
+    write_log(log_path, "=" * 80)
+
     if verbose:
         log(f"Running Claude with {len(prompt)} char prompt in {cwd}")
+        log("Prompt sent:")
+        # Show first 500 chars of prompt in console
+        log(prompt[:500] + "..." if len(prompt) > 500 else prompt)
+        log("-" * 80)
+
+    if verbose:
+        log("⏳ Claude is processing... (this may take up to 15 minutes)")
 
     # Pass prompt via stdin
     r = subprocess.run(
@@ -557,14 +627,34 @@ def run_claude(prompt, agents_json, architect_prompt, cwd, log_path):
         timeout=CLAUDE_TIMEOUT,
     )
 
-    write_log(log_path, r.stdout)
-    write_log(log_path, r.stderr)
+    write_log(log_path, "=" * 80)
+    write_log(log_path, f"CLAUDE OUTPUT (exit code: {r.returncode})")
+    write_log(log_path, "=" * 80)
+    write_log(log_path, "STDOUT:")
+    write_log(log_path, r.stdout if r.stdout else "(empty)")
+    write_log(log_path, "")
+    write_log(log_path, "STDERR:")
+    write_log(log_path, r.stderr if r.stderr else "(empty)")
+    write_log(log_path, "=" * 80)
 
     if verbose:
         if r.returncode == 0:
             log(f"✓ Claude completed successfully in {cwd}")
         else:
             log(f"✗ Claude failed (exit={r.returncode}) in {cwd}")
+
+        # Show Claude's actual output in console
+        if r.stdout:
+            log("Claude's response:")
+            log("-" * 80)
+            log(r.stdout)
+            log("-" * 80)
+
+        if r.stderr:
+            log("Claude's errors:")
+            log("-" * 80)
+            log(r.stderr)
+            log("-" * 80)
 
 
 # ---------------- Worker ----------------
@@ -593,8 +683,11 @@ def process_file(file, root, agents_json, architect_prompt):
     branch = sanitize_branch_name(file)
     log_path = LOG_DIR / f"{branch}.log"
 
-    write_log(log_path, f"FILE {file}")
-    write_log(log_path, f"BRANCH {branch}")
+    write_log(log_path, "=" * 80)
+    write_log(log_path, f"PROCESSING FILE: {file}")
+    write_log(log_path, f"BRANCH: {branch}")
+    write_log(log_path, f"TIMESTAMP: {ts()}")
+    write_log(log_path, "=" * 80)
 
     if verbose:
         log(f"[{branch}] Processing {file}")
@@ -603,6 +696,10 @@ def process_file(file, root, agents_json, architect_prompt):
 
     try:
         # CRITICAL: Check if file already compiles
+        write_log(log_path, "")
+        write_log(log_path, "-" * 80)
+        write_log(log_path, "INITIAL BUILD CHECK")
+        write_log(log_path, "-" * 80)
         write_log(log_path, "Checking if file compiles...")
         if verbose:
             log(f"[{branch}] Checking build status...")
@@ -631,6 +728,11 @@ def process_file(file, root, agents_json, architect_prompt):
             return
 
         # Verify build passes after fix
+        write_log(log_path, "")
+        write_log(log_path, "-" * 80)
+        write_log(log_path, "POST-CLAUDE BUILD VERIFICATION")
+        write_log(log_path, "-" * 80)
+
         if not build_ok(wt, root, file, log_path):
             write_log(log_path, "Build failed after Claude's fix - abandoning")
             if verbose:
