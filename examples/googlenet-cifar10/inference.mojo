@@ -18,24 +18,26 @@ Features:
 
 from shared.core import ExTensor, zeros
 from shared.data import extract_batch_pair, compute_num_batches, DatasetInfo
-from shared.data.datasets import load_cifar10_test
+from shared.data.datasets import CIFAR10Dataset
 from shared.training.metrics import evaluate_logits_batch
 from model import GoogLeNet
 
 
-# CIFAR-10 class names
-comptime CLASS_NAMES = [
-    "airplane",
-    "automobile",
-    "bird",
-    "cat",
-    "deer",
-    "dog",
-    "frog",
-    "horse",
-    "ship",
-    "truck",
-]
+# CIFAR-10 class names (runtime list)
+fn get_class_names() -> List[String]:
+    """Get CIFAR-10 class names."""
+    var classes: List[String] = []
+    classes.append("airplane")
+    classes.append("automobile")
+    classes.append("bird")
+    classes.append("cat")
+    classes.append("deer")
+    classes.append("dog")
+    classes.append("frog")
+    classes.append("horse")
+    classes.append("ship")
+    classes.append("truck")
+    return classes^
 
 
 fn evaluate_model(
@@ -48,11 +50,11 @@ fn evaluate_model(
     """Evaluate model on a dataset.
 
     Args:
-        model: GoogLeNet model
-        images: Input images (N, 3, 32, 32)
-        labels: Ground truth labels (N,)
-        batch_size: Batch size for evaluation
-        verbose: Print progress during evaluation
+        model: GoogLeNet model.
+        images: Input images (N, 3, 32, 32).
+        labels: Ground truth labels (N,).
+        batch_size: Batch size for evaluation.
+        verbose: Print progress during evaluation.
 
     Returns:
         Tuple of (accuracy, correct_per_class, total_per_class)
@@ -68,7 +70,7 @@ fn evaluate_model(
     var total_per_class = List[Int](capacity=10)
 
     # Initialize counters
-    for i in range(10):
+    for _ in range(10):
         correct_per_class.append(0)
         total_per_class.append(0)
 
@@ -115,7 +117,7 @@ fn evaluate_model(
                     pred_class = j
 
             # Get true label
-            var true_class = int(batch_labels[i])
+            var true_class = Int(batch_labels[i])
 
             # Update counters
             total_per_class[true_class] += 1
@@ -143,7 +145,7 @@ fn evaluate_model(
         print("Evaluation complete!")
         print()
 
-    return (overall_accuracy, correct_per_class, total_per_class)
+    return (overall_accuracy, correct_per_class^, total_per_class^)
 
 
 fn print_detailed_results(
@@ -152,8 +154,8 @@ fn print_detailed_results(
     """Print detailed evaluation results.
 
     Args:
-        accuracy: Overall accuracy percentage
-        correct_per_class: Correct predictions per class
+        accuracy: Overall accuracy percentage.
+        correct_per_class: Correct predictions per class.
         total_per_class: Total samples per class.
     """
     print("=" * 60)
@@ -177,8 +179,9 @@ fn print_detailed_results(
     )
     print("-" * 60)
 
+    var class_names = get_class_names()
     for i in range(10):
-        var class_name = CLASS_NAMES[i]
+        var class_name = class_names[i]
         var correct = correct_per_class[i]
         var total = total_per_class[i]
         var class_acc = Float32(correct) / Float32(
@@ -220,7 +223,8 @@ fn main() raises:
 
     # Load CIFAR-10 test set
     print("Loading CIFAR-10 test set...")
-    var test_data = load_cifar10_test("datasets/cifar10")
+    var dataset = CIFAR10Dataset("datasets/cifar10")
+    var test_data = dataset.get_test_data()
     var test_images = test_data[0]
     var test_labels = test_data[1]
 
@@ -263,12 +267,9 @@ fn main() raises:
     var results = evaluate_model(
         model, test_images, test_labels, batch_size, verbose=True
     )
-    var accuracy = results[0]
-    var correct_per_class = results[1]
-    var total_per_class = results[2]
 
-    # Print detailed results
-    print_detailed_results(accuracy, correct_per_class, total_per_class)
+    # Print detailed results (copy lists since they're small - 10 elements each)
+    print_detailed_results(results[0], results[1].copy(), results[2].copy())
 
     # Performance context
     print("Performance Context:")
