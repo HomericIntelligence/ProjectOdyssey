@@ -228,7 +228,7 @@ struct AlexNet:
         """Initialize AlexNet model with random weights.
 
         Args:
-            num_classes: Number of output classes (default: 10 for CIFAR-10)
+            num_classes: Number of output classes (default: 10 for CIFAR-10).
             dropout_rate: Dropout probability for FC layers (default: 0.5).
         """
         self.num_classes = num_classes
@@ -238,69 +238,77 @@ struct AlexNet:
         var flattened_size = compute_flattened_size()
 
         # Conv1: INPUT_CHANNELS -> CONV1_OUT_CHANNELS
-        var conv1_shape = List[Int](
+        var conv1_shape: List[Int] = [
             CONV1_OUT_CHANNELS,
             INPUT_CHANNELS,
             CONV1_KERNEL_SIZE,
             CONV1_KERNEL_SIZE,
-        )
+        ]
         self.conv1_kernel = he_uniform(conv1_shape, DType.float32)
-        self.conv1_bias = zeros(List[Int](CONV1_OUT_CHANNELS), DType.float32)
+        var conv1_bias_shape: List[Int] = [CONV1_OUT_CHANNELS]
+        self.conv1_bias = zeros(conv1_bias_shape, DType.float32)
 
         # Conv2: CONV1_OUT_CHANNELS -> CONV2_OUT_CHANNELS
-        var conv2_shape = List[Int](
+        var conv2_shape: List[Int] = [
             CONV2_OUT_CHANNELS,
             CONV1_OUT_CHANNELS,
             CONV2_KERNEL_SIZE,
             CONV2_KERNEL_SIZE,
-        )
+        ]
         self.conv2_kernel = he_uniform(conv2_shape, DType.float32)
-        self.conv2_bias = zeros(List[Int](CONV2_OUT_CHANNELS), DType.float32)
+        var conv2_bias_shape: List[Int] = [CONV2_OUT_CHANNELS]
+        self.conv2_bias = zeros(conv2_bias_shape, DType.float32)
 
         # Conv3: CONV2_OUT_CHANNELS -> CONV3_OUT_CHANNELS
-        var conv3_shape = List[Int](
+        var conv3_shape: List[Int] = [
             CONV3_OUT_CHANNELS,
             CONV2_OUT_CHANNELS,
             CONV3_KERNEL_SIZE,
             CONV3_KERNEL_SIZE,
-        )
+        ]
         self.conv3_kernel = he_uniform(conv3_shape, DType.float32)
-        self.conv3_bias = zeros(List[Int](CONV3_OUT_CHANNELS), DType.float32)
+        var conv3_bias_shape: List[Int] = [CONV3_OUT_CHANNELS]
+        self.conv3_bias = zeros(conv3_bias_shape, DType.float32)
 
         # Conv4: CONV3_OUT_CHANNELS -> CONV4_OUT_CHANNELS
-        var conv4_shape = List[Int](
+        var conv4_shape: List[Int] = [
             CONV4_OUT_CHANNELS,
             CONV3_OUT_CHANNELS,
             CONV4_KERNEL_SIZE,
             CONV4_KERNEL_SIZE,
-        )
+        ]
         self.conv4_kernel = he_uniform(conv4_shape, DType.float32)
-        self.conv4_bias = zeros(List[Int](CONV4_OUT_CHANNELS), DType.float32)
+        var conv4_bias_shape: List[Int] = [CONV4_OUT_CHANNELS]
+        self.conv4_bias = zeros(conv4_bias_shape, DType.float32)
 
         # Conv5: CONV4_OUT_CHANNELS -> CONV5_OUT_CHANNELS
-        var conv5_shape = List[Int](
+        var conv5_shape: List[Int] = [
             CONV5_OUT_CHANNELS,
             CONV4_OUT_CHANNELS,
             CONV5_KERNEL_SIZE,
             CONV5_KERNEL_SIZE,
-        )
+        ]
         self.conv5_kernel = he_uniform(conv5_shape, DType.float32)
-        self.conv5_bias = zeros(List[Int](CONV5_OUT_CHANNELS), DType.float32)
+        var conv5_bias_shape: List[Int] = [CONV5_OUT_CHANNELS]
+        self.conv5_bias = zeros(conv5_bias_shape, DType.float32)
 
         # FC1: flattened_size -> FC1_OUT_FEATURES (derived from conv/pool layers)
         var fc1_shape: List[Int] = [FC1_OUT_FEATURES, flattened_size]
         self.fc1_weights = xavier_uniform(fc1_shape, DType.float32)
-        self.fc1_bias = zeros(List[Int](FC1_OUT_FEATURES), DType.float32)
+        var fc1_bias_shape: List[Int] = [FC1_OUT_FEATURES]
+        self.fc1_bias = zeros(fc1_bias_shape, DType.float32)
 
         # FC2: FC1_OUT_FEATURES -> FC2_OUT_FEATURES
         var fc2_shape: List[Int] = [FC2_OUT_FEATURES, FC1_OUT_FEATURES]
         self.fc2_weights = xavier_uniform(fc2_shape, DType.float32)
-        self.fc2_bias = zeros(List[Int](FC2_OUT_FEATURES), DType.float32)
+        var fc2_bias_shape: List[Int] = [FC2_OUT_FEATURES]
+        self.fc2_bias = zeros(fc2_bias_shape, DType.float32)
 
         # FC3: FC2_OUT_FEATURES -> num_classes
         var fc3_shape: List[Int] = [num_classes, FC2_OUT_FEATURES]
         self.fc3_weights = xavier_uniform(fc3_shape, DType.float32)
-        self.fc3_bias = zeros(List[Int](num_classes), DType.float32)
+        var fc3_bias_shape: List[Int] = [num_classes]
+        self.fc3_bias = zeros(fc3_bias_shape, DType.float32)
 
     fn forward(
         mut self, input: ExTensor, training: Bool = True
@@ -308,8 +316,8 @@ struct AlexNet:
         """Forward pass through AlexNet.
 
         Args:
-            input: Input tensor of shape (batch, 3, 32, 32)
-            training: Whether in training mode (applies dropout if True)
+            input: Input tensor of shape (batch, 3, 32, 32).
+            training: Whether in training mode (applies dropout if True).
 
         Returns:
             Output logits of shape (batch, num_classes).
@@ -417,7 +425,7 @@ struct AlexNet:
         """Predict class for a single input.
 
         Args:
-            input: Input tensor of shape (1, 3, 32, 32)
+            input: Input tensor of shape (1, 3, 32, 32).
 
         Returns:
             Predicted class index (0 to num_classes-1).
@@ -440,7 +448,7 @@ struct AlexNet:
         """Save model weights to directory.
 
         Args:
-            weights_dir: Directory to save weight files (one file per parameter)
+            weights_dir: Directory to save weight files (one file per parameter).
 
         Note:
             Creates directory if it doesn't exist. Each parameter saved as:
@@ -547,10 +555,40 @@ struct AlexNet:
         """Update parameters using SGD with momentum.
 
         Args:
-            learning_rate: Learning rate for gradient descent
-            momentum: Momentum factor (typically 0.9)
-            grad_*: Gradients for each parameter
-            velocity_*: Velocity (momentum) for each parameter.
+            learning_rate: Learning rate for gradient descent.
+            momentum: Momentum factor (typically 0.9).
+            grad_conv1_kernel: Gradient for conv1 kernel weights.
+            grad_conv1_bias: Gradient for conv1 bias.
+            grad_conv2_kernel: Gradient for conv2 kernel weights.
+            grad_conv2_bias: Gradient for conv2 bias.
+            grad_conv3_kernel: Gradient for conv3 kernel weights.
+            grad_conv3_bias: Gradient for conv3 bias.
+            grad_conv4_kernel: Gradient for conv4 kernel weights.
+            grad_conv4_bias: Gradient for conv4 bias.
+            grad_conv5_kernel: Gradient for conv5 kernel weights.
+            grad_conv5_bias: Gradient for conv5 bias.
+            grad_fc1_weights: Gradient for fc1 weights.
+            grad_fc1_bias: Gradient for fc1 bias.
+            grad_fc2_weights: Gradient for fc2 weights.
+            grad_fc2_bias: Gradient for fc2 bias.
+            grad_fc3_weights: Gradient for fc3 weights.
+            grad_fc3_bias: Gradient for fc3 bias.
+            velocity_conv1_kernel: Velocity for conv1 kernel weights.
+            velocity_conv1_bias: Velocity for conv1 bias.
+            velocity_conv2_kernel: Velocity for conv2 kernel weights.
+            velocity_conv2_bias: Velocity for conv2 bias.
+            velocity_conv3_kernel: Velocity for conv3 kernel weights.
+            velocity_conv3_bias: Velocity for conv3 bias.
+            velocity_conv4_kernel: Velocity for conv4 kernel weights.
+            velocity_conv4_bias: Velocity for conv4 bias.
+            velocity_conv5_kernel: Velocity for conv5 kernel weights.
+            velocity_conv5_bias: Velocity for conv5 bias.
+            velocity_fc1_weights: Velocity for fc1 weights.
+            velocity_fc1_bias: Velocity for fc1 bias.
+            velocity_fc2_weights: Velocity for fc2 weights.
+            velocity_fc2_bias: Velocity for fc2 bias.
+            velocity_fc3_weights: Velocity for fc3 weights.
+            velocity_fc3_bias: Velocity for fc3 bias.
         """
         # SGD with momentum update: v = momentum * v - lr * grad; param = param + v
         # Convert Float32 parameters to Float64 for shared library
@@ -604,3 +642,12 @@ struct AlexNet:
         sgd_momentum_update_inplace(
             self.fc3_bias, grad_fc3_bias, velocity_fc3_bias, lr, mom
         )
+
+
+fn main() raises:
+    """Entry point for build validation.
+
+    This function exists solely to allow `mojo build` to compile the module.
+    The actual model is used as a library by train.mojo and inference.mojo.
+    """
+    print("AlexNet model module compiled successfully")
