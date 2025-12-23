@@ -46,11 +46,11 @@ struct InceptionModule:
 
     All branches are concatenated depth-wise.
 
-    Parameters:
-        - Branch 1: conv1x1_1 (weights, bias), bn1x1_1 (gamma, beta, running_mean, running_var)
-        - Branch 2: conv1x1_2 (reduce), bn1x1_2, conv3x3, bn3x3
-        - Branch 3: conv1x1_3 (reduce), bn1x1_3, conv5x5, bn5x5
-        - Branch 4: conv1x1_4 (project after pool), bn1x1_4.
+    The module contains the following parameters for each branch:
+        Branch 1: conv1x1_1 (weights, bias), bn1x1_1 (gamma, beta, running_mean, running_var).
+        Branch 2: conv1x1_2 (reduce), bn1x1_2, conv3x3, bn3x3.
+        Branch 3: conv1x1_3 (reduce), bn1x1_3, conv5x5, bn5x5.
+        Branch 4: conv1x1_4 (project after pool), bn1x1_4.
     """
 
     # Branch 1: 1×1 convolution
@@ -112,12 +112,12 @@ struct InceptionModule:
         """Initialize Inception module with specified channel configurations.
 
         Args:
-            in_channels: Number of input channels
-            out_1x1: Output channels for 1×1 branch
-            reduce_3x3: Reduction channels before 3×3 conv
-            out_3x3: Output channels for 3×3 branch
-            reduce_5x5: Reduction channels before 5×5 conv
-            out_5x5: Output channels for 5×5 branch
+            in_channels: Number of input channels.
+            out_1x1: Output channels for 1×1 branch.
+            reduce_3x3: Reduction channels before 3×3 conv.
+            out_3x3: Output channels for 3×3 branch.
+            reduce_5x5: Reduction channels before 5×5 conv.
+            out_5x5: Output channels for 5×5 branch.
             pool_proj: Projection channels after pooling.
         """
         # Branch 1: 1×1 conv
@@ -200,17 +200,13 @@ struct InceptionModule:
         """Forward pass through Inception module.
 
         Args:
-            x: Input tensor (batch, in_channels, H, W)
-            training: Training mode flag (affects batch norm)
+            x: Input tensor (batch, in_channels, H, W).
+            training: Training mode flag (affects batch norm).
 
         Returns:
             Output tensor (batch, out_channels, H, W)
             where out_channels = out_1x1 + out_3x3 + out_5x5 + pool_proj.
         """
-        var batch_size = x.shape()[0]
-        var height = x.shape()[2]
-        var width = x.shape()[3]
-
         # Branch 1: 1×1 conv
         var b1 = conv2d(
             x, self.conv1x1_1_weights, self.conv1x1_1_bias, stride=1, padding=0
@@ -302,10 +298,10 @@ fn concatenate_depthwise(
     """Concatenate 4 tensors along the channel dimension (axis=1).
 
     Args:
-        t1: Tensor 1 (batch, C1, H, W)
-        t2: Tensor 2 (batch, C2, H, W)
-        t3: Tensor 3 (batch, C3, H, W)
-        t4: Tensor 4 (batch, C4, H, W)
+        t1: Tensor 1 (batch, C1, H, W).
+        t2: Tensor 2 (batch, C2, H, W).
+        t3: Tensor 3 (batch, C3, H, W).
+        t4: Tensor 4 (batch, C4, H, W).
 
     Returns:
         Concatenated tensor (batch, C1+C2+C3+C4, H, W).
@@ -535,8 +531,8 @@ struct GoogLeNet:
         """Forward pass through GoogLeNet.
 
         Args:
-            x: Input tensor (batch, 3, 32, 32)
-            training: Training mode flag (affects batch norm and dropout)
+            x: Input tensor (batch, 3, 32, 32).
+            training: Training mode flag (affects batch norm and dropout).
 
         Returns:
             Logits tensor (batch, num_classes).
@@ -655,3 +651,8 @@ struct GoogLeNet:
         # TODO(#2394): Implement weight saving
         # This will be similar to ResNet-18's weight saving
         raise Error("Weight saving not yet implemented")
+
+
+fn main():
+    """Main function for build verification only."""
+    print("GoogLeNet model module - import this module, do not run directly")
