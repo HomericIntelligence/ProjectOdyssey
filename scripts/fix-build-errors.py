@@ -355,7 +355,7 @@ pixi run mojo build -g --no-optimization --validate-doc-strings -I {root} {file}
 CRITICAL: Read these files BEFORE making any changes:
 
 1. .claude/shared/mojo-guidelines.md
-   - Mojo v0.25.7+ syntax and parameter conventions
+   - Mojo v0.26.1+ syntax and parameter conventions
    - Constructor patterns (out self, mut self)
    - Ownership transfer (^ operator)
    - List initialization syntax
@@ -427,7 +427,7 @@ Read the file and understand the context around the error
 </step>
 <step number="2">
 Make the smallest change that fixes the root cause
-- Follow Mojo v0.25.7+ syntax patterns
+- Follow Mojo v0.26.1+ syntax patterns
 - Avoid known anti-patterns
 - Use existing patterns from the codebase
 </step>
