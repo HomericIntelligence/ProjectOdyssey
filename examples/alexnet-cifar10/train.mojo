@@ -17,7 +17,7 @@ References:
 """
 
 from model import AlexNet
-from shared.data.datasets import load_cifar10_train, load_cifar10_test
+from shared.data.datasets import CIFAR10Dataset
 from shared.core import ExTensor, zeros
 from shared.core.conv import conv2d, conv2d_backward
 from shared.core.pooling import maxpool2d, maxpool2d_backward
@@ -66,12 +66,12 @@ fn compute_gradients(
     This implements the full forward and backward pass manually through all 8 layers.
 
     Args:
-        model: AlexNet model
-        input: Batch of images (batch, 3, 32, 32)
-        labels: Batch of labels (batch,)
-        learning_rate: Learning rate for SGD
-        momentum: Momentum factor for SGD
-        velocities: Momentum velocities for each parameter (16 tensors)
+        model: AlexNet model.
+        input: Batch of images (batch, 3, 32, 32).
+        labels: Batch of labels (batch,).
+        learning_rate: Learning rate for SGD.
+        momentum: Momentum factor for SGD.
+        velocities: Momentum velocities for each parameter (16 tensors).
 
     Returns:
         Loss value for this batch.
@@ -123,14 +123,18 @@ fn compute_gradients(
     # FC1 + ReLU + Dropout
     var fc1_out = linear(flattened, model.fc1_weights, model.fc1_bias)
     var relu6_out = relu(fc1_out)
-    var drop1_result = dropout(relu6_out, model.dropout_rate)
+    var drop1_result = dropout(
+        relu6_out, Float64(model.dropout_rate), training=True
+    )
     var drop1_out = drop1_result[0]  # Dropout output
     var drop1_mask = drop1_result[1]  # Dropout mask for backward
 
     # FC2 + ReLU + Dropout
     var fc2_out = linear(drop1_out, model.fc2_weights, model.fc2_bias)
     var relu7_out = relu(fc2_out)
-    var drop2_result = dropout(relu7_out, model.dropout_rate)
+    var drop2_result = dropout(
+        relu7_out, Float64(model.dropout_rate), training=True
+    )
     var drop2_out = drop2_result[0]  # Dropout output
     var drop2_mask = drop2_result[1]  # Dropout mask for backward
 
@@ -153,13 +157,13 @@ fn compute_gradients(
 
     # FC3 backward
     var fc3_grads = linear_backward(grad_logits, drop2_out, model.fc3_weights)
-    var grad_drop2_out = fc3_grads[0]
-    var grad_fc3_weights = fc3_grads[1]
-    var grad_fc3_bias = fc3_grads[2]
+    var grad_drop2_out = fc3_grads.grad_input
+    var grad_fc3_weights = fc3_grads.grad_weights
+    var grad_fc3_bias = fc3_grads.grad_bias
 
     # Dropout2 backward
     var grad_relu7_out = dropout_backward(
-        grad_drop2_out, drop2_mask, model.dropout_rate
+        grad_drop2_out, drop2_mask, Float64(model.dropout_rate)
     )
 
     # ReLU7 backward
@@ -167,13 +171,13 @@ fn compute_gradients(
 
     # FC2 backward
     var fc2_grads = linear_backward(grad_fc2_out, drop1_out, model.fc2_weights)
-    var grad_drop1_out = fc2_grads[0]
-    var grad_fc2_weights = fc2_grads[1]
-    var grad_fc2_bias = fc2_grads[2]
+    var grad_drop1_out = fc2_grads.grad_input
+    var grad_fc2_weights = fc2_grads.grad_weights
+    var grad_fc2_bias = fc2_grads.grad_bias
 
     # Dropout1 backward
     var grad_relu6_out = dropout_backward(
-        grad_drop1_out, drop1_mask, model.dropout_rate
+        grad_drop1_out, drop1_mask, Float64(model.dropout_rate)
     )
 
     # ReLU6 backward
@@ -181,16 +185,16 @@ fn compute_gradients(
 
     # FC1 backward
     var fc1_grads = linear_backward(grad_fc1_out, flattened, model.fc1_weights)
-    var grad_flattened = fc1_grads[0]
-    var grad_fc1_weights = fc1_grads[1]
-    var grad_fc1_bias = fc1_grads[2]
+    var grad_flattened = fc1_grads.grad_input
+    var grad_fc1_weights = fc1_grads.grad_weights
+    var grad_fc1_bias = fc1_grads.grad_bias
 
     # Unflatten gradient
     var grad_pool3_out = grad_flattened.reshape(pool3_shape)
 
     # MaxPool3 backward
     var grad_relu5_out = maxpool2d_backward(
-        grad_pool3_out, relu5_out, pool3_out, kernel_size=3, stride=2, padding=0
+        grad_pool3_out, relu5_out, kernel_size=3, stride=2, padding=0
     )
 
     # ReLU5 backward
@@ -200,9 +204,9 @@ fn compute_gradients(
     var conv5_grads = conv2d_backward(
         grad_conv5_out, relu4_out, model.conv5_kernel, stride=1, padding=1
     )
-    var grad_relu4_out = conv5_grads[0]
-    var grad_conv5_kernel = conv5_grads[1]
-    var grad_conv5_bias = conv5_grads[2]
+    var grad_relu4_out = conv5_grads.grad_input
+    var grad_conv5_kernel = conv5_grads.grad_weights
+    var grad_conv5_bias = conv5_grads.grad_bias
 
     # ReLU4 backward
     var grad_conv4_out = relu_backward(grad_relu4_out, conv4_out)
@@ -211,9 +215,9 @@ fn compute_gradients(
     var conv4_grads = conv2d_backward(
         grad_conv4_out, relu3_out, model.conv4_kernel, stride=1, padding=1
     )
-    var grad_relu3_out = conv4_grads[0]
-    var grad_conv4_kernel = conv4_grads[1]
-    var grad_conv4_bias = conv4_grads[2]
+    var grad_relu3_out = conv4_grads.grad_input
+    var grad_conv4_kernel = conv4_grads.grad_weights
+    var grad_conv4_bias = conv4_grads.grad_bias
 
     # ReLU3 backward
     var grad_conv3_out = relu_backward(grad_relu3_out, conv3_out)
@@ -222,13 +226,13 @@ fn compute_gradients(
     var conv3_grads = conv2d_backward(
         grad_conv3_out, pool2_out, model.conv3_kernel, stride=1, padding=1
     )
-    var grad_pool2_out = conv3_grads[0]
-    var grad_conv3_kernel = conv3_grads[1]
-    var grad_conv3_bias = conv3_grads[2]
+    var grad_pool2_out = conv3_grads.grad_input
+    var grad_conv3_kernel = conv3_grads.grad_weights
+    var grad_conv3_bias = conv3_grads.grad_bias
 
     # MaxPool2 backward
     var grad_relu2_out = maxpool2d_backward(
-        grad_pool2_out, relu2_out, pool2_out, kernel_size=3, stride=2, padding=0
+        grad_pool2_out, relu2_out, kernel_size=3, stride=2, padding=0
     )
 
     # ReLU2 backward
@@ -238,13 +242,13 @@ fn compute_gradients(
     var conv2_grads = conv2d_backward(
         grad_conv2_out, pool1_out, model.conv2_kernel, stride=1, padding=2
     )
-    var grad_pool1_out = conv2_grads[0]
-    var grad_conv2_kernel = conv2_grads[1]
-    var grad_conv2_bias = conv2_grads[2]
+    var grad_pool1_out = conv2_grads.grad_input
+    var grad_conv2_kernel = conv2_grads.grad_weights
+    var grad_conv2_bias = conv2_grads.grad_bias
 
     # MaxPool1 backward
     var grad_relu1_out = maxpool2d_backward(
-        grad_pool1_out, relu1_out, pool1_out, kernel_size=3, stride=2, padding=0
+        grad_pool1_out, relu1_out, kernel_size=3, stride=2, padding=0
     )
 
     # ReLU1 backward
@@ -254,11 +258,29 @@ fn compute_gradients(
     var conv1_grads = conv2d_backward(
         grad_conv1_out, input, model.conv1_kernel, stride=4, padding=2
     )
-    var grad_input = conv1_grads[0]  # Not used (no input gradient needed)
-    var grad_conv1_kernel = conv1_grads[1]
-    var grad_conv1_bias = conv1_grads[2]
+    _ = conv1_grads.grad_input  # Not used (no input gradient needed)
+    var grad_conv1_kernel = conv1_grads.grad_weights
+    var grad_conv1_bias = conv1_grads.grad_bias
 
     # ========== Parameter Update (SGD with Momentum) ==========
+    # Extract velocities from list to avoid aliasing issues
+    var vel_conv1_kernel = velocities[0]
+    var vel_conv1_bias = velocities[1]
+    var vel_conv2_kernel = velocities[2]
+    var vel_conv2_bias = velocities[3]
+    var vel_conv3_kernel = velocities[4]
+    var vel_conv3_bias = velocities[5]
+    var vel_conv4_kernel = velocities[6]
+    var vel_conv4_bias = velocities[7]
+    var vel_conv5_kernel = velocities[8]
+    var vel_conv5_bias = velocities[9]
+    var vel_fc1_weights = velocities[10]
+    var vel_fc1_bias = velocities[11]
+    var vel_fc2_weights = velocities[12]
+    var vel_fc2_bias = velocities[13]
+    var vel_fc3_weights = velocities[14]
+    var vel_fc3_bias = velocities[15]
+
     model.update_parameters(
         learning_rate,
         momentum,
@@ -278,23 +300,41 @@ fn compute_gradients(
         grad_fc2_bias^,
         grad_fc3_weights^,
         grad_fc3_bias^,
-        velocities[0],
-        velocities[1],
-        velocities[2],
-        velocities[3],
-        velocities[4],
-        velocities[5],
-        velocities[6],
-        velocities[7],
-        velocities[8],
-        velocities[9],
-        velocities[10],
-        velocities[11],
-        velocities[12],
-        velocities[13],
-        velocities[14],
-        velocities[15],
+        vel_conv1_kernel,
+        vel_conv1_bias,
+        vel_conv2_kernel,
+        vel_conv2_bias,
+        vel_conv3_kernel,
+        vel_conv3_bias,
+        vel_conv4_kernel,
+        vel_conv4_bias,
+        vel_conv5_kernel,
+        vel_conv5_bias,
+        vel_fc1_weights,
+        vel_fc1_bias,
+        vel_fc2_weights,
+        vel_fc2_bias,
+        vel_fc3_weights,
+        vel_fc3_bias,
     )
+
+    # Update velocities list with modified values
+    velocities[0] = vel_conv1_kernel^
+    velocities[1] = vel_conv1_bias^
+    velocities[2] = vel_conv2_kernel^
+    velocities[3] = vel_conv2_bias^
+    velocities[4] = vel_conv3_kernel^
+    velocities[5] = vel_conv3_bias^
+    velocities[6] = vel_conv4_kernel^
+    velocities[7] = vel_conv4_bias^
+    velocities[8] = vel_conv5_kernel^
+    velocities[9] = vel_conv5_bias^
+    velocities[10] = vel_fc1_weights^
+    velocities[11] = vel_fc1_bias^
+    velocities[12] = vel_fc2_weights^
+    velocities[13] = vel_fc2_bias^
+    velocities[14] = vel_fc3_weights^
+    velocities[15] = vel_fc3_bias^
 
     return loss
 
@@ -313,15 +353,15 @@ fn train_epoch(
     """Train for one epoch.
 
     Args:
-        model: AlexNet model
-        train_images: Training images (50000, 3, 32, 32)
-        train_labels: Training labels (50000,)
-        batch_size: Mini-batch size
-        learning_rate: Learning rate for SGD
-        momentum: Momentum factor
-        epoch: Current epoch number (1-indexed)
-        total_epochs: Total number of epochs
-        velocities: Momentum velocities for each parameter
+        model: AlexNet model.
+        train_images: Training images (50000, 3, 32, 32).
+        train_labels: Training labels (50000,).
+        batch_size: Mini-batch size.
+        learning_rate: Learning rate for SGD.
+        momentum: Momentum factor.
+        epoch: Current epoch number (1-indexed).
+        total_epochs: Total number of epochs.
+        velocities: Momentum velocities for each parameter.
 
     Returns:
         Average loss for the epoch.
@@ -336,7 +376,7 @@ fn train_epoch(
     for batch_idx in range(num_batches):
         var start_idx = batch_idx * batch_size
         var end_idx = min(start_idx + batch_size, num_samples)
-        var actual_batch_size = end_idx - start_idx
+        _ = end_idx - start_idx  # actual_batch_size not used yet
 
         # TODO(#2721): Extract batch slice when slicing is fully supported
         # For now, we'll process the entire dataset (inefficient but demonstrates structure)
@@ -380,9 +420,9 @@ fn evaluate(
     """Evaluate model on test set.
 
     Args:
-        model: AlexNet model
-        test_images: Test images (10000, 3, 32, 32)
-        test_labels: Test labels (10000,)
+        model: AlexNet model.
+        test_images: Test images (10000, 3, 32, 32).
+        test_labels: Test labels (10000,).
 
     Returns:
         Test accuracy (0.0 to 1.0).
@@ -423,7 +463,7 @@ fn initialize_velocities(model: AlexNet) raises -> List[ExTensor]:
     """Initialize momentum velocities for all parameters (16 tensors).
 
     Args:
-        model: AlexNet model
+        model: AlexNet model.
 
     Returns:
         DynamicVector of zero-initialized velocity tensors matching parameter shapes.
@@ -448,7 +488,7 @@ fn initialize_velocities(model: AlexNet) raises -> List[ExTensor]:
     velocities.append(zeros(model.fc3_weights.shape(), DType.float32))
     velocities.append(zeros(model.fc3_bias.shape(), DType.float32))
 
-    return velocities
+    return velocities^
 
 
 fn main() raises:
@@ -493,11 +533,12 @@ fn main() raises:
 
     # Load dataset
     print("Loading CIFAR-10 dataset...")
-    var train_data = load_cifar10_train(data_dir)
+    var dataset = CIFAR10Dataset(data_dir)
+    var train_data = dataset.get_train_data()
     var train_images = train_data[0]
     var train_labels = train_data[1]
 
-    var test_data = load_cifar10_test(data_dir)
+    var test_data = dataset.get_test_data()
     var test_images = test_data[0]
     var test_labels = test_data[1]
 
