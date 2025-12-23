@@ -25,14 +25,14 @@ Example:
 """
 
 # Package version
-from ..version import VERSION
+from shared.version import VERSION
 
 # ============================================================================
 # Format Loaders (Low-Level File I/O)
 # ============================================================================
 
 # IDX format utilities
-from .formats import (
+from shared.data.formats import (
     read_uint32_be,  # Read big-endian uint32
     load_idx_labels,  # Load IDX label file
     load_idx_images,  # Load IDX grayscale images
@@ -48,7 +48,7 @@ from .formats import (
 # ============================================================================
 
 # Dataset-specific constants and metadata
-from .constants import (
+from shared.data.constants import (
     CIFAR10_IMAGE_SIZE,  # CIFAR-10 image size (32x32)
     CIFAR10_CHANNELS,  # CIFAR-10 color channels (3)
     CIFAR10_BYTES_PER_IMAGE,  # CIFAR-10 bytes per image (3073)
@@ -72,7 +72,7 @@ from .constants import (
 # ============================================================================
 
 # Dataset classes and loaders
-from .datasets import (
+from shared.data.datasets import (
     Dataset,  # Base dataset interface
     ExTensorDataset,  # In-memory tensor dataset wrapper
     FileDataset,  # File-based lazy-loading dataset
@@ -80,12 +80,12 @@ from .datasets import (
 )
 
 # Dataset wrappers and utilities
-from .dataset_with_transform import (
+from shared.data.dataset_with_transform import (
     TransformedDataset,  # Wrapper that applies transforms to data
 )
 
 # EMNIST dataset is defined in _datasets_core.mojo
-from ._datasets_core import (
+from shared.data._datasets_core import (
     EMNISTDataset,  # EMNIST dataset with multiple splits
     load_emnist_train,  # Load EMNIST training set
     load_emnist_test,  # Load EMNIST test set
@@ -110,7 +110,7 @@ from ._datasets_core import (
 # Transform Base Classes and Utilities
 # ============================================================================
 
-from .random_transform_base import (
+from shared.data.random_transform_base import (
     RandomTransformBase,  # Base for probabilistic transforms
     random_float,  # Random float generation utility
 )
@@ -120,13 +120,13 @@ from .random_transform_base import (
 # ============================================================================
 
 # Core data loading infrastructure
-from .loaders import (
+from shared.data.loaders import (
     Batch,  # Batch container with data, labels, and indices
     BatchLoader,  # Main data loader with shuffling and batching
 )
 
 # Sampling strategies for data iteration
-from .samplers import (
+from shared.data.samplers import (
     Sampler,  # Base sampler interface
     SequentialSampler,  # Sequential ordering without shuffling
     RandomSampler,  # Random permutation with shuffling
@@ -134,13 +134,13 @@ from .samplers import (
 )
 
 # Prefetching utilities
-from .prefetch import (
+from shared.data.prefetch import (
     PrefetchBuffer,  # Ring buffer for batches
     PrefetchDataLoader,  # Loader with prefetching
 )
 
 # Caching utilities
-from .cache import (
+from shared.data.cache import (
     CachedDataset,  # Dataset wrapper with caching
 )
 
@@ -148,9 +148,37 @@ from .cache import (
 # Batch Processing Utilities
 # ============================================================================
 
-from .batch_utils import (
+from shared.data.batch_utils import (
     extract_batch,
     extract_batch_pair,
     compute_num_batches,
     get_batch_indices,
 )
+
+
+fn main() raises:
+    """Data loading package entry point.
+
+    This serves as a placeholder entry point for the data loading package.
+    The package is designed to be imported and used by other modules:
+
+        from shared.data import load_emnist_train, EMNISTDataset
+        images, labels = load_emnist_train("/path/to/data")
+
+    For example usage, see:
+        - examples/data_pipeline_demo.mojo
+        - tests/shared/data/test_emnist.mojo
+        - tests/shared/data/test_cifar10.mojo
+
+    Future enhancement: Add interactive demo of data loading functionality.
+    """
+    print("ML Odyssey - Data Loading Package")
+    print("==================================")
+    print()
+    print("This package provides data loaders and utilities.")
+    print("Import and use in your Mojo code:")
+    print()
+    print("    from shared.data import load_emnist_train, EMNISTDataset")
+    print("    images, labels = load_emnist_train('/path/to/data')")
+    print()
+    print("See examples/ and tests/shared/data/ for usage examples.")
