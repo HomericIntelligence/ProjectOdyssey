@@ -23,7 +23,7 @@ Example:
 """
 
 from shared.core.extensor import ExTensor
-from .datasets import Dataset
+from shared.data._datasets_core import Dataset
 
 
 struct CachedDataset[D: Dataset & Copyable & Movable](
