@@ -21,6 +21,7 @@ site/
 # Mojo build artifacts
 *.o
 *.a
+*.mojopkg
 train
 examples/*/train
 examples/*/inference
