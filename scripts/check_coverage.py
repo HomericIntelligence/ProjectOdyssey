@@ -17,14 +17,15 @@ from typing import Optional
 def parse_coverage_report(coverage_file: Path) -> Optional[float]:
     """Parse coverage report and extract total coverage percentage.
 
-    ⚠️  WARNING: MOCK IMPLEMENTATION ⚠️
+    ⚠️  WARNING: NOT IMPLEMENTED - RETURNS None ⚠️
 
-    This function does NOT actually parse coverage data!
-    It returns a hardcoded 92.5% if the file exists.
+    This function does NOT parse coverage data!
+    It always returns None to indicate coverage parsing is not available.
 
     Real implementation blocked by:
     - Mojo v0.26+ lacks coverage instrumentation
     - No coverage report format available to parse
+    - No `mojo test --coverage` command exists
 
     See Issues:
     - #2583: Coverage implementation tracking
@@ -35,8 +36,9 @@ def parse_coverage_report(coverage_file: Path) -> Optional[float]:
         coverage_file: Path to coverage report file.
 
     Returns:
-        Mock coverage percentage (92.5%) if file exists, None otherwise.
-        Does NOT read actual coverage data from the file.
+        None - Coverage parsing is not implemented.
+        This ensures coverage checks are properly skipped rather than
+        falsely passing with a mock value.
     """
     # TODO(#2583): BLOCKED - Waiting on Mojo team to release coverage instrumentation
     #
@@ -47,37 +49,39 @@ def parse_coverage_report(coverage_file: Path) -> Optional[float]:
     #
     # WORKAROUND: Manual test discovery via `validate_test_coverage.py` ensures all tests run
     #
-    # DECISION: Return hardcoded 92.5% to allow CI to pass gracefully (see ADR-008)
-    # - This is NOT a bug - it's intentional until Mojo provides coverage tooling
+    # DECISION: Return None instead of fake value (see Issue #2612)
+    # - This prevents false sense of security from hardcoded mock values
+    # - Coverage checks are properly skipped until Mojo provides coverage tooling
     # - CI test validation still runs (ensures tests execute, just no coverage metrics)
     #
     # BLOCKED BY: Mojo team (external dependency)
-    # REFERENCE: Issue #2583, ADR-008
+    # REFERENCE: Issue #2583, Issue #2612, ADR-008
     print()
     print("⚠️" + "=" * 68)
-    print("⚠️  WARNING: MOCK COVERAGE PARSER - NOT READING ACTUAL COVERAGE!")
+    print("⚠️  WARNING: COVERAGE PARSING NOT IMPLEMENTED!")
     print("⚠️" + "=" * 68)
     print()
     print(f"   Coverage file: {coverage_file}")
     print(f"   File exists: {coverage_file.exists()}")
     print()
-    print("   This function returns a HARDCODED value, NOT actual coverage!")
-    print("   The coverage file is NOT being parsed.")
+    print("   This function does NOT parse coverage data.")
+    print("   Returning None to indicate coverage check is disabled.")
     print()
     print("   REASON: Mojo does not provide coverage instrumentation")
     print("   - No `mojo test --coverage` command exists")
     print("   - No coverage report format to parse")
     print()
+    print("   IMPACT: Coverage checks are skipped (better than fake passing)")
+    print("   - No false sense of security from hardcoded mock values")
+    print("   - CI still validates that tests execute successfully")
+    print()
     print("   REFERENCE: ADR-008, Issue #2583, Issue #2612")
     print()
-
-    if coverage_file.exists():
-        print("   ➤ Returning MOCK value: 92.5% (hardcoded)")
-        print()
-        return 92.5  # MOCK: Does NOT parse file content!
-
-    print("   ➤ Coverage file not found - returning None")
+    print("   ➤ Returning None (coverage check disabled)")
     print()
+
+    # Don't return fake value - return None to indicate not implemented
+    # This way coverage checks are properly skipped rather than falsely passing
     return None
 
 
@@ -90,14 +94,20 @@ def check_coverage(threshold: float, path: str, coverage_file: Path) -> bool:
         coverage_file: Path to coverage report.
 
     Returns:
-        True if coverage meets threshold, False otherwise.
+        True if coverage meets threshold or coverage is not available,
+        False only if coverage parsing succeeds but is below threshold.
     """
     coverage = parse_coverage_report(coverage_file)
 
     if coverage is None:
-        print(f"❌ ERROR: Failed to parse coverage report: {coverage_file}")
-        print("   Make sure tests were run with --coverage flag")
-        return False
+        print("\n📊 Coverage Report")
+        print(f"   Path: {path}")
+        print("   Status: Coverage parsing not implemented")
+        print(f"   Threshold: {threshold:.2f}%")
+        print()
+        print("   ✅ PASSED - Coverage check skipped (tool not available)")
+        print("      Tests are still validated for execution success")
+        return True  # Pass gracefully when coverage is not available
 
     print("\n📊 Coverage Report")
     print(f"   Path: {path}")
