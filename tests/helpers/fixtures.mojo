@@ -8,6 +8,8 @@ with convenient test-specific APIs.
 """
 
 from shared.core.extensor import ExTensor, zeros, ones
+from shared.core.extensor import nan_tensor as shared_nan_tensor
+from shared.core.extensor import inf_tensor as shared_inf_tensor
 from shared.testing.data_generators import random_tensor as shared_random_tensor
 from shared.testing.data_generators import random_uniform
 
@@ -96,20 +98,8 @@ fn nan_tensor(shape: List[Int]) raises -> ExTensor:
     Raises:
         Error: If operation fails.
     """
-    var tensor = zeros(shape, DType.float32)
-
-    # Calculate total number of elements
-    var numel = 1
-    for dim in shape:
-        numel *= dim
-
-    # Fill with NaN values
-    # NaN in float32 is typically 0x7fc00000 in bits
-    var nan_val = 0.0 / 0.0  # IEEE 754 NaN
-    for i in range(numel):
-        tensor._set_float64(i, nan_val)
-
-    return tensor
+    # Use shared implementation that safely creates NaN tensors
+    return shared_nan_tensor(shape, DType.float32)
 
 
 fn inf_tensor(shape: List[Int]) raises -> ExTensor:
@@ -134,19 +124,8 @@ fn inf_tensor(shape: List[Int]) raises -> ExTensor:
     Raises:
         Error: If operation fails.
     """
-    var tensor = zeros(shape, DType.float32)
-
-    # Calculate total number of elements
-    var numel = 1
-    for dim in shape:
-        numel *= dim
-
-    # Fill with positive infinity
-    var inf_val = 1.0 / 0.0  # IEEE 754 positive infinity
-    for i in range(numel):
-        tensor._set_float64(i, inf_val)
-
-    return tensor
+    # Use shared implementation that safely creates inf tensors
+    return shared_inf_tensor(shape, DType.float32)
 
 
 fn ones_like(tensor: ExTensor) raises -> ExTensor:
