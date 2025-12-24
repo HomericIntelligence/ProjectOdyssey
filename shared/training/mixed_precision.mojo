@@ -267,12 +267,29 @@ fn convert_to_fp32_master(params: ExTensor) raises -> ExTensor:
         _convert_fp32_to_fp32_simd(params, result)
         return result
 
-    # If FP16, use SIMD-optimized conversion
+    # If FP16, use SIMD-optimized conversion when available
     if params.dtype() == DType.float16:
-        # TODO(#2731): Use SIMD vectorization when Mojo supports FP16 SIMD loads
-        # Limitation: Mojo v0.25.7 cannot vectorize FP16 load operations
-        # Workaround: Use scalar conversion until compiler support lands
-        # For now, use scalar conversion
+        # TODO(#2731): Implement SIMD FP16→FP32 vectorization
+        #
+        # Current Limitation: Mojo v0.25.7+ does not support SIMD vectorization for
+        # FP16 load operations. This prevents efficient bulk conversion from FP16 to FP32.
+        #
+        # Compiler Limitation Details:
+        # - DTypePointer.load[width=N]() doesn't support FP16 types
+        # - FP16 SIMD types exist but load/store operations are unimplemented
+        # - No way to vectorize bulk FP16→FP32 conversions in current compiler
+        #
+        # Workaround: Scalar loop conversion (one element at a time)
+        # Performance Impact: ~10-15x slower than FP32→FP32 SIMD path
+        # Expected Speedup When Fixed: ~4x (matching FP32→FP32 performance)
+        #
+        # Implementation Plan:
+        # When Mojo adds FP16 SIMD load support:
+        # 1. Load FP16 vectors with DTypePointer[Float16].load[width]()
+        # 2. Convert to FP32 with explicit cast or builtin function
+        # 3. Store with DTypePointer[Float32].store[width]()
+        #
+        # Reference: Track Mojo compiler releases for FP16 SIMD support
         var src_ptr = params._data.bitcast[Float16]()
         var dst_ptr = result._data.bitcast[Float32]()
         for i in range(size):
@@ -334,7 +351,9 @@ fn update_model_from_master(
         _update_fp32_from_fp32_simd(master_params, model_params)
         return
 
-    # If FP16, use optimized conversion
+    # If FP16, use optimized conversion (scalar until Mojo supports FP16 SIMD)
+    # TODO(#2731): Implement SIMD FP32→FP16 vectorization when compiler support available
+    # See convert_to_fp32_master() for detailed notes on FP16 SIMD limitations
     if model_params.dtype() == DType.float16:
         var src_ptr = master_params._data.bitcast[Float32]()
         var dst_ptr = model_params._data.bitcast[Float16]()

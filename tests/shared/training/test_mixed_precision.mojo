@@ -233,6 +233,50 @@ fn test_check_gradients_finite() raises:
     print("✓ Gradient finite check test passed")
 
 
+fn test_check_gradients_finite_mixed_precision() raises:
+    """Test checking for finite gradients in mixed precision (FP16).
+
+    Validates that NaN/Inf detection works correctly for lower precision types.
+    This is critical for mixed precision training where gradient overflow is more
+    likely due to reduced precision.
+    """
+    print("Testing gradient finite check with mixed precision (FP16)...")
+
+    # Create finite FP16 gradients
+    var finite_fp16_grads = full([10], 1.0, DType.float16)
+    assert_true(
+        check_gradients_finite(finite_fp16_grads),
+        "Finite FP16 gradients should return True",
+    )
+
+    # Test NaN detection in FP16
+    var nan_fp16_grads = create_nan_tensor([10], DType.float16)
+    assert_false(
+        check_gradients_finite(nan_fp16_grads),
+        "NaN FP16 gradients should return False",
+    )
+
+    # Test +Inf detection in FP16
+    var pos_inf_fp16_grads = create_inf_tensor(
+        [10], DType.float16, positive=True
+    )
+    assert_false(
+        check_gradients_finite(pos_inf_fp16_grads),
+        "+Inf FP16 gradients should return False",
+    )
+
+    # Test -Inf detection in FP16
+    var neg_inf_fp16_grads = create_inf_tensor(
+        [10], DType.float16, positive=False
+    )
+    assert_false(
+        check_gradients_finite(neg_inf_fp16_grads),
+        "-Inf FP16 gradients should return False",
+    )
+
+    print("✓ Mixed precision gradient finite check test passed")
+
+
 fn test_clip_gradients_by_value() raises:
     """Test clipping gradients by value range."""
     print("Testing gradient clipping by value...")
@@ -334,6 +378,7 @@ fn main() raises:
     test_fp32_master_conversion()
     test_update_model_from_master()
     test_check_gradients_finite()
+    test_check_gradients_finite_mixed_precision()
     test_clip_gradients_by_value()
     test_clip_gradients_by_norm()
     test_fp16_operations()
