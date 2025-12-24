@@ -233,6 +233,7 @@ fn mean(
 
         var result_shape = build_reduced_shape(tensor.shape(), axis, keepdims)
         var result = ExTensor(result_shape, tensor.dtype())
+        result._fill_zero()
 
         var sizes = compute_axis_strides(tensor.shape(), axis)
         var outer_size = sizes[0]
@@ -287,6 +288,7 @@ fn max_reduce(
 
         var result_shape = build_reduced_shape(tensor.shape(), axis, keepdims)
         var result = ExTensor(result_shape, tensor.dtype())
+        result._fill_zero()
 
         var sizes = compute_axis_strides(tensor.shape(), axis)
         var outer_size = sizes[0]
@@ -341,6 +343,7 @@ fn min_reduce(
 
         var result_shape = build_reduced_shape(tensor.shape(), axis, keepdims)
         var result = ExTensor(result_shape, tensor.dtype())
+        result._fill_zero()
 
         var sizes = compute_axis_strides(tensor.shape(), axis)
         var outer_size = sizes[0]
@@ -376,6 +379,7 @@ fn reduce_backward[
     """
     var input_shape = x.shape()
     var result = ExTensor(input_shape, grad_output.dtype())
+    result._fill_zero()
     var op = Op()
 
     if axis == -1:
