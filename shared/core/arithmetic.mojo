@@ -291,6 +291,110 @@ fn divide(a: ExTensor, b: ExTensor) raises -> ExTensor:
     return _dispatch_broadcast_binary[_div_op](a, b)
 
 
+fn multiply_scalar(tensor: ExTensor, scalar: Float32) raises -> ExTensor:
+    """Multiply tensor by a scalar value efficiently.
+
+    Optimized version that multiplies each element by a scalar without
+    creating an intermediate full tensor. Useful for operations like negation
+    (multiply by -1.0) or scaling in gradient computations.
+
+    Args:
+        tensor: Input tensor to multiply.
+        scalar: Scalar value to multiply by.
+
+    Returns:
+        A new tensor with each element multiplied by the scalar.
+
+    Raises:
+        Error: If tensor dtype is unsupported.
+
+    Examples:
+        ```
+        var a = full([2, 3], 5.0, DType.float32)
+        var result = multiply_scalar(a, 2.0)  # Shape (2, 3), all 10.0
+
+        var b = full([2, 3], 3.0, DType.float32)
+        var negated = multiply_scalar(b, -1.0)  # Shape (2, 3), all -3.0
+        ```
+    """
+    var result = ExTensor(tensor.shape(), tensor.dtype())
+    var numel = 1
+    for dim in tensor.shape():
+        numel *= dim
+
+    # Dispatch based on dtype for compile-time specialization
+    if tensor.dtype() == DType.float16:
+        var input_ptr = tensor._data.bitcast[Scalar[DType.float16]]()
+        var result_ptr = result._data.bitcast[Scalar[DType.float16]]()
+        var scalar_cast = Scalar[DType.float16](scalar)
+        for i in range(numel):
+            result_ptr[i] = input_ptr[i] * scalar_cast
+    elif tensor.dtype() == DType.float32:
+        var input_ptr = tensor._data.bitcast[Scalar[DType.float32]]()
+        var result_ptr = result._data.bitcast[Scalar[DType.float32]]()
+        var scalar_cast = Scalar[DType.float32](scalar)
+        for i in range(numel):
+            result_ptr[i] = input_ptr[i] * scalar_cast
+    elif tensor.dtype() == DType.float64:
+        var input_ptr = tensor._data.bitcast[Scalar[DType.float64]]()
+        var result_ptr = result._data.bitcast[Scalar[DType.float64]]()
+        var scalar_cast = Scalar[DType.float64](scalar)
+        for i in range(numel):
+            result_ptr[i] = input_ptr[i] * scalar_cast
+    elif tensor.dtype() == DType.int8:
+        var input_ptr = tensor._data.bitcast[Scalar[DType.int8]]()
+        var result_ptr = result._data.bitcast[Scalar[DType.int8]]()
+        var scalar_cast = Scalar[DType.int8](scalar)
+        for i in range(numel):
+            result_ptr[i] = input_ptr[i] * scalar_cast
+    elif tensor.dtype() == DType.int16:
+        var input_ptr = tensor._data.bitcast[Scalar[DType.int16]]()
+        var result_ptr = result._data.bitcast[Scalar[DType.int16]]()
+        var scalar_cast = Scalar[DType.int16](scalar)
+        for i in range(numel):
+            result_ptr[i] = input_ptr[i] * scalar_cast
+    elif tensor.dtype() == DType.int32:
+        var input_ptr = tensor._data.bitcast[Scalar[DType.int32]]()
+        var result_ptr = result._data.bitcast[Scalar[DType.int32]]()
+        var scalar_cast = Scalar[DType.int32](scalar)
+        for i in range(numel):
+            result_ptr[i] = input_ptr[i] * scalar_cast
+    elif tensor.dtype() == DType.int64:
+        var input_ptr = tensor._data.bitcast[Scalar[DType.int64]]()
+        var result_ptr = result._data.bitcast[Scalar[DType.int64]]()
+        var scalar_cast = Scalar[DType.int64](scalar)
+        for i in range(numel):
+            result_ptr[i] = input_ptr[i] * scalar_cast
+    elif tensor.dtype() == DType.uint8:
+        var input_ptr = tensor._data.bitcast[Scalar[DType.uint8]]()
+        var result_ptr = result._data.bitcast[Scalar[DType.uint8]]()
+        var scalar_cast = Scalar[DType.uint8](scalar)
+        for i in range(numel):
+            result_ptr[i] = input_ptr[i] * scalar_cast
+    elif tensor.dtype() == DType.uint16:
+        var input_ptr = tensor._data.bitcast[Scalar[DType.uint16]]()
+        var result_ptr = result._data.bitcast[Scalar[DType.uint16]]()
+        var scalar_cast = Scalar[DType.uint16](scalar)
+        for i in range(numel):
+            result_ptr[i] = input_ptr[i] * scalar_cast
+    elif tensor.dtype() == DType.uint32:
+        var input_ptr = tensor._data.bitcast[Scalar[DType.uint32]]()
+        var result_ptr = result._data.bitcast[Scalar[DType.uint32]]()
+        var scalar_cast = Scalar[DType.uint32](scalar)
+        for i in range(numel):
+            result_ptr[i] = input_ptr[i] * scalar_cast
+    elif tensor.dtype() == DType.uint64:
+        var input_ptr = tensor._data.bitcast[Scalar[DType.uint64]]()
+        var result_ptr = result._data.bitcast[Scalar[DType.uint64]]()
+        var scalar_cast = Scalar[DType.uint64](scalar)
+        for i in range(numel):
+            result_ptr[i] = input_ptr[i] * scalar_cast
+    else:
+        raise Error("Unsupported dtype for multiply_scalar operation")
+
+    return result^
+
+
 fn floor_divide(a: ExTensor, b: ExTensor) raises -> ExTensor:
     """Element-wise floor division with broadcasting.
 
@@ -560,9 +664,8 @@ fn subtract_backward(
     # Gradient for A passes through unchanged (but reduced for broadcasting)
     var grad_a = _reduce_broadcast_dims(grad_output, a.shape())
 
-    # Gradient for B is negated using tensor operations (multiply by -1.0)
-    var neg_one = full(grad_output.shape(), -1.0, grad_output.dtype())
-    var neg_grad = multiply(grad_output, neg_one)
+    # Gradient for B is negated using optimized scalar multiplication
+    var neg_grad = multiply_scalar(grad_output, -1.0)
 
     # Reduce for broadcasting
     var grad_b = _reduce_broadcast_dims(neg_grad, b.shape())
@@ -660,9 +763,8 @@ fn divide_backward(
     var temp = multiply(grad_output, a)
     var grad_b_positive = divide(temp, b_squared_safe)
 
-    # Negate it using tensor operations (multiply by -1.0)
-    var neg_one = full(grad_b_positive.shape(), -1.0, grad_b_positive.dtype())
-    var grad_b_unreduced = multiply(grad_b_positive, neg_one)
+    # Negate it using optimized scalar multiplication
+    var grad_b_unreduced = multiply_scalar(grad_b_positive, -1.0)
 
     # Reduce for broadcasting
     var grad_b = _reduce_broadcast_dims(grad_b_unreduced, b.shape())
