@@ -186,6 +186,7 @@ from .arithmetic import (
     floor_divide,
     modulo,
     power,
+    multiply_scalar,
     add_backward,
     subtract_backward,
     multiply_backward,
