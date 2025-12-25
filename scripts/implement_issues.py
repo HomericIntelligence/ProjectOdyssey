@@ -2342,9 +2342,11 @@ Focus on what functionality was added or fixed. Do not include implementation de
         self._update_status(slot, issue, "Worktree", "setting up")
         worktree = self.worktree_manager.create_for_existing_branch(issue, branch)
         log("DEBUG", f"  Worktree ready: {worktree}")
-        self.state.in_progress[issue] = str(worktree)
-        self.state.pr_numbers[issue] = pr_number
-        self.state.save(self.state_file)
+        # Protect state modifications with lock
+        with self.state._save_lock:
+            self.state.in_progress[issue] = str(worktree)
+            self.state.pr_numbers[issue] = pr_number
+            self.state.save(self.state_file)
 
         # Fetch CI logs
         log("DEBUG", "  Fetching CI run info")
@@ -2517,8 +2519,10 @@ DO NOT describe what you're doing - just run the commands to commit.
 
         # Cleanup worktree since we're moving on
         self.worktree_manager.remove(issue)
-        del self.state.in_progress[issue]
-        self.state.save(self.state_file)
+        # Protect state modifications with lock
+        with self.state._save_lock:
+            del self.state.in_progress[issue]
+            self.state.save(self.state_file)
 
         duration = time.time() - start_time
         log("INFO", f"  Fixed PR #{pr_number} - moving to next issue")
@@ -2658,8 +2662,10 @@ DO NOT describe what you're doing - just run the commands to commit.
             # 2. Create worktree
             self._update_status(slot, issue, "Worktree", "creating")
             worktree = self.worktree_manager.create(issue, title)
-            self.state.in_progress[issue] = str(worktree)
-            self.state.save(self.state_file)
+            # Protect state modifications with lock
+            with self.state._save_lock:
+                self.state.in_progress[issue] = str(worktree)
+                self.state.save(self.state_file)
 
             # 3. Fetch and rebase
             self._update_status(slot, issue, "Git", "fetch & rebase")
@@ -2739,8 +2745,10 @@ You are on branch: {worktree.name}
             if not has_uncommitted and not has_new_commits:
                 log("WARN", f"  No changes made for #{issue}")
                 self.worktree_manager.remove(issue)
-                del self.state.in_progress[issue]
-                self.state.save(self.state_file)
+                # Protect state modifications with lock
+                with self.state._save_lock:
+                    del self.state.in_progress[issue]
+                    self.state.save(self.state_file)
                 return WorkerResult(issue, "skipped", None, "No changes made", time.time() - start_time)
 
             # 6. Get summary
@@ -2832,8 +2840,10 @@ DO NOT describe what you're doing - just run the commands to commit.
             # NOTE: PR creation removed - commits are pushed to branches only
             self._update_status(slot, issue, "Cleanup", "removing worktree")
             self.worktree_manager.remove(issue)
-            del self.state.in_progress[issue]
-            self.state.save(self.state_file)
+            # Protect state modifications with lock
+            with self.state._save_lock:
+                del self.state.in_progress[issue]
+                self.state.save(self.state_file)
 
             duration = time.time() - start_time
             log("INFO", f"  Committed #{issue} to branch {branch} in {duration:.0f}s")
@@ -2850,7 +2860,8 @@ DO NOT describe what you're doing - just run the commands to commit.
                         reason="Interrupted by user",
                     )
                     del self.state.in_progress[issue]
-                self.state.save(self.state_file)
+                    # Save inside lock to prevent race conditions
+                    self.state.save(self.state_file)
             raise
         except RuntimeError as e:
             # Expected failures (git push failed, etc.)
@@ -2866,7 +2877,8 @@ DO NOT describe what you're doing - just run the commands to commit.
                         reason=str(e)[:100],
                     )
                     del self.state.in_progress[issue]
-                self.state.save(self.state_file)
+                    # Save inside lock to prevent race conditions
+                    self.state.save(self.state_file)
 
             duration = time.time() - start_time
             return WorkerResult(issue, "paused", None, str(e), duration)
@@ -2887,7 +2899,8 @@ DO NOT describe what you're doing - just run the commands to commit.
                         reason=str(e)[:100],
                     )
                     del self.state.in_progress[issue]
-                self.state.save(self.state_file)
+                    # Save inside lock to prevent race conditions
+                    self.state.save(self.state_file)
 
             duration = time.time() - start_time
             return WorkerResult(issue, "paused", None, str(e), duration)
