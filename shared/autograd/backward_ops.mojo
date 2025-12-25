@@ -74,8 +74,8 @@ fn backward_add(
     """
     if len(nodes[idx].saved.tensors) < 2:
         return
-    var a = nodes[idx].saved.tensors[0]
-    var b = nodes[idx].saved.tensors[1]
+    var a = nodes[idx].saved.tensors[0].copy()
+    var b = nodes[idx].saved.tensors[1].copy()
     var result = add_backward(grad_output, a, b)
     if len(nodes[idx].input_ids) >= 1:
         registry.set_grad(nodes[idx].input_ids[0], result.grad_a)
@@ -103,8 +103,8 @@ fn backward_subtract(
     """
     if len(nodes[idx].saved.tensors) < 2:
         return
-    var a = nodes[idx].saved.tensors[0]
-    var b = nodes[idx].saved.tensors[1]
+    var a = nodes[idx].saved.tensors[0].copy()
+    var b = nodes[idx].saved.tensors[1].copy()
     var result = subtract_backward(grad_output, a, b)
     if len(nodes[idx].input_ids) >= 1:
         registry.set_grad(nodes[idx].input_ids[0], result.grad_a)
@@ -132,8 +132,8 @@ fn backward_multiply(
     """
     if len(nodes[idx].saved.tensors) < 2:
         return
-    var a = nodes[idx].saved.tensors[0]
-    var b = nodes[idx].saved.tensors[1]
+    var a = nodes[idx].saved.tensors[0].copy()
+    var b = nodes[idx].saved.tensors[1].copy()
     var result = multiply_backward(grad_output, a, b)
     if len(nodes[idx].input_ids) >= 1:
         registry.set_grad(nodes[idx].input_ids[0], result.grad_a)
@@ -161,8 +161,8 @@ fn backward_divide(
     """
     if len(nodes[idx].saved.tensors) < 2:
         return
-    var a = nodes[idx].saved.tensors[0]
-    var b = nodes[idx].saved.tensors[1]
+    var a = nodes[idx].saved.tensors[0].copy()
+    var b = nodes[idx].saved.tensors[1].copy()
     var result = divide_backward(grad_output, a, b)
     if len(nodes[idx].input_ids) >= 1:
         registry.set_grad(nodes[idx].input_ids[0], result.grad_a)
@@ -258,8 +258,8 @@ fn backward_matmul(
     """
     if len(nodes[idx].saved.tensors) < 2:
         return
-    var a = nodes[idx].saved.tensors[0]
-    var b = nodes[idx].saved.tensors[1]
+    var a = nodes[idx].saved.tensors[0].copy()
+    var b = nodes[idx].saved.tensors[1].copy()
     var result = matmul_backward(grad_output, a, b)
     if len(nodes[idx].input_ids) >= 1:
         registry.set_grad(nodes[idx].input_ids[0], result.grad_a)
