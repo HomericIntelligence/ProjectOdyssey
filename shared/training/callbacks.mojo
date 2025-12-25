@@ -71,10 +71,14 @@ struct EarlyStopping(Callback, Copyable, Movable):
     """Mode for monitoring metric ("min" or "max")."""
     var best_value: Float64
     """Best value seen so far."""
+    var best_epoch: Int
+    """Epoch number where best value was observed (0-indexed)."""
     var wait_count: Int
     """Number of epochs since last improvement."""
     var stopped: Bool
     """Whether training has been stopped."""
+    var verbose: Bool
+    """Whether to print detailed progress messages."""
 
     fn __init__(
         out self,
@@ -82,6 +86,7 @@ struct EarlyStopping(Callback, Copyable, Movable):
         patience: Int = 5,
         min_delta: Float64 = 0.0,
         mode: String = "min",
+        verbose: Bool = True,
     ):
         """Initialize early stopping callback.
 
@@ -90,11 +95,13 @@ struct EarlyStopping(Callback, Copyable, Movable):
             patience: Epochs to wait before stopping.
             min_delta: Minimum improvement threshold.
             mode: "min" for metrics to minimize (loss), "max" for metrics to maximize (accuracy).
+            verbose: Whether to print detailed progress messages.
         """
         self.monitor = monitor
         self.patience = patience
         self.min_delta = min_delta
         self.mode = mode
+        self.verbose = verbose
 
         # Initialize best_value based on mode
         if mode == "max":
@@ -102,6 +109,7 @@ struct EarlyStopping(Callback, Copyable, Movable):
         else:  # mode == "min" (default)
             self.best_value = Float64(1e9)
 
+        self.best_epoch = 0
         self.wait_count = 0
         self.stopped = False
 
@@ -120,6 +128,7 @@ struct EarlyStopping(Callback, Copyable, Movable):
         else:  # mode == "min" (default)
             self.best_value = Float64(1e9)
 
+        self.best_epoch = 0
         self.wait_count = 0
         self.stopped = False
         return CallbackSignal(0)
@@ -177,13 +186,39 @@ struct EarlyStopping(Callback, Copyable, Movable):
 
         if improved:
             self.best_value = current_value
+            self.best_epoch = state.epoch
             self.wait_count = 0
+            if self.verbose:
+                print(
+                    "[EarlyStopping] Improvement detected at epoch",
+                    state.epoch + 1,
+                    "- New best:",
+                    current_value,
+                )
         else:
             self.wait_count += 1
+            if self.verbose:
+                print(
+                    "[EarlyStopping] No improvement for",
+                    self.wait_count,
+                    "epochs (patience:",
+                    String(self.patience) + ")",
+                )
 
         if self.wait_count >= self.patience:
             self.stopped = True
             state.should_stop = True
+            if self.verbose:
+                print(
+                    "[EarlyStopping] Training stopped at epoch",
+                    state.epoch + 1,
+                )
+                print(
+                    "  Best value:",
+                    self.best_value,
+                    "at epoch",
+                    self.best_epoch + 1,
+                )
             return CallbackSignal(1)
 
         return CallbackSignal(0)
@@ -217,6 +252,14 @@ struct EarlyStopping(Callback, Copyable, Movable):
             True if patience exhausted, False otherwise.
         """
         return self.stopped
+
+    fn get_best_epoch(self) -> Int:
+        """Get epoch with best metric value.
+
+        Returns:
+            Epoch number (0-indexed) where the best value was observed.
+        """
+        return self.best_epoch
 
 
 # ============================================================================

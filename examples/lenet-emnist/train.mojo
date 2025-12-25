@@ -80,6 +80,14 @@ struct TrainConfig:
 fn parse_args() raises -> TrainConfig:
     """Parse command line arguments using enhanced argument parser.
 
+    Note: Early stopping arguments are parsed but not used in this example.
+    The create_training_parser() includes early stopping flags:
+        --use-early-stopping
+        --early-stopping-monitor (default: val_loss)
+        --early-stopping-patience (default: 5)
+        --early-stopping-min-delta (default: 0.0)
+        --early-stopping-mode (default: min)
+
     Returns:
         TrainConfig with parsed arguments.
     """

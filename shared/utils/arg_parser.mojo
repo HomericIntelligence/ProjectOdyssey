@@ -336,6 +336,11 @@ fn create_training_parser() raises -> ArgumentParser:
             - lr-decay-epochs (int, default 0)
             - lr-decay-factor (float, default 0.1)
             - verbose (flag)
+            - use-early-stopping (flag)
+            - early-stopping-monitor (string, default "val_loss")
+            - early-stopping-patience (int, default 5)
+            - early-stopping-min-delta (float, default 0.0)
+            - early-stopping-mode (string, default "min")
 
     Returns:
             ArgumentParser configured with ML training arguments.
@@ -358,6 +363,13 @@ fn create_training_parser() raises -> ArgumentParser:
     parser.add_argument("lr-decay-epochs", "int", "0")
     parser.add_argument("lr-decay-factor", "float", "0.1")
     parser.add_flag("verbose")
+
+    # Early stopping arguments
+    parser.add_flag("use-early-stopping")
+    parser.add_argument("early-stopping-monitor", "string", "val_loss")
+    parser.add_argument("early-stopping-patience", "int", "5")
+    parser.add_argument("early-stopping-min-delta", "float", "0.0")
+    parser.add_argument("early-stopping-mode", "string", "min")
 
     return parser^
 

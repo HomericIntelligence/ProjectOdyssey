@@ -34,6 +34,8 @@ from shared.training.mixed_precision import (
 )
 from shared.core.numerical_safety import has_nan, has_inf
 from shared.utils.serialization import NamedTensor
+from shared.training.callbacks import EarlyStopping
+from shared.training.base import TrainingState, CallbackSignal
 
 
 struct BaseTrainer(Trainer):
@@ -118,11 +120,12 @@ struct BaseTrainer(Trainer):
         zero_gradients: fn () raises -> None,
         mut train_loader: DataLoader,
         mut val_loader: DataLoader,
+        mut early_stopping: Pointer[EarlyStopping] = Pointer[EarlyStopping](),
     ) raises:
-        """Train model with periodic validation.
+        """Train model with periodic validation and optional early stopping.
 
         This is the main entry point for training. Combines training loop
-        and validation loop with proper metric tracking
+        and validation loop with proper metric tracking and callback support.
 
         Args:
             model_forward: Function to compute model forward pass.
@@ -131,9 +134,24 @@ struct BaseTrainer(Trainer):
             zero_gradients: Function to zero gradients.
             train_loader: Training data loader.
             val_loader: Validation data loader.
+            early_stopping: Optional pointer to EarlyStopping callback.
+                If provided, training will stop early when patience is exhausted.
 
         Raises:
             Error if training or validation fails.
+
+        Example:
+            ```mojo
+            # Without early stopping
+            trainer.fit(model_forward, compute_loss, optimizer_step,
+                       zero_gradients, train_loader, val_loader)
+
+            # With early stopping
+            var early_stop = EarlyStopping(monitor="val_loss", patience=5)
+            trainer.fit(model_forward, compute_loss, optimizer_step,
+                       zero_gradients, train_loader, val_loader,
+                       Pointer.address_of(early_stop))
+            ```
         """
         print("\n" + "=" * 70)
         print("STARTING TRAINING")
@@ -166,10 +184,27 @@ struct BaseTrainer(Trainer):
 
         self.is_training = True
 
+        # Create training state for callbacks
+        var state = TrainingState(
+            epoch=0, learning_rate=self.config.learning_rate
+        )
+
+        # Call on_train_begin callback
+        if early_stopping:
+            var signal = early_stopping[].on_train_begin(state)
+            if signal.value == 1:  # STOP signal
+                print("Training stopped by callback at start")
+                self.is_training = False
+                return
+
         # Training loop
         for epoch in range(self.config.num_epochs):
             self.metrics.current_epoch = epoch
             self.metrics.reset_epoch()
+
+            # Update state for this epoch
+            state.epoch = epoch
+            state.learning_rate = self.config.learning_rate
 
             print("\n" + "=" * 70)
             print(
@@ -179,6 +214,13 @@ struct BaseTrainer(Trainer):
                 + String(self.config.num_epochs)
             )
             print("=" * 70)
+
+            # Call on_epoch_begin callback
+            if early_stopping:
+                var signal = early_stopping[].on_epoch_begin(state)
+                if signal.value == 1:  # STOP signal
+                    print("Training stopped by callback at epoch begin")
+                    break
 
             # Run training epoch
             self.training_loop.run_epoch(
@@ -205,6 +247,17 @@ struct BaseTrainer(Trainer):
 
                 print("-" * 70)
 
+            # Update state with current metrics
+            state.metrics["train_loss"] = self.metrics.train_loss
+            state.metrics["val_loss"] = self.metrics.val_loss
+
+            # Call on_epoch_end callback (after validation)
+            if early_stopping:
+                var signal = early_stopping[].on_epoch_end(state)
+                if signal.value == 1:  # STOP signal
+                    print("Training stopped by early stopping")
+                    break
+
             # Log epoch metrics
             var epoch_metrics: List[MetricResult] = []
             epoch_metrics.append(
@@ -228,6 +281,10 @@ struct BaseTrainer(Trainer):
             )
 
         self.is_training = False
+
+        # Call on_train_end callback
+        if early_stopping:
+            _ = early_stopping[].on_train_end(state)
 
         # Final summary
         print("\n" + "=" * 70)
