@@ -691,13 +691,25 @@ def is_issue_closed(issue_num: int, force_refresh: bool = False) -> bool:
             _external_issue_cache[issue_num] = CachedIssueState(is_closed=is_closed, cached_at=now)
             return is_closed
         except json.JSONDecodeError as e:
-            log("WARN", f"Failed to parse issue #{issue_num} state: {e}")
-    else:
-        log("WARN", f"Failed to fetch issue #{issue_num}: {cp.stderr[:100]}")
+            log("ERROR", f"Failed to parse issue #{issue_num} state: {e}")
+            raise RuntimeError(f"Invalid JSON from GitHub API for issue #{issue_num}: {e}")
 
-    # Conservative fallback: assume not closed
-    _external_issue_cache[issue_num] = CachedIssueState(is_closed=False, cached_at=now)
-    return False
+    # Fetch failed - distinguish error types
+    stderr_lower = cp.stderr.lower()
+
+    # Check if issue doesn't exist
+    if "not found" in stderr_lower or "could not resolve" in stderr_lower:
+        log("ERROR", f"Issue #{issue_num} does not exist")
+        raise ValueError(f"External dependency issue #{issue_num} does not exist")
+
+    # Check for network/temporary errors
+    if any(msg in stderr_lower for msg in ["connection", "network", "timeout", "eof", "dns", "rate limit"]):
+        log("ERROR", f"Network error fetching issue #{issue_num}: {cp.stderr[:200]}")
+        raise RuntimeError(f"Network error checking external dependency #{issue_num}: {cp.stderr[:200]}")
+
+    # Unknown error - raise
+    log("ERROR", f"Unknown error fetching issue #{issue_num}: {cp.stderr[:200]}")
+    raise RuntimeError(f"Failed to check external dependency #{issue_num}: {cp.stderr[:200]}")
 
 
 # ---------------------------------------------------------------------
@@ -1740,17 +1752,22 @@ class IssueImplementer:
         self._last_api_call = 0.0
 
     def _gh_call(self, args: list[str], retries: int = MAX_RETRIES) -> subprocess.CompletedProcess:
-        """Make a rate-limited GitHub CLI call with retries."""
-        with self._api_lock:
-            # Wait for rate limit delay
-            elapsed = time.time() - self._last_api_call
-            if elapsed < self.opts.api_delay:
-                time.sleep(self.opts.api_delay - elapsed)
-            self._last_api_call = time.time()
+        """Make a rate-limited GitHub CLI call with retries.
 
+        CRITICAL: The API call must happen INSIDE the lock to prevent concurrent calls.
+        """
         # Execute with retries
         for attempt in range(1, retries + 1):
-            cp = run(args)
+            with self._api_lock:
+                # Wait for rate limit delay
+                elapsed = time.time() - self._last_api_call
+                if elapsed < self.opts.api_delay:
+                    time.sleep(self.opts.api_delay - elapsed)
+
+                # Execute API call INSIDE lock to prevent concurrent calls
+                cp = run(args)
+                self._last_api_call = time.time()
+
             if cp.returncode == 0:
                 return cp
 
@@ -1952,6 +1969,21 @@ class IssueImplementer:
                     priority=current_priority,
                     status=status,
                 )
+
+        # Validate that at least one issue was found
+        if not issues:
+            log("ERROR", f"No issues found in epic #{epic_number}")
+            log("ERROR", "Expected format in epic body:")
+            log("ERROR", "  ### P0: Foundation")
+            log("ERROR", "  - [ ] #123 (depends on: #456, #789)")
+            log("ERROR", "  - [x] #124")
+            log("ERROR", "")
+            log("ERROR", "Epic body preview (first 500 chars):")
+            log("ERROR", f"{body[:500]}")
+            raise ValueError(
+                f"No issues found in epic #{epic_number}. "
+                "Check the epic issue format - expected checklist items like '- [ ] #123'"
+            )
 
         # Titles are fetched lazily when needed (to avoid rate limiting)
         log("INFO", f"Parsed {len(issues)} issues from epic #{epic_number}")
@@ -2206,8 +2238,17 @@ Focus on what functionality was added or fixed. Do not include implementation de
 
         return "Implementation completed."
 
+    # ============================================================================
+    # DISABLED: PR creation functionality was removed (see line 2743, 2840)
+    # These methods (_check_existing_pr, _analyze_and_fix_pr) are preserved
+    # for potential future restoration but are NOT called anywhere.
+    # If PR creation is re-enabled, uncomment the call sites and update logic.
+    # ============================================================================
+
     def _check_existing_pr(self, issue: int) -> dict | None:
         """Check if a PR already exists for this issue.
+
+        **DISABLED**: This method is not called - PR creation was removed.
 
         Returns PR info dict if found, None otherwise.
         Checks both by issue number in title/body AND by branch name pattern.
@@ -2306,7 +2347,10 @@ Focus on what functionality was added or fixed. Do not include implementation de
         return None
 
     def _analyze_and_fix_pr(self, pr_info: dict, issue: int, slot: int) -> WorkerResult:
-        """Analyze CI failures on an existing PR and attempt to fix them."""
+        """Analyze CI failures on an existing PR and attempt to fix them.
+
+        **DISABLED**: This method is not called - PR creation was removed.
+        """
         start_time = time.time()
         pr_number = pr_info["number"]
         branch = pr_info.get("headRefName", "")
