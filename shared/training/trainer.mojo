@@ -120,7 +120,9 @@ struct BaseTrainer(Trainer):
         zero_gradients: fn () raises -> None,
         mut train_loader: DataLoader,
         mut val_loader: DataLoader,
-        mut early_stopping: Pointer[EarlyStopping] = Pointer[EarlyStopping](),
+        early_stopping: UnsafePointer[EarlyStopping] = UnsafePointer[
+            EarlyStopping
+        ](),
     ) raises:
         """Train model with periodic validation and optional early stopping.
 
@@ -190,7 +192,7 @@ struct BaseTrainer(Trainer):
         )
 
         # Call on_train_begin callback
-        if early_stopping:
+        if int(early_stopping) != 0:
             var signal = early_stopping[].on_train_begin(state)
             if signal.value == 1:  # STOP signal
                 print("Training stopped by callback at start")
@@ -216,7 +218,7 @@ struct BaseTrainer(Trainer):
             print("=" * 70)
 
             # Call on_epoch_begin callback
-            if early_stopping:
+            if int(early_stopping) != 0:
                 var signal = early_stopping[].on_epoch_begin(state)
                 if signal.value == 1:  # STOP signal
                     print("Training stopped by callback at epoch begin")
@@ -252,7 +254,7 @@ struct BaseTrainer(Trainer):
             state.metrics["val_loss"] = self.metrics.val_loss
 
             # Call on_epoch_end callback (after validation)
-            if early_stopping:
+            if int(early_stopping) != 0:
                 var signal = early_stopping[].on_epoch_end(state)
                 if signal.value == 1:  # STOP signal
                     print("Training stopped by early stopping")
@@ -283,7 +285,7 @@ struct BaseTrainer(Trainer):
         self.is_training = False
 
         # Call on_train_end callback
-        if early_stopping:
+        if int(early_stopping) != 0:
             _ = early_stopping[].on_train_end(state)
 
         # Final summary
