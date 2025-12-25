@@ -21,11 +21,10 @@ sys.path.insert(0, str(pathlib.Path(__file__).parent.parent.parent / "scripts"))
 
 # Import module with dash in filename
 spec = importlib.util.spec_from_file_location(
-    "implement_issues",
-    pathlib.Path(__file__).parent.parent.parent / "scripts" / "implement_issues.py"
+    "implement_issues", pathlib.Path(__file__).parent.parent.parent / "scripts" / "implement_issues.py"
 )
 implement_issues = importlib.util.module_from_spec(spec)
-sys.modules['implement_issues'] = implement_issues  # Add to sys.modules for patching
+sys.modules["implement_issues"] = implement_issues  # Add to sys.modules for patching
 spec.loader.exec_module(implement_issues)
 
 
@@ -246,6 +245,7 @@ class TestHealthCheck(unittest.TestCase):
     @patch("shutil.which")
     def test_health_check_missing_dependency(self, mock_which):
         """Verify health check returns 1 when dependency missing."""
+
         def which_side_effect(cmd):
             return None if cmd == "gh" else "/usr/bin/" + cmd
 
