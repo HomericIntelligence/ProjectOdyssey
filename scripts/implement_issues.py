@@ -932,6 +932,31 @@ class StatusTracker:
             else:
                 log("WARN", f"Attempted to release unoccupied slot {slot}")
 
+    def release_by_item(self, item_id: int) -> bool:
+        """Release the slot owned by a specific item.
+
+        Args:
+            item_id: ID of the item to release
+
+        Returns:
+            True if slot was found and released, False otherwise
+        """
+        with self._slot_available:
+            # Find slot for this item
+            for slot, owner in self._slot_to_item.items():
+                if owner == item_id:
+                    # Found it - release
+                    log("DEBUG", f"Item #{item_id} releasing slot {slot}")
+                    if slot in self._slots:
+                        del self._slots[slot]
+                    del self._slot_to_item[slot]
+                    self._update_event.set()
+                    self._slot_available.notify()
+                    return True
+
+            log("WARN", f"No slot found for item #{item_id}")
+            return False
+
     def get_status_data(self) -> dict:
         """Return current state snapshot for external rendering."""
         with self._lock:
@@ -1237,10 +1262,12 @@ class ImplementationState:
                     import fcntl
 
                     fcntl.flock(f.fileno(), fcntl.LOCK_EX)
-                    f.write(json_content)
-                    f.flush()
-                    os.fsync(f.fileno())  # Force write to disk
-                    fcntl.flock(f.fileno(), fcntl.LOCK_UN)
+                    try:
+                        f.write(json_content)
+                        f.flush()
+                        os.fsync(f.fileno())  # Force write to disk
+                    finally:
+                        fcntl.flock(f.fileno(), fcntl.LOCK_UN)
 
                 # Set permissions before rename
                 os.chmod(temp_path, 0o600)
@@ -1454,7 +1481,11 @@ class DependencyResolver:
         return any(color[n] == WHITE and dfs(n) for n in self.issues)
 
     def get_topological_order(self) -> list[int]:
-        """Return issues in dependency order (no issue before its dependencies)."""
+        """Return issues in dependency order (no issue before its dependencies).
+
+        Raises:
+            ValueError: If a dependency cycle is detected
+        """
         priority_order = {"P0": 0, "P1": 1, "P2": 2}
         all_issues = self.get_all_issue_numbers()
 
@@ -1474,6 +1505,22 @@ class DependencyResolver:
                     in_degree[other] -= 1
                     if in_degree[other] == 0:
                         queue.append(other)
+
+        # CRITICAL: Detect dependency cycles
+        # If not all issues were processed, there's a cycle
+        if len(result) != len(self.issues):
+            unprocessed = set(self.issues.keys()) - set(result)
+            # Build cycle description for error message
+            cycle_details = []
+            for issue_num in sorted(unprocessed):
+                deps = self.issues[issue_num].depends_on & all_issues
+                cycle_details.append(f"  #{issue_num} depends on: {sorted(deps)}")
+
+            raise ValueError(
+                f"Dependency cycle detected! {len(unprocessed)} issue(s) cannot be processed:\n"
+                + "\n".join(cycle_details)
+                + "\n\nPlease fix the circular dependencies in your epic issue."
+            )
 
         return result
 
@@ -1815,11 +1862,11 @@ class IssueImplementer:
             results = self._fetch_issues_batch(batch)
 
             for issue_num in batch:
-                if issue_num in results:
+                if results is not None and issue_num in results:
                     if issue_num in self.state.issues:
                         self.state.issues[issue_num].title = results[issue_num]["title"]
                 else:
-                    # Fallback to individual fetch if batch missed this one
+                    # Fallback to individual fetch if batch missed this one or batch failed
                     title = self._fetch_issue_title(issue_num)
                     if issue_num in self.state.issues:
                         self.state.issues[issue_num].title = title
@@ -2487,7 +2534,12 @@ DO NOT describe what you're doing - just run the commands to commit.
             stderr=subprocess.PIPE,
             text=True,
         )
-        proc.communicate(input=comment)
+        try:
+            proc.communicate(input=comment, timeout=30)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+            proc.wait(timeout=5)
+            log("WARN", f"Timeout posting update to issue #{issue}")
 
     def _poll_pr_status(self, pr_number: int, slot: int, issue: int) -> str:
         """Poll PR status until merged, failed, or timeout.
@@ -2704,7 +2756,12 @@ You are on branch: {worktree.name}
                 stderr=subprocess.PIPE,
                 text=True,
             )
-            proc.communicate(input=summary_comment)
+            try:
+                proc.communicate(input=summary_comment, timeout=30)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                proc.wait(timeout=5)
+                log("WARN", f"Timeout posting summary to issue #{issue}")
 
             # 8. Commit (if Claude didn't already)
             if has_uncommitted:
@@ -2786,12 +2843,13 @@ DO NOT describe what you're doing - just run the commands to commit.
         except (KeyboardInterrupt, SystemExit):
             # Clean shutdown - preserve state and re-raise
             if issue in self.state.in_progress:
-                self.state.paused_issues[issue] = PausedIssue(
-                    worktree=self.state.in_progress[issue],
-                    pr=None,
-                    reason="Interrupted by user",
-                )
-                del self.state.in_progress[issue]
+                with self.state._save_lock:
+                    self.state.paused_issues[issue] = PausedIssue(
+                        worktree=self.state.in_progress[issue],
+                        pr=None,
+                        reason="Interrupted by user",
+                    )
+                    del self.state.in_progress[issue]
                 self.state.save(self.state_file)
             raise
         except RuntimeError as e:
@@ -2801,12 +2859,13 @@ DO NOT describe what you're doing - just run the commands to commit.
             self._post_issue_update(issue, f"❌ Implementation failed:\n\n```\n{error_msg}\n```")
 
             if issue in self.state.in_progress:
-                self.state.paused_issues[issue] = PausedIssue(
-                    worktree=self.state.in_progress[issue],
-                    pr=None,
-                    reason=str(e)[:100],
-                )
-                del self.state.in_progress[issue]
+                with self.state._save_lock:
+                    self.state.paused_issues[issue] = PausedIssue(
+                        worktree=self.state.in_progress[issue],
+                        pr=None,
+                        reason=str(e)[:100],
+                    )
+                    del self.state.in_progress[issue]
                 self.state.save(self.state_file)
 
             duration = time.time() - start_time
@@ -2821,12 +2880,13 @@ DO NOT describe what you're doing - just run the commands to commit.
             self._post_issue_update(issue, f"❌ Implementation failed:\n\n```\n{error_msg}\n```")
 
             if issue in self.state.in_progress:
-                self.state.paused_issues[issue] = PausedIssue(
-                    worktree=self.state.in_progress[issue],
-                    pr=None,
-                    reason=str(e)[:100],
-                )
-                del self.state.in_progress[issue]
+                with self.state._save_lock:
+                    self.state.paused_issues[issue] = PausedIssue(
+                        worktree=self.state.in_progress[issue],
+                        pr=None,
+                        reason=str(e)[:100],
+                    )
+                    del self.state.in_progress[issue]
                 self.state.save(self.state_file)
 
             duration = time.time() - start_time
@@ -3267,17 +3327,8 @@ Examples:
                                 f"Main loop: marked #{issue_num} as paused ({result.status})",
                             )
 
-                        # Release slot (find slot first, then release without holding lock)
-                        slot_to_release = None
-                        with status_tracker._lock:
-                            for slot in range(actual_workers):
-                                if slot in status_tracker._slots:
-                                    item, _, _, _ = status_tracker._slots[slot]
-                                    if item == issue_num:
-                                        slot_to_release = slot
-                                        break
-                        if slot_to_release is not None:
-                            status_tracker.release_slot(slot_to_release)
+                        # Release slot for this issue
+                        status_tracker.release_by_item(issue_num)
 
         finally:
             # Save state even if interrupted
