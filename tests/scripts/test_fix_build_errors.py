@@ -24,11 +24,10 @@ sys.path.insert(0, str(pathlib.Path(__file__).parent.parent.parent / "scripts"))
 
 # Import module with dash in filename
 spec = importlib.util.spec_from_file_location(
-    "fix_build_errors",
-    pathlib.Path(__file__).parent.parent.parent / "scripts" / "fix-build-errors.py"
+    "fix_build_errors", pathlib.Path(__file__).parent.parent.parent / "scripts" / "fix-build-errors.py"
 )
 fix_build_errors = importlib.util.module_from_spec(spec)
-sys.modules['fix_build_errors'] = fix_build_errors  # Add to sys.modules for patching
+sys.modules["fix_build_errors"] = fix_build_errors  # Add to sys.modules for patching
 spec.loader.exec_module(fix_build_errors)
 
 
@@ -91,13 +90,9 @@ class TestBuildValidation(unittest.TestCase):
     @patch("fix_build_errors.run")
     def test_build_ok_success_no_warnings(self, mock_run):
         """Verify successful build with no warnings."""
-        mock_run.return_value = Mock(
-            returncode=0, stderr="Build completed successfully", stdout=""
-        )
+        mock_run.return_value = Mock(returncode=0, stderr="Build completed successfully", stdout="")
 
-        result = fix_build_errors.build_ok(
-            cwd=self.temp_dir, root="/root", file="test.mojo", log_path=self.log_path
-        )
+        result = fix_build_errors.build_ok(cwd=self.temp_dir, root="/root", file="test.mojo", log_path=self.log_path)
 
         self.assertTrue(result)
         mock_run.assert_called_once()
@@ -111,35 +106,25 @@ class TestBuildValidation(unittest.TestCase):
             stdout="",
         )
 
-        result = fix_build_errors.build_ok(
-            cwd=self.temp_dir, root="/root", file="test.mojo", log_path=self.log_path
-        )
+        result = fix_build_errors.build_ok(cwd=self.temp_dir, root="/root", file="test.mojo", log_path=self.log_path)
 
         self.assertFalse(result)
 
     @patch("fix_build_errors.run")
     def test_build_ok_failure(self, mock_run):
         """Verify build failure returns False."""
-        mock_run.return_value = Mock(
-            returncode=1, stderr="error: syntax error at line 10", stdout=""
-        )
+        mock_run.return_value = Mock(returncode=1, stderr="error: syntax error at line 10", stdout="")
 
-        result = fix_build_errors.build_ok(
-            cwd=self.temp_dir, root="/root", file="test.mojo", log_path=self.log_path
-        )
+        result = fix_build_errors.build_ok(cwd=self.temp_dir, root="/root", file="test.mojo", log_path=self.log_path)
 
         self.assertFalse(result)
 
     @patch("fix_build_errors.run")
     def test_build_ok_case_insensitive_warning(self, mock_run):
         """Verify warning detection is case-insensitive."""
-        mock_run.return_value = Mock(
-            returncode=0, stderr="Warning: unused import", stdout=""
-        )
+        mock_run.return_value = Mock(returncode=0, stderr="Warning: unused import", stdout="")
 
-        result = fix_build_errors.build_ok(
-            cwd=self.temp_dir, root="/root", file="test.mojo", log_path=self.log_path
-        )
+        result = fix_build_errors.build_ok(cwd=self.temp_dir, root="/root", file="test.mojo", log_path=self.log_path)
 
         self.assertFalse(result)
 
@@ -148,9 +133,7 @@ class TestBuildValidation(unittest.TestCase):
         """Verify build output is logged."""
         mock_run.return_value = Mock(returncode=0, stderr="Build output", stdout="")
 
-        fix_build_errors.build_ok(
-            cwd=self.temp_dir, root="/root", file="test.mojo", log_path=self.log_path
-        )
+        fix_build_errors.build_ok(cwd=self.temp_dir, root="/root", file="test.mojo", log_path=self.log_path)
 
         # Verify log file created and contains output
         self.assertTrue(self.log_path.exists())
@@ -182,9 +165,7 @@ class TestWorktreeManagement(unittest.TestCase):
         fix_build_errors.create_worktree("test-branch")
 
         # Verify fetch was called
-        fetch_calls = [
-            call for call in mock_run.call_args_list if "fetch" in str(call)
-        ]
+        fetch_calls = [call for call in mock_run.call_args_list if "fetch" in str(call)]
         self.assertTrue(len(fetch_calls) > 0)
 
     @patch("fix_build_errors.run")
@@ -217,14 +198,10 @@ class TestWorktreeManagement(unittest.TestCase):
         """Verify cleanup deletes remote branch when specified."""
         mock_run.return_value = Mock(returncode=0, stderr="", stdout="")
 
-        fix_build_errors.cleanup_worktree(
-            pathlib.Path("/tmp/test"), branch="test-branch"
-        )
+        fix_build_errors.cleanup_worktree(pathlib.Path("/tmp/test"), branch="test-branch")
 
         # Verify push --delete was called
-        delete_calls = [
-            call for call in mock_run.call_args_list if "--delete" in str(call)
-        ]
+        delete_calls = [call for call in mock_run.call_args_list if "--delete" in str(call)]
         self.assertTrue(len(delete_calls) > 0)
 
 
@@ -256,9 +233,7 @@ class TestMetricsTracking(unittest.TestCase):
 
     def test_track_file_metrics_failure(self):
         """Verify failed file metrics tracked."""
-        fix_build_errors.track_file_metrics(
-            "test.mojo", success=False, elapsed_time=3.2
-        )
+        fix_build_errors.track_file_metrics("test.mojo", success=False, elapsed_time=3.2)
 
         self.assertEqual(fix_build_errors.metrics["files_processed"], 1)
         self.assertEqual(fix_build_errors.metrics["files_succeeded"], 0)
@@ -279,9 +254,7 @@ class TestMetricsTracking(unittest.TestCase):
     def test_track_multiple_files(self):
         """Verify multiple file metrics aggregated correctly."""
         fix_build_errors.track_file_metrics("file1.mojo", success=True, elapsed_time=2.0)
-        fix_build_errors.track_file_metrics(
-            "file2.mojo", success=False, elapsed_time=3.0
-        )
+        fix_build_errors.track_file_metrics("file2.mojo", success=False, elapsed_time=3.0)
         fix_build_errors.track_file_metrics("file3.mojo", success=True, elapsed_time=4.0)
 
         self.assertEqual(fix_build_errors.metrics["files_processed"], 3)
@@ -291,9 +264,7 @@ class TestMetricsTracking(unittest.TestCase):
     def test_save_metrics_calculates_derived(self):
         """Verify save_metrics calculates success rate and average time."""
         fix_build_errors.track_file_metrics("file1.mojo", success=True, elapsed_time=2.0)
-        fix_build_errors.track_file_metrics(
-            "file2.mojo", success=False, elapsed_time=4.0
-        )
+        fix_build_errors.track_file_metrics("file2.mojo", success=False, elapsed_time=4.0)
 
         with tempfile.TemporaryDirectory() as tmpdir:
             fix_build_errors.LOG_DIR = pathlib.Path(tmpdir)
@@ -357,9 +328,7 @@ class TestDependencyValidation(unittest.TestCase):
     def test_health_check_all_ok(self, mock_run, mock_which):
         """Verify health check returns 0 when all OK."""
         mock_which.return_value = "/usr/bin/cmd"
-        mock_run.return_value = Mock(
-            returncode=0, stdout="version 1.0.0\n", stderr="Logged in as user\n"
-        )
+        mock_run.return_value = Mock(returncode=0, stdout="version 1.0.0\n", stderr="Logged in as user\n")
 
         result = fix_build_errors.health_check()
 
@@ -397,9 +366,7 @@ class TestRetryIntegration(unittest.TestCase):
     def test_run_with_retry_network_error(self, mock_sleep, mock_run):
         """Verify network errors trigger retry."""
         mock_run.side_effect = [
-            Mock(
-                returncode=1, stderr="fatal: could not resolve hostname", stdout=""
-            ),  # Retry
+            Mock(returncode=1, stderr="fatal: could not resolve hostname", stdout=""),  # Retry
             Mock(returncode=0, stderr="", stdout="success"),  # Success
         ]
 
@@ -411,9 +378,7 @@ class TestRetryIntegration(unittest.TestCase):
     @patch("fix_build_errors.run")
     def test_run_with_retry_non_network_error_no_retry(self, mock_run):
         """Verify non-network errors don't trigger retry."""
-        mock_run.return_value = Mock(
-            returncode=1, stderr="fatal: invalid reference", stdout=""
-        )
+        mock_run.return_value = Mock(returncode=1, stderr="fatal: invalid reference", stdout="")
 
         result = fix_build_errors.run_with_retry(["git", "checkout", "invalid"])
 
