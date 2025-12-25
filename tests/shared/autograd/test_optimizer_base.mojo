@@ -136,7 +136,7 @@ fn test_zero_grad_implementation() raises:
     var grad = ExTensor(shape, DType.float32)
     grad._set_float64(0, 1.0)
 
-    tape.registry.gradients[0] = grad^
+    tape.registry.set_grad(0, grad^)
 
     # Verify gradient exists
     assert_true(
@@ -158,7 +158,7 @@ fn test_sgd_zero_grad() raises:
     # Add gradient
     var shape: List[Int] = [1]
     var grad = ExTensor(shape, DType.float32)
-    tape.registry.gradients[0] = grad^
+    tape.registry.set_grad(0, grad^)
 
     # Clear gradients
     optimizer.zero_grad(tape)
@@ -177,7 +177,7 @@ fn test_adam_zero_grad() raises:
     # Add gradient
     var shape: List[Int] = [1]
     var grad = ExTensor(shape, DType.float32)
-    tape.registry.gradients[0] = grad^
+    tape.registry.set_grad(0, grad^)
 
     # Clear gradients
     optimizer.zero_grad(tape)
@@ -208,7 +208,7 @@ fn test_zero_grad_preserves_optimizer_state() raises:
     var grad = ExTensor(shape, DType.float32)
     grad._set_float64(0, 0.1)
     grad._set_float64(1, 0.2)
-    tape.registry.gradients[0] = grad^
+    tape.registry.set_grad(0, grad^)
 
     # Take a step (initializes moment buffers)
     optimizer.step(parameters, tape)
@@ -247,7 +247,7 @@ fn test_clip_gradients_no_clipping_needed() raises:
     grad._set_float64(0, 0.1)
     grad._set_float64(1, 0.1)
     grad._set_float64(2, 0.1)
-    tape.registry.gradients[0] = grad^
+    tape.registry.set_grad(0, grad^)
 
     # Clip with max_norm=5.0 (should not clip)
     var original_norm = clip_gradients_by_global_norm(
@@ -282,7 +282,7 @@ fn test_clip_gradients_with_clipping() raises:
     grad._set_float64(0, 3.0)
     grad._set_float64(1, 4.0)
     grad._set_float64(2, 0.0)
-    tape.registry.gradients[0] = grad^
+    tape.registry.set_grad(0, grad^)
 
     # Original norm = sqrt(9 + 16) = 5.0
     # Clip to max_norm=1.0
@@ -334,12 +334,12 @@ fn test_clip_gradients_multiple_parameters() raises:
     var grad1 = ExTensor(shape, DType.float32)
     grad1._set_float64(0, 3.0)
     grad1._set_float64(1, 0.0)
-    tape.registry.gradients[0] = grad1^
+    tape.registry.set_grad(0, grad1^)
 
     var grad2 = ExTensor(shape, DType.float32)
     grad2._set_float64(0, 0.0)
     grad2._set_float64(1, 4.0)
-    tape.registry.gradients[1] = grad2^
+    tape.registry.set_grad(1, grad2^)
 
     # Global norm = sqrt(3^2 + 4^2) = 5.0
     # Clip to max_norm=1.0
@@ -403,10 +403,10 @@ fn test_count_parameters_with_gradients() raises:
 
     # Add gradients for param1 and param2 only
     var grad1 = ExTensor(shape, DType.float32)
-    tape.registry.gradients[0] = grad1^
+    tape.registry.set_grad(0, grad1^)
 
     var grad2 = ExTensor(shape, DType.float32)
-    tape.registry.gradients[1] = grad2^
+    tape.registry.set_grad(1, grad2^)
 
     # Count should be 2 (param3 doesn't require grad)
     var count = count_parameters_with_gradients(parameters, tape)
@@ -455,7 +455,7 @@ fn test_optimizer_integration_with_gradient_clipping() raises:
     var grad = ExTensor(shape, DType.float32)
     grad._set_float64(0, 10.0)
     grad._set_float64(1, 0.0)
-    tape.registry.gradients[0] = grad^
+    tape.registry.set_grad(0, grad^)
 
     # Clip gradients before optimizer step
     _ = clip_gradients_by_global_norm(parameters, tape, max_norm=1.0)
