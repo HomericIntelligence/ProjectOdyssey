@@ -401,33 +401,80 @@ fn test_mixed_precision_memory_savings() raises:
 
 
 fn test_training_with_toml_config() raises:
-    """Test full training from TOML config file.
+    """Test loading training configuration from TOML file.
+
+    Verifies that TOML config files can be loaded and parsed correctly.
+    Tests precision mode and gradient scaler configuration from TOML.
 
     TOML config should specify:
     - precision mode (fp32/fp16/bf16/fp8)
     - initial scale for gradient scaler
     - batch size, learning rate, etc.
-
-    Note: This test requires config loading infrastructure.
-    Currently a placeholder.
     """
-    # TODO(#2734): Implement when TOML config loading is available
-    # Expected workflow:
-    # 1. Load config from configs/lenet5/emnist/fp16.toml
-    # 2. Create PrecisionConfig from config
-    # 3. Train model using config settings
-    # 4. Verify loss decreases
+    from shared.utils.toml_loader import load_toml_config
 
-    # For now, just verify we can create configs programmatically
-    var fp16_config = PrecisionConfig.fp16(initial_scale=65536.0)
+    # Load FP16 config from TOML file
+    var config = load_toml_config("configs/lenet5/emnist/fp16.toml")
+
+    # Verify precision mode
+    var mode = config.get_string("precision.mode")
+    assert_true(mode == "fp16", "Precision mode should be fp16")
+
+    # Verify gradient scaler initial scale
+    var initial_scale = config.get_float(
+        "precision.gradient_scaler.initial_scale"
+    )
+    assert_almost_equal(
+        initial_scale,
+        65536.0,
+        tolerance=0.1,
+        message="Initial scale should be 65536.0 from TOML",
+    )
+
+    # Verify other gradient scaler settings
+    var growth_factor = config.get_float(
+        "precision.gradient_scaler.growth_factor"
+    )
+    assert_almost_equal(
+        growth_factor,
+        2.0,
+        tolerance=0.01,
+        message="Growth factor should be 2.0",
+    )
+
+    var backoff_factor = config.get_float(
+        "precision.gradient_scaler.backoff_factor"
+    )
+    assert_almost_equal(
+        backoff_factor,
+        0.5,
+        tolerance=0.01,
+        message="Backoff factor should be 0.5",
+    )
+
+    # Verify training settings
+    var batch_size = config.get_int("training.batch_size")
+    assert_true(batch_size == 64, "Batch size should be 64")
+
+    var learning_rate = config.get_float("training.learning_rate")
+    assert_almost_equal(
+        learning_rate,
+        0.001,
+        tolerance=0.0001,
+        message="Learning rate should be 0.001",
+    )
+
+    # Now create a PrecisionConfig from the loaded values
+    var fp16_config = PrecisionConfig.fp16(initial_scale=Float32(initial_scale))
     assert_true(
-        fp16_config.mode == PrecisionMode.FP16, "Should create FP16 config"
+        fp16_config.mode == PrecisionMode.FP16,
+        "Should create FP16 config from TOML",
     )
     assert_almost_equal(
         Float64(fp16_config.get_scale()),
-        Float64(65536.0),
-        tolerance=Float64(0.1),
-        message="Scale should match initial",
+        initial_scale,
+        tolerance=0.1,
+        message="Config scale should match TOML value",
     )
 
 
