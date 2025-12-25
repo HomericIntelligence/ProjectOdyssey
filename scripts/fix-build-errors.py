@@ -10,6 +10,11 @@ Key properties:
 - Branches off main
 - KISS + DRY enforced
 
+Mojo Requirements:
+- Requires Mojo v0.26.1 or later
+- Language reference: https://docs.modular.com/mojo/manual/
+- Uses modern Mojo syntax (list literals, @fieldwise_init, etc.)
+
 Path Dependencies:
 - Requires .claude/ directory in repository root
 - Claude runs with --add-dir .claude to access guidelines
@@ -1184,7 +1189,11 @@ def process_file(file, root):
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Autonomous Mojo repair with Claude Code (Requires Mojo v0.26.1+). "
+        "Language reference: https://docs.modular.com/mojo/manual/",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
     parser.add_argument("--input", "-i", help="File containing list of files to process")
     parser.add_argument("--root", "-r", help="Root directory for include paths")
     parser.add_argument("--workers", "-w", type=int, default=MAX_WORKERS_DEFAULT, help="Number of parallel workers")

@@ -10,6 +10,11 @@ Design goals (following plan_issues.py and analyze_issues_claude.py patterns):
 - Live status display with StatusTracker
 - Resumable state persistence
 - Pause on CI failure for manual intervention
+
+Mojo Requirements:
+- Requires Mojo v0.26.1 or later
+- Language reference: https://docs.modular.com/mojo/manual/
+- Uses modern Mojo syntax (list literals, @fieldwise_init, etc.)
 """
 
 from __future__ import annotations
@@ -3035,7 +3040,8 @@ def print_paused_summary(state: ImplementationState) -> None:
 def main() -> int:
     """CLI entry point for the issue implementer."""
     p = argparse.ArgumentParser(
-        description="Orchestrate parallel implementation of GitHub issues using worktrees",
+        description="Orchestrate parallel implementation of GitHub issues using worktrees.\n"
+        "Requires Mojo v0.26.1+. Language reference: https://docs.modular.com/mojo/manual/",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
 Examples:
