@@ -62,8 +62,8 @@ from shared.autograd.optimizer_base import (
 )
 
 
-@value
-struct SGD(Optimizer):
+@fieldwise_init
+struct SGD(Copyable, Movable, Optimizer):
     """Stochastic Gradient Descent optimizer.
 
         Implements basic gradient descent with optional momentum:
@@ -247,8 +247,8 @@ struct SGD(Optimizer):
         self.learning_rate = lr
 
 
-@value
-struct Adam(Optimizer):
+@fieldwise_init
+struct Adam(Copyable, Movable, Optimizer):
     """Adam (Adaptive Moment Estimation) optimizer.
 
         Combines momentum and RMSprop to achieve adaptive learning rates for each parameter:
@@ -559,8 +559,8 @@ struct Adam(Optimizer):
         self.learning_rate = lr
 
 
-@value
-struct AdaGrad(Optimizer):
+@fieldwise_init
+struct AdaGrad(Copyable, Movable, Optimizer):
     """AdaGrad (Adaptive Gradient) optimizer.
 
         Implements adaptive learning rate optimization based on accumulated squared
@@ -776,8 +776,8 @@ struct AdaGrad(Optimizer):
         self.G_buffers.clear()
 
 
-@value
-struct RMSprop(Optimizer):
+@fieldwise_init
+struct RMSprop(Copyable, Movable, Optimizer):
     """Root Mean Square Propagation (RMSprop) optimizer.
 
         Adapts learning rate per parameter based on running average of squared gradients:
