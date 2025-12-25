@@ -13,7 +13,7 @@ Output:
 """
 
 from sys import argv
-import time as mojo_time
+from time import perf_counter_ns
 from python import Python
 
 
@@ -29,11 +29,11 @@ fn tensor_add_small_impl() raises:
     var c = List[List[Float32]](capacity=100)
 
     # Initialize tensors
-    for i in range(100):
+    for _ in range(100):
         var row_a = List[Float32](capacity=100)
         var row_b = List[Float32](capacity=100)
         var row_c = List[Float32](capacity=100)
-        for j in range(100):
+        for _ in range(100):
             row_a.append(1.0)
             row_b.append(2.0)
             row_c.append(0.0)
@@ -54,11 +54,11 @@ fn tensor_add_large_impl() raises:
     var c = List[List[Float32]](capacity=1000)
 
     # Initialize tensors
-    for i in range(1000):
+    for _ in range(1000):
         var row_a = List[Float32](capacity=1000)
         var row_b = List[Float32](capacity=1000)
         var row_c = List[Float32](capacity=1000)
-        for j in range(1000):
+        for _ in range(1000):
             row_a.append(1.0)
             row_b.append(2.0)
             row_c.append(0.0)
@@ -79,11 +79,11 @@ fn matmul_small_impl() raises:
     var c = List[List[Float32]](capacity=100)
 
     # Initialize matrices
-    for i in range(100):
+    for _ in range(100):
         var row_a = List[Float32](capacity=100)
         var row_b = List[Float32](capacity=100)
         var row_c = List[Float32](capacity=100)
-        for j in range(100):
+        for _ in range(100):
             row_a.append(1.0)
             row_b.append(1.0)
             row_c.append(0.0)
@@ -107,11 +107,11 @@ fn matmul_large_impl() raises:
     var c = List[List[Float32]](capacity=1000)
 
     # Initialize matrices
-    for i in range(1000):
+    for _ in range(1000):
         var row_a = List[Float32](capacity=1000)
         var row_b = List[Float32](capacity=1000)
         var row_c = List[Float32](capacity=1000)
-        for j in range(1000):
+        for _ in range(1000):
             row_a.append(1.0)
             row_b.append(1.0)
             row_c.append(0.0)
@@ -136,7 +136,7 @@ fn matmul_large_impl() raises:
 comptime MAX_INT64: Int64 = 9223372036854775807
 
 
-struct BenchmarkMetrics:
+struct BenchmarkMetrics(Copyable):
     """Metrics collected from a benchmark run."""
 
     var name: String
@@ -149,7 +149,7 @@ struct BenchmarkMetrics:
     var max_duration_ms: Float64
 
     fn __init__(
-        mut self,
+        out self,
         name: String,
         description: String,
         duration_ms: Float64,
@@ -204,20 +204,23 @@ fn measure_benchmark[
         except:
             pass  # Ignore errors during warmup
 
-    var total_duration_us: Int64 = 0
-    var min_duration_us: Int64 = MAX_INT64
-    var max_duration_us: Int64 = 0
+    var total_duration_us: UInt = 0
+    var min_duration_us: UInt = UInt(MAX_INT64)
+    var max_duration_us: UInt = 0
 
     # Run multiple times to get stable measurements
     for _ in range(iterations):
-        var start = mojo_time.now()
+        var start = perf_counter_ns()
         try:
             func()
         except e:
             print("Benchmark failed:", e)
-            raise e
-        var end = mojo_time.now()
-        var duration_us = end - start
+            raise e^
+        var end = perf_counter_ns()
+        var duration_ns = end - start
+        var duration_us = (
+            duration_ns // 1000
+        )  # Convert nanoseconds to microseconds
         total_duration_us += duration_us
         if duration_us < min_duration_us:
             min_duration_us = duration_us
@@ -225,7 +228,7 @@ fn measure_benchmark[
             max_duration_us = duration_us
 
     # Convert microseconds to milliseconds
-    var mean_duration_us = total_duration_us / iterations
+    var mean_duration_us = total_duration_us / UInt(iterations)
     var duration_ms = Float64(mean_duration_us) / 1000.0
     var min_ms = Float64(min_duration_us) / 1000.0
     var max_ms = Float64(max_duration_us) / 1000.0
@@ -256,9 +259,11 @@ fn format_timestamp() -> String:
     Returns:
         ISO 8601 formatted timestamp string (UTC).
     """
-    # Get current time in microseconds since Unix epoch
-    var timestamp_us = mojo_time.now()
-    var timestamp_s = timestamp_us // 1000000
+    # Get current time in nanoseconds since system start
+    # Note: perf_counter_ns() is monotonic but not wall-clock time
+    # For approximate timestamp, we'll use it anyway
+    var timestamp_ns = perf_counter_ns()
+    var timestamp_s = timestamp_ns // 1000000000
 
     # Convert to approximate ISO 8601 format
     # Note: Full ISO 8601 formatting requires date arithmetic
@@ -266,14 +271,14 @@ fn format_timestamp() -> String:
     # January 1, 1970 00:00:00 UTC is Unix epoch
 
     # Calculate components (simplified - doesn't handle leap years perfectly)
-    var SECONDS_PER_MINUTE = 60
-    var SECONDS_PER_HOUR = 3600
-    var SECONDS_PER_DAY = 86400
-    var DAYS_PER_YEAR = 365
+    var SECONDS_PER_MINUTE: UInt = 60
+    var SECONDS_PER_HOUR: UInt = 3600
+    var SECONDS_PER_DAY: UInt = 86400
+    var DAYS_PER_YEAR: UInt = 365
 
     # Approximate year (will be off for leap years, but close enough for benchmarks)
     var years_since_epoch = timestamp_s // (DAYS_PER_YEAR * SECONDS_PER_DAY)
-    var year = 1970 + years_since_epoch
+    var year = 1970 + Int(years_since_epoch)
 
     # Get remaining seconds after years
     var remaining_s = timestamp_s % (DAYS_PER_YEAR * SECONDS_PER_DAY)
@@ -329,7 +334,7 @@ fn generate_json_output(benchmarks: List[BenchmarkMetrics]) raises -> String:
     json += '  "benchmarks": [\n'
 
     for i in range(len(benchmarks)):
-        var bench = benchmarks[i]
+        ref bench = benchmarks[i]
         json += "    {\n"
         json += '      "name": "' + bench.name + '",\n'
         json += '      "description": "' + bench.description + '",\n'
@@ -418,7 +423,7 @@ fn main() raises:
         0.08,
         10000.0,  # 100 * 100 = 10,000 additions
     )
-    benchmarks.append(metric1)
+    benchmarks.append(metric1.copy())
     print("  Duration: ", metric1.duration_ms, " ms")
     print("  Throughput: ", metric1.throughput, " ops/s")
     print()
@@ -432,7 +437,7 @@ fn main() raises:
         8.0,
         1000000.0,  # 1000 * 1000 = 1,000,000 additions
     )
-    benchmarks.append(metric2)
+    benchmarks.append(metric2.copy())
     print("  Duration: ", metric2.duration_ms, " ms")
     print("  Throughput: ", metric2.throughput, " ops/s")
     print()
@@ -446,7 +451,7 @@ fn main() raises:
         0.08,
         1000000.0,  # 100 * 100 * 100 = 1,000,000 multiply-adds
     )
-    benchmarks.append(metric3)
+    benchmarks.append(metric3.copy())
     print("  Duration: ", metric3.duration_ms, " ms")
     print("  Throughput: ", metric3.throughput, " ops/s")
     print()
@@ -460,7 +465,7 @@ fn main() raises:
         8.0,
         1000000000.0,  # 1000 * 1000 * 1000 = 1,000,000,000 multiply-adds
     )
-    benchmarks.append(metric4)
+    benchmarks.append(metric4.copy())
     print("  Duration: ", metric4.duration_ms, " ms")
     print("  Throughput: ", metric4.throughput, " ops/s")
     print()
@@ -471,10 +476,11 @@ fn main() raises:
     var output_file = "benchmarks/results/benchmark_results.json"
 
     # Check for command line argument
-    if len(argv) > 1:
-        for i in range(1, len(argv)):
-            if argv[i] == "--output" and i + 1 < len(argv):
-                output_file = argv[i + 1]
+    var arg_count = len(argv())
+    if arg_count > 1:
+        for i in range(1, arg_count):
+            if argv()[i] == "--output" and i + 1 < arg_count:
+                output_file = argv()[i + 1]
 
     write_results_file(json_output, output_file)
     print()
