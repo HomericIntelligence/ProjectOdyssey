@@ -333,6 +333,108 @@ fn test_early_stopping_tracks_best_value() raises:
     assert_almost_equal(early_stop.best_value, 0.3)
 
 
+fn test_early_stopping_get_best_epoch() raises:
+    """Test EarlyStopping get_best_epoch() returns correct epoch number."""
+    var early_stop = EarlyStopping(monitor="val_loss", patience=3, mode="min")
+    var state = TrainingState(epoch=0, learning_rate=0.1)
+
+    # Epoch 0: Initial best
+    state.metrics["val_loss"] = 0.5
+    _ = early_stop.on_epoch_end(state)
+    assert_equal(early_stop.get_best_epoch(), 0)
+
+    # Epoch 1: No improvement (best stays at epoch 0)
+    state.epoch = 1
+    state.metrics["val_loss"] = 0.6
+    _ = early_stop.on_epoch_end(state)
+    assert_equal(early_stop.get_best_epoch(), 0)
+
+    # Epoch 2: Improvement (best updates to epoch 2)
+    state.epoch = 2
+    state.metrics["val_loss"] = 0.3
+    _ = early_stop.on_epoch_end(state)
+    assert_equal(early_stop.get_best_epoch(), 2)
+
+    # Epoch 3: No improvement (best stays at epoch 2)
+    state.epoch = 3
+    state.metrics["val_loss"] = 0.4
+    _ = early_stop.on_epoch_end(state)
+    assert_equal(early_stop.get_best_epoch(), 2)
+
+
+fn test_early_stopping_best_epoch_updates_on_improvement() raises:
+    """Test EarlyStopping best_epoch updates when metric improves."""
+    var early_stop = EarlyStopping(
+        monitor="val_accuracy", patience=3, mode="max"
+    )
+    var state = TrainingState(epoch=0, learning_rate=0.1)
+
+    # Epoch 0: Initial best
+    state.metrics["val_accuracy"] = 0.6
+    _ = early_stop.on_epoch_end(state)
+    assert_equal(early_stop.best_epoch, 0)
+
+    # Epoch 1: Improvement
+    state.epoch = 1
+    state.metrics["val_accuracy"] = 0.7
+    _ = early_stop.on_epoch_end(state)
+    assert_equal(early_stop.best_epoch, 1)
+
+    # Epoch 2: Improvement again
+    state.epoch = 2
+    state.metrics["val_accuracy"] = 0.8
+    _ = early_stop.on_epoch_end(state)
+    assert_equal(early_stop.best_epoch, 2)
+
+    # Epoch 3: No improvement (best_epoch stays at 2)
+    state.epoch = 3
+    state.metrics["val_accuracy"] = 0.75
+    _ = early_stop.on_epoch_end(state)
+    assert_equal(early_stop.best_epoch, 2)
+
+
+fn test_early_stopping_verbose_mode() raises:
+    """Test EarlyStopping with verbose=True (prints progress messages)."""
+    var early_stop = EarlyStopping(
+        monitor="val_loss", patience=2, mode="min", verbose=True
+    )
+    var state = TrainingState(epoch=0, learning_rate=0.1)
+
+    # Verbose mode should print messages (verified by manual inspection)
+    # This test ensures verbose=True doesn't crash
+    state.metrics["val_loss"] = 0.5
+    _ = early_stop.on_epoch_end(state)
+
+    state.epoch = 1
+    state.metrics["val_loss"] = 0.6
+    _ = early_stop.on_epoch_end(state)
+
+    assert_false(early_stop.should_stop())
+
+
+fn test_early_stopping_silent_mode() raises:
+    """Test EarlyStopping with verbose=False (suppresses output)."""
+    var early_stop = EarlyStopping(
+        monitor="val_loss", patience=2, mode="min", verbose=False
+    )
+    var state = TrainingState(epoch=0, learning_rate=0.1)
+
+    # Silent mode should not print messages
+    state.metrics["val_loss"] = 0.5
+    _ = early_stop.on_epoch_end(state)
+
+    state.epoch = 1
+    state.metrics["val_loss"] = 0.6
+    _ = early_stop.on_epoch_end(state)
+
+    state.epoch = 2
+    state.metrics["val_loss"] = 0.6
+    _ = early_stop.on_epoch_end(state)
+
+    # Should still stop correctly even in silent mode
+    assert_true(early_stop.should_stop())
+
+
 # ============================================================================
 # Test Main
 # ============================================================================
@@ -361,5 +463,11 @@ fn main() raises:
 
     print("Running best value tracking tests...")
     test_early_stopping_tracks_best_value()
+    test_early_stopping_get_best_epoch()
+    test_early_stopping_best_epoch_updates_on_improvement()
+
+    print("Running verbose mode tests...")
+    test_early_stopping_verbose_mode()
+    test_early_stopping_silent_mode()
 
     print("\nAll early stopping callback tests passed! ✓")
