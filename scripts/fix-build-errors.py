@@ -48,6 +48,7 @@ WORKTREE_BASE = ROOT / "worktrees"
 LOG_DIR = ROOT / "build" / "logs"
 
 print_lock = threading.Lock()
+git_lock = threading.Lock()  # Protect all git operations from concurrent access
 stop_processing = threading.Event()
 dry_run = False  # Set via --dry-run flag
 verbose = False  # Set via --verbose flag
@@ -113,9 +114,9 @@ def track_retry(retry_type):
 
 def save_metrics():
     """Save metrics to JSON file."""
-    metrics_file = LOG_DIR / "metrics.json"
+    with metrics_lock:  # Acquire lock BEFORE reading metrics
+        metrics_file = LOG_DIR / "metrics.json"
 
-    with metrics_lock:
         # Calculate derived metrics
         if metrics["files_processed"] > 0:
             metrics["success_rate"] = round(metrics["files_succeeded"] / metrics["files_processed"], 3)
@@ -131,7 +132,7 @@ def save_metrics():
         with open(metrics_file, "w") as f:
             json.dump(metrics, f, indent=2)
 
-    log(f"📊 Metrics saved to {metrics_file}")
+        log(f"📊 Metrics saved to {metrics_file}")
 
 
 def run(cmd, cwd=None, timeout=None):
@@ -392,54 +393,56 @@ def sanitize_branch_name(file_path: str) -> str:
 
 
 def ensure_base_branch():
-    run(["git", "fetch", REMOTE])
-    r = run(["git", "show-ref", "--verify", f"refs/remotes/{REMOTE}/{BASE_BRANCH}"])
-    if r.returncode != 0:
-        raise RuntimeError(f"{REMOTE}/{BASE_BRANCH} does not exist")
+    with git_lock:  # Protect git operations from concurrent access
+        run(["git", "fetch", REMOTE])
+        r = run(["git", "show-ref", "--verify", f"refs/remotes/{REMOTE}/{BASE_BRANCH}"])
+        if r.returncode != 0:
+            raise RuntimeError(f"{REMOTE}/{BASE_BRANCH} does not exist")
 
 
 def create_worktree(branch):
     """Create worktree branching from latest main."""
-    path = WORKTREE_BASE / branch
-    if path.exists():
+    with git_lock:  # Protect git operations from concurrent access
+        path = WORKTREE_BASE / branch
+        if path.exists():
+            if verbose:
+                log(f"  Removing existing worktree directory: {path}")
+            shutil.rmtree(path, ignore_errors=True)
+
+        # Fetch latest main before creating worktree
         if verbose:
-            log(f"  Removing existing worktree directory: {path}")
-        shutil.rmtree(path, ignore_errors=True)
+            log(f"  Fetching latest {REMOTE}/{BASE_BRANCH}")
+        r = run(["git", "fetch", REMOTE, BASE_BRANCH])
+        if r.returncode != 0:
+            raise RuntimeError(f"Failed to fetch {REMOTE}/{BASE_BRANCH}: {r.stderr}")
 
-    # Fetch latest main before creating worktree
-    if verbose:
-        log(f"  Fetching latest {REMOTE}/{BASE_BRANCH}")
-    r = run(["git", "fetch", REMOTE, BASE_BRANCH])
-    if r.returncode != 0:
-        raise RuntimeError(f"Failed to fetch {REMOTE}/{BASE_BRANCH}: {r.stderr}")
+        # Delete existing branch if it exists (git branch -D is idempotent)
+        if verbose:
+            log(f"  Deleting branch {branch} if it exists")
+        run(["git", "branch", "-D", branch])  # Ignore errors - branch may not exist
 
-    # Delete existing branch if it exists (git branch -D is idempotent)
-    if verbose:
-        log(f"  Deleting branch {branch} if it exists")
-    run(["git", "branch", "-D", branch])  # Ignore errors - branch may not exist
+        # Create worktree with new branch
+        if verbose:
+            log(f"  Creating worktree at {path} with branch {branch}")
+        r = run(
+            [
+                "git",
+                "worktree",
+                "add",
+                "--force",
+                "-b",
+                branch,
+                str(path),
+                f"{REMOTE}/{BASE_BRANCH}",
+            ]
+        )
+        if r.returncode != 0:
+            raise RuntimeError(f"Failed to create worktree: {r.stderr}")
 
-    # Create worktree with new branch
-    if verbose:
-        log(f"  Creating worktree at {path} with branch {branch}")
-    r = run(
-        [
-            "git",
-            "worktree",
-            "add",
-            "--force",
-            "-b",
-            branch,
-            str(path),
-            f"{REMOTE}/{BASE_BRANCH}",
-        ]
-    )
-    if r.returncode != 0:
-        raise RuntimeError(f"Failed to create worktree: {r.stderr}")
+        if verbose:
+            log(f"  ✓ Worktree created at {path}")
 
-    if verbose:
-        log(f"  ✓ Worktree created at {path}")
-
-    return path
+        return path
 
 
 def cleanup_worktree(path, branch=None):
@@ -448,13 +451,30 @@ def cleanup_worktree(path, branch=None):
     Args:
         path: Path to worktree directory
         branch: Branch name to delete from remote (optional)
-    """
-    run(["git", "worktree", "remove", "--force", path])
-    shutil.rmtree(path, ignore_errors=True)
 
-    # Delete remote branch if provided (prevents orphaned branches)
-    if branch:
-        run(["git", "push", REMOTE, "--delete", branch], check=False)
+    Raises:
+        RuntimeError: If worktree removal fails
+    """
+    with git_lock:  # Protect git operations from concurrent access
+        # Remove git worktree
+        r = run(["git", "worktree", "remove", "--force", path])
+        if r.returncode != 0:
+            # Log warning but continue - worktree might already be gone
+            if verbose:
+                log(f"⚠ git worktree remove failed: {r.stderr}")
+
+        # Ensure directory is actually removed
+        if path.exists():
+            try:
+                shutil.rmtree(path)
+            except OSError as e:
+                if verbose:
+                    log(f"⚠ Failed to remove worktree directory {path}: {e}")
+
+        # Delete remote branch if provided (prevents orphaned branches)
+        if branch:
+            # Ignore errors - branch may not exist on remote
+            run(["git", "push", REMOTE, "--delete", branch])
 
 
 def ensure_clean_git(cwd, log_path) -> bool:
@@ -561,49 +581,54 @@ def create_pr(branch, file, cwd, log_path) -> bool:
     if verbose:
         log(f"✓ PR created for {file}: {pr_url}")
 
+    # Extract PR number from URL for API calls
+    # URL format: https://github.com/owner/repo/pull/123
+    pr_number = pr_url.split("/")[-1] if "/" in pr_url else pr_url
+
     # Enable auto-merge using rebase strategy with retry
     merge_cmd = ["gh", "pr", "merge", pr_url, "--auto", "--rebase"]
     try:
         r = run_with_retry(merge_cmd, cwd=cwd)
-        if r.returncode == 0:
-            # Verify auto-merge actually enabled
-            # gh pr merge --auto returns output like "Pull request #123 will be automatically merged..."
-            if "automatically" in r.stdout.lower() or "auto" in r.stdout.lower():
-                write_log(log_path, "AUTO-MERGE ENABLED")
+        if r.returncode != 0:
+            write_log(log_path, f"AUTO-MERGE FAILED - {r.stderr}")
+            if verbose:
+                log(f"⚠️  Auto-merge failed for {file}: {r.stderr}")
+            return False
+
+        # Verify auto-merge was enabled using structured JSON output (not string matching)
+        # This is more reliable than parsing stdout text which can change
+        verify_cmd = ["gh", "pr", "view", pr_number, "--json", "autoMergeRequest"]
+        verify_result = run(verify_cmd, cwd=cwd)
+
+        if verify_result.returncode == 0:
+            try:
+                data = json.loads(verify_result.stdout)
+                if data.get("autoMergeRequest"):
+                    write_log(log_path, "AUTO-MERGE VERIFIED VIA API")
+                    if verbose:
+                        log(f"✓ Auto-merge enabled for {file}")
+                    return True
+                else:
+                    write_log(log_path, "AUTO-MERGE NOT ENABLED (API returned null)")
+                    if verbose:
+                        log(f"⚠️  Auto-merge not enabled for {file}: {pr_url}")
+                    return False
+            except json.JSONDecodeError as e:
+                write_log(log_path, f"AUTO-MERGE VERIFICATION FAILED - Invalid JSON: {e}")
                 if verbose:
-                    log(f"✓ Auto-merge enabled for {file}")
-                return True
-            else:
-                write_log(log_path, f"AUTO-MERGE STATUS UNCLEAR - {r.stdout}")
-                # Check auto-merge status via API
-                verify_cmd = ["gh", "pr", "view", pr_url, "--json", "autoMergeRequest"]
-                verify_result = run(verify_cmd, cwd=cwd)
-                if verify_result.returncode == 0:
-                    import json
-
-                    try:
-                        data = json.loads(verify_result.stdout)
-                        if data.get("autoMergeRequest"):
-                            write_log(log_path, "AUTO-MERGE VERIFIED VIA API")
-                            return True
-                    except json.JSONDecodeError:
-                        pass
-
-                write_log(log_path, "AUTO-MERGE NOT VERIFIED")
-                if verbose:
-                    log(f"⚠️  Auto-merge not verified for {file}: {pr_url}")
-                return False  # Changed from True
-
-        write_log(log_path, f"AUTO-MERGE FAILED - {r.stderr}")
-        if verbose:
-            log(f"⚠️  Auto-merge failed for {file}: {r.stderr}")
-        return False  # Changed from True
+                    log(f"⚠️  Failed to parse auto-merge status for {file}")
+                return False
+        else:
+            write_log(log_path, f"AUTO-MERGE VERIFICATION FAILED - {verify_result.stderr}")
+            if verbose:
+                log(f"⚠️  Failed to verify auto-merge for {file}")
+            return False
 
     except Exception as e:
         write_log(log_path, f"AUTO-MERGE FAILED after retries - {e}")
         if verbose:
             log(f"⚠️  Auto-merge failed for {file}: {e}")
-        return False  # Changed from True
+        return False
 
 
 # ---------------- Claude ----------------
@@ -1161,7 +1186,8 @@ def main():
     if not args.input or not args.root:
         parser.error("--input and --root are required (unless using --health-check)")
 
-    # Set global flags
+    # CRITICAL: Set global flags BEFORE any worker threads start
+    # Workers read these flags without synchronization, so they must be initialized first
     global dry_run, verbose
     dry_run = args.dry_run
     verbose = args.verbose
