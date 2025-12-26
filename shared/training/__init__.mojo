@@ -488,14 +488,3 @@ struct CrossEntropyLoss(Loss, Movable):
 #     load_cifar10_dataset,
 #     print_dataset_summary,
 # )
-
-
-def main():
-    """Entry point for standalone compilation.
-
-    This function exists solely to allow `mojo build shared/training/__init__.mojo`
-    to succeed. In normal usage, this module is imported as a package and
-    this function is never called.
-    """
-    print("shared.training package loaded successfully")
-    print("VERSION:", VERSION)
