@@ -34,13 +34,24 @@ Example:
 """
 
 # Type exports
-from .fp8 import FP8
-from .bf8 import BF8
-from .fp4 import FP4_E2M1
-from .mxfp4 import MXFP4, E8M0Scale
-from .nvfp4 import NVFP4, E4M3Scale
+from shared.core.types.fp8 import FP8
+from shared.core.types.bf8 import BF8
+from shared.core.types.fp4 import FP4_E2M1
+from shared.core.types.mxfp4 import MXFP4, E8M0Scale
+from shared.core.types.nvfp4 import NVFP4, E4M3Scale
 
 # Future exports will be added here as components are implemented
-# from .tensor import Tensor
-# from .shape() import Shape
-# from .dtype import DType
+# from shared.core.types.tensor import Tensor
+# from shared.core.types.shape import Shape
+# from shared.core.types.dtype import DType
+
+
+def main():
+    """Entry point for standalone compilation.
+
+    This function exists solely to allow `mojo build shared/core/types/__init__.mojo`
+    to succeed. In normal usage, this module is imported as a package and
+    this function is never called.
+    """
+    print("shared.core.types package loaded successfully")
+    print("Available types: FP8, BF8, FP4_E2M1, MXFP4, NVFP4")
