@@ -28,7 +28,7 @@ References:
 """
 
 from model import VGG16
-from shared.data.datasets import load_cifar10_train, load_cifar10_test
+from shared.data.datasets import CIFAR10Dataset
 from shared.core import ExTensor, zeros
 from shared.core.conv import conv2d, conv2d_backward
 from shared.core.pooling import maxpool2d, maxpool2d_backward
@@ -37,22 +37,53 @@ from shared.core.activation import relu, relu_backward
 from shared.core.dropout import dropout, dropout_backward
 from shared.core.loss import cross_entropy, cross_entropy_backward
 from shared.training.schedulers import step_lr
-from shared.training.manual_trainer import ManualTrainer
-from shared.training.trainer_interface import TrainerConfig
-from shared.data import DatasetInfo, extract_batch_pair
+from shared.training.loops import TrainingLoop
+from shared.data import (
+    extract_batch_pair,
+    compute_num_batches,
+    get_batch_indices,
+    DatasetInfo,
+)
+from shared.utils.training_args import parse_training_args_with_defaults
 from shared.training.metrics.evaluate import evaluate_with_predict
 from shared.training.optimizers import sgd_momentum_update_inplace
 from collections import List
 
 
-fn parse_args() raises -> TrainerConfig:
-    """Parse command line arguments and create TrainerConfig.
+struct TrainingArgs:
+    """Training arguments for VGG-16."""
+
+    var epochs: Int
+    var batch_size: Int
+    var learning_rate: Float32
+    var momentum: Float32
+    var data_dir: String
+    var weights_dir: String
+
+    fn __init__(
+        out self,
+        epochs: Int,
+        batch_size: Int,
+        learning_rate: Float32,
+        momentum: Float32,
+        data_dir: String,
+        weights_dir: String,
+    ):
+        """Initialize training arguments."""
+        self.epochs = epochs
+        self.batch_size = batch_size
+        self.learning_rate = learning_rate
+        self.momentum = momentum
+        self.data_dir = data_dir
+        self.weights_dir = weights_dir
+
+
+fn parse_args() raises -> TrainingArgs:
+    """Parse command line arguments.
 
     Returns:
-        TrainerConfig with parsed arguments.
+        TrainingArgs with parsed arguments.
     """
-    from shared.utils.training_args import parse_training_args_with_defaults
-
     var args = parse_training_args_with_defaults(
         default_epochs=200,
         default_batch_size=128,
@@ -64,12 +95,13 @@ fn parse_args() raises -> TrainerConfig:
         default_lr_decay_factor=0.2,
     )
 
-    return TrainerConfig(
-        num_epochs=args.epochs,
+    return TrainingArgs(
+        epochs=args.epochs,
         batch_size=args.batch_size,
-        learning_rate=args.learning_rate,
-        log_interval=100,  # Log every 100 batches
-        validate_interval=1,  # Validate every epoch
+        learning_rate=Float32(args.learning_rate),
+        momentum=Float32(args.momentum),
+        data_dir=args.data_dir,
+        weights_dir=args.weights_dir,
     )
 
 
@@ -77,7 +109,7 @@ fn initialize_velocities(model: VGG16) raises -> List[ExTensor]:
     """Initialize momentum velocities for all parameters (32 tensors).
 
     Args:
-        model: VGG16 model
+        model: VGG16 model.
 
     Returns:
         List of zero-initialized velocity tensors matching parameter shapes.
@@ -129,7 +161,7 @@ fn initialize_velocities(model: VGG16) raises -> List[ExTensor]:
     velocities.append(zeros(model.fc3_weights.shape(), DType.float32))
     velocities.append(zeros(model.fc3_bias.shape(), DType.float32))
 
-    return velocities
+    return velocities^
 
 
 fn compute_gradients(
@@ -146,12 +178,12 @@ fn compute_gradients(
     This function is UNCHANGED from the original - only the orchestration changed.
 
     Args:
-        model: VGG16 model
-        input: Batch of images (batch, 3, 32, 32)
-        labels: Batch of labels (batch,)
-        learning_rate: Learning rate for SGD
-        momentum: Momentum factor for SGD
-        velocities: Momentum velocities for each parameter (32 tensors)
+        model: VGG16 model.
+        input: Batch of images (batch, 3, 32, 32).
+        labels: Batch of labels (batch,).
+        learning_rate: Learning rate for SGD.
+        momentum: Momentum factor for SGD.
+        velocities: Momentum velocities for each parameter (32 tensors).
 
     Returns:
         Loss value for this batch.
@@ -269,14 +301,18 @@ fn compute_gradients(
     # FC1 + ReLU + Dropout
     var fc1_out = linear(flattened, model.fc1_weights, model.fc1_bias)
     var relu_fc1_out = relu(fc1_out)
-    var drop1_result = dropout(relu_fc1_out, model.dropout_rate)
+    var drop1_result = dropout(
+        relu_fc1_out, Float64(model.dropout_rate), training=True
+    )
     var drop1_out = drop1_result[0]  # Dropout output
     var drop1_mask = drop1_result[1]  # Dropout mask for backward
 
     # FC2 + ReLU + Dropout
     var fc2_out = linear(drop1_out, model.fc2_weights, model.fc2_bias)
     var relu_fc2_out = relu(fc2_out)
-    var drop2_result = dropout(relu_fc2_out, model.dropout_rate)
+    var drop2_result = dropout(
+        relu_fc2_out, Float64(model.dropout_rate), training=True
+    )
     var drop2_out = drop2_result[0]  # Dropout output
     var drop2_mask = drop2_result[1]  # Dropout mask for backward
 
@@ -299,13 +335,13 @@ fn compute_gradients(
 
     # FC3 backward
     var fc3_grads = linear_backward(grad_logits, drop2_out, model.fc3_weights)
-    var grad_drop2_out = fc3_grads[0]
-    var grad_fc3_weights = fc3_grads[1]
-    var grad_fc3_bias = fc3_grads[2]
+    var grad_drop2_out = fc3_grads.grad_input
+    var grad_fc3_weights = fc3_grads.grad_weights
+    var grad_fc3_bias = fc3_grads.grad_bias
 
     # Dropout2 backward
     var grad_relu_fc2_out = dropout_backward(
-        grad_drop2_out, drop2_mask, model.dropout_rate
+        grad_drop2_out, drop2_mask, Float64(model.dropout_rate)
     )
 
     # ReLU FC2 backward
@@ -313,13 +349,13 @@ fn compute_gradients(
 
     # FC2 backward
     var fc2_grads = linear_backward(grad_fc2_out, drop1_out, model.fc2_weights)
-    var grad_drop1_out = fc2_grads[0]
-    var grad_fc2_weights = fc2_grads[1]
-    var grad_fc2_bias = fc2_grads[2]
+    var grad_drop1_out = fc2_grads.grad_input
+    var grad_fc2_weights = fc2_grads.grad_weights
+    var grad_fc2_bias = fc2_grads.grad_bias
 
     # Dropout1 backward
     var grad_relu_fc1_out = dropout_backward(
-        grad_drop1_out, drop1_mask, model.dropout_rate
+        grad_drop1_out, drop1_mask, Float64(model.dropout_rate)
     )
 
     # ReLU FC1 backward
@@ -327,9 +363,9 @@ fn compute_gradients(
 
     # FC1 backward
     var fc1_grads = linear_backward(grad_fc1_out, flattened, model.fc1_weights)
-    var grad_flattened = fc1_grads[0]
-    var grad_fc1_weights = fc1_grads[1]
-    var grad_fc1_bias = fc1_grads[2]
+    var grad_flattened = fc1_grads.grad_input
+    var grad_fc1_weights = fc1_grads.grad_weights
+    var grad_fc1_bias = fc1_grads.grad_bias
 
     # Unflatten gradient
     var grad_pool5_out = grad_flattened.reshape(pool5_shape)
@@ -340,7 +376,6 @@ fn compute_gradients(
     var grad_relu5_3_out = maxpool2d_backward(
         grad_pool5_out,
         relu5_3_out,
-        pool5_out,
         kernel_size=2,
         stride=2,
         padding=0,
@@ -353,9 +388,9 @@ fn compute_gradients(
     var conv5_3_grads = conv2d_backward(
         grad_conv5_3_out, relu5_2_out, model.conv5_3_kernel, stride=1, padding=1
     )
-    var grad_relu5_2_out = conv5_3_grads[0]
-    var grad_conv5_3_kernel = conv5_3_grads[1]
-    var grad_conv5_3_bias = conv5_3_grads[2]
+    var grad_relu5_2_out = conv5_3_grads.grad_input
+    var grad_conv5_3_kernel = conv5_3_grads.grad_weights
+    var grad_conv5_3_bias = conv5_3_grads.grad_bias
 
     # ReLU5_2 backward
     var grad_conv5_2_out = relu_backward(grad_relu5_2_out, conv5_2_out)
@@ -364,9 +399,9 @@ fn compute_gradients(
     var conv5_2_grads = conv2d_backward(
         grad_conv5_2_out, relu5_1_out, model.conv5_2_kernel, stride=1, padding=1
     )
-    var grad_relu5_1_out = conv5_2_grads[0]
-    var grad_conv5_2_kernel = conv5_2_grads[1]
-    var grad_conv5_2_bias = conv5_2_grads[2]
+    var grad_relu5_1_out = conv5_2_grads.grad_input
+    var grad_conv5_2_kernel = conv5_2_grads.grad_weights
+    var grad_conv5_2_bias = conv5_2_grads.grad_bias
 
     # ReLU5_1 backward
     var grad_conv5_1_out = relu_backward(grad_relu5_1_out, conv5_1_out)
@@ -375,9 +410,9 @@ fn compute_gradients(
     var conv5_1_grads = conv2d_backward(
         grad_conv5_1_out, pool4_out, model.conv5_1_kernel, stride=1, padding=1
     )
-    var grad_pool4_out = conv5_1_grads[0]
-    var grad_conv5_1_kernel = conv5_1_grads[1]
-    var grad_conv5_1_bias = conv5_1_grads[2]
+    var grad_pool4_out = conv5_1_grads.grad_input
+    var grad_conv5_1_kernel = conv5_1_grads.grad_weights
+    var grad_conv5_1_bias = conv5_1_grads.grad_bias
 
     # ===== Block 4 Backward =====
 
@@ -385,7 +420,6 @@ fn compute_gradients(
     var grad_relu4_3_out = maxpool2d_backward(
         grad_pool4_out,
         relu4_3_out,
-        pool4_out,
         kernel_size=2,
         stride=2,
         padding=0,
@@ -398,9 +432,9 @@ fn compute_gradients(
     var conv4_3_grads = conv2d_backward(
         grad_conv4_3_out, relu4_2_out, model.conv4_3_kernel, stride=1, padding=1
     )
-    var grad_relu4_2_out = conv4_3_grads[0]
-    var grad_conv4_3_kernel = conv4_3_grads[1]
-    var grad_conv4_3_bias = conv4_3_grads[2]
+    var grad_relu4_2_out = conv4_3_grads.grad_input
+    var grad_conv4_3_kernel = conv4_3_grads.grad_weights
+    var grad_conv4_3_bias = conv4_3_grads.grad_bias
 
     # ReLU4_2 backward
     var grad_conv4_2_out = relu_backward(grad_relu4_2_out, conv4_2_out)
@@ -409,9 +443,9 @@ fn compute_gradients(
     var conv4_2_grads = conv2d_backward(
         grad_conv4_2_out, relu4_1_out, model.conv4_2_kernel, stride=1, padding=1
     )
-    var grad_relu4_1_out = conv4_2_grads[0]
-    var grad_conv4_2_kernel = conv4_2_grads[1]
-    var grad_conv4_2_bias = conv4_2_grads[2]
+    var grad_relu4_1_out = conv4_2_grads.grad_input
+    var grad_conv4_2_kernel = conv4_2_grads.grad_weights
+    var grad_conv4_2_bias = conv4_2_grads.grad_bias
 
     # ReLU4_1 backward
     var grad_conv4_1_out = relu_backward(grad_relu4_1_out, conv4_1_out)
@@ -420,9 +454,9 @@ fn compute_gradients(
     var conv4_1_grads = conv2d_backward(
         grad_conv4_1_out, pool3_out, model.conv4_1_kernel, stride=1, padding=1
     )
-    var grad_pool3_out = conv4_1_grads[0]
-    var grad_conv4_1_kernel = conv4_1_grads[1]
-    var grad_conv4_1_bias = conv4_1_grads[2]
+    var grad_pool3_out = conv4_1_grads.grad_input
+    var grad_conv4_1_kernel = conv4_1_grads.grad_weights
+    var grad_conv4_1_bias = conv4_1_grads.grad_bias
 
     # ===== Block 3 Backward =====
 
@@ -430,7 +464,6 @@ fn compute_gradients(
     var grad_relu3_3_out = maxpool2d_backward(
         grad_pool3_out,
         relu3_3_out,
-        pool3_out,
         kernel_size=2,
         stride=2,
         padding=0,
@@ -443,9 +476,9 @@ fn compute_gradients(
     var conv3_3_grads = conv2d_backward(
         grad_conv3_3_out, relu3_2_out, model.conv3_3_kernel, stride=1, padding=1
     )
-    var grad_relu3_2_out = conv3_3_grads[0]
-    var grad_conv3_3_kernel = conv3_3_grads[1]
-    var grad_conv3_3_bias = conv3_3_grads[2]
+    var grad_relu3_2_out = conv3_3_grads.grad_input
+    var grad_conv3_3_kernel = conv3_3_grads.grad_weights
+    var grad_conv3_3_bias = conv3_3_grads.grad_bias
 
     # ReLU3_2 backward
     var grad_conv3_2_out = relu_backward(grad_relu3_2_out, conv3_2_out)
@@ -454,9 +487,9 @@ fn compute_gradients(
     var conv3_2_grads = conv2d_backward(
         grad_conv3_2_out, relu3_1_out, model.conv3_2_kernel, stride=1, padding=1
     )
-    var grad_relu3_1_out = conv3_2_grads[0]
-    var grad_conv3_2_kernel = conv3_2_grads[1]
-    var grad_conv3_2_bias = conv3_2_grads[2]
+    var grad_relu3_1_out = conv3_2_grads.grad_input
+    var grad_conv3_2_kernel = conv3_2_grads.grad_weights
+    var grad_conv3_2_bias = conv3_2_grads.grad_bias
 
     # ReLU3_1 backward
     var grad_conv3_1_out = relu_backward(grad_relu3_1_out, conv3_1_out)
@@ -465,9 +498,9 @@ fn compute_gradients(
     var conv3_1_grads = conv2d_backward(
         grad_conv3_1_out, pool2_out, model.conv3_1_kernel, stride=1, padding=1
     )
-    var grad_pool2_out = conv3_1_grads[0]
-    var grad_conv3_1_kernel = conv3_1_grads[1]
-    var grad_conv3_1_bias = conv3_1_grads[2]
+    var grad_pool2_out = conv3_1_grads.grad_input
+    var grad_conv3_1_kernel = conv3_1_grads.grad_weights
+    var grad_conv3_1_bias = conv3_1_grads.grad_bias
 
     # ===== Block 2 Backward =====
 
@@ -475,7 +508,6 @@ fn compute_gradients(
     var grad_relu2_2_out = maxpool2d_backward(
         grad_pool2_out,
         relu2_2_out,
-        pool2_out,
         kernel_size=2,
         stride=2,
         padding=0,
@@ -488,9 +520,9 @@ fn compute_gradients(
     var conv2_2_grads = conv2d_backward(
         grad_conv2_2_out, relu2_1_out, model.conv2_2_kernel, stride=1, padding=1
     )
-    var grad_relu2_1_out = conv2_2_grads[0]
-    var grad_conv2_2_kernel = conv2_2_grads[1]
-    var grad_conv2_2_bias = conv2_2_grads[2]
+    var grad_relu2_1_out = conv2_2_grads.grad_input
+    var grad_conv2_2_kernel = conv2_2_grads.grad_weights
+    var grad_conv2_2_bias = conv2_2_grads.grad_bias
 
     # ReLU2_1 backward
     var grad_conv2_1_out = relu_backward(grad_relu2_1_out, conv2_1_out)
@@ -499,9 +531,9 @@ fn compute_gradients(
     var conv2_1_grads = conv2d_backward(
         grad_conv2_1_out, pool1_out, model.conv2_1_kernel, stride=1, padding=1
     )
-    var grad_pool1_out = conv2_1_grads[0]
-    var grad_conv2_1_kernel = conv2_1_grads[1]
-    var grad_conv2_1_bias = conv2_1_grads[2]
+    var grad_pool1_out = conv2_1_grads.grad_input
+    var grad_conv2_1_kernel = conv2_1_grads.grad_weights
+    var grad_conv2_1_bias = conv2_1_grads.grad_bias
 
     # ===== Block 1 Backward =====
 
@@ -509,7 +541,6 @@ fn compute_gradients(
     var grad_relu1_2_out = maxpool2d_backward(
         grad_pool1_out,
         relu1_2_out,
-        pool1_out,
         kernel_size=2,
         stride=2,
         padding=0,
@@ -522,9 +553,9 @@ fn compute_gradients(
     var conv1_2_grads = conv2d_backward(
         grad_conv1_2_out, relu1_1_out, model.conv1_2_kernel, stride=1, padding=1
     )
-    var grad_relu1_1_out = conv1_2_grads[0]
-    var grad_conv1_2_kernel = conv1_2_grads[1]
-    var grad_conv1_2_bias = conv1_2_grads[2]
+    var grad_relu1_1_out = conv1_2_grads.grad_input
+    var grad_conv1_2_kernel = conv1_2_grads.grad_weights
+    var grad_conv1_2_bias = conv1_2_grads.grad_bias
 
     # ReLU1_1 backward
     var grad_conv1_1_out = relu_backward(grad_relu1_1_out, conv1_1_out)
@@ -533,41 +564,45 @@ fn compute_gradients(
     var conv1_1_grads = conv2d_backward(
         grad_conv1_1_out, input, model.conv1_1_kernel, stride=1, padding=1
     )
-    var grad_input = conv1_1_grads[0]  # Not used (no input gradient needed)
-    var grad_conv1_1_kernel = conv1_1_grads[1]
-    var grad_conv1_1_bias = conv1_1_grads[2]
+    _ = conv1_1_grads.grad_input  # Not used (no input gradient needed)
+    var grad_conv1_1_kernel = conv1_1_grads.grad_weights
+    var grad_conv1_1_bias = conv1_1_grads.grad_bias
 
     # ========== Parameter Update (SGD with Momentum) ==========
     # Update all 32 parameters (16 layers × 2 params per layer)
+
+    # Convert Float32 hyperparameters to Float64 for optimizer
+    var lr_f64 = Float64(learning_rate)
+    var momentum_f64 = Float64(momentum)
 
     # Block 1 updates
     sgd_momentum_update_inplace(
         model.conv1_1_kernel,
         grad_conv1_1_kernel,
         velocities[0],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv1_1_bias,
         grad_conv1_1_bias,
         velocities[1],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv1_2_kernel,
         grad_conv1_2_kernel,
         velocities[2],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv1_2_bias,
         grad_conv1_2_bias,
         velocities[3],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
 
     # Block 2 updates
@@ -575,29 +610,29 @@ fn compute_gradients(
         model.conv2_1_kernel,
         grad_conv2_1_kernel,
         velocities[4],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv2_1_bias,
         grad_conv2_1_bias,
         velocities[5],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv2_2_kernel,
         grad_conv2_2_kernel,
         velocities[6],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv2_2_bias,
         grad_conv2_2_bias,
         velocities[7],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
 
     # Block 3 updates
@@ -605,43 +640,43 @@ fn compute_gradients(
         model.conv3_1_kernel,
         grad_conv3_1_kernel,
         velocities[8],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv3_1_bias,
         grad_conv3_1_bias,
         velocities[9],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv3_2_kernel,
         grad_conv3_2_kernel,
         velocities[10],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv3_2_bias,
         grad_conv3_2_bias,
         velocities[11],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv3_3_kernel,
         grad_conv3_3_kernel,
         velocities[12],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv3_3_bias,
         grad_conv3_3_bias,
         velocities[13],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
 
     # Block 4 updates
@@ -649,43 +684,43 @@ fn compute_gradients(
         model.conv4_1_kernel,
         grad_conv4_1_kernel,
         velocities[14],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv4_1_bias,
         grad_conv4_1_bias,
         velocities[15],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv4_2_kernel,
         grad_conv4_2_kernel,
         velocities[16],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv4_2_bias,
         grad_conv4_2_bias,
         velocities[17],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv4_3_kernel,
         grad_conv4_3_kernel,
         velocities[18],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv4_3_bias,
         grad_conv4_3_bias,
         velocities[19],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
 
     # Block 5 updates
@@ -693,43 +728,43 @@ fn compute_gradients(
         model.conv5_1_kernel,
         grad_conv5_1_kernel,
         velocities[20],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv5_1_bias,
         grad_conv5_1_bias,
         velocities[21],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv5_2_kernel,
         grad_conv5_2_kernel,
         velocities[22],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv5_2_bias,
         grad_conv5_2_bias,
         velocities[23],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv5_3_kernel,
         grad_conv5_3_kernel,
         velocities[24],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
         model.conv5_3_bias,
         grad_conv5_3_bias,
         velocities[25],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
 
     # FC layer updates
@@ -737,55 +772,105 @@ fn compute_gradients(
         model.fc1_weights,
         grad_fc1_weights,
         velocities[26],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
-        model.fc1_bias, grad_fc1_bias, velocities[27], learning_rate, momentum
+        model.fc1_bias, grad_fc1_bias, velocities[27], lr_f64, momentum_f64
     )
     sgd_momentum_update_inplace(
         model.fc2_weights,
         grad_fc2_weights,
         velocities[28],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
-        model.fc2_bias, grad_fc2_bias, velocities[29], learning_rate, momentum
+        model.fc2_bias, grad_fc2_bias, velocities[29], lr_f64, momentum_f64
     )
     sgd_momentum_update_inplace(
         model.fc3_weights,
         grad_fc3_weights,
         velocities[30],
-        learning_rate,
-        momentum,
+        lr_f64,
+        momentum_f64,
     )
     sgd_momentum_update_inplace(
-        model.fc3_bias, grad_fc3_bias, velocities[31], learning_rate, momentum
+        model.fc3_bias, grad_fc3_bias, velocities[31], lr_f64, momentum_f64
     )
 
     return loss
 
 
+fn evaluate(
+    mut model: VGG16, test_images: ExTensor, test_labels: ExTensor
+) raises -> Float32:
+    """Evaluate model on test set.
+
+    Args:
+        model: VGG16 model.
+        test_images: Test images tensor.
+        test_labels: Test labels tensor.
+
+    Returns:
+        Test accuracy as percentage.
+    """
+    var num_samples = test_images.shape()[0]
+    var predictions = List[Int]()
+
+    print("Evaluating on", num_samples, "samples...")
+
+    # Collect predictions from model for all test samples
+    for i in range(num_samples):
+        # Extract single sample using batch utilities
+        var batch_pair = extract_batch_pair(test_images, test_labels, i, 1)
+        var sample_image = batch_pair[0]
+
+        # Forward pass (inference mode)
+        var pred_class = model.predict(sample_image)
+        predictions.append(pred_class)
+
+        # Print progress every 1000 samples
+        if (i + 1) % 1000 == 0:
+            print("  Processed", i + 1, "/", num_samples)
+
+    # Use shared evaluate function from shared.training.metrics
+    var accuracy = evaluate_with_predict(predictions, test_labels)
+    print(
+        "  Test Accuracy:",
+        accuracy * 100.0,
+        "% (",
+        Int(accuracy * Float32(num_samples)),
+        "/",
+        num_samples,
+        ")",
+    )
+
+    return accuracy * 100.0  # Return as percentage
+
+
 fn main() raises:
-    """Main training loop using ManualTrainer."""
+    """Main training loop."""
     print("=" * 60)
-    print("VGG-16 Training on CIFAR-10 Dataset (ManualTrainer)")
+    print("VGG-16 Training on CIFAR-10 Dataset")
     print("=" * 60)
 
-    # Parse arguments and create config
+    # Parse arguments
     var config = parse_args()
-    var data_dir = "datasets/cifar10"
-    var weights_dir = "vgg16_weights"
-    var momentum = Float32(0.9)  # From args
+    var epochs = config.epochs
+    var batch_size = config.batch_size
+    var learning_rate = config.learning_rate
+    var momentum = config.momentum
+    var data_dir = config.data_dir
+    var weights_dir = config.weights_dir
 
     print("\nConfiguration:")
-    print("  Epochs: ", config.num_epochs)
-    print("  Batch Size: ", config.batch_size)
-    print("  Learning Rate: ", config.learning_rate)
-    print("  Momentum: ", momentum)
-    print("  Data Directory: ", data_dir)
-    print("  Weights Directory: ", weights_dir)
+    print("  Epochs:", epochs)
+    print("  Batch Size:", batch_size)
+    print("  Learning Rate:", learning_rate)
+    print("  Momentum:", momentum)
+    print("  Data Directory:", data_dir)
+    print("  Weights Directory:", weights_dir)
     print()
 
     # Initialize model
@@ -804,92 +889,85 @@ fn main() raises:
 
     # Load dataset
     print("Loading CIFAR-10 dataset...")
-    var train_data = load_cifar10_train(data_dir)
+    var dataset = CIFAR10Dataset(data_dir)
+    var train_data = dataset.get_train_data()
     var train_images = train_data[0]
     var train_labels = train_data[1]
 
-    var test_data = load_cifar10_test(data_dir)
+    var test_data = dataset.get_test_data()
     var test_images = test_data[0]
-    var test_labels = test_labels = test_data[1]
+    var test_labels = test_data[1]
 
-    print("  Training samples: ", train_images.shape()[0])
-    print("  Test samples: ", test_images.shape()[0])
+    print("  Training samples:", train_images.shape()[0])
+    print("  Test samples:", test_images.shape()[0])
     print()
 
-    # Define compute_batch_loss closure
-    fn compute_batch_loss(
-        batch_images: ExTensor, batch_labels: ExTensor
-    ) raises -> Float32:
-        """Wrapper that calls compute_gradients with captured momentum/velocities.
-        """
-        return compute_gradients(
-            model,
-            batch_images,
-            batch_labels,
-            Float32(config.learning_rate),
-            momentum,
-            velocities,
-        )
+    # Training loop
+    print("Starting training...")
+    print()
 
-    # Define evaluation function closure
-    fn evaluate_fn(
-        test_images: ExTensor, test_labels: ExTensor
-    ) raises -> Float32:
-        """Wrapper for evaluation using evaluate_with_predict."""
-        var num_samples = test_images.shape()[0]
-        var predictions = List[Int]()
+    for epoch in range(1, epochs + 1):
+        # Manual batch processing loop
+        var num_samples = train_images.shape()[0]
+        var num_batches = compute_num_batches(num_samples, batch_size)
+        var total_loss = Float32(0.0)
 
-        print("Evaluating on ", num_samples, " samples...")
+        print("Epoch [", epoch, "/", epochs, "]")
 
-        # Collect predictions from model for all test samples
-        for i in range(num_samples):
-            # Extract single sample using batch utilities
-            var batch_pair = extract_batch_pair(test_images, test_labels, i, 1)
-            var sample_image = batch_pair[0]
+        for batch_idx in range(num_batches):
+            var batch_indices = get_batch_indices(
+                batch_idx, batch_size, num_samples
+            )
+            var start_idx = batch_indices[0]
+            var end_idx = batch_indices[1]
 
-            # Forward pass (inference mode)
-            var pred_class = model.predict(sample_image)
-            predictions.append(pred_class)
+            # Extract batch
+            var batch_pair = extract_batch_pair(
+                train_images, train_labels, start_idx, end_idx - start_idx
+            )
+            var batch_images = batch_pair[0]
+            var batch_labels = batch_pair[1]
 
-            # Print progress every 1000 samples
-            if (i + 1) % 1000 == 0:
-                print("  Processed ", i + 1, "/", num_samples)
+            # Compute gradients and update parameters
+            var batch_loss = compute_gradients(
+                model,
+                batch_images,
+                batch_labels,
+                learning_rate,
+                momentum,
+                velocities,
+            )
+            total_loss += batch_loss
 
-        # Use shared evaluate function from shared.training.metrics
-        var accuracy = evaluate_with_predict(predictions, test_labels)
-        print(
-            "  Test Accuracy: ",
-            accuracy * 100.0,
-            "% (",
-            Int(accuracy * Float32(num_samples)),
-            "/",
-            num_samples,
-            ")",
-        )
+            # Print progress
+            if (batch_idx + 1) % 100 == 0:
+                print(
+                    "  Batch [",
+                    batch_idx + 1,
+                    "/",
+                    num_batches,
+                    "] - Loss:",
+                    batch_loss,
+                )
 
-        return accuracy * 100.0  # Return as percentage
+        var train_loss = total_loss / Float32(num_batches)
+        print("  Average Loss:", train_loss)
 
-    # Create trainer and run training
-    print("Starting training using ManualTrainer...")
-    var trainer = ManualTrainer(config)
-    trainer.fit(
-        train_images,
-        train_labels,
-        test_images,
-        test_labels,
-        compute_batch_loss,
-        evaluate_fn,
-    )
+        # Evaluate every epoch
+        var test_acc = evaluate(model, test_images, test_labels)
+        print()
 
-    # Save model
-    print("Saving model weights...")
+        # Save model every 20 epochs
+        if epoch % 20 == 0:
+            print("Saving checkpoint at epoch", epoch, "...")
+            model.save_weights(weights_dir)
+            print("  Checkpoint saved to", weights_dir)
+            print()
+
+    # Save final model
+    print("Saving final model weights...")
     model.save_weights(weights_dir)
     print("  Model saved to", weights_dir)
     print()
 
     print("Training complete!")
-    print(
-        "\nNote: This implementation uses the shared ManualTrainer"
-        " infrastructure."
-    )
-    print("Code reduced from 918 lines to ~780 lines (15% reduction).")
