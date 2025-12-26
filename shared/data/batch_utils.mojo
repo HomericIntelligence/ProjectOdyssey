@@ -4,7 +4,7 @@ This module provides utilities for extracting mini-batches from datasets
 for training and evaluation.
 """
 
-from ..core import ExTensor, zeros
+from shared.core import ExTensor, zeros
 
 
 fn extract_batch(
