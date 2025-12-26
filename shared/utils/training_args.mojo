@@ -216,21 +216,5 @@ fn parse_training_args_with_defaults(
 # Validation Entry Point
 # ============================================================================
 
-
-fn main() raises:
-    """Entry point for standalone module validation.
-
-    This function exists solely to allow `mojo build` to compile this library
-    module for validation purposes. It performs basic smoke tests to verify
-    the module's functionality.
-    """
-    # Test 1: Create default TrainingArgs
-    var default_args = TrainingArgs()
-    _ = default_args
-
-    # Test 2: Parse with defaults (requires no command-line args)
-    # Note: This will fail if command-line args are invalid, which is expected
-    var parsed = parse_training_args_with_defaults()
-    _ = parsed
-
-    print("Module validation successful")
+# Note: main() function removed for mojo package compatibility
+# (mojo package forbids main() in library files)
