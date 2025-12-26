@@ -1092,7 +1092,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
         Raises:
             Error: If tensors have incompatible shapes.
         """
-        from .arithmetic import add
+        from shared.core.arithmetic import add
 
         return add(self, other)
 
@@ -1108,7 +1108,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
         Raises:
             Error: If tensors have incompatible shapes.
         """
-        from .arithmetic import subtract
+        from shared.core.arithmetic import subtract
 
         return subtract(self, other)
 
@@ -1124,7 +1124,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
         Raises:
             Error: If tensors have incompatible shapes.
         """
-        from .arithmetic import multiply
+        from shared.core.arithmetic import multiply
 
         return multiply(self, other)
 
@@ -1141,7 +1141,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
             Error: If tensors have incompatible shapes or division by zero.
 
         """
-        from .arithmetic import divide
+        from shared.core.arithmetic import divide
 
         return divide(self, other)
 
@@ -1157,7 +1157,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
         Raises:
             Error: If tensors have incompatible shapes or division by zero.
         """
-        from .arithmetic import floor_divide
+        from shared.core.arithmetic import floor_divide
 
         return floor_divide(self, other)
 
@@ -1173,7 +1173,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
         Raises:
             Error: If tensors have incompatible shapes.
         """
-        from .arithmetic import modulo
+        from shared.core.arithmetic import modulo
 
         return modulo(self, other)
 
@@ -1189,7 +1189,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
         Raises:
             Error: If tensors have incompatible shapes.
         """
-        from .arithmetic import power
+        from shared.core.arithmetic import power
 
         return power(self, other)
 
@@ -1205,7 +1205,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
         Raises:
             Error: If tensors have incompatible dimensions for multiplication.
         """
-        from .matrix import matmul
+        from shared.core.matrix import matmul
 
         return matmul(self, other)
 
@@ -1221,7 +1221,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
         Raises:
             Error: If tensors have incompatible shapes.
         """
-        from .comparison import equal
+        from shared.core.comparison import equal
 
         return equal(self, other)
 
@@ -1237,7 +1237,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
         Raises:
             Error: If tensors have incompatible shapes.
         """
-        from .comparison import not_equal
+        from shared.core.comparison import not_equal
 
         return not_equal(self, other)
 
@@ -1253,7 +1253,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
         Raises:
             Error: If tensors have incompatible shapes.
         """
-        from .comparison import less
+        from shared.core.comparison import less
 
         return less(self, other)
 
@@ -1269,7 +1269,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
         Raises:
             Error: If tensors have incompatible shapes.
         """
-        from .comparison import less_equal
+        from shared.core.comparison import less_equal
 
         return less_equal(self, other)
 
@@ -1285,7 +1285,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
         Raises:
             Error: If tensors have incompatible shapes.
         """
-        from .comparison import greater
+        from shared.core.comparison import greater
 
         return greater(self, other)
 
@@ -1301,7 +1301,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
         Raises:
             Error: If tensors have incompatible shapes.
         """
-        from .comparison import greater_equal
+        from shared.core.comparison import greater_equal
 
         return greater_equal(self, other)
 
@@ -1332,7 +1332,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
             are clamped. This is useful for memory-efficient training/inference.
             FP16 inputs are converted to FP32 before quantization.
         """
-        from .types.fp8 import FP8
+        from shared.core.types.fp8 import FP8
 
         # Verify source is floating point
         if not (
@@ -1390,7 +1390,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
             This assumes the uint8 tensor contains valid FP8 E4M3 encoded values.
             Use this to decode tensors created by to_fp8().
         """
-        from .types.fp8 import FP8
+        from shared.core.types.fp8 import FP8
 
         # Verify source is uint8
         if self._dtype != DType.uint8:
@@ -1883,7 +1883,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
             training/inference where range is more important than precision.
             FP16 inputs are converted to FP32 before quantization.
         """
-        from .types.bf8 import BF8
+        from shared.core.types.bf8 import BF8
 
         # Verify source is floating point
         if not (
@@ -1936,7 +1936,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
             This assumes the uint8 tensor contains valid BF8 E5M2 encoded values.
             Use this to decode tensors created by to_bf8().
         """
-        from .types.bf8 import BF8
+        from shared.core.types.bf8 import BF8
 
         # Verify source is uint8
         if self._dtype != DType.uint8:
@@ -2021,7 +2021,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
             Memory efficiency: 17 bytes per 32 Float32 values (16:1 compression).
             FP16 inputs are converted to FP32 before quantization.
         """
-        from .types.mxfp4 import MXFP4Block
+        from shared.core.types.mxfp4 import MXFP4Block
 
         # Verify source is floating point
         if not (
@@ -2107,7 +2107,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
             Use this to decode tensors created by to_mxfp4().
             Original tensor size is restored from metadata if available.
         """
-        from .types.mxfp4 import MXFP4Block, E8M0Scale
+        from shared.core.types.mxfp4 import MXFP4Block, E8M0Scale
 
         # Verify source is uint8
         if self._dtype != DType.uint8:
@@ -2234,7 +2234,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
                 Memory efficiency: 9 bytes per 16 Float32 values (14:1 compression).
                 FP16 inputs are converted to FP32 before quantization.
         """
-        from .types.nvfp4 import NVFP4Block
+        from shared.core.types.nvfp4 import NVFP4Block
 
         # Verify source is floating point
         if not (
@@ -2320,7 +2320,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
                 Use this to decode tensors created by to_nvfp4().
                 Original tensor size is restored from metadata if available.
         """
-        from .types.nvfp4 import NVFP4Block, E4M3Scale
+        from shared.core.types.nvfp4 import NVFP4Block, E4M3Scale
 
         # Verify source is uint8
         if self._dtype != DType.uint8:
@@ -2393,7 +2393,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
             Error: If tensors have incompatible shapes.
 
         """
-        from .arithmetic import subtract
+        from shared.core.arithmetic import subtract
 
         return subtract(other, self)
 
@@ -2413,7 +2413,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
             Error: If tensors have incompatible shapes or division by zero.
 
         """
-        from .arithmetic import divide
+        from shared.core.arithmetic import divide
 
         return divide(other, self)
 
@@ -2425,7 +2425,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
             Error: If tensors have incompatible shapes or dtypes.
 
         """
-        from .arithmetic import add
+        from shared.core.arithmetic import add
 
         var result = add(self, other)
         # Copy result data into self (must match shape/dtype)
@@ -2444,7 +2444,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
             Error: If tensors have incompatible shapes or dtypes.
 
         """
-        from .arithmetic import subtract
+        from shared.core.arithmetic import subtract
 
         var result = subtract(self, other)
         # Copy result data into self (must match shape/dtype)
@@ -2463,7 +2463,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
             Error: If tensors have incompatible shapes or dtypes.
 
         """
-        from .arithmetic import multiply
+        from shared.core.arithmetic import multiply
 
         var result = multiply(self, other)
         # Copy result data into self (must match shape/dtype)
@@ -2482,7 +2482,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
             Error: If tensors have incompatible shapes or dtypes, or division by zero.
 
         """
-        from .arithmetic import divide
+        from shared.core.arithmetic import divide
 
         var result = divide(self, other)
         # Copy result data into self (must match shape/dtype)
@@ -2584,7 +2584,7 @@ struct ExTensor(Copyable, ImplicitlyCopyable, Movable, Sized):
             Error: If operation fails.
 
         """
-        from .elementwise import abs
+        from shared.core.elementwise import abs
 
         return abs(self)
 
@@ -3458,3 +3458,12 @@ fn diff(tensor: ExTensor, n: Int = 1) raises -> ExTensor:
         ```
     """
     return tensor.diff(n)
+
+
+def main():
+    """Entry point for standalone compilation.
+
+    This file is a library module and not meant to be executed directly.
+    The main() function is provided only to allow standalone compilation for testing.
+    """
+    pass
