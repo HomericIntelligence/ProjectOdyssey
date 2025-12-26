@@ -23,8 +23,8 @@ Usage:
 See mixed precision training examples in examples/mixed_precision/
 """
 
-from ..core.extensor import ExTensor, full
-from ..core.numerical_safety import has_nan, has_inf
+from shared.core.extensor import ExTensor, full
+from shared.core.numerical_safety import has_nan, has_inf
 from math import log2
 from algorithm import vectorize
 from sys.info import simd_width_of
@@ -424,7 +424,7 @@ fn clip_gradients_by_norm(
     if gradients._numel == 0:
         return gradients  # No clipping needed for empty tensor
 
-    from ..core.reduction import sum as tensor_sum
+    from shared.core.reduction import sum as tensor_sum
     from math import sqrt as math_sqrt
 
     # Compute L2 norm: sqrt(sum(grad^2))
@@ -613,3 +613,13 @@ fn _clip_by_value_simd_float64(
         dst_ptr.store[width=width](idx, min(max(vec, min_vec), max_vec))
 
     vectorize[simd_width](size, vectorized_clamp)
+
+
+def main():
+    """Entry point for standalone compilation.
+
+    This function exists solely to allow `mojo build shared/training/mixed_precision.mojo`
+    to succeed. In normal usage, this module is imported as a package and
+    this function is never called.
+    """
+    print("mixed_precision module loaded successfully")
