@@ -454,3 +454,12 @@ struct RandomSynonymReplacement(Copyable, Movable, TextTransform):
 #
 # # Type comptime for more intuitive naming
 # comptime TextPipeline = TextCompose
+
+
+def main():
+    """Entry point for standalone compilation.
+
+    This file is a library module and not meant to be executed directly.
+    The main() function is provided only to allow standalone compilation for testing.
+    """
+    pass
