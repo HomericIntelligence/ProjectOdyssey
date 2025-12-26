@@ -14,7 +14,7 @@ All metrics implement the Metric trait for consistent interface
 """
 
 # Export base metric interface and utilities
-from .base import (
+from shared.training.metrics.base import (
     Metric,
     MetricResult,
     MetricCollection,
@@ -23,24 +23,28 @@ from .base import (
 )
 
 # Export metric implementations
-from .accuracy import (
+from shared.training.metrics.accuracy import (
     top1_accuracy,
     topk_accuracy,
     per_class_accuracy,
     AccuracyMetric,
 )
-from .loss_tracker import LossTracker, Statistics, ComponentTracker
-from .confusion_matrix import ConfusionMatrix
+from shared.training.metrics.loss_tracker import (
+    LossTracker,
+    Statistics,
+    ComponentTracker,
+)
+from shared.training.metrics.confusion_matrix import ConfusionMatrix
 
 # Consolidated evaluation utilities
-from .evaluate import (
+from shared.training.metrics.evaluate import (
     evaluate_with_predict,
     evaluate_logits_batch,
     compute_accuracy_on_batch,
 )
 
 # Results printing utilities
-from .results_printer import (
+from shared.training.metrics.results_printer import (
     print_evaluation_summary,
     print_per_class_accuracy,
     print_confusion_matrix,
@@ -51,3 +55,13 @@ from .results_printer import (
 # Future exports (to be implemented):
 # from .precision import Precision
 # from .recall import Recall
+
+
+def main():
+    """Entry point for standalone compilation.
+
+    This function exists solely to allow `mojo build shared/training/metrics/__init__.mojo`
+    to succeed. In normal usage, this module is imported as a package and
+    this function is never called.
+    """
+    print("shared.training.metrics package loaded successfully")
