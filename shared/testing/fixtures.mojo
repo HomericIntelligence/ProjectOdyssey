@@ -31,7 +31,7 @@ Example:
 """
 
 from shared.core import ExTensor, zeros, ones, full, zeros_like
-from .models import SimpleCNN, LinearModel
+from shared.testing.models import SimpleCNN, LinearModel
 
 
 fn create_test_cnn(
