@@ -8,7 +8,7 @@ This module defines:
 - GradientTriple: For ternary operations returning 3 gradients.
 """
 
-from .extensor import ExTensor
+from shared.core.extensor import ExTensor
 
 
 struct GradientPair(Copyable, Movable):
@@ -140,3 +140,12 @@ struct GradientQuad(Copyable, Movable):
         self.grad_b = grad_b^
         self.grad_c = grad_c^
         self.grad_d = grad_d^
+
+
+def main():
+    """Entry point for build validation only.
+
+    This function exists solely to satisfy `mojo build` requirements for
+    library files during CI validation. It should never be called in production.
+    """
+    pass
