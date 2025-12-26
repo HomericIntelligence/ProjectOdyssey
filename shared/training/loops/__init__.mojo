@@ -27,7 +27,21 @@ Example Usage:
 """
 
 # Export training loop implementations
-from .training_loop import TrainingLoop, train_one_epoch, training_step
+from shared.training.loops.training_loop import (
+    TrainingLoop,
+    train_one_epoch,
+    training_step,
+)
 
 # Export validation loop
-from .validation_loop import ValidationLoop
+from shared.training.loops.validation_loop import ValidationLoop
+
+
+def main():
+    """Entry point for standalone compilation.
+
+    This function exists solely to allow `mojo build shared/training/loops/__init__.mojo`
+    to succeed. In normal usage, this module is imported as a package and
+    this function is never called.
+    """
+    print("shared.training.loops package loaded successfully")
