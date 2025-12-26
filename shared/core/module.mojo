@@ -41,7 +41,7 @@ See Also:
     - shared.core.layers.linear: Linear layer implementation example
 """
 
-from .extensor import ExTensor
+from shared.core.extensor import ExTensor
 
 
 trait Module:
