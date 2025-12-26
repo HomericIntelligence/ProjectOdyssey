@@ -22,11 +22,11 @@ Issues covered:
 
 from math import exp, erf, sqrt, tanh as math_tanh, log as math_log
 from collections import List
-from .extensor import ExTensor, full, zeros_like
-from .arithmetic import add, subtract, multiply
-from .reduction import sum as tensor_sum, max as tensor_max
-from .elementwise import log
-from .dtype_dispatch import (
+from shared.core.extensor import ExTensor, full, zeros_like
+from shared.core.arithmetic import add, subtract, multiply
+from shared.core.reduction import sum as tensor_sum, max as tensor_max
+from shared.core.elementwise import log
+from shared.core.dtype_dispatch import (
     dispatch_unary,
     dispatch_binary,
     dispatch_float_unary,
@@ -43,8 +43,8 @@ from .dtype_dispatch import (
     dispatch_hard_tanh,
     dispatch_hard_tanh_backward,
 )
-from .gradient_types import GradientPair
-from .activation_ops import exp_scalar_f32, exp_scalar_f64
+from shared.core.gradient_types import GradientPair
+from shared.core.activation_ops import exp_scalar_f32, exp_scalar_f64
 
 
 # ============================================================================
@@ -1431,3 +1431,12 @@ fn hard_tanh_backward(
         )
 
     return dispatch_hard_tanh_backward(grad_output, x, min_val, max_val)
+
+
+def main():
+    """Entry point for standalone compilation.
+
+    This file is a library module and not meant to be executed directly.
+    The main() function is provided only to allow standalone compilation for testing.
+    """
+    pass
