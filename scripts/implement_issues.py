@@ -428,7 +428,10 @@ The issue is now ready for re-implementation.
 
 
 class LogBuffer:
-    """Thread-safe circular buffer for log messages with optional file output."""
+    """Thread-safe circular buffer for log messages with optional file output.
+
+    Supports context manager protocol for automatic resource cleanup.
+    """
 
     def __init__(self, max_lines: int = 1000, log_file: pathlib.Path | None = None) -> None:
         self._lock = threading.Lock()
@@ -438,6 +441,14 @@ class LogBuffer:
         if log_file:
             log_file.parent.mkdir(parents=True, exist_ok=True)
             self._file_handle = open(log_file, "a", encoding="utf-8")
+
+    def __enter__(self) -> "LogBuffer":
+        """Enter context manager - returns self."""
+        return self
+
+    def __exit__(self, exc_type: object, exc_val: object, exc_tb: object) -> None:
+        """Exit context manager - ensures file handle is closed."""
+        self.close()
 
     def append(self, level: str, msg: str) -> None:
         """Append a log message with timestamp."""
@@ -455,11 +466,16 @@ class LogBuffer:
             return list(self._messages)[-n:]
 
     def close(self) -> None:
-        """Close the log file handle."""
+        """Close the log file handle (safe to call multiple times)."""
         with self._lock:
             if self._file_handle:
-                self._file_handle.close()
-                self._file_handle = None
+                try:
+                    self._file_handle.close()
+                except (OSError, IOError) as e:
+                    # Log error but don't raise - cleanup should continue
+                    print(f"Warning: Failed to close log file {self._log_file}: {e}", file=sys.stderr)
+                finally:
+                    self._file_handle = None
 
 
 # Global log buffer for curses mode
@@ -872,6 +888,28 @@ def wait_until(epoch: int) -> None:
         signal.signal(signal.SIGINT, old_handler)
 
 
+def kill_process_safely(proc: subprocess.Popen, timeout: float = 5.0) -> None:
+    """Safely kill a subprocess, escalating to SIGKILL if needed.
+
+    Args:
+        proc: The process to kill
+        timeout: How long to wait for graceful termination
+
+    This prevents orphaned processes by ensuring the process is terminated.
+    """
+    try:
+        proc.kill()  # Send SIGTERM (or SIGKILL on Windows)
+        proc.wait(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        # Process didn't die - force kill with SIGKILL
+        log("WARN", f"Process {proc.pid} didn't terminate, forcing SIGKILL")
+        try:
+            proc.send_signal(signal.SIGKILL)
+            proc.wait()  # This should succeed now
+        except (OSError, subprocess.SubprocessError) as e:
+            log("ERROR", f"Failed to force-kill process {proc.pid}: {e}")
+
+
 # ---------------------------------------------------------------------
 # Status Tracker (from plan_issues.py)
 # ---------------------------------------------------------------------
@@ -946,8 +984,18 @@ class StatusTracker:
                 # No slots available - wait for one to be released
                 remaining = deadline - time.time()
                 if remaining <= 0:
+                    # Build detailed error message showing occupied slots
+                    occupied = []
+                    for s, i in self._slot_to_item.items():
+                        stage, info = "", ""
+                        if s in self._slots:
+                            _, stage, info, _ = self._slots[s]
+                        occupied.append(f"Slot {s}: #{i} ({stage})")
+
                     raise RuntimeError(
-                        f"Timeout waiting for slot (item #{item_id}). All {self._max_workers} slots occupied."
+                        f"Timeout waiting for slot (item #{item_id}). "
+                        f"All {self._max_workers} slots occupied:\n  " + "\n  ".join(occupied) + "\n"
+                        "Consider reducing --parallel count."
                     )
 
                 occupied_items = list(self._slot_to_item.values())
@@ -955,7 +1003,9 @@ class StatusTracker:
                     "DEBUG",
                     f"Item #{item_id} waiting for slot (timeout in {remaining:.0f}s, occupied: {occupied_items})",
                 )
-                self._slot_available.wait(timeout=min(remaining, 5.0))
+                # Wait proportionally to remaining time (min 1s, max remaining/4)
+                wait_time = min(remaining, max(1.0, remaining / 4))
+                self._slot_available.wait(timeout=wait_time)
 
     def update(self, slot: int, item_id: int, stage: str, info: str = "") -> None:
         """Update the status for a slot.
@@ -2212,8 +2262,7 @@ class IssueImplementer:
                     # Check timeout
                     remaining = deadline - time.time()
                     if remaining <= 0:
-                        proc.kill()
-                        proc.wait(timeout=5)  # Give it time to die
+                        kill_process_safely(proc, timeout=5)
                         log("DEBUG", "  Claude timed out")
                         return False, "Timeout exceeded"
 
@@ -2236,13 +2285,11 @@ class IssueImplementer:
                         total_bytes += len(line.encode("utf-8"))
 
                         if line_count > MAX_OUTPUT_LINES:
-                            proc.kill()
-                            proc.wait(timeout=5)
+                            kill_process_safely(proc, timeout=5)
                             return False, f"Output exceeded {MAX_OUTPUT_LINES} lines"
 
                         if total_bytes > MAX_OUTPUT_SIZE:
-                            proc.kill()
-                            proc.wait(timeout=5)
+                            kill_process_safely(proc, timeout=5)
                             return False, f"Output exceeded {MAX_OUTPUT_SIZE / 1024 / 1024:.0f}MB"
 
                         # Extract meaningful output for status
@@ -2294,11 +2341,7 @@ class IssueImplementer:
 
         except (KeyboardInterrupt, SystemExit):
             # Clean shutdown - kill process and re-raise
-            try:
-                proc.kill()
-                proc.wait(timeout=5)
-            except (OSError, subprocess.SubprocessError):
-                pass
+            kill_process_safely(proc, timeout=5)
             raise
         except subprocess.TimeoutExpired as e:
             log("ERROR", f"  Claude timed out: {e}")
