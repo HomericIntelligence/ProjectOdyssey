@@ -33,6 +33,7 @@ theme:
 
 nav:
   - Home: index.md
+  - Glossary: glossary.md
   - Getting Started:
     - Installation: getting-started/installation.md
     - Quickstart: getting-started/quickstart.md

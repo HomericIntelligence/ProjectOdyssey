@@ -51,6 +51,7 @@ For contributors:
 
 ## Quick Links
 
+- [Glossary of Terms](glossary.md)
 - [GitHub Repository](https://github.com/mvillmow/ProjectOdyssey)
 - [Issue Tracker](https://github.com/mvillmow/ProjectOdyssey/issues)
 - Contributing Guidelines (see `CONTRIBUTING.md` in the repository root)
