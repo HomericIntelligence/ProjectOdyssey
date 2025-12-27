@@ -12,7 +12,7 @@ Key components:
 """
 
 from shared.core.extensor import ExTensor, zeros, ones, zeros_like, ones_like
-from shared.core.normalization import batch_norm2d
+from shared.core.normalization_simd import batch_norm2d_fused
 
 
 struct BatchNorm2dLayer(Copyable, Movable):
@@ -153,7 +153,7 @@ struct BatchNorm2dLayer(Copyable, Movable):
             var output = bn.forward(input, training=False)
             ```
         """
-        var (output, new_running_mean, new_running_var) = batch_norm2d(
+        var (output, new_running_mean, new_running_var) = batch_norm2d_fused(
             input,
             self.gamma,
             self.beta,

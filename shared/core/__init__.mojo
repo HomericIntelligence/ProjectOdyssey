@@ -305,6 +305,11 @@ from shared.core.normalization import (
     instance_norm_backward,
 )
 
+from shared.core.normalization_simd import (
+    batch_norm2d_fused,
+    batch_norm2d_fused_inference,
+)
+
 from shared.core.normalize_ops import normalize_rgb
 
 from shared.core.scalar_ops import (
