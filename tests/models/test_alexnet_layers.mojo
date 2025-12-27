@@ -1185,13 +1185,14 @@ fn main() raises:
     # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
     print("  test_fc3_backward_float32... FIXME(#2704)")
 
-    # FIXME(#2705): test_flatten_operation_float32 disabled - runtime crash.
-    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2705
-    print("  test_flatten_operation_float32... FIXME(#2705)")
+    # Flatten tests - reference counting bug fixed in Mojo 0.26.1
+    print("  test_flatten_operation_float32...", end="")
+    test_flatten_operation_float32()
+    print(" OK")
 
-    # FIXME(#2705): test_flatten_operation_float16 disabled - same crash.
-    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2705
-    print("  test_flatten_operation_float16... FIXME(#2705)")
+    print("  test_flatten_operation_float16...", end="")
+    test_flatten_operation_float16()
+    print(" OK")
 
     # Sequential data flow test
     print("  test_all_layers_sequence_float32...", end="")

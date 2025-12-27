@@ -533,7 +533,6 @@ fn test_flatten_operation_float32() raises:
     assert_dtype(flattened, dtype, "Flatten dtype mismatch")
 
     # Verify all values preserved
-    var expected_value = 1.0
     for i in range(flattened.numel()):
         var val = flattened._get_float64(i)
         assert_false(isnan(val), "Flatten produced NaN")
@@ -761,12 +760,11 @@ fn main() raises:
     # See: https://github.com/mvillmow/ProjectOdyssey/issues/2702
     print("  test_fc3_backward_float32... FIXME(#2702)")
 
-    # FIXME(#2705): test_flatten_operation_float32 disabled - runtime crash in reshape.
+    # FIXME(#2705): Flatten tests disabled - crashes during tensor creation after
+    # running many previous tests (possible memory corruption from earlier tests).
+    # Note: Standalone flatten tests pass, AlexNet flatten tests pass.
     # See: https://github.com/mvillmow/ProjectOdyssey/issues/2705
     print("  test_flatten_operation_float32... FIXME(#2705)")
-
-    # FIXME(#2705): test_flatten_operation_float16 disabled - same reshape crash.
-    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2705
     print("  test_flatten_operation_float16... FIXME(#2705)")
 
     # Sequential data flow test
