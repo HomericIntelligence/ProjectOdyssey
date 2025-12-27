@@ -44,6 +44,9 @@ from shared.training.gradient_ops import (
     zero_gradient_inplace,
 )
 
+# Export checkpoint manager (Issue #2664)
+from shared.training.checkpoint import CheckpointManager
+
 # Export base interfaces and utilities
 from shared.training.base import (
     Callback,
