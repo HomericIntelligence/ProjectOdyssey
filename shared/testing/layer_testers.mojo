@@ -77,7 +77,9 @@ from shared.testing.gradient_checker import (
     check_gradients,
     check_gradients_verbose,
     compute_numerical_gradient,
+    compute_sampled_numerical_gradient,
     assert_gradients_close,
+    assert_sampled_gradients_close,
 )
 
 
@@ -496,6 +498,7 @@ struct LayerTester:
         stride: Int = 1,
         padding: Int = 0,
         validate_analytical: Bool = False,
+        num_gradient_samples: Int = 0,
     ) raises:
         """Test conv2d backward pass with gradient checking.
 
@@ -516,6 +519,9 @@ struct LayerTester:
             padding: Convolution padding (default: 0).
             validate_analytical: If True, validate analytical gradient against
                 numerical gradient (default: False).
+            num_gradient_samples: If > 0, use sampled gradient checking (faster).
+                If 0, use exhaustive checking (default, slower but thorough).
+                Recommended: 100 samples for large conv layers.
 
         Verifies:
             - Forward pass runs without error
@@ -528,7 +534,7 @@ struct LayerTester:
 
         Example:
             ```mojo
-            # Test conv layer backward with FP32 (small tensor to avoid timeout)
+            # Test small conv layer with exhaustive checking
             LayerTester.test_conv_layer_backward(
                 in_channels=3,
                 out_channels=16,
@@ -540,6 +546,20 @@ struct LayerTester:
                 dtype=DType.float32,
                 stride=1,
                 padding=1
+            )
+
+            # Test large conv layer with sampled checking (much faster)
+            LayerTester.test_conv_layer_backward(
+                in_channels=192,
+                out_channels=384,
+                kernel_size=3,
+                input_h=8,
+                input_w=8,
+                weights=conv3_weights,
+                bias=conv3_bias,
+                dtype=DType.float32,
+                validate_analytical=True,
+                num_gradient_samples=100  # Much faster than exhaustive
             )
             ```
         """
@@ -581,45 +601,80 @@ struct LayerTester:
         fn forward(x: ExTensor) raises escaping -> ExTensor:
             return conv2d(x, weights, bias, stride=stride, padding=padding)
 
-        # Compute numerical gradient (always computed for validation)
-        var numerical_grad = compute_numerical_gradient(forward, input, epsilon)
+        # Use sampled or exhaustive gradient checking based on num_gradient_samples
+        if num_gradient_samples > 0:
+            # Sampled gradient checking (faster for large layers)
+            # Optionally validate analytical gradient
+            if validate_analytical:
+                # Compute sampled numerical gradients
+                var sampled_gradients = compute_sampled_numerical_gradient(
+                    forward, input, num_gradient_samples, epsilon, seed=42
+                )
 
-        # Verify numerical gradient has correct shape
-        assert_shape(
-            numerical_grad,
-            input.shape(),
-            "Conv2D backward: numerical gradient shape mismatch",
-        )
+                # Create gradient output (upstream gradient)
+                var grad_output = ones_like(output)
 
-        # Verify no NaN/Inf in numerical gradients
-        for i in range(numerical_grad.numel()):
-            var val = numerical_grad._get_float64(i)
-            assert_false(
-                isnan(val), "Conv2D backward: NaN in numerical gradient"
+                # Compute analytical gradient using conv2d_backward
+                var backward_result = conv2d_backward(
+                    grad_output, input, weights, stride=stride, padding=padding
+                )
+                var analytical_grad = backward_result.grad_input
+
+                # Compare analytical vs sampled numerical gradients
+                assert_sampled_gradients_close(
+                    analytical_grad,
+                    sampled_gradients,
+                    rtol=tolerance,
+                    message=(
+                        "Conv2D analytical gradient doesn't match sampled"
+                        " numerical"
+                    ),
+                )
+        else:
+            # Exhaustive gradient checking (slower but thorough)
+            # Compute numerical gradient (always computed for validation)
+            var numerical_grad = compute_numerical_gradient(
+                forward, input, epsilon
             )
-            assert_false(
-                isinf(val), "Conv2D backward: Inf in numerical gradient"
-            )
 
-        # Optionally validate analytical gradient
-        if validate_analytical:
-            # Create gradient output (upstream gradient)
-            var grad_output = ones_like(output)
-
-            # Compute analytical gradient using conv2d_backward
-            var backward_result = conv2d_backward(
-                grad_output, input, weights, stride=stride, padding=padding
-            )
-            var analytical_grad = backward_result.grad_input
-
-            # Compare analytical vs numerical gradients
-            assert_gradients_close(
-                analytical_grad,
+            # Verify numerical gradient has correct shape
+            assert_shape(
                 numerical_grad,
-                rtol=tolerance,
-                atol=tolerance,
-                message="Conv2D analytical gradient doesn't match numerical",
+                input.shape(),
+                "Conv2D backward: numerical gradient shape mismatch",
             )
+
+            # Verify no NaN/Inf in numerical gradients
+            for i in range(numerical_grad.numel()):
+                var val = numerical_grad._get_float64(i)
+                assert_false(
+                    isnan(val), "Conv2D backward: NaN in numerical gradient"
+                )
+                assert_false(
+                    isinf(val), "Conv2D backward: Inf in numerical gradient"
+                )
+
+            # Optionally validate analytical gradient
+            if validate_analytical:
+                # Create gradient output (upstream gradient)
+                var grad_output = ones_like(output)
+
+                # Compute analytical gradient using conv2d_backward
+                var backward_result = conv2d_backward(
+                    grad_output, input, weights, stride=stride, padding=padding
+                )
+                var analytical_grad = backward_result.grad_input
+
+                # Compare analytical vs numerical gradients
+                assert_gradients_close(
+                    analytical_grad,
+                    numerical_grad,
+                    rtol=tolerance,
+                    atol=tolerance,
+                    message=(
+                        "Conv2D analytical gradient doesn't match numerical"
+                    ),
+                )
 
     @staticmethod
     fn test_linear_layer_backward(
@@ -629,6 +684,7 @@ struct LayerTester:
         bias: ExTensor,
         dtype: DType,
         validate_analytical: Bool = False,
+        num_gradient_samples: Int = 0,
     ) raises:
         """Test linear layer backward pass with gradient checking.
 
@@ -643,6 +699,9 @@ struct LayerTester:
             dtype: Data type to test.
             validate_analytical: If True, validate analytical gradient against
                 numerical gradient (default: False).
+            num_gradient_samples: If > 0, use sampled gradient checking (faster).
+                If 0, use exhaustive checking (default, slower but thorough).
+                Recommended: 100 samples for large layers (>1000 parameters).
 
         Verifies:
             - Forward pass runs without error
@@ -655,13 +714,24 @@ struct LayerTester:
 
         Example:
             ```mojo
-            # Test FC layer backward with FP32
+            # Test small FC layer with exhaustive checking
             LayerTester.test_linear_layer_backward(
                 in_features=32,
                 out_features=10,
                 weights=fc_weights,
                 bias=fc_bias,
                 dtype=DType.float32
+            )
+
+            # Test large FC layer with sampled checking (much faster)
+            LayerTester.test_linear_layer_backward(
+                in_features=9216,
+                out_features=4096,
+                weights=fc_weights,
+                bias=fc_bias,
+                dtype=DType.float32,
+                validate_analytical=True,
+                num_gradient_samples=100  # 99% faster than exhaustive
             )
             ```
         """
@@ -688,45 +758,84 @@ struct LayerTester:
         fn forward(x: ExTensor) raises escaping -> ExTensor:
             return linear(x, weights, bias)
 
-        # Compute numerical gradient (always computed for validation)
-        var numerical_grad = compute_numerical_gradient(forward, input, epsilon)
+        # Use sampled or exhaustive gradient checking based on num_gradient_samples
+        if num_gradient_samples > 0:
+            # Sampled gradient checking (faster for large layers)
+            # Optionally validate analytical gradient
+            if validate_analytical:
+                # Compute sampled numerical gradients
+                var sampled_gradients = compute_sampled_numerical_gradient(
+                    forward, input, num_gradient_samples, epsilon, seed=42
+                )
 
-        # Verify numerical gradient has correct shape
-        assert_shape(
-            numerical_grad,
-            input.shape(),
-            "Linear backward: numerical gradient shape mismatch",
-        )
+                # Create gradient output (upstream gradient)
+                var grad_output = ones_like(output)
 
-        # Verify no NaN/Inf in numerical gradients
-        for i in range(numerical_grad.numel()):
-            var val = numerical_grad._get_float64(i)
-            assert_false(
-                isnan(val), "Linear backward: NaN in numerical gradient"
+                # Compute analytical gradient using linear_backward
+                var backward_result = linear_backward(
+                    grad_output, input, weights
+                )
+                var analytical_grad = backward_result.grad_input
+
+                # Compare analytical vs sampled numerical gradients
+                # Use wider tolerance (1.5%) for matrix operations due to accumulated errors
+                var wide_tolerance = 0.015
+                assert_sampled_gradients_close(
+                    analytical_grad,
+                    sampled_gradients,
+                    rtol=wide_tolerance,
+                    message=(
+                        "Linear analytical gradient doesn't match sampled"
+                        " numerical"
+                    ),
+                )
+        else:
+            # Exhaustive gradient checking (slower but thorough)
+            # Compute numerical gradient (always computed for validation)
+            var numerical_grad = compute_numerical_gradient(
+                forward, input, epsilon
             )
-            assert_false(
-                isinf(val), "Linear backward: Inf in numerical gradient"
-            )
 
-        # Optionally validate analytical gradient
-        if validate_analytical:
-            # Create gradient output (upstream gradient)
-            var grad_output = ones_like(output)
-
-            # Compute analytical gradient using linear_backward
-            var backward_result = linear_backward(grad_output, input, weights)
-            var analytical_grad = backward_result.grad_input
-
-            # Compare analytical vs numerical gradients
-            # Use wider tolerance (1.5%) for matrix operations due to accumulated errors
-            var wide_tolerance = 0.015
-            assert_gradients_close(
-                analytical_grad,
+            # Verify numerical gradient has correct shape
+            assert_shape(
                 numerical_grad,
-                rtol=wide_tolerance,
-                atol=wide_tolerance,
-                message="Linear analytical gradient doesn't match numerical",
+                input.shape(),
+                "Linear backward: numerical gradient shape mismatch",
             )
+
+            # Verify no NaN/Inf in numerical gradients
+            for i in range(numerical_grad.numel()):
+                var val = numerical_grad._get_float64(i)
+                assert_false(
+                    isnan(val), "Linear backward: NaN in numerical gradient"
+                )
+                assert_false(
+                    isinf(val), "Linear backward: Inf in numerical gradient"
+                )
+
+            # Optionally validate analytical gradient
+            if validate_analytical:
+                # Create gradient output (upstream gradient)
+                var grad_output = ones_like(output)
+
+                # Compute analytical gradient using linear_backward
+                var backward_result = linear_backward(
+                    grad_output, input, weights
+                )
+                var analytical_grad = backward_result.grad_input
+
+                # Compare analytical vs numerical gradients
+                # Use wider tolerance (1.5%) for matrix operations due to accumulated errors
+                var wide_tolerance = 0.015
+                assert_gradients_close(
+                    analytical_grad,
+                    numerical_grad,
+                    rtol=wide_tolerance,
+                    atol=wide_tolerance,
+                    message=(
+                        "Linear analytical gradient doesn't match numerical"
+                    ),
+                )
 
     @staticmethod
     fn test_activation_layer_backward(

@@ -8,7 +8,7 @@ bug that occurs after running 15+ cumulative tests.
 Tests:
 - FC1 (400→120): forward float32, forward float16, backward float32
 - FC2 (120→84): forward float32, forward float16, backward float32
-- FC3 (84→10): forward float32
+- FC3 (84→10): forward float32, forward float16, backward float32
 """
 
 from shared.core.extensor import ExTensor
@@ -180,6 +180,31 @@ fn test_fc3_forward_float32() raises:
     )
 
 
+fn test_fc3_forward_float16() raises:
+    """Test FC3 (84→10) forward pass with float16.
+
+    FIXME(#2703): This test may fail due to float16 precision limitations.
+    FC3 performs 84 multiplications per output, which can cause accumulation
+    errors in float16 (limited to ~3.3 decimal digits precision).
+
+    If this test fails, we need to implement float32 accumulation in linear().
+    """
+    var dtype = DType.float16
+    var _result = create_fc3_parameters(dtype)
+
+    var weights = _result[0]
+
+    var bias = _result[1]
+
+    LayerTester.test_linear_layer(
+        in_features=84,
+        out_features=10,
+        weights=weights,
+        bias=bias,
+        dtype=dtype,
+    )
+
+
 fn test_fc3_backward_float32() raises:
     """Test FC3 backward pass with gradient checking."""
     var dtype = DType.float32
@@ -234,8 +259,12 @@ fn main() raises:
     test_fc3_forward_float32()
     print(" OK")
 
+    print("  test_fc3_forward_float16...", end="")
+    test_fc3_forward_float16()
+    print(" OK")
+
     print("  test_fc3_backward_float32...", end="")
     test_fc3_backward_float32()
     print(" OK")
 
-    print("\n✅ All fully connected layer tests passed (8/8)")
+    print("\n✅ All fully connected layer tests passed (9/9)")
