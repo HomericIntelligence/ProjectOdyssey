@@ -37,6 +37,13 @@ from shared.training.model_utils import (
     validate_shapes,
 )
 
+# Export gradient operations (Issue #2630)
+from shared.training.gradient_ops import (
+    accumulate_gradient_inplace,
+    scale_gradient_inplace,
+    zero_gradient_inplace,
+)
+
 # Export base interfaces and utilities
 from shared.training.base import (
     Callback,
