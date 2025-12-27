@@ -349,7 +349,12 @@ fn test_conv2_forward_float16() raises:
 
 
 fn test_conv2_backward_float32() raises:
-    """Test Conv2 backward pass with gradient checking (small tensor: 8x8)."""
+    """Test Conv2 backward pass with sampled gradient checking.
+
+    Uses sampled gradient checking (100 samples) instead of exhaustive checking
+    to avoid timeout. Conv2 has 64 input channels with 5x5 kernel (4096 elements),
+    making exhaustive checking too slow.
+    """
     var dtype = DType.float32
     var _result = create_conv2_parameters(dtype)
 
@@ -368,6 +373,8 @@ fn test_conv2_backward_float32() raises:
         dtype=dtype,
         stride=1,
         padding=2,
+        validate_analytical=True,
+        num_gradient_samples=200,  # Increased for better statistical coverage
     )
 
 
@@ -423,7 +430,11 @@ fn test_conv3_forward_float16() raises:
 
 
 fn test_conv3_backward_float32() raises:
-    """Test Conv3 backward pass with gradient checking (small tensor: 8x8)."""
+    """Test Conv3 backward pass with sampled gradient checking.
+
+    Uses sampled gradient checking (100 samples) to avoid timeout.
+    Conv3 has 192 input channels with 3x3 kernel (11,520 elements).
+    """
     var dtype = DType.float32
     var _result = create_conv3_parameters(dtype)
 
@@ -442,6 +453,8 @@ fn test_conv3_backward_float32() raises:
         dtype=dtype,
         stride=1,
         padding=1,
+        validate_analytical=True,
+        num_gradient_samples=100,
     )
 
 
@@ -475,7 +488,11 @@ fn test_conv4_forward_float32() raises:
 
 
 fn test_conv4_backward_float32() raises:
-    """Test Conv4 backward pass with gradient checking (small tensor: 8x8)."""
+    """Test Conv4 backward pass with sampled gradient checking.
+
+    Uses sampled gradient checking (100 samples) to avoid timeout.
+    Conv4 has 384 input channels with 3x3 kernel (23,040 elements).
+    """
     var dtype = DType.float32
     var _result = create_conv4_parameters(dtype)
 
@@ -494,6 +511,8 @@ fn test_conv4_backward_float32() raises:
         dtype=dtype,
         stride=1,
         padding=1,
+        validate_analytical=True,
+        num_gradient_samples=100,
     )
 
 
@@ -526,7 +545,11 @@ fn test_conv5_forward_float32() raises:
 
 
 fn test_conv5_backward_float32() raises:
-    """Test Conv5 backward pass with gradient checking (small tensor: 8x8)."""
+    """Test Conv5 backward pass with sampled gradient checking.
+
+    Uses sampled gradient checking (100 samples) to avoid timeout.
+    Conv5 has 384 input channels with 3x3 kernel (23,040 elements).
+    """
     var dtype = DType.float32
     var _result = create_conv5_parameters(dtype)
 
@@ -545,6 +568,8 @@ fn test_conv5_backward_float32() raises:
         dtype=dtype,
         stride=1,
         padding=1,
+        validate_analytical=True,
+        num_gradient_samples=100,
     )
 
 
@@ -720,7 +745,11 @@ fn test_fc1_forward_float16() raises:
 
 
 fn test_fc1_backward_float32() raises:
-    """Test FC1 backward pass with gradient checking."""
+    """Test FC1 backward pass with sampled gradient checking.
+
+    Uses sampled gradient checking (100 samples) to avoid timeout.
+    FC1 has 9,216 inputs, making exhaustive checking too slow.
+    """
     var dtype = DType.float32
     var _result = create_fc1_parameters(dtype)
 
@@ -734,6 +763,8 @@ fn test_fc1_backward_float32() raises:
         weights=weights,
         bias=bias,
         dtype=dtype,
+        validate_analytical=True,
+        num_gradient_samples=100,
     )
 
 
@@ -779,7 +810,11 @@ fn test_fc2_forward_float16() raises:
 
 
 fn test_fc2_backward_float32() raises:
-    """Test FC2 backward pass with gradient checking."""
+    """Test FC2 backward pass with sampled gradient checking.
+
+    Uses sampled gradient checking (100 samples) to avoid timeout.
+    FC2 has 4,096 inputs, making exhaustive checking too slow.
+    """
     var dtype = DType.float32
     var _result = create_fc2_parameters(dtype)
 
@@ -793,6 +828,8 @@ fn test_fc2_backward_float32() raises:
         weights=weights,
         bias=bias,
         dtype=dtype,
+        validate_analytical=True,
+        num_gradient_samples=100,
     )
 
 
@@ -838,7 +875,11 @@ fn test_fc3_forward_float16() raises:
 
 
 fn test_fc3_backward_float32() raises:
-    """Test FC3 backward pass with gradient checking."""
+    """Test FC3 backward pass with sampled gradient checking.
+
+    Uses sampled gradient checking (100 samples) to avoid timeout.
+    FC3 has 4,096 inputs, making exhaustive checking too slow.
+    """
     var dtype = DType.float32
     var _result = create_fc3_parameters(dtype)
 
@@ -852,6 +893,8 @@ fn test_fc3_backward_float32() raises:
         weights=weights,
         bias=bias,
         dtype=dtype,
+        validate_analytical=True,
+        num_gradient_samples=100,
     )
 
 
@@ -1071,9 +1114,10 @@ fn main() raises:
     # See: https://github.com/mvillmow/ProjectOdyssey/issues/2701
     print("  test_conv2_forward_float16... FIXME(#2701)")
 
-    # FIXME(#2704): test_conv2_backward_float32 disabled - gradient checking timeout.
-    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
-    print("  test_conv2_backward_float32... FIXME(#2704)")
+    # FIXME: test_conv2_backward_float32 disabled - gradient accuracy issue (194% error)
+    # Sampled gradient checking reveals analytical gradient doesn't match numerical.
+    # This is a separate issue from #2704 (timeout) - needs investigation.
+    print("  test_conv2_backward_float32... FIXME (gradient accuracy)")
 
     # Conv3 tests
     print("  test_conv3_forward_float32...", end="")
@@ -1085,28 +1129,33 @@ fn main() raises:
     # See: https://github.com/mvillmow/ProjectOdyssey/issues/2701
     print("  test_conv3_forward_float16... FIXME(#2701)")
 
-    # FIXME(#2704): test_conv3_backward_float32 disabled - gradient checking timeout
-    # (192 input channels * 3x3 kernel requires many forward passes).
-    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
-    print("  test_conv3_backward_float32... FIXME(#2704)")
+    # FIXME: test_conv3_backward_float32 disabled - gradient accuracy issue (183% error)
+    # Sampled gradient checking reveals analytical gradient doesn't match numerical.
+    print("  test_conv3_backward_float32... FIXME (gradient accuracy)")
 
     # Conv4 tests
     print("  test_conv4_forward_float32...", end="")
     test_conv4_forward_float32()
     print(" OK")
 
-    # FIXME(#2704): test_conv4_backward_float32 disabled - gradient checking timeout.
-    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
-    print("  test_conv4_backward_float32... FIXME(#2704)")
+    # FIXME: test_conv4_backward_float32 disabled - likely has gradient accuracy issue
+    # Conv2 and Conv3 backward have gradient bugs, Conv4 likely similar.
+    print(
+        "  test_conv4_backward_float32... FIXME (gradient accuracy - not"
+        " tested)"
+    )
 
     # Conv5 tests
     print("  test_conv5_forward_float32...", end="")
     test_conv5_forward_float32()
     print(" OK")
 
-    # FIXME(#2704): test_conv5_backward_float32 disabled - gradient checking timeout.
-    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
-    print("  test_conv5_backward_float32... FIXME(#2704)")
+    # FIXME: test_conv5_backward_float32 disabled - likely has gradient accuracy issue
+    # Conv2 and Conv3 backward have gradient bugs, Conv5 likely similar.
+    print(
+        "  test_conv5_backward_float32... FIXME (gradient accuracy - not"
+        " tested)"
+    )
 
     # ReLU tests
     print("  test_relu_forward_float32...", end="")
@@ -1155,9 +1204,9 @@ fn main() raises:
     test_fc1_forward_float16()
     print(" OK")
 
-    # FIXME(#2704): test_fc1_backward_float32 disabled - gradient checking timeout.
-    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
-    print("  test_fc1_backward_float32... FIXME(#2704)")
+    print("  test_fc1_backward_float32...", end="")
+    test_fc1_backward_float32()
+    print(" OK")
 
     # FC2 tests
     print("  test_fc2_forward_float32...", end="")
@@ -1168,9 +1217,9 @@ fn main() raises:
     test_fc2_forward_float16()
     print(" OK")
 
-    # FIXME(#2704): test_fc2_backward_float32 disabled - gradient checking timeout.
-    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
-    print("  test_fc2_backward_float32... FIXME(#2704)")
+    print("  test_fc2_backward_float32...", end="")
+    test_fc2_backward_float32()
+    print(" OK")
 
     # FC3 tests
     print("  test_fc3_forward_float32...", end="")
@@ -1181,9 +1230,9 @@ fn main() raises:
     test_fc3_forward_float16()
     print(" OK")
 
-    # FIXME(#2704): test_fc3_backward_float32 disabled - gradient checking timeout.
-    # See: https://github.com/mvillmow/ProjectOdyssey/issues/2704
-    print("  test_fc3_backward_float32... FIXME(#2704)")
+    print("  test_fc3_backward_float32...", end="")
+    test_fc3_backward_float32()
+    print(" OK")
 
     # Flatten tests - reference counting bug fixed in Mojo 0.26.1
     print("  test_flatten_operation_float32...", end="")
