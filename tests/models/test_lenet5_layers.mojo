@@ -27,6 +27,7 @@ from shared.core.linear import linear
 from shared.core.activation import relu
 from shared.core.shape import conv2d_output_shape, pool_output_shape
 from shared.core.initializers import kaiming_uniform
+from shared.testing.layer_params import ConvFixture, LinearFixture
 from shared.testing.assertions import (
     assert_shape,
     assert_dtype,
@@ -51,99 +52,36 @@ from math import isnan, isinf
 
 fn create_conv1_parameters(dtype: DType) raises -> Tuple[ExTensor, ExTensor]:
     """Create Conv1 layer parameters (1→6, 5x5 kernel)."""
-    var in_channels = 1
-    var out_channels = 6
-    var kernel_size = 5
-
-    # Conv1 weights: (6, 1, 5, 5)
-    var kernel_shape: List[Int] = [
-        out_channels,
-        in_channels,
-        kernel_size,
-        kernel_size,
-    ]
-    var fan_in = in_channels * kernel_size * kernel_size
-    var fan_out = out_channels * kernel_size * kernel_size
-    var kernel = kaiming_uniform(fan_in, fan_out, kernel_shape, dtype=dtype)
-
-    # Conv1 bias: (6,)
-    var bias = zeros([out_channels], dtype)
-
-    return kernel, bias
+    var fixture = ConvFixture(
+        in_channels=1, out_channels=6, kernel_size=5, dtype=dtype
+    )
+    return fixture.kernel, fixture.bias
 
 
 fn create_conv2_parameters(dtype: DType) raises -> Tuple[ExTensor, ExTensor]:
     """Create Conv2 layer parameters (6→16, 5x5 kernel)."""
-    var in_channels = 6
-    var out_channels = 16
-    var kernel_size = 5
-
-    # Conv2 weights: (16, 6, 5, 5)
-    var kernel_shape: List[Int] = [
-        out_channels,
-        in_channels,
-        kernel_size,
-        kernel_size,
-    ]
-    var fan_in = in_channels * kernel_size * kernel_size
-    var fan_out = out_channels * kernel_size * kernel_size
-    var kernel = kaiming_uniform(fan_in, fan_out, kernel_shape, dtype=dtype)
-
-    # Conv2 bias: (16,)
-    var bias = zeros([out_channels], dtype)
-
-    return kernel, bias
+    var fixture = ConvFixture(
+        in_channels=6, out_channels=16, kernel_size=5, dtype=dtype
+    )
+    return fixture.kernel, fixture.bias
 
 
 fn create_fc1_parameters(dtype: DType) raises -> Tuple[ExTensor, ExTensor]:
     """Create FC1 layer parameters (400→120)."""
-    var in_features = 400
-    var out_features = 120
-
-    # FC1 weights: (120, 400)
-    var weights_shape: List[Int] = [out_features, in_features]
-    var weights = kaiming_uniform(
-        in_features, out_features, weights_shape, dtype=dtype
-    )
-
-    # FC1 bias: (120,)
-    var bias = zeros([out_features], dtype)
-
-    return weights, bias
+    var fixture = LinearFixture(in_features=400, out_features=120, dtype=dtype)
+    return fixture.weights, fixture.bias
 
 
 fn create_fc2_parameters(dtype: DType) raises -> Tuple[ExTensor, ExTensor]:
     """Create FC2 layer parameters (120→84)."""
-    var in_features = 120
-    var out_features = 84
-
-    # FC2 weights: (84, 120)
-    var weights_shape: List[Int] = [out_features, in_features]
-    var weights = kaiming_uniform(
-        in_features, out_features, weights_shape, dtype=dtype
-    )
-
-    # FC2 bias: (84,)
-    var bias = zeros([out_features], dtype)
-
-    return weights, bias
+    var fixture = LinearFixture(in_features=120, out_features=84, dtype=dtype)
+    return fixture.weights, fixture.bias
 
 
 fn create_fc3_parameters(dtype: DType) raises -> Tuple[ExTensor, ExTensor]:
     """Create FC3 layer parameters (84→10)."""
-    var in_features = 84
-    var out_features = 10
-
-    # FC3 weights: (10, 84)
-    var weights_shape: List[Int] = [out_features, in_features]
-    var weights = kaiming_uniform(
-        in_features, out_features, weights_shape, dtype=dtype
-    )
-
-    # FC3 bias: (10,)
-    var bias = zeros([out_features], dtype)
-
-    return weights, bias
+    var fixture = LinearFixture(in_features=84, out_features=10, dtype=dtype)
+    return fixture.weights, fixture.bias
 
 
 # ============================================================================
