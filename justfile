@@ -103,6 +103,81 @@ native prefix:
     @NATIVE=1 just {{prefix}}
 
 # ==============================================================================
+# Docker Registry (GHCR)
+# ==============================================================================
+
+# Default registry
+REGISTRY := "ghcr.io"
+REPO_NAME := "mvillmow/ml-odyssey"
+
+# Build CI-optimized Docker image
+docker-build-ci target="runtime":
+    @docker build -f Dockerfile.ci --target {{target}} \
+        -t {{REGISTRY}}/{{REPO_NAME}}:{{target}} \
+        -t {{REGISTRY}}/{{REPO_NAME}}:{{target}}-$(git rev-parse --short HEAD) \
+        .
+
+# Build all CI image targets
+docker-build-ci-all:
+    @just docker-build-ci runtime
+    @just docker-build-ci ci
+    @just docker-build-ci production
+
+# Push Docker image to GHCR (requires `docker login ghcr.io`)
+docker-push target="runtime":
+    @docker push {{REGISTRY}}/{{REPO_NAME}}:{{target}}
+    @docker push {{REGISTRY}}/{{REPO_NAME}}:{{target}}-$(git rev-parse --short HEAD)
+
+# Push all images to GHCR
+docker-push-all:
+    @just docker-push runtime
+    @just docker-push ci
+    @just docker-push production
+
+# Build and push Docker image
+docker-release target="runtime":
+    @just docker-build-ci {{target}}
+    @just docker-push {{target}}
+
+# Test Docker image locally
+docker-test-image target="runtime":
+    @echo "Testing {{target}} image..."
+    @docker run --rm {{REGISTRY}}/{{REPO_NAME}}:{{target}} pixi run mojo --version
+    @echo "✅ Image {{target}} is working"
+
+# Run tests in Docker image
+docker-run-tests target="runtime":
+    @docker run --rm {{REGISTRY}}/{{REPO_NAME}}:{{target}} \
+        pixi run mojo test -I . tests/
+
+# Interactive shell in Docker image
+docker-run-shell target="runtime":
+    @docker run -it --rm {{REGISTRY}}/{{REPO_NAME}}:{{target}} bash
+
+# ==============================================================================
+# CI Docker Build (matches GitHub Actions)
+# ==============================================================================
+
+# Build Docker image exactly as CI does
+ci-docker-build:
+    @docker buildx build \
+        --file Dockerfile.ci \
+        --target runtime \
+        --platform linux/amd64 \
+        --cache-from type=local,src=/tmp/.buildx-cache \
+        --cache-to type=local,dest=/tmp/.buildx-cache-new,mode=max \
+        -t {{REGISTRY}}/{{REPO_NAME}}:local \
+        .
+    @rm -rf /tmp/.buildx-cache
+    @mv /tmp/.buildx-cache-new /tmp/.buildx-cache 2>/dev/null || true
+
+# Validate Docker build without pushing
+ci-docker-validate:
+    @echo "Validating Dockerfile.ci..."
+    @docker build -f Dockerfile.ci --target runtime . >/dev/null
+    @echo "✅ Dockerfile.ci is valid"
+
+# ==============================================================================
 # Build Recipes (mojo build - compile/validate Mojo files)
 # ==============================================================================
 

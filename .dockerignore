@@ -81,6 +81,13 @@ datasets/
 # Pre-commit cache
 .pre-commit-config.yaml.swp
 
+# CI Build Exclusions (for faster Dockerfile.ci builds)
+worktrees/
+.claude/
+*.md
+!README.md
+!INSTALL.md
+
 # OS files
 .DS_Store
 Thumbs.db

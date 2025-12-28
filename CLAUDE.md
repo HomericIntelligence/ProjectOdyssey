@@ -920,6 +920,48 @@ just docker-down           # Stop environment
 just shell          # Open shell in container
 ```
 
+### Docker Registry (GHCR)
+
+The project publishes Docker images to GitHub Container Registry (GHCR).
+
+#### Available Images
+
+| Image | Purpose | Size |
+|-------|---------|------|
+| `ghcr.io/mvillmow/ml-odyssey:main` | Runtime with Mojo/tests | ~2GB |
+| `ghcr.io/mvillmow/ml-odyssey:main-ci` | CI with pre-commit | ~2.5GB |
+| `ghcr.io/mvillmow/ml-odyssey:main-prod` | Minimal production | ~1.5GB |
+
+#### Pull and Run
+
+```bash
+# Pull latest runtime image
+docker pull ghcr.io/mvillmow/ml-odyssey:main
+
+# Run tests
+docker run --rm ghcr.io/mvillmow/ml-odyssey:main
+
+# Interactive shell
+docker run -it --rm ghcr.io/mvillmow/ml-odyssey:main bash
+
+# Mount local code for development
+docker run -it --rm -v $(pwd):/app ghcr.io/mvillmow/ml-odyssey:main bash
+```
+
+#### Build Locally
+
+```bash
+# Build CI image locally
+just docker-build-ci runtime
+
+# Build all targets
+just docker-build-ci-all
+
+# Push to GHCR (requires authentication)
+docker login ghcr.io
+just docker-push runtime
+```
+
 ### Why Use Justfile?
 
 1. **Consistency**: Same commands work locally and in CI
