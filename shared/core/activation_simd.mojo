@@ -34,7 +34,7 @@ Related:
 - Issue #2623: Add Vectorized Implementations for Common Activations
 """
 
-from algorithm import vectorize, select
+from algorithm import vectorize
 from sys.info import simd_width_of
 from math import exp as math_exp
 from shared.core.extensor import ExTensor
@@ -361,7 +361,10 @@ fn _elu_simd_float32(tensor: ExTensor, mut result: ExTensor, alpha: Float32):
 
         # Select based on condition: x > 0
         var mask = vec > zero_vec
-        out_ptr.store[width=width](idx, select(mask, pos_result, neg_result))
+        # Use bitwise operations for SIMD conditional selection
+        # result = mask ? pos_result : neg_result
+        var result = (mask & pos_result) | (~mask & neg_result)
+        out_ptr.store[width=width](idx, result)
 
     vectorize[simd_width](size, vectorized_elu)
 
@@ -390,7 +393,8 @@ fn _elu_simd_float64(tensor: ExTensor, mut result: ExTensor, alpha: Float64):
         var neg_result = alpha_vec * (exp_result - one_vec)
 
         var mask = vec > zero_vec
-        out_ptr.store[width=width](idx, select(mask, pos_result, neg_result))
+        var result = (mask & pos_result) | (~mask & neg_result)
+        out_ptr.store[width=width](idx, result)
 
     vectorize[simd_width](size, vectorized_elu)
 
@@ -468,7 +472,8 @@ fn _selu_simd_float32(
         var neg_result = lambda_vec * alpha_vec * (exp_result - one_vec)
 
         var mask = vec > zero_vec
-        out_ptr.store[width=width](idx, select(mask, pos_result, neg_result))
+        var result = (mask & pos_result) | (~mask & neg_result)
+        out_ptr.store[width=width](idx, result)
 
     vectorize[simd_width](size, vectorized_selu)
 
@@ -498,7 +503,8 @@ fn _selu_simd_float64(
         var neg_result = lambda_vec * alpha_vec * (exp_result - one_vec)
 
         var mask = vec > zero_vec
-        out_ptr.store[width=width](idx, select(mask, pos_result, neg_result))
+        var result = (mask & pos_result) | (~mask & neg_result)
+        out_ptr.store[width=width](idx, result)
 
     vectorize[simd_width](size, vectorized_selu)
 
