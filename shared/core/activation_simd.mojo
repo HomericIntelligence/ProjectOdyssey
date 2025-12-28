@@ -361,10 +361,8 @@ fn _elu_simd_float32(tensor: ExTensor, mut result: ExTensor, alpha: Float32):
 
         # Select based on condition: x > 0
         var mask = vec > zero_vec
-        # Use bitwise operations for SIMD conditional selection
-        # result = mask ? pos_result : neg_result
-        var result = (mask & pos_result) | (~mask & neg_result)
-        out_ptr.store[width=width](idx, result)
+        # SIMD conditional selection: mask.select(true_value, false_value)
+        out_ptr.store[width=width](idx, mask.select(pos_result, neg_result))
 
     vectorize[simd_width](size, vectorized_elu)
 
@@ -393,8 +391,8 @@ fn _elu_simd_float64(tensor: ExTensor, mut result: ExTensor, alpha: Float64):
         var neg_result = alpha_vec * (exp_result - one_vec)
 
         var mask = vec > zero_vec
-        var result = (mask & pos_result) | (~mask & neg_result)
-        out_ptr.store[width=width](idx, result)
+        # SIMD conditional selection: mask.select(true_value, false_value)
+        out_ptr.store[width=width](idx, mask.select(pos_result, neg_result))
 
     vectorize[simd_width](size, vectorized_elu)
 
@@ -472,8 +470,8 @@ fn _selu_simd_float32(
         var neg_result = lambda_vec * alpha_vec * (exp_result - one_vec)
 
         var mask = vec > zero_vec
-        var result = (mask & pos_result) | (~mask & neg_result)
-        out_ptr.store[width=width](idx, result)
+        # SIMD conditional selection: mask.select(true_value, false_value)
+        out_ptr.store[width=width](idx, mask.select(pos_result, neg_result))
 
     vectorize[simd_width](size, vectorized_selu)
 
@@ -503,8 +501,8 @@ fn _selu_simd_float64(
         var neg_result = lambda_vec * alpha_vec * (exp_result - one_vec)
 
         var mask = vec > zero_vec
-        var result = (mask & pos_result) | (~mask & neg_result)
-        out_ptr.store[width=width](idx, result)
+        # SIMD conditional selection: mask.select(true_value, false_value)
+        out_ptr.store[width=width](idx, mask.select(pos_result, neg_result))
 
     vectorize[simd_width](size, vectorized_selu)
 
