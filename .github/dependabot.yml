@@ -114,6 +114,38 @@ updates:
           - "*"
 
   # ============================================================================
+  # Docker Base Images
+  # ============================================================================
+  # Purpose: Keep Docker base images and dependencies current
+  # Frequency: Weekly (Wednesdays)
+  # Scope: Dockerfile and Dockerfile.ci
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "09:00"
+      timezone: "America/New_York"
+
+    # PR Configuration
+    open-pull-requests-limit: 3
+
+    # PR Metadata
+    labels:
+      - "dependencies"
+      - "docker"
+      - "automated"
+    assignees:
+      - "mvillmow"
+    reviewers:
+      - "mvillmow"
+
+    # Commit Message Format
+    commit-message:
+      prefix: "chore(docker)"
+      include: "scope"
+
+  # ============================================================================
   # Pixi Ecosystem (Future - Placeholder)
   # ============================================================================
   # Purpose: Native pixi dependency management when ecosystem support is available

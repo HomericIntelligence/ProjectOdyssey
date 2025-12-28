@@ -1,0 +1,99 @@
+# ML Odyssey - CI/Production Optimized Dockerfile
+# Multi-stage build for minimal image size and fast CI builds
+
+# ==============================================================================
+# Stage 1: Builder - Install dependencies and build packages
+# ==============================================================================
+FROM ubuntu:22.04 AS builder
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PATH="/root/.pixi/bin:$PATH"
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    build-essential \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+
+# Install Pixi
+RUN curl -fsSL https://pixi.sh/install.sh | bash
+
+# Copy dependency files first (better layer caching)
+COPY pixi.toml pixi.lock ./
+
+# Install dependencies (this is the slow step - cached if pixi.toml unchanged)
+RUN pixi install --frozen
+
+# Copy source code
+COPY shared/ ./shared/
+COPY tests/ ./tests/
+COPY pyproject.toml requirements.txt requirements-dev.txt ./
+
+# ==============================================================================
+# Stage 2: Runtime - Minimal image for running tests/inference
+# ==============================================================================
+FROM ubuntu:22.04 AS runtime
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PATH="/root/.pixi/bin:$PATH"
+ENV PYTHONPATH=/app:${PYTHONPATH:-}
+
+# Install minimal runtime dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Install Pixi
+RUN curl -fsSL https://pixi.sh/install.sh | bash
+
+# Copy dependency files
+COPY pixi.toml pixi.lock ./
+
+# Install runtime dependencies only
+RUN pixi install --frozen
+
+# Copy built artifacts and source
+COPY --from=builder /build/shared/ ./shared/
+COPY --from=builder /build/tests/ ./tests/
+COPY pyproject.toml requirements.txt ./
+
+# Default command runs tests
+CMD ["pixi", "run", "mojo", "test", "-I", ".", "tests/"]
+
+# ==============================================================================
+# Stage 3: CI - Extended with test tooling
+# ==============================================================================
+FROM runtime AS ci
+
+# Copy additional test dependencies
+COPY requirements-dev.txt ./
+COPY .pre-commit-config.yaml ./
+
+# Install pre-commit hooks
+RUN pixi run pre-commit install --install-hooks || true
+
+# CI-specific environment
+ENV CI=true
+ENV ENVIRONMENT=ci
+
+CMD ["pixi", "run", "pytest", "tests/", "-v", "--timeout=300"]
+
+# ==============================================================================
+# Stage 4: Production - Minimal production image
+# ==============================================================================
+FROM runtime AS production
+
+ENV ENVIRONMENT=production
+
+# Remove test files for smaller image
+RUN rm -rf tests/
+
+# Default to shell for interactive use
+CMD ["pixi", "shell"]
