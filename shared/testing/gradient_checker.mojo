@@ -53,7 +53,7 @@ fn check_gradients(
     forward_fn: fn (ExTensor) raises escaping -> ExTensor,
     backward_fn: fn (ExTensor, ExTensor) raises escaping -> ExTensor,
     input: ExTensor,
-    epsilon: Float64 = 1e-5,
+    epsilon: Float64 = 3e-4,  # Changed from 1e-5 - see #2704
     tolerance: Float64 = 1e-2,
 ) raises -> Bool:
     """Verify gradients using finite differences.
@@ -176,7 +176,7 @@ fn check_gradients_verbose(
     forward_fn: fn (ExTensor) raises escaping -> ExTensor,
     backward_fn: fn (ExTensor, ExTensor) raises escaping -> ExTensor,
     input: ExTensor,
-    epsilon: Float64 = 1e-5,
+    epsilon: Float64 = 3e-4,  # Changed from 1e-5 - see #2704
     tolerance: Float64 = 1e-2,
     print_all: Bool = False,
 ) raises -> Bool:
@@ -306,7 +306,7 @@ fn relative_error(analytical: Float64, numerical: Float64) -> Float64:
 fn compute_numerical_gradient(
     forward_fn: fn (ExTensor) raises escaping -> ExTensor,
     x: ExTensor,
-    epsilon: Float64 = 1e-5,
+    epsilon: Float64 = 3e-4,  # Changed from 1e-5 - see #2704
 ) raises -> ExTensor:
     """Compute numerical gradient using finite differences.
 
@@ -396,7 +396,7 @@ fn compute_sampled_numerical_gradient(
     forward_fn: fn (ExTensor) raises escaping -> ExTensor,
     x: ExTensor,
     num_samples: Int = 100,
-    epsilon: Float64 = 1e-5,
+    epsilon: Float64 = 3e-4,  # Changed from 1e-5 - see #2704
     seed: Int = 42,
 ) raises -> List[IndexGradientPair]:
     """Compute numerical gradient for random sample of input elements.
@@ -434,7 +434,7 @@ fn compute_sampled_numerical_gradient(
 
         var x = ExTensor([100, 100], DType.float32)
         var sampled = compute_sampled_numerical_gradient(
-            forward, x, num_samples=100, epsilon=1e-5, seed=42
+            forward, x, num_samples=100, epsilon=3e-4, seed=42
         )
         # sampled contains ~100 (index, gradient) tuples
         ```
