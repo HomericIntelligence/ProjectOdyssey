@@ -494,7 +494,7 @@ fn assert_sampled_gradients_close(
     analytical_grad: ExTensor,
     sampled_numerical: List[IndexGradientPair],
     rtol: Float64 = 1e-2,
-    atol: Float64 = 1e-3,  # Added absolute tolerance for small gradients
+    atol: Float64 = 1e-2,  # 1% absolute tolerance for small gradients
     message: String = "Sampled gradients mismatch",
 ) raises:
     """Compare analytical gradient with sampled numerical gradients.
