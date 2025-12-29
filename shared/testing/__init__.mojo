@@ -6,6 +6,7 @@ Provides tools for validating neural network implementations:
 - Gradient checking (numerical vs analytical)
 - Consolidated test models and fixtures
 - Data type utilities for comprehensive multi-dtype testing
+- Fuzzing infrastructure for property-based testing
 
 Modules:
     assertions: Comprehensive assertion functions for testing
@@ -16,6 +17,9 @@ Modules:
     special_values: FP-representable test values (0.0, 0.5, 1.0, 1.5) for layerwise testing
     layer_testers: Reusable layer testing patterns (conv, linear, pooling, activation)
     dtype_utils: DType iteration utilities for testing across multiple precisions
+    fuzz_core: Core fuzzing infrastructure (FuzzConfig, FuzzResult, random tensor generators)
+    fuzz_shapes: Shape fuzzing utilities (random shapes, edge cases, broadcast pairs)
+    fuzz_dtypes: DType fuzzing utilities (random dtypes, edge values, type classification)
 
 Test Models:
     SimpleCNN: Minimal CNN for image processing tests
@@ -131,3 +135,61 @@ from shared.testing.dtype_utils import (
 )
 
 from shared.testing.layer_params import ConvFixture, LinearFixture
+
+# Fuzzing infrastructure
+from shared.testing.fuzz_core import (
+    FuzzConfig,
+    FuzzResult,
+    SeededRNG,
+    create_random_tensor,
+    create_edge_case_tensor,
+    has_nan,
+    has_inf,
+    is_finite,
+    all_values_in_range,
+    NumericInvariants,
+    check_numeric_invariants,
+    verify_shape_preserved,
+    verify_dtype_preserved,
+    verify_numel_preserved,
+    format_failure_message,
+)
+
+from shared.testing.fuzz_shapes import (
+    ShapeFuzzer,
+    generate_broadcast_shapes,
+    generate_matmul_shapes,
+    generate_same_shape_pair,
+    is_valid_shape,
+    is_empty_shape,
+    is_scalar_shape,
+    compute_numel,
+    shapes_equal,
+    are_broadcast_compatible,
+    compute_broadcast_shape,
+    shape_to_string,
+)
+
+from shared.testing.fuzz_dtypes import (
+    DTypeFuzzer,
+    get_all_dtypes,
+    get_float_dtypes as get_fuzz_float_dtypes,
+    get_int_dtypes,
+    get_uint_dtypes,
+    get_numeric_dtypes,
+    get_common_ml_dtypes,
+    get_dtype_range,
+    get_dtype_safe_range,
+    get_edge_values,
+    get_special_float_values,
+    is_float_dtype,
+    is_signed_int_dtype,
+    is_unsigned_int_dtype,
+    is_integer_dtype,
+    is_numeric_dtype,
+    supports_negative,
+    supports_nan_inf,
+    get_dtype_size_bytes,
+    get_dtype_precision_bits,
+    dtype_to_string as fuzz_dtype_to_string,
+)
