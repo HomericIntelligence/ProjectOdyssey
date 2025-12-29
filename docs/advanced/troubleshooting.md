@@ -9,10 +9,10 @@ section for your issue.
 Use this 5-point checklist to identify the problem category:
 
 1. **Can't import modules or run commands?** → See Installation Issues
-2. **Compilation errors during `mojo build`?** → See Build Errors
-3. **Errors when running code?** → See Runtime Errors
-4. **Ownership or constructor errors?** → See Mojo-Specific Issues
-5. **Tests failing or CI broken?** → See Testing Issues
+1. **Compilation errors during `mojo build`?** → See Build Errors
+1. **Errors when running code?** → See Runtime Errors
+1. **Ownership or constructor errors?** → See Mojo-Specific Issues
+1. **Tests failing or CI broken?** → See Testing Issues
 
 ---
 
@@ -30,7 +30,7 @@ Use this 5-point checklist to identify the problem category:
 mojo --version
 ```
 
-2. If not found, activate the Pixi environment:
+1. If not found, activate the Pixi environment:
 
 ```bash
 cd /path/to/ProjectOdyssey
@@ -38,7 +38,7 @@ pixi shell
 mojo --version
 ```
 
-3. If still not found, reinstall Pixi dependencies:
+1. If still not found, reinstall Pixi dependencies:
 
 ```bash
 pixi install --force
@@ -46,7 +46,7 @@ pixi shell
 mojo --version
 ```
 
-4. Verify you are in the correct directory with `pixi.toml`:
+1. Verify you are in the correct directory with `pixi.toml`:
 
 ```bash
 ls pixi.toml
@@ -110,19 +110,19 @@ python3 -c "import sys; sys.path.insert(0, '.'); from scripts import your_script
 curl -fsSL https://pixi.sh/install.sh | bash
 ```
 
-2. Activate Pixi in current shell:
+1. Activate Pixi in current shell:
 
 ```bash
 source "$HOME/.local/bin/env"
 ```
 
-3. Verify installation:
+1. Verify installation:
 
 ```bash
 pixi --version
 ```
 
-4. Navigate to repository and create environment:
+1. Navigate to repository and create environment:
 
 ```bash
 cd /path/to/ProjectOdyssey
@@ -163,12 +163,12 @@ mojo build -I . examples/train.mojo
 1. Verify the package directory structure exists:
 
 ```bash
-ls -la shared/__init__.mojo
-ls -la shared/core/__init__.mojo
-ls -la shared/training/__init__.mojo
+ls -la shared/**init**.mojo
+ls -la shared/core/**init**.mojo
+ls -la shared/training/**init**.mojo
 ```
 
-2. Use absolute import paths from the repository root:
+1. Use absolute import paths from the repository root:
 
 ```mojo
 # CORRECT - Import from root
@@ -180,13 +180,13 @@ from shared.training.optimizer import Adam
 from ..version import VERSION
 ```
 
-3. Always build with `-I .` to set the import path:
+1. Always build with `-I .` to set the import path:
 
 ```bash
 mojo build -I . examples/train.mojo
 ```
 
-4. If using `mojo package`, verify the package path:
+1. If using `mojo package`, verify the package path:
 
 ```bash
 mojo package shared -o dist/shared-0.1.0.mojopkg
@@ -205,13 +205,13 @@ mojo package shared/training -o dist/training-0.1.0.mojopkg
 mojo --version
 ```
 
-2. Check required version in `pixi.toml` or `CLAUDE.md`:
+1. Check required version in `pixi.toml` or `CLAUDE.md`:
 
 ```bash
 grep -A5 "mojo" pixi.toml
 ```
 
-3. Update Mojo via Pixi:
+1. Update Mojo via Pixi:
 
 ```bash
 pixi update mojo
@@ -219,7 +219,7 @@ pixi shell
 mojo --version
 ```
 
-4. If still incompatible, create a new environment:
+1. If still incompatible, create a new environment:
 
 ```bash
 pixi remove --all
@@ -228,29 +228,29 @@ pixi install
 pixi shell
 ```
 
-### Symptom: "error: cannot build package without '__init__.mojo'" or similar package errors
+### Symptom: "error: cannot build package without '**init**.mojo'" or similar package errors
 
-**Cause**: Missing `__init__.mojo` files in package directories.
+**Cause**: Missing `**init**.mojo` files in package directories.
 
 **Solution**:
 
-Create `__init__.mojo` in all package directories:
+Create `**init**.mojo` in all package directories:
 
 ```bash
-touch shared/__init__.mojo
-touch shared/core/__init__.mojo
-touch shared/training/__init__.mojo
-touch shared/data/__init__.mojo
-touch shared/utils/__init__.mojo
+touch shared/**init**.mojo
+touch shared/core/**init**.mojo
+touch shared/training/**init**.mojo
+touch shared/data/**init**.mojo
+touch shared/utils/**init**.mojo
 ```
 
-Each `__init__.mojo` should contain version export (if applicable):
+Each `**init**.mojo` should contain version export (if applicable):
 
 ```mojo
-# shared/__init__.mojo
+# shared/**init**.mojo
 from .version import VERSION
 
-__all__ = ["VERSION"]
+**all** = ["VERSION"]
 ```
 
 ---
@@ -272,7 +272,7 @@ var y = forward(x)
 print("Output shape:", y._shape)
 ```
 
-2. Check the layer documentation for expected dimensions:
+1. Check the layer documentation for expected dimensions:
 
 ```bash
 # For example, Linear layer expects:
@@ -280,7 +280,7 @@ print("Output shape:", y._shape)
 # Output: (batch_size, out_features)
 ```
 
-3. Ensure batch dimensions are preserved through pipeline:
+1. Ensure batch dimensions are preserved through pipeline:
 
 ```mojo
 # CORRECT - Batch dimension preserved
@@ -293,7 +293,7 @@ var wrong_shape = List[Int]()
 wrong_shape.append(input_features)
 ```
 
-4. For convolutional layers, verify the full 4D shape (batch, channels, height, width):
+1. For convolutional layers, verify the full 4D shape (batch, channels, height, width):
 
 ```mojo
 # CORRECT - 4D shape for Conv2D
@@ -322,7 +322,7 @@ var list = List[Int]()
 list.append(42)
 ```
 
-2. Verify tensor is initialized before accessing data:
+1. Verify tensor is initialized before accessing data:
 
 ```mojo
 # WRONG - Empty shape means 0D scalar (1 element only)
@@ -337,7 +337,7 @@ var tensor = ExTensor(shape, DType.float32)
 # Now indices 0-3 are valid
 ```
 
-3. Check bounds before indexing:
+1. Check bounds before indexing:
 
 ```mojo
 fn safe_access(tensor: ExTensor, index: Int) -> Float32:
@@ -364,27 +364,27 @@ just train lenet5 fp32 20 batch_size=1024
 just train lenet5 fp32 20 batch_size=32
 ```
 
-2. Use lower precision (float16 instead of float32):
+1. Use lower precision (float16 instead of float32):
 
 ```bash
 # Uses less memory
 just train lenet5 fp16 20
 ```
 
-3. Reduce model size (remove layers, channels):
+1. Reduce model size (remove layers, channels):
 
 ```bash
 # Modify model configuration to use fewer parameters
 ```
 
-4. Monitor memory during execution:
+1. Monitor memory during execution:
 
 ```bash
 watch -n 1 'nvidia-smi'  # For GPU
 free -h  # For system memory
 ```
 
-5. Check memory requirements in documentation:
+1. Check memory requirements in documentation:
 
 ```bash
 cat docs/MEMORY_REQUIREMENTS.md
@@ -406,7 +406,7 @@ var tensor = ExTensor(shape, 32)
 var tensor = ExTensor(shape, DType.float32)
 ```
 
-2. Use correct DType values:
+1. Use correct DType values:
 
 ```mojo
 DType.int8        # 8-bit integer
@@ -417,7 +417,7 @@ DType.float16     # 16-bit float
 DType.bfloat16    # Brain float 16
 ```
 
-3. For tensor operations, ensure dtype consistency:
+1. For tensor operations, ensure dtype consistency:
 
 ```mojo
 # WRONG - Mixing dtypes
@@ -537,7 +537,7 @@ struct Model(Copyable, Movable):
         return self.weights^
 ```
 
-### Symptom: "error: fn __init__(mut self,...) should use out self"
+### Symptom: "error: fn **init**(mut self,...) should use out self"
 
 **Cause**: Using `mut self` in constructor instead of `out self`.
 
@@ -547,26 +547,26 @@ Use `out self` for all constructors:
 
 ```mojo
 # WRONG - mut self in constructor
-fn __init__(mut self, value: Int):
+fn **init**(mut self, value: Int):
     self.value = value
 
 # CORRECT - out self for constructors
-fn __init__(out self, value: Int):
+fn **init**(out self, value: Int):
     self.value = value
 ```
 
 Constructor convention reference:
 
 ```mojo
-fn __init__(out self, value: Int):
+fn **init**(out self, value: Int):
     """Constructor - use out self"""
     self.value = value
 
-fn __moveinit__(out self, owned existing: Self):
+fn **moveinit**(out self, owned existing: Self):
     """Move constructor - use out self, owned parameter"""
     self.value = existing.value
 
-fn __copyinit__(out self, existing: Self):
+fn **copyinit**(out self, existing: Self):
     """Copy constructor - use out self"""
     self.value = existing.value
 
@@ -617,7 +617,7 @@ wrong precision.
 time pixi run mojo test tests/models/test_lenet5_layers.mojo
 ```
 
-2. Increase batch size (within memory limits):
+1. Increase batch size (within memory limits):
 
 ```bash
 # Too small batch size
@@ -627,7 +627,7 @@ just train lenet5 fp32 20 batch_size=8
 just train lenet5 fp32 20 batch_size=32
 ```
 
-3. Use float16 instead of float32 (2x faster):
+1. Use float16 instead of float32 (2x faster):
 
 ```bash
 # Slower - 32-bit floats
@@ -637,14 +637,14 @@ just train lenet5 fp32 20
 just train lenet5 fp16 20
 ```
 
-4. Verify SIMD is being used:
+1. Verify SIMD is being used:
 
 ```bash
 # Check generated assembly
 mojo build -I . --emit-mlir examples/train.mojo
 ```
 
-5. Reduce number of epochs if unnecessary:
+1. Reduce number of epochs if unnecessary:
 
 ```bash
 # Too many epochs
@@ -672,7 +672,7 @@ fn train_epoch() -> Float32:
     }  # batch and gradients freed here
 ```
 
-2. Clear gradients between batches:
+1. Clear gradients between batches:
 
 ```mojo
 # CORRECT - Reset gradients
@@ -682,7 +682,7 @@ for batch in batches:
     var loss = train_step(batch, model)
 ```
 
-3. Use `del` to explicitly free large tensors:
+1. Use `del` to explicitly free large tensors:
 
 ```mojo
 var x = ExTensor(large_shape, DType.float32)
@@ -690,7 +690,7 @@ var x = ExTensor(large_shape, DType.float32)
 del x  # Explicitly free if needed
 ```
 
-4. Monitor memory during training:
+1. Monitor memory during training:
 
 ```bash
 watch -n 1 'free -h'
@@ -720,7 +720,7 @@ fn vectorized_scale(data: DTypePointer[DType.float32],
             data + i, chunk)
 ```
 
-2. Use appropriate SIMD widths:
+1. Use appropriate SIMD widths:
 
 ```mojo
 # Typical SIMD widths
@@ -732,7 +732,7 @@ fn get_simd_width() -> Int:
     return 4  # For float32
 ```
 
-3. Check alignment for SIMD operations:
+1. Check alignment for SIMD operations:
 
 ```mojo
 # SIMD works best with aligned memory
@@ -762,7 +762,7 @@ fn test_another_case():
     pass
 ```
 
-2. Import test utilities:
+1. Import test utilities:
 
 ```mojo
 from shared.testing.assertions import assert_equal, assert_true
@@ -774,7 +774,7 @@ fn test_with_assertions():
     assert_true(result == expected, "Operation failed")
 ```
 
-3. Run test with correct command:
+1. Run test with correct command:
 
 ```bash
 # Run single test file
@@ -808,7 +808,7 @@ fn test_with_debug():
     assert_true(y.numel() == expected, "Shape mismatch")
 ```
 
-2. Use special FP-representable values in tests:
+1. Use special FP-representable values in tests:
 
 ```mojo
 # These values are exactly representable in all float dtypes
@@ -819,7 +819,7 @@ for value in test_values:
     assert_true(result == expected_value, "Failed for value: " + str(value))
 ```
 
-3. For gradient checking, use seeded randomness:
+1. For gradient checking, use seeded randomness:
 
 ```mojo
 from shared.testing.special_values import seeded_rand
@@ -850,7 +850,7 @@ var x = ExTensor(shape=[1024, 1024, 512], DType.float32)
 var x = ExTensor(shape=[32, 64, 64], DType.float32)
 ```
 
-2. Reduce number of test iterations:
+1. Reduce number of test iterations:
 
 ```mojo
 # WRONG - Too many iterations
@@ -862,7 +862,7 @@ for i in range(10):
     var result = operation()
 ```
 
-3. Check test timeout settings:
+1. Check test timeout settings:
 
 ```bash
 # See timeout in justfile
@@ -888,7 +888,7 @@ pixi shell
 just validate  # Runs all CI checks locally
 ```
 
-2. Check CI logs for specific failure:
+1. Check CI logs for specific failure:
 
 ```bash
 # View CI logs
@@ -896,7 +896,7 @@ gh workflow view build-validation
 gh run view <run-id>
 ```
 
-3. Ensure all pre-commit hooks pass:
+1. Ensure all pre-commit hooks pass:
 
 ```bash
 # Run all pre-commit checks
@@ -907,7 +907,7 @@ pixi run mojo format tests/
 pixi run npx markdownlint-cli2 docs/
 ```
 
-4. Verify Mojo version matches CI:
+1. Verify Mojo version matches CI:
 
 ```bash
 # Check pixi.toml for exact version
@@ -934,7 +934,7 @@ gh issue list --label bug --state all
 gh search issues "your error message"
 ```
 
-2. **Gather diagnostic information**:
+1. **Gather diagnostic information**:
 
 ```bash
 # System information
@@ -950,7 +950,7 @@ git log -1 --oneline
 git status
 ```
 
-3. **Create detailed issue**:
+1. **Create detailed issue**:
 
 ```bash
 gh issue create \
@@ -961,7 +961,7 @@ Error message here
 
 ## Steps to Reproduce
 1. Run pixi run mojo test tests/models/test_lenet5_layers.mojo
-2. Observe failure
+1. Observe failure
 
 ## Environment
 - Mojo: output of mojo --version
@@ -979,7 +979,7 @@ EOF
 
 ### Getting Community Help
 
-- **Mojo Discord**: https://discord.gg/modular
+- **Mojo Discord**: [Mojo Discord](https://discord.gg/modular)
 - **ML Odyssey Discussions**: GitHub Discussions on the repository
 - **Documentation**: Check `/docs/dev/mojo-test-failure-patterns.md` for detailed patterns
 - **Anti-Patterns Reference**: See `.claude/shared/mojo-anti-patterns.md` for 64+ common mistakes
@@ -987,7 +987,7 @@ EOF
 ### Common Resources
 
 | Resource | Purpose |
-|----------|---------|
+| -------- | ------- |
 | `mojo-test-failure-patterns.md` | Comprehensive failure analysis |
 | `mojo-anti-patterns.md` | Common mistakes to avoid |
 | `mojo-guidelines.md` | Mojo v0.25.7+ syntax and patterns |
@@ -999,9 +999,9 @@ EOF
 For issues requiring immediate attention:
 
 1. Post to the relevant GitHub issue
-2. Use `@mention` for code owners
-3. For security issues, use GitHub's private vulnerability reporting
-4. For infrastructure issues, contact DevOps team (if applicable)
+1. Use `@mention` for code owners
+1. For security issues, use GitHub's private vulnerability reporting
+1. For infrastructure issues, contact DevOps team (if applicable)
 
 ---
 

@@ -106,7 +106,10 @@ fn parse_args() raises -> TrainConfig:
 
 
 fn compute_gradients(
-    mut model: SimpleCNN, input: ExTensor, labels: ExTensor, learning_rate: Float32
+    mut model: SimpleCNN,
+    input: ExTensor,
+    labels: ExTensor,
+    learning_rate: Float32,
 ) raises -> Float32:
     """Compute gradients and update parameters for one batch.
 
@@ -397,12 +400,8 @@ fn main() raises:
 
     # Load dataset
     print("Loading MNIST dataset...")
-    var train_images_path = (
-        data_dir + "/train-images-idx3-ubyte"
-    )
-    var train_labels_path = (
-        data_dir + "/train-labels-idx1-ubyte"
-    )
+    var train_images_path = data_dir + "/train-images-idx3-ubyte"
+    var train_labels_path = data_dir + "/train-labels-idx1-ubyte"
     var test_images_path = data_dir + "/t10k-images-idx3-ubyte"
     var test_labels_path = data_dir + "/t10k-labels-idx1-ubyte"
 
