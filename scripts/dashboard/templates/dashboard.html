@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Odyssey Training Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-card: #0f3460;
+            --text-primary: #eaeaea;
+            --text-secondary: #a0a0a0;
+            --accent: #e94560;
+            --accent-secondary: #0097e6;
+            --success: #44bd32;
+            --warning: #ffa502;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--bg-secondary);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        header h1 span {
+            color: var(--accent);
+        }
+
+        .refresh-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .refresh-btn:hover {
+            background: #c73e54;
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--bg-secondary);
+            padding: 1rem;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar h2 {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .run-list {
+            list-style: none;
+        }
+
+        .run-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: var(--bg-card);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .run-item:hover {
+            border-color: var(--accent-secondary);
+        }
+
+        .run-item.selected {
+            border-color: var(--accent);
+            background: rgba(233, 69, 96, 0.1);
+        }
+
+        .run-item .run-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .run-item .run-meta {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .metrics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .metrics-header h2 {
+            font-size: 1.25rem;
+        }
+
+        .metric-selector {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .metric-btn {
+            padding: 0.4rem 0.8rem;
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--text-primary);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .metric-btn:hover {
+            border-color: var(--accent-secondary);
+        }
+
+        .metric-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .chart-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .chart-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .chart-container {
+            height: 300px;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-card .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .compare-mode {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-radius: 6px;
+        }
+
+        .compare-mode h3 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .compare-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .compare-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.85rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .loading-indicator {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><span>ML Odyssey</span> Training Dashboard</h1>
+        <button class="refresh-btn" onclick="refreshData()">Refresh</button>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Training Runs</h2>
+            <ul class="run-list" id="runList">
+                <li class="loading loading-indicator">Loading runs...</li>
+            </ul>
+
+            <div class="compare-mode" id="compareMode" style="display: none;">
+                <h3>Compare Runs</h3>
+                <div class="compare-checkboxes" id="compareCheckboxes"></div>
+                <button class="refresh-btn" style="margin-top: 0.5rem; width: 100%;" onclick="compareRuns()">
+                    Compare Selected
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content" id="mainContent">
+            <div class="empty-state">
+                <h3>Welcome to ML Odyssey Training Dashboard</h3>
+                <p>Select a training run from the sidebar to view metrics.</p>
+                <p style="margin-top: 1rem; font-size: 0.9rem;">
+                    Training logs are read from the <code>logs/</code> directory.
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // State
+        let runs = [];
+        let selectedRun = null;
+        let selectedMetrics = [];
+        let compareEnabled = false;
+        let compareSelection = new Set();
+
+        // Color palette for charts
+        const colors = [
+            '#e94560', '#0097e6', '#44bd32', '#ffa502',
+            '#9c88ff', '#00cec9', '#fd79a8', '#a29bfe'
+        ];
+
+        // Plotly layout template
+        const layoutTemplate = {
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: '#eaeaea' },
+            xaxis: {
+                gridcolor: 'rgba(255,255,255,0.1)',
+                zerolinecolor: 'rgba(255,255,255,0.2)'
+            },
+            yaxis: {
+                gridcolor: 'rgba(255,255,255,0.1)',
+                zerolinecolor: 'rgba(255,255,255,0.2)'
+            },
+            margin: { l: 50, r: 20, t: 30, b: 40 }
+        };
+
+        // Helper: Create element with text content (safe)
+        function createTextElement(tag, text, className) {
+            const el = document.createElement(tag);
+            el.textContent = text;
+            if (className) el.className = className;
+            return el;
+        }
+
+        // Helper: Create run item element (safe DOM methods)
+        function createRunItem(run) {
+            const li = document.createElement('li');
+            li.className = 'run-item' + (selectedRun === run.id ? ' selected' : '');
+            li.onclick = () => selectRun(run.id);
+
+            const nameDiv = document.createElement('div');
+            nameDiv.className = 'run-name';
+            nameDiv.textContent = run.id;
+
+            const metaDiv = document.createElement('div');
+            metaDiv.className = 'run-meta';
+            metaDiv.textContent = run.num_metrics + ' metrics \u2022 ' + formatDate(run.created);
+
+            li.appendChild(nameDiv);
+            li.appendChild(metaDiv);
+            return li;
+        }
+
+        // Helper: Create checkbox for compare mode (safe DOM methods)
+        function createCompareCheckbox(run) {
+            const label = document.createElement('label');
+            label.className = 'compare-checkbox';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = run.id;
+            checkbox.checked = compareSelection.has(run.id);
+            checkbox.onchange = () => toggleCompare(run.id);
+
+            const text = document.createTextNode(run.id);
+
+            label.appendChild(checkbox);
+            label.appendChild(text);
+            return label;
+        }
+
+        // Helper: Create stat card (safe DOM methods)
+        function createStatCard(value, label) {
+            const card = document.createElement('div');
+            card.className = 'stat-card';
+
+            const valueDiv = document.createElement('div');
+            valueDiv.className = 'stat-value';
+            valueDiv.textContent = value;
+
+            const labelDiv = document.createElement('div');
+            labelDiv.className = 'stat-label';
+            labelDiv.textContent = label;
+
+            card.appendChild(valueDiv);
+            card.appendChild(labelDiv);
+            return card;
+        }
+
+        // Helper: Create chart card (safe DOM methods)
+        function createChartCard(name, chartId) {
+            const card = document.createElement('div');
+            card.className = 'chart-card';
+            card.id = 'card-' + name;
+
+            const title = document.createElement('h3');
+            title.textContent = formatMetricName(name);
+
+            const container = document.createElement('div');
+            container.className = 'chart-container';
+            container.id = chartId;
+
+            card.appendChild(title);
+            card.appendChild(container);
+            return card;
+        }
+
+        // Helper: Create metric button (safe DOM methods)
+        function createMetricButton(name, isActive) {
+            const btn = document.createElement('button');
+            btn.className = 'metric-btn' + (isActive ? ' active' : '');
+            btn.textContent = name;
+            btn.dataset.metric = name;
+            btn.onclick = function() { toggleMetric(name, this); };
+            return btn;
+        }
+
+        // Fetch all runs
+        async function fetchRuns() {
+            try {
+                const response = await fetch('/api/runs');
+                runs = await response.json();
+                renderRunList();
+            } catch (error) {
+                console.error('Failed to fetch runs:', error);
+                const runList = document.getElementById('runList');
+                runList.replaceChildren();
+                const li = createTextElement('li', 'Failed to load runs', 'empty-state');
+                runList.appendChild(li);
+            }
+        }
+
+        // Render run list in sidebar (safe DOM methods)
+        function renderRunList() {
+            const runList = document.getElementById('runList');
+            const compareCheckboxes = document.getElementById('compareCheckboxes');
+
+            runList.replaceChildren();
+            compareCheckboxes.replaceChildren();
+
+            if (runs.length === 0) {
+                const li = document.createElement('li');
+                li.className = 'empty-state';
+
+                const p1 = document.createElement('p');
+                p1.textContent = 'No training runs found.';
+
+                const p2 = document.createElement('p');
+                p2.style.fontSize = '0.8rem';
+                p2.style.marginTop = '0.5rem';
+                p2.textContent = 'Run a training to see metrics here.';
+
+                li.appendChild(p1);
+                li.appendChild(p2);
+                runList.appendChild(li);
+
+                document.getElementById('compareMode').style.display = 'none';
+                return;
+            }
+
+            runs.forEach(run => {
+                runList.appendChild(createRunItem(run));
+            });
+
+            // Show compare mode if multiple runs
+            if (runs.length > 1) {
+                document.getElementById('compareMode').style.display = 'block';
+                runs.slice(0, 8).forEach(run => {
+                    compareCheckboxes.appendChild(createCompareCheckbox(run));
+                });
+            }
+        }
+
+        // Format date for display
+        function formatDate(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Select a run
+        async function selectRun(runId) {
+            selectedRun = runId;
+            renderRunList();
+
+            const mainContent = document.getElementById('mainContent');
+            mainContent.replaceChildren();
+            const loadingDiv = createTextElement('div', 'Loading metrics...', 'loading loading-indicator');
+            mainContent.appendChild(loadingDiv);
+
+            try {
+                const response = await fetch('/api/run/' + encodeURIComponent(runId) + '/metrics');
+                const metrics = await response.json();
+
+                if (metrics.error) {
+                    mainContent.replaceChildren();
+                    const emptyDiv = document.createElement('div');
+                    emptyDiv.className = 'empty-state';
+                    emptyDiv.appendChild(createTextElement('h3', 'No metrics found'));
+                    emptyDiv.appendChild(createTextElement('p', metrics.error));
+                    mainContent.appendChild(emptyDiv);
+                    return;
+                }
+
+                renderMetrics(runId, metrics);
+            } catch (error) {
+                console.error('Failed to fetch metrics:', error);
+                mainContent.replaceChildren();
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'empty-state';
+                emptyDiv.appendChild(createTextElement('h3', 'Failed to load metrics'));
+                emptyDiv.appendChild(createTextElement('p', error.message));
+                mainContent.appendChild(emptyDiv);
+            }
+        }
+
+        // Format metric name for display
+        function formatMetricName(name) {
+            return name.split('_').map(word =>
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+        }
+
+        // Render metrics for a run (safe DOM methods)
+        function renderMetrics(runId, metrics) {
+            const metricNames = Object.keys(metrics);
+            const mainContent = document.getElementById('mainContent');
+            mainContent.replaceChildren();
+
+            // Calculate stats
+            let totalPoints = 0;
+            let latestValues = {};
+            metricNames.forEach(name => {
+                const data = metrics[name];
+                totalPoints += data.values.length;
+                if (data.values.length > 0) {
+                    latestValues[name] = data.values[data.values.length - 1];
+                }
+            });
+
+            // Header with run name and metric buttons
+            const header = document.createElement('div');
+            header.className = 'metrics-header';
+
+            const title = document.createElement('h2');
+            title.textContent = 'Run: ' + runId;
+            header.appendChild(title);
+
+            const selector = document.createElement('div');
+            selector.className = 'metric-selector';
+            selector.id = 'metricSelector';
+            metricNames.forEach((name, i) => {
+                selector.appendChild(createMetricButton(name, i < 4));
+            });
+            header.appendChild(selector);
+            mainContent.appendChild(header);
+
+            // Stats row
+            const statsRow = document.createElement('div');
+            statsRow.className = 'stats-row';
+            statsRow.appendChild(createStatCard(metricNames.length.toString(), 'Metrics'));
+            statsRow.appendChild(createStatCard(totalPoints.toString(), 'Data Points'));
+
+            if (metricNames.includes('train_loss') && latestValues['train_loss'] !== undefined) {
+                statsRow.appendChild(createStatCard(latestValues['train_loss'].toFixed(4), 'Latest Loss'));
+            }
+            if (metricNames.includes('train_accuracy') && latestValues['train_accuracy'] !== undefined) {
+                statsRow.appendChild(createStatCard(((latestValues['train_accuracy']) * 100).toFixed(1) + '%', 'Accuracy'));
+            }
+            mainContent.appendChild(statsRow);
+
+            // Charts grid
+            const chartsGrid = document.createElement('div');
+            chartsGrid.className = 'charts-grid';
+            chartsGrid.id = 'chartsGrid';
+
+            metricNames.slice(0, 4).forEach((name, i) => {
+                const chartId = 'chart-' + name;
+                chartsGrid.appendChild(createChartCard(name, chartId));
+            });
+            mainContent.appendChild(chartsGrid);
+
+            // Render charts
+            metricNames.slice(0, 4).forEach((name, i) => {
+                const data = metrics[name];
+                renderChart('chart-' + name, name, data, colors[i % colors.length]);
+            });
+
+            // Store for toggling
+            window.currentMetrics = metrics;
+            window.visibleMetrics = new Set(metricNames.slice(0, 4));
+        }
+
+        // Toggle metric visibility
+        function toggleMetric(name, button) {
+            button.classList.toggle('active');
+            const chartsGrid = document.getElementById('chartsGrid');
+            const cardId = 'card-' + name;
+            const existingCard = document.getElementById(cardId);
+
+            if (button.classList.contains('active')) {
+                if (!existingCard && window.currentMetrics[name]) {
+                    const colorIndex = Object.keys(window.currentMetrics).indexOf(name);
+                    const chartId = 'chart-' + name;
+                    chartsGrid.appendChild(createChartCard(name, chartId));
+                    renderChart(chartId, name, window.currentMetrics[name], colors[colorIndex % colors.length]);
+                }
+            } else {
+                if (existingCard) {
+                    existingCard.remove();
+                }
+            }
+        }
+
+        // Render a single chart
+        function renderChart(containerId, name, data, color) {
+            const trace = {
+                x: data.steps,
+                y: data.values,
+                type: 'scatter',
+                mode: 'lines',
+                name: name,
+                line: { color: color, width: 2 }
+            };
+
+            const layout = {
+                ...layoutTemplate,
+                xaxis: { ...layoutTemplate.xaxis, title: 'Step' },
+                yaxis: { ...layoutTemplate.yaxis, title: formatMetricName(name) },
+                showlegend: false
+            };
+
+            Plotly.newPlot(containerId, [trace], layout, {
+                responsive: true,
+                displayModeBar: false
+            });
+        }
+
+        // Toggle compare selection
+        function toggleCompare(runId) {
+            if (compareSelection.has(runId)) {
+                compareSelection.delete(runId);
+            } else {
+                compareSelection.add(runId);
+            }
+        }
+
+        // Compare multiple runs
+        async function compareRuns() {
+            if (compareSelection.size < 2) {
+                alert('Select at least 2 runs to compare');
+                return;
+            }
+
+            const runIds = Array.from(compareSelection);
+            const metric = 'train_loss';
+
+            const mainContent = document.getElementById('mainContent');
+            mainContent.replaceChildren();
+            const loadingDiv = createTextElement('div', 'Loading comparison...', 'loading loading-indicator');
+            mainContent.appendChild(loadingDiv);
+
+            try {
+                const response = await fetch('/api/compare?runs=' + runIds.map(encodeURIComponent).join(',') + '&metric=' + encodeURIComponent(metric));
+                const comparison = await response.json();
+
+                if (comparison.error) {
+                    mainContent.replaceChildren();
+                    const emptyDiv = document.createElement('div');
+                    emptyDiv.className = 'empty-state';
+                    emptyDiv.appendChild(createTextElement('h3', 'Comparison failed'));
+                    emptyDiv.appendChild(createTextElement('p', comparison.error));
+                    mainContent.appendChild(emptyDiv);
+                    return;
+                }
+
+                renderComparison(runIds, comparison, metric);
+            } catch (error) {
+                console.error('Failed to compare runs:', error);
+                mainContent.replaceChildren();
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'empty-state';
+                emptyDiv.appendChild(createTextElement('h3', 'Comparison failed'));
+                emptyDiv.appendChild(createTextElement('p', error.message));
+                mainContent.appendChild(emptyDiv);
+            }
+        }
+
+        // Render comparison view (safe DOM methods)
+        function renderComparison(runIds, comparison, metric) {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.replaceChildren();
+
+            // Header
+            const header = document.createElement('div');
+            header.className = 'metrics-header';
+
+            const title = document.createElement('h2');
+            title.textContent = 'Comparing ' + runIds.length + ' Runs';
+            header.appendChild(title);
+
+            const selector = document.createElement('div');
+            selector.className = 'metric-selector';
+
+            const lossBtn = document.createElement('button');
+            lossBtn.className = 'metric-btn active';
+            lossBtn.textContent = 'Loss';
+            lossBtn.onclick = () => compareMetric('train_loss');
+            selector.appendChild(lossBtn);
+
+            const accBtn = document.createElement('button');
+            accBtn.className = 'metric-btn';
+            accBtn.textContent = 'Accuracy';
+            accBtn.onclick = () => compareMetric('train_accuracy');
+            selector.appendChild(accBtn);
+
+            header.appendChild(selector);
+            mainContent.appendChild(header);
+
+            // Chart card
+            const card = document.createElement('div');
+            card.className = 'chart-card';
+
+            const cardTitle = document.createElement('h3');
+            cardTitle.textContent = formatMetricName(metric) + ' Comparison';
+            card.appendChild(cardTitle);
+
+            const container = document.createElement('div');
+            container.className = 'chart-container';
+            container.id = 'comparison-chart';
+            container.style.height = '400px';
+            card.appendChild(container);
+
+            mainContent.appendChild(card);
+
+            // Build traces
+            const traces = runIds.map((runId, i) => {
+                const data = comparison[runId];
+                if (!data) return null;
+                return {
+                    x: data.steps,
+                    y: data.values,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: runId,
+                    line: { color: colors[i % colors.length], width: 2 }
+                };
+            }).filter(t => t !== null);
+
+            const layout = {
+                ...layoutTemplate,
+                xaxis: { ...layoutTemplate.xaxis, title: 'Step' },
+                yaxis: { ...layoutTemplate.yaxis, title: formatMetricName(metric) },
+                showlegend: true,
+                legend: { x: 1, xanchor: 'right', y: 1 }
+            };
+
+            Plotly.newPlot('comparison-chart', traces, layout, {
+                responsive: true,
+                displayModeBar: true
+            });
+        }
+
+        // Refresh data
+        function refreshData() {
+            fetchRuns();
+            if (selectedRun) {
+                selectRun(selectedRun);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', fetchRuns);
+
+        // Auto-refresh every 30 seconds
+        setInterval(refreshData, 30000);
+    </script>
+</body>
+</html>
