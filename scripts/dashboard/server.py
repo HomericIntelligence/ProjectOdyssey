@@ -51,7 +51,7 @@ def discover_runs() -> List[Dict[str, Any]]:
         - created: Directory creation timestamp
     """
     logs_dir = get_logs_dir()
-    runs = []
+    runs: List[Dict[str, Any]] = []
 
     if not logs_dir.exists():
         return runs
