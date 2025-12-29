@@ -35,12 +35,13 @@ jobs:
       - name: Run mypy
         run: |
           echo "Running mypy type checking..."
-          pixi run mypy scripts/ || {
+          # Exclude generators/ due to module path ambiguity (scripts adds parent to path)
+          pixi run mypy --exclude 'generators/' scripts/ || {
             echo "❌ Type checking failed"
             echo ""
             echo "To fix locally:"
             echo "  pixi run pip install mypy"
-            echo "  pixi run mypy scripts/"
+            echo "  pixi run mypy --exclude 'generators/' scripts/"
             exit 1
           }
           echo "✅ All type checks passed"
