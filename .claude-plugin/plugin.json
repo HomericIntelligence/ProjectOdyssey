@@ -1,11 +1,30 @@
 {
-  "name": "verify-issue-before-work",
+  "name": "ml-odyssey-skills",
   "version": "1.0.0",
-  "category": "tooling",
-  "description": "Verify GitHub issue state and existing implementation before starting work to avoid duplicate effort",
+  "description": "Collection of debugging and workflow skills for ML Odyssey project",
   "author": "ML Odyssey Team",
   "created": "2025-12-29",
-  "tags": ["workflow", "github", "productivity", "verification"],
-  "skillPath": "skills/verify-issue-before-work/SKILL.md",
-  "referencesPath": "skills/verify-issue-before-work/references/notes.md"
+  "skills": [
+    {
+      "name": "verify-issue-before-work",
+      "category": "tooling",
+      "description": "Verify GitHub issue state and existing implementation before starting work to avoid duplicate effort",
+      "tags": ["workflow", "github", "productivity", "verification"],
+      "skillPath": "skills/verify-issue-before-work/SKILL.md",
+      "referencesPath": "skills/verify-issue-before-work/references/notes.md"
+    },
+    {
+      "name": "fix-implicitlycopyable-removal",
+      "category": "debugging",
+      "description": "Systematic approach to removing ImplicitlyCopyable trait from Mojo structs and fixing resulting compilation errors",
+      "tags": ["mojo", "ownership", "memory-safety", "refactoring", "ci-fix"],
+      "skillPath": "skills/fix-implicitlycopyable-removal/SKILL.md",
+      "referencesPath": "skills/fix-implicitlycopyable-removal/references/notes.md",
+      "metrics": {
+        "files_fixed": 27,
+        "errors_resolved": 132,
+        "test_pass_rate": "100%"
+      }
+    }
+  ]
 }
