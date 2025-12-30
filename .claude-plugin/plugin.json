@@ -1,0 +1,42 @@
+{
+  "name": "fix-docker-image-case",
+  "version": "1.0.0",
+  "category": "ci-cd",
+  "description": "Fix Docker SBOM and workflow failures caused by mixed-case image names in GitHub Actions",
+  "created": "2025-12-29",
+  "tags": [
+    "docker",
+    "ci-cd",
+    "github-actions",
+    "sbom",
+    "case-sensitivity"
+  ],
+  "trigger_conditions": [
+    "SBOM generation fails with image parsing errors",
+    "Docker workflow fails with 'could not parse reference' errors",
+    "GitHub Actions using github.repository in Docker image names",
+    "After repository renames that change capitalization"
+  ],
+  "success_criteria": [
+    "SBOM generation completes successfully",
+    "Docker workflows pass in CI",
+    "All image references use lowercase names",
+    "Image scanning and testing steps work"
+  ],
+  "related_skills": [
+    "fix-ci-failures",
+    "analyze-ci-failure-logs",
+    "validate-workflow"
+  ],
+  "files": {
+    "skill": ".claude/skills/fix-docker-image-case/SKILL.md",
+    "notes": "references/docker-image-case-fix-notes.md"
+  },
+  "metadata": {
+    "pr_number": 2982,
+    "failed_run": 20563226174,
+    "workflow_file": ".github/workflows/docker.yml",
+    "error_type": "image_reference_parsing",
+    "fix_type": "hardcode_lowercase"
+  }
+}
