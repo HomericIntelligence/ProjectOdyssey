@@ -596,7 +596,4 @@ model.load_state_dict(weights)
 
 ## Resources
 
-- [ML Odyssey API Reference](../api/index.md)
-- [ExTensor Documentation](../api/tensor.md)
-- [Training Guide](../api/training/optimizers.md)
 - [Examples](../../examples/)
