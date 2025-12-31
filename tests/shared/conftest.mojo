@@ -71,11 +71,12 @@ struct TestFixtures:
     # TODO(#1538): Add tensor fixture methods when Tensor type is implemented
     # @staticmethod
     # fn small_tensor() -> Tensor:
-    #     """Create small 3x3 tensor for unit tests."""
+    #     """Create small 3x3 tensor for unit tests.
+    #
+    #     Returns:
+    #         3x3 ExTensor with deterministic values (0.1).
+    #     """
     #     pass
-
-        Returns:
-            3x3 ExTensor with deterministic values (0.1).
 
     # FIXME(#3010): Placeholder model fixture methods in tests/shared/conftest.mojo
     # TODO(#1538): Add model fixture methods when models are implemented
