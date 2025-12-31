@@ -240,35 +240,36 @@ fn test_dtypes_float16() raises:
 fn test_dtypes_bfloat16() raises:
     """Test special values work with bfloat16.
 
-    NOTE: BFloat16 is a custom type in shared.core.bfloat16 but is not
-    yet integrated with Mojo's runtime DType system. This test is skipped
-    until DType.bfloat16 is added to Mojo or we implement custom dtype handling.
-
-    TODO(#2731): Enable BFloat16 DType support testing
+    EXTERNAL BLOCKER (Issue #3012): BFloat16 is not yet available in Mojo.
+    This test is disabled until Mojo releases DType.bfloat16 support.
 
     Current Status:
-    - BFloat16 struct exists in shared.core.bfloat16
-    - Mojo's DType enum does not include DType.bfloat16
-    - Cannot create tensors with BFloat16 dtype through standard ExTensor API
+    ✓ BFloat16 struct exists in shared.core.bfloat16 (custom implementation)
+    ✗ Mojo's DType enum does not include DType.bfloat16 (Mojo v0.26.1)
+    ✗ Cannot create ExTensor with DType.bfloat16 (not available at runtime)
 
-    Implementation Requirements:
-    - Wait for Mojo to add DType.bfloat16 to the DType enum
-    - OR implement custom dtype registration in ExTensor
-    - OR wrap special_values functions to support struct-based dtypes
+    What's Blocking:
+    - Mojo team needs to add DType.bfloat16 to the DType enum
+    - See https://github.com/modularml/mojo/issues/2731
 
-    Once Available:
+    When Mojo Adds DType.bfloat16:
     1. Uncomment the test code below
-    2. Verify special values (0.5, 1.0, 1.5, -0.5, -1.0) are representable
-    3. Add BFloat16 SIMD operations similar to FP32 paths
-    4. Test mixed precision training with BFloat16 parameters
+    2. Verify special values (0.0, 0.5, 1.0, 1.5, -0.5, -1.0) are representable
+    3. Test that BF16 range matches expected (~1e-38 to 3.4e38)
+    4. Verify gradient operations work with DType.bfloat16
+    5. Enable mixed precision training tests with BFloat16 parameters
 
-    Reference: shared.core.bfloat16 module for current BFloat16 implementation
+    Related Files:
+    - shared.training.dtype_utils - Tracks bfloat16_dtype (currently aliased to float16)
+    - shared.core.bfloat16 - Custom BFloat16 struct implementation
+    - Issue #3012 - This tracking issue
+    - Issue #2731 - Mojo team's tracking issue
     """
-    # TODO(#2731): Uncomment when Mojo adds DType.bfloat16
+    # BLOCKED: Waiting for Mojo team to release DType.bfloat16 (Issue #2731)
     # var tensor = create_special_value_tensor([2, 2], DType.bfloat16, 1.0)
     # assert_dtype(tensor, DType.bfloat16, "Should be bfloat16")
     # verify_special_value_invariants(tensor, 1.0)
-    pass  # Placeholder - BFloat16 DType not yet supported in Mojo's runtime
+    pass  # Placeholder - BFloat16 DType not yet supported in Mojo v0.26.1
 
 
 fn test_create_seeded_random_tensor_reproducibility() raises:
@@ -482,9 +483,11 @@ fn main() raises:
     test_dtypes_float16()
     print("✓ test_dtypes_float16")
 
-    # BFloat16 dtype not yet supported in Mojo
+    # BLOCKED: BFloat16 dtype not yet supported in Mojo (Issue #3012, #2731)
     test_dtypes_bfloat16()
-    print("✓ test_dtypes_bfloat16 (skipped - DType.bfloat16 not supported)")
+    print(
+        "⊘ test_dtypes_bfloat16 (blocked - DType.bfloat16 not in Mojo v0.26.1)"
+    )
 
     # Test seeded random tensor (for gradient checking reproducibility)
     test_create_seeded_random_tensor_reproducibility()

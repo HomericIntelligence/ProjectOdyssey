@@ -1,29 +1,44 @@
 """DType aliases and utilities for mixed precision training.
 
-Provides convenience aliases and dtype utilities for mixed precision training
+Provides convenience aliases and dtype utilities for mixed precision training.
 
-IMPORTANT: BFloat16 Alias
---------------------------
-BFloat16 is not yet available in Mojo, so `bfloat16_dtype` currently aliases
-to `DType.float16`. This is a TEMPORARY workaround to enable forward-compatible
-code.
+EXTERNAL BLOCKER: BFloat16 Support (Issue #3012)
+-------------------------------------------------
+BFloat16 (DType.bfloat16) is not yet available in Mojo v0.26.1. The `bfloat16_dtype`
+comptime currently aliases to `DType.float16` as a TEMPORARY workaround.
 
-Key Differences:
+Status: BLOCKED - Waiting for Mojo team to add native DType.bfloat16 support
+Tracking: Issue #2731 (Mojo team), Issue #3012 (this repo)
+
+When Mojo releases DType.bfloat16 support, the following changes will be made:
+
+Key Differences (Current FP16 vs Future BF16):
 - Float16 (FP16):  1 sign + 5 exponent + 10 mantissa = 16 bits
+  - Current behavior (aliased, what we have now)
   - Range: ~6e-8 to 65504
   - Precision: ~3 decimal digits
 
 - BFloat16 (BF16): 1 sign + 8 exponent + 7 mantissa = 16 bits
+  - Future behavior (when Mojo adds support)
   - Range: ~1e-38 to 3.4e38 (same as FP32)
   - Precision: ~2 decimal digits
 
-BF16 trades precision for range compared to FP16. When Mojo adds native BF16
-support, this comptime will be updated to use the real BF16 dtype.
+BF16 trades precision for range compared to FP16, providing the same exponent
+range as FP32 in half the memory.
 
-Usage:
+Implementation Plan (When Mojo Adds BF16):
+1. Change: bfloat16_dtype = DType.bfloat16  (from DType.float16)
+2. Update: is_reduced_precision() to include DType.bfloat16
+3. Update: get_dtype_precision_bits() to return 7 for BF16
+4. Update: get_dtype_exponent_bits() to return 8 for BF16
+5. Update: dtype_to_string() to recognize "bfloat16"
+6. Enable: Disabled BFloat16 tests in tests/shared/testing/test_special_values.mojo
+7. Remove: All WARNING/TEMPORARY comments marked with TODO(#2731)
+
+Current Usage (With Temporary Alias):
     from shared.training.dtype_utils import bfloat16_dtype, is_reduced_precision
 
-    # Use bfloat16_dtype instead of DType.bfloat16
+    # Currently uses FP16 behavior, will use BF16 when Mojo adds support
     var params = ExTensor.zeros((100, 100), bfloat16_dtype)
 
     # Check if dtype is reduced precision
@@ -63,25 +78,37 @@ High precision for numerical stability. Standard IEEE 754 format
 - Memory: 8 bytes
 """
 
-# WARNING: This is a temporary comptime until BFloat16 is available in Mojo
-# Currently maps to Float16, which has different numerical properties than BF16
+# EXTERNAL BLOCKER: BFloat16 is not available in Mojo v0.26.1
+# This comptime temporarily aliases to Float16 until Mojo adds DType.bfloat16
+# See Issue #3012 for implementation plan
 comptime bfloat16_dtype = DType.float16
 """BFloat16 (BF16) dtype - Brain floating point (TEMPORARY ALIAS).
 
-⚠️ WARNING: BFloat16 is not yet available in Mojo. This currently aliases to
-DType.float16 as a temporary workaround. The numerical behavior will change
-when real BF16 support is added.
+⚠️ EXTERNAL BLOCKER (Issue #3012): BFloat16 is not yet available in Mojo.
+This currently aliases to DType.float16 as a temporary workaround.
+The numerical behavior will change when Mojo releases DType.bfloat16 support.
 
-Expected BF16 properties (when available):
+Status: BLOCKED on Mojo team to add native DType.bfloat16 support
+
+Current Behavior (Aliased to FP16):
+- 1 sign bit, 5 exponent bits, 10 mantissa bits
+- Range: ~6e-8 to 65504 (narrower than true BF16)
+- More precision but less range than true BF16
+- ⚠️ Caveat: Not ideal for training large models due to overflow
+
+Expected BF16 Properties (When Available):
 - 1 sign bit, 8 exponent bits, 7 mantissa bits
 - Range: ~1e-38 to 3.4e38 (same as FP32)
 - Memory: 2 bytes
 - Better for training than FP16 due to wider exponent range
+- Less precise but better overflow protection than FP16
 
-Current behavior (aliased to FP16):
-- 1 sign bit, 5 exponent bits, 10 mantissa bits
-- Range: ~6e-8 to 65504 (narrower than BF16)
-- More precision but less range than true BF16
+Migration Path:
+When Mojo releases DType.bfloat16:
+1. Change this to: comptime bfloat16_dtype = DType.bfloat16
+2. Update helper functions (see dtype_utils module docstring)
+3. Enable BFloat16 tests in tests/shared/testing/test_special_values.mojo
+4. Run full test suite to verify numerical behavior
 """
 
 
