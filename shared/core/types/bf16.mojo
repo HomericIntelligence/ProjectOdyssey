@@ -1,4 +1,4 @@
-"""BF16 (BFloat16) data type implementation.
+"""BF16 (BFloat16 / Brain Floating Point) data type implementation.
 
 This module implements BFloat16 format:
 - 1 sign bit
@@ -13,6 +13,7 @@ Key properties:
 - Same exponent range as Float32 (no overflow issues during training)
 - Less precision than Float16 (7 vs 10 mantissa bits)
 - Commonly used in TPUs and modern GPU training
+- Simple conversion: BF16 is the upper 16 bits of Float32
 
 Example:
     ```mojo
@@ -20,13 +21,16 @@ Example:
 
     var x = BF16.from_float32(3.14159)
     var y = x.to_float32()
+    print(x)  # BF16(3.140625)
     ```
 """
 
+from memory import bitcast
 from math import isnan, isinf
 
 
-struct BF16(Copyable, Movable, Representable, Stringable):
+@register_passable("trivial")
+struct BF16(Representable, Stringable):
     """16-bit brain floating point number.
 
     Memory layout (2 bytes):
@@ -42,11 +46,22 @@ struct BF16(Copyable, Movable, Representable, Stringable):
     BFloat16 shares the same exponent range as Float32, making it ideal for
     training deep neural networks where dynamic range is more important than
     precision.
+
+    Attributes:
+        value: UInt16 storage for BF16 bit representation.
     """
 
     var value: UInt16
 
-    fn __init__(out self, value: UInt16 = 0):
+    # ========================================================================
+    # Constructors
+    # ========================================================================
+
+    fn __init__(out self):
+        """Initialize BF16 to zero."""
+        self.value = 0
+
+    fn __init__(out self, value: UInt16):
         """Initialize BF16 from raw UInt16 bits.
 
         Args:
@@ -54,180 +69,166 @@ struct BF16(Copyable, Movable, Representable, Stringable):
         """
         self.value = value
 
+    # ========================================================================
+    # Conversion from Float32
+    # ========================================================================
+
     @staticmethod
+    @always_inline
     fn from_float32(x: Float32) -> Self:
-        """Convert Float32 to BF16 format.
+        """Convert Float32 to BF16 using round-to-nearest-even.
+
+        Uses IEEE 754 round-to-nearest-even (RNE) for proper rounding.
+        This is the recommended conversion method.
 
         Args:
             x: Float32 value to convert.
 
         Returns:
-            BF16 representation (with potential precision loss in mantissa).
+            BF16 representation.
 
-        Note:
-            Rounding is truncation (round-toward-zero).
+        Example:
+            ```mojo
+            var bf16 = BF16.from_float32(3.14159)
+            ```
         """
         # Handle special cases
         if isnan(x):
-            # NaN: exp=255, mantissa!=0 (use 0x7FC0 for quiet NaN)
-            return BF16(0x7FC0)
-
+            return BF16._nan()
         if isinf(x):
-            if x > 0:
-                return BF16(0x7F80)  # +Inf: sign=0, exp=255, mantissa=0
-            else:
-                return BF16(0xFF80)  # -Inf: sign=1, exp=255, mantissa=0
+            return BF16._inf() if x > 0 else BF16._neg_inf()
 
-        if x == 0.0:
-            # Check for negative zero
-            if x < 0.0 or (1.0 / x) < 0.0:
-                return BF16(0x8000)  # -0
-            return BF16(0)  # +0
+        # Get bit representation of Float32 using SIMD bitcast
+        var bits32 = bitcast[DType.uint32, 1](SIMD[DType.float32, 1](x))[0]
 
-        # Extract sign
-        var sign: UInt16 = 0
-        var abs_x = x
-        if x < 0:
-            sign = 1
-            abs_x = -x
+        # Extract components from Float32 (32 bits)
+        # Float32: [sign:1][exponent:8][mantissa:23]
+        var sign_bit = (bits32 >> 31) & 0x1
+        var exponent = (bits32 >> 23) & 0xFF
+        var mantissa23 = bits32 & 0x7FFFFF
 
-        # BF16 has the same exponent range as Float32
-        # Max value: ~3.4e38, Min normal: ~1.18e-38
+        # Round to nearest even (RNE)
+        # BF16 keeps bits 31-16, so bit 15 is the rounding bit, bits 14-0 are sticky
+        var rounding_bit = (bits32 >> 15) & 0x1
+        var sticky_bits = bits32 & 0x7FFF
 
-        # BF16 max value is approximately 3.4e38 (same as Float32)
-        # Check for overflow (exp would be 255 which is Inf)
-        if abs_x >= 3.4028235e38:
-            # Return infinity
-            return BF16((sign << 15) | 0x7F80)
+        # Extract top 7 bits of mantissa for BF16
+        var mantissa7 = (mantissa23 >> 16) & 0x7F
 
-        # BF16 min normal value is 2^-126 ≈ 1.18e-38
-        var min_normal: Float32 = 1.1754944e-38
-        if abs_x < min_normal:
-            # Subnormal handling
-            # Subnormal: exp=0, mantissa encodes value * 2^126 / 2^-7 = value * 2^133
-            # But for BF16, subnormal min is 2^-126 * 2^-7 = 2^-133
-            var min_subnormal: Float32 = min_normal / 128.0  # 2^-133
-            if abs_x < min_subnormal:
-                return BF16(sign << 15)  # Zero
+        # Apply rounding: round up if rounding bit is 1 AND
+        # (sticky bits != 0 OR mantissa7 is odd - for round-to-even)
+        if rounding_bit == 1:
+            if sticky_bits != 0 or (mantissa7 & 0x1) == 1:
+                mantissa7 += 1
+                # Handle mantissa overflow
+                if mantissa7 > 0x7F:
+                    mantissa7 = 0
+                    exponent += 1
+                    # Handle exponent overflow (infinity)
+                    if exponent > 0xFF:
+                        return BF16._inf() if sign_bit == 0 else BF16._neg_inf()
 
-            # Encode subnormal: mantissa = abs_x / min_normal * 128
-            var mantissa = Int(abs_x / min_normal * 128.0)
-            if mantissa > 127:
-                mantissa = 127
-            var bits = (sign << 15) | UInt16(mantissa)
-            return BF16(bits)
+        # Combine into BF16 format: [sign:1][exponent:8][mantissa:7]
+        var bits16 = UInt16((sign_bit << 15) | (exponent << 7) | mantissa7)
 
-        # Normal number encoding
-        # Find exponent (log2 of abs_x)
-        var exp_val = 0
-        var scaled = abs_x
+        return BF16(bits16)
 
-        # Scale to range [1, 2)
-        while scaled >= 2.0:
-            scaled /= 2.0
-            exp_val += 1
+    @staticmethod
+    @always_inline
+    fn from_float32_truncate(x: Float32) -> Self:
+        """Convert Float32 to BF16 using simple truncation.
 
-        while scaled < 1.0:
-            scaled *= 2.0
-            exp_val -= 1
+        Faster than rounding but less accurate. Use only when performance
+        is critical and slight accuracy loss is acceptable.
 
-        # Apply bias (127 for BF16, same as Float32)
-        var biased_exp = exp_val + 127
+        Args:
+            x: Float32 value to convert.
 
-        # Clamp exponent to valid range [1, 254]
-        if biased_exp <= 0:
-            biased_exp = 0
-            # This shouldn't happen for normal numbers after subnormal check
-        elif biased_exp >= 255:
-            biased_exp = 254
+        Returns:
+            BF16 representation.
 
-        # Extract mantissa (7 bits)
-        # scaled is in [1, 2), we want the fractional part
-        var mantissa_val = scaled - 1.0  # Now in [0, 1)
-        var mantissa = Int(
-            mantissa_val * 128.0
-        )  # Scale to 7-bit range [0, 127]
-        if mantissa > 127:
-            mantissa = 127
+        Example:
+            ```mojo
+            var bf16 = BF16.from_float32_truncate(3.14159)
+            ```
+        """
+        # Get bit representation using SIMD bitcast
+        var bits32 = bitcast[DType.uint32, 1](SIMD[DType.float32, 1](x))[0]
 
-        # Combine: sign(1) | exponent(8) | mantissa(7)
-        var bits = (sign << 15) | (UInt16(biased_exp) << 7) | UInt16(mantissa)
-        return BF16(bits)
+        # Simply take upper 16 bits (truncate lower 16)
+        var bits16 = UInt16(bits32 >> 16)
 
+        return BF16(bits16)
+
+    # ========================================================================
+    # Conversion to Float32/Float64
+    # ========================================================================
+
+    @always_inline
     fn to_float32(self) -> Float32:
         """Convert BF16 to Float32.
 
+        Conversion is exact (no rounding needed) since we're expanding
+        mantissa bits (7 -> 23) by zero-padding.
+
         Returns:
-            Float32 representation of the BF16 value.
+            Float32 representation.
+
+        Example:
+            ```mojo
+            var f32 = bf16.to_float32()
+            ```
         """
-        # Extract components
-        var sign = (self.value >> 15) & 0x1
-        var exp = (self.value >> 7) & 0xFF  # 8 bits
-        var mantissa = self.value & 0x7F  # 7 bits
+        # BF16 to Float32 is simple: extend to 32 bits by shifting left 16
+        # BF16: [sign:1][exponent:8][mantissa:7]
+        # FP32: [sign:1][exponent:8][mantissa:23]
+        #
+        # We just zero-pad the lower 16 bits of mantissa
+        var bits32 = UInt32(self.value) << 16
 
-        # Handle special cases
-        if exp == 255:
-            if mantissa != 0:
-                return Float32(0.0) / Float32(0.0)  # NaN
-            else:
-                if sign == 1:
-                    return -Float32(1.0) / Float32(0.0)  # -Inf
-                else:
-                    return Float32(1.0) / Float32(0.0)  # +Inf
-
-        # Handle zero
-        if exp == 0 and mantissa == 0:
-            if sign == 1:
-                return -0.0
-            else:
-                return 0.0
-
-        # Compute value
-        var result: Float32
-
-        if exp == 0:
-            # Subnormal number
-            # value = (-1)^sign * 2^(-126) * (mantissa / 128)
-            result = Float32(mantissa.cast[DType.float32]()) / 128.0
-            # Multiply by 2^-126 using repeated division
-            for _ in range(126):
-                result /= 2.0
-        else:
-            # Normal number
-            # value = (-1)^sign * 2^(exp - 127) * (1 + mantissa / 128)
-            var exponent = exp.cast[DType.int32]() - 127
-            var base = Float32(1.0) + (
-                Float32(mantissa.cast[DType.float32]()) / 128.0
-            )
-
-            # Compute 2^exponent more efficiently
-            var scale = Float32(1.0)
-            if exponent > 0:
-                # Use doubling for positive exponents
-                var e = exponent
-                var factor = Float32(2.0)
-                while e > 0:
-                    if e & 1:
-                        scale *= factor
-                    factor *= factor
-                    e >>= 1
-            elif exponent < 0:
-                # Use halving for negative exponents
-                var e = -exponent
-                var factor = Float32(0.5)
-                while e > 0:
-                    if e & 1:
-                        scale *= factor
-                    factor *= factor
-                    e >>= 1
-
-            result = base * scale
-
-        # Apply sign
-        if sign == 1:
-            result = -result
+        # Convert bits to Float32 using SIMD bitcast
+        var result = bitcast[DType.float32, 1](SIMD[DType.uint32, 1](bits32))[0]
 
         return result
+
+    fn to_float64(self) -> Float64:
+        """Convert BF16 to Float64.
+
+        Goes through Float32 conversion first.
+
+        Returns:
+            Float64 representation.
+        """
+        return Float64(self.to_float32())
+
+    # ========================================================================
+    # Special Values
+    # ========================================================================
+
+    @staticmethod
+    fn _zero() -> Self:
+        """Create BF16 zero."""
+        return BF16(0x0000)
+
+    @staticmethod
+    fn _neg_zero() -> Self:
+        """Create BF16 negative zero."""
+        return BF16(0x8000)
+
+    @staticmethod
+    fn _inf() -> Self:
+        """Create BF16 positive infinity."""
+        return BF16(0x7F80)
+
+    @staticmethod
+    fn _neg_inf() -> Self:
+        """Create BF16 negative infinity."""
+        return BF16(0xFF80)
+
+    @staticmethod
+    fn _nan() -> Self:
+        """Create BF16 NaN."""
+        return BF16(0x7FC0)
 
     fn is_nan(self) -> Bool:
         """Check if value is NaN.
@@ -237,7 +238,7 @@ struct BF16(Copyable, Movable, Representable, Stringable):
         """
         var exp = (self.value >> 7) & 0xFF
         var mantissa = self.value & 0x7F
-        return exp == 255 and mantissa != 0
+        return exp == 0xFF and mantissa != 0
 
     fn is_inf(self) -> Bool:
         """Check if value is infinity (positive or negative).
@@ -247,7 +248,15 @@ struct BF16(Copyable, Movable, Representable, Stringable):
         """
         var exp = (self.value >> 7) & 0xFF
         var mantissa = self.value & 0x7F
-        return exp == 255 and mantissa == 0
+        return exp == 0xFF and mantissa == 0
+
+    fn is_finite(self) -> Bool:
+        """Check if value is finite (not NaN or infinity).
+
+        Returns:
+            True if finite, False otherwise.
+        """
+        return not (self.is_nan() or self.is_inf())
 
     fn is_zero(self) -> Bool:
         """Check if value is zero (positive or negative).
@@ -255,7 +264,6 @@ struct BF16(Copyable, Movable, Representable, Stringable):
         Returns:
             True if the value is ±0 (exp=0, mantissa=0).
         """
-        # Mask out sign bit and check if rest is zero
         return (self.value & 0x7FFF) == 0
 
     fn is_subnormal(self) -> Bool:
@@ -276,40 +284,87 @@ struct BF16(Copyable, Movable, Representable, Stringable):
         """
         return Int((self.value >> 15) & 1)
 
-    fn __str__(self) -> String:
-        """String representation showing BF16 value as Float32.
+    # ========================================================================
+    # Arithmetic Operations (via Float32)
+    # ========================================================================
+
+    fn __add__(self, other: Self) -> Self:
+        """Add two BF16 values.
+
+        Args:
+            other: Value to add.
 
         Returns:
-            String representation.
+            Sum as BF16.
         """
-        return "BF16(" + String(self.to_float32()) + ")"
+        return BF16.from_float32(self.to_float32() + other.to_float32())
 
-    fn __repr__(self) -> String:
-        """Detailed representation showing both bits and value.
+    fn __sub__(self, other: Self) -> Self:
+        """Subtract two BF16 values.
+
+        Args:
+            other: Value to subtract.
 
         Returns:
-            Detailed string representation.
+            Difference as BF16.
         """
-        return (
-            "BF16(bits=0x"
-            + hex(self.value)
-            + ", value="
-            + String(self.to_float32())
-            + ")"
-        )
+        return BF16.from_float32(self.to_float32() - other.to_float32())
+
+    fn __mul__(self, other: Self) -> Self:
+        """Multiply two BF16 values.
+
+        Args:
+            other: Value to multiply.
+
+        Returns:
+            Product as BF16.
+        """
+        return BF16.from_float32(self.to_float32() * other.to_float32())
+
+    fn __truediv__(self, other: Self) -> Self:
+        """Divide two BF16 values.
+
+        Args:
+            other: Divisor.
+
+        Returns:
+            Quotient as BF16.
+        """
+        return BF16.from_float32(self.to_float32() / other.to_float32())
+
+    fn __neg__(self) -> Self:
+        """Negate the value.
+
+        Returns:
+            BF16 with flipped sign bit.
+        """
+        return BF16(self.value ^ 0x8000)
+
+    fn __abs__(self) -> Self:
+        """Absolute value.
+
+        Returns:
+            BF16 with sign bit cleared.
+        """
+        return BF16(self.value & 0x7FFF)
+
+    # ========================================================================
+    # Comparison Operations
+    # ========================================================================
 
     fn __eq__(self, other: Self) -> Bool:
-        """Check equality by comparing raw bits.
+        """Check equality.
 
-        Note: This means +0 != -0 and NaN == NaN (same bit pattern).
-        For IEEE-754 semantics, compare to_float32() values.
+        Note: NaN != NaN per IEEE 754.
 
         Args:
             other: Other BF16 value.
 
         Returns:
-            True if bit patterns match.
+            True if equal.
         """
+        if self.is_nan() or other.is_nan():
+            return False
         return self.value == other.value
 
     fn __ne__(self, other: Self) -> Bool:
@@ -319,9 +374,9 @@ struct BF16(Copyable, Movable, Representable, Stringable):
             other: Other BF16 value.
 
         Returns:
-            True if bit patterns differ.
+            True if not equal.
         """
-        return self.value != other.value
+        return not (self == other)
 
     fn __lt__(self, other: Self) -> Bool:
         """Less than comparison.
@@ -367,18 +422,85 @@ struct BF16(Copyable, Movable, Representable, Stringable):
         """
         return self.to_float32() >= other.to_float32()
 
-    fn __neg__(self) -> Self:
-        """Negate the value.
+    # ========================================================================
+    # String Representation
+    # ========================================================================
+
+    fn __str__(self) -> String:
+        """String representation showing BF16 value as Float32.
 
         Returns:
-            BF16 with flipped sign bit.
+            String representation.
         """
-        return BF16(self.value ^ 0x8000)
+        return "BF16(" + String(self.to_float32()) + ")"
 
-    fn __abs__(self) -> Self:
-        """Absolute value.
+    fn __repr__(self) -> String:
+        """Detailed representation showing both bits and value.
 
         Returns:
-            BF16 with sign bit cleared.
+            Detailed string representation.
         """
-        return BF16(self.value & 0x7FFF)
+        return (
+            "BF16(bits=0x"
+            + hex(self.value)
+            + ", value="
+            + String(self.to_float32())
+            + ")"
+        )
+
+
+# ============================================================================
+# Backward Compatibility Alias
+# ============================================================================
+
+comptime BFloat16 = BF16
+"""Backward compatibility alias for BF16 (BFloat16)."""
+
+
+# ============================================================================
+# Utility Functions
+# ============================================================================
+
+
+fn print_bf16_bits(value: BF16):
+    """Print BF16 value and its bit representation.
+
+    Shows sign, exponent, and mantissa bits for debugging.
+
+    Args:
+        value: BF16 value to print.
+
+    Example:
+        ```mojo
+        var bf16 = BF16.from_float32(3.14159)
+        print_bf16_bits(bf16)
+        # Output:
+        # BF16: 3.140625
+        # Bits: 0100000010010010
+        # Sign: 0, Exponent: 128, Mantissa: 18
+        ```
+    """
+    print("BF16: " + String(value.to_float32()))
+
+    # Print binary representation
+    var bits = value.value
+    var binary = String("")
+    for i in range(15, -1, -1):
+        var bit = (bits >> i) & 0x1
+        binary += String(bit)
+
+    print("Bits: " + binary)
+
+    # Decode components
+    var sign = (bits >> 15) & 0x1
+    var exponent = (bits >> 7) & 0xFF
+    var mantissa = bits & 0x7F
+
+    print(
+        "Sign: "
+        + String(sign)
+        + ", Exponent: "
+        + String(exponent)
+        + ", Mantissa: "
+        + String(mantissa)
+    )
