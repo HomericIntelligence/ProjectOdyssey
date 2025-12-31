@@ -7,6 +7,7 @@ All types are implemented using Mojo's struct system for memory safety and perfo
 Components:
     - FP8: 8-bit floating point type (E4M3 format)
     - BF8: 8-bit floating point type (E5M2 format)
+    - BF16: 16-bit brain floating point type (same range as Float32)
     - FP4_E2M1: 4-bit floating point base type (E2M1 format)
     - MXFP4: Microscaling FP4 with E8M0 scaling (32-element blocks)
     - NVFP4: NVIDIA FP4 with E4M3 scaling (16-element blocks)
@@ -16,7 +17,7 @@ Note:
 
 Example:
     ```mojo
-    from shared.core.types import FP8, BF8, FP4_E2M1, MXFP4, NVFP4
+    from shared.core.types import FP8, BF8, BF16, FP4_E2M1, MXFP4, NVFP4
 
     # Work with FP8 values
     var fp8_val = FP8.from_float32(3.14159)
@@ -25,6 +26,10 @@ Example:
     # Work with BF8 values
     var bf8_val = BF8.from_float32(100.0)
     var float_val2 = bf8_val.to_float32()
+
+    # Work with BF16 values (brain floating point)
+    var bf16_val = BF16.from_float32(1e30)
+    var float_val3 = bf16_val.to_float32()
 
     # Work with blocked FP4 values
     var mxfp4_val = MXFP4.from_float32(2.718)
@@ -36,6 +41,7 @@ Example:
 # Type exports
 from shared.core.types.fp8 import FP8
 from shared.core.types.bf8 import BF8
+from shared.core.types.bf16 import BF16
 from shared.core.types.fp4 import FP4_E2M1
 from shared.core.types.mxfp4 import MXFP4, E8M0Scale
 from shared.core.types.nvfp4 import NVFP4, E4M3Scale
