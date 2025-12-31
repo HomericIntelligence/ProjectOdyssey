@@ -552,25 +552,25 @@ else:
 
 - **Float16 (FP16)** ✓ - Fully supported, recommended for most use cases
 - **Float32 (FP32)** ✓ - Default precision, maximum accuracy
-- **BFloat16 (BF16)** ✓ - Custom implementation with uint16 storage (`shared/core/bfloat16.mojo`)
+- **BFloat16 (BF16)** ✓ - Custom implementation with uint16 storage (`shared/core/types/bf16.mojo`)
 
 #### BFloat16 Custom Implementation
 
-Since Mojo doesn't natively support BFloat16, we provide a custom `BFloat16` struct:
+Since Mojo doesn't natively support BFloat16, we provide a custom `BF16` struct:
 
 ```mojo
-from shared.core.bfloat16 import BFloat16
+from shared.core.types.bf16 import BF16
 
 # Convert from Float32
-var bf16 = BFloat16.from_float32(3.14159)
+var bf16 = BF16.from_float32(3.14159)
 
 # Convert back to Float32
 var f32 = bf16.to_float32()
 
 # Arithmetic operations
-var a = BFloat16.from_float32(2.0)
-var b = BFloat16.from_float32(3.0)
-var sum = a + b  # BFloat16(5.0)
+var a = BF16.from_float32(2.0)
+var b = BF16.from_float32(3.0)
+var sum = a + b  # BF16(5.0)
 
 # Comparison
 if a < b:

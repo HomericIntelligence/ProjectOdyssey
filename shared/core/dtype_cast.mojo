@@ -5,7 +5,7 @@ for common conversions (FP32 <-> FP16, FP32 <-> BF16).
 """
 
 from shared.core.extensor import ExTensor
-from shared.core.bfloat16 import BFloat16
+from shared.core.types.bf16 import BF16, BFloat16
 
 
 fn cast_tensor(tensor: ExTensor, target_dtype: DType) raises -> ExTensor:
