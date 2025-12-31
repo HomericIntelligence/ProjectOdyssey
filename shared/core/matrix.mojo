@@ -24,16 +24,33 @@ from shared.core.gradient_types import GradientPair
 fn _matmul_2d_1d_impl[
     dtype: DType
 ](result: ExTensor, a: ExTensor, b: ExTensor, m: Int, k: Int):
-    """Dtype-specialized 2D @ 1D matmul."""
-    var a_ptr = a._data.bitcast[Scalar[dtype]]()
-    var b_ptr = b._data.bitcast[Scalar[dtype]]()
-    var out_ptr = result._data.bitcast[Scalar[dtype]]()
+    """Dtype-specialized 2D @ 1D matmul.
 
-    for i in range(m):
-        var sum_val: Scalar[dtype] = 0
-        for j in range(k):
-            sum_val += a_ptr[i * k + j] * b_ptr[j]
-        out_ptr[i] = sum_val
+    For Float16, uses FP32 accumulation internally (industry-standard mixed precision).
+    This matches NVIDIA TensorCores, PyTorch, and TensorFlow behavior.
+    See GitHub issue #3009 for rationale.
+    """
+    @parameter
+    if dtype == DType.float16:
+        var a_ptr = a._data.bitcast[Scalar[DType.float16]]()
+        var b_ptr = b._data.bitcast[Scalar[DType.float16]]()
+        var out_ptr = result._data.bitcast[Scalar[DType.float16]]()
+
+        for i in range(m):
+            var sum_val = Float32(0.0)
+            for j in range(k):
+                sum_val += Float32(a_ptr[i * k + j]) * Float32(b_ptr[j])
+            out_ptr[i] = Float16(sum_val)
+    else:
+        var a_ptr = a._data.bitcast[Scalar[dtype]]()
+        var b_ptr = b._data.bitcast[Scalar[dtype]]()
+        var out_ptr = result._data.bitcast[Scalar[dtype]]()
+
+        for i in range(m):
+            var sum_val: Scalar[dtype] = 0
+            for j in range(k):
+                sum_val += a_ptr[i * k + j] * b_ptr[j]
+            out_ptr[i] = sum_val
 
 
 fn _dispatch_matmul_2d_1d(
@@ -59,16 +76,33 @@ fn _dispatch_matmul_2d_1d(
 fn _matmul_1d_2d_impl[
     dtype: DType
 ](result: ExTensor, a: ExTensor, b: ExTensor, m: Int, n: Int):
-    """Dtype-specialized 1D @ 2D matmul."""
-    var a_ptr = a._data.bitcast[Scalar[dtype]]()
-    var b_ptr = b._data.bitcast[Scalar[dtype]]()
-    var out_ptr = result._data.bitcast[Scalar[dtype]]()
+    """Dtype-specialized 1D @ 2D matmul.
 
-    for j in range(n):
-        var sum_val: Scalar[dtype] = 0
-        for i in range(m):
-            sum_val += a_ptr[i] * b_ptr[i * n + j]
-        out_ptr[j] = sum_val
+    For Float16, uses FP32 accumulation internally (industry-standard mixed precision).
+    This matches NVIDIA TensorCores, PyTorch, and TensorFlow behavior.
+    See GitHub issue #3009 for rationale.
+    """
+    @parameter
+    if dtype == DType.float16:
+        var a_ptr = a._data.bitcast[Scalar[DType.float16]]()
+        var b_ptr = b._data.bitcast[Scalar[DType.float16]]()
+        var out_ptr = result._data.bitcast[Scalar[DType.float16]]()
+
+        for j in range(n):
+            var sum_val = Float32(0.0)
+            for i in range(m):
+                sum_val += Float32(a_ptr[i]) * Float32(b_ptr[i * n + j])
+            out_ptr[j] = Float16(sum_val)
+    else:
+        var a_ptr = a._data.bitcast[Scalar[dtype]]()
+        var b_ptr = b._data.bitcast[Scalar[dtype]]()
+        var out_ptr = result._data.bitcast[Scalar[dtype]]()
+
+        for j in range(n):
+            var sum_val: Scalar[dtype] = 0
+            for i in range(m):
+                sum_val += a_ptr[i] * b_ptr[i * n + j]
+            out_ptr[j] = sum_val
 
 
 fn _dispatch_matmul_1d_2d(
@@ -101,17 +135,35 @@ fn _matmul_2d_2d_impl[
     a_cols: Int,
     b_cols: Int,
 ):
-    """Dtype-specialized 2D @ 2D matmul."""
-    var a_ptr = a._data.bitcast[Scalar[dtype]]()
-    var b_ptr = b._data.bitcast[Scalar[dtype]]()
-    var out_ptr = result._data.bitcast[Scalar[dtype]]()
+    """Dtype-specialized 2D @ 2D matmul.
 
-    for i in range(a_rows):
-        for j in range(b_cols):
-            var sum_val: Scalar[dtype] = 0
-            for k in range(a_cols):
-                sum_val += a_ptr[i * a_cols + k] * b_ptr[k * b_cols + j]
-            out_ptr[i * b_cols + j] = sum_val
+    For Float16, uses FP32 accumulation internally (industry-standard mixed precision).
+    This matches NVIDIA TensorCores, PyTorch, and TensorFlow behavior.
+    See GitHub issue #3009 for rationale.
+    """
+    @parameter
+    if dtype == DType.float16:
+        var a_ptr = a._data.bitcast[Scalar[DType.float16]]()
+        var b_ptr = b._data.bitcast[Scalar[DType.float16]]()
+        var out_ptr = result._data.bitcast[Scalar[DType.float16]]()
+
+        for i in range(a_rows):
+            for j in range(b_cols):
+                var sum_val = Float32(0.0)
+                for k in range(a_cols):
+                    sum_val += Float32(a_ptr[i * a_cols + k]) * Float32(b_ptr[k * b_cols + j])
+                out_ptr[i * b_cols + j] = Float16(sum_val)
+    else:
+        var a_ptr = a._data.bitcast[Scalar[dtype]]()
+        var b_ptr = b._data.bitcast[Scalar[dtype]]()
+        var out_ptr = result._data.bitcast[Scalar[dtype]]()
+
+        for i in range(a_rows):
+            for j in range(b_cols):
+                var sum_val: Scalar[dtype] = 0
+                for k in range(a_cols):
+                    sum_val += a_ptr[i * a_cols + k] * b_ptr[k * b_cols + j]
+                out_ptr[i * b_cols + j] = sum_val
 
 
 fn _dispatch_matmul_2d_2d(
@@ -153,25 +205,51 @@ fn _matmul_batched_impl[
     matrix_size_b: Int,
     matrix_size_result: Int,
 ):
-    """Dtype-specialized batched matmul."""
-    var a_ptr = a._data.bitcast[Scalar[dtype]]()
-    var b_ptr = b._data.bitcast[Scalar[dtype]]()
-    var out_ptr = result._data.bitcast[Scalar[dtype]]()
+    """Dtype-specialized batched matmul.
 
-    for batch in range(batch_size):
-        var a_offset = batch * matrix_size_a
-        var b_offset = batch * matrix_size_b
-        var result_offset = batch * matrix_size_result
+    For Float16, uses FP32 accumulation internally (industry-standard mixed precision).
+    This matches NVIDIA TensorCores, PyTorch, and TensorFlow behavior.
+    See GitHub issue #3009 for rationale.
+    """
+    @parameter
+    if dtype == DType.float16:
+        var a_ptr = a._data.bitcast[Scalar[DType.float16]]()
+        var b_ptr = b._data.bitcast[Scalar[DType.float16]]()
+        var out_ptr = result._data.bitcast[Scalar[DType.float16]]()
 
-        for i in range(a_rows):
-            for j in range(b_cols):
-                var sum_val: Scalar[dtype] = 0
-                for k in range(a_cols):
-                    var a_idx = a_offset + i * a_cols + k
-                    var b_idx = b_offset + k * b_cols + j
-                    sum_val += a_ptr[a_idx] * b_ptr[b_idx]
-                var result_idx = result_offset + i * b_cols + j
-                out_ptr[result_idx] = sum_val
+        for batch in range(batch_size):
+            var a_offset = batch * matrix_size_a
+            var b_offset = batch * matrix_size_b
+            var result_offset = batch * matrix_size_result
+
+            for i in range(a_rows):
+                for j in range(b_cols):
+                    var sum_val = Float32(0.0)
+                    for k in range(a_cols):
+                        var a_idx = a_offset + i * a_cols + k
+                        var b_idx = b_offset + k * b_cols + j
+                        sum_val += Float32(a_ptr[a_idx]) * Float32(b_ptr[b_idx])
+                    var result_idx = result_offset + i * b_cols + j
+                    out_ptr[result_idx] = Float16(sum_val)
+    else:
+        var a_ptr = a._data.bitcast[Scalar[dtype]]()
+        var b_ptr = b._data.bitcast[Scalar[dtype]]()
+        var out_ptr = result._data.bitcast[Scalar[dtype]]()
+
+        for batch in range(batch_size):
+            var a_offset = batch * matrix_size_a
+            var b_offset = batch * matrix_size_b
+            var result_offset = batch * matrix_size_result
+
+            for i in range(a_rows):
+                for j in range(b_cols):
+                    var sum_val: Scalar[dtype] = 0
+                    for k in range(a_cols):
+                        var a_idx = a_offset + i * a_cols + k
+                        var b_idx = b_offset + k * b_cols + j
+                        sum_val += a_ptr[a_idx] * b_ptr[b_idx]
+                    var result_idx = result_offset + i * b_cols + j
+                    out_ptr[result_idx] = sum_val
 
 
 fn _dispatch_matmul_batched(
