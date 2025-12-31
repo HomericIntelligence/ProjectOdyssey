@@ -336,44 +336,120 @@ struct GradientTape:
 struct NoGradContext(Copyable, Movable):
     """Context manager for disabling gradient computation.
 
-    WARNING: This is currently a stub implementation that does not function.
-    The full context manager is blocked by Mojo's UnsafePointer limitation
-    (parametric mutability not yet supported). See issue #3014.
+    Provides control over gradient tracking through explicit enter/exit methods.
+    This enables disabling gradient tracking for inference or when building
+    computation graphs that shouldn't be differentiated.
 
-    Workaround: Manually manage gradient tracking with requires_grad=False
-    on Variables that shouldn't track gradients. Alternatively, use
-    tape.disable() / tape.enable() directly on the global tape.
+    The context stores the previous enabled state internally and restores it
+    on exit, supporting nested no-grad contexts correctly.
 
-    Example (future usage when full support is available):
+    Example:
     ```
-        with NoGradContext():
-            var output = model(input)  # No gradients tracked
-    ```
-
-    Current workaround:
-    ```
-        tape.disable()
-        var output = model(input)
-        tape.enable()
+        var ctx = NoGradContext()
+        ctx.enter(tape)
+        var output = model(input)  # No gradients tracked
+        ctx.exit(tape)  # Gradients re-enabled
     ```
 
-    Limitation Details:
-        Full context manager implementation requires storing a mutable reference
-        to the global gradient tape. Mojo's UnsafePointer does not yet support
-        parametric mutability, making it impossible to create a context that
-        preserves the mutability state of the tape across scope boundaries.
+    Design Note:
+        Uses explicit enter(tape)/exit(tape) methods instead of __enter__/__exit__
+        because Mojo's context manager protocol doesn't support external mutable state.
+        This pattern matches the explicit-tape-passing pattern used throughout the
+        autograd module, and aligns with how Variables are passed explicitly to
+        operations.
+
+    See Also:
+        disable_gradient_tracking() - Convenience function wrapping enter()
+        restore_gradient_tracking() - Convenience function wrapping exit()
     """
 
+    var _previous_enabled: Bool
+    """Store the previous enabled state to restore on exit."""
+
     fn __init__(out self):
-        """Initialize no-grad context."""
-        pass
+        """Initialize no-grad context with default state."""
+        self._previous_enabled = False
 
-    fn __enter__(mut self) -> None:
-        """Enter no-grad context (disable gradient tracking)."""
-        # TODO(#3014): Implement gradient tracking disable
-        pass
+    fn enter(mut self, mut tape: GradientTape):
+        """Enter no-grad context by disabling gradient tracking.
 
-    fn __exit__(mut self) -> None:
-        """Exit no-grad context (restore gradient tracking)."""
-        # TODO(#3014): Implement gradient tracking restore
-        pass
+        Args:
+            tape: The gradient tape to disable.
+
+        Note:
+            Stores the current enabled state so exit() can restore it.
+        """
+        self._previous_enabled = tape.enabled
+        tape.disable()
+
+    fn exit(mut self, mut tape: GradientTape):
+        """Exit no-grad context by restoring previous tracking state.
+
+        Args:
+            tape: The gradient tape to restore.
+
+        Note:
+            Restores the state from before enter() was called.
+        """
+        if self._previous_enabled:
+            tape.enable()
+        else:
+            tape.disable()
+
+
+fn disable_gradient_tracking(mut tape: GradientTape) -> Bool:
+    """Disable gradient tracking and return the previous state.
+
+    This is a convenience function that wraps NoGradContext.enter().
+    It's useful when you want to disable gradient tracking without
+    managing a context object explicitly.
+
+    Args:
+        tape: The gradient tape to disable.
+
+    Returns:
+        Bool: The previous enabled state (True if was enabled, False otherwise).
+              Use this value with restore_gradient_tracking() to restore state.
+
+    Example:
+    ```
+        var was_enabled = disable_gradient_tracking(tape)
+        var output = model(input)  # No gradients tracked
+        restore_gradient_tracking(tape, was_enabled)  # Restore previous state
+    ```
+
+    See Also:
+        restore_gradient_tracking() - Restore the previous state
+        NoGradContext - For context manager style usage
+    """
+    var previous_enabled = tape.enabled
+    tape.disable()
+    return previous_enabled
+
+
+fn restore_gradient_tracking(mut tape: GradientTape, was_enabled: Bool):
+    """Restore gradient tracking to a previous state.
+
+    This is a convenience function that pairs with disable_gradient_tracking().
+    It restores the gradient tape to the state it was in before disable_gradient_tracking()
+    was called.
+
+    Args:
+        tape: The gradient tape to restore.
+        was_enabled: The previous enabled state from disable_gradient_tracking().
+
+    Example:
+    ```
+        var was_enabled = disable_gradient_tracking(tape)
+        var output = model(input)
+        restore_gradient_tracking(tape, was_enabled)
+    ```
+
+    See Also:
+        disable_gradient_tracking() - Get the previous state
+        NoGradContext - For context manager style usage
+    """
+    if was_enabled:
+        tape.enable()
+    else:
+        tape.disable()

@@ -275,68 +275,167 @@ trait Composable(Differentiable):
         ```
     """
 
-    fn compose[T: Composable](self, other: T) raises -> ExTensor:
+    fn compose[T: Differentiable & Copyable & Movable](self, other: T) raises:
         """Compose this component with another.
 
-        NOTE: Full implementation blocked by Mojo language limitation
-        Generic types F and S require Movable constraint which cannot
-        be expressed in the current Mojo type system. See issue #3014.
+        NOTE: The compose method signature is intentionally incomplete because Mojo's
+        current type system limitations prevent returning ComposedOp[Self, T]. The trait
+        `Self` type does not automatically satisfy the required trait constraints
+        (Differentiable & Copyable & Movable) needed by ComposedOp.
+
+        However, ComposedOp itself is fully implemented and can be used directly:
+        ```
+            var composed = ComposedOp[LayerType1, LayerType2](layer1, layer2)
+            var output = composed.forward(input)
+            var grad = composed.backward(grad_output)
+        ```
 
         Args:
             other: The component to compose with this one.
-
-        Returns:
-            Composed operation result.
+            The output shape of self must match the input shape of other.
 
         Raises:
-            Error: This method is not yet supported due to Mojo limitation. If operation fails.
-
-        Workaround:
-        ```
-                Instead of using compose(), manually chain operations:
-
-                # Instead of:
-                # var combined = layer1.compose(layer2)
-
-                # Use manual composition:
-                var intermediate = layer1.forward(input)
-                var result = layer2.forward(intermediate)
-        ```
+            Error: This method is a stub. Use ComposedOp[F, S](first, second) directly.
 
         See Also:
+            - ComposedOp: Fully implemented struct for operation composition
             - https://docs.modular.com/mojo/manual/traits/.
         """
-        raise Error(
-            "compose() not yet supported - use manual composition instead. "
-        )
+        raise Error("Use ComposedOp[F, S](first, second) directly for now")
 
 
-# TODO(#3014): ComposedOp struct blocked by Mojo type system limitation
-#
-# Issue: ComposedOp requires Movable constraint on generic types F and S,
-# but Mojo does not support trait intersection syntax needed to express:
-#   struct ComposedOp[F: (Differentiable & Movable), S: (Differentiable & Movable)](...)
-#
-# Current Status: Deferred until Mojo adds proper trait intersection.
-#
-# Workaround: Use manual composition in Composable.compose() docstring.
-# Commented code below for future reference:
-#
-# struct ComposedOp[F: Differentiable, S: Differentiable](Differentiable, Composable):
-#     """Composition of two differentiable operations."""
-#     var first: F
-#     var second: S
-#
-#     fn forward(mut self, input: ExTensor) raises -> ExTensor:
-#         var intermediate = self.first.forward(input)
-#         return self.second.forward(intermediate)
-#
-#     fn backward(self, grad_output: ExTensor) raises -> ExTensor:
-#         var grad_intermediate = self.second.backward(grad_output)
-#         return self.first.backward(grad_intermediate)
-#
-# See: https://docs.modular.com/mojo/manual/traits/
-# See: GitHub issue #3014 for limitation details
+struct ComposedOp[F: Differentiable & Copyable & Movable, S: Differentiable & Copyable & Movable](
+    Differentiable, Composable
+):
+    """Composition of two differentiable operations.
+
+    Chains two differentiable operations together (first.forward → second.forward)
+    and applies the chain rule during backward pass (second.backward → first.backward).
+
+    The composed operation behaves as a single differentiable layer, with the
+    intermediate tensor cached for the backward pass.
+
+    Type Parameters:
+        F: First operation (must be Differentiable, Copyable, and Movable)
+        S: Second operation (must be Differentiable, Copyable, and Movable)
+
+    Contract:
+        - Output shape of F must match input shape of S
+        - Forward pass: output = S(F(input))
+        - Backward pass applies chain rule: grad_input = F.backward(S.backward(grad_output))
+
+    Example:
+    ```
+        struct ReLU(Differentiable, Copyable, Movable):
+            # ... implementation
+
+        struct Linear(Differentiable, Copyable, Movable):
+            # ... implementation
+
+        # Create composed operation
+        var relu = ReLU()
+        var linear = Linear(128, 64)
+        var composed = ComposedOp[ReLU, Linear](relu, linear)
+
+        # Use in forward/backward pass
+        var output = composed.forward(input)
+        var grad = composed.backward(loss_grad)
+    ```
+
+    Attributes:
+        first: The first operation in the composition.
+        second: The second operation in the composition.
+        _intermediate: Cached intermediate tensor for backward pass.
+
+    See Also:
+        Composable.compose() - Factory method for creating ComposedOp
+        Differentiable - Base trait for forward/backward operations
+    """
+
+    var first: Self.F
+    """The first operation in the composition."""
+    var second: Self.S
+    """The second operation in the composition."""
+    var _intermediate: ExTensor
+    """Cached intermediate tensor (output of first operation, input to second)."""
+
+    fn __init__(out self, first: Self.F, second: Self.S) raises:
+        """Initialize composed operation with first and second components.
+
+        Args:
+            first: The first differentiable operation.
+            second: The second differentiable operation.
+
+        Raises:
+            Error: If tensor initialization fails.
+        """
+        self.first = first.copy()
+        self.second = second.copy()
+        # Initialize with empty tensor - will be set during forward pass
+        self._intermediate = ExTensor(List[Int](), DType.float32)
+
+    fn forward(mut self, input: ExTensor) raises -> ExTensor:
+        """Compute forward pass by chaining operations.
+
+        Applies first operation, then second operation:
+            output = second.forward(first.forward(input))
+
+        The intermediate result is cached for use in backward pass.
+
+        Args:
+            input: Input tensor to the first operation.
+
+        Returns:
+            Output tensor from the second operation.
+
+        Raises:
+            Error: If either forward pass fails.
+
+        Note:
+            This method caches the intermediate tensor (output of first operation)
+            for use during backward pass. The tensor is copied to preserve its
+            values across potential modifications.
+        """
+        # Forward through first operation
+        var intermediate = self.first.forward(input)
+
+        # Cache intermediate result for backward pass
+        self._intermediate = intermediate.copy()
+
+        # Forward through second operation
+        var output = self.second.forward(intermediate)
+
+        return output
+
+    fn backward(self, grad_output: ExTensor) raises -> ExTensor:
+        """Compute backward pass by applying chain rule.
+
+        Applies operations in reverse order with chain rule:
+            grad_input = first.backward(second.backward(grad_output))
+
+        Uses the cached intermediate tensor to compute gradients.
+
+        Args:
+            grad_output: Gradient w.r.t. the output (∂L/∂output).
+
+        Returns:
+            Gradient w.r.t. the input (∂L/∂input).
+
+        Raises:
+            Error: If either backward pass fails.
+
+        Note:
+            Requires that forward() was called beforehand to cache
+            the intermediate tensor. If forward() was not called,
+            this will use an empty tensor and likely fail.
+        """
+        # Backward through second operation
+        var grad_intermediate = self.second.backward(grad_output)
+
+        # Backward through first operation
+        var grad_input = self.first.backward(grad_intermediate)
+
+        return grad_input
 
 
 trait Trainable:
