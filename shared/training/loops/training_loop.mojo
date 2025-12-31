@@ -105,7 +105,6 @@ fn train_one_epoch(
     var num_batches = 0
 
     # Setup metrics for epoch
-    # FIXME(unused) var accuracy_metric = AccuracyMetric()
     var loss_tracker = LossTracker(window_size=log_interval)
 
     # Reset dataloader
@@ -241,7 +240,6 @@ struct TrainingLoop:
         for batch_idx in range(num_batches):
             var start_idx = batch_idx * batch_size
             var end_idx = min(start_idx + batch_size, num_samples)
-            # FIXME(unused) var actual_batch_size = end_idx - start_idx
 
             # Extract batch slice using ExTensor.slice()
             var batch_data = train_data.slice(start_idx, end_idx, axis=0)
