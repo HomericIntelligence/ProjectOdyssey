@@ -15,8 +15,8 @@ Usage:
 import os
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
+
 
 # Get the repo root - use environment variable or find it from git
 def get_repo_root():
@@ -25,16 +25,14 @@ def get_repo_root():
         return Path(os.environ["REPO_ROOT"])
     # Try to find it from git
     try:
-        result = subprocess.run(
-            ["git", "rev-parse", "--show-toplevel"],
-            capture_output=True, text=True
-        )
+        result = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True)
         if result.returncode == 0:
             return Path(result.stdout.strip())
     except Exception:
         pass
     # Fallback to hardcoded path
     return Path("/home/mvillmow/ProjectOdyssey")
+
 
 REPO_ROOT = get_repo_root()
 
@@ -303,7 +301,7 @@ def main():
             capture_output=True,
             text=True,
             timeout=600,  # 10 minute timeout
-            cwd=REPO_ROOT
+            cwd=REPO_ROOT,
         )
 
         print(result.stdout)
@@ -334,10 +332,7 @@ def main():
 
 def get_current_commit():
     """Get the current commit hash."""
-    result = subprocess.run(
-        ["git", "rev-parse", "--short", "HEAD"],
-        capture_output=True, text=True, cwd=REPO_ROOT
-    )
+    result = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True, cwd=REPO_ROOT)
     return result.stdout.strip()
 
 
