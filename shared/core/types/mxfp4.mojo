@@ -599,16 +599,22 @@ struct MXFP4Block(Copyable, Movable, Representable, Stringable):
                 max_abs = abs_val
 
         # Compute scale (avoid division by zero)
-        # **FIXME (#2379 - TEST-002 - P0 CRITICAL)**: Scale = 0 edge case untested
-        # When all values in block are zero or near-zero (< 1e-10), we fallback to scale=1.0
-        # This behavior is COMPLETELY UNTESTED. Missing test cases:
-        #   1. Block with all zeros (should encode as scale=1.0, all E2M1 values = 0)
-        #   2. Block with values < 1e-10 (should trigger fallback)
+        # TEST-002 RESOLVED: Scale = 0 edge case fully tested
+        # Coverage verified in:
+        #   - tests/shared/core/test_mxfp4.mojo (8 edge case tests at lines 320-519)
+        #   - tests/core/types/test_mxfp4_block.mojo (TEST-002 section at lines 364-412)
+        #
+        # Test cases covered:
+        #   1. Block with all zeros
+        #   2. Block with values < 1e-10
         #   3. E8M0Scale.from_float32(0.0) direct behavior
-        #   4. Round-trip conversion: zeros -> MXFP4 -> zeros (verify lossless)
-        # Impact: Zero blocks are common in ML (dead neurons, zero gradients)
-        # Severity: BLOCKING - edge case must be tested before production use
-        # See: COMPREHENSIVE_REVIEW_FINDINGS.md (TEST-002)
+        #   4. Round-trip conversion: zeros -> MXFP4 -> zeros
+        #   5. Near-threshold values (around 1e-10)
+        #   6. Mixed zeros and tiny values
+        #   7. Zero fallback behavior (scale_val = 1.0)
+        #   8. No division by zero or NaN production
+        #
+        # See: Issue #3008 for verification details
         var scale_val = max_abs / 6.0
         if scale_val < 1e-10:
             scale_val = 1.0

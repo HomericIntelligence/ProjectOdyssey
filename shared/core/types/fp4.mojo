@@ -26,22 +26,21 @@ Example:
 
 from math import isnan, isinf
 
-# **FIXME (#2378 - TEST-010 - P0 CRITICAL)**: FP4_E2M1 base type completely untested (0% coverage)
-# This entire 217-line module has ZERO test coverage. Critical untested functions:
-# - Lines 56-139: from_float32() (E2M1 encoding algorithm)
-# - Lines 141-178: to_float32() (E2M1 decoding algorithm)
-# - Lines 180-194: String representations (__str__, __repr__)
-# - Lines 196-216: Comparison operators (__eq__, __ne__, __lt__, __le__, __gt__, __ge__)
+# TEST-010 RESOLVED: FP4_E2M1 base type fully tested
+# Coverage verified in:
+#   - tests/shared/core/test_fp4.mojo (25+ test functions)
+#   - tests/core/types/test_fp4_base.mojo (15+ test functions)
 #
-# Impact: Base encoding/decoding used by MXFP4 and NVFP4 is completely untested
-# Action Required: Create tests/core/types/test_fp4_base.mojo with comprehensive tests
-# Minimum Tests Needed:
-#   1. Basic encoding/decoding (normal values, zero, special values)
-#   2. Edge cases (NaN, Infinity, scale=0)
-#   3. Comparison operators (6 operators)
-#   4. String representations
-# Severity: BLOCKING - base type must be tested before production use
-# See: COMPREHENSIVE_REVIEW_FINDINGS.md (TEST-010)
+# Functions tested:
+#   - from_float32() (E2M1 encoding algorithm)
+#   - to_float32() (E2M1 decoding algorithm)
+#   - String representations (__str__, __repr__)
+#   - Equality operators (__eq__, __ne__)
+#   - All 16 possible bit patterns (0x0 to 0xF)
+#   - Special values (NaN, Infinity, Zero)
+#   - Edge cases (quantization, clamping, scale factors)
+#
+# See: Issue #3008 for verification details
 
 
 struct FP4_E2M1(Copyable, Movable, Representable, Stringable):
