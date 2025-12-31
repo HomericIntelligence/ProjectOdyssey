@@ -179,6 +179,8 @@ from shared.core.shape import (
     ravel,
     concatenate,
     stack,
+    split,
+    split_with_indices,
     is_contiguous,
     as_contiguous,
     view,
