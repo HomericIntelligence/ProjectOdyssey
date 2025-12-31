@@ -190,21 +190,20 @@ fn test_recommend_precision_dtype() raises:
 
 
 fn test_bfloat16_alias_behavior() raises:
-    """Test that bfloat16 comptime works as expected."""
-    print("Testing bfloat16 comptime behavior...")
+    """Test that bfloat16 uses native DType.bfloat16."""
+    print("Testing bfloat16 native dtype behavior...")
 
-    # Verify bfloat16_dtype can be used like DType.float16
+    # Verify bfloat16_dtype uses native DType.bfloat16
     from shared.core import zeros
 
     var tensor = zeros(List[Int](), bfloat16_dtype)
     assert_equal(
         tensor.dtype(),
-        DType.float16,
-        "BF16 tensor should have float16 dtype (aliased)",
+        DType.bfloat16,
+        "BF16 tensor should have native bfloat16 dtype",
     )
 
-    print("✓ BFloat16 comptime behavior test passed")
-    print("⚠ Note: bfloat16_dtype currently aliases to float16")
+    print("✓ BFloat16 native dtype behavior test passed")
 
 
 fn main() raises:
@@ -227,5 +226,4 @@ fn main() raises:
     print("ALL DTYPE UTILITIES TESTS PASSED! ✓")
     print("=" * 70)
     print()
-    print("⚠ REMINDER: bfloat16_dtype is currently aliased to DType.float16")
-    print("   This will change when Mojo adds native BFloat16 support.")
+    print("✓ bfloat16_dtype now uses native DType.bfloat16")
