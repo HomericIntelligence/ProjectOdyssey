@@ -73,7 +73,7 @@ Design Philosophy:
 Status:
     ✅ GradientTape with backward() implementation
     ✅ Variable operations with tape recording
-    ⏳ NoGradContext stub (full context manager blocked by Mojo limitation)
+    ✅ NoGradContext with enter/exit and convenience functions
     ✅ Functional gradient helpers (mse, bce, ce)
     ✅ SGD optimizer
     ✅ Adam optimizer
@@ -112,6 +112,8 @@ from shared.autograd.tape_types import (
 from shared.autograd.tape import (
     GradientTape,
     NoGradContext,
+    disable_gradient_tracking,
+    restore_gradient_tracking,
     # Operation type aliases
     OP_ADD,
     OP_SUBTRACT,
