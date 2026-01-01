@@ -52,13 +52,9 @@ Example:
     var a1 = relu(h1)
     ```
 
-FIXME(#3010): Placeholder import tests in tests/shared/test_imports.mojo require:
-- test_core_imports (line 17)
-- test_core_layers_imports (line 31)
-- test_core_activations_imports (line 46)
-- test_core_types_imports (line 60)
-All tests marked as "(placeholder - awaiting implementation)" and require module
-imports to be uncommented as Issue #49 progresses. See Issue #49 for details
+Placeholder import tests in tests/shared/test_imports.mojo require implementation.
+See Issue #3033 for tracking: 4 tests for core module imports.
+Tests require corresponding modules to be implemented first.
 """
 
 # Package version

@@ -646,7 +646,8 @@ fn export_profiling_report(
         # Default to text format for unknown formats
         _content = report.to_string()
 
-    # TODO(#2714): Enable actual file writing when Mojo FileIO is stable
+    # Blocked: Mojo FileIO unstable
+    # TODO: Enable actual file writing when Mojo FileIO is stable
     # Once available, write _content to filepath using Mojo's file APIs
     # Similar to: File(filepath, "w").write(_content)
 
