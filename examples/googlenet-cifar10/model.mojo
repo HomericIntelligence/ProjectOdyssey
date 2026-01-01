@@ -33,6 +33,7 @@ from shared.core import (
 )
 from shared.core.linear import linear
 from shared.core.dropout import dropout
+from shared.utils.serialization import save_tensor, load_tensor
 
 
 struct InceptionModule:
@@ -290,6 +291,232 @@ struct InceptionModule:
 
         # Concatenate all branches depth-wise
         return concatenate_depthwise(b1, b2, b3, b4)
+
+    fn save_weights(self, weights_dir: String, prefix: String) raises:
+        """Save all Inception module weights to directory.
+
+        Args:
+            weights_dir: Directory to save weight files.
+            prefix: Prefix for weight file names (e.g., "inception_3a").
+
+        Note:
+            Running stats (running_mean, running_var) are not saved as they
+            are recomputed during training.
+        """
+        # Branch 1: 1×1 conv
+        save_tensor(
+            self.conv1x1_1_weights,
+            weights_dir + "/" + prefix + "_b1_conv_weights.bin",
+            prefix + "_b1_conv_weights",
+        )
+        save_tensor(
+            self.conv1x1_1_bias,
+            weights_dir + "/" + prefix + "_b1_conv_bias.bin",
+            prefix + "_b1_conv_bias",
+        )
+        save_tensor(
+            self.bn1x1_1_gamma,
+            weights_dir + "/" + prefix + "_b1_bn_gamma.bin",
+            prefix + "_b1_bn_gamma",
+        )
+        save_tensor(
+            self.bn1x1_1_beta,
+            weights_dir + "/" + prefix + "_b1_bn_beta.bin",
+            prefix + "_b1_bn_beta",
+        )
+
+        # Branch 2: 1×1 reduce + 3×3
+        save_tensor(
+            self.conv1x1_2_weights,
+            weights_dir + "/" + prefix + "_b2_reduce_weights.bin",
+            prefix + "_b2_reduce_weights",
+        )
+        save_tensor(
+            self.conv1x1_2_bias,
+            weights_dir + "/" + prefix + "_b2_reduce_bias.bin",
+            prefix + "_b2_reduce_bias",
+        )
+        save_tensor(
+            self.bn1x1_2_gamma,
+            weights_dir + "/" + prefix + "_b2_reduce_bn_gamma.bin",
+            prefix + "_b2_reduce_bn_gamma",
+        )
+        save_tensor(
+            self.bn1x1_2_beta,
+            weights_dir + "/" + prefix + "_b2_reduce_bn_beta.bin",
+            prefix + "_b2_reduce_bn_beta",
+        )
+        save_tensor(
+            self.conv3x3_weights,
+            weights_dir + "/" + prefix + "_b2_conv3x3_weights.bin",
+            prefix + "_b2_conv3x3_weights",
+        )
+        save_tensor(
+            self.conv3x3_bias,
+            weights_dir + "/" + prefix + "_b2_conv3x3_bias.bin",
+            prefix + "_b2_conv3x3_bias",
+        )
+        save_tensor(
+            self.bn3x3_gamma,
+            weights_dir + "/" + prefix + "_b2_bn3x3_gamma.bin",
+            prefix + "_b2_bn3x3_gamma",
+        )
+        save_tensor(
+            self.bn3x3_beta,
+            weights_dir + "/" + prefix + "_b2_bn3x3_beta.bin",
+            prefix + "_b2_bn3x3_beta",
+        )
+
+        # Branch 3: 1×1 reduce + 5×5
+        save_tensor(
+            self.conv1x1_3_weights,
+            weights_dir + "/" + prefix + "_b3_reduce_weights.bin",
+            prefix + "_b3_reduce_weights",
+        )
+        save_tensor(
+            self.conv1x1_3_bias,
+            weights_dir + "/" + prefix + "_b3_reduce_bias.bin",
+            prefix + "_b3_reduce_bias",
+        )
+        save_tensor(
+            self.bn1x1_3_gamma,
+            weights_dir + "/" + prefix + "_b3_reduce_bn_gamma.bin",
+            prefix + "_b3_reduce_bn_gamma",
+        )
+        save_tensor(
+            self.bn1x1_3_beta,
+            weights_dir + "/" + prefix + "_b3_reduce_bn_beta.bin",
+            prefix + "_b3_reduce_bn_beta",
+        )
+        save_tensor(
+            self.conv5x5_weights,
+            weights_dir + "/" + prefix + "_b3_conv5x5_weights.bin",
+            prefix + "_b3_conv5x5_weights",
+        )
+        save_tensor(
+            self.conv5x5_bias,
+            weights_dir + "/" + prefix + "_b3_conv5x5_bias.bin",
+            prefix + "_b3_conv5x5_bias",
+        )
+        save_tensor(
+            self.bn5x5_gamma,
+            weights_dir + "/" + prefix + "_b3_bn5x5_gamma.bin",
+            prefix + "_b3_bn5x5_gamma",
+        )
+        save_tensor(
+            self.bn5x5_beta,
+            weights_dir + "/" + prefix + "_b3_bn5x5_beta.bin",
+            prefix + "_b3_bn5x5_beta",
+        )
+
+        # Branch 4: pool + 1×1 projection
+        save_tensor(
+            self.conv1x1_4_weights,
+            weights_dir + "/" + prefix + "_b4_proj_weights.bin",
+            prefix + "_b4_proj_weights",
+        )
+        save_tensor(
+            self.conv1x1_4_bias,
+            weights_dir + "/" + prefix + "_b4_proj_bias.bin",
+            prefix + "_b4_proj_bias",
+        )
+        save_tensor(
+            self.bn1x1_4_gamma,
+            weights_dir + "/" + prefix + "_b4_bn_gamma.bin",
+            prefix + "_b4_bn_gamma",
+        )
+        save_tensor(
+            self.bn1x1_4_beta,
+            weights_dir + "/" + prefix + "_b4_bn_beta.bin",
+            prefix + "_b4_bn_beta",
+        )
+
+    fn load_weights(mut self, weights_dir: String, prefix: String) raises:
+        """Load all Inception module weights from directory.
+
+        Args:
+            weights_dir: Directory containing saved weight files.
+            prefix: Prefix for weight file names (e.g., "inception_3a").
+        """
+        # Branch 1: 1×1 conv
+        self.conv1x1_1_weights = load_tensor(
+            weights_dir + "/" + prefix + "_b1_conv_weights.bin"
+        )
+        self.conv1x1_1_bias = load_tensor(
+            weights_dir + "/" + prefix + "_b1_conv_bias.bin"
+        )
+        self.bn1x1_1_gamma = load_tensor(
+            weights_dir + "/" + prefix + "_b1_bn_gamma.bin"
+        )
+        self.bn1x1_1_beta = load_tensor(
+            weights_dir + "/" + prefix + "_b1_bn_beta.bin"
+        )
+
+        # Branch 2: 1×1 reduce + 3×3
+        self.conv1x1_2_weights = load_tensor(
+            weights_dir + "/" + prefix + "_b2_reduce_weights.bin"
+        )
+        self.conv1x1_2_bias = load_tensor(
+            weights_dir + "/" + prefix + "_b2_reduce_bias.bin"
+        )
+        self.bn1x1_2_gamma = load_tensor(
+            weights_dir + "/" + prefix + "_b2_reduce_bn_gamma.bin"
+        )
+        self.bn1x1_2_beta = load_tensor(
+            weights_dir + "/" + prefix + "_b2_reduce_bn_beta.bin"
+        )
+        self.conv3x3_weights = load_tensor(
+            weights_dir + "/" + prefix + "_b2_conv3x3_weights.bin"
+        )
+        self.conv3x3_bias = load_tensor(
+            weights_dir + "/" + prefix + "_b2_conv3x3_bias.bin"
+        )
+        self.bn3x3_gamma = load_tensor(
+            weights_dir + "/" + prefix + "_b2_bn3x3_gamma.bin"
+        )
+        self.bn3x3_beta = load_tensor(
+            weights_dir + "/" + prefix + "_b2_bn3x3_beta.bin"
+        )
+
+        # Branch 3: 1×1 reduce + 5×5
+        self.conv1x1_3_weights = load_tensor(
+            weights_dir + "/" + prefix + "_b3_reduce_weights.bin"
+        )
+        self.conv1x1_3_bias = load_tensor(
+            weights_dir + "/" + prefix + "_b3_reduce_bias.bin"
+        )
+        self.bn1x1_3_gamma = load_tensor(
+            weights_dir + "/" + prefix + "_b3_reduce_bn_gamma.bin"
+        )
+        self.bn1x1_3_beta = load_tensor(
+            weights_dir + "/" + prefix + "_b3_reduce_bn_beta.bin"
+        )
+        self.conv5x5_weights = load_tensor(
+            weights_dir + "/" + prefix + "_b3_conv5x5_weights.bin"
+        )
+        self.conv5x5_bias = load_tensor(
+            weights_dir + "/" + prefix + "_b3_conv5x5_bias.bin"
+        )
+        self.bn5x5_gamma = load_tensor(
+            weights_dir + "/" + prefix + "_b3_bn5x5_gamma.bin"
+        )
+        self.bn5x5_beta = load_tensor(
+            weights_dir + "/" + prefix + "_b3_bn5x5_beta.bin"
+        )
+
+        # Branch 4: pool + 1×1 projection
+        self.conv1x1_4_weights = load_tensor(
+            weights_dir + "/" + prefix + "_b4_proj_weights.bin"
+        )
+        self.conv1x1_4_bias = load_tensor(
+            weights_dir + "/" + prefix + "_b4_proj_bias.bin"
+        )
+        self.bn1x1_4_gamma = load_tensor(
+            weights_dir + "/" + prefix + "_b4_bn_gamma.bin"
+        )
+        self.bn1x1_4_beta = load_tensor(
+            weights_dir + "/" + prefix + "_b4_bn_beta.bin"
+        )
 
 
 fn concatenate_depthwise(
@@ -638,19 +865,81 @@ struct GoogLeNet:
         Args:
             weights_dir: Directory containing saved weight files.
         """
-        # TODO(#2394): Implement weight loading
-        # This will be similar to ResNet-18's weight loading
-        raise Error("Weight loading not yet implemented")
+        # Initial convolution block
+        self.initial_conv_weights = load_tensor(
+            weights_dir + "/initial_conv_weights.bin"
+        )
+        self.initial_conv_bias = load_tensor(
+            weights_dir + "/initial_conv_bias.bin"
+        )
+        self.initial_bn_gamma = load_tensor(
+            weights_dir + "/initial_bn_gamma.bin"
+        )
+        self.initial_bn_beta = load_tensor(weights_dir + "/initial_bn_beta.bin")
+
+        # Load all Inception module weights
+        self.inception_3a.load_weights(weights_dir, "inception_3a")
+        self.inception_3b.load_weights(weights_dir, "inception_3b")
+        self.inception_4a.load_weights(weights_dir, "inception_4a")
+        self.inception_4b.load_weights(weights_dir, "inception_4b")
+        self.inception_4c.load_weights(weights_dir, "inception_4c")
+        self.inception_4d.load_weights(weights_dir, "inception_4d")
+        self.inception_4e.load_weights(weights_dir, "inception_4e")
+        self.inception_5a.load_weights(weights_dir, "inception_5a")
+        self.inception_5b.load_weights(weights_dir, "inception_5b")
+
+        # Final FC layer
+        self.fc_weights = load_tensor(weights_dir + "/fc_weights.bin")
+        self.fc_bias = load_tensor(weights_dir + "/fc_bias.bin")
 
     fn save_weights(self, weights_dir: String) raises:
         """Save model weights to directory.
 
         Args:
             weights_dir: Directory to save weight files.
+
+        Note:
+            Running stats (running_mean, running_var) are not saved as they
+            are recomputed during training from scratch.
         """
-        # TODO(#2394): Implement weight saving
-        # This will be similar to ResNet-18's weight saving
-        raise Error("Weight saving not yet implemented")
+        # Initial convolution block
+        save_tensor(
+            self.initial_conv_weights,
+            weights_dir + "/initial_conv_weights.bin",
+            "initial_conv_weights",
+        )
+        save_tensor(
+            self.initial_conv_bias,
+            weights_dir + "/initial_conv_bias.bin",
+            "initial_conv_bias",
+        )
+        save_tensor(
+            self.initial_bn_gamma,
+            weights_dir + "/initial_bn_gamma.bin",
+            "initial_bn_gamma",
+        )
+        save_tensor(
+            self.initial_bn_beta,
+            weights_dir + "/initial_bn_beta.bin",
+            "initial_bn_beta",
+        )
+
+        # Save all Inception module weights
+        self.inception_3a.save_weights(weights_dir, "inception_3a")
+        self.inception_3b.save_weights(weights_dir, "inception_3b")
+        self.inception_4a.save_weights(weights_dir, "inception_4a")
+        self.inception_4b.save_weights(weights_dir, "inception_4b")
+        self.inception_4c.save_weights(weights_dir, "inception_4c")
+        self.inception_4d.save_weights(weights_dir, "inception_4d")
+        self.inception_4e.save_weights(weights_dir, "inception_4e")
+        self.inception_5a.save_weights(weights_dir, "inception_5a")
+        self.inception_5b.save_weights(weights_dir, "inception_5b")
+
+        # Final FC layer
+        save_tensor(
+            self.fc_weights, weights_dir + "/fc_weights.bin", "fc_weights"
+        )
+        save_tensor(self.fc_bias, weights_dir + "/fc_bias.bin", "fc_bias")
 
 
 fn main():
