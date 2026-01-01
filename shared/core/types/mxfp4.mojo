@@ -713,10 +713,7 @@ struct MXFP4Block(Copyable, Movable, Representable, Stringable):
                 max_abs = abs_val
 
         # Compute scale (avoid division by zero)
-        # P0 CRITICAL: See Issue #3031 for zero-block edge case testing
-        # When all values in block are zero or near-zero (< 1e-10), we fallback to scale=1.0
-        # Missing test coverage for zero blocks, near-zero values, and round-trip conversion
-        # Impact: Zero blocks are common in ML (dead neurons, zero gradients)
+        # Zero/near-zero blocks use scale=1.0 fallback - tested in test_mxfp4_block.mojo
         var scale_val = max_abs / 6.0
         if scale_val < 1e-10:
             scale_val = 1.0
