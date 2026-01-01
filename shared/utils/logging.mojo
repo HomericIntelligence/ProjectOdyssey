@@ -438,7 +438,8 @@ fn get_log_level_from_env() -> Int:
     # Try to get environment variable
     # Note: Mojo doesn't have os.getenv, so we use print + stderr approach
     # For now, return default INFO level
-    # TODO: Implement env var reading when Mojo has stdlib support
+    # Blocked: Mojo stdlib limitation - no os.getenv equivalent
+    # TODO: Implement env var reading when Mojo adds stdlib support
     return LogLevel.INFO
 
 

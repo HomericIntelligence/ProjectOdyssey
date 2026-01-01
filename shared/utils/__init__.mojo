@@ -23,13 +23,9 @@ Example:
     config = load_config("experiment.yaml")
     ```
 
-FIXME(#3010): Placeholder import tests in tests/shared/test_imports.mojo require:
-- test_utils_imports (line 210+)
-- test_utils_logging_imports (line 220+)
-- test_utils_visualization_imports (line 230+)
-- test_utils_config_imports (line 240+)
-All tests marked as "(placeholder)" and require uncommented imports as Issue #49 progresses.
-See Issue #49 for details
+Placeholder import tests in tests/shared/test_imports.mojo require implementation.
+See Issue #3033 for tracking: 4 tests for utils module imports.
+Tests require corresponding modules to be implemented first.
 """
 
 # Package version

@@ -388,9 +388,9 @@ struct DataLoader(Copyable, Movable):
         var batch_labels = ExTensor(batch_labels_shape, self.labels.dtype())
 
         # Tensor slicing is implemented in ExTensor.slice() and __getitem__()
-        # The real blocker is integrating with Python data loaders (Track 4)
-        # For now, we'll just create placeholders
-        # TODO(#3013): Implement proper tensor slicing in ExTensor
+        # Blocked: Track 4 (Python↔Mojo interop)
+        # TODO: Integrate with Python data loaders when Track 4 infrastructure is ready
+        # For now, we just create placeholder tensors
 
         self.current_batch += 1
 

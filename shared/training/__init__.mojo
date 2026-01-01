@@ -6,15 +6,9 @@ schedulers, metrics, callbacks, and training loops for ML Odyssey paper implemen
 
 All components are implemented in Mojo for maximum performance.
 
-FIXME(#3010): Placeholder import tests in tests/shared/test_imports.mojo require:
-- test_training_imports (line 80+)
-- test_training_optimizers_imports (line 95+)
-- test_training_schedulers_imports (line 110+)
-- test_training_metrics_imports (line 125+)
-- test_training_callbacks_imports (line 140+)
-- test_training_loops_imports (line 155+)
-All tests marked as "(placeholder)" and require uncommented imports as Issue #49 progresses.
-See Issue #49 for details.
+Placeholder import tests in tests/shared/test_imports.mojo require implementation.
+See Issue #3033 for tracking: 6 tests for training module imports.
+Tests require corresponding modules to be implemented first.
 """
 
 from python import PythonObject
@@ -414,10 +408,10 @@ struct TrainingLoop[
         var total_loss = Float64(0.0)
         var num_batches = Int(0)
 
-        # TODO(#3013): Iterate through batches when Python integration is complete
+        # Blocked: Track 4 (Python↔Mojo interop)
+        # TODO: Iterate through batches when Python data loader integration is complete
         # The data_loader is currently a PythonObject, but step() requires ExTensor.
-        # Real blocker: Python↔Mojo interop for data loading (Track 4 initiative)
-        # Once data loading infrastructure is ready, integrate batching here.
+        # Once Track 4 data loading infrastructure is ready, integrate batching here.
         _ = data_loader  # Suppress unused variable warning
 
         # Return average loss
@@ -495,7 +489,8 @@ struct CrossEntropyLoss(Loss, Movable):
 # Public API
 # ============================================================================
 
-# TODO(#2597): Export training script utilities when implemented
+# See Issue #3034 for tracking training script utilities export
+# TODO: Export training script utilities when script_runner module is implemented
 # from shared.training.script_runner import (
 #     TrainingCallbacks,
 #     run_epoch_with_batches,
