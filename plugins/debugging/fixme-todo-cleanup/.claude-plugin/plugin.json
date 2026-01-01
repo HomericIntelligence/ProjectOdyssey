@@ -1,0 +1,28 @@
+{
+  "name": "fixme-todo-cleanup",
+  "version": "1.0.0",
+  "description": "Systematic FIXME/TODO cleanup workflow with proper branching, PRs, and CI handling",
+  "category": "debugging",
+  "created": "2026-01-01",
+  "repository": "mvillmow/ProjectOdyssey",
+  "tags": ["technical-debt", "cleanup", "workflow", "github", "ci-cd", "mojo"],
+  "triggers": [
+    "cleanup FIXME items",
+    "cleanup TODO items",
+    "technical debt reduction",
+    "code quality sweep"
+  ],
+  "tools_used": [
+    "grep -rn FIXME|TODO",
+    "gh pr create",
+    "gh pr merge --auto --rebase",
+    "gh run rerun --failed",
+    "pixi run mojo format"
+  ],
+  "metrics": {
+    "prs_merged": 7,
+    "issues_closed": 3,
+    "items_resolved": 7,
+    "items_blocked": 5
+  }
+}
