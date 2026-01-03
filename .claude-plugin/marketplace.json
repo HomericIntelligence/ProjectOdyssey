@@ -1,0 +1,34 @@
+{
+  "name": "ProjectOdyssey",
+  "owner": {
+    "name": "HomericIntelligence",
+    "url": "https://github.com/HomericIntelligence"
+  },
+  "description": "ML Odyssey skills combined with ProjectMnemosyne marketplace",
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "name": "verify-issue-before-work",
+      "description": "Verify GitHub issue state and existing implementation before starting work. Use when: (1) Starting work on issues, (2) Resuming after breaks, (3) Taking over from other sessions. Prevents duplicate effort.",
+      "version": "1.0.0",
+      "source": "./.claude-plugin/skills/verify-issue-before-work",
+      "category": "tooling",
+      "tags": ["workflow", "github", "productivity", "verification"]
+    },
+    {
+      "name": "fix-implicitlycopyable-removal",
+      "description": "Systematic approach to removing ImplicitlyCopyable trait from Mojo structs. Use when: (1) Removing ImplicitlyCopyable from structs, (2) Fixing 'cannot implicitly copy' errors, (3) Debugging memory corruption from implicit copies.",
+      "version": "1.0.0",
+      "source": "./.claude-plugin/skills/fix-implicitlycopyable-removal",
+      "category": "debugging",
+      "tags": ["mojo", "ownership", "memory-safety", "refactoring", "ci-fix"]
+    }
+  ],
+  "external_marketplaces": [
+    {
+      "name": "ProjectMnemosyne",
+      "description": "Skills marketplace for the HomericIntelligence agentic ecosystem (50+ skills)",
+      "path": "./build/ProjectMnemosyne/.claude-plugin/marketplace.json"
+    }
+  ]
+}
