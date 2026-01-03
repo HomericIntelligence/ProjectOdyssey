@@ -25,6 +25,7 @@ env:
 permissions:
   contents: read
   packages: write
+  security-events: write  # For Trivy SARIF uploads
 
 jobs:
   # ============================================================================
