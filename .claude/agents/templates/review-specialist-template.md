@@ -2,6 +2,24 @@
 
 This template provides common sections for all review specialists to eliminate duplication.
 
+## Agent Frontmatter - disallowedTools Field (New Feature)
+
+The `disallowedTools` field blocks specific tools for safety. All review specialists have:
+
+```yaml
+disallowedTools: [Edit, Write, Bash, WebFetch, Task]
+```
+
+This enforces read-only mode - review specialists cannot modify files, run commands, or delegate tasks.
+
+Junior engineers have:
+
+```yaml
+disallowedTools: [Bash, WebFetch, Task]
+```
+
+This blocks command execution and web fetching for safety.
+
 ## Output Location (Include Verbatim in All Specialists)
 
 **CRITICAL**: All review feedback MUST be posted directly to the GitHub pull request using

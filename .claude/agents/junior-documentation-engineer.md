@@ -7,6 +7,7 @@ tools: Read,Write,Edit,Grep,Glob
 model: haiku
 delegates_to: []
 receives_from: [documentation-engineer, documentation-specialist]
+disallowedTools: [Bash, WebFetch, Task]
 ---
 
 # Junior Documentation Engineer

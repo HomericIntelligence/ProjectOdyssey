@@ -7,6 +7,7 @@ tools: Read,Write,Edit,Grep,Glob
 model: haiku
 delegates_to: []
 receives_from: [implementation-engineer, implementation-specialist]
+disallowedTools: [Bash, WebFetch, Task]
 ---
 
 # Junior Implementation Engineer

@@ -7,6 +7,7 @@ tools: Read,Grep,Glob
 model: sonnet
 delegates_to: []
 receives_from: [code-review-orchestrator]
+disallowedTools: [Edit, Write, Bash, WebFetch, Task]
 ---
 
 # Data Engineering Review Specialist
