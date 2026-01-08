@@ -4,6 +4,7 @@ description: "Analyze imports and identify all module dependencies. Use when map
 mcp_fallback: none
 category: analysis
 tier: 2
+user-invocable: false
 ---
 
 # Extract Dependencies

@@ -3,7 +3,8 @@ name: mojo-memory-check
 description: "Verify memory safety in Mojo code including ownership, borrowing, and lifetime management. Use when reviewing code or debugging memory issues."
 mcp_fallback: none
 category: mojo
-agent: safety-review-specialist
+agent: test-engineer
+user-invocable: false
 ---
 
 # Memory Safety Check Skill

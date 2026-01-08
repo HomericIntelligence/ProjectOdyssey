@@ -4,6 +4,7 @@ description: "Generate test files and coordinate test-driven development (TDD). 
 mcp_fallback: none
 category: phase
 phase: Test
+user-invocable: false
 ---
 
 # Test-Driven Development Skill

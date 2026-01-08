@@ -4,6 +4,7 @@ description: "Validate and verify dependencies are available and compatible. Use
 mcp_fallback: none
 category: analysis
 tier: 2
+user-invocable: false
 ---
 
 # Check Dependencies

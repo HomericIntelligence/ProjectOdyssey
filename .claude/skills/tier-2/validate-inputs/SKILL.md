@@ -4,6 +4,7 @@ description: "Check function inputs for correctness and safety. Use when impleme
 mcp_fallback: none
 category: analysis
 tier: 2
+user-invocable: false
 ---
 
 # Validate Inputs

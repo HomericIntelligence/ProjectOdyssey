@@ -4,6 +4,7 @@ description: "Create changelog from git commits. Use when preparing release note
 mcp_fallback: none
 category: generation
 tier: 2
+user-invocable: false
 ---
 
 # Generate Changelog

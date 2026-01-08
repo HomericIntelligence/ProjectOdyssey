@@ -4,6 +4,7 @@ description: "Measure model performance on test datasets. Use when assessing acc
 mcp_fallback: none
 category: ml
 tier: 2
+user-invocable: false
 ---
 
 # Evaluate Model

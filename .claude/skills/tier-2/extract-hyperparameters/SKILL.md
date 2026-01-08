@@ -4,6 +4,7 @@ description: "Identify and document model hyperparameters from papers. Use when 
 mcp_fallback: none
 category: analysis
 tier: 2
+user-invocable: false
 ---
 
 # Extract Hyperparameters

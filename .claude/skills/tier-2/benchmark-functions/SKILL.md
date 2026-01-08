@@ -4,6 +4,7 @@ description: "Measure function performance and compare implementations. Use when
 mcp_fallback: none
 category: analysis
 tier: 2
+user-invocable: false
 ---
 
 # Benchmark Functions

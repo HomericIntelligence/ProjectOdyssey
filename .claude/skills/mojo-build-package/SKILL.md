@@ -3,7 +3,8 @@ name: mojo-build-package
 description: "Build Mojo packages (.mojopkg files) for distribution. Use when creating distributable libraries or during packaging phase."
 mcp_fallback: none
 category: mojo
-agent: senior-implementation-engineer
+agent: test-engineer
+user-invocable: false
 ---
 
 # Mojo Build Package Skill

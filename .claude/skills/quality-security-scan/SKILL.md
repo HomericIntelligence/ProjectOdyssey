@@ -3,7 +3,8 @@ name: quality-security-scan
 description: Scan code for security vulnerabilities and unsafe patterns. Use before committing sensitive code or in security reviews.
 mcp_fallback: none
 category: quality
-agent: security-review-specialist
+agent: test-engineer
+user-invocable: false
 ---
 
 # Security Scan Skill

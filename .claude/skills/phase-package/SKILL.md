@@ -4,6 +4,7 @@ description: "Create distributable packages including .mojopkg files and archive
 mcp_fallback: none
 category: phase
 phase: Package
+user-invocable: false
 ---
 
 # Package Phase Coordination Skill

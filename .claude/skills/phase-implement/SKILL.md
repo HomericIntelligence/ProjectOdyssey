@@ -4,6 +4,7 @@ description: "Coordinate implementation phase by delegating tasks and ensuring c
 mcp_fallback: none
 category: phase
 phase: Impl
+user-invocable: false
 ---
 
 # Implementation Coordination Skill

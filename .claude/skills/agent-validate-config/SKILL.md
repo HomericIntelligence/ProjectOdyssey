@@ -3,6 +3,7 @@ name: agent-validate-config
 description: "Validate agent YAML frontmatter and configuration. Use before committing agent changes or in CI."
 mcp_fallback: none
 category: agent
+user-invocable: false
 ---
 
 # Agent Configuration Validation

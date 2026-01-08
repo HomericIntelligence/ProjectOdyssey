@@ -4,6 +4,7 @@ description: "Examine code organization and identify structural patterns. Use wh
 mcp_fallback: none
 category: analysis
 tier: 1
+user-invocable: false
 ---
 
 # Analyze Code Structure

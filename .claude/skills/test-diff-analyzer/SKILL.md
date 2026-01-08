@@ -3,6 +3,7 @@ name: test-diff-analyzer
 description: "Analyze test differences between runs to identify flaky tests and consistency issues. Use to find tests that fail intermittently."
 category: testing
 mcp_fallback: none
+user-invocable: false
 ---
 
 # Analyze Test Differences Between Runs

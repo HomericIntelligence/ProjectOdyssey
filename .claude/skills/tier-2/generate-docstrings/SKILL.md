@@ -4,6 +4,7 @@ description: "Create docstrings for functions and classes. Use when documenting 
 mcp_fallback: none
 category: generation
 tier: 2
+user-invocable: false
 ---
 
 # Generate Docstrings

@@ -4,6 +4,7 @@ description: "Parse and interpret mathematical equations from research papers. U
 mcp_fallback: none
 category: analysis
 tier: 2
+user-invocable: false
 ---
 
 # Analyze Equations

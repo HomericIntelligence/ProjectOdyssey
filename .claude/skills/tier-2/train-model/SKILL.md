@@ -4,6 +4,7 @@ description: "Execute model training with optimization algorithms. Use when runn
 mcp_fallback: none
 category: ml
 tier: 2
+user-invocable: false
 ---
 
 # Train Model

@@ -4,6 +4,7 @@ description: "DEPRECATED: The notes/plan/ directory has been removed. Planning i
 mcp_fallback: none
 category: plan
 deprecated: true
+user-invocable: false
 ---
 
 # Regenerate GitHub Issues Skill (DEPRECATED)

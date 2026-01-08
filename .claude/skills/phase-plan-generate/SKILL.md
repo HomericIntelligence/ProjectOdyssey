@@ -4,6 +4,7 @@ description: "Generate comprehensive plan documentation following Template 1 for
 mcp_fallback: none
 category: phase
 phase: Plan
+user-invocable: false
 ---
 
 # Plan Generation Skill

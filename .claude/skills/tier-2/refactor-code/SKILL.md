@@ -4,6 +4,7 @@ description: "Restructure code for improved clarity and maintainability. Use whe
 mcp_fallback: none
 category: generation
 tier: 2
+user-invocable: false
 ---
 
 # Refactor Code

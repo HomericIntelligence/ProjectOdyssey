@@ -4,6 +4,7 @@ description: "Check code for style and quality issues. Use when validating code 
 mcp_fallback: none
 category: analysis
 tier: 1
+user-invocable: false
 ---
 
 # Lint Code

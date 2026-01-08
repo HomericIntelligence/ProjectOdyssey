@@ -3,7 +3,8 @@ name: check-memory-safety
 description: "Check Mojo code for memory safety issues (ownership violations, use-after-free, etc.). Use to catch memory bugs."
 category: mojo
 mcp_fallback: none
-agent: safety-review-specialist
+agent: test-engineer
+user-invocable: false
 ---
 
 # Check Memory Safety

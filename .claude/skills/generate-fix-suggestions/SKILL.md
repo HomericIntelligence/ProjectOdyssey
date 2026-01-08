@@ -3,6 +3,7 @@ name: generate-fix-suggestions
 description: "Generate fix suggestions based on error patterns and best practices. Use when analyzing failures to get actionable remediation steps."
 category: testing
 mcp_fallback: none
+user-invocable: false
 ---
 
 # Generate Fix Suggestions from Errors
