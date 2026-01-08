@@ -3,6 +3,7 @@ name: extract-test-failures
 description: "Extract and summarize test failures from logs. Use to quickly understand what tests failed and why."
 category: testing
 mcp_fallback: none
+user-invocable: false
 ---
 
 # Extract and Summarize Test Failures

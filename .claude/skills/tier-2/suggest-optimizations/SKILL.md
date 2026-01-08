@@ -4,6 +4,7 @@ description: "Identify performance optimization opportunities. Use when improvin
 mcp_fallback: none
 category: analysis
 tier: 2
+user-invocable: false
 ---
 
 # Suggest Optimizations

@@ -4,6 +4,7 @@ description: "Identify code quality issues and anti-patterns. Use when reviewing
 mcp_fallback: none
 category: analysis
 tier: 2
+user-invocable: false
 ---
 
 # Detect Code Smells

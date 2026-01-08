@@ -3,6 +3,7 @@ name: build-run-local
 description: "Run local builds with proper environment setup. Use when building code locally to verify changes before pushing."
 category: ci
 mcp_fallback: none
+user-invocable: false
 ---
 
 # Build and Run Local

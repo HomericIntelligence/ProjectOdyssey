@@ -3,6 +3,7 @@ name: track-implementation-progress
 description: "Track implementation progress against plan. Use to monitor component delivery and identify blockers."
 category: review
 mcp_fallback: none
+user-invocable: false
 ---
 
 # Track Implementation Progress

@@ -3,6 +3,7 @@ name: validate-workflow
 description: Validate GitHub Actions workflow files for syntax, best practices, and correctness. Use before committing workflow changes or when workflows fail.
 mcp_fallback: none
 category: ci
+user-invocable: false
 ---
 
 # CI Workflow Validation Skill

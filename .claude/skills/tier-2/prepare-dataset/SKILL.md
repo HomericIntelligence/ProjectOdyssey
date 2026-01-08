@@ -4,6 +4,7 @@ description: "Process and validate datasets for training. Use when setting up da
 mcp_fallback: none
 category: ml
 tier: 2
+user-invocable: false
 ---
 
 # Prepare Dataset

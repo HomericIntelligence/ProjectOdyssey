@@ -4,6 +4,7 @@ description: "Detect security vulnerabilities in code and dependencies. Use when
 mcp_fallback: none
 category: security
 tier: 2
+user-invocable: false
 ---
 
 # Scan Vulnerabilities

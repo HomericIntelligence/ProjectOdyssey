@@ -3,6 +3,7 @@ name: skill-template
 description: "Template for new skills following optimized format. Use as reference when creating new skills."
 category: example
 mcp_fallback: example
+user-invocable: false
 ---
 
 # Skill Name
@@ -102,6 +103,7 @@ All skills must have:
 - `agent`: (Optional) Specify which agent type should execute this skill. Examples:
   `mojo-syntax-validator`, `code-review-orchestrator`, `implementation-engineer`.
   Use this to provide specialized context for skill execution.
+- `user-invocable`: Set to `false` for internal-only skills (agents call these, not users). Omit or set to `true` for user-facing skills that appear in slash command menu.
 
 ### Section Order
 

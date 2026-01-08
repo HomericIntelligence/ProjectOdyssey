@@ -4,6 +4,7 @@ description: "Parse and document algorithm pseudocode from research papers. Use 
 mcp_fallback: none
 category: analysis
 tier: 2
+user-invocable: false
 ---
 
 # Extract Algorithm

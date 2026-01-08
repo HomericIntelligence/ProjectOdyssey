@@ -4,6 +4,7 @@ description: "Run Mojo tests using mojo test command. Use when executing tests o
 mcp_fallback: none
 category: mojo
 agent: test-engineer
+user-invocable: false
 ---
 
 # Mojo Test Runner Skill

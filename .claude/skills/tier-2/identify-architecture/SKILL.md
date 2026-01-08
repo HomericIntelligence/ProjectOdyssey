@@ -4,6 +4,7 @@ description: "Analyze ML model architecture from papers and code. Use when under
 mcp_fallback: none
 category: analysis
 tier: 2
+user-invocable: false
 ---
 
 # Identify Architecture

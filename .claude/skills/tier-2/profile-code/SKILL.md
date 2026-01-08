@@ -4,6 +4,7 @@ description: "Measure execution time and memory usage of code. Use when analyzin
 mcp_fallback: none
 category: analysis
 tier: 2
+user-invocable: false
 ---
 
 # Profile Code

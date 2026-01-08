@@ -4,6 +4,7 @@ description: "Execute test suites and report results. Use when validating code f
 mcp_fallback: none
 category: testing
 tier: 1
+user-invocable: false
 ---
 
 # Run Tests

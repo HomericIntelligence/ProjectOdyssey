@@ -4,6 +4,7 @@ description: "Refactor and finalize code after parallel phases complete, address
 mcp_fallback: none
 category: phase
 phase: Cleanup
+user-invocable: false
 ---
 
 # Cleanup Phase Coordination Skill

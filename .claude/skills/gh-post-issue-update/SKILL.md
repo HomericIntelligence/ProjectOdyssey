@@ -2,7 +2,8 @@
 name: gh-post-issue-update
 description: "Post structured updates to GitHub issues. Use to report progress, findings, and implementation notes directly to issues."
 category: github
-agent: documentation-engineer
+agent: test-engineer
+user-invocable: false
 ---
 
 # Post Issue Update
