@@ -21,7 +21,7 @@ fn test_core_imports() raises:
 
     # Test that functions are actually callable and work correctly
     var test_tensor = zeros([3, 3], DType.float32)
-    assert_true(test_tensor.rank() == 2, "zeros should create tensor with correct rank")
+    assert_true(test_tensor.dim() == 2, "zeros should create tensor with correct rank")
     assert_true(test_tensor.shape()[0] == 3, "zeros should create tensor with correct first dimension")
     assert_true(test_tensor.shape()[1] == 3, "zeros should create tensor with correct second dimension")
 
@@ -279,7 +279,12 @@ fn test_version_info() raises:
     # Test that version parts are numeric
     for i in range(version_parts.__len__()):
         var part = version_parts[i]
-        assert_true(part.isdigit(), "Version part " + str(i) + " should be numeric")
+        # Test numeric format by trying to convert to Int and checking result
+        try:
+            var numeric_value = int(part)
+            assert_true(numeric_value >= 0, "Version part " + str(i) + " should be non-negative numeric")
+        except:
+            assert_true(False, "Version part " + str(i) + " should be numeric")
 
     print("✓ Version info test passed")
 

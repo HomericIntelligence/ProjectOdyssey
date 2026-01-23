@@ -48,9 +48,10 @@ fn test_subpackage_accessibility() raises:
 
     # Test that we can actually call the functions
     var test_tensor = zeros([2, 3], DType.float32)
-    assert_true(test_tensor.rank() == 2, "zeros should create 2D tensor")
-    assert_true(test_tensor.shape()[0] == 2, "First dimension should be 2")
-    assert_true(test_tensor.shape()[1] == 3, "Second dimension should be 3")
+    assert_true(test_tensor.dim() == 2, "zeros should create 2D tensor")
+    var shape = test_tensor.shape()
+    assert_true(shape[0] == 2, "First dimension should be 2")
+    assert_true(shape[1] == 3, "Second dimension should be 3")
 
     # Test that we can actually instantiate classes
     var test_optimizer = SGD(learning_rate=0.01)
@@ -111,9 +112,10 @@ fn test_core_training_integration() raises:
     var loss_fn = MSELoss()
 
     # Verify types are correct and components can be instantiated
-    assert_true(data.rank() == 2, "Data should be 2D tensor")
-    assert_true(data.shape()[0] == 10, "First dimension should be 10")
-    assert_true(data.shape()[1] == 5, "Second dimension should be 5")
+    var data_shape = data.shape()
+    assert_true(data.dim() == 2, "Data should be 2D tensor")
+    assert_true(data_shape[0] == 10, "First dimension should be 10")
+    assert_true(data_shape[1] == 5, "Second dimension should be 5")
     assert_true(optimizer.get_learning_rate() == 0.01, "Learning rate should be 0.01")
 
     print("✓ Core-training integration test passed")
@@ -132,10 +134,12 @@ fn test_core_data_integration() raises:
     var dataset = ExTensorDataset(data^, labels^)
 
     # Verify dataset was created and has correct properties
-    assert_true(data.rank() == 2, "Data should be 2D tensor")
-    assert_true(labels.rank() == 2, "Labels should be 2D tensor")
-    assert_true(data.shape()[0] == 10, "First dimension should be 10")
-    assert_true(labels.shape()[0] == 10, "Labels first dimension should be 10")
+    var data_shape = data.shape()
+    var labels_shape = labels.shape()
+    assert_true(data.dim() == 2, "Data should be 2D tensor")
+    assert_true(labels.dim() == 2, "Labels should be 2D tensor")
+    assert_true(data_shape[0] == 10, "First dimension should be 10")
+    assert_true(labels_shape[0] == 10, "Labels first dimension should be 10")
     assert_true(dataset != None, "Dataset should be created")
 
     print("✓ Core-data integration test passed")
@@ -156,8 +160,10 @@ fn test_training_data_integration() raises:
     var optimizer = SGD(learning_rate=0.01)
 
     # Verify integration by checking component properties
-    assert_true(data.rank() == 2, "Data should be 2D tensor")
-    assert_true(labels.rank() == 2, "Labels should be 2D tensor")
+    var data_shape = data.shape()
+    var labels_shape = labels.shape()
+    assert_true(data.dim() == 2, "Data should be 2D tensor")
+    assert_true(labels.dim() == 2, "Labels should be 2D tensor")
     assert_true(optimizer.get_learning_rate() == 0.01, "Learning rate should be 0.01")
     assert_true(dataset != None, "Dataset should be created")
 
@@ -193,10 +199,14 @@ fn test_complete_training_workflow() raises:
     var logger = Logger("training.log")
 
     # 5. Verify workflow components work together
-    assert_true(weights.rank() == 2, "Weights should be 2D tensor")
-    assert_true(bias.rank() == 1, "Bias should be 1D tensor")
-    assert_true(data.rank() == 2, "Data should be 2D tensor")
-    assert_true(labels.rank() == 2, "Labels should be 2D tensor")
+    var weights_shape = weights.shape()
+    var bias_shape = bias.shape()
+    var data_shape = data.shape()
+    var labels_shape = labels.shape()
+    assert_true(weights.dim() == 2, "Weights should be 2D tensor")
+    assert_true(bias.dim() == 1, "Bias should be 1D tensor")
+    assert_true(data.dim() == 2, "Data should be 2D tensor")
+    assert_true(labels.dim() == 2, "Labels should be 2D tensor")
     assert_true(optimizer.get_learning_rate() == 0.01, "Learning rate should be 0.01")
     assert_true(dataset != None, "Dataset should be created")
     assert_true(logger != None, "Logger should be created")
@@ -234,7 +244,7 @@ fn test_paper_implementation_pattern() raises:
     var dataset = ExTensorDataset(data^, labels^)
 
     # Verify all components are properly instantiated
-    assert_true(input_data.rank() == 4, "Input data should be 4D tensor")
+    assert_true(input_data.dim() == 4, "Input data should be 4D tensor")
     assert_true(optimizer.get_learning_rate() == 0.001, "Learning rate should be 0.001")
     assert_true(dataset != None, "Dataset should be created")
 
@@ -331,14 +341,23 @@ fn test_api_version_compatibility() raises:
     var patch = version_parts[2]
     
     # Basic format validation (should be digits)
-    assert_true(major.isdigit(), "Major version should be numeric")
-    assert_true(minor.isdigit(), "Minor version should be numeric")
-    assert_true(patch.isdigit(), "Patch version should be numeric")
+    try:
+        var major_int = Int(major)
+        assert_true(major_int >= 0, "Major version should be non-negative")
+    except:
+        assert_true(False, "Major version should be numeric")
     
-    # Verify version is reasonable (not negative, not excessively large)
-    assert_true(Int(major) >= 0, "Major version should be non-negative")
-    assert_true(Int(minor) >= 0, "Minor version should be non-negative")
-    assert_true(Int(patch) >= 0, "Patch version should be non-negative")
+    try:
+        var minor_int = Int(minor)
+        assert_true(minor_int >= 0, "Minor version should be non-negative")
+    except:
+        assert_true(False, "Minor version should be numeric")
+    
+    try:
+        var patch_int = Int(patch)
+        assert_true(patch_int >= 0, "Patch version should be non-negative")
+    except:
+        assert_true(False, "Patch version should be numeric")
 
     print("✓ API version compatibility test passed")
 
@@ -372,9 +391,10 @@ fn test_cross_module_computation() raises:
     var logits = matmul(hidden_activated, weights2)  # (32,128) × (128,10) = (32,10)
     
     # Critical assertions that would catch shape/dtype errors
-    assert_true(logits.rank() == 2, "Logits should be 2D tensor")
-    assert_true(logits.shape()[0] == 32, "Batch size should be preserved")
-    assert_true(logits.shape()[1] == 10, "Output classes should match labels")
+    var logits_shape = logits.shape()
+    assert_true(logits.dim() == 2, "Logits should be 2D tensor")
+    assert_true(logits_shape[0] == 32, "Batch size should be preserved")
+    assert_true(logits_shape[1] == 10, "Output classes should match labels")
     assert_true(logits.dtype() == DType.float32, "DType should be preserved")
     
     # Test with training components
@@ -383,8 +403,9 @@ fn test_cross_module_computation() raises:
     
     # Compute loss
     var loss = loss_fn.compute(logits, labels)
-    assert_true(loss.rank() == 1, "Loss should be reduced to batch dimension")
-    assert_true(loss.shape()[0] == 32, "Loss should have one value per sample")
+    var loss_shape = loss.shape()
+    assert_true(loss.dim() == 1, "Loss should be reduced to batch dimension")
+    assert_true(loss_shape[0] == 32, "Loss should have one value per sample")
     
     print("✓ Cross-module computation test passed")
 
@@ -484,13 +505,16 @@ fn test_integration_stress() raises:
     var x3 = matmul(x2_activated, w3)  # (128,256) × (256,10) = (128,10)
     
     # Verify all shapes are correct
-    assert_true(x1_activated.rank() == 2, "First layer output should be 2D")
-    assert_true(x1_activated.shape() == train_data.shape()[:1] + (hidden_dim,))
-    assert_true(x2_activated.rank() == 2, "Second layer output should be 2D")
-    assert_true(x2_activated.shape()[0] == batch_size)
-    assert_true(x3.rank() == 2, "Final output should be 2D")
-    assert_true(x3.shape()[0] == batch_size)
-    assert_true(x3.shape()[1] == output_dim)
+    var x1_shape = x1_activated.shape()
+    var x2_shape = x2_activated.shape()
+    var x3_shape = x3.shape()
+    assert_true(x1_activated.dim() == 2, "First layer output should be 2D")
+    assert_true(x1_shape[0] == batch_size and x1_shape[1] == hidden_dim, "First layer should match expected shape")
+    assert_true(x2_activated.dim() == 2, "Second layer output should be 2D")
+    assert_true(x2_shape[0] == batch_size, "Second layer batch size should match")
+    assert_true(x3.dim() == 2, "Final output should be 2D")
+    assert_true(x3_shape[0] == batch_size, "Final output batch size should match")
+    assert_true(x3_shape[1] == output_dim, "Final output classes should match")
     
     # Test with training components
     var optimizer = SGD(learning_rate=0.01)
@@ -498,8 +522,9 @@ fn test_integration_stress() raises:
     
     # Compute loss
     var loss = loss_fn.compute(x3, train_labels)
-    assert_true(loss.rank() == 1, "Loss should be reduced")
-    assert_true(loss.shape()[0] == batch_size, "Loss should have one value per sample")
+    var loss_shape = loss.shape()
+    assert_true(loss.dim() == 1, "Loss should be reduced")
+    assert_true(loss_shape[0] == batch_size, "Loss should have one value per sample")
     
     print("✓ Integration stress test passed")
 
