@@ -403,9 +403,7 @@ fn test_cross_module_computation() raises:
     # Forward pass - this is where integration failures would occur
     var hidden = weights1.__matmul__(data)  # (32,64) × (64,128) = (32,128)
     var hidden_activated = relu(hidden)
-    var logits = hidden_activated.__matmul__(
-        weights2
-    )  # (32,128) × (128,10) = (32,10)
+    var logits = matmul(hidden_activated, weights2)  # (32,128) × (128,10) = (32,10)
 
     # Critical assertions that would catch shape/dtype errors
     var logits_shape = logits.shape()
@@ -539,10 +537,10 @@ fn test_integration_stress() raises:
     var x1 = w1.__matmul__(train_data)  # (128,784) × (784,256) = (128,256)
     var x1_activated = relu(x1)
 
-    var x2 = x1_activated.__matmul__(w2)  # (128,256) × (256,256) = (128,256)
+    var x2 = matmul(x1_activated, w2)  # (128,256) × (256,256) = (128,256)
     var x2_activated = relu(x2)
 
-    var x3 = x2_activated.__matmul__(w3)  # (128,256) × (256,10) = (128,10)
+    var x3 = matmul(x2_activated, w3)  # (128,256) × (256,10) = (128,10)
 
     # Verify all shapes are correct
     var x1_shape = x1_activated.shape()
