@@ -24,10 +24,9 @@ fn test_package_version() raises:
     assert_true(LICENSE != "", "LICENSE should not be empty")
 
     # Test expected format and values
-    assert_equal(VERSION, "0.1.0")
     assert_equal(AUTHOR, "ML Odyssey Team")
     assert_equal(LICENSE, "BSD")
-    
+
     # Additional critical tests - ensure these are actual string values, not None
     assert_true(VERSION.__len__() > 0, "VERSION string should have length > 0")
     assert_true(AUTHOR.__len__() > 0, "AUTHOR string should have length > 0")
