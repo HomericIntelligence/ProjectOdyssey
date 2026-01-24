@@ -262,7 +262,6 @@ fn test_nested_metric_imports() raises:
 fn test_version_info() raises:
     """Test version info is accessible and has proper format."""
     from shared import VERSION, AUTHOR, LICENSE
-    from sys.ffi import atol
 
     # Critical validation - ensure values are not empty/None
     assert_true(VERSION != "", "VERSION should not be empty")
@@ -278,15 +277,20 @@ fn test_version_info() raises:
     var version_parts = VERSION.split(".")
     assert_true(version_parts.__len__() == 3, "Version should have 3 parts (major.minor.patch)")
 
-    # Test that version parts are numeric
+    # Test that version parts are numeric by checking they only contain digits
     for i in range(version_parts.__len__()):
         var part = version_parts[i]
-        # Test numeric format by trying to convert to Int and checking result
-        try:
-            var numeric_value = atol(part)
-            assert_true(numeric_value >= 0, "Version part " + str(i) + " should be non-negative numeric")
-        except e:
-            assert_true(False, "Version part " + str(i) + " should be numeric")
+        assert_true(part.__len__() > 0, "Version part should not be empty")
+
+        # Check each character is a digit (0-9)
+        var is_numeric = True
+        for j in range(part.__len__()):
+            var ch = part[j]
+            if ch < "0" or ch > "9":
+                is_numeric = False
+                break
+
+        assert_true(is_numeric, "Version part should contain only digits")
 
     print("✓ Version info test passed")
 
