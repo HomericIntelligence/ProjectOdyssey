@@ -55,7 +55,7 @@ trait Dataset:
 # ============================================================================
 
 
-struct ExTensorDataset(Copyable, Dataset, Movable):
+struct ExTensorDataset(Copyable, Dataset, Movable, Sized):
     """Dataset wrapping tensors for in-memory data.
 
     Stores data and labels as tensors and provides indexed access.
