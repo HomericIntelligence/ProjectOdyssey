@@ -1,3 +1,11 @@
+---
+name: review-specialist-template
+description: "Reusable template for review specialist agents - not an active agent"
+level: template
+tools: Read,Grep,Glob
+model: sonnet
+---
+
 # Review Specialist Common Sections
 
 This template provides common sections for all review specialists to eliminate duplication.
