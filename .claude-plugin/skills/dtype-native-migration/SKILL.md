@@ -3,7 +3,7 @@
 ## Overview
 
 | Field | Value |
-|-------|-------|
+| ----- | ----- |
 | **Date** | 2025-12-31 |
 | **Category** | architecture |
 | **Objective** | Migrate custom dtype struct implementations to Mojo's native built-in types |
@@ -123,22 +123,26 @@ assert_true(error < expected * 1.0, "Error too large")
 ### 1. Native E8M0 Conversion
 
 **What was tried:**
+
 ```mojo
 return Scalar[E8M0](scale)  # Native conversion
 ```
 
-**Why it failed:** E8M0 has no mantissa - only 8 exponent bits. Native `Scalar[E8M0]()` conversion doesn't know how to handle the mantissa portion of Float32.
+**Why it failed:** E8M0 has no mantissa - only 8 exponent bits. Native `Scalar[E8M0]()` conversion doesn't
+know how to handle the mantissa portion of Float32.
 
 **Solution:** Manual exponent extraction with proper rounding.
 
 ### 2. Native E8M0 to Float32 Conversion
 
 **What was tried:**
+
 ```mojo
 return Float32(e8m0_val)  # Native conversion
 ```
 
-**Why it failed:** Similar issue - the reverse conversion doesn't properly reconstruct Float32 from exponent-only format.
+**Why it failed:** Similar issue - the reverse conversion doesn't properly reconstruct Float32 from
+exponent-only format.
 
 **Solution:** Manual Float32 reconstruction using bitcast.
 
@@ -155,7 +159,7 @@ return Float32(e8m0_val)  # Native conversion
 ### Type Mapping
 
 | Custom Type | Mojo Built-in | Alias |
-|-------------|---------------|-------|
+| ----------- | ------------- | ----- |
 | `BF16` struct | `DType.bfloat16` | `BF16` |
 | `FP8` struct | `DType.float8_e4m3fn` | `FP8` |
 | `BF8` struct | `DType.float8_e5m2` | `BF8` |
@@ -171,17 +175,20 @@ return Float32(e8m0_val)  # Native conversion
 ### Key Patterns
 
 **Use `comptime` not `alias`:**
+
 ```mojo
 comptime BF16 = DType.bfloat16  # Correct
 alias BF16 = DType.bfloat16    # Deprecated
 ```
 
 **Import bitcast for dtype conversions:**
+
 ```mojo
 from memory import bitcast
 ```
 
 **Bitcast pattern for raw byte access:**
+
 ```mojo
 # Read raw bits from native dtype
 var raw_byte = bitcast[DType.uint8, 1](scalar_val)[0]
