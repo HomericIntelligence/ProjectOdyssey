@@ -33,11 +33,21 @@ jobs:
         with:
           fetch-depth: 0  # Full history for comprehensive scanning
 
-      - name: Run Gitleaks
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}  # Optional: for Gitleaks Pro
+      - name: Run Gitleaks (Free CLI)
+        run: |
+          # Download and install gitleaks CLI (free, no license required)
+          wget -q https://github.com/gitleaks/gitleaks/releases/download/v8.18.0/gitleaks_8.18.0_linux_x64.tar.gz
+          tar -xzf gitleaks_8.18.0_linux_x64.tar.gz
+          chmod +x gitleaks
+
+          # Run gitleaks detect with .gitleaks.toml config if it exists
+          if [ -f .gitleaks.toml ]; then
+            echo "Using .gitleaks.toml configuration"
+            ./gitleaks detect --source=. --config=.gitleaks.toml --verbose --no-git --exit-code=1
+          else
+            echo "No .gitleaks.toml found, using default configuration"
+            ./gitleaks detect --source=. --verbose --no-git --exit-code=1
+          fi
 
       - name: Display scan summary
         if: always()
@@ -57,7 +67,7 @@ jobs:
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
 
       - name: Download dependency scan results
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v4
         with:
           name: dependency-scan-results
           path: security-results/
