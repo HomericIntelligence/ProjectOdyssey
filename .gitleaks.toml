@@ -1,0 +1,10 @@
+title = "ML Odyssey Gitleaks Configuration"
+
+[allowlist]
+description = "Allowlist for false positives in documentation"
+paths = [
+  '''^\.claude/agents/security-review-specialist\.md$''',
+  '''^\.claude/skills/quality-security-scan/SKILL\.md$''',
+  '''^configs/BEST_PRACTICES\.md$''',
+  '''^README\.md$'''
+]
