@@ -697,7 +697,7 @@ jobs:
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
 
       - name: Download all test results
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v4
         with:
           path: all-results/
           pattern: "test-results-*"  # Only download test result artifacts, not build artifacts
