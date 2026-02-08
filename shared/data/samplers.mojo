@@ -106,30 +106,30 @@ struct RandomSampler(Copyable, Movable, Sampler):
     """Whether to sample with replacement."""
     var num_samples: Int
     """Number of samples to draw."""
-    var seed_value: Optional[Int]
-    """Random seed for reproducibility."""
+    var seed_value: Int
+    """Random seed for reproducibility (-1 = no seed)."""
 
     fn __init__(
         out self,
         data_source_len: Int,
         replacement: Bool = False,
-        num_samples: Optional[Int] = None,
-        seed_value: Optional[Int] = None,
+        num_samples: Int = -1,
+        seed_value: Int = -1,
     ):
         """Create random sampler.
 
         Args:
             data_source_len: Length of the dataset.
             replacement: Whether to sample with replacement.
-            num_samples: Number of samples to draw (None = all).
-            seed_value: Random seed for reproducibility.
+            num_samples: Number of samples to draw (-1 = all).
+            seed_value: Random seed for reproducibility (-1 = no seed).
         """
         self.data_source_len = data_source_len
         self.replacement = replacement
         self.seed_value = seed_value
 
-        if num_samples:
-            self.num_samples = num_samples.value()
+        if num_samples > 0:
+            self.num_samples = num_samples
         else:
             self.num_samples = data_source_len
 
@@ -172,15 +172,15 @@ struct WeightedSampler(Copyable, Movable, Sampler):
     """Number of samples to draw."""
     var replacement: Bool
     """Whether to sample with replacement."""
-    var seed_value: Optional[Int]
-    """Random seed for reproducibility."""
+    var seed_value: Int
+    """Random seed for reproducibility (-1 = no seed)."""
 
     fn __init__(
         out self,
         var weights: List[Float64],
         num_samples: Int,
         replacement: Bool = True,
-        seed_value: Optional[Int] = None,
+        seed_value: Int = -1,
     ) raises:
         """Create weighted sampler.
 
@@ -188,7 +188,7 @@ struct WeightedSampler(Copyable, Movable, Sampler):
             weights: Weight for each sample.
             num_samples: Number of samples to draw.
             replacement: Whether to sample with replacement.
-            seed_value: Random seed for reproducibility.
+            seed_value: Random seed for reproducibility (-1 = no seed).
 
         Raises:
             Error: If weights are invalid.

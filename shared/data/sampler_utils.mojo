@@ -74,14 +74,14 @@ fn create_range_indices(start_index: Int, end_index: Int) -> List[Int]:
 # ============================================================================
 
 
-fn set_random_seed(seed_value: Optional[Int]):
+fn set_random_seed(seed_value: Int):
     """Set random seed if provided.
 
     Args:
-            seed_value: Optional seed value. If None, randomness is not seeded.
+            seed_value: Seed value (-1 = no seed, randomness is not seeded).
     """
-    if seed_value:
-        seed(seed_value.value())
+    if seed_value >= 0:
+        seed(seed_value)
 
 
 # ============================================================================
