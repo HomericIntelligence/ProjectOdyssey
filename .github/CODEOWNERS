@@ -209,7 +209,7 @@ tests/                              @mvillmow
 # 4. File type patterns (*.mojo) catch files in any directory
 #
 # Testing CODEOWNERS:
-#   gh api /repos/mvillmow/ProjectOdyssey/codeowners/errors
+#   gh api /repos/HomericIntelligence/ProjectOdyssey/codeowners/errors
 #
 # Validating a PR:
 #   gh pr view <number> --json reviewRequests

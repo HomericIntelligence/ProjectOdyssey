@@ -76,7 +76,7 @@ def fix_list_initialization(file_path: Path) -> tuple[int, bool]:
 
 def main():
     """Fix all test files."""
-    test_dir = Path("/home/mvillmow/ProjectOdyssey/tests")
+    test_dir = Path(__file__).resolve().parent.parent / "tests"
 
     # Find all .mojo files
     mojo_files = list(test_dir.rglob("*.mojo"))

@@ -12,6 +12,7 @@ This script:
 
 import subprocess
 import sys
+from pathlib import Path
 
 
 def run_command(cmd, description):
@@ -19,9 +20,10 @@ def run_command(cmd, description):
     print(f"[*] {description}")
     print(f"    Command: {' '.join(cmd)}")
     try:
+        repo_root = Path(__file__).resolve().parent.parent
         result = subprocess.run(
             cmd,
-            cwd="/home/mvillmow/ProjectOdyssey",
+            cwd=str(repo_root),
             capture_output=True,
             text=True,
             check=True,
@@ -120,7 +122,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"""
     print("Next Steps:")
     print("=" * 70)
     print("1. Monitor CI status: gh pr checks (after ~30 seconds)")
-    print("2. Review PR at: https://github.com/mvillmow/ProjectOdyssey/pulls")
+    print("2. Review PR at: https://github.com/HomericIntelligence/ProjectOdyssey/pulls")
     print("3. Address any review comments")
     print("=" * 70)
 

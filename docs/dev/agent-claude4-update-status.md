@@ -25,10 +25,10 @@ Each agent file must include:
 
 **Reference Implementations:**
 
-1. `/home/mvillmow/ProjectOdyssey-manual/.claude/agents/chief-architect.md` ✅
-2. `/home/mvillmow/ProjectOdyssey-manual/.claude/agents/implementation-engineer.md` ✅
-3. `/home/mvillmow/ProjectOdyssey-manual/.claude/agents/test-engineer.md` ✅
-4. `/home/mvillmow/ProjectOdyssey-manual/.claude/agents/foundation-orchestrator.md` ✅
+1. `/.claude/agents/chief-architect.md` ✅
+2. `/.claude/agents/implementation-engineer.md` ✅
+3. `/.claude/agents/test-engineer.md` ✅
+4. `/.claude/agents/foundation-orchestrator.md` ✅
 
 These serve as templates for their respective categories.
 
@@ -110,7 +110,7 @@ These serve as templates for their respective categories.
 
 A Python script has been created to automate the updates:
 
-**Location:** `/home/mvillmow/ProjectOdyssey-manual/scripts/update_agents_claude4.py`
+**Location:** `/scripts/update_agents_claude4.py`
 
 **Features:**
 
@@ -196,7 +196,7 @@ The script handles:
 1. **Run automation script:**
 
    ```bash
-   cd /home/mvillmow/ProjectOdyssey-manual
+   cd
    python3 scripts/update_agents_claude4.py
 ```text
 
@@ -253,4 +253,4 @@ Before finalizing:
 - **Agent Skills Best Practices**: [https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
 - **Sub-Agents Guide**: [https://code.claude.com/docs/en/sub-agents](https://code.claude.com/docs/en/sub-agents)
 - **Output Styles**: [https://code.claude.com/docs/en/output-styles](https://code.claude.com/docs/en/output-styles)
-- **Issue #2548**: [https://github.com/mvillmow/ProjectOdyssey/issues/2548](https://github.com/mvillmow/ProjectOdyssey/issues/2548)
+- **Issue #2548**: [https://github.com/HomericIntelligence/ProjectOdyssey/issues/2548](https://github.com/HomericIntelligence/ProjectOdyssey/issues/2548)

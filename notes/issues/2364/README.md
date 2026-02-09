@@ -23,7 +23,7 @@ Both schedulers are fully implemented with comprehensive test coverage. All test
 
 ### CosineAnnealingLR
 
-**Location**: `/home/mvillmow/worktrees/2364-schedulers/shared/training/schedulers/lr_schedulers.mojo` (lines 78-136)
+**Location**: `shared/training/schedulers/lr_schedulers.mojo` (lines 78-136)
 
 **Status**: IMPLEMENTED AND TESTED
 
@@ -46,7 +46,7 @@ Smooth cosine decay scheduler that gradually reduces learning rate from base_lr 
 
 ### WarmupLR
 
-**Location**: `/home/mvillmow/worktrees/2364-schedulers/shared/training/schedulers/lr_schedulers.mojo` (lines 144-194)
+**Location**: `shared/training/schedulers/lr_schedulers.mojo` (lines 144-194)
 
 **Status**: IMPLEMENTED AND TESTED
 
@@ -231,9 +231,9 @@ The implementation provides simple linear warmup with constant learning rate aft
 
 ## References
 
-- **Shared Configuration**: `/home/mvillmow/worktrees/2364-schedulers/shared/training/base.mojo` - LRScheduler trait definition
-- **Scheduler Module**: `/home/mvillmow/worktrees/2364-schedulers/shared/training/schedulers/`
-- **Test Utilities**: `/home/mvillmow/worktrees/2364-schedulers/tests/shared/conftest.mojo` - Test assertion functions
+- **Shared Configuration**: `shared/training/base.mojo` - LRScheduler trait definition
+- **Scheduler Module**: `shared/training/schedulers/`
+- **Test Utilities**: `tests/shared/conftest.mojo` - Test assertion functions
 - **Related Issues**:
   - #2303: Initial learning rate schedulers implementation (StepLR)
   - #2304: ReduceLROnPlateau scheduler

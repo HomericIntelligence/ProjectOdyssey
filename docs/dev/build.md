@@ -21,7 +21,7 @@ From root MDs (backed up `notes/root-backup/`). Links to [phases.md](phases.md).
 **Docker (Recommended)**:
 
 ```bash
-git clone https://github.com/mvillmow/ProjectOdyssey.git
+git clone https://github.com/HomericIntelligence/ProjectOdyssey.git
 cd ProjectOdyssey
 docker-compose up -d ProjectOdyssey-dev
 docker-compose exec ProjectOdyssey-dev bash

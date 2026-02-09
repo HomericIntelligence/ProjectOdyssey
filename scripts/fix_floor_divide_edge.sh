@@ -5,7 +5,7 @@ set -e
 # Script to fix floor_divide edge case for division by zero
 # This script creates a feature branch, commits the fix, and creates a PR
 
-cd /home/mvillmow/ProjectOdyssey
+cd "$(dirname "$0")/.."
 
 # Create and switch to feature branch
 echo "Creating feature branch fix-floor-divide-edge..."

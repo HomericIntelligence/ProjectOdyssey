@@ -8,13 +8,13 @@ This document describes how to use Docker for ml-odyssey development and deploym
 
 ```bash
 # Pull the latest runtime image
-docker pull ghcr.io/mvillmow/ml-odyssey:main
+docker pull ghcr.io/homericintelligence/projectodyssey:main
 
 # Run tests
-docker run --rm ghcr.io/mvillmow/ml-odyssey:main
+docker run --rm ghcr.io/homericintelligence/projectodyssey:main
 
 # Interactive shell
-docker run -it --rm ghcr.io/mvillmow/ml-odyssey:main bash
+docker run -it --rm ghcr.io/homericintelligence/projectodyssey:main bash
 ```
 
 ### Local Development
@@ -91,7 +91,7 @@ docker buildx build \
   --file Dockerfile.ci \
   --target runtime \
   --platform linux/amd64,linux/arm64 \
-  -t ghcr.io/mvillmow/ml-odyssey:test \
+  -t ghcr.io/homericintelligence/projectodyssey:test \
   --push \
   .
 ```

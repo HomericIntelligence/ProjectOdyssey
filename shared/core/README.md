@@ -173,10 +173,10 @@ Core components should meet these performance goals:
 
 ## Related Documentation
 
-- Shared Library: `/home/mvillmow/ProjectOdyssey-manual/worktrees/issue-13-plan/worktrees/issue-19-plan/shared/README.md`
-- Models Library: `/home/mvillmow/ProjectOdyssey-manual/worktrees/issue-13-plan/worktrees/issue-19-plan/shared/models/README.md`
+- Shared Library: `/worktrees/issue-13-plan/worktrees/issue-19-plan/shared/README.md`
+- Models Library: `/worktrees/issue-13-plan/worktrees/issue-19-plan/shared/models/README.md`
 - Mojo Language Guide: <https://docs.modular.com/mojo/>
-- Project Documentation: `/home/mvillmow/ProjectOdyssey-manual/worktrees/issue-13-plan/worktrees/issue-19-plan/CLAUDE.md`
+- Project Documentation: `/worktrees/issue-13-plan/worktrees/issue-19-plan/CLAUDE.md`
 
 ## License
 

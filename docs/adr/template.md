@@ -4,7 +4,7 @@
 
 **Date**: YYYY-MM-DD
 
-**Issue Reference**: [Issue #NNN](https://github.com/mvillmow/ProjectOdyssey/issues/NNN)
+**Issue Reference**: [Issue #NNN](https://github.com/HomericIntelligence/ProjectOdyssey/issues/NNN)
 
 **Decision Owner**: [Role or person responsible]
 

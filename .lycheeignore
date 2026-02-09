@@ -14,9 +14,9 @@ agents/templates/.*
 # Specific placeholder URLs in templates
 https://github.com/org/repo/issues/XX
 
-# Ignore old repository name redirects (ProjectOdyssey -> ProjectOdyssey)
+# Ignore old repository name redirects (mvillmow -> HomericIntelligence)
 # These are valid redirects, not broken links
-github\.com/mvillmow/ProjectOdyssey
+github\.com/HomericIntelligence/ProjectOdyssey
 
 # Ignore pytorch docs redirects (pytorch.org -> docs.pytorch.org)
 pytorch\.org/docs

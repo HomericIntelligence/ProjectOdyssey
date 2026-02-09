@@ -467,14 +467,14 @@ Consistent output styles improve clarity and actionability. Follow these guideli
 
 #### Code References
 
-**DO**: Use absolute file paths with line numbers when referencing code:
+**DO**: Use repo-relative file paths with line numbers when referencing code:
 
 ```markdown
-✅ GOOD: Updated /home/mvillmow/ProjectOdyssey-manual/CLAUDE.md:173-185
+✅ GOOD: Updated CLAUDE.md:173-185
 
-✅ GOOD: Modified ExTensor initialization in /home/user/ProjectOdyssey/shared/core/extensor.mojo:45
+✅ GOOD: Modified ExTensor initialization in shared/core/extensor.mojo:45
 
-❌ BAD: Updated CLAUDE.md (ambiguous - which CLAUDE.md?)
+❌ BAD: Updated CLAUDE.md (missing line numbers)
 
 ❌ BAD: Fixed the tensor file (too vague)
 ```
@@ -928,24 +928,24 @@ The project publishes Docker images to GitHub Container Registry (GHCR).
 
 | Image | Purpose | Size |
 |-------|---------|------|
-| `ghcr.io/mvillmow/ml-odyssey:main` | Runtime with Mojo/tests | ~2GB |
-| `ghcr.io/mvillmow/ml-odyssey:main-ci` | CI with pre-commit | ~2.5GB |
-| `ghcr.io/mvillmow/ml-odyssey:main-prod` | Minimal production | ~1.5GB |
+| `ghcr.io/homericintelligence/projectodyssey:main` | Runtime with Mojo/tests | ~2GB |
+| `ghcr.io/homericintelligence/projectodyssey:main-ci` | CI with pre-commit | ~2.5GB |
+| `ghcr.io/homericintelligence/projectodyssey:main-prod` | Minimal production | ~1.5GB |
 
 #### Pull and Run
 
 ```bash
 # Pull latest runtime image
-docker pull ghcr.io/mvillmow/ml-odyssey:main
+docker pull ghcr.io/homericintelligence/projectodyssey:main
 
 # Run tests
-docker run --rm ghcr.io/mvillmow/ml-odyssey:main
+docker run --rm ghcr.io/homericintelligence/projectodyssey:main
 
 # Interactive shell
-docker run -it --rm ghcr.io/mvillmow/ml-odyssey:main bash
+docker run -it --rm ghcr.io/homericintelligence/projectodyssey:main bash
 
 # Mount local code for development
-docker run -it --rm -v $(pwd):/app ghcr.io/mvillmow/ml-odyssey:main bash
+docker run -it --rm -v $(pwd):/app ghcr.io/homericintelligence/projectodyssey:main bash
 ```
 
 #### Build Locally
