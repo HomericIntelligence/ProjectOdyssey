@@ -127,8 +127,8 @@ rm .claude/ralph-loop.local.md
 | #3035 | - | Update stale issue references |
 | #3036 | #3031 | Remove MXFP4 FIXME |
 | #3037 | #3033 | Implement conftest fixtures |
-| #3038 | #3034 | Implement script_runner |
-| #3039 | #3034 | Implement dataset_loaders |
+| #3038 | #3034 | Implement script\_runner |
+| #3039 | #3034 | Implement dataset\_loaders |
 | #3040 | #3034 | Export script utilities |
 | #3041 | #3032 | Update ExTensor Array API |
 
@@ -138,9 +138,9 @@ rm .claude/ralph-loop.local.md
 |------|------|---------|
 | profiling.mojo | 650 | Mojo FileIO stability |
 | logging.mojo | 442 | Mojo env var support |
-| mixed_precision.mojo | 284, 368 | Compiler SIMD FP16 support |
-| training/__init__.mojo | 412 | Track 4 Python data loader |
-| trainer_interface.mojo | 392 | Track 4 Python data loader |
+| mixed\_precision.mojo | 284, 368 | Compiler SIMD FP16 support |
+| training/\_\_init\_\_.mojo | 412 | Track 4 Python data loader |
+| trainer\_interface.mojo | 392 | Track 4 Python data loader |
 
 ### Git Configuration
 

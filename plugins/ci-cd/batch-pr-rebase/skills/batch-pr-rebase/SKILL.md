@@ -30,6 +30,7 @@ Use this workflow when:
 - ✅ Some PRs are in worktrees, others are not
 
 **Don't use when**:
+
 - ❌ Only 1-2 PRs need rebasing (use standard `git rebase` workflow)
 - ❌ PRs have complex multi-file conflicts requiring manual resolution
 - ❌ PRs are from external contributors (coordinate with them first)
@@ -63,6 +64,7 @@ git log --oneline origin/main..<branch-name>
 ```
 
 **Pattern**: Drop commits that:
+
 - Are labeled "chore: retrigger CI"
 - Add files that main already has (like `.gitleaks.toml`)
 - Only exist to fix CI on the old branch
@@ -91,6 +93,7 @@ git push --force-with-lease origin <branch-name>
 ```
 
 **Why this works**:
+
 - Creates clean history without conflict markers
 - Automatically drops superseded commits
 - Safer than interactive rebase for complex conflicts
@@ -134,6 +137,7 @@ done
 ```
 
 **Success criteria**:
+
 - `mergeable: "MERGEABLE"` for all PRs
 - `secret-scan` and `security-report` failures resolved
 - Commit history clean (only meaningful commits)
@@ -143,6 +147,7 @@ done
 ### ❌ Failed: Interactive Rebase Kept Wrong Commits
 
 **What I tried**:
+
 ```bash
 git rebase -i origin/main
 # In editor: kept all 3 commits, then manually skipped conflict
@@ -157,6 +162,7 @@ git rebase -i origin/main
 ### ❌ Failed: Git Reset Hard Blocked by Safety Net
 
 **What I tried**:
+
 ```bash
 git reset --hard origin/main && git cherry-pick bdbb3d71
 ```
@@ -170,6 +176,7 @@ git reset --hard origin/main && git cherry-pick bdbb3d71
 ### ❌ Failed: Rebasing in Main Repo When Worktree Exists
 
 **What I tried**:
+
 ```bash
 git checkout skill/architecture/dtype-native-migration
 # Error: already used by worktree at '/path/to/worktree'
@@ -184,6 +191,7 @@ git checkout skill/architecture/dtype-native-migration
 ### ⚠️ Partial Success: Removing Untracked Conflict Files
 
 **What I tried**:
+
 ```bash
 cd /path/to/worktree
 git rebase origin/main
@@ -191,6 +199,7 @@ git rebase origin/main
 ```
 
 **Solution**:
+
 ```bash
 rm .gitleaks.toml
 git rebase origin/main  # Now succeeds
