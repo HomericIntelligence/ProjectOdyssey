@@ -431,6 +431,10 @@ jobs:
       contents: read
       packages: write
 
+    env:
+      # Docker image names must be lowercase
+      IMAGE_NAME: homericintelligence/projectodyssey
+
     steps:
       - name: Checkout code
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
@@ -454,8 +458,8 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ needs.validate-version.outputs.version }}
-            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ env.IMAGE_NAME }}:${{ needs.validate-version.outputs.version }}
+            ghcr.io/${{ env.IMAGE_NAME }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
@@ -464,7 +468,7 @@ jobs:
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:
-          image: ghcr.io/${{ github.repository }}:${{ needs.validate-version.outputs.version }}
+          image: ghcr.io/${{ env.IMAGE_NAME }}:${{ needs.validate-version.outputs.version }}
           artifact-name: sbom.spdx.json
           output-file: sbom.spdx.json
 

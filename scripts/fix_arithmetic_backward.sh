@@ -3,7 +3,7 @@
 
 set -e
 
-cd /home/mvillmow/ProjectOdyssey
+cd "$(dirname "$0")/.."
 
 echo "================================================================================"
 echo "Applying fix for issue #2128: YAML Parsing for Values Containing Colons"

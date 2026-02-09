@@ -11,6 +11,7 @@ import json
 import subprocess
 import sys
 from collections import defaultdict
+from pathlib import Path
 
 
 def run_markdownlint():
@@ -30,7 +31,7 @@ def run_markdownlint():
                 "--ignore",
                 "notes/review/**",
             ],
-            cwd="/home/mvillmow/ProjectOdyssey",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
             timeout=120,
@@ -108,7 +109,8 @@ def main():
     print(f"Total files with errors: {len(errors_by_file)}")
 
     # Save for processing
-    with open("/home/mvillmow/ProjectOdyssey/markdown_errors.json", "w") as f:
+    repo_root = Path(__file__).resolve().parent.parent
+    with open(repo_root / "markdown_errors.json", "w") as f:
         json.dump(
             {
                 "by_type": {k: v for k, v in errors_by_type.items()},

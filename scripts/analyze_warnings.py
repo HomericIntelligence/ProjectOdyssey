@@ -4,6 +4,7 @@
 import subprocess
 import re
 from collections import defaultdict
+from pathlib import Path
 
 
 def get_build_warnings():
@@ -79,9 +80,10 @@ def print_summary(categories):
                 file_counts[file_path] += 1
 
     sorted_files = sorted(file_counts.items(), key=lambda x: x[1], reverse=True)
+    repo_root = Path(__file__).resolve().parent.parent
     for file_path, count in sorted_files[:10]:
-        # Show just the filename relative to shared/
-        short_path = file_path.replace("/home/mvillmow/ProjectOdyssey/", "")
+        # Show just the filename relative to repo root
+        short_path = file_path.replace(str(repo_root) + "/", "")
         print(f"{count:4d} warnings - {short_path}")
 
     print()

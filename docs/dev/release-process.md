@@ -146,10 +146,10 @@ Releases automatically publish Docker images to GHCR:
 
 ```bash
 # Pull specific version
-docker pull ghcr.io/mvillmow/projectodyssey:v0.2.0
+docker pull ghcr.io/homericintelligence/projectodyssey:v0.2.0
 
 # Pull latest release
-docker pull ghcr.io/mvillmow/projectodyssey:latest
+docker pull ghcr.io/homericintelligence/projectodyssey:latest
 ```
 
 ## Hotfix Releases

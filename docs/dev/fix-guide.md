@@ -200,7 +200,7 @@ sed -i 's/List\[Tensor\]/List[ExTensor]/g' test_augmentations.mojo
 
 ### Verify Which Works
 
-1. Check `/home/mvillmow/ProjectOdyssey/shared/core/extensor.mojo` for Tensor definition
+1. Check `/shared/core/extensor.mojo` for Tensor definition
 2. If Tensor exists and is different from ExTensor, use Option A (add import)
 3. If Tensor is an alias for ExTensor, use Option A (add import)
 4. If Tensor doesn't exist, use Option B (replace with ExTensor)
@@ -507,16 +507,16 @@ struct MyStruct(Copyable, Movable):
 
 ### Test Files (5)
 
-1. `/home/mvillmow/ProjectOdyssey/tests/shared/data/datasets/test_base_dataset.mojo`
-2. `/home/mvillmow/ProjectOdyssey/tests/shared/data/datasets/test_tensor_dataset.mojo`
-3. `/home/mvillmow/ProjectOdyssey/tests/shared/data/loaders/test_base_loader.mojo`
-4. `/home/mvillmow/ProjectOdyssey/tests/shared/data/transforms/test_pipeline.mojo`
-5. `/home/mvillmow/ProjectOdyssey/tests/shared/data/transforms/test_augmentations.mojo`
+1. `/tests/shared/data/datasets/test_base_dataset.mojo`
+2. `/tests/shared/data/datasets/test_tensor_dataset.mojo`
+3. `/tests/shared/data/loaders/test_base_loader.mojo`
+4. `/tests/shared/data/transforms/test_pipeline.mojo`
+5. `/tests/shared/data/transforms/test_augmentations.mojo`
 
 ### Implementation Files (2)
 
-1. `/home/mvillmow/ProjectOdyssey/shared/data/transforms.mojo`
-2. `/home/mvillmow/ProjectOdyssey/shared/core/extensor.mojo` (check for Tensor definition)
+1. `/shared/data/transforms.mojo`
+2. `/shared/core/extensor.mojo` (check for Tensor definition)
 
 ---
 

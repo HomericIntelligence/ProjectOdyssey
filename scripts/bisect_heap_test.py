@@ -30,8 +30,8 @@ def get_repo_root():
             return Path(result.stdout.strip())
     except Exception:
         pass
-    # Fallback to hardcoded path
-    return Path("/home/mvillmow/ProjectOdyssey")
+    # Fallback to script location
+    return Path(__file__).resolve().parent.parent
 
 
 REPO_ROOT = get_repo_root()

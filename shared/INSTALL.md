@@ -22,7 +22,7 @@ This method is best for contributors who want to modify the shared library code.
 
 ```bash
 # Clone the repository
-git clone https://github.com/mvillmow/ProjectOdyssey.git
+git clone https://github.com/HomericIntelligence/ProjectOdyssey.git
 cd ProjectOdyssey
 
 # Install in development mode (creates symlinks)
@@ -543,7 +543,7 @@ Set up a complete development environment:
 
 ```bash
 # Clone repository
-git clone https://github.com/mvillmow/ProjectOdyssey.git
+git clone https://github.com/HomericIntelligence/ProjectOdyssey.git
 cd ProjectOdyssey
 
 # Install development dependencies
@@ -591,7 +591,7 @@ After installation:
 
 - **Documentation**: Check [README.md](README.md) for overview
 - **Examples**: See [EXAMPLES.md](EXAMPLES.md) for code samples
-- **Issues**: Report bugs on [GitHub Issues](https://github.com/mvillmow/ProjectOdyssey/issues)
+- **Issues**: Report bugs on [GitHub Issues](https://github.com/HomericIntelligence/ProjectOdyssey/issues)
 - **Discussions**: Ask questions in GitHub Discussions
 
 ### Reporting Issues

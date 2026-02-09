@@ -116,14 +116,14 @@ git push --force-with-lease origin feature/improve-import-tests-3033
 
 ### PR #3116: skill/architecture/dtype-native-migration
 
-**Initial state**: MERGEABLE, in worktree `/home/mvillmow/ProjectOdyssey/worktrees/pr-3116-dtype-native-migration`
+**Initial state**: MERGEABLE, in worktree `/worktrees/pr-3116-dtype-native-migration`
 
 **Issue encountered**: Untracked `.gitleaks.toml` file blocking rebase
 
 **Commands**:
 
 ```bash
-cd /home/mvillmow/ProjectOdyssey/worktrees/pr-3116-dtype-native-migration
+cd /worktrees/pr-3116-dtype-native-migration
 rm .gitleaks.toml  # Remove untracked conflict file
 git rebase origin/main
 git push --force-with-lease origin skill/architecture/dtype-native-migration
@@ -136,14 +136,14 @@ git push --force-with-lease origin skill/architecture/dtype-native-migration
 
 ### PR #3114: dependabot/github_actions/github-actions-1bd4ecb1c2
 
-**Initial state**: MERGEABLE, in worktree `/home/mvillmow/ProjectOdyssey/worktrees/pr-3114-github-actions-1bd4ecb1c2`
+**Initial state**: MERGEABLE, in worktree `/worktrees/pr-3114-github-actions-1bd4ecb1c2`
 
 **Approach**: Clean rebase in worktree
 
 **Commands**:
 
 ```bash
-cd /home/mvillmow/ProjectOdyssey/worktrees/pr-3114-github-actions-1bd4ecb1c2
+cd /worktrees/pr-3114-github-actions-1bd4ecb1c2
 git rebase origin/main
 git push --force-with-lease origin dependabot/github_actions/github-actions-1bd4ecb1c2
 ```

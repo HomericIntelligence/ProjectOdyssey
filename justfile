@@ -108,7 +108,7 @@ native prefix:
 
 # Default registry
 REGISTRY := "ghcr.io"
-REPO_NAME := "mvillmow/ml-odyssey"
+REPO_NAME := "homericintelligence/projectodyssey"
 
 # Build CI-optimized Docker image
 docker-build-ci target="runtime":

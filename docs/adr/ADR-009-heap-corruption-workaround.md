@@ -4,7 +4,7 @@
 
 **Date**: 2025-12-30
 
-**Issue Reference**: [Issue #2942](https://github.com/mvillmow/ProjectOdyssey/issues/2942)
+**Issue Reference**: [Issue #2942](https://github.com/HomericIntelligence/ProjectOdyssey/issues/2942)
 
 **Decision Owner**: Development Team
 
@@ -169,9 +169,9 @@ bug that occurs after ~15 cumulative tests. See Issue #2942.
 
 ### Related Issues
 
-- [Issue #2942](https://github.com/mvillmow/ProjectOdyssey/issues/2942): Heap corruption bug report
-- [Issue #2705](https://github.com/mvillmow/ProjectOdyssey/issues/2705): Flatten tests (closed)
-- [Issue #2702](https://github.com/mvillmow/ProjectOdyssey/issues/2702): FC backward tests (closed)
+- [Issue #2942](https://github.com/HomericIntelligence/ProjectOdyssey/issues/2942): Heap corruption bug report
+- [Issue #2705](https://github.com/HomericIntelligence/ProjectOdyssey/issues/2705): Flatten tests (closed)
+- [Issue #2702](https://github.com/HomericIntelligence/ProjectOdyssey/issues/2702): FC backward tests (closed)
 
 ### Affected Files
 

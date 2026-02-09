@@ -149,7 +149,7 @@ def main():
 
     args = parser.parse_args()
 
-    base_path = Path("/home/mvillmow/ProjectOdyssey")
+    base_path = Path(__file__).resolve().parent.parent
 
     if args.file:
         files = [args.file]

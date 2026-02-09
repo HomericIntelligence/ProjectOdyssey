@@ -233,7 +233,7 @@ def generate_output_preferences(category: str, agent_name: str) -> str:
     # Add file path format if code examples are used
     if "file paths" in config["code_examples"].lower():
         section.append("")
-        section.append("- Use absolute paths: `/home/mvillmow/ProjectOdyssey-manual/path/to/file.mojo:line-range`")
+        section.append("- Use repo-relative paths: `path/to/file.mojo:line-range`")
         section.append("- Include line numbers when referencing existing code")
         section.append("- Show complete function signatures with parameter types")
 
