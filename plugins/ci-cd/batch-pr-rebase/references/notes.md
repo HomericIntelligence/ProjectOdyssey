@@ -8,6 +8,7 @@
 ## Problem Statement
 
 ### Initial State
+
 - PR #3119 merged to main with:
   - Replaced `gitleaks-action@v2` with free CLI
   - Added `.gitleaks.toml` allowlist
@@ -25,6 +26,7 @@
 | #3114 | `dependabot/github_actions/...` | MERGEABLE | secret-scan, security-report |
 
 ### Root Causes
+
 1. **Conflicts**: 3 PRs added their own `.gitleaks.toml` which conflicts with main's version
 2. **CI failures**: All 5 PRs had `secret-scan` failures from old workflow file
 3. **Redundant commits**: Each PR had "chore: retrigger CI" and gitleaks fix commits
@@ -34,7 +36,8 @@
 ### PR #3118: fix-flaky-data-samplers-optional-int
 
 **Initial commits**:
-```
+
+```bash
 391a2912 chore: retrigger CI
 d38c6663 fix(ci): add .gitleaks.toml to resolve secret-scan false positives
 bdbb3d71 fix(data): replace Optional[Int] with Int sentinel in samplers
@@ -43,6 +46,7 @@ bdbb3d71 fix(data): replace Optional[Int] with Int sentinel in samplers
 **Approach**: Cherry-pick only meaningful commit
 
 **Commands**:
+
 ```bash
 git checkout main
 git checkout -B fix-flaky-data-samplers-optional-int origin/main
@@ -51,6 +55,7 @@ git push --force-with-lease origin fix-flaky-data-samplers-optional-int
 ```
 
 **Result**: ✅ Success
+
 - New commit: `a63a80f0 fix(data): replace Optional[Int] with Int sentinel in samplers`
 - All CI checks passing
 - MERGEABLE
@@ -58,7 +63,8 @@ git push --force-with-lease origin fix-flaky-data-samplers-optional-int
 ### PR #3117: skill/debugging/fixme-todo-cleanup-v2
 
 **Initial commits**:
-```
+
+```bash
 feceb6d6 chore: retrigger CI
 <hash> fix(ci): resolve pre-commit and secret-scan failures
 c778d98e feat(skills): add fixme-todo-cleanup skill from retrospective
@@ -67,6 +73,7 @@ c778d98e feat(skills): add fixme-todo-cleanup skill from retrospective
 **Approach**: Cherry-pick meaningful commit
 
 **Commands**:
+
 ```bash
 git checkout main
 git checkout -B skill/debugging/fixme-todo-cleanup-v2 origin/main
@@ -75,6 +82,7 @@ git push --force-with-lease origin skill/debugging/fixme-todo-cleanup-v2
 ```
 
 **Result**: ⚠️ Partial success
+
 - New commit: `8ede58dd feat(skills): add fixme-todo-cleanup skill from retrospective`
 - MERGEABLE (conflicts resolved)
 - Still has `pre-commit` and `Core Utilities` failures (new, need investigation)
@@ -82,7 +90,8 @@ git push --force-with-lease origin skill/debugging/fixme-todo-cleanup-v2
 ### PR #3115: feature/improve-import-tests-3033
 
 **Initial commits**:
-```
+
+```bash
 90d20325 chore: retrigger CI
 <hash> fix(ci): add .gitleaks.toml to handle false positives
 90258f89 docs(agents): add YAML frontmatter to review-specialist-template
@@ -91,6 +100,7 @@ git push --force-with-lease origin skill/debugging/fixme-todo-cleanup-v2
 **Approach**: Cherry-pick meaningful commit
 
 **Commands**:
+
 ```bash
 git checkout main
 git checkout -B feature/improve-import-tests-3033 origin/main
@@ -99,6 +109,7 @@ git push --force-with-lease origin feature/improve-import-tests-3033
 ```
 
 **Result**: ✅ Success
+
 - New commit: `682a855a docs(agents): add YAML frontmatter to review-specialist-template`
 - All CI checks passing
 - MERGEABLE
@@ -110,6 +121,7 @@ git push --force-with-lease origin feature/improve-import-tests-3033
 **Issue encountered**: Untracked `.gitleaks.toml` file blocking rebase
 
 **Commands**:
+
 ```bash
 cd /home/mvillmow/ProjectOdyssey/worktrees/pr-3116-dtype-native-migration
 rm .gitleaks.toml  # Remove untracked conflict file
@@ -118,6 +130,7 @@ git push --force-with-lease origin skill/architecture/dtype-native-migration
 ```
 
 **Result**: ⚠️ Partial success
+
 - Rebase succeeded, MERGEABLE
 - Still has `Core NN Modules` failure (likely flaky test)
 
@@ -128,6 +141,7 @@ git push --force-with-lease origin skill/architecture/dtype-native-migration
 **Approach**: Clean rebase in worktree
 
 **Commands**:
+
 ```bash
 cd /home/mvillmow/ProjectOdyssey/worktrees/pr-3114-github-actions-1bd4ecb1c2
 git rebase origin/main
@@ -135,6 +149,7 @@ git push --force-with-lease origin dependabot/github_actions/github-actions-1bd4
 ```
 
 **Result**: ✅ Success
+
 - Clean rebase, no conflicts
 - All CI checks passing
 - MERGEABLE
