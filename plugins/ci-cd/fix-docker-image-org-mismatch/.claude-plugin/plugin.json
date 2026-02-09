@@ -1,0 +1,28 @@
+{
+  "name": "fix-docker-image-org-mismatch",
+  "description": "Fix Docker GHCR push failures when repository organization changes but IMAGE_NAME remains hardcoded to old org. Use when: (1) Docker workflow fails with 'could not parse reference' or permission errors, (2) Repository was transferred to new GitHub org, (3) GITHUB_TOKEN scope doesn't match IMAGE_NAME org, (4) GHCR push fails with authentication errors despite valid token.",
+  "category": "ci-cd",
+  "date": "2026-02-09",
+  "tags": [
+    "docker",
+    "ghcr",
+    "github-actions",
+    "authentication",
+    "organization-migration",
+    "container-registry",
+    "image-names",
+    "ci-cd-fix"
+  ],
+  "requires": {
+    "tools": [
+      {
+        "name": "gh",
+        "version": ">=2.0.0"
+      },
+      {
+        "name": "git",
+        "version": ">=2.0.0"
+      }
+    ]
+  }
+}
