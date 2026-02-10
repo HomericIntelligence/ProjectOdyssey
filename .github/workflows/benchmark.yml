@@ -148,7 +148,7 @@ jobs:
           python-version: '3.11'
 
       - name: Download current benchmark results
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           pattern: benchmark-results-*
           path: current-results/
@@ -223,13 +223,13 @@ jobs:
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
 
       - name: Download all benchmark results
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           pattern: benchmark-results-*
           path: all-results/
 
       - name: Download regression results
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: regression-results
           path: regression-results/
