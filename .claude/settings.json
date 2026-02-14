@@ -1,30 +1,3 @@
 {
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/pre-bash-exec.py"
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/retrospective-trigger.py\"",
-            "timeout": 120
-          }
-        ]
-      }
-    ]
-  },
-  "enabledPlugins": {
-    "skills-registry-commands@ProjectMnemosyne": true,
-    "safety-net@cc-marketplace": true
-  }
+  "alwaysThinkingEnabled": false
 }
