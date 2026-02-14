@@ -181,7 +181,7 @@ fn test_ravel_view() raises:
     var a = ones(shape, DType.float32)
     var b = ravel(a)
 
-    # Should be 1D view of same data (currently copies, TODO(#2722): implement views)
+    # Should be 1D view of same data (currently copies, # TODO: implement views)
     assert_dim(b, 1, "Ravel should be 1D")
 
 
@@ -287,7 +287,7 @@ fn test_split_equal() raises:
     var shape = List[Int]()
     shape.append(12)
     var a = arange(0.0, 12.0, 1.0, DType.float32)
-    # TODO(#3013): Implement split()
+    # TODO: Implement split()
     # var parts = split(a, 3)
     #
     # # Should give 3 tensors of size 4 each
@@ -305,7 +305,7 @@ fn test_split_unequal() raises:
     var shape = List[Int]()
     shape.append(10)
     var a = arange(0.0, 10.0, 1.0, DType.float32)
-    # TODO(#3013): Implement split with indices
+    # TODO: Implement split with indices
     # var parts = split(a, [3, 5, 10])
     #
     # # Should give 3 tensors of sizes 3, 4, 3
@@ -327,7 +327,7 @@ fn test_tile_1d() raises:
     var shape = List[Int]()
     shape.append(3)
     var a = arange(0.0, 3.0, 1.0, DType.float32)  # [0, 1, 2]
-    # varb = tile(a, 3)  # TODO(#3013): Implement tile()
+    # varb = tile(a, 3)  # TODO: Implement tile()
 
     # Result: [0, 1, 2, 0, 1, 2, 0, 1, 2] (9 elements)
     # assert_numel(b, 9, "Tiled tensor should have 9 elements")
@@ -340,7 +340,7 @@ fn test_tile_multidim() raises:
     shape.append(2)
     shape.append(3)
     var a = ones(shape, DType.float32)  # 2x3
-    # varb = tile(a, (2, 3))  # TODO(#3013): Implement tile() with tuple
+    # varb = tile(a, (2, 3))  # TODO: Implement tile() with tuple
 
     # Result should be 4x9 (2*2 rows, 3*3 cols)
     # assert_numel(b, 36, "Should have 36 elements (4*9)")
@@ -357,7 +357,7 @@ fn test_repeat_elements() raises:
     var shape = List[Int]()
     shape.append(3)
     var a = arange(0.0, 3.0, 1.0, DType.float32)  # [0, 1, 2]
-    # varb = repeat(a, 2)  # TODO(#3013): Implement repeat()
+    # varb = repeat(a, 2)  # TODO: Implement repeat()
 
     # Result: [0, 0, 1, 1, 2, 2] (6 elements)
     # assert_numel(b, 6, "Repeated tensor should have 6 elements")
@@ -370,7 +370,7 @@ fn test_repeat_axis() raises:
     shape.append(2)
     shape.append(3)
     var a = ones(shape, DType.float32)  # 2x3
-    # varb = repeat(a, 2, axis=0)  # TODO(#3013): Implement repeat() with axis
+    # varb = repeat(a, 2, axis=0)  # TODO: Implement repeat() with axis
 
     # Result should be 4x3 (each row repeated twice)
     # assert_numel(b, 12, "Should have 12 elements (4*3)")
@@ -390,7 +390,7 @@ fn test_broadcast_to_compatible() raises:
     # var target_shape = List[Int]()
     # target_shape[0] = 4
     # target_shape[1] = 3
-    # varb = broadcast_to(a, target_shape)  # TODO(#3013): Implement broadcast_to()
+    # varb = broadcast_to(a, target_shape)  # TODO: Implement broadcast_to()
 
     # Result should be 4x3 (broadcasting (3,) to (4,3))
     # assert_dim(b, 2, "Broadcasted tensor should be 2D")
@@ -436,7 +436,7 @@ fn test_permute_axes() raises:
     shape.append(3)
     shape.append(4)
     var a = ones(shape, DType.float32)  # Shape (2, 3, 4)
-    # varb = permute(a, (2, 0, 1))  # TODO(#3013): Implement permute()
+    # varb = permute(a, (2, 0, 1))  # TODO: Implement permute()
 
     # Result should be (4, 2, 3)
     # assert_dim(b, 3, "Should still be 3D")

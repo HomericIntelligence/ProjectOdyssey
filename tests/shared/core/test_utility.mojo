@@ -136,7 +136,7 @@ fn test_is_contiguous_true() raises:
     shape.append(4)
     var t = ones(shape, DType.float32)
 
-    # TODO(#2722): assert_contiguous(t)
+    # TODO: assert_contiguous(t)
     # For now, just test the method exists
     var _ = t.is_contiguous()
     # Should be True for newly created tensor
@@ -149,7 +149,7 @@ fn test_is_contiguous_after_transpose() raises:
     shape.append(3)
     shape.append(4)
     var a = ones(shape, DType.float32)
-    # var b = transpose(a)  # TODO(#2722): Implement transpose()
+    # var b = transpose(a)  # TODO: Implement transpose()
 
     # Transposed tensor is typically not contiguous
     # var contig = b.is_contiguous()
@@ -169,7 +169,7 @@ fn test_contiguous_on_noncontiguous() raises:
     shape.append(4)
     var a = ones(shape, DType.float32)
     # var b = transpose(a)  # Not contiguous
-    # var c = contiguous(b)  # TODO(#2722): Implement contiguous()
+    # var c = contiguous(b)  # TODO: Implement contiguous()
 
     # c should now be contiguous
     # var contig = c.is_contiguous()
@@ -353,7 +353,7 @@ fn test_str_readable() raises:
     shape.append(3)
     var t = arange(0.0, 3.0, 1.0, DType.float32)
 
-    # var s = String(t)  # TODO(#2722): Implement __str__
+    # var s = String(t)  # TODO: Implement __str__
     # Should produce something like "ExTensor([0, 1, 2], dtype=float32)"
     pass  # Placeholder
 
@@ -365,7 +365,7 @@ fn test_repr_complete() raises:
     shape.append(2)
     var t = ones(shape, DType.float32)
 
-    # var r = repr(t)  # TODO(#2722): Implement __repr__
+    # var r = repr(t)  # TODO: Implement __repr__
     # Should produce detailed representation
     pass  # Placeholder
 
@@ -382,7 +382,7 @@ fn test_hash_immutable() raises:
     var a = arange(0.0, 3.0, 1.0, DType.float32)
     var b = arange(0.0, 3.0, 1.0, DType.float32)
 
-    # var hash_a = hash(a)  # TODO(#2722): Implement __hash__
+    # var hash_a = hash(a)  # TODO: Implement __hash__
     # var hash_b = hash(b)
     # Equal tensors should have same hash
     # assert_equal_int(hash_a, hash_b, "Equal tensors should have same hash")

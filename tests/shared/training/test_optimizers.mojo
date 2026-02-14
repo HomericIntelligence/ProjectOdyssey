@@ -348,7 +348,7 @@ fn test_adamw_weight_decay() raises:
 
         This differs from L2 regularization used in standard Adam.
     """
-    # TODO(#1538): Implement when AdamW is available
+    # TODO: Implement when AdamW is available
     # var params = ExTensor([1], DType.float32)
     # params._data.bitcast[Float32]()[0] = 1.0
     # var grads = ExTensor([1], DType.float32)
@@ -380,7 +380,7 @@ fn test_rmsprop_initialization() raises:
             momentum: Float32 = 0.0
         ).
     """
-    # TODO(#1538): Implement when RMSprop is available
+    # TODO: Implement when RMSprop is available
     # var optimizer = RMSprop(
     #     learning_rate=0.01,
     #     alpha=0.99,
@@ -400,7 +400,7 @@ fn test_rmsprop_parameter_update() raises:
         - v = alpha * v + (1 - alpha) * grad^2
         - params = params - lr * grad / (sqrt(v) + epsilon).
     """
-    # TODO(#1538): Implement when RMSprop is available
+    # TODO: Implement when RMSprop is available
     # var params = ExTensor([1], DType.float32)
     # params._data.bitcast[Float32]()[0] = 1.0
     # var grads = ExTensor([1], DType.float32)
@@ -429,7 +429,7 @@ fn test_optimizer_property_decreasing_loss() raises:
     Test that all optimizers can minimize a simple quadratic function.
     This validates basic convergence behavior.
     """
-    # TODO(#1538): Implement when optimizers and loss functions are available
+    # TODO: Implement when optimizers and loss functions are available
     # # Define simple quadratic: f(x) = x^2
     # # Gradient: df/dx = 2x
     # # Minimum at x=0
@@ -465,7 +465,7 @@ fn test_optimizer_property_gradient_shape() raises:
 
     All optimizers should work with multi-dimensional parameter tensors.
     """
-    # TODO(#1538): Implement when optimizers are available
+    # TODO: Implement when optimizers are available
     # # Test with various parameter shapes
     # varshapes = [Shape(10), Shape(10, 5), Shape(3, 32, 32)]
     # #

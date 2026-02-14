@@ -188,7 +188,7 @@ struct FullyConnectedLayer(Differentiable, Parameterized):
             Output tensor (batch_size, out_features).
         """
         self.last_input = input.copy()
-        # TODO(#2725): Use linear operation when available
+        # TODO: Use linear operation when available
         # For now, return zeros as placeholder
         var output_shape = List[Int]()
         output_shape.append(input.shape()[0])  # batch_size

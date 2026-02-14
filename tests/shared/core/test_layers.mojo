@@ -183,7 +183,7 @@ fn test_conv2d_initialization() raises:
             bias: Bool = True
         ).
     """
-    # TODO(#1538): Implement when Conv2D is available
+    # TODO: Implement when Conv2D is available
     # var layer = Conv2D(
     #     in_channels=3,
     #     out_channels=16,
@@ -207,7 +207,7 @@ fn test_conv2d_output_shape() raises:
         - Input: (batch, in_channels, height, width)
         - Output: (batch, out_channels, out_height, out_width).
     """
-    # TODO(#1538): Implement when Conv2D is available
+    # TODO: Implement when Conv2D is available
     # # Input: (batch=1, channels=3, height=32, width=32)
     # # Conv2D: out_channels=16, kernel=3, stride=1, padding=1
     # # Expected output: (1, 16, 32, 32) - same spatial size due to padding
@@ -225,7 +225,7 @@ fn test_conv2d_stride() raises:
     API Contract:
         Conv2D with stride=2 should halve spatial dimensions.
     """
-    # TODO(#1538): Implement when Conv2D is available
+    # TODO: Implement when Conv2D is available
     # # Input: (1, 3, 32, 32)
     # # Conv2D: kernel=3, stride=2, padding=1
     # # Expected output: (1, 16, 16, 16) - halved spatial size
@@ -243,7 +243,7 @@ fn test_conv2d_valid_padding() raises:
     API Contract:
         Conv2D with padding=0 reduces spatial dimensions.
     """
-    # TODO(#1538): Implement when Conv2D is available
+    # TODO: Implement when Conv2D is available
     # # Input: (1, 3, 32, 32)
     # # Conv2D: kernel=5, stride=1, padding=0
     # # Expected output: (1, 16, 28, 28) - reduced by kernel_size-1
@@ -371,7 +371,7 @@ fn test_maxpool2d_downsampling() raises:
         MaxPool2D(kernel_size: Int, stride: Int = None, padding: Int = 0)
         - Reduces spatial dimensions by kernel_size (if stride=kernel_size).
     """
-    # TODO(#1538): Implement when MaxPool2D is available
+    # TODO: Implement when MaxPool2D is available
     # # Input: (1, 16, 32, 32)
     # # MaxPool2D: kernel=2, stride=2
     # # Expected output: (1, 16, 16, 16)
@@ -389,7 +389,7 @@ fn test_maxpool2d_max_selection() raises:
     API Contract:
         MaxPool2D selects max over kernel_size x kernel_size window.
     """
-    # TODO(#1538): Implement when MaxPool2D is available
+    # TODO: Implement when MaxPool2D is available
     # var pool = MaxPool2D(kernel_size=2)
     #
     # # Create input with known values

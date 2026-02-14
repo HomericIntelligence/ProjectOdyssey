@@ -23,7 +23,7 @@ from tests.shared.conftest import (
 
 fn test_load_yaml_config():
     """Test loading configuration from YAML file."""
-    # TODO(#44): Implement when Config.from_yaml exists
+    # TODO: Implement when Config.from_yaml exists
     # Create temp YAML file with:
     # learning_rate: 0.001
     # batch_size: 32
@@ -36,7 +36,7 @@ fn test_load_yaml_config():
 
 fn test_load_json_config():
     """Test loading configuration from JSON file."""
-    # TODO(#44): Implement when Config.from_json exists
+    # TODO: Implement when Config.from_json exists
     # Create temp JSON file with:
     # {"learning_rate": 0.001, "batch_size": 32, "epochs": 10}
     # Load config
@@ -47,7 +47,7 @@ fn test_load_json_config():
 
 fn test_load_nested_config():
     """Test loading configuration with nested sections."""
-    # TODO(#44): Implement when Config supports nested dicts
+    # TODO: Implement when Config supports nested dicts
     # YAML:
     # model:
     #   layers: [64, 32, 10]
@@ -61,7 +61,7 @@ fn test_load_nested_config():
 
 fn test_load_config_with_lists():
     """Test loading configuration with list values."""
-    # TODO(#44): Implement when Config supports lists
+    # TODO: Implement when Config supports lists
     # YAML:
     # layer_sizes: [64, 32, 10]
     # dropout_rates: [0.5, 0.3, 0.1]
@@ -71,7 +71,7 @@ fn test_load_config_with_lists():
 
 fn test_load_nonexistent_file():
     """Test loading nonexistent config file raises error."""
-    # TODO(#44): Implement when Config.from_file exists
+    # TODO: Implement when Config.from_file exists
     # Try to load "nonexistent.yaml"
     # Verify FileNotFoundError is raised
     pass
@@ -79,7 +79,7 @@ fn test_load_nonexistent_file():
 
 fn test_load_malformed_yaml():
     """Test loading malformed YAML raises parse error."""
-    # TODO(#44): Implement when Config.from_yaml exists
+    # TODO: Implement when Config.from_yaml exists
     # Create temp YAML with invalid syntax:
     # key: [unclosed list
     # Try to load
@@ -94,7 +94,7 @@ fn test_load_malformed_yaml():
 
 fn test_validate_required_fields():
     """Test validation ensures required fields are present."""
-    # TODO(#44): Implement when Config.validate exists
+    # TODO: Implement when Config.validate exists
     # Create config missing required field "learning_rate"
     # Call validate()
     # Verify ValidationError is raised
@@ -103,7 +103,7 @@ fn test_validate_required_fields():
 
 fn test_validate_field_types():
     """Test validation checks field types."""
-    # TODO(#44): Implement when Config.validate exists
+    # TODO: Implement when Config.validate exists
     # Create config with:
     # learning_rate: "not a number"  # Should be Float32
     # Call validate()
@@ -113,7 +113,7 @@ fn test_validate_field_types():
 
 fn test_validate_numeric_ranges():
     """Test validation checks numeric values are in valid ranges."""
-    # TODO(#44): Implement when Config.validate exists
+    # TODO: Implement when Config.validate exists
     # Create config with:
     # learning_rate: -0.001  # Should be positive
     # batch_size: 0          # Should be >= 1
@@ -124,7 +124,7 @@ fn test_validate_numeric_ranges():
 
 fn test_validate_enum_values():
     """Test validation checks enum fields have valid values."""
-    # TODO(#44): Implement when Config.validate exists
+    # TODO: Implement when Config.validate exists
     # Create config with:
     # optimizer: "invalid_optimizer"  # Should be ["sgd", "adam", "rmsprop"]
     # Call validate()
@@ -134,7 +134,7 @@ fn test_validate_enum_values():
 
 fn test_validate_mutually_exclusive_fields():
     """Test validation checks mutually exclusive fields."""
-    # TODO(#44): Implement when Config.validate exists
+    # TODO: Implement when Config.validate exists
     # Create config with both:
     # load_checkpoint: "model.bin"
     # random_init: True
@@ -150,7 +150,7 @@ fn test_validate_mutually_exclusive_fields():
 
 fn test_merge_with_defaults():
     """Test merging user config with default values."""
-    # TODO(#44): Implement when Config.merge exists
+    # TODO: Implement when Config.merge exists
     # Defaults:
     # learning_rate: 0.001
     # batch_size: 32
@@ -166,7 +166,7 @@ fn test_merge_with_defaults():
 
 fn test_merge_nested_configs():
     """Test merging nested configuration sections."""
-    # TODO(#44): Implement when Config.merge supports nested dicts
+    # TODO: Implement when Config.merge supports nested dicts
     # Defaults:
     # model:
     #   layers: [64, 32]
@@ -183,7 +183,7 @@ fn test_merge_nested_configs():
 
 fn test_merge_preserves_types():
     """Test merging preserves field types."""
-    # TODO(#44): Implement when Config.merge exists
+    # TODO: Implement when Config.merge exists
     # Defaults: learning_rate: Float32(0.001)
     # User: learning_rate: 0.01 (parsed as Float64)
     # Verify merged value is Float32(0.01)
@@ -192,7 +192,7 @@ fn test_merge_preserves_types():
 
 fn test_merge_multiple_sources():
     """Test merging from multiple configuration sources."""
-    # TODO(#44): Implement when Config.merge supports multiple sources
+    # TODO: Implement when Config.merge supports multiple sources
     # Priority: CLI args > User config > Defaults
     # Defaults: lr=0.001, batch=32, epochs=10
     # User config: lr=0.01, epochs=20
@@ -208,7 +208,7 @@ fn test_merge_multiple_sources():
 
 fn test_substitute_env_vars():
     """Test substituting environment variables in config."""
-    # TODO(#44): Implement when Config supports env var substitution
+    # TODO: Implement when Config supports env var substitution
     # Set environment variable: DATA_DIR=/path/to/data
     # Config:
     # data_path: "${DATA_DIR}/train.csv"
@@ -219,7 +219,7 @@ fn test_substitute_env_vars():
 
 fn test_substitute_with_defaults():
     """Test env var substitution with default values."""
-    # TODO(#44): Implement when Config supports env var defaults
+    # TODO: Implement when Config supports env var defaults
     # Config:
     # data_path: "${DATA_DIR:-/default/path}/train.csv"
     # If DATA_DIR not set, use /default/path
@@ -229,7 +229,7 @@ fn test_substitute_with_defaults():
 
 fn test_substitute_missing_env_var():
     """Test substitution of missing env var without default raises error."""
-    # TODO(#44): Implement when Config supports env var substitution
+    # TODO: Implement when Config supports env var substitution
     # Config: data_path: "${MISSING_VAR}/file.csv"
     # MISSING_VAR not set
     # Verify error is raised (or return placeholder?)
@@ -238,7 +238,7 @@ fn test_substitute_missing_env_var():
 
 fn test_substitute_multiple_env_vars():
     """Test substituting multiple environment variables."""
-    # TODO(#44): Implement when Config supports env var substitution
+    # TODO: Implement when Config supports env var substitution
     # Set: BASE_DIR=/base, DATA_SUBDIR=data
     # Config: path: "${BASE_DIR}/${DATA_SUBDIR}/file.csv"
     # Verify: path = "/base/data/file.csv"
@@ -252,7 +252,7 @@ fn test_substitute_multiple_env_vars():
 
 fn test_access_config_fields():
     """Test accessing configuration fields by name."""
-    # TODO(#44): Implement when Config class exists
+    # TODO: Implement when Config class exists
     # Create config with: learning_rate=0.001, batch_size=32
     # Access: config.learning_rate
     # Verify: returns 0.001
@@ -261,7 +261,7 @@ fn test_access_config_fields():
 
 fn test_access_nested_fields():
     """Test accessing nested configuration fields."""
-    # TODO(#44): Implement when Config supports nested access
+    # TODO: Implement when Config supports nested access
     # Config: model.layers = [64, 32]
     # Access: config.model.layers
     # Verify: returns [64, 32]
@@ -270,7 +270,7 @@ fn test_access_nested_fields():
 
 fn test_access_missing_field():
     """Test accessing missing field returns None or raises error."""
-    # TODO(#44): Implement when Config class exists
+    # TODO: Implement when Config class exists
     # Create config without "missing_field"
     # Access: config.missing_field
     # Verify: returns None or raises AttributeError
@@ -279,7 +279,7 @@ fn test_access_missing_field():
 
 fn test_get_with_default():
     """Test getting field with default value."""
-    # TODO(#44): Implement when Config.get exists
+    # TODO: Implement when Config.get exists
     # Create config without "dropout_rate"
     # Access: config.get("dropout_rate", default=0.5)
     # Verify: returns 0.5
@@ -288,7 +288,7 @@ fn test_get_with_default():
 
 fn test_set_config_field():
     """Test setting configuration field."""
-    # TODO(#44): Implement when Config supports mutation
+    # TODO: Implement when Config supports mutation
     # Create config with learning_rate=0.001
     # Set: config.learning_rate = 0.01
     # Verify: config.learning_rate == 0.01
@@ -302,7 +302,7 @@ fn test_set_config_field():
 
 fn test_save_config_to_yaml():
     """Test saving configuration to YAML file."""
-    # TODO(#44): Implement when Config.to_yaml exists
+    # TODO: Implement when Config.to_yaml exists
     # Create config with various fields
     # Save to temp YAML file
     # Load file and verify contents match
@@ -312,7 +312,7 @@ fn test_save_config_to_yaml():
 
 fn test_save_config_to_json():
     """Test saving configuration to JSON file."""
-    # TODO(#44): Implement when Config.to_json exists
+    # TODO: Implement when Config.to_json exists
     # Create config with various fields
     # Save to temp JSON file
     # Load file and verify contents match
@@ -322,7 +322,7 @@ fn test_save_config_to_json():
 
 fn test_roundtrip_yaml():
     """Test loading and saving YAML preserves values."""
-    # TODO(#44): Implement when Config serialization exists
+    # TODO: Implement when Config serialization exists
     # Create YAML file
     # Load config
     # Save to new YAML file
@@ -333,7 +333,7 @@ fn test_roundtrip_yaml():
 
 fn test_serialize_nested_config():
     """Test serialization preserves nested structure."""
-    # TODO(#44): Implement when Config serialization supports nested dicts
+    # TODO: Implement when Config serialization supports nested dicts
     # Create config with nested sections
     # Serialize to YAML
     # Verify nested structure is preserved
@@ -347,7 +347,7 @@ fn test_serialize_nested_config():
 
 fn test_load_training_config_template():
     """Test loading predefined training configuration template."""
-    # TODO(#44): Implement when Config.from_template exists
+    # TODO: Implement when Config.from_template exists
     # Load "training_default" template
     # Verify contains standard training parameters:
     # - learning_rate, batch_size, epochs
@@ -357,7 +357,7 @@ fn test_load_training_config_template():
 
 fn test_load_model_config_template():
     """Test loading predefined model configuration template."""
-    # TODO(#44): Implement when Config.from_template exists
+    # TODO: Implement when Config.from_template exists
     # Load "lenet5" template
     # Verify contains LeNet-5 architecture parameters:
     # - layer sizes, activations, dropout rates
@@ -366,7 +366,7 @@ fn test_load_model_config_template():
 
 fn test_override_template_values():
     """Test overriding template values with user config."""
-    # TODO(#44): Implement when Config.from_template exists
+    # TODO: Implement when Config.from_template exists
     # Load "training_default" template
     # Override: learning_rate=0.01 (instead of template default)
     # Verify: learning_rate=0.01, other values from template
@@ -380,7 +380,7 @@ fn test_override_template_values():
 
 fn test_config_integration_training():
     """Test configuration integrates with training workflow."""
-    # TODO(#44): Implement when full training workflow exists
+    # TODO: Implement when full training workflow exists
     # Create training config
     # Initialize trainer from config
     # Verify trainer uses config values:
@@ -392,7 +392,7 @@ fn test_config_integration_training():
 
 fn test_config_from_cli_args():
     """Test creating configuration from command-line arguments."""
-    # TODO(#44): Implement when CLI parser exists
+    # TODO: Implement when CLI parser exists
     # Parse CLI args: --lr 0.01 --batch-size 64 --epochs 20
     # Create config from args
     # Verify config values match CLI inputs

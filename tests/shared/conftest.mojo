@@ -67,8 +67,8 @@ struct TestFixtures:
         """Set random seed for deterministic test execution."""
         seed(Self.deterministic_seed())
 
-    # FIXME(#3010): Placeholder tensor fixture methods in tests/shared/conftest.mojo
-    # TODO(#1538): Add tensor fixture methods when Tensor type is implemented
+    # FIXME: Placeholder tensor fixture methods in tests/shared/conftest.mojo
+    # TODO: Add tensor fixture methods when Tensor type is implemented
     # @staticmethod
     # fn small_tensor() -> Tensor:
     #     """Create small 3x3 tensor for unit tests.
@@ -78,15 +78,15 @@ struct TestFixtures:
     #     """
     #     pass
 
-    # FIXME(#3010): Placeholder model fixture methods in tests/shared/conftest.mojo
-    # TODO(#1538): Add model fixture methods when models are implemented
+    # FIXME: Placeholder model fixture methods in tests/shared/conftest.mojo
+    # TODO: Add model fixture methods when models are implemented
     # @staticmethod
     # fn simple_linear_model() -> Linear:
     #     """Create simple Linear layer with known weights."""
     #     pass
 
-    # FIXME(#3010): Placeholder dataset fixture methods in tests/shared/conftest.mojo
-    # TODO(#1538): Add dataset fixture methods when datasets are implemented
+    # FIXME: Placeholder dataset fixture methods in tests/shared/conftest.mojo
+    # TODO: Add dataset fixture methods when datasets are implemented
     # @staticmethod
     # fn synthetic_dataset(n_samples: Int = 100) -> TensorDataset:
     #     """Create synthetic dataset for testing."""

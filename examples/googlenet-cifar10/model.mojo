@@ -638,7 +638,7 @@ struct GoogLeNet:
         Args:
             weights_dir: Directory containing saved weight files.
         """
-        # TODO(#2394): Implement weight loading
+        # TODO: Implement weight loading
         # This will be similar to ResNet-18's weight loading
         raise Error("Weight loading not yet implemented")
 
@@ -648,7 +648,7 @@ struct GoogLeNet:
         Args:
             weights_dir: Directory to save weight files.
         """
-        # TODO(#2394): Implement weight saving
+        # TODO: Implement weight saving
         # This will be similar to ResNet-18's weight saving
         raise Error("Weight saving not yet implemented")
 

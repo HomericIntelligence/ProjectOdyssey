@@ -183,7 +183,7 @@ fn test_fc3_forward_float32() raises:
 fn test_fc3_forward_float16() raises:
     """Test FC3 (84→10) forward pass with float16.
 
-    FIXME(#3009): This test may fail due to float16 precision limitations.
+    # FIXME(float16 precision: This test may fail due to float16 precision limitations.
     FC3 performs 84 multiplications per output, which can cause accumulation
     errors in float16 (limited to ~3.3 decimal digits precision).
 

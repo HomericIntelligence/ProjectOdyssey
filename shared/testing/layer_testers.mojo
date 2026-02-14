@@ -1125,8 +1125,8 @@ struct LayerTester:
         assert_dtype(input, dtype, "BatchNorm backward: input dtype mismatch")
 
         # Test gradient checking with appropriate epsilon and tolerance for dtype
-        # FIXME(#3011, unused) var epsilon = 1e-5 if dtype == DType.float32 else 1e-4
-        # FIXME(#3011, unused) var tolerance = 1e-2 if dtype == DType.float32 else 1e-1
+        # # FIXME(, unused) var epsilon = 1e-5 if dtype == DType.float32 else 1e-4
+        # # FIXME(, unused) var tolerance = 1e-2 if dtype == DType.float32 else 1e-1
 
         # Note: Actual BatchNorm backward gradient checking would be implemented
         # when BatchNorm forward pass is available

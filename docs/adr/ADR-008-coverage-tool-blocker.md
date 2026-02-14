@@ -32,7 +32,7 @@ The ML Odyssey project follows TDD principles and aims for high test coverage. H
 is not implemented:
 
 ```python
-# TODO(#1538): Implement actual coverage parsing when Mojo coverage format is known
+# TODO: Implement actual coverage parsing when Mojo coverage format is known
 # For now, this is a placeholder for TDD
 ```
 
@@ -143,9 +143,9 @@ def parse_coverage_report(coverage_file: Path) -> Optional[float]:
     Returns:
         Coverage percentage (0-100) or None if parsing fails.
     """
-    # TODO(#2583): BLOCKED - Waiting on Mojo team to release coverage instrumentation
+    # NOTE: Coverage instrumentation not available in Mojo v0.26+
     #
-    # CONTEXT: Mojo v0.26+ does not provide built-in code coverage tools
+    # CONTEXT: Mojo does not provide built-in code coverage tools
     # - No coverage instrumentation (no `mojo test --coverage` equivalent)
     # - No coverage report generation (no XML/JSON output)
     # - Expected format when available: Cobertura XML (standard for Python ecosystems)
@@ -153,10 +153,10 @@ def parse_coverage_report(coverage_file: Path) -> Optional[float]:
     # WORKAROUND: Manual test discovery via `validate_test_coverage.py` ensures all tests run
     #
     # DECISION: Return hardcoded 92.5% to allow CI to pass gracefully (see ADR-008)
-    # - This is NOT a bug - it's intentional until Mojo provides coverage tooling
+    # - This is intentional until Mojo provides coverage tooling
     # - CI test validation still runs (ensures tests execute, just no coverage metrics)
     #
-    # BLOCKED BY: Mojo team (external dependency)
+    # Awaiting: Mojo team to release coverage instrumentation
     # REFERENCE: Issue #2583, ADR-008
 
     if coverage_file.exists():
@@ -637,13 +637,13 @@ not implemented. This is documentation-only - NO functional code changes.
 
 **Before**:
 ```python
-# TODO(#1538): Implement actual coverage parsing when Mojo coverage format is known
+# TODO: Implement actual coverage parsing when Mojo coverage format is known
 ```
 
 **After**:
 
 ```python
-# TODO(#2583): BLOCKED - Waiting on Mojo team to release coverage instrumentation
+# NOTE: Coverage instrumentation not available in Mojo v0.26+
 # [15 lines of detailed explanation]
 ```
 

@@ -1625,7 +1625,7 @@ fn main() raises:
     print("\n=== Matrix Multiplication: Backward Pass ===")
     test_matmul_backward_shapes()
     print("✓ test_matmul_backward_shapes")
-    # TODO(#2724): Fix matmul_backward gradient computation
+    # TODO: Fix matmul_backward gradient computation
     # test_matmul_backward_gradient_a() and _b() had ~10000x gradient mismatch
     # Fixed by implementing direct matrix multiplication in backward pass
     test_matmul_backward_gradient_a()

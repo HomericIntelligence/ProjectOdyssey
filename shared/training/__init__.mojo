@@ -6,7 +6,7 @@ schedulers, metrics, callbacks, and training loops for ML Odyssey paper implemen
 
 All components are implemented in Mojo for maximum performance.
 
-FIXME(#3010): Placeholder import tests in tests/shared/test_imports.mojo require:
+# FIXME: Placeholder import tests in tests/shared/test_imports.mojo require:
 - test_training_imports (line 80+)
 - test_training_optimizers_imports (line 95+)
 - test_training_schedulers_imports (line 110+)
@@ -414,7 +414,7 @@ struct TrainingLoop[
         var total_loss = Float64(0.0)
         var num_batches = Int(0)
 
-        # TODO(#3013): Iterate through batches when Python integration is complete
+        # TODO: Iterate through batches when Python integration is complete
         # The data_loader is currently a PythonObject, but step() requires ExTensor.
         # Real blocker: Python↔Mojo interop for data loading (Track 4 initiative)
         # Once data loading infrastructure is ready, integrate batching here.
@@ -495,7 +495,7 @@ struct CrossEntropyLoss(Loss, Movable):
 # Public API
 # ============================================================================
 
-# TODO(#2597): Export training script utilities when implemented
+# TODO: Export training script utilities when implemented
 # from shared.training.script_runner import (
 #     TrainingCallbacks,
 #     run_epoch_with_batches,

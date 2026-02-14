@@ -101,7 +101,7 @@ def parse_coverage_report(coverage_file: Path) -> Optional[float]:
         This ensures coverage checks are properly skipped rather than
         falsely passing with a mock value.
     """
-    # TODO(#2583): BLOCKED - Waiting on Mojo team to release coverage instrumentation
+    # # TODO: BLOCKED - Waiting on Mojo team to release coverage instrumentation
     #
     # CONTEXT: Mojo v0.26+ does not provide built-in code coverage tools
     # - No coverage instrumentation (no `mojo test --coverage` equivalent)

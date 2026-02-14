@@ -35,7 +35,7 @@ fn test_data_loading_basic() raises:
         - All data is accessible
         - No runtime errors.
     """
-    # TODO(#1538): Implement when all components are available
+    # TODO: Implement when all components are available
     pass
 
 
@@ -52,7 +52,7 @@ fn test_data_transformation_pipeline() raises:
         - Data shapes preserved/correct
         - No data corruption.
     """
-    # TODO(#1538): Implement when all components are available
+    # TODO: Implement when all components are available
     pass
 
 
@@ -69,7 +69,7 @@ fn test_data_batching_and_shuffling() raises:
         - Shuffling produces different order
         - All data included in epochs.
     """
-    # TODO(#1538): Implement when all components are available
+    # TODO: Implement when all components are available
     pass
 
 
@@ -86,7 +86,7 @@ fn test_data_pipeline_memory_efficiency() raises:
         - Large datasets handled efficiently
         - No data duplication.
     """
-    # TODO(#1538): Implement when all components are available
+    # TODO: Implement when all components are available
     pass
 
 
@@ -108,7 +108,7 @@ fn test_dataset_creation() raises:
         - Metadata correct
         - Data accessible.
     """
-    # TODO(#1538): Implement when all components are available
+    # TODO: Implement when all components are available
     pass
 
 
@@ -125,7 +125,7 @@ fn test_dataset_splits() raises:
         - Total data preserved
         - No overlap between splits.
     """
-    # TODO(#1538): Implement when all components are available
+    # TODO: Implement when all components are available
     pass
 
 

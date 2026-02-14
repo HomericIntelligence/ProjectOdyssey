@@ -337,7 +337,7 @@ fn main() raises:
         print("Loading image from", config.image_path, "...")
 
         # Load image (currently supports IDX format)
-        # TODO(#2394): Add PNG image loading when external image libraries become available
+        # TODO: Add PNG image loading when external image libraries become available
         var image = load_image(config.image_path)
 
         if image.shape()[0] == 0:

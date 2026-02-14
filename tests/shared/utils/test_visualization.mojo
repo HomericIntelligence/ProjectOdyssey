@@ -23,7 +23,7 @@ from tests.shared.conftest import (
 
 fn test_plot_training_loss():
     """Test plotting training loss over epochs."""
-    # TODO(#44): Implement when plot_loss exists
+    # TODO: Implement when plot_loss exists
     # Create loss data: [0.5, 0.4, 0.3, 0.25, 0.2]
     # Plot training loss
     # Verify plot file is created
@@ -34,7 +34,7 @@ fn test_plot_training_loss():
 
 fn test_plot_training_and_validation_loss():
     """Test plotting both training and validation loss."""
-    # TODO(#44): Implement when plot_loss supports multiple series
+    # TODO: Implement when plot_loss supports multiple series
     # Create train_loss: [0.5, 0.4, 0.3, 0.25, 0.2]
     # Create val_loss: [0.6, 0.5, 0.4, 0.35, 0.3]
     # Plot both series on same graph
@@ -45,7 +45,7 @@ fn test_plot_training_and_validation_loss():
 
 fn test_plot_accuracy_curves():
     """Test plotting accuracy curves over epochs."""
-    # TODO(#44): Implement when plot_accuracy exists
+    # TODO: Implement when plot_accuracy exists
     # Create train_acc: [0.6, 0.7, 0.8, 0.85, 0.9]
     # Create val_acc: [0.55, 0.65, 0.75, 0.8, 0.85]
     # Plot accuracy curves
@@ -56,7 +56,7 @@ fn test_plot_accuracy_curves():
 
 fn test_plot_with_custom_style():
     """Test plotting with custom style (colors, line styles)."""
-    # TODO(#44): Implement when plot supports styling
+    # TODO: Implement when plot supports styling
     # Create data
     # Plot with custom:
     # - Line color: red for train, blue for val
@@ -68,7 +68,7 @@ fn test_plot_with_custom_style():
 
 fn test_plot_with_title_and_labels():
     """Test plotting with custom title and axis labels."""
-    # TODO(#44): Implement when plot supports labels
+    # TODO: Implement when plot supports labels
     # Create data
     # Plot with:
     # - Title: "LeNet-5 Training Progress"
@@ -80,7 +80,7 @@ fn test_plot_with_title_and_labels():
 
 fn test_save_plot_to_file():
     """Test saving plot to image file (PNG, SVG)."""
-    # TODO(#44): Implement when plot save exists
+    # TODO: Implement when plot save exists
     # Create plot
     # Save to "training_loss.png"
     # Verify file exists
@@ -96,7 +96,7 @@ fn test_save_plot_to_file():
 
 fn test_create_confusion_matrix():
     """Test creating confusion matrix from predictions."""
-    # TODO(#44): Implement when confusion_matrix exists
+    # TODO: Implement when confusion_matrix exists
     # True labels: [0, 1, 2, 0, 1, 2]
     # Predictions: [0, 2, 2, 0, 1, 1]
     # Create confusion matrix
@@ -107,7 +107,7 @@ fn test_create_confusion_matrix():
 
 fn test_plot_confusion_matrix():
     """Test plotting confusion matrix as heatmap."""
-    # TODO(#44): Implement when plot_confusion_matrix exists
+    # TODO: Implement when plot_confusion_matrix exists
     # Create confusion matrix (3x3 for 3 classes)
     # Plot as heatmap
     # Verify: colors indicate value magnitude
@@ -118,7 +118,7 @@ fn test_plot_confusion_matrix():
 
 fn test_confusion_matrix_with_class_names():
     """Test confusion matrix with custom class names."""
-    # TODO(#44): Implement when confusion_matrix supports class names
+    # TODO: Implement when confusion_matrix supports class names
     # Create confusion matrix for classes: ["cat", "dog", "bird"]
     # Plot matrix
     # Verify: axes show "cat", "dog", "bird" instead of 0, 1, 2
@@ -127,7 +127,7 @@ fn test_confusion_matrix_with_class_names():
 
 fn test_confusion_matrix_normalization():
     """Test normalizing confusion matrix by row (true labels)."""
-    # TODO(#44): Implement when confusion_matrix supports normalization
+    # TODO: Implement when confusion_matrix supports normalization
     # Create confusion matrix
     # Normalize by row (percentages per true class)
     # Verify: each row sums to 1.0
@@ -137,7 +137,7 @@ fn test_confusion_matrix_normalization():
 
 fn test_confusion_matrix_accuracy():
     """Test computing accuracy from confusion matrix."""
-    # TODO(#44): Implement when confusion_matrix.accuracy exists
+    # TODO: Implement when confusion_matrix.accuracy exists
     # Create confusion matrix:
     # [[8, 1, 0],
     #  [1, 7, 2],
@@ -154,7 +154,7 @@ fn test_confusion_matrix_accuracy():
 
 fn test_visualize_simple_model():
     """Test visualizing simple neural network architecture."""
-    # TODO(#44): Implement when visualize_model exists
+    # TODO: Implement when visualize_model exists
     # Create simple model: Input(784) -> Linear(128) -> ReLU -> Linear(10)
     # Visualize architecture
     # Verify diagram shows:
@@ -167,7 +167,7 @@ fn test_visualize_simple_model():
 
 fn test_visualize_conv_model():
     """Test visualizing convolutional neural network."""
-    # TODO(#44): Implement when visualize_model supports Conv2D
+    # TODO: Implement when visualize_model supports Conv2D
     # Create CNN: Conv2D -> ReLU -> MaxPool -> Conv2D -> ReLU -> MaxPool -> Flatten -> Linear
     # Visualize architecture
     # Verify diagram shows:
@@ -180,7 +180,7 @@ fn test_visualize_conv_model():
 
 fn test_visualize_model_with_shapes():
     """Test visualizing model with tensor shapes at each layer."""
-    # TODO(#44): Implement when visualize_model shows shapes
+    # TODO: Implement when visualize_model shows shapes
     # Create model with known input shape
     # Visualize with shapes
     # Verify diagram shows:
@@ -193,7 +193,7 @@ fn test_visualize_model_with_shapes():
 
 fn test_save_architecture_diagram():
     """Test saving architecture diagram to file."""
-    # TODO(#44): Implement when visualize_model saves to file
+    # TODO: Implement when visualize_model saves to file
     # Create model
     # Visualize and save to "model_arch.png"
     # Verify file exists
@@ -209,7 +209,7 @@ fn test_save_architecture_diagram():
 
 fn test_visualize_gradient_magnitudes():
     """Test visualizing gradient magnitudes by layer."""
-    # TODO(#44): Implement when gradient visualization exists
+    # TODO: Implement when gradient visualization exists
     # Create model with known gradients
     # Compute gradients
     # Visualize gradient magnitudes per layer
@@ -219,7 +219,7 @@ fn test_visualize_gradient_magnitudes():
 
 fn test_detect_vanishing_gradients():
     """Test detecting vanishing gradient problem."""
-    # TODO(#44): Implement when gradient analysis exists
+    # TODO: Implement when gradient analysis exists
     # Create model with very small gradients in early layers
     # Analyze gradients
     # Verify: warning about vanishing gradients
@@ -229,7 +229,7 @@ fn test_detect_vanishing_gradients():
 
 fn test_detect_exploding_gradients():
     """Test detecting exploding gradient problem."""
-    # TODO(#44): Implement when gradient analysis exists
+    # TODO: Implement when gradient analysis exists
     # Create model with very large gradients
     # Analyze gradients
     # Verify: warning about exploding gradients
@@ -239,7 +239,7 @@ fn test_detect_exploding_gradients():
 
 fn test_plot_gradient_flow():
     """Test plotting gradient flow through network."""
-    # TODO(#44): Implement when gradient flow visualization exists
+    # TODO: Implement when gradient flow visualization exists
     # Create model
     # Compute gradients for multiple iterations
     # Plot gradient magnitude over time for each layer
@@ -254,7 +254,7 @@ fn test_plot_gradient_flow():
 
 fn test_visualize_image_batch():
     """Test visualizing batch of images in grid."""
-    # TODO(#44): Implement when visualize_images exists
+    # TODO: Implement when visualize_images exists
     # Create batch of 16 images (28x28)
     # Visualize as 4x4 grid
     # Verify: grid shows all 16 images
@@ -264,7 +264,7 @@ fn test_visualize_image_batch():
 
 fn test_visualize_images_with_labels():
     """Test visualizing images with labels."""
-    # TODO(#44): Implement when visualize_images supports labels
+    # TODO: Implement when visualize_images supports labels
     # Create batch of images with labels: ["cat", "dog", "bird", ...]
     # Visualize with labels
     # Verify: each image shows its label
@@ -273,7 +273,7 @@ fn test_visualize_images_with_labels():
 
 fn test_visualize_augmented_images():
     """Test visualizing original and augmented images side by side."""
-    # TODO(#44): Implement when visualize_augmentation exists
+    # TODO: Implement when visualize_augmentation exists
     # Create image
     # Apply augmentations (rotate, flip, crop)
     # Visualize original and augmented versions
@@ -283,7 +283,7 @@ fn test_visualize_augmented_images():
 
 fn test_plot_class_distribution():
     """Test plotting class distribution in dataset."""
-    # TODO(#44): Implement when plot_distribution exists
+    # TODO: Implement when plot_distribution exists
     # Create dataset with imbalanced classes
     # Plot class distribution as bar chart
     # Verify: bars show count per class
@@ -298,7 +298,7 @@ fn test_plot_class_distribution():
 
 fn test_visualize_feature_maps():
     """Test visualizing convolutional feature maps."""
-    # TODO(#44): Implement when visualize_feature_maps exists
+    # TODO: Implement when visualize_feature_maps exists
     # Create Conv2D layer
     # Forward pass image
     # Visualize feature maps (activations)
@@ -308,7 +308,7 @@ fn test_visualize_feature_maps():
 
 fn test_visualize_activation_distribution():
     """Test visualizing distribution of activations."""
-    # TODO(#44): Implement when visualize_activations exists
+    # TODO: Implement when visualize_activations exists
     # Create layer activations
     # Plot histogram of activation values
     # Verify: histogram shows distribution
@@ -323,7 +323,7 @@ fn test_visualize_activation_distribution():
 
 fn test_set_plot_style():
     """Test setting global plot style."""
-    # TODO(#44): Implement when set_style exists
+    # TODO: Implement when set_style exists
     # Set style to "seaborn" or "ggplot"
     # Create plot
     # Verify: plot uses specified style
@@ -332,7 +332,7 @@ fn test_set_plot_style():
 
 fn test_plot_with_grid():
     """Test adding grid to plot."""
-    # TODO(#44): Implement when plot supports grid
+    # TODO: Implement when plot supports grid
     # Create plot with grid enabled
     # Verify: grid lines appear
     pass
@@ -340,7 +340,7 @@ fn test_plot_with_grid():
 
 fn test_plot_with_legend():
     """Test adding legend to plot."""
-    # TODO(#44): Implement when plot supports legend
+    # TODO: Implement when plot supports legend
     # Create plot with multiple series
     # Add legend
     # Verify: legend shows series names
@@ -350,7 +350,7 @@ fn test_plot_with_legend():
 
 fn test_plot_with_annotations():
     """Test adding annotations to plot."""
-    # TODO(#44): Implement when plot supports annotations
+    # TODO: Implement when plot supports annotations
     # Create plot
     # Add annotation: "Best epoch" at max accuracy point
     # Verify: annotation appears at correct location
@@ -364,7 +364,7 @@ fn test_plot_with_annotations():
 
 fn test_export_plot_formats():
     """Test exporting plot in different formats (PNG, SVG, PDF)."""
-    # TODO(#44): Implement when plot export supports multiple formats
+    # TODO: Implement when plot export supports multiple formats
     # Create plot
     # Export as PNG
     # Export as SVG
@@ -377,7 +377,7 @@ fn test_export_plot_formats():
 
 fn test_export_high_resolution_plot():
     """Test exporting plot at high resolution (300 DPI)."""
-    # TODO(#44): Implement when plot export supports DPI setting
+    # TODO: Implement when plot export supports DPI setting
     # Create plot
     # Export at 300 DPI
     # Verify: file has correct resolution
@@ -386,7 +386,7 @@ fn test_export_high_resolution_plot():
 
 fn test_export_plot_with_transparent_background():
     """Test exporting plot with transparent background."""
-    # TODO(#44): Implement when plot export supports transparency
+    # TODO: Implement when plot export supports transparency
     # Create plot
     # Export with transparent background
     # Verify: background is transparent (alpha channel)
@@ -400,7 +400,7 @@ fn test_export_plot_with_transparent_background():
 
 fn test_visualization_integration_training():
     """Test visualization integrates with training loop."""
-    # TODO(#44): Implement when full training workflow exists
+    # TODO: Implement when full training workflow exists
     # Train model
     # Collect metrics (loss, accuracy)
     # Visualize training progress
@@ -411,7 +411,7 @@ fn test_visualization_integration_training():
 
 fn test_create_training_report():
     """Test creating comprehensive training report with all visualizations."""
-    # TODO(#44): Implement when training report exists
+    # TODO: Implement when training report exists
     # Train model
     # Create report with:
     # - Loss curves

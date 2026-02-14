@@ -244,7 +244,7 @@ fn test_dtypes_bfloat16() raises:
     yet integrated with Mojo's runtime DType system. This test is skipped
     until DType.bfloat16 is added to Mojo or we implement custom dtype handling.
 
-    TODO(#3015): Enable BF16 DType support testing
+    # TODO: Enable BF16 DType support testing
 
     Current Status:
     - BF16 struct exists in shared.core.types.bf16
@@ -264,7 +264,7 @@ fn test_dtypes_bfloat16() raises:
 
     Reference: shared.core.types.bf16 module for current BF16 implementation
     """
-    # TODO(#3015): Uncomment when Mojo adds DType.bfloat16
+    # TODO: Uncomment when Mojo adds DType.bfloat16
     # var tensor = create_special_value_tensor([2, 2], DType.bfloat16, 1.0)
     # assert_dtype(tensor, DType.bfloat16, "Should be bfloat16")
     # verify_special_value_invariants(tensor, 1.0)
