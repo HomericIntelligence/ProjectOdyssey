@@ -596,4 +596,7 @@ model.load_state_dict(weights)
 
 ## Resources
 
-- [Examples](../../examples/)
+- ML Odyssey API Reference - See `docs/` directory for API documentation
+- ExTensor Documentation - See tensor operations in core documentation
+- Training Guide - See optimization guides in `docs/optimization/`
+- Examples - See `examples/` directory for working examples
