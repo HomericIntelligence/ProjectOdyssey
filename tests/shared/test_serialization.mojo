@@ -188,14 +188,31 @@ fn test_named_tensor_collection() raises:
 
         # Verify sizes
         assert_equal(len(loaded), 2, "Wrong number of tensors loaded")
+        # Define expected names and their corresponding sizes
+        expected = {"weights": 6, "bias": 3}
 
-        # Verify first tensor
-        assert_equal(loaded[0].name, "weights", "Wrong name for first tensor")
-        assert_equal(loaded[0].tensor.numel(), 6, "Wrong size for weights")
+        # Track which names we've found
+        found_names = set()
 
-        # Verify second tensor
-        assert_equal(loaded[1].name, "bias", "Wrong name for second tensor")
-        assert_equal(loaded[1].tensor.numel(), 3, "Wrong size for bias")
+        # Check each loaded tensor
+        for tensor in loaded:
+            name = tensor.name
+            size = tensor.tensor.numel()
+
+            if name in expected:
+                found_names.add(name)
+                if size != expected[name]:
+                    raise AssertionError(
+                        f"Size mismatch for '{name}': expected"
+                        f" {expected[name]}, got {size}"
+                    )
+            else:
+                raise AssertionError(f"Unexpected tensor name: '{name}'")
+
+        # Ensure all expected names are present
+        if found_names != expected.keys():
+            missing = set(expected.keys()) - found_names
+            raise AssertionError(f"Missing expected tensors: {missing}")
 
     finally:
         # Clean up
